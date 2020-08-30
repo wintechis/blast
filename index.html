@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>BLAST Demo</title>
+  <script src="js/blockly_compressed.js"></script>
+  <script src="js/javascript_compressed.js"></script>
+  <script src="js/blocks_compressed.js"></script>
+  <script src="js/query_blocks.js"></script>
+  <script src="js/query_stubs.js"></script>
+  <script src="js/urdf-browser.js"></script>
+  <script src="js/blockly_things.js"></script>
+  <script src="msg/js/en.js"></script>
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background-color: #fff;
+      font-family: sans-serif;
+      overflow: hidden;
+    }
+
+    h1 {
+      font-weight: normal;
+      font-size: 140%;
+    }
+
+    #page-body {
+      height: 100%;
+      width: 100%;
+    }
+
+    #blocklyArea {
+      height: 99%;
+    }
+
+    #resultsArea {
+      height: 99%;
+      width: 450px;
+      border: 1px solid #c6c6c6;
+      vertical-align: top;
+    }
+
+    .status {
+      float: right;
+    }
+
+    .controlButtons {
+      height: 30px;
+      margin-right: 15px;
+    }
+
+    .message {
+      border: 2px solid #dedede;
+      background-color: #f1f1f1;
+      border-radius: 5px;
+      padding: 10px;
+      margin: 10px 10px;
+    }
+
+    .time {
+      float: right;
+      color: #aaa;
+    }
+
+    #messageBox {
+      width: 450px;
+      height: 100%;
+      overflow: auto;
+    }
+
+    #messageBox table,
+    #messageBox th,
+    #messageBox td {
+      margin: 10px auto;
+      padding: 5px;
+      border-collapse: collapse;
+      border: 1px solid black;
+    }
+  </style>
+</head>
+
+<body>
+  <table id="page-body">
+    <tr>
+      <td>
+        <h1>Demonstration</h1>
+        <p>
+          The menu on the left contains different blocks.</br>
+          Move them into the setup and loop blocks below to define queries, conditions and actions.</br>
+          When finished click the execute button on the bottom-right to start the blockprogram.
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td id="blocklyArea">
+      </td>
+      <td id="resultsArea">
+        <div id="messageBox"></div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="status">
+          <span id="status"></span>
+          <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
+          <button onclick="runCode()" id="run" class="controlButtons">execute</button>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <div id="blocklyDiv" style="position: absolute"></div>
+
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="things" custom="things_category" colour="270"></category>
+    <category name="actions" colour="0">
+      <block type="message"></block>
+      <block type="display"></block>
+    </category>
+    <!-- <category name="config" colour="60">
+      <block type="alias"></block>
+    </category> -->
+    <category name="Logic" colour="210">
+      <block type="controls_if"></block>
+      <block type="event"></block>
+      <block type="logic_compare"></block>
+      <block type="logic_operation"></block>
+      <block type="logic_boolean"></block>
+      <block type="logic_negate"></block>
+    </category>
+    <category name="Text" colour="160">
+      <block type="text"></block>
+      <block type="text_join"></block>
+    </category>
+    <category name="Numbers" colour="230">
+      <block type="math_number"></block>
+      <block type="infinity"></block>
+      <block type="math_arithmetic">
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_modulo">
+        <value name="DIVIDEND">
+          <shadow type="math_number">
+            <field name="NUM">64</field>
+          </shadow>
+        </value>
+        <value name="DIVISOR">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_float"></block>
+    </category>
+    <!-- <category name="Variables" colour="330" custom="VARIABLE"></category>
+    <category name="Functions" colour="290" custom="PROCEDURE"></category> -->
+  </xml>
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+    <block type="setup" id="setup" movable="false" inline="false" x="10" y="10"></block>
+    <block type="loop" id="loop" x="10" y="250">
+      <value name="n">
+        <block type="infinity"></block>
+      </value>
+      <value name="seconds">
+        <block type="math_number">
+          <field name="NUM">2</field>
+        </block>
+      </value>
+    </block>
+  </xml>
+
+  <script>
+
+    var messageCounter = 0;
+
+    function insertMessage(text) {
+      msg = document.createElement("div");
+      msg.classList.add("message");
+      msg.id = "message-" + messageCounter;
+
+      textNode = document.createTextNode(text);
+      msg.appendChild(textNode);
+
+      timeSpan = document.createElement("span");
+      timeSpan.classList.add("time");
+      timeSpan.innerHTML = new Date().toLocaleTimeString();
+      msg.appendChild(timeSpan);
+
+      msgBox = document.getElementById("messageBox");
+      msgBox.insertBefore(msg, msgBox.firstChild);
+    }
+
+    insertMessage("Actionblock output will be displayed here");
+
+
+    /*  
+    ################
+    # BLOCKLY CODE # 
+    ################
+    */
+
+    var blocklyArea = document.getElementById('blocklyArea');
+    var blocklyDiv = document.getElementById('blocklyDiv');
+    var workspace = Blockly.inject(blocklyDiv, { toolbox: document.getElementById('toolbox') });
+
+    var onresize = function (e) {
+      // Compute the absolute coordinates and dimensions of blocklyArea.
+      var element = blocklyArea;
+      var x = 0;
+      var y = 0;
+      do {
+        x += element.offsetLeft;
+        y += element.offsetTop;
+        element = element.offsetParent;
+      } while (element);
+      // Position blocklyDiv over blocklyArea.
+      blocklyDiv.style.left = x + 'px';
+      blocklyDiv.style.top = y + 'px';
+      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
+      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
+      Blockly.svgResize(workspace);
+    };
+    window.addEventListener('resize', onresize, false);
+    onresize();
+    Blockly.svgResize(workspace);
+
+    var interval = null;
+
+    runCode = function () {
+      // disable run button and enable stop button
+      document.getElementById("stop").disabled = false;
+      document.getElementById("run").disabled = true;
+      document.getElementById("status").innerHTML = "running... ";
+
+      // stop loop interval
+      var prevInterval = interval;
+      clearInterval(prevInterval);
+
+      // clear process arrays
+      var setup = [];
+      var loop = []
+
+      // query data first
+      var addresses = getAllAddresses();
+      queryAlliBeacons(addresses).then(() => {
+        var code = Blockly.JavaScript.workspaceToCode(workspace);
+
+        // writes code into arrays
+        eval(code);
+
+        for (process of setup) {
+          eval(process);
+        }
+
+        prevResultsMap = new Map(resultsMap);
+
+        //eval loop
+        var setupBlock = workspace.getBlockById("setup");
+        var addresses = getiBeaconAddressesInBlock(setupBlock);
+        var loopCounter = 0
+        interval = setInterval(function () {
+          loopCounter++;
+
+          var addresses = getAllAddresses();
+          queryAlliBeacons(addresses).then(() => {
+
+            for (process of loop) {
+              eval(process);
+            }
+          });
+
+          prevResultsMap = new Map(resultsMap);
+          if (loopCounter == loop_n) {
+            stopCode('finished');
+          }
+        }, loopTime * 1000)
+      })
+    }
+
+    getAllAddresses = function () {
+      let receivers = workspace.getBlocksByType("receiver_get");
+      var addresses = []
+      receivers.forEach(block => {
+        if (block.type != 'receiver_get') return;
+        var thingName = block.getFieldValue('thing');
+        var thing = Blockly.Things.thingsMap.get("receiver").get(thingName);
+        addresses.push(thing.address);
+      })
+      addresses = eliminateDupilactes(addresses);
+      return addresses;
+    }
+
+    getiBeaconAddressesInBlock = function (parentBlock) {
+      // array of addresses to be queried (will elimanate duplicates later)
+      var addresses = [];
+      parentBlock.getDescendants()
+        .forEach(block => {
+          if (block.type != 'receiver_get') return;
+          var thingName = block.getFieldValue('thing');
+          var thing = Blockly.Things.thingsMap.get("receiver").get(thingName);
+          addresses.push(thing.address);
+        })
+      addresses = eliminateDupilactes(addresses);
+      return addresses;
+    }
+
+    eliminateDupilactes = function (array) {
+      return [...new Set(array)];
+    }
+
+    stopCode = function (message) {
+      // enable run button and disable stop button
+      document.getElementById("stop").disabled = true;
+      document.getElementById("run").disabled = false;
+
+      // stop interval execution and set status text
+      clearInterval(interval)
+      document.getElementById("status").innerHTML = message;
+    }
+
+    // Setting blocks on startup
+    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), Blockly.mainWorkspace);
+
+    // creates blocks in things category
+    workspace.registerToolboxCategoryCallback("things_category", Blockly.Things.flyoutCallback);
+
+    /*
+    #############
+    # uRDF Code #
+    #############
+    */
+
+    // build html table with data from query
+    function addTable(query) {
+      urdf.clear();
+
+      let resultsField = document.createElement("table");
+      // dataTabButton.click();
+
+      urdf.query(query)
+        .then(results => {
+          // deal with missing values
+          let vars = results.reduce((list, res) => {
+            for (let v in res) {
+              if (list.indexOf(v) === -1) list.push(v);
+            }
+            return list;
+          }, []);
+
+          let html = '<tr>';
+          vars.forEach(v => html += '<th>' + v + '</th>');
+          html += '</tr>';
+
+          results.forEach(res => {
+            html += '<tr>';
+            vars.forEach(v => {
+              html += '<td>' + (res[v] ? res[v].value : '') + '</td>'
+            });
+            html += '</tr>';
+          });
+
+          resultsField.innerHTML = html;
+
+          var div = document.getElementById("messageBox");
+          div.insertBefore(resultsField, div.firstChild);
+        })
+        .catch(e => {
+          resultsField.innerHTML = '<tr><td>Error (see console)</td/></tr>';
+          console.error(e);
+        });
+    }
+
+    function displayTable(key, checkboxes) {
+
+      let resultsField = document.createElement("table");
+
+      // deal with missing values
+      results = resultsMap.get(key);
+      let vars = checkboxes;
+
+      let html = '<tr>';
+      vars.forEach(v => html += '<th>' + v + '</th>');
+      html += '</tr>';
+
+      results.forEach(res => {
+        html += '<tr>';
+        vars.forEach(v => {
+          html += '<td>' + (res[v] ? res[v].value : '') + '</td>'
+        });
+        html += '</tr>';
+      });
+
+      resultsField.innerHTML = html;
+
+      var div = document.getElementById("messageBox");
+      div.insertBefore(resultsField, div.firstChild);
+    }
+
+    var resultsMap = new Map();
+
+    function queryAlliBeacons(addresses) {
+      return new Promise((resolve, reject) => {
+        if (addresses.length == 0) {
+          resolve();
+        }
+        return Promise.all(addresses.map(address => {
+          var url = new URL(address);
+          var baseUrl = url.protocol + "//" + url.host;
+          var path = url.pathname;
+
+          var query =
+            `BASE <${baseUrl}>
+            PREFIX scp: <https://github.com/aharth/supercool/>
+            PREFIX sosa: <http://www.w3.org/ns/sosa/>
+            PREFIX qudt: <http://qudt.org/1.1/schema/qudt#>
+            
+            SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity
+            FROM <${path}>
+            WHERE 
+            {
+                ?ble sosa:madeBySensor ?apfull .
+                BIND(substr(?apfull, 7,1) AS ?ap) .
+                ?ble sosa:hasResult ?sensor .
+                ?sensor scp:MacAddress ?mac .
+                ?sensor qudt:numericValue ?rssi .
+                ?sensor sosa:resultTime ?resultTime .
+                ?sensor scp:accuracy ?accuracy .
+                ?sensor scp:major ?major .
+                ?sensor scp:major ?minor .
+                ?sensor scp:measuredPower ?measuredPower .
+                ?sensor scp:proximity ?proximity .
+            } ORDER BY ?ap ?mac`;
+
+          urdf.clear();
+          urdf.query(query)
+            .then(result => {
+              let formattedResult = new Map();
+              for (r of result) {
+                formattedResult.set(r.mac.value, r);
+              }
+              resultsMap.set(address, formattedResult);
+              resolve();
+            })
+        }));
+      });
+    }
+
+    function setQuerySelect(path, host, checkboxes = [true, true, true, true, true, true, true]) {
+      // This String is built and returned
+      var query = ""
+
+      var url = "";
+      try {
+        url = new URL(host);
+      } catch (error) {
+        if (error.name = "TypeError") {
+          url = new URL(alias.get(host));
+        }
+      }
+      var baseUrl = url.protocol + "//" + url.host;
+      var path = url.pathname;
+
+      // adding BASE URL and path
+      // lineBreaks are only for readability
+      query += `
+BASE <${baseUrl}>
+PREFIX scp: <https://github.com/aharth/supercool/>
+PREFIX sosa: <http://www.w3.org/ns/sosa/>
+PREFIX qudt: <http://qudt.org/1.1/schema/qudt#>
+
+ASK
+FROM <${path}>
+WHERE
+{
+  ?ble sosa:madeBySensor ?apfull .
+  BIND(substr(?apfull, 7,1) AS ?ap) .
+  ?ble sosa:hasResult ?sensor .
+  ?sensor scp:MacAddress ?mac .
+  `;
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i]) query += fields[i];
+      }
+
+      return query
+    }
+
+    function addQueryFilters(filters) {
+      return filters ? `FILTER(${filters}) .\n` : "";
+    }
+
+    // writes queryString to only get fields set to true in parameters
+    // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
+    //  showMajor, showMinor, showMeasuredPower, showProximity}
+    function updateiBeaconQuery(from, checkboxes, macs, aps) {
+      var url = new URL(from);
+      var baseUrl = url.protocol + "//" + url.host;
+      var path = url.pathname;
+      var queryBase = '\
+                BASE <' + baseUrl + '> \n \
+                PREFIX scp: <https://github.com/aharth/supercool/>\n \
+                PREFIX sosa: <http://www.w3.org/ns/sosa/> \n \
+                PREFIX qudt: <http://qudt.org/1.1/schema/qudt#> \n \
+                \n \
+                SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity \n \
+                FROM <' + path + '>\n \
+                WHERE \n \
+                {\n \
+                    ?ble sosa:madeBySensor ?apfull .\n \
+                    BIND(substr(?apfull, 7,1) AS ?ap) .\n \
+                    ?ble sosa:hasResult ?sensor .\n \
+                    ?sensor scp:MacAddress ?mac . \n';
+
+      queryString = queryBase;
+      fields = [];
+      var queryRSSI = '?sensor qudt:numericValue ?rssi .\n';
+      fields.push(queryRSSI);
+      var queryResultTime = '?sensor sosa:resultTime ?resultTime .\n';
+      fields.push(queryResultTime);
+      var queryAccuracy = '?sensor scp:accuracy ?accuracy .\n';
+      fields.push(queryAccuracy);
+      var queryMajor = '?sensor scp:major ?major .\n';
+      fields.push(queryMajor);
+      var queryMinor = '?sensor scp:major ?minor .\n';
+      fields.push(queryMinor);
+      var queryMeasuredPower = '?sensor scp:measuredPower ?measuredPower .\n';
+      fields.push(queryMeasuredPower);
+      var queryProximity = '?sensor scp:proximity ?proximity .\n';
+      fields.push(queryProximity);
+      var queryEnd = '} ORDER BY ?ap ?mac \n';
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i]) queryString += fields[i];
+      }
+
+      if (macs != "") {
+        if (aps != "") {
+          queryString += ' FILTER ((' + macs + ') && (' + aps + '))\n';
+        } else {
+          queryString += ' FILTER (' + macs + ')\n';
+        }
+      }
+      else if (aps != "") {
+        queryString += ' FILTER (' + aps + ')\n';
+      }
+
+      queryString += queryEnd;
+    }
+
+    // writes queryString to only get fields set to true in parameters
+    // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
+    //  showMajor, showMinor, showMeasuredPower, showProximity}
+    function updateBleQuery(from, checkboxes, mac = "all") {
+      var url = new URL(from);
+      var baseUrl = url.protocol + "//" + url.host;
+      var path = url.pathname;
+      var queryBase = '\
+                BASE <' + baseUrl + '> \n \
+                PREFIX scp: <https://github.com/aharth/supercool/>\n \
+                PREFIX sosa: <http://www.w3.org/ns/sosa/> \n \
+                PREFIX qudt: <http://qudt.org/1.1/schema/qudt#> \n \
+                \n \
+                SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity \n \
+                FROM <' + path + '>\n \
+                WHERE \n \
+                {\n \
+                    ?ble sosa:madeBySensor ?ap .\n \
+                    ?ble sosa:hasResult ?sensor .\n \
+                    ?sensor scp:MacAddress ?mac . \n';
+
+      queryString = queryBase;
+      fields = [];
+      var queryRSSI = '?sensor qudt:numericValue ?rssi .\n';
+      fields.push(queryRSSI);
+      var queryResultTime = '?sensor sosa:resultTime ?resultTime .\n';
+      fields.push(queryResultTime);
+      var queryAccuracy = '?sensor scp:accuracy ?accuracy .\n';
+
+      var queryFilterMac = ' FILTER (str(?mac) = "' + mac + '")\n'
+      var queryEnd = '} ORDER BY ?ap ?mac \n';
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i]) queryString += fields[i];
+      }
+
+      if (mac != "all")
+        queryString += queryFilterMac;
+
+      queryString += queryEnd;
+    }
+
+    function updateAccesspointsQuery(from, checkboxes) {
+      var url = new URL(from);
+      var baseUrl = url.protocol + "//" + url.host;
+      var path = url.pathname;
+      var queryBase = '\
+                BASE <' + baseUrl + '> \n \
+                PREFIX scp: <https://github.com/aharth/supercool/> \n \
+                PREFIX accesspoint: <http://static.rapidthings.eu/accesspoint/> \n \
+                PREFIX ibeacon: <../../a_one_rapidthings_eu/ibeacon/> \n \
+                PREFIX en: <../../a_one_rapidthings_eu/envirophat/> \n \
+                \n \
+                SELECT ?ap ?x ?y \n \
+                FROM <' + path + '> \n \
+                WHERE \n \
+                    { \n \
+                        ?ap a accesspoint:RaspberryPiZeroW . \n';
+
+      queryString = queryBase;
+      fields = [];
+      var queryX = '?ap scp:hasX ?x . \n';
+      fields.push(queryX);
+      var queryY = '?ap scp:hasY ?y . \n';
+      fields.push(queryY);
+
+      queryEnd = '} ORDER BY ?ap \n'
+
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i]) queryString += fields[i];
+      }
+
+      queryString += queryEnd;
+    }
+  </script>
+</body>
+
+</html>
