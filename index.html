@@ -92,9 +92,11 @@
         <h1>Demonstration</h1>
         <p>
           The menu on the left contains different blocks.</br>
-          Move them into the setup and loop blocks below to define queries, conditions and actions.</br>
-          When finished click the execute button on the bottom-right to start the blockprogram.
+          Move them into either the setup- or loop-block below to define a blockprogram.</br>
+          When finished click the execute button on the bottom-right to start the program.<br>
         </p>
+        <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
+        <button><a onclick="Blockly.Things.loadButtonHandler()">load Workspace</a></button>
       </td>
     </tr>
     <tr>
@@ -122,6 +124,7 @@
     <category name="actions" colour="0">
       <block type="message"></block>
       <block type="display"></block>
+      <block type="switchlights"></block>
     </category>
     <!-- <category name="config" colour="60">
       <block type="alias"></block>
@@ -299,6 +302,7 @@
           queryAlliBeacons(addresses).then(() => {
 
             for (process of loop) {
+              console.log(process);
               eval(process);
             }
           });
@@ -428,6 +432,25 @@
 
       var div = document.getElementById("messageBox");
       div.insertBefore(resultsField, div.firstChild);
+    }
+
+    function switchLights(mac, r, y, g) {
+      console.log("foo");
+      var r_byte = r ? "ff" : "00";
+      var y_byte = y ? "ff" : "00";
+      var g_byte = g ? "ff" : "00";
+
+      var data = { type: "WriteWithoutResponse", data: "7e000503" + r_byte + g_byte + y_byte + "00ef" };
+
+      fetch("http://raspberrypi.local:8000/devices/be5860006ad4/char/0009/", {
+        method: "POST",
+        headers: new Headers({
+          "Content-Type": "application/json"
+        }),
+        body: JSON.stringify(data)
+      }).then(res => {
+        console.log("Request complete! response:", res);
+      })
     }
 
     var resultsMap = new Map();

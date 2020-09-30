@@ -16,7 +16,7 @@ Blockly.Things.flyoutCallback = function (workspace) {
     var xmlList = [];
 
     var beacon_button = document.createElement('button');
-    beacon_button.setAttribute('text', 'Create new iBeacon');
+    beacon_button.setAttribute('text', 'Create new thing');
     beacon_button.setAttribute('callbackKey', 'CREATE_IBEACON');
 
     var receiver_button = document.createElement('button');
@@ -140,10 +140,10 @@ Blockly.Things.createThingButtonHandler = function (
                         newThing.name = text;
                         let promptText;
                         let promptDefault;
-                        if(type == "iBeacon"){
+                        if (type == "iBeacon") {
                             promptText = "What is your beacon's MAC address";
                             promptDefault = "deadbeef";
-                        } else if(type == "receiver"){
+                        } else if (type == "receiver") {
                             promptText = "What is your receiver's address";
                             promptDefault = "http://example.com/ibeacon/";
                         }
@@ -240,3 +240,121 @@ Blockly.Things.nameUsed_ = function (name, workspace, type) {
 
     return null;
 };
+
+Blockly.Things.saveButtonHandler = function (
+    workspace, type, opt_callback) {
+    Blockly.hideChaff();
+    var promptAndCheckWithAlert = function (defaultName) {
+        let workspace = {};
+        workspace.type = type;
+
+        Blockly.Things.promptName("Give your workspace a name", defaultName,
+            function (text) {
+                if (text) {
+                    var existing = Blockly.Workspace.nameUsed_(text);
+                    if (existing) {
+                        var msg = "The name %1 already exists. Overwrite?".replace(
+                            '%1', text);
+                        Blockly.confirm(msg,
+                            function (overwrite) {
+                                if (overwrite) {
+                                    save(text);
+                                    Blockly.alert("workspace saved successfully!")
+                                    if (opt_callback) {
+                                        opt_callback(text);
+                                    }
+                                } else {
+                                    promptAndCheckWithAlert(text);  // Recurse
+                                }
+                            });
+                    } else {
+                        // No conflict
+                        save(text);
+                        Blockly.alert("workspace saved successfully!")
+                        if (opt_callback) {
+                            opt_callback(text);
+                        }
+                    }
+                } else {
+                    // User canceled prompt.
+                    if (opt_callback) {
+                        opt_callback(null);
+                    }
+                }
+            });
+    };
+    promptAndCheckWithAlert('');
+};
+
+/**
+* Check whether there exists a thing with the given name of any type.
+* @param {string} name The name to search for.
+* @param {!Blockly.Workspace} workspace The workspace to search for the thing.
+* @return {} The thing with the given name,
+*     or null if none was found.
+* @private
+*/
+Blockly.Workspace.nameUsed_ = function (name, type) {
+    name = name.toLowerCase();
+
+    if (localStorage.hasOwnProperty(name)) {
+        return localStorage.getItem(name);
+    }
+
+    return null;
+};
+
+/**
+ * saves the current workspace to the (local) web storage
+ * @param {string} name unique name of the workspace
+ */
+function save(name) {
+    if (typeof (Storage) !== "undefined") {
+        var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+        var xmlText = Blockly.Xml.domToText(xmlDom);
+        localStorage.setItem(name, xmlText)
+    } else {
+        Blockly.alert("Your browser does not support local storage, to enable this feature please use Firefox or Chrome.")
+    }
+}
+
+Blockly.Things.loadButtonHandler = function () {
+    Blockly.hideChaff();
+    var promptAndCheckWithAlert = function () {
+
+        var names = Blockly.Things.getStoredWorkspaces();
+        if (names.length === 0) {
+            Blockly.alert("No saved workspace found!");
+
+        } else {
+            var msg = "Enter the Name of the workspace to load [%1]".replace('%1', names.toString());
+            Blockly.Things.promptName(msg, names[0], function(text) {
+                restore(text);
+            });
+        }
+    };
+    promptAndCheckWithAlert();
+};
+
+Blockly.Things.getStoredWorkspaces = function () {
+    if (localStorage.length === 0) {
+        return [];
+    }
+
+    var names = [];
+    for (var i=0, len=localStorage.length; i<len; i++) {
+        names.push(localStorage.key(i));
+    }
+    return names;
+}
+
+/**
+ * loads a workspace from the (local) web storage
+ * @param {string} name name of the workspace
+ */
+function restore(name) {
+    Blockly.mainWorkspace.clear();
+    var xmlText = localStorage.getItem(name);
+    var xmlDom = Blockly.Xml.textToDom(xmlText);
+    Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+}

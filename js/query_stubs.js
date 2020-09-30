@@ -319,6 +319,16 @@ Blockly.JavaScript['event'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['switchlights'] = function(block) {
+  var cb_red = block.getFieldValue('cb_red') == 'TRUE';
+  var cb_yellow = block.getFieldValue('cb_yellow') == 'TRUE';
+  var cb_green = block.getFieldValue('cb_green') == 'TRUE';
+  var ibeacon = Blockly.JavaScript.valueToCode(block, 'light', Blockly.JavaScript.ORDER_NONE);
+  
+  var code = `switchLights("${ibeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
+  return code;
+};
+
 if ((!(prevResultsMap.get("http://testserver.local:3000/ibeacon/").get("f0346fbf4875")["rssi"].value < -50)) &&
      (resultsMap.get("http://testserver.local:3000/ibeacon/").get("f0346fbf4875")["rssi"].value < -50)) {
     insertMessage('ja')

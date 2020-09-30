@@ -763,5 +763,39 @@ Blockly.defineBlocksWithJsonArray([
     "colour": 230,
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "switchlights",
+    "message0": "switch lights of: %1 %2 red %3 yellow %4 green %5",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "light",
+        "check": "ibeacon"
+      },
+      {
+        "type": "field_checkbox",
+        "name": "cb_red",
+        "checked": true
+      },
+      {
+        "type": "field_checkbox",
+        "name": "cb_yellow",
+        "checked": true
+      },
+      {
+        "type": "field_checkbox",
+        "name": "cb_green",
+        "checked": true
+      }
+    ],
+    "previousStatement": "action",
+    "nextStatement": "action",
+    "colour": 0,
+    "tooltip": "",
+    "helpUrl": ""
   }
 ])
