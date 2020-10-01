@@ -33,41 +33,21 @@
     #page-body {
       height: 100%;
       width: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    #intro {
-      padding: 5px;
-    }
-
-    #main {
-      height: 75%;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: nowrap;
     }
 
     #blocklyArea {
-      display: flex;
-      width: 100%;
+      height: 99%;
     }
 
     #resultsArea {
-      height: 100%;
+      height: 99%;
       width: 450px;
       border: 1px solid #c6c6c6;
-      display: flex;
+      vertical-align: top;
     }
 
-    #statusDiv {
-      display: flex;
-      align-self: end;
-      padding: 5px;
-    }
-
-    #statusSpan {
-      padding: 5px;
+    .status {
+      float: right;
     }
 
     .controlButtons {
@@ -92,8 +72,6 @@
       width: 450px;
       height: 100%;
       overflow: auto;
-      display: flex;
-      flex-direction: column;
     }
 
     #messageBox table,
@@ -108,7 +86,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
   <table id="page-body">
     <tr>
       <td>
@@ -127,29 +104,19 @@
       <td id="blocklyArea">
       </td>
       <td id="resultsArea">
-=======
-  <div id="page-body">
-    <div id="intro">
-      <h1>Demonstration</h1>
-      <p>
-        The menu on the left contains different blocks.</br>
-        Move them into the setup and loop blocks below to define queries, conditions and actions.</br>
-        When finished click the execute button on the bottom-right to start the blockprogram.
-      </p>
-    </div>
-    <div id="main">
-      <div id="blocklyArea"></div>
-      <div id="resultsArea">
->>>>>>> d8a1156e76bd78c823b570e0a849afb3864d3465
         <div id="messageBox"></div>
-      </div>
-    </div>
-    <div id="statusDiv" style="align-self: end;">
-      <span id="statusSpan"></span>
-      <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
-      <button onclick="runCode()" id="run" class="controlButtons">execute</button>
-    </div>
-  </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <div class="status">
+          <span id="status"></span>
+          <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
+          <button onclick="runCode()" id="run" class="controlButtons">execute</button>
+        </div>
+      </td>
+    </tr>
+  </table>
 
   <div id="blocklyDiv" style="position: absolute"></div>
 
@@ -278,7 +245,7 @@
       // disable run button and enable stop button
       document.getElementById("stop").disabled = false;
       document.getElementById("run").disabled = true;
-      document.getElementById("statusSpan").innerHTML = "running... ";
+      document.getElementById("status").innerHTML = "running... ";
 
       // stop loop interval
       var prevInterval = interval;
@@ -364,7 +331,7 @@
 
       // stop interval execution and set status text
       clearInterval(interval)
-      document.getElementById("statusSpan").innerHTML = message;
+      document.getElementById("status").innerHTML = message;
     }
 
     // Setting blocks on startup
