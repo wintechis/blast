@@ -36,7 +36,4 @@ _:b2 a sosa:Result;
 This code works out of the box. Just open the index.html file in your favorite Browser.
 
 ## Planned features
-* **bugfix** - start/stop button disappears in firefox when message-container is full
-* **bugfix** - infinity block is not working properly
-* **modules** - saving blocks-programs and naming them for future-use
 * **documentation** - improve docs, add sample program (screenshot or as module?)

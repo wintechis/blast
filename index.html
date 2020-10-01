@@ -89,11 +89,12 @@
   <table id="page-body">
     <tr>
       <td>
-        <h1>Demonstration</h1>
+        <h1>BLAST</h1>
         <p>
           The menu on the left contains different blocks.</br>
           Move them into either the setup- or loop-block below to define a blockprogram.</br>
           When finished click the execute button on the bottom-right to start the program.<br>
+          For more information on each of the blocks, check the <a href="docs/index.html" target="_blank" rel="noopener noreferrer">documentation</a>.
         </p>
         <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
         <button><a onclick="Blockly.Things.loadButtonHandler()">load Workspace</a></button>
@@ -126,9 +127,6 @@
       <block type="display"></block>
       <block type="switchlights"></block>
     </category>
-    <!-- <category name="config" colour="60">
-      <block type="alias"></block>
-    </category> -->
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
       <block type="event"></block>
@@ -156,25 +154,6 @@
           </shadow>
         </value>
       </block>
-      <block type="math_round">
-        <value name="NUM">
-          <shadow type="math_number">
-            <field name="NUM">3.1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_modulo">
-        <value name="DIVIDEND">
-          <shadow type="math_number">
-            <field name="NUM">64</field>
-          </shadow>
-        </value>
-        <value name="DIVISOR">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
       <block type="math_random_int">
         <value name="FROM">
           <shadow type="math_number">
@@ -187,7 +166,6 @@
           </shadow>
         </value>
       </block>
-      <block type="math_random_float"></block>
     </category>
     <!-- <category name="Variables" colour="330" custom="VARIABLE"></category>
     <category name="Functions" colour="290" custom="PROCEDURE"></category> -->
