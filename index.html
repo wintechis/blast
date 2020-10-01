@@ -89,7 +89,7 @@
   <table id="page-body">
     <tr>
       <td>
-        <h1>BLAST</h1>
+        <h1>BLAST - Block Applications for Things</h1>
         <p>
           The menu on the left contains different blocks.</br>
           Move them into either the setup- or loop-block below to define a blockprogram.</br>
@@ -299,7 +299,7 @@
       receivers.forEach(block => {
         if (block.type != 'receiver_get') return;
         var thingName = block.getFieldValue('thing');
-        var thing = Blockly.Things.thingsMap.get("receiver").get(thingName);
+        var thing = Blockly.Things.thingsMap.receiver[thingName];
         addresses.push(thing.address);
       })
       addresses = eliminateDupilactes(addresses);
@@ -313,7 +313,7 @@
         .forEach(block => {
           if (block.type != 'receiver_get') return;
           var thingName = block.getFieldValue('thing');
-          var thing = Blockly.Things.thingsMap.get("receiver").get(thingName);
+          var thing = Blockly.Things.thingsMap.receiver.thingName;
           addresses.push(thing.address);
         })
       addresses = eliminateDupilactes(addresses);

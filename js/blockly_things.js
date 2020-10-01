@@ -4,7 +4,9 @@
 
 
 Blockly.Things = {};
-Blockly.Things.thingsMap = new Map();
+Blockly.Things.thingsMap = {};
+Blockly.Things.thingsMap.iBeacon = {};
+Blockly.Things.thingsMap.receiver = {};
 
 
 /**
@@ -45,8 +47,8 @@ Blockly.Things.flyoutCallback = function (workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blockly.Things.flyoutCategoryBlocks = function (workspace) {
-    var ibeaconsExist = Blockly.Things.thingsMap.get("iBeacon") != undefined;
-    var receiverExists = Blockly.Things.thingsMap.get("receiver") != undefined;
+    var ibeaconsExist = Object.keys(Blockly.Things.thingsMap.iBeacon).length != 0;
+    var receiverExists = Object.keys(Blockly.Things.thingsMap.receiver).length != 0;
 
     var xmlList = [];
     if (ibeaconsExist) {
@@ -69,32 +71,32 @@ Blockly.Things.flyoutCategoryBlocks = function (workspace) {
 };
 
 Blockly.Extensions.register('dynamic_ibeacon_menu_extension', function () {
-    var ibeacons = Blockly.Things.thingsMap.get("iBeacon");
+    var ibeacons = Blockly.Things.thingsMap.iBeacon;
     this.getInput('INPUT')
         .appendField(new Blockly.FieldDropdown(
             function () {
                 var options = [];
-                ibeacons.forEach(thing => {
+                for (thing of Object.values(ibeacons)) {
                     if (thing.type == "iBeacon") {
                         options.push([thing.name, thing.name]);
                     }
-                })
+                }
                 return options;
             }), "thing"
         );
 });
 
 Blockly.Extensions.register('dynamic_receiver_menu_extension', function () {
-    var receivers = Blockly.Things.thingsMap.get("receiver");
+    var receivers = Blockly.Things.thingsMap.receiver;
     this.getInput('INPUT')
         .appendField(new Blockly.FieldDropdown(
             function () {
                 var options = [];
-                receivers.forEach(thing => {
+                for (thing of Object.values(receivers)) {
                     if (thing.type == "receiver") {
                         options.push([thing.name, thing.name]);
                     }
-                })
+                }
                 return options;
             }), "thing"
         );
@@ -131,9 +133,37 @@ Blockly.Things.createThingButtonHandler = function (
                     if (existing) {
                         var msg = "The name %1 already exists.".replace(
                             '%1', existing.name);
-                        Blockly.alert(msg,
-                            function () {
-                                promptAndCheckWithAlert(text);  // Recurse
+
+                        Blockly.confirm(msg,
+                            function (overwrite) {
+                                if (overwrite) {
+                                    newThing.name = text;
+                                    let promptText;
+                                    let promptDefault;
+                                    if (type == "iBeacon") {
+                                        promptText = "What is your beacon's MAC address";
+                                        promptDefault = "deadbeef";
+                                    } else if (type == "receiver") {
+                                        promptText = "What is your receiver's address";
+                                        promptDefault = "http://example.com/ibeacon/";
+                                    }
+                                    Blockly.Things.promptAddress(promptText, promptDefault, function (address) {
+                                        if (address) {
+                                            newThing.address = address;
+                                            Blockly.Things.thingsMap[type][newThing.name] = newThing;
+                                        } else {
+                                            // User canceled prompt.
+                                            if (opt_callback) {
+                                                opt_callback(null);
+                                            }
+                                        }
+                                    });
+                                    if (opt_callback) {
+                                        opt_callback(text);
+                                    }
+                                } else {
+                                    promptAndCheckWithAlert(text);  // Recurse
+                                }
                             });
                     } else {
                         // No conflict
@@ -150,11 +180,7 @@ Blockly.Things.createThingButtonHandler = function (
                         Blockly.Things.promptAddress(promptText, promptDefault, function (address) {
                             if (address) {
                                 newThing.address = address;
-                                if (Blockly.Things.thingsMap.get(type) == undefined) {
-                                    // map for type has to be created first
-                                    Blockly.Things.thingsMap.set(type, new Map());
-                                }
-                                Blockly.Things.thingsMap.get(type).set(newThing.name, newThing);
+                                Blockly.Things.thingsMap[type][newThing.name] = newThing;
                             } else {
                                 // User canceled prompt.
                                 if (opt_callback) {
@@ -227,15 +253,15 @@ Blockly.Things.promptAddress = function (promptText, defaultText, callback) {
 * @private
 */
 Blockly.Things.nameUsed_ = function (name, workspace, type) {
-    var names = Blockly.Things.thingsMap.get(type);
-    if (names == undefined) {
+    var names = Blockly.Things.thingsMap[type];
+    if (names === {}) {
         return null;
     }
 
     name = name.toLowerCase();
 
-    if (names.has(name)) {
-        return names.get(name);
+    if (names.hasOwnProperty(name)) {
+        return names[name];
     }
 
     return null;
@@ -310,9 +336,14 @@ Blockly.Workspace.nameUsed_ = function (name, type) {
  */
 function save(name) {
     if (typeof (Storage) !== "undefined") {
+        // save blocks in workspace
         var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
         var xmlText = Blockly.Xml.domToText(xmlDom);
         localStorage.setItem(name, xmlText)
+
+        // save things variables
+        localStorage.setItem("storedThingsVariables", JSON.stringify(Blockly.Things.thingsMap));
+
     } else {
         Blockly.alert("Your browser does not support local storage, to enable this feature please use Firefox or Chrome.")
     }
@@ -328,7 +359,7 @@ Blockly.Things.loadButtonHandler = function () {
 
         } else {
             var msg = "Enter the Name of the workspace to load [%1]".replace('%1', names.toString());
-            Blockly.Things.promptName(msg, names[0], function(text) {
+            Blockly.Things.promptName(msg, names[0], function (text) {
                 restore(text);
             });
         }
@@ -342,7 +373,9 @@ Blockly.Things.getStoredWorkspaces = function () {
     }
 
     var names = [];
-    for (var i=0, len=localStorage.length; i<len; i++) {
+    for (var i = 0, len = localStorage.length; i < len; i++) {
+        if (localStorage.key(i) === "storedThingsVariables") continue;
+
         names.push(localStorage.key(i));
     }
     return names;
@@ -353,7 +386,13 @@ Blockly.Things.getStoredWorkspaces = function () {
  * @param {string} name name of the workspace
  */
 function restore(name) {
+    // clear blocks
     Blockly.mainWorkspace.clear();
+
+    // restore things variables
+    Blockly.Things.thingsMap = JSON.parse(localStorage.getItem("storedThingsVariables"));
+
+    // restore blocks
     var xmlText = localStorage.getItem(name);
     var xmlDom = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);

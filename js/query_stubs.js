@@ -276,16 +276,16 @@ Blockly.JavaScript['display'] = function (block) {
 
 Blockly.JavaScript['ibeacon_get'] = function (block) {
   var thingName = block.getFieldValue('thing');
-  var ibeacons = Blockly.Things.thingsMap.get("iBeacon");
-  var thing = ibeacons.get(thingName);
+  var ibeacons = Blockly.Things.thingsMap.iBeacon;
+  var thing = ibeacons[thingName];
   
   return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['receiver_get'] = function (block) {
   var thingName = block.getFieldValue('thing');
-  var receiver = Blockly.Things.thingsMap.get("receiver");
-  var thing = receiver.get(thingName);
+  var receiver = Blockly.Things.thingsMap.receiver;
+  var thing = receiver[thingName];
 
   return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
 };
