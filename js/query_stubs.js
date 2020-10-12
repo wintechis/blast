@@ -291,9 +291,11 @@ Blockly.JavaScript['receiver_get'] = function (block) {
 };
 
 Blockly.JavaScript['event'] = function(block) {
-  var ibeacon = Blockly.JavaScript.valueToCode(block, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
-  var receiver = Blockly.JavaScript.valueToCode(block, 'receiver', Blockly.JavaScript.ORDER_NONE);
-  var value = block.getFieldValue('value');
+  ibeaconBlock = block.getInputTargetBlock('measurement');
+  var measurement = Blockly.JavaScript.valueToCode(block, 'measurement', Blockly.JavaScript.ORDER_NONE);
+  var ibeacon = Blockly.JavaScript.valueToCode(ibeaconBlock, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
+  var receiver = Blockly.JavaScript.valueToCode(ibeaconBlock, 'receiver', Blockly.JavaScript.ORDER_NONE);
+  var value = ibeaconBlock.getFieldValue('value');
   var dropdown_startstop = block.getFieldValue('startstop');
   var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
 

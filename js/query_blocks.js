@@ -602,64 +602,15 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "event",
-    "message0": "beacon %1 %2 at receiver %3 %4 value %5 %6 %7 %8 %9 %10",
+    "message0": "%1 %2 %3 %4 %5",
     "args0": [
       {
-        "type": "input_dummy"
-      },
-      {
         "type": "input_value",
-        "name": "ibeacon",
-        "check": "ibeacon"
-      },
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_value",
-        "name": "receiver",
-        "check": "receiver"
-      },
-      {
-        "type": "field_dropdown",
-        "name": "value",
-        "options": [
-          [
-            "mac address",
-            "mac"
-          ],
-          [
-            "rssi",
-            "rssi"
-          ],
-          [
-            "proximity",
-            "proximity"
-          ],
-          [
-            "timestamp",
-            "time"
-          ],
-          [
-            "measured power",
-            "measured"
-          ],
-          [
-            "accuracy",
-            "accuracy"
-          ],
-          [
-            "major",
-            "major"
-          ],
-          [
-            "minor",
-            "minor"
-          ]
+        "name": "measurement",
+        "check": [
+          "Number",
+          "String"
         ]
-      },
-      {
-        "type": "input_dummy"
       },
       {
         "type": "field_dropdown",
