@@ -3,6 +3,8 @@ This project aims to provide an easy to use Blockly-interface for creating IoT-a
 
 The blocks provide capabilites to create simple querying applications or more complex ones that trigger state-dependent or event-based actions.
 
+For a detailed desribtion of the blocks see [Blocks.md](docs/Blocks.md)
+
 ## Requirements
 This Application currently works with IoT-Systems that offer a RDF/Turtle interface similiar to the one below.
 
