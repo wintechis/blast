@@ -330,10 +330,3 @@ Blockly.JavaScript['switchlights'] = function(block) {
   var code = `switchLights("${ibeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
   return code;
 };
-
-if ((!(prevResultsMap.get("http://testserver.local:3000/ibeacon/").get("f0346fbf4875")["rssi"].value < -50)) &&
-     (resultsMap.get("http://testserver.local:3000/ibeacon/").get("f0346fbf4875")["rssi"].value < -50)) {
-    insertMessage('ja')
-  } else {
-    insertMessage('nein')
-  }
