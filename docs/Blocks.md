@@ -1,5 +1,5 @@
 # BLAST Block Overview
-This document describes the BLAST blocks in detail. For a formal syntax definiton check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantic](#Semantic).
+This document describes the BLAST blocks in detail. For a formal syntax definition check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantic](#Semantic).
 
 Contents:
 * [**Syntax**](#Syntax)
@@ -24,15 +24,15 @@ setup                    ::= ( action | conditional-statement )*
 loop                     ::= ( action | conditional-statement )*
 action                   ::= ( display-text | display-data | switch-lights)
 conditional-statement    ::= ( if | if-else )
-display-text             ::= (text | number | ibeacon-data)
-display-data             ::= ibeacon receiver
-switch-lights            ::= ibeacon
+display-text             ::= (text | number | iBeacon-data)
+display-data             ::= iBeacon receiver
+switch-lights            ::= iBeacon
 if                       ::= boolean ( action | conditional-statement )*
 if-else                  ::= boolean ( action | conditional-statement )*
 text                     ::= ( text-value | text-create )
 number                   ::= ( number-value | number-infinity | arithmetic-operations | number-random )
-ibeacon-data             ::= ibeacon receiver
-ibeacon                  ::= iBeaconObject
+iBeacon-data             ::= iBeacon receiver
+iBeacon                  ::= iBeaconObject
 boolean                  ::= ( boolean-value | comparison | logical-operation | not )
 receiver                 ::= receiverObject
 text-value               ::= StringLiteral
@@ -48,14 +48,14 @@ not                      ::= boolean
 ```
 
 ### Terminals
-This table aims to descirbe the terminals used in the EBNF above.
+This table aims to describe the terminals used in the EBNF above.
 terminal | description | example
 ---| --- | ---
 StringLiteral | any visible character and the whitespace character, no termination characters (newline, carriage return, tabs, ...) | `hello world!`
 DoubleLiteral | a floating point number | `3.14`
 BooleanLiteral  | a boolean (*true* or *false*) | `true`
-iBeaconObject| these blocks returns the address the ibeacon's RDF graph can be found at | `http://localhost/ibeacon/deadbeef` 
-receiverObject | these blocks returns the address the receivers's RDF graph can be found at | `http://localhost/ibeacon/` 
+iBeaconObject| these blocks returns the address the iBeacon's RDF graph can be found at | `http://localhost/iBeacon/deadbeef` 
+receiverObject | these blocks returns the address the receivers's RDF graph can be found at | `http://localhost/iBeacon/` 
 
 ## Semantic
 This section explains the semantic of the blocks used in BLAST.
@@ -70,19 +70,19 @@ In BLAST there are 5 categories of blocks:
 
 Descriptions of these blocks can be found in the following.
 
-## process-bloks
+## process-blocks
 The [**setup**](#setup) and [**loop**](#loop) blocks control the block programs process order
 
 ### setup
-Every block in the setup-block get's executed once at programm start.
+Every block in the setup-block get's executed once at program start.
 
 ![setup block](images/upload/process-setup.png)
 
 **input:** *action* or *conditional statement*  
 **output:** *no output*
 
-Before executing the setup block, BLAST parses every ibeaconObject and receiverObject inside it (`getAllAdresses()`) and runs a SPARQL-query using [µRDF](https://github.com/vcharpenay/uRDF.js) to get their current data (`queryAlliBeacons(addresses)`). Afterwards the blocks in the setup block are executed consecutively, starting with the topmost block.
-```javascript
+Before executing the setup block, BLAST parses every *iBeaconObject* and *receiverObject* inside it (`getAllAdresses()`) and runs a SPARQL-query using [µRDF](https://github.com/vcharpenay/uRDF.js) to get their current data (`queryAlliBeacons(addresses)`). Afterwards the blocks in the setup block are executed consecutively, starting with the topmost block.
+```JavaScript
 // clear process array
 var setup = [];
 
@@ -100,8 +100,8 @@ for (process of setup) {
 }
 ```
 
-Below is the SPARQL query executed by queryAlliBeacons.
-```javascript
+Below is the SPARQL query executed by `queryAlliBeacons`.
+```JavaScript
 var query =
 `BASE <${baseUrl}>
 PREFIX scp: <https://github.com/aharth/supercool/>
@@ -138,7 +138,7 @@ The blocks withing the loop-block are executed consecutively `n`-times every `x`
 Like with the [setup](#setup) block, RDF-data is queried before each execution of the loop block. Then the blocks within the loop block are executed consecutively.  
 Additionally the loop block writes each data retrieved from the RDF-graphs to a map to store previous results. This map (`prevResultsMap`) is used by the [event](#event)-block to compare previous and current results.
 
-```javascript
+```JavaScript
 prevResultsMap = new Map(resultsMap);
 
 //eval loop
@@ -165,33 +165,33 @@ interval = setInterval(function () {
 ```
 
 ## things-blocks
-There are 3 different blocks in this category: [**ibeacon**](#ibeacon), [**receiver**](#receiver) and [**ibeacon-data**](#ibeacon-data).
+There are 3 different blocks in this category: [**iBeacon**](#iBeacon), [**receiver**](#receiver) and [**iBeacon-data**](#iBeacon-data).
 
-### ibeacon
+### iBeacon
 The iBeacon block represents an iBeacon
 
-![ibeacon block](images/upload/things-ibeacon.png)
+![iBeacon block](images/upload/things-iBeacon.png)
 
 **input:** *no input*  
-**output:** *ibeaconObject*
+**output:** *iBeaconObject*
 
 to create a new iBeacon click the `create new thing` button in the things category.  
 Internally, this stores the address of the iBeacon's RDF-graph in a map.
 
 On execution the iBeacon block then retrieves the address of the iBeacon's RDF-graph from this map.
 
-```javascript
-Blockly.JavaScript['ibeacon_get'] = function (block) {
+```JavaScript
+Blockly.JavaScript['iBeacon_get'] = function (block) {
   var thingName = block.getFieldValue('thing');
-  var ibeacons = Blockly.Things.thingsMap.iBeacon;
-  var thing = ibeacons[thingName];
+  var iBeacons = Blockly.Things.thingsMap.iBeacon;
+  var thing = iBeacons[thingName];
   
   return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
 };
 ```
 
 ### receiver
-The receiver block represents a bluetooth receiver.
+The receiver block represents a Bluetooth receiver.
 
 ![receiver block](images/upload/things-receiver.png)
 
@@ -203,7 +203,7 @@ Internally, this stores the address of the receiver's RDF-graph in a map.
 
 On execution the receiver block then retrieves the address of the receivers's RDF-graph from this map.
 
-```javascript
+```JavaScript
 Blockly.JavaScript['receiver_get'] = function (block) {
   var thingName = block.getFieldValue('thing');
   var receiver = Blockly.Things.thingsMap.receiver;
@@ -213,23 +213,23 @@ Blockly.JavaScript['receiver_get'] = function (block) {
 };
 ```
 
-### ibeacon-data
-The ibeacon-data block retrieves data ibeacon data.
+### iBeacon-data
+The iBeacon-data block retrieves data iBeacon data.
 
-![ibeacon-data block](images/upload/things-ibeacon-data.png)![ibeacon-data block output](images/upload/things-ibeacon-data-outputs.png)
+![iBeacon-data block](images/upload/things-iBeacon-data.png)![iBeacon-data block output](images/upload/things-iBeacon-data-outputs.png)
 
-**input:** *thing*  *reveiver*  
+**input:** *thing*  *receiver*  
 **output:** *string* | *number* - the retrieved data
 
 Data is retrieved from the results map created on execution of the [setup](#setup)- or [loop](#loop)-block.
 
-```javascript
-Blockly.JavaScript['ibeacon_data'] = function (block) {
-  var ibeacon = Blockly.JavaScript.valueToCode(block, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
+```JavaScript
+Blockly.JavaScript['iBeacon_data'] = function (block) {
+  var iBeacon = Blockly.JavaScript.valueToCode(block, 'iBeacon', Blockly.JavaScript.ORDER_NONE);
   var receiver = Blockly.JavaScript.valueToCode(block, 'receiver', Blockly.JavaScript.ORDER_NONE);
   var value = block.getFieldValue('value');
 
-  var code = `resultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value`;
+  var code = `resultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -240,7 +240,7 @@ Blockly.JavaScript['ibeacon_data'] = function (block) {
 There are 3 different blocks in this category: [**display text**](#display-text), [**display data**](#display-data) and [**switch lights**](#switch-lights). 
 
 ### display text
-The display text block adds a text container to the actionblock output container on the right.
+The display text block adds a text container to the action-block output container on the right.
 
 ![display text block](images/upload/action-display-text.png)
 ![display text output](images/upload/action-display-text-output.png)
@@ -248,8 +248,8 @@ The display text block adds a text container to the actionblock output container
 **input:** *text* | *number*  
 **output:** *no output*
 
-This block calls the `insertMessage(text)` function to insert it's input into a message container in the actionblock-output container.
-```javascript
+This block calls the `insertMessage(text)` function to insert it's input into a message container in the action-block-output container.
+```JavaScript
 Blockly.JavaScript['message'] = function (block) {
   var text_msg = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE) || '\'\'';
 
@@ -259,7 +259,7 @@ Blockly.JavaScript['message'] = function (block) {
 ```
 
 ### display data
-The display data block prints a table containing all the data received at a receiver to the actionblock output container on the right.
+The display data block prints a table containing all the data received at a receiver to the action-block output container on the right.
 
 ![display data block](images/upload/action-display-data.png)
 ![display data output](images/upload/action-display-data-output.png)
@@ -267,8 +267,8 @@ The display data block prints a table containing all the data received at a rece
 **input:** *receiver*  
 **output:** *no output*
 
-When executed this block writes the checkbox values into an array and calls the `displayTable` function (see below).
-```javascript
+When executed this block writes the check-box values into an array and calls the `displayTable` function (see below).
+```JavaScript
 Blockly.JavaScript['display'] = function (block) {
   var value_thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_NONE);
   var checkbox_show_rssi = block.getFieldValue('show_rssi') == 'TRUE';
@@ -296,7 +296,7 @@ Blockly.JavaScript['display'] = function (block) {
 ```
 
 The `displayTable` function retrieves the data identified by `key` from `resultsMap` and creates a HTML table containing the values where `checkboxes` is true.
-```javascript
+```JavaScript
 function displayTable(key, checkboxes) {
 
     let resultsField = document.createElement("table");
@@ -335,19 +335,19 @@ The switch lights block can be used to control the LEDs of a [LED strip controll
 This block redirects it's input to the `switchLights(mac, r, y, g)` function, which then sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) which controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac`.
 
 
-```javascript
+```JavaScript
 Blockly.JavaScript['switchlights'] = function(block) {
   var cb_red = block.getFieldValue('cb_red') == 'TRUE';
   var cb_yellow = block.getFieldValue('cb_yellow') == 'TRUE';
   var cb_green = block.getFieldValue('cb_green') == 'TRUE';
-  var ibeacon = Blockly.JavaScript.valueToCode(block, 'light', Blockly.JavaScript.ORDER_NONE);
+  var iBeacon = Blockly.JavaScript.valueToCode(block, 'light', Blockly.JavaScript.ORDER_NONE);
   
-  var code = `switchLights("${ibeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
+  var code = `switchLights("${iBeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
   return code;
 };
 ```
 
-```javascript
+```JavaScript
 function switchLights(mac, r, y, g) {
     console.log("foo");
     var r_byte = r ? "ff" : "00";
@@ -382,7 +382,7 @@ The value block represents a boolean value
 **output:** *boolean*
 
 This block returns `true` or `false` depending on the value selected from the dropdown.
-```javascript
+```JavaScript
 Blockly.JavaScript['logic_boolean'] = function(block) {
   // Boolean values true and false.
   var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
@@ -400,8 +400,8 @@ The six operators are: equals, not equals, less than, greater than, less than or
 **input:** (*text* | *number*), (*text* | *number*)  
 **output:** *boolean*
 
-On execution this block returns javascript code, that compares two values when evaluated.
-```javascript
+On execution this block returns JavaScript code, that compares two values when evaluated.
+```JavaScript
 Blockly.JavaScript['logic_compare'] = function(block) {
   // Comparison operator.
   var OPERATORS = {
@@ -431,8 +431,8 @@ This block represents the logical operations *and* and *or*.
 **input:** *boolean*, *boolean*  
 **output:** *boolean*
 
-On execution this block returns javascript code, that performs the logic operation selected in the dropdown when evaluated.
-```javascript
+On execution this block returns JavaScript code, that performs the logic operation selected in the dropdown when evaluated.
+```JavaScript
 Blockly.JavaScript['logic_operation'] = function(block) {
   // Operations 'and', 'or'.
   var operator = (block.getFieldValue('OP') == 'AND') ? '&&' : '||';
@@ -468,7 +468,7 @@ is **false**
 **output:** *boolean*
 
 The not-block calls a function that negates the boolean in the argument.
-```javascript
+```JavaScript
 Blockly.JavaScript['logic_negate'] = function(block) {
   // Negation.
   var order = Blockly.JavaScript.ORDER_LOGICAL_NOT;
@@ -494,8 +494,8 @@ An **if** block may have zero or one **else** sections but not more than one.
 **input:** *boolean* (*action* | *conditional-statement*)*
 **output:** *conditional-statement*
 
-The underlying function, which is called upon execution returns the javascript representation of the if condition defined by the block.
-```javascript
+The underlying function, which is called upon execution returns the JavaScript representation of the if condition defined by the block.
+```JavaScript
 Blockly.JavaScript['controls_if'] = function(block) {
   // If/elseif/else condition.
   var n = 0;
@@ -534,21 +534,21 @@ Blockly.JavaScript['controls_if'] = function(block) {
 
 ### event
 The event block is used to describe events.  
-iE it returns `true` or `false` when a mesaurement enters or leaves a specified range.
+iE it returns `true` or `false` when a measurement enters or leaves a specified range.
 
 ![event block](images/upload/logic-event.png))
 
-**input:** *ibeaconObject* ( *text* | *number* )  
+**input:** *iBeaconObject* ( *text* | *number* )  
 **output:** *boolean*
 
-This block creates javascript code, that when evaluated compares the specified measurement's current result with the previous one. Those results are gathered when executing the [setup](#setup) and [loop](#loop) blocks.
-```javascript
+This block creates JavaScript code, that when evaluated compares the specified measurement's current result with the previous one. Those results are gathered when executing the [setup](#setup) and [loop](#loop) blocks.
+```JavaScript
 Blockly.JavaScript['event'] = function(block) {
-  ibeaconBlock = block.getInputTargetBlock('measurement');
+  iBeaconBlock = block.getInputTargetBlock('measurement');
   var measurement = Blockly.JavaScript.valueToCode(block, 'measurement', Blockly.JavaScript.ORDER_NONE);
-  var ibeacon = Blockly.JavaScript.valueToCode(ibeaconBlock, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
-  var receiver = Blockly.JavaScript.valueToCode(ibeaconBlock, 'receiver', Blockly.JavaScript.ORDER_NONE);
-  var value = ibeaconBlock.getFieldValue('value');
+  var iBeacon = Blockly.JavaScript.valueToCode(iBeaconBlock, 'iBeacon', Blockly.JavaScript.ORDER_NONE);
+  var receiver = Blockly.JavaScript.valueToCode(iBeaconBlock, 'receiver', Blockly.JavaScript.ORDER_NONE);
+  var value = iBeaconBlock.getFieldValue('value');
   var dropdown_startstop = block.getFieldValue('startstop');
   var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE);
 
@@ -568,8 +568,8 @@ Blockly.JavaScript['event'] = function(block) {
   var negate = dropdown_startstop == "BECOMES" ? "" : "!";
 
   var code = 
-  `${negate}(!(prevResultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value ${operator} ${value_name})) &&
-  ${negate} (resultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value ${operator} ${value_name})`;
+  `${negate}(!(prevResultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value ${operator} ${value_name})) &&
+  ${negate} (resultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value ${operator} ${value_name})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -591,8 +591,8 @@ The following block creates the piece of text "hello".
 **input:** *no input*  
 **output:** *text*
 
-When executed this block simply returns the entered text as a javascript string.
-```javascript
+When executed this block simply returns the entered text as a JavaScript string.
+```JavaScript
 Blockly.JavaScript['text'] = function(block) {
   // Text value.
   var code = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
@@ -601,12 +601,12 @@ Blockly.JavaScript['text'] = function(block) {
 ```
 
 ### text create
-The create text with block combines (concatenates) the value of two text blocks to create the text "helloworld". Note that there is no space between them, since none was in either original text.
+The create text with block combines (concatenates) the value of two text blocks to create the text "hello world". Note that there is no space between them, since none was in either original text.
 
 ![text create block](images/upload/text-create.png)
 
 **input:** { *text* }  
-**ouput** *text*
+**output** *text*
 
 To increase the number of text inputs, click on the gear icon, which changes the view to:
 
@@ -614,8 +614,8 @@ To increase the number of text inputs, click on the gear icon, which changes the
 
 Additional inputs are added by dragging an "item" block from the gray toolbox on the left into the "join" block.
 
-In order to concatenate strings this block adds all values to an array and then calls the javascript function `join()` on that array.
-```javascript
+In order to concatenate strings this block adds all values to an array and then calls the JavaScript function `join()` on that array.
+```JavaScript
 Blockly.JavaScript['text_join'] = function(block) {
   switch (block.itemCount_) {
     case 0:
@@ -656,8 +656,8 @@ The number-value block represents a numerical value
 **input:** *no input*  
 **output:** *number*
 
-This block simply returns the entered value as a javascript number
-```javascript
+This block simply returns the entered value as a JavaScript number
+```JavaScript
 Blockly.JavaScript['math_number'] = function(block) {
   // Numeric value.
   var code = Number(block.getFieldValue('NUM'));
@@ -668,15 +668,15 @@ Blockly.JavaScript['math_number'] = function(block) {
 ```
 
 ### infinity
-The infinity block represent the *inifinty* contant.
+The infinity block represent the *infinity* constant.
 
 ![infinity block](images/upload/number-infinity.png)
 
 **input:** *no input*  
 **output:** *number*
 
-On execution this block returns a javascript representation of inifity
-```javascript
+On execution this block returns a JavaScript representation of infinity
+```JavaScript
 Blockly.JavaScript['infinity'] = function (block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
 }
@@ -692,8 +692,8 @@ The available arithmetic operations are: addition, subtraction, multiplication, 
 **input:** *number* *number*  
 **output:** *number*
 
-Below is the function called when executing this block in order to create javascript code from the block.
-```javascript
+Below is the function called when executing this block in order to create JavaScript code from the block.
+```JavaScript
 Blockly.JavaScript['math_arithmetic'] = function(block) {
   // Basic arithmetic operators, and power.
   var OPERATORS = {
@@ -720,15 +720,15 @@ Blockly.JavaScript['math_arithmetic'] = function(block) {
 ```
 
 ### random integer
-This block creates a random integer in betwee the defined boundaries.
+This block creates a random integer in between the defined boundaries.
 
 ![random block](images/upload/number-random.png)
 
 **input:** *number* *number*  
 **output:** *number*
 
-This block returns javascript code utilizing the `Math.random()` function to create a random number in the range specified by the blocks' arguments.
-```javascript
+This block returns JavaScript code utilizing the `Math.random()` function to create a random number in the range specified by the blocks' arguments.
+```JavaScript
 Blockly.JavaScript['math_random_int'] = function(block) {
   // Random integer between [X] and [Y].
   var argument0 = Blockly.JavaScript.valueToCode(block, 'FROM',
