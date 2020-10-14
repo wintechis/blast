@@ -1,5 +1,5 @@
 # BLAST Block Overview
-This document describes the BLAST blocks in detail. For a formal syntax definiton check the first section [EBNF](#EBNF), to learn what happens at execution time see [Execution](#execution) and for a more detailed describtion of a single block, click their respective category's section from the table of contents below.
+This document describes the BLAST blocks in detail. For a formal syntax definiton check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantic](#Semantic).
 
 Contents:
 * [**Syntax**](#Syntax)
