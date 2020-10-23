@@ -4,6 +4,9 @@
 <head>
   <meta charset="utf-8">
   <title>BLAST Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.4.1/dist-lib/solid-auth-client.bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/solid-file-client"></script>
+  <script src="js/solid.js" type="application/javascript"></script>
   <script src="js/blockly_compressed.js"></script>
   <script src="js/javascript_compressed.js"></script>
   <script src="js/blocks_compressed.js"></script>
@@ -97,7 +100,7 @@
           For more information on each of the blocks, check the <a href="docs/Blocks.md" target="_blank" rel="noopener noreferrer">documentation</a>.
         </p>
         <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
-        <button><a onclick="Blockly.Things.loadButtonHandler()">load Workspace</a></button>
+        <button onclick="Blockly.Things.loadButtonHandler()">load Workspace</button>
       </td>
     </tr>
     <tr>

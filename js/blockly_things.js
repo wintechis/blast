@@ -267,40 +267,25 @@ Blockly.Things.nameUsed_ = function (name, workspace, type) {
     return null;
 };
 
-Blockly.Things.saveButtonHandler = function (
+Blockly.Things.saveButtonHandler = async function (
     workspace, type, opt_callback) {
     Blockly.hideChaff();
+    if (!loggedIn) {
+        await popupLogin();
+    }
     var promptAndCheckWithAlert = function (defaultName) {
         let workspace = {};
         workspace.type = type;
 
-        Blockly.Things.promptName("Give your workspace a name", defaultName,
+        Blockly.Things.promptName("Enter a URL to save your pod at", defaultName,
             function (text) {
                 if (text) {
-                    var existing = Blockly.Workspace.nameUsed_(text);
-                    if (existing) {
-                        var msg = "The name %1 already exists. Overwrite?".replace(
-                            '%1', text);
-                        Blockly.confirm(msg,
-                            function (overwrite) {
-                                if (overwrite) {
-                                    save(text);
-                                    Blockly.alert("workspace saved successfully!")
-                                    if (opt_callback) {
-                                        opt_callback(text);
-                                    }
-                                } else {
-                                    promptAndCheckWithAlert(text);  // Recurse
-                                }
-                            });
-                    } else {
-                        // No conflict
-                        save(text);
-                        Blockly.alert("workspace saved successfully!")
-                        if (opt_callback) {
-                            opt_callback(text);
-                        }
+                    // No conflict
+                    save(text);
+                    if (opt_callback) {
+                        opt_callback(text);
                     }
+
                 } else {
                     // User canceled prompt.
                     if (opt_callback) {
@@ -309,91 +294,76 @@ Blockly.Things.saveButtonHandler = function (
                 }
             });
     };
-    promptAndCheckWithAlert('');
+    promptAndCheckWithAlert('https://solid.example.org/blast/workspace.blast');
 };
 
 /**
-* Check whether there exists a thing with the given name of any type.
-* @param {string} name The name to search for.
-* @param {!Blockly.Workspace} workspace The workspace to search for the thing.
-* @return {} The thing with the given name,
-*     or null if none was found.
-* @private
-*/
-Blockly.Workspace.nameUsed_ = function (name, type) {
-    name = name.toLowerCase();
-
-    if (localStorage.hasOwnProperty(name)) {
-        return localStorage.getItem(name);
-    }
-
-    return null;
-};
-
-/**
- * saves the current workspace to the (local) web storage
- * @param {string} name unique name of the workspace
+ * saves the current workspace to solid pod
+ * @param {string} url new url of the workspace
  */
-function save(name) {
-    if (typeof (Storage) !== "undefined") {
-        // save blocks in workspace
-        var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-        var xmlText = Blockly.Xml.domToText(xmlDom);
-        localStorage.setItem(name, xmlText)
+function save(url) {
+    // object to save relevant data in (blocks and variables)
+    var workSpaceSaveObj = {};
 
-        // save things variables
-        localStorage.setItem("storedThingsVariables", JSON.stringify(Blockly.Things.thingsMap));
+    // save blocks in workspace
+    var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+    var xmlText = Blockly.Xml.domToText(xmlDom);
+    workSpaceSaveObj.blocks = xmlText;
+    workSpaceSaveObj.variables = JSON.stringify(Blockly.Things.thingsMap);
+    workspacesaveJSON = JSON.stringify(workSpaceSaveObj);
 
-    } else {
-        Blockly.alert("Your browser does not support local storage, to enable this feature please use Firefox or Chrome.")
-    }
+    // upload workspace file to pod
+    fileClient.createFile(url, workspacesaveJSON, "text/json")
+        .then(() => {
+            Blockly.alert("workspace uploaded!")
+        })
+        .catch(err => {
+            Blockly.alert("Something went wrong. Do you have permission to write on this pod?")
+        })
 }
 
-Blockly.Things.loadButtonHandler = function () {
+Blockly.Things.loadButtonHandler = async function () {
     Blockly.hideChaff();
+    if (!loggedIn) {
+        await popupLogin();
+    }
     var promptAndCheckWithAlert = function () {
 
-        var names = Blockly.Things.getStoredWorkspaces();
-        if (names.length === 0) {
-            Blockly.alert("No saved workspace found!");
-
-        } else {
-            var msg = "Enter the Name of the workspace to load [%1]".replace('%1', names.toString());
-            Blockly.Things.promptName(msg, names[0], function (text) {
-                restore(text);
-            });
-        }
+        var msg = "Enter the address to your blast workspace file";
+        var defaultFolder = "https://solid.example.com/blast/workspace.blast"
+        Blockly.Things.promptName(msg, defaultFolder, function (url) {
+            fileClient.readFile(url)
+                .then((content) => {
+                    restore(content);
+                })
+                .catch(err => {
+                    console.error(`Error: ${err}`);
+                    Blockly.alert("Error: File either doesnt exists or you dont have permission to read it.");
+                });
+        });
     };
     promptAndCheckWithAlert();
 };
 
-Blockly.Things.getStoredWorkspaces = function () {
-    if (localStorage.length === 0) {
-        return [];
-    }
-
-    var names = [];
-    for (var i = 0, len = localStorage.length; i < len; i++) {
-        if (localStorage.key(i) === "storedThingsVariables") continue;
-
-        names.push(localStorage.key(i));
-    }
-    return names;
-}
-
 /**
- * loads a workspace from the (local) web storage
+ * restores a workspace from JSON
  * @param {string} name name of the workspace
  */
-function restore(name) {
+function restore(workspaceJSON) {
     // clear blocks
     Blockly.mainWorkspace.clear();
 
+    console.log(workspaceJSON);
+
+    var workspaceObject = JSON.parse(workspaceJSON);
+
+    console.log(workspaceObject);
+
     // restore things variables
-    Blockly.Things.thingsMap = JSON.parse(localStorage.getItem("storedThingsVariables"));
+    Blockly.Things.thingsMap = JSON.parse(workspaceObject.variables);
 
     // restore blocks
-    var xmlText = localStorage.getItem(name);
+    var xmlText = workspaceObject.blocks;
     var xmlDom = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
 }
