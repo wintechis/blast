@@ -85,11 +85,16 @@ Blockly.JavaScript['setup'] = function (block) {
 };
 
 Blockly.JavaScript['loop'] = function (block) {
-  var value_n = Blockly.JavaScript.valueToCode(block, 'n', Blockly.JavaScript.ORDER_NONE);
-  var value_seconds = Blockly.JavaScript.valueToCode(block, 'seconds', Blockly.JavaScript.ORDER_NONE);
+  var value_seconds = Blockly.JavaScript.valueToCode(block, 'seconds', Blockly.JavaScript.ORDER_ATOMIC);
+  var dropdown_dropdown_mode = block.getFieldValue('dropdown_mode');
+  var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_ATOMIC);
   var statements_loop = Blockly.JavaScript.statementToCode(block, 'loop_processes');
 
-  var code = `loop.push(\`${statements_loop.trim()}\`); var loopTime = ${value_seconds}; var loop_n = ${value_n}`;
+  if(dropdown_dropdown_mode == "mode_until"){
+    value_condition = "!" + value_condition
+  }
+
+  var code = `loop.push(\`${statements_loop.trim()}\`); var loopTime = ${value_seconds}; var loopCondition = ${value_condition};`;
   return code;
 };
 

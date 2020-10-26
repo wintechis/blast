@@ -89,16 +89,8 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "loop",
-    "message0": "Repeat %1 %2 times, every %3 seconds %4 %5",
+    "message0": "Repeat every %1 seconds %2 %3 %4 %5",
     "args0": [
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_value",
-        "name": "n",
-        "check": "Number"
-      },
       {
         "type": "input_value",
         "name": "seconds",
@@ -106,6 +98,25 @@ Blockly.defineBlocksWithJsonArray([
       },
       {
         "type": "input_dummy"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "dropdown_mode",
+        "options": [
+          [
+            "while",
+            "mode_while"
+          ],
+          [
+            "until",
+            "mode_until"
+          ]
+        ]
+      },
+      {
+        "type": "input_value",
+        "name": "condition",
+        "check": "Boolean"
       },
       {
         "type": "input_statement",

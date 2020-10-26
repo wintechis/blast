@@ -97,7 +97,8 @@
           The menu on the left contains different blocks.</br>
           Move them into either the setup- or loop-block below to define a blockprogram.</br>
           When finished click the execute button on the bottom-right to start the program.<br>
-          For more information on each of the blocks, check the <a href="docs/Blocks.md" target="_blank" rel="noopener noreferrer">documentation</a>.
+          For more information on each of the blocks, check the <a href="docs/Blocks.md" target="_blank"
+            rel="noopener noreferrer">documentation</a>.
         </p>
         <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
         <button onclick="Blockly.Things.loadButtonHandler()">load Workspace</button>
@@ -263,6 +264,8 @@
       queryAlliBeacons(addresses).then(() => {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
 
+        console.log(code);
+
         // writes code into arrays
         eval(code);
 
@@ -275,12 +278,13 @@
         //eval loop
         var setupBlock = workspace.getBlockById("setup");
         var addresses = getiBeaconAddressesInBlock(setupBlock);
-        var loopCounter = 0
         interval = setInterval(function () {
-          loopCounter++;
 
           var addresses = getAllAddresses();
           queryAlliBeacons(addresses).then(() => {
+            if (!eval(loopCondition)) {
+              stopCode('finished');
+            }
 
             for (process of loop) {
               console.log(process);
@@ -289,9 +293,6 @@
           });
 
           prevResultsMap = new Map(resultsMap);
-          if (loopCounter == loop_n) {
-            stopCode('finished');
-          }
         }, loopTime * 1000)
       })
     }
