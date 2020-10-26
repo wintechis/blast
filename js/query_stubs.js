@@ -335,3 +335,9 @@ Blockly.JavaScript['switchlights'] = function(block) {
   var code = `switchLights("${ibeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
   return code;
 };
+
+Blockly.JavaScript['randomsound'] = function(block) {
+  var dropdown_category = block.getFieldValue('category');
+  var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
+  return code;
+};

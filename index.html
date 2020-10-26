@@ -130,6 +130,7 @@
       <block type="message"></block>
       <block type="display"></block>
       <block type="switchlights"></block>
+      <block type="randomsound"></block>
     </category>
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
@@ -176,7 +177,7 @@
   </xml>
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
     <block type="setup" id="setup" movable="false" deletable="false" inline="false" x="10" y="10"></block>
-    <block type="loop" id="loop"  deletable="false "x="10" y="250">
+    <block type="loop" id="loop" deletable="false " x="10" y="250">
       <value name="n">
         <block type="infinity"></block>
       </value>
@@ -278,12 +279,14 @@
         //eval loop
         var setupBlock = workspace.getBlockById("setup");
         var addresses = getiBeaconAddressesInBlock(setupBlock);
+        
         interval = setInterval(function () {
 
           var addresses = getAllAddresses();
           queryAlliBeacons(addresses).then(() => {
             if (!eval(loopCondition)) {
               stopCode('finished');
+              return;
             }
 
             for (process of loop) {
@@ -661,6 +664,7 @@ WHERE
       queryString += queryEnd;
     }
   </script>
+  <script src="js/sounds.js"></script>
 </body>
 
 </html>

@@ -759,5 +759,30 @@ Blockly.defineBlocksWithJsonArray([
     "colour": 0,
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "randomsound",
+    "message0": "Play random sound %1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "category",
+        "options": [
+          [
+            "happy",
+            "happy"
+          ],
+          [
+            "sad",
+            "sad"
+          ]
+        ]
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 0,
+    "tooltip": "",
+    "helpUrl": ""
   }
 ])
