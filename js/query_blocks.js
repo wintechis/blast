@@ -784,5 +784,14 @@ Blockly.defineBlocksWithJsonArray([
     "colour": 0,
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "halt",
+    "message0": "stop execution",
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 0,
+    "tooltip": "",
+    "helpUrl": ""
   }
 ])

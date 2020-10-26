@@ -341,3 +341,8 @@ Blockly.JavaScript['randomsound'] = function(block) {
   var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
   return code;
 };
+
+Blockly.JavaScript['halt'] = function(block) {
+  var code = 'stopCode("finished");\n';
+  return code;
+};
