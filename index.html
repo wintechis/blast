@@ -279,7 +279,15 @@
         //eval loop
         var setupBlock = workspace.getBlockById("setup");
         var addresses = getiBeaconAddressesInBlock(setupBlock);
-        
+        if (!eval(loopCondition)) {
+          stopCode('finished');
+          return;
+        }
+
+        for (process of loop) {
+          console.log(process);
+          eval(process);
+        }
         interval = setInterval(function () {
 
           var addresses = getAllAddresses();
