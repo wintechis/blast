@@ -268,9 +268,10 @@
 
         console.log(code);
 
-        // writes code into arrays
+        // pushes the block's code into either setup or loop array 
         eval(code);
 
+        // eval setup
         for (process of setup) {
           eval(process);
         }
@@ -280,15 +281,19 @@
         //eval loop
         var setupBlock = workspace.getBlockById("setup");
         var addresses = getiBeaconAddressesInBlock(setupBlock);
+
+        // stop condition
         if (!eval(loopCondition)) {
           stopCode('finished');
           return;
         }
 
+        // first iteration
         for (process of loop) {
-          console.log(process);
           eval(process);
         }
+
+        // repeat after n seconds
         interval = setInterval(function () {
 
           var addresses = getAllAddresses();
@@ -299,7 +304,6 @@
             }
 
             for (process of loop) {
-              console.log(process);
               eval(process);
             }
           });
@@ -362,46 +366,6 @@
     #############
     */
 
-    // build html table with data from query
-    function addTable(query) {
-      urdf.clear();
-
-      let resultsField = document.createElement("table");
-      // dataTabButton.click();
-
-      urdf.query(query)
-        .then(results => {
-          // deal with missing values
-          let vars = results.reduce((list, res) => {
-            for (let v in res) {
-              if (list.indexOf(v) === -1) list.push(v);
-            }
-            return list;
-          }, []);
-
-          let html = '<tr>';
-          vars.forEach(v => html += '<th>' + v + '</th>');
-          html += '</tr>';
-
-          results.forEach(res => {
-            html += '<tr>';
-            vars.forEach(v => {
-              html += '<td>' + (res[v] ? res[v].value : '') + '</td>'
-            });
-            html += '</tr>';
-          });
-
-          resultsField.innerHTML = html;
-
-          var div = document.getElementById("messageBox");
-          div.insertBefore(resultsField, div.firstChild);
-        })
-        .catch(e => {
-          resultsField.innerHTML = '<tr><td>Error (see console)</td/></tr>';
-          console.error(e);
-        });
-    }
-
     function displayTable(key, checkboxes) {
 
       let resultsField = document.createElement("table");
@@ -429,7 +393,6 @@
     }
 
     function switchLights(mac, r, y, g) {
-      console.log("foo");
       var r_byte = r ? "ff" : "00";
       var y_byte = y ? "ff" : "00";
       var g_byte = g ? "ff" : "00";
@@ -494,183 +457,6 @@
             })
         }));
       });
-    }
-
-    function setQuerySelect(path, host, checkboxes = [true, true, true, true, true, true, true]) {
-      // This String is built and returned
-      var query = ""
-
-      var url = "";
-      try {
-        url = new URL(host);
-      } catch (error) {
-        if (error.name = "TypeError") {
-          url = new URL(alias.get(host));
-        }
-      }
-      var baseUrl = url.protocol + "//" + url.host;
-      var path = url.pathname;
-
-      // adding BASE URL and path
-      // lineBreaks are only for readability
-      query += `
-BASE <${baseUrl}>
-PREFIX scp: <https://github.com/aharth/supercool/>
-PREFIX sosa: <http://www.w3.org/ns/sosa/>
-PREFIX qudt: <http://qudt.org/1.1/schema/qudt#>
-
-ASK
-FROM <${path}>
-WHERE
-{
-  ?ble sosa:madeBySensor ?apfull .
-  BIND(substr(?apfull, 7,1) AS ?ap) .
-  ?ble sosa:hasResult ?sensor .
-  ?sensor scp:MacAddress ?mac .
-  `;
-
-      for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i]) query += fields[i];
-      }
-
-      return query
-    }
-
-    function addQueryFilters(filters) {
-      return filters ? `FILTER(${filters}) .\n` : "";
-    }
-
-    // writes queryString to only get fields set to true in parameters
-    // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
-    //  showMajor, showMinor, showMeasuredPower, showProximity}
-    function updateiBeaconQuery(from, checkboxes, macs, aps) {
-      var url = new URL(from);
-      var baseUrl = url.protocol + "//" + url.host;
-      var path = url.pathname;
-      var queryBase = '\
-                BASE <' + baseUrl + '> \n \
-                PREFIX scp: <https://github.com/aharth/supercool/>\n \
-                PREFIX sosa: <http://www.w3.org/ns/sosa/> \n \
-                PREFIX qudt: <http://qudt.org/1.1/schema/qudt#> \n \
-                \n \
-                SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity \n \
-                FROM <' + path + '>\n \
-                WHERE \n \
-                {\n \
-                    ?ble sosa:madeBySensor ?apfull .\n \
-                    BIND(substr(?apfull, 7,1) AS ?ap) .\n \
-                    ?ble sosa:hasResult ?sensor .\n \
-                    ?sensor scp:MacAddress ?mac . \n';
-
-      queryString = queryBase;
-      fields = [];
-      var queryRSSI = '?sensor qudt:numericValue ?rssi .\n';
-      fields.push(queryRSSI);
-      var queryResultTime = '?sensor sosa:resultTime ?resultTime .\n';
-      fields.push(queryResultTime);
-      var queryAccuracy = '?sensor scp:accuracy ?accuracy .\n';
-      fields.push(queryAccuracy);
-      var queryMajor = '?sensor scp:major ?major .\n';
-      fields.push(queryMajor);
-      var queryMinor = '?sensor scp:major ?minor .\n';
-      fields.push(queryMinor);
-      var queryMeasuredPower = '?sensor scp:measuredPower ?measuredPower .\n';
-      fields.push(queryMeasuredPower);
-      var queryProximity = '?sensor scp:proximity ?proximity .\n';
-      fields.push(queryProximity);
-      var queryEnd = '} ORDER BY ?ap ?mac \n';
-
-      for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i]) queryString += fields[i];
-      }
-
-      if (macs != "") {
-        if (aps != "") {
-          queryString += ' FILTER ((' + macs + ') && (' + aps + '))\n';
-        } else {
-          queryString += ' FILTER (' + macs + ')\n';
-        }
-      }
-      else if (aps != "") {
-        queryString += ' FILTER (' + aps + ')\n';
-      }
-
-      queryString += queryEnd;
-    }
-
-    // writes queryString to only get fields set to true in parameters
-    // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
-    //  showMajor, showMinor, showMeasuredPower, showProximity}
-    function updateBleQuery(from, checkboxes, mac = "all") {
-      var url = new URL(from);
-      var baseUrl = url.protocol + "//" + url.host;
-      var path = url.pathname;
-      var queryBase = '\
-                BASE <' + baseUrl + '> \n \
-                PREFIX scp: <https://github.com/aharth/supercool/>\n \
-                PREFIX sosa: <http://www.w3.org/ns/sosa/> \n \
-                PREFIX qudt: <http://qudt.org/1.1/schema/qudt#> \n \
-                \n \
-                SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity \n \
-                FROM <' + path + '>\n \
-                WHERE \n \
-                {\n \
-                    ?ble sosa:madeBySensor ?ap .\n \
-                    ?ble sosa:hasResult ?sensor .\n \
-                    ?sensor scp:MacAddress ?mac . \n';
-
-      queryString = queryBase;
-      fields = [];
-      var queryRSSI = '?sensor qudt:numericValue ?rssi .\n';
-      fields.push(queryRSSI);
-      var queryResultTime = '?sensor sosa:resultTime ?resultTime .\n';
-      fields.push(queryResultTime);
-      var queryAccuracy = '?sensor scp:accuracy ?accuracy .\n';
-
-      var queryFilterMac = ' FILTER (str(?mac) = "' + mac + '")\n'
-      var queryEnd = '} ORDER BY ?ap ?mac \n';
-
-      for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i]) queryString += fields[i];
-      }
-
-      if (mac != "all")
-        queryString += queryFilterMac;
-
-      queryString += queryEnd;
-    }
-
-    function updateAccesspointsQuery(from, checkboxes) {
-      var url = new URL(from);
-      var baseUrl = url.protocol + "//" + url.host;
-      var path = url.pathname;
-      var queryBase = '\
-                BASE <' + baseUrl + '> \n \
-                PREFIX scp: <https://github.com/aharth/supercool/> \n \
-                PREFIX accesspoint: <http://static.rapidthings.eu/accesspoint/> \n \
-                PREFIX ibeacon: <../../a_one_rapidthings_eu/ibeacon/> \n \
-                PREFIX en: <../../a_one_rapidthings_eu/envirophat/> \n \
-                \n \
-                SELECT ?ap ?x ?y \n \
-                FROM <' + path + '> \n \
-                WHERE \n \
-                    { \n \
-                        ?ap a accesspoint:RaspberryPiZeroW . \n';
-
-      queryString = queryBase;
-      fields = [];
-      var queryX = '?ap scp:hasX ?x . \n';
-      fields.push(queryX);
-      var queryY = '?ap scp:hasY ?y . \n';
-      fields.push(queryY);
-
-      queryEnd = '} ORDER BY ?ap \n'
-
-      for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i]) queryString += fields[i];
-      }
-
-      queryString += queryEnd;
     }
   </script>
   <script src="js/sounds.js"></script>
