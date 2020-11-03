@@ -397,9 +397,9 @@
       var y_byte = y ? "ff" : "00";
       var g_byte = g ? "ff" : "00";
 
-      var data = { type: "WriteWithoutResponse", data: "7e000503" + r_byte + g_byte + y_byte + "00ef" };
+      var data = { type: "Write", data: {"@value": "7e000503" + r_byte + g_byte + y_byte + "00ef", "@type":"ble:HexString" }};
 
-      fetch("http://raspberrypi.local:8000/devices/be5860006ad4/char/0009/", {
+      fetch(`http://192.168.178.22:8000/devices/${mac}/char/0009/`, {
         method: "POST",
         headers: new Headers({
           "Content-Type": "application/json"
@@ -424,15 +424,16 @@
 
           var query =
             `BASE <${baseUrl}>
-            PREFIX scp: <https://github.com/aharth/supercool/>
+            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX sosa: <http://www.w3.org/ns/sosa/>
-            PREFIX qudt: <http://qudt.org/1.1/schema/qudt#>
+            PREFIX ble: <http://vocab.rapidthings.eu/ns/ble.ttl#>
+
             
-            SELECT ?ap ?mac ?rssi ?resultTime ?accuracy ?major ?minor ?measuredPower ?proximity
+            SELECT ?mac ?rssi ?resultTime
             FROM <${path}>
             WHERE 
             {
-                ?ble sosa:madeBySensor ?apfull .
+              ?ble sosa:madeBySensor ?apfull .
                 BIND(substr(?apfull, 7,1) AS ?ap) .
                 ?ble sosa:hasResult ?sensor .
                 ?sensor scp:MacAddress ?mac .
