@@ -124,7 +124,7 @@ Blockly.JavaScript['alias'] = function (block) {
 Blockly.JavaScript['message'] = function (block) {
   var text_msg = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_NONE) || '\'\'';
 
-  var code = `insertMessage(${text_msg})\n`;
+  var code = `displayText(${text_msg})\n`;
   return code;
 };
 
@@ -169,7 +169,7 @@ Blockly.JavaScript['display'] = function (block) {
   if(checkbox_show_major) checkboxes.push("major");
   if(checkbox_show_minor) checkboxes.push("minor");
 
-  code = `displayTable("${value_thing}", ['${checkboxes.join("','")}']);`;
+  code = `displayData("${value_thing}", ['${checkboxes.join("','")}']);`;
   return code;
 }
 

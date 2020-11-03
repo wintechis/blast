@@ -194,7 +194,7 @@
 
     var messageCounter = 0;
 
-    function insertMessage(text) {
+    function displayText(text) {
       msg = document.createElement("div");
       msg.classList.add("message");
       msg.id = "message-" + messageCounter;
@@ -211,7 +211,7 @@
       msgBox.insertBefore(msg, msgBox.firstChild);
     }
 
-    insertMessage("Actionblock output will be displayed here");
+    displayText("Actionblock output will be displayed here");
 
 
     /*  
@@ -366,7 +366,7 @@
     #############
     */
 
-    function displayTable(key, checkboxes) {
+    function displayData(key, checkboxes) {
 
       let resultsField = document.createElement("table");
 
