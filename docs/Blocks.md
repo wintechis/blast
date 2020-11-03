@@ -5,8 +5,7 @@ This document describes the BLAST blocks in detail. For a formal syntax definiti
 Contents:
 
 * [**Syntax**](#Syntax)
-  - [**EBNF**](#EBNF)
-  - [**terminals**](#terminals)
+  - [**EBNF**](#Extended-Backus-Naur-Form)
 * [**Semantics**](#semantics)
   * [**functions**](#functions)
     * [**runcode**](#runCode)
@@ -32,46 +31,71 @@ This section gives an overview of the syntax used in BLAST
 
 The following describes BLAST's syntax using the [W3C EBNF Notation](https://www.w3.org/TR/2010/REC-xquery-20101214/#EBNFNotation).
 
-``` 
-block-program            ::= (setup loop)
-setup                    ::= ( action | conditional-statement )*
-loop                     ::= number number ( action | conditional-statement )*
-action                   ::= ( display-text | display-data | switch-lights | play-sound | halt)
-conditional-statement    ::= ( if | if-else )
-display-text             ::= (text | number | iBeacon-data)
-display-data             ::= iBeacon receiver
-switch-lights            ::= iBeacon
-if                       ::= boolean ( action | conditional-statement )*
-if-else                  ::= boolean ( action | conditional-statement )*
-text                     ::= ( text-value | text-concat)
-number                   ::= ( number-value | number-infinity | arithmetic-operations | number-random )
-iBeacon-data             ::= iBeacon receiver
-iBeacon                  ::= iBeaconObject
-boolean                  ::= ( boolean-value | comparison | logical-operation | not )
-receiver                 ::= receiverObject
-text-value               ::= StringLiteral
-text-concat              ::= text (text)*
-number-value             ::= DoubleLiteral
-number-infinity          ::= DoubleLiteral
-arithmetic-operations    ::= number number
-number-random            ::= number number
-boolean-value            ::= booleanLiteral
-comparison               ::= (number | text ) (number | text )
-logical-operation        ::= boolean boolean
-not                      ::= boolean
-```
+**block programs**
 
-### Terminals
+<pre>
+<a name="ebnf-block-program"></a>block-program            ::= (<a href="#ebnf-setup">setup</a> <a href="#ebnf-loop">loop</a>)
+<a name="ebnf-setup"></a>setup                    ::= ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-loop"></a>loop                     ::= <a href="#ebnf-number">number</a> <a href="#ebnf-number">number</a> ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-conditional-statement"></a>conditional-statement    ::= ( <a href="#ebnf-if">if</a> | <a href="#ebnf-if-else">if-else</a> )
+</pre>
 
-This table aims to describe the terminals used in the EBNF above.
+**things block**
+<pre>
+<a name="ebnf-iBeacon-data"></a>iBeacon-data             ::= "resultsMap.get('" <a href="#ebnf-receiver">receiver</a> "').get('" <a href="#ebnf-iBeacon">iBeacon</a> "')[" <a href="#ebnf-iBeacon-data-dropdown">iBeacon-data-dropdown</a> "].value
+<a name="ebnf-iBeacon-dropdown"></a>iBeacon-data-dropdown    ::= "mac adress", "rssi", "proximity", "timestamp", "measured power", "accuracy", "major", "minor"
+<a name="ebnf-iBeacon"></a>iBeacon                  ::= <a href="#ebnf-iBeaconObject">iBeaconObject</a>
+<a name="ebnf-receiver"></a>receiver                 ::= <a href="#ebnf-receiverObject">receiverObject</a>
+<a name="ebnf-iBeaconObject"></a>iBeaconObject            ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
+<a name="ebnf-receiverObject"></a>receiverObject           ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
+</pre>
 
-| terminal       | description                                                                                                         | example                             |
-|----------------|---------------------------------------------------------------------------------------------------------------------|-------------------------------------|
-| StringLiteral  | any visible character and the whitespace character, no termination characters (newline, carriage return, tabs, ...) | `hello world!` |
-| DoubleLiteral  | a floating point number                                                                                             | `3.14` |
-| BooleanLiteral | a boolean (*true* or *false*)                                                                                       | `true` |
-| iBeaconObject  | these blocks returns the address the iBeacon's RDF graph can be found at                                            | `http://localhost/iBeacon/deadbeef` |
-| receiverObject | these blocks returns the address the receivers's RDF graph can be found at                                          | `http://localhost/iBeacon/` |
+**action blocks**
+<pre>
+<a name="ebnf-action"></a>action                   ::= ( <a href="#ebnf-display-text">display-text</a> | <a href="#ebnf-display-data">display-data</a> | <a href="#ebnf-switch-lights">switch-lights</a> | <a href="#ebnf-playsound">play-sound</a> | <a href="#ebnf-halt">halt</a>)
+display-text             ::= "displayText(" (<a href="#ebnf-text">text</a> | <a href="#ebnf-number">number</a> | <a href="#ebnf-iBeacon-data">iBeacon-data</a>) ");"
+display-data             ::= "displayData(" <a href="#ebnf-iBeacon">iBeacon</a> "," <a href="#ebnf-receiver">receiver</a> "," <a href="#ebnf-boolean-array">boolean-array</a> ");"
+switch-lights            ::= "switch-lights(" <a href="#ebnf-iBeacon">iBeacon</a> "," <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> "," <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> "," <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> ");"
+play-sound               ::= "playRandomSoundFromCategory(category);"
+halt                     ::= "stopCode('halted');"
+</pre>
+
+**text blocks**
+<pre>
+<a name="ebnf-text"></a>text                     ::= ( <a href="#ebnf-text-value">text-value</a> | <a href="#ebnf-text-concat">text-concat</a>)
+<a name="ebnf-text-value"></a>text-value               ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
+<a name="ebnf-text-concat"></a>text-concat              ::= <a href="#ebnf-text">text</a> (<a href="#ebnf-text">text</a>)*
+</pre>
+
+
+**number blocks**
+<pre>
+<a name="ebnf-number"></a>number                   ::= ( <a href="#ebnf-number-value">number-value</a> | <a href="#ebnf-number-infinity">number-infinity</a> | <a href="#ebnf-arithmetic-operations">arithmetic-operations</a> | <a href="#ebnf-number-random">number-random</a> )
+<a name="ebnf-number-value"></a>number-value             ::= <a href="#ebnf-DoubleLiteral">DoubleLiteral</a>
+<a name="ebnf-infinity"></a>number-infinity          ::= <a href="#ebnf-DoubleLiteral">DoubleLiteral</a>
+<a name="ebnf-arithmeti-operations"></a>arithmetic-operations    ::= <a href="#ebnf-number">number</a> <a href="#ebnf-number">number</a>
+<a name="ebnf-number-random"></a>number-random            ::= <a href="#ebnf-number">number</a> <a href="#ebnf-number">number</a>
+</pre>
+
+**logic blocks**
+<pre>
+<a name="ebnf-if"></a>if                       ::= <a href="#ebnf-boolean">boolean</a> ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-if-else"></a>if-else                  ::= <a href="#ebnf-boolean">boolean</a> ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-boolean"></a>boolean                  ::= ( <a href="#ebnf-boolean-value">boolean-value</a> | <a href="#ebnf-comparison">comparison</a> | <a href="#ebnf-logical-comparison">logical-operation</a> | <a href="#ebnf-not">not</a> )
+<a name="ebnf-boolean-array"></a>boolean-array            ::= "[" (<a href="#ebnf-BooleanLiteral">BooleanLiteral</a> ( "," <a href="#ebnf-BooleanLiteral">BooleanLiteral</a>  )* )? "]"
+<a name="ebnf-boolean-value"></a>boolean-value            ::= <a href="#ebnf-booleanLiteral">booleanLiteral</a>
+<a name="ebnf-comparison"></a>comparison               ::= (<a href="#ebnf-number">number</a> | <a href="#ebnf-text">text</a> ) (<a href="#ebnf-number">number</a> | <a href="#ebnf-text">text</a> )
+<a name="ebnf-logical-comparison"></a>logical-operation        ::= <a href="#ebnf-boolean">boolean</a> <a href="#ebnf-boolean">boolean</a>
+<a name="ebnf-not"></a>not                      ::= <a href="#ebnf-boolean">boolean</a>
+</pre>
+
+**Literals**
+<pre>
+<a name="ebnf-StringLiteral"></a>StringLiteral            ::= /* any visible character and the whitespace character, no termination characters */
+<a name="ebnf-DoubleLiteral"></a>DoubleLiteral            ::= (("." <a href="#ebnf-Digits">Digits</a>) | (<a href="#ebnf-Digits">Digits</a> ("." [0-9]*)?)) [eE] [+-]? <a href="#ebnf-Digits">Digits</a>
+<a name="ebnf-Digits"></a>Digits                   ::= [0-9]+
+<a name="ebnf-BooleanLiteral"></a>BooleanLiteral           ::= true | false
+</pre>
 
 ## Semantics
 
