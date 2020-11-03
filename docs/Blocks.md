@@ -1,13 +1,13 @@
 # BLAST Block Overview
 
-This document describes the BLAST blocks in detail. For a formal syntax definition check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantic](#Semantic).
+This document describes the BLAST blocks in detail. For a formal syntax definition check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantics](#Semantics).
 
 Contents:
 
 * [**Syntax**](#Syntax)
   - [**EBNF**](#EBNF)
   - [**terminals**](#terminals)
-* [**Semantic**](#semantic)
+* [**Semantics**](#semantics)
   * [**functions**](#functions)
     * [**runcode**](#runCode)
     * [**getAllAddresses**](#getAllAddresses)
@@ -35,22 +35,22 @@ The following describes BLAST's syntax using the [W3C EBNF Notation](https://www
 ``` 
 block-program            ::= (setup loop)
 setup                    ::= ( action | conditional-statement )*
-loop                     ::= ( action | conditional-statement )*
-action                   ::= ( display-text | display-data | switch-lights)
+loop                     ::= number number ( action | conditional-statement )*
+action                   ::= ( display-text | display-data | switch-lights | play-sound | halt)
 conditional-statement    ::= ( if | if-else )
 display-text             ::= (text | number | iBeacon-data)
 display-data             ::= iBeacon receiver
 switch-lights            ::= iBeacon
 if                       ::= boolean ( action | conditional-statement )*
 if-else                  ::= boolean ( action | conditional-statement )*
-text                     ::= ( text-value | text-create )
+text                     ::= ( text-value | text-concat)
 number                   ::= ( number-value | number-infinity | arithmetic-operations | number-random )
 iBeacon-data             ::= iBeacon receiver
 iBeacon                  ::= iBeaconObject
 boolean                  ::= ( boolean-value | comparison | logical-operation | not )
 receiver                 ::= receiverObject
 text-value               ::= StringLiteral
-text-create              ::= text (text)*
+text-concat              ::= text (text)*
 number-value             ::= DoubleLiteral
 number-infinity          ::= DoubleLiteral
 arithmetic-operations    ::= number number
@@ -73,7 +73,7 @@ This table aims to describe the terminals used in the EBNF above.
 | iBeaconObject  | these blocks returns the address the iBeacon's RDF graph can be found at                                            | `http://localhost/iBeacon/deadbeef` |
 | receiverObject | these blocks returns the address the receivers's RDF graph can be found at                                          | `http://localhost/iBeacon/` |
 
-## Semantic
+## Semantics
 
 This section explains what happens when a block program gets executed. In order to do so the first section lists and explains all static helper functions of BLAST and the second section describes each block in detail.
 
