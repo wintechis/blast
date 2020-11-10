@@ -397,7 +397,7 @@
       var y_byte = y ? "ff" : "00";
       var g_byte = g ? "ff" : "00";
 
-      var data = { type: "Write", data: {"@value": "7e000503" + r_byte + g_byte + y_byte + "00ef", "@type":"ble:HexString" }};
+      var data = { type: "Write", data: { "@value": "7e000503" + r_byte + g_byte + y_byte + "00ef", "@type": "ble:HexString" } };
 
       fetch(`http://192.168.178.22:8000/devices/${mac}/char/0009/`, {
         method: "POST",
@@ -424,27 +424,22 @@
 
           var query =
             `BASE <${baseUrl}>
-            PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+            PREFIX rdf: <http://w3.org/1999/02/22-rdf-syntax-ns#>
             PREFIX sosa: <http://www.w3.org/ns/sosa/>
             PREFIX ble: <http://vocab.rapidthings.eu/ns/ble.ttl#>
+            PREFIX a: <http://vocab.rapidthings.eu/ns/ble/adapter.ttl#>
 
             
             SELECT ?mac ?rssi ?resultTime
             FROM <${path}>
             WHERE 
             {
-              ?ble sosa:madeBySensor ?apfull .
-                BIND(substr(?apfull, 7,1) AS ?ap) .
-                ?ble sosa:hasResult ?sensor .
-                ?sensor scp:MacAddress ?mac .
-                ?sensor qudt:numericValue ?rssi .
-                ?sensor sosa:resultTime ?resultTime .
-                ?sensor scp:accuracy ?accuracy .
-                ?sensor scp:major ?major .
-                ?sensor scp:major ?minor .
-                ?sensor scp:measuredPower ?measuredPower .
-                ?sensor scp:proximity ?proximity .
-            } ORDER BY ?ap ?mac`;
+                ?history ble:entries ?obs .
+                ?obs a ble:RssiObservation .
+                ?obs sosa:madeBySensor ?mac .
+                ?obs sosa:hasSimpleResult ?rssi .
+                ?obs sosa:resultTime ?resultTime .
+            }`;
 
           urdf.clear();
           urdf.query(query)
