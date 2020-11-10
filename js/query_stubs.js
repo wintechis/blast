@@ -150,26 +150,8 @@ fields.push(queryProximity);
 
 Blockly.JavaScript['display'] = function (block) {
   var value_thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_NONE);
-  var checkbox_show_rssi = block.getFieldValue('show_rssi') == 'TRUE';
-  var checkbox_show_proximity = block.getFieldValue('show_proximity') == 'TRUE';
-  var checkbox_timestamp = block.getFieldValue('timestamp') == 'TRUE';
-  var checkbox_show_measured_power = block.getFieldValue('show_measured_power') == 'TRUE';
-  var checkbox_show_accuracy = block.getFieldValue('show_accuracy') == 'TRUE';
-  var checkbox_show_major = block.getFieldValue('show_major') == 'TRUE';
-  var checkbox_show_minor = block.getFieldValue('show_minor') == 'TRUE';
 
-  // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
-  //  showMajor, showMinor, showMeasuredPower, showProximity}
-  checkboxes = ["mac"];
-  if(checkbox_show_rssi) checkboxes.push("rssi");
-  if(checkbox_show_proximity) checkboxes.push("proximity");
-  if(checkbox_timestamp) checkboxes.push("resultTime");
-  if(checkbox_show_measured_power) checkboxes.push("measuredPower");
-  if(checkbox_show_accuracy) checkboxes.push("accuracy");
-  if(checkbox_show_major) checkboxes.push("major");
-  if(checkbox_show_minor) checkboxes.push("minor");
-
-  code = `displayData("${value_thing}", ['${checkboxes.join("','")}']);`;
+  code = `displayData("${value_thing}");`;
   return code;
 }
 

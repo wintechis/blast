@@ -366,13 +366,13 @@
     #############
     */
 
-    function displayData(key, checkboxes) {
+    function displayData(key) {
 
       let resultsField = document.createElement("table");
 
       // deal with missing values
       results = resultsMap.get(key);
-      let vars = checkboxes;
+      let vars = ["mac","rssi","resultTime"];
 
       let html = '<tr>';
       vars.forEach(v => html += '<th>' + v + '</th>');

@@ -669,47 +669,12 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "display",
-    "message0": "Display data received at %1 %2 rssi %3 proximity %4 timestamp %5 measured power %6 accuracy %7 major %8 minor",
+    "message0": "display data received at %1",
     "args0": [
       {
         "type": "input_value",
         "name": "thing",
         "check": "receiver"
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_rssi",
-        "checked": true
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_proximity",
-        "checked": true
-      },
-      {
-        "type": "field_checkbox",
-        "name": "timestamp",
-        "checked": false
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_measured_power",
-        "checked": false
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_accuracy",
-        "checked": true
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_major",
-        "checked": false
-      },
-      {
-        "type": "field_checkbox",
-        "name": "show_minor",
-        "checked": false
       }
     ],
     "previousStatement": "action",
@@ -762,7 +727,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "randomsound",
-    "message0": "Play random sound %1",
+    "message0": "play random sound %1",
     "args0": [
       {
         "type": "field_dropdown",
