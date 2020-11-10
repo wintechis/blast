@@ -760,3 +760,21 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": ""
   }
 ])
+
+Blockly.Blocks['sparql_query'] = {
+  init: function() {
+    this.appendDummyInput()
+      .appendField("run a SPARQL query:");
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldMultilineInput(`
+SELECT *
+FROM <>
+WHERE { 
+  ?s ?p ?o
+}`), "query");
+    this.setOutput(false);
+    this.setColour(0);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  }
+};

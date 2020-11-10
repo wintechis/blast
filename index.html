@@ -120,6 +120,13 @@
       width: 80%;
     }
 
+    .modal-content a {
+      display:block;
+      width: 200px;
+      height: 50px;
+    }
+
+
     /* Modal Close Button */
     .close {
       color: #aaaaaa;
@@ -177,7 +184,8 @@
   <div id="sampleModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <a onClick="loadSample('gamble')">Gamble</a>
+      <a onClick="loadSample('gamble')">Gamble</a><br>
+      <a onClick="loadSample('sparql')">SPARQL</a>
     </div>
   </div>
 
@@ -189,6 +197,7 @@
     <category name="actions" colour="0">
       <block type="message"></block>
       <block type="display"></block>
+      <block type="sparql_query"></block>
       <block type="switchlights"></block>
       <block type="randomsound"></block>
       <block type="halt"></block>
@@ -541,7 +550,7 @@
 
         var modal = document.getElementById("sampleModal");
         modal.style.display = "none";
-      }); 
+      });
     }
 
     function getJSON(url, callback) {
@@ -558,6 +567,36 @@
       };
       xhr.send();
     };
+
+    function sparqlQuery(query) {
+
+      urdf.clear();
+      urdf.query(query)
+        .then(results => {
+          // deal with missing values
+          let vars = results.reduce((list, res) => {
+            for (let v in res) {
+              if (list.indexOf(v) === -1) list.push(v);
+            }
+            return list;
+          }, []);
+
+          let html = '<tr>';
+          vars.forEach(v => html += '<th>' + v + '</th>');
+          html += '</tr>';
+
+          results.forEach(res => {
+            html += '<tr>';
+            vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
+            html += '</tr>';
+          });
+
+          let resultsField = document.createElement("table");
+          resultsField.innerHTML = html;
+          var msgBox = document.getElementById("messageBox");
+          msgBox.insertBefore(resultsField, msgBox.firstChild);
+        });
+    }
   </script>
   <script src="js/sounds.js"></script>
 </body>

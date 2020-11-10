@@ -46,7 +46,7 @@ Blockly.JavaScript['loop'] = function (block) {
   var value_condition = Blockly.JavaScript.valueToCode(block, 'condition', Blockly.JavaScript.ORDER_ATOMIC);
   var statements_loop = Blockly.JavaScript.statementToCode(block, 'loop_processes');
 
-  if(dropdown_dropdown_mode == "mode_until"){
+  if (dropdown_dropdown_mode == "mode_until") {
     value_condition = "!" + value_condition
   }
 
@@ -159,7 +159,7 @@ Blockly.JavaScript['ibeacon_get'] = function (block) {
   var thingName = block.getFieldValue('thing');
   var ibeacons = Blockly.Things.thingsMap.iBeacon;
   var thing = ibeacons[thingName];
-  
+
   return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -171,7 +171,7 @@ Blockly.JavaScript['receiver_get'] = function (block) {
   return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['event'] = function(block) {
+Blockly.JavaScript['event'] = function (block) {
   ibeaconBlock = block.getInputTargetBlock('measurement');
   var measurement = Blockly.JavaScript.valueToCode(block, 'measurement', Blockly.JavaScript.ORDER_NONE);
   var ibeacon = Blockly.JavaScript.valueToCode(ibeaconBlock, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
@@ -191,34 +191,42 @@ Blockly.JavaScript['event'] = function(block) {
 
   var operator = OPERATORS[block.getFieldValue('operator')];
   var order = (operator == '==' || operator == '!=') ?
-  Blockly.JavaScript.ORDER_EQUALITY : Blockly.JavaScript.ORDER_RELATIONAL;
+    Blockly.JavaScript.ORDER_EQUALITY : Blockly.JavaScript.ORDER_RELATIONAL;
 
   var negate = dropdown_startstop == "BECOMES" ? "" : "!";
 
-  var code = 
-  `${negate}(!(prevResultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value ${operator} ${value_name})) &&
+  var code =
+    `${negate}(!(prevResultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value ${operator} ${value_name})) &&
   ${negate} (resultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value ${operator} ${value_name})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['switchlights'] = function(block) {
+Blockly.JavaScript['switchlights'] = function (block) {
   var cb_red = block.getFieldValue('cb_red') == 'TRUE';
   var cb_yellow = block.getFieldValue('cb_yellow') == 'TRUE';
   var cb_green = block.getFieldValue('cb_green') == 'TRUE';
   var ibeacon = Blockly.JavaScript.valueToCode(block, 'light', Blockly.JavaScript.ORDER_NONE);
-  
+
   var code = `switchLights("${ibeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
   return code;
 };
 
-Blockly.JavaScript['randomsound'] = function(block) {
+Blockly.JavaScript['randomsound'] = function (block) {
   var dropdown_category = block.getFieldValue('category');
   var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
   return code;
 };
 
-Blockly.JavaScript['halt'] = function(block) {
+Blockly.JavaScript['halt'] = function (block) {
   var code = 'stopCode("finished");\n';
   return code;
 };
+
+Blockly.JavaScript['sparql_query'] = function (block) {
+  var query = block.getFieldValue('query');
+
+  var code = (`sparqlQuery(\\\`${query}\\\`)`)
+
+  return code;
+}

@@ -363,3 +363,5 @@ function restore(workspaceJSON) {
     var xmlDom = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
 }
+
+
