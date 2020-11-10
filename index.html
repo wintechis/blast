@@ -85,6 +85,55 @@
       border-collapse: collapse;
       border: 1px solid black;
     }
+
+
+    /* The Modal (background) */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      /* Stay in place */
+      z-index: 1;
+      /* Sit on top */
+      padding-top: 100px;
+      /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%;
+      /* Full width */
+      height: 100%;
+      /* Full height */
+      overflow: auto;
+      /* Enable scroll if needed */
+      background-color: rgb(0, 0, 0);
+      /* Fallback color */
+      background-color: rgba(0, 0, 0, 0.4);
+      /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+    }
+
+    /* Modal Close Button */
+    .close {
+      color: #aaaaaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -102,6 +151,7 @@
         </p>
         <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
         <button onclick="Blockly.Things.loadButtonHandler()">load Workspace</button>
+        <button onclick="loadSampleButtonHandler()">load sample</button>
       </td>
     </tr>
     <tr>
@@ -124,8 +174,18 @@
 
   <div id="blocklyDiv" style="position: absolute"></div>
 
+  <div id="sampleModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <a onClick="loadSample('gamble')">Gamble</a>
+    </div>
+  </div>
+
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="things" custom="things_category" colour="270"></category>
+    <category name="Variables" custom="VARIABLE" colour="330">
+
+    </category>
     <category name="actions" colour="0">
       <block type="message"></block>
       <block type="display"></block>
@@ -372,7 +432,7 @@
 
       // deal with missing values
       results = resultsMap.get(key);
-      let vars = ["mac","rssi","resultTime"];
+      let vars = ["mac", "rssi", "resultTime"];
 
       let html = '<tr>';
       vars.forEach(v => html += '<th>' + v + '</th>');
@@ -454,6 +514,50 @@
         }));
       });
     }
+
+    function loadSampleButtonHandler() {
+      var modal = document.getElementById("sampleModal");
+      modal.style.display = "block";
+
+      var span = document.getElementsByClassName("close")[0];
+
+      // When the user clicks on <span> (x), close the modal
+      span.onclick = function () {
+        modal.style.display = "none";
+      }
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function (event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    }
+
+    function loadSample(sample) {
+      var url = `sample-workspaces/${sample}.json`;
+      getJSON(url, function (status, data) {
+        restore(data);
+
+        var modal = document.getElementById("sampleModal");
+        modal.style.display = "none";
+      }); 
+    }
+
+    function getJSON(url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'text';
+      xhr.onload = function () {
+        var status = xhr.status;
+        if (status === 200) {
+          callback(null, xhr.response);
+        } else {
+          callback(status, xhr.response);
+        }
+      };
+      xhr.send();
+    };
   </script>
   <script src="js/sounds.js"></script>
 </body>
