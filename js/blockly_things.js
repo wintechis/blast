@@ -353,11 +353,7 @@ function restore(workspaceJSON) {
     // clear blocks
     Blockly.mainWorkspace.clear();
 
-    console.log(workspaceJSON);
-
     var workspaceObject = JSON.parse(workspaceJSON);
-
-    console.log(workspaceObject);
 
     // restore things variables
     Blockly.Things.thingsMap = JSON.parse(workspaceObject.variables);
