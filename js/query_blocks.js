@@ -67,7 +67,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "setup",
-    "message0": "Setup %1 %2",
+    "message0": "setup %1 %2",
     "args0": [
       {
         "type": "input_dummy",
@@ -89,7 +89,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "loop",
-    "message0": "Repeat every %1 seconds %2 %3 %4 %5",
+    "message0": "repeat every %1 seconds %2 %3 %4 %5",
     "args0": [
       {
         "type": "input_value",
