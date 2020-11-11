@@ -573,6 +573,10 @@
       urdf.clear();
       urdf.query(query)
         .then(results => {
+          if(results.length == 0){
+            displayText("the SPARQL query returned no results.")
+          }
+
           // deal with missing values
           let vars = results.reduce((list, res) => {
             for (let v in res) {
@@ -595,6 +599,10 @@
           resultsField.innerHTML = html;
           var msgBox = document.getElementById("messageBox");
           msgBox.insertBefore(resultsField, msgBox.firstChild);
+        })
+        .catch(e => {
+          displayText("the SPARQL query returned an error, see console for details.")
+          console.error(e);
         });
     }
   </script>
