@@ -1,6 +1,6 @@
-# BLAST Block Overview<!-- omit in toc -->
+# BLAST Documentation<!-- omit in toc -->
 
-BLAST is an achronym for **Bl**ock **A**pplication**s** for **t**hings. It offers a web-based, visual programming environment based on Google's [Blockly](https://developers.google.com/blockly). 
+BLAST is an acronym for **Bl**ock **A**pplication**s** for **t**hings. It offers a web-based, visual programming environment based on Google's [Blockly](https://developers.google.com/blockly). 
 
 In order to build and run a block-program, users can drag blocks together and then execute those by clicking the `execute` button on the bottom right. To stop a running program, click the `stop` button next to it.
 
@@ -11,7 +11,7 @@ The following describes the BLAST blocks in detail.
 
 In BLAST there are 5 categories of blocks:
 
-* **process**: The setup- and repeat-block control the block programs process order
+* **program**: The setup- and repeat-block control the block programs process order
 * **things**: Blocks representing and retrieving data from things
 * **actions**: Display measured data, custom messages or setting the LEDs of a signal light
 * **logic**: Everything concerning boolean logic, like if, if-else blocks and events
@@ -24,7 +24,7 @@ For a formal syntax definition check the first section [1. syntax](#1-Syntax) an
 - [1. Syntax](#1-syntax)
   - [1.1. Extended Backus-Naur Form](#11-extended-backus-naur-form)
   - [1.2. block syntax](#12-block-syntax)
-    - [1.2.1. process-blocks syntax](#121-process-blocks-syntax)
+    - [1.2.1. program-blocks syntax](#121-program-blocks-syntax)
       - [1.2.1.1. setup-syntax](#1211-setup-syntax)
       - [1.2.1.2. repeat-syntax](#1212-repeat-syntax)
     - [1.2.2. things-blocks syntax](#122-things-blocks-syntax)
@@ -43,7 +43,7 @@ For a formal syntax definition check the first section [1. syntax](#1-Syntax) an
       - [1.2.4.3. logical operation syntax](#1243-logical-operation-syntax)
       - [1.2.4.4. not syntax](#1244-not-syntax)
       - [1.2.4.5. if / if-else syntax](#1245-if--if-else-syntax)
-      - [1.2.4.6. event](#1246-event)
+      - [1.2.4.6. event syntax](#1246-event-syntax)
     - [1.2.5. text blocks syntax](#125-text-blocks-syntax)
       - [1.2.5.1. text-value syntax](#1251-text-value-syntax)
       - [1.2.5.2. text concatenation syntax](#1252-text-concatenation-syntax)
@@ -62,8 +62,8 @@ For a formal syntax definition check the first section [1. syntax](#1-Syntax) an
     - [2.1.6. switchLights](#216-switchlights)
     - [2.1.7. insertMessage](#217-insertmessage)
     - [2.1.8. playRandomSoundFromCategory](#218-playrandomsoundfromcategory)
-  - [2.2. Block semantics](#22-block-semantics)
-    - [2.2.1. process-blocks semantics](#221-process-blocks-semantics)
+  - [2.2. block semantics](#22-block-semantics)
+    - [2.2.1. program-blocks semantics](#221-program-blocks-semantics)
       - [2.2.1.1. setup semantics](#2211-setup-semantics)
       - [2.2.1.2. repeat semantics](#2212-repeat-semantics)
     - [2.2.2. things-blocks semantics](#222-things-blocks-semantics)
@@ -113,7 +113,7 @@ The following describes BLAST's syntax using the [W3C EBNF Notation](https://www
 **things blocks**<a name="ebnf-things-blocks"></a>
 <pre>
 <a name="ebnf-iBeacon-data"></a>iBeacon-data             ::= "resultsMap.get('" <a href="#ebnf-receiver">receiver</a> "').get('" <a href="#ebnf-iBeacon">iBeacon</a> "')[" <a href="#ebnf-iBeacon-data-dropdown">iBeacon-data-dropdown</a> "].value
-<a name="ebnf-iBeacon-dropdown"></a>iBeacon-data-dropdown    ::= "mac adress", "rssi", "proximity", "timestamp", "measured power", "accuracy", "major", "minor"
+<a name="ebnf-iBeacon-dropdown"></a>iBeacon-data-dropdown    ::= "mac address", "rssi", "proximity", "timestamp", "measured power", "accuracy", "major", "minor"
 <a name="ebnf-iBeacon"></a>iBeacon                  ::= <a href="#ebnf-iBeaconObject">iBeaconObject</a>
 <a name="ebnf-receiver"></a>receiver                 ::= <a href="#ebnf-receiverObject">receiverObject</a>
 <a name="ebnf-iBeaconObject"></a>iBeaconObject            ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
@@ -161,7 +161,7 @@ halt                     ::= "stopCode('halted');"
 
 **Literals**<a name="ebnf-literals"></a>
 <pre>
-<a name="ebnf-StringLiteral"></a>StringLiteral            ::= /* any visible character and the whitespace character, no termination characters */
+<a name="ebnf-StringLiteral"></a>StringLiteral            ::= /* any visible character and the white-space character, no termination characters */
 <a name="ebnf-DoubleLiteral"></a>DoubleLiteral            ::= (("." <a href="#ebnf-Digits">Digits</a>) | (<a href="#ebnf-Digits">Digits</a> ("." [0-9]*)?)) [eE] [+-]? <a href="#ebnf-Digits">Digits</a>
 <a name="ebnf-Digits"></a>Digits                   ::= [0-9]+
 <a name="ebnf-BooleanLiteral"></a>BooleanLiteral           ::= true | false
@@ -169,7 +169,7 @@ halt                     ::= "stopCode('halted');"
 
 ## 1.2. block syntax
 
-### 1.2.1. process-blocks syntax
+### 1.2.1. program-blocks syntax
 
 #### 1.2.1.1. setup-syntax
 ![setup block](images/upload/process-setup.png)
@@ -185,7 +185,7 @@ halt                     ::= "stopCode('halted');"
 
 ### 1.2.2. things-blocks syntax
 
-There are 3 different blocks in this category: [**iBeacon**](#iBeacon)-syntax, [**receiver**](#receiver-syntax) and [**iBeacon-data**](#iBeacon-data-syntax).
+There are 3 different blocks in this category: **iBeacon**, **receiver** and **iBeacon-data**.
 
 #### 1.2.2.1. iBeacon-syntax
 ![iBeacon block](images/upload/things-ibeacon.png)
@@ -207,7 +207,7 @@ There are 3 different blocks in this category: [**iBeacon**](#iBeacon)-syntax, [
 
 ### 1.2.3. action blocks syntax
 
-There are 5 different blocks in this category: [**display text**](#display-text-syntax), [**display data**](#display-data-syntax), [**switch lights**](#switch-lights-syntax), [**random sound**](#random-sound-syntax) and [**halt**](#halt-syntax) 
+There are 5 different blocks in this category: **display text**, **display data**, **switch lights**, **random sound** and **halt**
 
 #### 1.2.3.1. display text syntax
 ![display text block](images/upload/action-display-text.png)
@@ -279,7 +279,7 @@ There are 5 different blocks in this category: [**display text**](#display-text-
 **input:** *boolean* (*action* | *conditional-statement*)*
 **output:** *conditional-statement*
 
-#### 1.2.4.6. event
+#### 1.2.4.6. event syntax
 ![event block](images/upload/logic-event.png))
 
 **input:** *iBeaconObject* ( *text* | *number* )  
@@ -331,13 +331,13 @@ There are 5 different blocks in this category: [**display text**](#display-text-
 This section explains what happens when a block program gets executed. In order to do so the first section lists and explains all static helper functions of BLAST and the second section describes each block in detail.
 
 Click the links below to jump to each one of those sections.
-* [**functions**](#functions)
-* [**blocks**](#blocks-semtantics)
+* [**functions**](#21-functions)
+* [**blocks**](#22-block-semantics)
 
 ## 2.1. functions
 BLAST's has a handful of predefined functions in order to execute block programs. These functions can be divided into the tow categories *general* and *specific*. 
 
-The *general* functions perfom tasks used by the BLAST environment to handle execution of a block program. The *specific* functions are only used by single blocks and arent needed for execution of a block program without these blocks.
+The *general* functions perform tasks used by the BLAST environment to handle execution of a block program. The *specific* functions are only used by single blocks and are not needed for execution of a block program without these blocks.
 
 The following describes all functions used by BLAST and it's blocks.
 
@@ -356,13 +356,14 @@ The following describes all functions used by BLAST and it's blocks.
 
 **[sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) only functions**
 * [**switchLights**](#switchLights)
+  
 When a user clicks the execute button the [**runCode()**](#runCode) function is called.
 
 ### 2.1.1. runCode
 
 The `runCode()` handles execution of a block program.
 
-Before each iteration of any of the [**process blocks**](#process-blocks), [**setup**](#setup) and [**repeat**](#repeat), it uses the [**getAllAddresses()**](#getAllAddresses) function to collect addresses of all ressources and then [**queryAlliBeacons()**](#queryAlliBeacons) to query those addresses and store the results. Describtions of theses functions can be found in their respective section.
+Before each iteration of any of the **program blocks**, **setup** and **repeat**, it uses the [**getAllAddresses()**](#212-getalladdresses) function to collect addresses of all resources and then [**queryAlliBeacons()**](#213-queryallibeacons) to query those addresses and store the results. Descriptions of theses functions can be found in their respective section.
 
 **parameters:** *none*  
 **returns:** `null`
@@ -437,7 +438,7 @@ runCode = function() {
 
 ### 2.1.2. getAllAddresses
 
-Before executing a block program, BLAST uses `getAllAddresses()` to parse the workspace for [**receiver**](#receiver) blocks and saves their addresses.
+Before executing a block program, BLAST uses `getAllAddresses()` to parse the workspace for **receiver** blocks and saves their addresses.
 
 **parameters:** *none*  
 **returns:** `addresses` (*string[]*) array with addresses of receivers
@@ -457,11 +458,11 @@ getAllAddresses = function() {
 }
 ```
 
-This enables parsing their RDF before each iteration of a process block, by calling `queryAlliBeacons(addresses)` . 
+This enables parsing their RDF before each iteration of a program block, by calling `queryAlliBeacons(addresses)` . 
 
 ### 2.1.3. queryAlliBeacons
 
-This function uses [µRDF](https://github.com/vcharpenay/uRDF.js) to query a ressource with a predefined SPARQL query and stores the results into a JavaScript Map, enabling blocks to perfom JavaScript operations like selecting properties and comparing values of the retrieved data.
+This function uses [µRDF](https://github.com/vcharpenay/uRDF.js) to query a resource with a predefined SPARQL query and stores the results into a JavaScript Map, enabling blocks to perform JavaScript operations like selecting properties and comparing values of the retrieved data.
 
 **parameters:** 
 
@@ -520,7 +521,7 @@ function queryAlliBeacons(addresses) {
 }
 ```
 
-Before each iteration of the [**repeat**](#repeat) block if `resultsMap` is not empty BLAST will save a copy of it to enable the [**event**](#event) block to compare values from `resultsMap` with values from previous Results.
+Before each iteration of the **repeat** block if `resultsMap` is not empty BLAST will save a copy of it to enable the **event**#event block to compare values from `resultsMap` with values from previous Results.
 
 ### 2.1.4. stopCode
 
@@ -585,7 +586,7 @@ function displayTable(key, checkboxes) {
 
 ### 2.1.6. switchLights
 
-SwitchLights is a helper function, used by the [**switch lights**](#switch-lights) block. It sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) which controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac` .
+SwitchLights is a helper function, used by the [**switch lights**](#216-switchlights) block. It sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) which controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac` .
 
 **parameters:**
 
@@ -623,7 +624,7 @@ function switchLights(address, r, y, g) {
 
 ### 2.1.7. insertMessage
 
-insertMessage is a helper function used by the [**display text**](#display-text) block. It creates a HTML div with the desired text and attaches it to the action block output container.
+insertMessage is a helper function used by the **display text** block. It creates a HTML div with the desired text and attaches it to the action block output container.
 
 **parameters:** 
 
@@ -653,7 +654,7 @@ function insertMessage(text) {
 ```
 
 ### 2.1.8. playRandomSoundFromCategory
-This functions is used by the [**random sound**](#random-sound) block. It plays a random audio file out of two predifined arrays `soundsCheerful` and `soundsSad`.
+This functions is used by the **random sound** block. It plays a random audio file out of two predefined arrays `soundsCheerful` and `soundsSad`.
 
 **parameters:** 
 
@@ -679,11 +680,11 @@ function playRandomSoundFromCategory(category){
 }
 ```
 
-## 2.2. Block semantics
+## 2.2. block semantics
 
-### 2.2.1. process-blocks semantics
+### 2.2.1. program-blocks semantics
 
-The [**setup**](#setup) and [**repeat**](#repeat) blocks control the block programs process order.
+The **setup** and **repeat** blocks control the block programs process order.
 
 #### 2.2.1.1. setup semantics
 
@@ -699,8 +700,8 @@ var code = `setup.push(\`${statements_onstart.trim()}\`);`;
 
 The blocks withing the repeat-block are executed consecutively `n` -times every `x` seconds according to the parameters .
 
-Like with the [setup](#setup) block, RDF-data is queried before each execution of the reüeat block. Then the blocks within the repeat block are executed consecutively.  
-Additionally the repeat block writes each data retrieved from the RDF-graphs to a map to store previous results. This map ( `prevResultsMap` ) is used by the [event](#event)-block to compare previous and current results.
+Like with the **setup** block, RDF-data is queried before each execution of the **repeat** block. Then the blocks within the **repeat** block are executed consecutively.  
+Additionally the **repeat** block writes each data retrieved from the RDF-graphs to a map to store previous results. This map ( `prevResultsMap` ) is used by the **event** block to compare previous and current results.
 
 ``` JavaScript
 if(dropdown_dropdown_mode == "mode_until"){
@@ -713,7 +714,7 @@ return code;
 
 ### 2.2.2. things-blocks semantics
 
-There are 3 different blocks in this category: [**iBeacon**](#iBeacon), [**receiver**](#receiver) and [**iBeacon-data**](#iBeacon-data).
+There are 3 different blocks in this category: **iBeacon**, **receiver** and **iBeacon-data**.
 
 #### 2.2.2.1. iBeacon semantics
 
@@ -745,7 +746,7 @@ return thing.address.trim();
 
 The iBeacon-data block retrieves iBeacon data.
 
-Data is retrieved from the results map created on execution of the [setup](#setup)- or [repeat](#repeat)-block. (See [runcode](#runcode))
+Data is retrieved from the results map created on execution of the setup- or repeat-block. (See [runcode](#211-runcode))
 
 ``` JavaScript
 var code = `resultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value`;
@@ -754,13 +755,13 @@ return code;
 
 ### 2.2.3. action blocks semantics
 
-There are 3 different blocks in this category: [**display text**](#display-text), [**display data**](#display-data) and [**switch lights**](#switch-lights). 
+There are 3 different blocks in this category: **display text**, **display data** and **switch lights**. 
 
 #### 2.2.3.1. display text semantics
 
 The display text block adds a text container to the action-block output container on the right.
 
-This block calls the [insertMessage](#insertmessage) function to insert it's input into a message container in the action-block-output container.
+This block calls the [insertMessage](#217-insertmessage) function to insert it's input into a message container in the action-block-output container.
 
 ``` JavaScript
 var code = `insertMessage(${text_msg})\n`;
@@ -771,7 +772,7 @@ return code;
 
 The display data block prints a table containing all the data received at a receiver to the action-block output container on the right.
 
-When executed this block writes the check-box values into an array and calls the [displayTable](#displayTable) function.
+When executed this block writes the check-box values into an array and calls the [displayTable](#215-displaytable) function.
 
 ``` JavaScript
 // checkboxes are booleans for {showRSSI, showResultTime, showAccuracy, 
@@ -793,7 +794,7 @@ return code;
 
 The switch lights block can be used to control the LEDs of a [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller).
 
-This block calls the [switchLights](#switchLights) function, which then sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) which controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac` .
+This block calls the [switchLights](#216-switchlights) function, which then sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) in order to controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac` .
 
 ``` JavaScript
 var code = `switchLights("${iBeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
@@ -801,14 +802,14 @@ return code;
 ```
 
 #### 2.2.3.4. random sound semantics
-This block plays a random sound out of the two predifined soundsets "happy" and "sad" by calling the [playRandomSound](#playRandomSound)function.
+This block plays a random sound out of the two predefined sound-sets "happy" and "sad" by calling the [playRandomSoundFromCategory](#218-playrandomsoundfromcategory)function.
 
 ```JavaScript
 var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
 return code;
 ```
 #### 2.2.3.5. halt semantics
-The halt block stops execution of the current block program, by calling the [stopCode](#stopCode) function.
+The halt block stops execution of the current block program, by calling the [stopCode](#214-stopcode) function.
 
 ```JavaScript
 var code = 'stopCode("finished");\n';
@@ -971,7 +972,7 @@ Blockly.JavaScript['controls_if'] = function(block) {
 The event block is used to describe events.  
 iE it returns `true` or `false` when a measurement enters or leaves a specified range.
 
-This block creates JavaScript code, that when evaluated compares the specified measurement's current result with the previous one. Those results are gathered when executing the [setup](#setup) and [repeat](#repeat) blocks.
+This block creates JavaScript code, that when evaluated compares the specified measurement's current result with the previous one. Those results are gathered when executing the **setup** and **repeat** blocks.
 
 ``` JavaScript
 var order = (operator == '==' || operator == '!=') ?
