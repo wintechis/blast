@@ -1,8 +1,26 @@
 # BLAST Block Overview<!-- omit in toc -->
 
-This document describes the BLAST blocks in detail. For a formal syntax definition check the first section [Syntax](#Syntax) and to learn about the blocks semantic see [Semantics](#Semantics).
+BLAST is an achronym for **Bl**ock **A**pplication**s** for **t**hings. It offers a web-based, visual programming environment based on Google's [Blockly](https://developers.google.com/blockly). 
 
-Contents:
+In order to build and run a block-program, users can drag blocks together and then execute those by clicking the `execute` button on the bottom right. To stop a running program, click the `stop` button next to it.
+
+![BLAST screenshot](images/upload/blast-screenshot.png)
+
+
+The following describes the BLAST blocks in detail.
+
+In BLAST there are 5 categories of blocks:
+
+* **process**: The setup- and repeat-block control the block programs process order
+* **things**: Blocks representing and retrieving data from things
+* **actions**: Display measured data, custom messages or setting the LEDs of a signal light
+* **logic**: Everything concerning boolean logic, like if, if-else blocks and events
+* **text**: Text creation and manipulation blocks
+* **numbers**: represent numbers and enable basic arithmetic
+
+For a formal syntax definition check the first section [1. syntax](#1-Syntax) and to learn about the blocks semantic see [2. semantics](#2-Semantics).
+
+# Contents:<!-- omit in toc -->
 - [1. Syntax](#1-syntax)
   - [1.1. Extended Backus-Naur Form](#11-extended-backus-naur-form)
   - [1.2. block syntax](#12-block-syntax)
@@ -150,16 +168,6 @@ halt                     ::= "stopCode('halted');"
 </pre>
 
 ## 1.2. block syntax
-In BLAST there are 5 categories of blocks:
-
-* [**process**](#process-blocks-syntax): The setup- and repeat-block control the block programs process order
-* [**things**](#things-blocks-syntax): Blocks representing and retrieving data from things
-* [**actions**](#action-blocks-syntax): Display measured data, custom messages or setting the LEDs of a signal light
-* [**logic**](#logic-blocks-syntax): Everything concerning boolean logic, like if, if-else blocks and events
-* [**text**](#text-blocks-syntax): Text creation and manipulation blocks
-* [**numbers**](mumber-blocks-syntax): represent numbers and enable basic arithmetic
-
-Descriptions of these blocks' syntax can be found in the following.
 
 ### 1.2.1. process-blocks syntax
 
