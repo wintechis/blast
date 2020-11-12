@@ -121,7 +121,7 @@
     }
 
     .modal-content a {
-      display:block;
+      display: block;
       width: 200px;
       height: 50px;
     }
@@ -191,12 +191,11 @@
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
     <category name="Things" custom="things_category" colour="270"></category>
-    <category name="Variables" custom="VARIABLE" colour="330">
-
-    </category>
+    <category name="Variables" custom="VARIABLE" colour="330"></category>
     <category name="Actions" colour="0">
       <block type="message"></block>
       <block type="display"></block>
+      <block type="httprequest"></block>
       <block type="sparql_query"></block>
       <block type="switchlights"></block>
       <block type="randomsound"></block>
@@ -250,13 +249,13 @@
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
     <block type="setup" id="setup" movable="false" deletable="false" inline="false" x="10" y="10"></block>
     <block type="loop" id="loop" deletable="false " x="10" y="250">
-      <value name="n">
-        <block type="infinity"></block>
-      </value>
       <value name="seconds">
         <block type="math_number">
           <field name="NUM">2</field>
         </block>
+      </value>
+      <value name="condition">
+        <block type="logic_boolean"></block>
       </value>
     </block>
   </xml>
@@ -336,8 +335,6 @@
       var addresses = getAllAddresses();
       queryAlliBeacons(addresses).then(() => {
         var code = Blockly.JavaScript.workspaceToCode(workspace);
-
-        console.log(code);
 
         // pushes the block's code into either setup or loop array 
         eval(code);
@@ -575,7 +572,7 @@
       urdf.clear();
       urdf.query(query)
         .then(results => {
-          if(results.length == 0){
+          if (results.length == 0) {
             displayText("the SPARQL query returned no results.")
           }
 
@@ -606,6 +603,49 @@
           displayText("the SPARQL query returned an error, see console for details.")
           console.error(e);
         });
+    }
+
+    function sendHttpRequest(url, method, headers, body, print) {
+      displayText(`sending ${method} request...`);
+      sendHttpRequestHelper(url, method, headers, body)
+        .then (res => {
+          if(print) displayText(res.response);
+        })
+        .catch (e => {
+        console.error(e);
+        displayText(`Error sending ${method} request. See console for details.`)
+      });
+    }
+
+    function sendHttpRequestHelper(url, method, headers, body) {
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+
+        for (header of headers) {
+          values = header.split(':');
+
+          xhr.setRequestHeader(values[0].trim(), values[1].trim());
+        }
+
+        xhr.addEventListener('load', () => {
+          let { response, status } = xhr;
+          displayText(`Request response status: ${xhr.status}`);
+          if (status >= 200 && status < 400) {
+            resolve({ response: response, status });
+          } else {
+            reject({ response: response, status });
+          }
+        });
+
+        if (body) {
+          xhr.send(JSON.stringify(body));
+
+        } else {
+          xhr.send();
+        }
+
+      });
     }
   </script>
   <script src="js/sounds.js"></script>

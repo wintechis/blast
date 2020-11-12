@@ -758,15 +758,59 @@ Blockly.defineBlocksWithJsonArray([
     "colour": 0,
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "httprequest",
+    "message0": "send HTTP request %1 method %2 %3 headers %4",
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "NAME",
+        "options": [
+          [
+            "GET",
+            "GET"
+          ],
+          [
+            "PUT",
+            "PUT"
+          ],
+          [
+            "POST",
+            "POST"
+          ],
+          [
+            "DELETE",
+            "DELETE"
+          ]
+        ]
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_input",
+        "name": "HEADERS",
+        "text": ""
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": 0,
+    "tooltip": "",
+    "helpUrl": ""
   }
 ])
 
 Blockly.Blocks['sparql_query'] = {
-  init: function() {
+  init: function () {
     this.appendDummyInput()
       .appendField("run a SPARQL query:");
     this.appendDummyInput()
-        .appendField(new Blockly.FieldMultilineInput(`
+      .appendField(new Blockly.FieldMultilineInput(`
 SELECT *
 FROM <>
 WHERE { 
@@ -778,3 +822,60 @@ WHERE {
     this.setNextStatement(true);
   }
 };
+
+Blockly.Blocks['httprequest'] = {
+
+  httpRequestValidator: function (newValue) {
+    this.getSourceBlock().updateInputs(newValue);
+    return newValue;
+  },
+
+  init: function () {
+    this.appendDummyInput()
+      .appendField("send HTTP request");
+    this.appendDummyInput()
+      .appendField("URL")
+      .appendField(new Blockly.FieldTextInput('http://example.com'),
+        'URL');
+    this.appendDummyInput()
+      .appendField("method")
+      .appendField(new Blockly.FieldDropdown([
+        ['GET', 'GET'],
+        ['PUT', 'PUT'],
+        ['POST', 'POST'],
+        ['DELETE', 'DELETE']
+      ], this.httpRequestValidator), 'METHOD')
+      .appendField('show response body:')
+      .appendField(new Blockly.FieldCheckbox(true), 'print');
+    this.appendDummyInput()
+      .appendField("headers (comma separated)")
+      .appendField(new Blockly.FieldTextInput('"Content-Type: application/json", "Accept: application/json"'),
+        'HEADERS');
+    this.setOutput(false);
+    this.setColour(0);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+  },
+
+  updateInputs: function (newValue) {
+    this.removeInput('BODYINPUT',  /* no error */ true);
+
+    if (newValue != 'GET') {
+      this.appendDummyInput("BODYINPUT")
+        .appendField("body")
+        .appendField(new Blockly.FieldMultilineInput(`{
+  "object": {
+    "a": "b",
+    "c": "d",
+    "e": "f"
+  },
+  "array": [
+    1,
+    2
+  ],
+  "string": "Hello World"
+}`
+        ), 'BODY');
+    }
+  }
+}

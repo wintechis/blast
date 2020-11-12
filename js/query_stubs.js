@@ -230,3 +230,16 @@ Blockly.JavaScript['sparql_query'] = function (block) {
 
   return code;
 }
+
+Blockly.JavaScript['httprequest'] = function(block) {
+  var url = block.getFieldValue('URL');
+  var method = block.getFieldValue('METHOD');
+  var text_headers = block.getFieldValue('HEADERS');
+  var body = block.getFieldValue('BODY');
+  var print = block.getFieldValue('print') == 'TRUE';
+  
+  var headers = text_headers.split(',');
+
+  var code = `sendHttpRequest("${url}","${method}",[${headers}],"${body}",${print})`;
+  return code;
+};
