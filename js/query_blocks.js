@@ -834,7 +834,7 @@ Blockly.Blocks['httprequest'] = {
     this.appendDummyInput()
       .appendField("send HTTP request");
     this.appendDummyInput()
-      .appendField("URL")
+      .appendField("URI")
       .appendField(new Blockly.FieldTextInput('http://example.com'),
         'URL');
     this.appendDummyInput()
