@@ -543,6 +543,7 @@
     }
 
     function loadSample(sample) {
+      stopCode();
       var url = `sample-workspaces/${sample}.json`;
       getJSON(url, function (status, data) {
         restore(data);

@@ -350,6 +350,8 @@ Blockly.Things.loadButtonHandler = async function () {
  * @param {string} name name of the workspace
  */
 function restore(workspaceJSON) {
+    stopCode();
+
     // clear blocks
     Blockly.mainWorkspace.clear();
 
