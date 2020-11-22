@@ -4,8 +4,8 @@
 <head>
   <meta charset="utf-8">
   <title>BLAST Demo</title>
-  <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.4.1/dist-lib/solid-auth-client.bundle.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/solid-file-client"></script>
+  <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
   <script src="js/solid.js" type="application/javascript"></script>
   <script src="js/blockly_compressed.js"></script>
   <script src="js/javascript_compressed.js"></script>
@@ -85,60 +85,8 @@
       border: 1px solid black;
     }
 
-
-    /* The Modal (background) */
-    .modal {
-      display: none;
-      /* Hidden by default */
-      position: fixed;
-      /* Stay in place */
-      z-index: 1;
-      /* Sit on top */
-      padding-top: 100px;
-      /* Location of the box */
-      left: 0;
-      top: 0;
-      width: 100%;
-      /* Full width */
-      height: 100%;
-      /* Full height */
-      overflow: auto;
-      /* Enable scroll if needed */
-      background-color: rgb(0, 0, 0);
-      /* Fallback color */
-      background-color: rgba(0, 0, 0, 0.4);
-      /* Black w/ opacity */
-    }
-
-    /* Modal Content */
-    .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-    }
-
-    .modal-content a {
-      display: block;
-      width: 200px;
-      height: 50px;
-    }
-
-
-    /* Modal Close Button */
-    .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
+    #loadWorkspace-input {
+      width: 400px;
     }
   </style>
 </head>
@@ -155,9 +103,13 @@
           For more information on each of the blocks, check the <a href="docs/Blocks.md" target="_blank"
             rel="noopener noreferrer">documentation</a>.
         </p>
-        <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
+        <input list="samples" type="text" id="loadWorkspace-input" placeholder="https://example.solidcommunity.net/">
+        <datalist id="samples">
+          <option value="./sample-workspaces/gamble.json"></option>
+          <option value="./sample-workspaces/sparql.json"></option>
+        </datalist>
         <button onclick="Blockly.Things.loadButtonHandler()">load Workspace</button>
-        <button onclick="loadSampleButtonHandler()">load sample</button>
+        <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
       </td>
     </tr>
     <tr>
@@ -180,22 +132,19 @@
 
   <div id="blocklyDiv" style="position: absolute"></div>
 
-  <div id="sampleModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <a onClick="loadSample('gamble')">Gamble</a><br>
-      <a onClick="loadSample('sparql')">SPARQL</a>
-    </div>
-  </div>
-
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
-    <category name="Things" custom="things_category" colour="270"></category>
+    <category name="Things" colour="270">
+      <block type="things_get"></block>
+      <block type="receiver_get"></block>
+      <block type="ibeacon_data"></block>
+    </category>
     <category name="Variables" custom="VARIABLE" colour="330"></category>
     <category name="Actions" colour="0">
       <block type="message"></block>
       <block type="display"></block>
       <block type="httprequest"></block>
       <block type="sparql_query"></block>
+      <block type="sparql_ask"></block>
       <block type="switchlights"></block>
       <block type="randomsound"></block>
       <block type="halt"></block>
@@ -211,6 +160,8 @@
       <block type="logic_boolean"></block>
     </category>
     <category name="Text" colour="160">
+      <block type="uri"></block>
+      <block type="mac"></block>
       <block type="text"></block>
       <block type="text_join"></block>
     </category>
@@ -384,24 +335,20 @@
       let receivers = workspace.getBlocksByType("receiver_get");
       var addresses = []
       receivers.forEach(block => {
+        console.log(block);
         if (block.type != 'receiver_get') return;
-        var thingName = block.getFieldValue('thing');
-        var thing = Blockly.Things.thingsMap.receiver[thingName];
-        addresses.push(thing.address);
+        addresses.push(Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE));
       })
       addresses = eliminateDupilactes(addresses);
       return addresses;
     }
 
     getiBeaconAddressesInBlock = function (parentBlock) {
-      // array of addresses to be queried (will elimanate duplicates later)
       var addresses = [];
       parentBlock.getDescendants()
         .forEach(block => {
           if (block.type != 'receiver_get') return;
-          var thingName = block.getFieldValue('thing');
-          var thing = Blockly.Things.thingsMap.receiver.thingName;
-          addresses.push(thing.address);
+          addresses.push(Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE));
         })
       addresses = eliminateDupilactes(addresses);
       return addresses;
@@ -433,12 +380,42 @@
     #############
     */
 
-    function displayData(key) {
+    function displayData(promise) {
 
-      let resultsField = document.createElement("table");
+      promise().then(results => {
+        if (results.length == 0) {
+          displayText("empty table")
+          return;
+        }
 
-      // deal with missing values
-      results = resultsMap.get(key);
+        // deal with missing values
+        let vars = results.reduce((list, res) => {
+          for (let v in res) {
+            if (list.indexOf(v) === -1) list.push(v);
+          }
+          return list;
+        }, []);
+
+        let html = '<tr>';
+        vars.forEach(v => html += '<th>' + v + '</th>');
+        html += '</tr>';
+
+        results.forEach(res => {
+          html += '<tr>';
+          vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
+          html += '</tr>';
+        });
+
+        let resultsField = document.createElement("table");
+        resultsField.innerHTML = html;
+        var msgBox = document.getElementById("messageBox");
+        msgBox.insertBefore(resultsField, msgBox.firstChild);
+      })
+        .catch(e => {
+          displayText("am error occured, see console for details.")
+          console.error(e);
+        });
+
       let vars = ["mac", "rssi", "resultTime"];
 
       let html = '<tr>';
@@ -485,6 +462,7 @@
           resolve();
         }
         return Promise.all(addresses.map(address => {
+          console.log(address);
           var url = new URL(address);
           var baseUrl = url.protocol + "//" + url.host;
           var path = url.pathname;
@@ -522,36 +500,6 @@
       });
     }
 
-    function loadSampleButtonHandler() {
-      var modal = document.getElementById("sampleModal");
-      modal.style.display = "block";
-
-      var span = document.getElementsByClassName("close")[0];
-
-      // When the user clicks on <span> (x), close the modal
-      span.onclick = function () {
-        modal.style.display = "none";
-      }
-
-      // When the user clicks anywhere outside of the modal, close it
-      window.onclick = function (event) {
-        if (event.target == modal) {
-          modal.style.display = "none";
-        }
-      }
-    }
-
-    function loadSample(sample) {
-      stopCode();
-      var url = `sample-workspaces/${sample}.json`;
-      getJSON(url, function (status, data) {
-        restore(data);
-
-        var modal = document.getElementById("sampleModal");
-        modal.style.display = "none";
-      });
-    }
-
     function getJSON(url, callback) {
       var xhr = new XMLHttpRequest();
       xhr.open('GET', url, true);
@@ -567,54 +515,21 @@
       xhr.send();
     };
 
-    function sparqlQuery(query) {
-
+    async function sparqlQuery(query) {
       urdf.clear();
-      urdf.query(query)
-        .then(results => {
-          if (results.length == 0) {
-            displayText("the SPARQL query returned no results.")
-          }
-
-          // deal with missing values
-          let vars = results.reduce((list, res) => {
-            for (let v in res) {
-              if (list.indexOf(v) === -1) list.push(v);
-            }
-            return list;
-          }, []);
-
-          let html = '<tr>';
-          vars.forEach(v => html += '<th>' + v + '</th>');
-          html += '</tr>';
-
-          results.forEach(res => {
-            html += '<tr>';
-            vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
-            html += '</tr>';
-          });
-
-          let resultsField = document.createElement("table");
-          resultsField.innerHTML = html;
-          var msgBox = document.getElementById("messageBox");
-          msgBox.insertBefore(resultsField, msgBox.firstChild);
-        })
-        .catch(e => {
-          displayText("the SPARQL query returned an error, see console for details.")
-          console.error(e);
-        });
+      return urdf.query(query)
     }
 
     function sendHttpRequest(url, method, headers, body, print) {
       displayText(`sending ${method} request...`);
       sendHttpRequestHelper(url, method, headers, body)
-        .then (res => {
-          if(print) displayText(res.response);
+        .then(res => {
+          if (print) displayText(res.response);
         })
-        .catch (e => {
-        console.error(e);
-        displayText(`Error sending ${method} request. See console for details.`)
-      });
+        .catch(e => {
+          console.error(e);
+          displayText(`Error sending ${method} request. See console for details.`)
+        });
     }
 
     function sendHttpRequestHelper(url, method, headers, body) {

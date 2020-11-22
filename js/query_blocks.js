@@ -411,7 +411,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         "type": "input_value",
         "name": "receiver",
-        "check": "receiver"
+        "check": "table"
       },
       {
         "type": "field_dropdown",
@@ -426,28 +426,8 @@ Blockly.defineBlocksWithJsonArray([
             "rssi"
           ],
           [
-            "proximity",
-            "proximity"
-          ],
-          [
             "timestamp",
             "time"
-          ],
-          [
-            "measured power",
-            "measured"
-          ],
-          [
-            "accuracy",
-            "accuracy"
-          ],
-          [
-            "major",
-            "major"
-          ],
-          [
-            "minor",
-            "minor"
           ]
         ]
       },
@@ -669,12 +649,12 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     "type": "display",
-    "message0": "display data received at %1",
+    "message0": "display table %1",
     "args0": [
       {
         "type": "input_value",
         "name": "thing",
-        "check": "receiver"
+        "check": "table"
       }
     ],
     "previousStatement": "action",
@@ -802,24 +782,97 @@ Blockly.defineBlocksWithJsonArray([
     "colour": 0,
     "tooltip": "",
     "helpUrl": ""
+  },
+  {
+    "type": "receiver_get",
+    "message0": "receiver at URI %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "address",
+        "check": "URI"
+      }
+    ],
+    "output": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "things_get",
+    "message0": "thing with mac: %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "address",
+        "check": "mac"
+      }
+    ],
+    "output": null,
+    "colour": 270,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "uri",
+    "message0": "URI %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "URI",
+        "text": "http://example.com"
+      }
+    ],
+    "output": null,
+    "colour": 160,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "mac",
+    "message0": "mac %1",
+    "args0": [
+      {
+        "type": "field_input",
+        "name": "MAC",
+        "text": "deadbeef"
+      }
+    ],
+    "output": "mac",
+    "colour": 160,
+    "tooltip": "",
+    "helpUrl": ""
   }
 ])
 
 Blockly.Blocks['sparql_query'] = {
   init: function () {
     this.appendDummyInput()
-      .appendField("run a SPARQL query:");
+      .appendField("display SPARQL SELECT output:");
     this.appendDummyInput()
-      .appendField(new Blockly.FieldMultilineInput(`
-SELECT *
+      .appendField(new Blockly.FieldMultilineInput(`SELECT *
 FROM <>
 WHERE { 
   ?s ?p ?o
 }`), "query");
-    this.setOutput(false);
+    this.setOutput(true, "table");
     this.setColour(0);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
+  }
+};
+
+Blockly.Blocks['sparql_ask'] = {
+  init: function () {
+    this.appendDummyInput()
+      .appendField("run SPARQL ASK query:");
+    this.appendDummyInput()
+      .appendField(new Blockly.FieldMultilineInput(`PREFIX sosa: <http://www.w3.org/ns/sosa/>
+ASK 
+WHERE {
+  ?node sosa:hasSimpleResult ?rssiValue 
+} HAVING (?rssiValue > -40)`
+      ), "query");
+    this.setOutput(true, "Boolean");
+    this.setColour(0);
   }
 };
 
@@ -831,12 +884,9 @@ Blockly.Blocks['httprequest'] = {
   },
 
   init: function () {
-    this.appendDummyInput()
-      .appendField("send HTTP request");
-    this.appendDummyInput()
-      .appendField("URI")
-      .appendField(new Blockly.FieldTextInput('http://example.com'),
-        'URL');
+    this.appendValueInput("URI")
+      .appendField("send HTTP request to URI")
+      .setCheck("URI");
     this.appendDummyInput()
       .appendField("method")
       .appendField(new Blockly.FieldDropdown([
@@ -845,16 +895,13 @@ Blockly.Blocks['httprequest'] = {
         ['POST', 'POST'],
         ['DELETE', 'DELETE']
       ], this.httpRequestValidator), 'METHOD')
-      .appendField('show response body:')
-      .appendField(new Blockly.FieldCheckbox(true), 'print');
     this.appendDummyInput()
       .appendField("headers (comma separated)")
+    this.appendDummyInput()
       .appendField(new Blockly.FieldTextInput('"Content-Type: application/json", "Accept: application/json"'),
         'HEADERS');
-    this.setOutput(false);
+    this.setOutput(true, "table");
     this.setColour(0);
-    this.setPreviousStatement(true);
-    this.setNextStatement(true);
   },
 
   updateInputs: function (newValue) {

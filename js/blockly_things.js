@@ -324,25 +324,15 @@ function save(url) {
 
 Blockly.Things.loadButtonHandler = async function () {
     Blockly.hideChaff();
-    if (!loggedIn) {
-        await popupLogin();
-    }
-    var promptAndCheckWithAlert = function () {
-
-        var msg = "Enter the address to your blast workspace file";
-        var defaultFolder = "https://solid.example.com/blast/workspace.blast"
-        Blockly.Things.promptName(msg, defaultFolder, function (url) {
-            fileClient.readFile(url)
-                .then((content) => {
-                    restore(content);
-                })
-                .catch(err => {
-                    console.error(`Error: ${err}`);
-                    Blockly.alert("Error: File either doesnt exists or you dont have permission to read it.");
-                });
+    let url = document.getElementById("loadWorkspace-input").value;
+    fileClient.readFile(url)
+        .then((content) => {
+            restore(content);
+        })
+        .catch(err => {
+            console.error(`Error: ${err}`);
+            Blockly.alert("Error: File either doesnt exists or you dont have permission to read it.");
         });
-    };
-    promptAndCheckWithAlert();
 };
 
 /**

@@ -13,7 +13,7 @@ Blockly.JavaScript['ibeacon_data'] = function (block) {
   // }{
   code = `resultsMap.get("${receiver}").get("${ibeacon}")["${value}"].value`;
 
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, Blockly.JavaScript.ORDER_NONE]; 
 };
 
 Blockly.JavaScript['and'] = function (block) {
@@ -151,24 +151,20 @@ fields.push(queryProximity);
 Blockly.JavaScript['display'] = function (block) {
   var value_thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_NONE);
 
-  code = `displayData("${value_thing}");`;
+  code = `displayData(${value_thing});`;
   return code;
 }
 
-Blockly.JavaScript['ibeacon_get'] = function (block) {
-  var thingName = block.getFieldValue('thing');
-  var ibeacons = Blockly.Things.thingsMap.iBeacon;
-  var thing = ibeacons[thingName];
-
-  return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['things_get'] = function(block) {
+  var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScript.ORDER_ATOMIC);
+  
+  return [value_name, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
-Blockly.JavaScript['receiver_get'] = function (block) {
-  var thingName = block.getFieldValue('thing');
-  var receiver = Blockly.Things.thingsMap.receiver;
-  var thing = receiver[thingName];
-
-  return [thing.address.trim(), Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['receiver_get'] = function(block) {
+  var value_address = Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_ATOMIC);
+  
+  return [value_address, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['event'] = function (block) {
@@ -226,20 +222,28 @@ Blockly.JavaScript['halt'] = function (block) {
 Blockly.JavaScript['sparql_query'] = function (block) {
   var query = block.getFieldValue('query');
 
-  var code = (`sparqlQuery(\\\`${query}\\\`)`)
-
-  return code;
+  urdf.clear()
+  return [urdf.query(query), Blockly.JavaScript.ORDER_NONE];
 }
 
 Blockly.JavaScript['httprequest'] = function(block) {
   var url = block.getFieldValue('URL');
   var method = block.getFieldValue('METHOD');
   var text_headers = block.getFieldValue('HEADERS');
-  var body = block.getFieldValue('BODY');
   var print = block.getFieldValue('print') == 'TRUE';
   
   var headers = text_headers.split(',');
 
   var code = `sendHttpRequest("${url}","${method}",[${headers}],"${body}",${print})`;
   return code;
+};
+
+Blockly.JavaScript['uri'] = function(block) {
+  var text_uri = block.getFieldValue('URI');
+  return [text_uri, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['mac'] = function(block) {
+  var text_mac = block.getFieldValue('MAC');
+  return [text_mac, Blockly.JavaScript.ORDER_NONE];
 };
