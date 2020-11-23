@@ -855,7 +855,8 @@ FROM <>
 WHERE { 
   ?s ?p ?o
 }`), "query");
-    this.setOutput(true, "table");
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
     this.setColour(0);
   }
 };
