@@ -382,7 +382,7 @@
 
     function displayData(promise) {
 
-      promise().then(results => {
+      promise.then(results => {
         if (results.length == 0) {
           displayText("empty table")
           return;
@@ -517,7 +517,7 @@
 
     async function sparqlQuery(query) {
       urdf.clear();
-      return urdf.query(query)
+      displayData(urdf.query(query));
     }
 
     function sendHttpRequest(url, method, headers, body, print) {

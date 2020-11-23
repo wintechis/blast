@@ -222,8 +222,9 @@ Blockly.JavaScript['halt'] = function (block) {
 Blockly.JavaScript['sparql_query'] = function (block) {
   var query = block.getFieldValue('query');
 
-  urdf.clear()
-  return [urdf.query(query), Blockly.JavaScript.ORDER_NONE];
+  var code = (`sparqlQuery(\\\`${query}\\\`)`)
+
+  return code;
 }
 
 Blockly.JavaScript['httprequest'] = function(block) {
