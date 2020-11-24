@@ -108,8 +108,13 @@
           <option value="./sample-workspaces/gamble.json"></option>
           <option value="./sample-workspaces/sparql.json"></option>
         </datalist>
-        <button onclick="Blockly.Things.loadButtonHandler()">load Workspace</button>
-        <button><a onclick="Blockly.Things.saveButtonHandler()">Save Workspace</a></button>
+        <button onclick="Blockly.Things.loadButtonHandler()">load</button>
+        <button><a onclick="Blockly.Things.saveButtonHandler()">Save</a></button>
+        <div class="status">
+          <span id="status"></span>
+          <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
+          <button onclick="runCode()" id="run" class="controlButtons">execute</button>
+        </div>
       </td>
     </tr>
     <tr>
@@ -117,15 +122,6 @@
       </td>
       <td id="resultsArea">
         <div id="messageBox"></div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="status">
-          <span id="status"></span>
-          <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
-          <button onclick="runCode()" id="run" class="controlButtons">execute</button>
-        </div>
       </td>
     </tr>
   </table>
@@ -412,7 +408,7 @@
         msgBox.insertBefore(resultsField, msgBox.firstChild);
       })
         .catch(e => {
-          displayText("am error occured, see console for details.")
+          displayText("an error occured, see console for details.")
           console.error(e);
         });
 
