@@ -70,38 +70,6 @@ Blockly.Things.flyoutCategoryBlocks = function (workspace) {
     return xmlList;
 };
 
-Blockly.Extensions.register('dynamic_ibeacon_menu_extension', function () {
-    var ibeacons = Blockly.Things.thingsMap.iBeacon;
-    this.getInput('INPUT')
-        .appendField(new Blockly.FieldDropdown(
-            function () {
-                var options = [];
-                for (thing of Object.values(ibeacons)) {
-                    if (thing.type == "iBeacon") {
-                        options.push([thing.name, thing.name]);
-                    }
-                }
-                return options;
-            }), "thing"
-        );
-});
-
-Blockly.Extensions.register('dynamic_receiver_menu_extension', function () {
-    var receivers = Blockly.Things.thingsMap.receiver;
-    this.getInput('INPUT')
-        .appendField(new Blockly.FieldDropdown(
-            function () {
-                var options = [];
-                for (thing of Object.values(receivers)) {
-                    if (thing.type == "receiver") {
-                        options.push([thing.name, thing.name]);
-                    }
-                }
-                return options;
-            }), "thing"
-        );
-});
-
 /**
  * Generate DOM objects representing a thing field.
  * @param {} thing The thing to represent.
@@ -273,28 +241,8 @@ Blockly.Things.saveButtonHandler = async function (
     if (!loggedIn) {
         await popupLogin();
     }
-    var promptAndCheckWithAlert = function (defaultName) {
-        let workspace = {};
-        workspace.type = type;
-
-        Blockly.Things.promptName("Enter a URL to save your pod at", defaultName,
-            function (text) {
-                if (text) {
-                    // No conflict
-                    save(text);
-                    if (opt_callback) {
-                        opt_callback(text);
-                    }
-
-                } else {
-                    // User canceled prompt.
-                    if (opt_callback) {
-                        opt_callback(null);
-                    }
-                }
-            });
-    };
-    promptAndCheckWithAlert('https://solid.example.org/blast/workspace.blast');
+    let url = document.getElementById("loadWorkspace-input").value;
+    save(url);
 };
 
 /**
@@ -307,18 +255,14 @@ function save(url) {
 
     // save blocks in workspace
     var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-    var xmlText = Blockly.Xml.domToText(xmlDom);
-    workSpaceSaveObj.blocks = xmlText;
-    workSpaceSaveObj.variables = JSON.stringify(Blockly.Things.thingsMap);
-    workspacesaveJSON = JSON.stringify(workSpaceSaveObj);
 
     // upload workspace file to pod
-    fileClient.createFile(url, workspacesaveJSON, "text/json")
+    fileClient.createFile(url, xmlDom, "text/xml")
         .then(() => {
             Blockly.alert("workspace uploaded!")
         })
         .catch(err => {
-            Blockly.alert("Something went wrong. Do you have permission to write on this pod?")
+            Blockly.alert("Something went wrong. Do you have permission to write on this server?")
         })
 }
 
@@ -329,31 +273,22 @@ Blockly.Things.loadButtonHandler = async function () {
         .then((content) => {
             restore(content);
         })
-        .catch(err => {
-            console.error(`Error: ${err}`);
-            Blockly.alert("Error: File either doesnt exists or you dont have permission to read it.");
-        });
+    // .catch(err => {
+    //     console.error(`Error: ${err}`);
+    //     Blockly.alert("Error: File either doesnt exists or you dont have permission to read it.");
+    // });
 };
 
 /**
  * restores a workspace from JSON
  * @param {string} name name of the workspace
  */
-function restore(workspaceJSON) {
+function restore(xmlText) {
     stopCode();
 
     // clear blocks
     Blockly.mainWorkspace.clear();
 
-    var workspaceObject = JSON.parse(workspaceJSON);
-
-    // restore things variables
-    Blockly.Things.thingsMap = JSON.parse(workspaceObject.variables);
-
-    // restore blocks
-    var xmlText = workspaceObject.blocks;
     var xmlDom = Blockly.Xml.textToDom(xmlText);
     Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
 }
-
-

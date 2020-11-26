@@ -1,0 +1,37 @@
+<xml>
+    <block type="controls_whileUntil" id="9E{9@8WDB+c?D3=UF=:[" x="10" y="250">
+        <field name="MODE">WHILE</field>
+        <value name="BOOL">
+            <block type="logic_boolean" id="*RT#Lt@[sye9Q%76(,AG">
+                <field name="BOOL">TRUE</field>
+            </block>
+        </value>
+        <statement name="DO">
+            <block type="controls_if" id="KCI[B$tHZh@4$Nl8c+ea">
+                <value name="IF0">
+                    <block type="sparql_ask" id="%IJjt5.{`nIe?MJY2KP_">
+                        <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;
+ASK 
+WHERE {
+  ?node sosa:hasSimpleResult ?rssiValue 
+} HAVING (?rssiValue &gt; -40)</field>
+                        <value name="uri">
+                            <block type="uri" id=".3=?6+r3q[%Pc]qoAO#~">
+                                <field name="URI">http://localhost/ble/current</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+                <statement name="DO0">
+                    <block type="displayText" id="MQIFc$FPb.?wI=ltTohl">
+                        <value name="text">
+                            <block type="text" id="|.2?*DRkAVp9VFs,y9B}">
+                                <field name="TEXT">There's a beacon nearby!</field>
+                            </block>
+                        </value>
+                    </block>
+                </statement>
+            </block>
+        </statement>
+    </block>
+</xml>

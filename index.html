@@ -9,12 +9,14 @@
   <script src="js/solid.js" type="application/javascript"></script>
   <script src="js/blockly_compressed.js"></script>
   <script src="js/javascript_compressed.js"></script>
+  <script src="js/acorn_interpreter.js"></script>
   <script src="js/blocks_compressed.js"></script>
   <script src="js/query_blocks.js"></script>
   <script src="js/query_stubs.js"></script>
   <script src="js/urdf-browser.js"></script>
   <script src="js/blockly_things.js"></script>
   <script src="msg/js/en.js"></script>
+  <script src="js/interpreter-api.js"></script>
   <style>
     html,
     body {
@@ -105,8 +107,11 @@
         </p>
         <input list="samples" type="text" id="loadWorkspace-input" placeholder="https://example.solidcommunity.net/">
         <datalist id="samples">
-          <option value="./sample-workspaces/gamble.json"></option>
-          <option value="./sample-workspaces/sparql.json"></option>
+          <option value="./sample-workspaces/gamble.xml"></option>
+          <option value="./sample-workspaces/sparqlAsk.xml"></option>
+          <option value="./sample-workspaces/httpRequests.xml"></option>
+          <option value="./sample-workspaces/event.xml"></option>
+          <option value="./sample-workspaces/lightsProximity.xml"></option>
         </datalist>
         <button onclick="Blockly.Things.loadButtonHandler()">load</button>
         <button><a onclick="Blockly.Things.saveButtonHandler()">Save</a></button>
@@ -129,21 +134,48 @@
   <div id="blocklyDiv" style="position: absolute"></div>
 
   <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Program" colour="120">
+      <block type="controls_repeat_ext">
+        <value name="TIMES">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="controls_whileUntil"></block>
+      <block type="controls_for">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">10</field>
+          </shadow>
+        </value>
+        <value name="BY">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
     <category name="Things" colour="270">
-      <block type="things_get"></block>
-      <block type="receiver_get"></block>
+      <block type="things"></block>
+      <block type="receiver"></block>
       <block type="ibeacon_data"></block>
     </category>
     <category name="Variables" custom="VARIABLE" colour="330"></category>
     <category name="Actions" colour="0">
-      <block type="message"></block>
-      <block type="display"></block>
+      <block type="displayText"></block>
+      <block type="displayTable"></block>
       <block type="httprequest"></block>
       <block type="sparql_query"></block>
       <block type="sparql_ask"></block>
       <block type="switchlights"></block>
       <block type="randomsound"></block>
-      <block type="halt"></block>
+      <block type="controls_flow_statements"></block>
     </category>
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
@@ -189,25 +221,16 @@
         </value>
       </block>
     </category>
-    <!-- <category name="Variables" colour="330" custom="VARIABLE"></category>
-    <category name="Functions" colour="290" custom="PROCEDURE"></category> -->
   </xml>
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
-    <block type="setup" id="setup" movable="false" deletable="false" inline="false" x="10" y="10"></block>
-    <block type="loop" id="loop" deletable="false " x="10" y="250">
-      <value name="seconds">
-        <block type="math_number">
-          <field name="NUM">2</field>
-        </block>
-      </value>
-      <value name="condition">
+    <block type="controls_whileUntil" x="10" y="250">
+      <value name="BOOL">
         <block type="logic_boolean"></block>
       </value>
     </block>
   </xml>
 
   <script>
-
     var messageCounter = 0;
 
     function displayText(text) {
@@ -236,6 +259,14 @@
     ################
     */
 
+    // Highlight blocks
+    Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    Blockly.JavaScript.addReservedWords('highlightBlock');
+
+    function highlightBlock(id) {
+      workspace.highlightBlock(id);
+    }
+
     var blocklyArea = document.getElementById('blocklyArea');
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace = Blockly.inject(blocklyDiv, { toolbox: document.getElementById('toolbox') });
@@ -261,6 +292,7 @@
     onresize();
     Blockly.svgResize(workspace);
 
+    // execution interval is global to make sure stopCode() works
     var interval = null;
 
     runCode = function () {
@@ -269,89 +301,22 @@
       document.getElementById("run").disabled = true;
       document.getElementById("status").innerHTML = "running... ";
 
-      // stop loop interval
+      // stop any previous loop interval
       var prevInterval = interval;
       clearInterval(prevInterval);
 
-      // clear process arrays
-      var setup = [];
-      var loop = []
+      let code = Blockly.JavaScript.workspaceToCode(workspace);
 
-      // query data first
-      var addresses = getAllAddresses();
-      queryAlliBeacons(addresses).then(() => {
-        var code = Blockly.JavaScript.workspaceToCode(workspace);
+      console.log(code);
 
-        // pushes the block's code into either setup or loop array 
-        eval(code);
+      var myInterpreter = new Interpreter(code, initApi);
 
-        // eval setup
-        for (process of setup) {
-          eval(process);
+      interval = setInterval(function () {
+        if (!myInterpreter.step()) {
+          clearInterval(interval);
         }
+      }, 10)
 
-        prevResultsMap = new Map(resultsMap);
-
-        //eval loop
-        var setupBlock = workspace.getBlockById("setup");
-        var addresses = getiBeaconAddressesInBlock(setupBlock);
-
-        // stop condition
-        if (!eval(loopCondition)) {
-          stopCode('finished');
-          return;
-        }
-
-        // first iteration
-        for (process of loop) {
-          eval(process);
-        }
-
-        // repeat after n seconds
-        interval = setInterval(function () {
-
-          var addresses = getAllAddresses();
-          queryAlliBeacons(addresses).then(() => {
-            if (!eval(loopCondition)) {
-              stopCode('finished');
-              return;
-            }
-
-            for (process of loop) {
-              eval(process);
-            }
-          });
-
-          prevResultsMap = new Map(resultsMap);
-        }, loopTime * 1000)
-      })
-    }
-
-    getAllAddresses = function () {
-      let receivers = workspace.getBlocksByType("receiver_get");
-      var addresses = []
-      receivers.forEach(block => {
-        console.log(block);
-        if (block.type != 'receiver_get') return;
-        addresses.push(Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE));
-      })
-      addresses = eliminateDupilactes(addresses);
-      return addresses;
-    }
-
-    getiBeaconAddressesInBlock = function (parentBlock) {
-      var addresses = [];
-      parentBlock.getDescendants()
-        .forEach(block => {
-          if (block.type != 'receiver_get') return;
-          addresses.push(Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE));
-        })
-      addresses = eliminateDupilactes(addresses);
-      return addresses;
-    }
-
-    eliminateDupilactes = function (array) {
-      return [...new Set(array)];
     }
 
     stopCode = function (message) {
@@ -376,187 +341,35 @@
     #############
     */
 
-    function displayData(promise) {
+    function displayTable(table) {
 
-      promise.then(results => {
-        if (results.length == 0) {
-          displayText("empty table")
-          return;
+      if (table.length == 0) {
+        displayText("empty table")
+        return;
+      }
+
+      // deal with missing values
+      let vars = table.reduce((list, res) => {
+        for (let v in res) {
+          if (list.indexOf(v) === -1) list.push(v);
         }
-
-        // deal with missing values
-        let vars = results.reduce((list, res) => {
-          for (let v in res) {
-            if (list.indexOf(v) === -1) list.push(v);
-          }
-          return list;
-        }, []);
-
-        let html = '<tr>';
-        vars.forEach(v => html += '<th>' + v + '</th>');
-        html += '</tr>';
-
-        results.forEach(res => {
-          html += '<tr>';
-          vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
-          html += '</tr>';
-        });
-
-        let resultsField = document.createElement("table");
-        resultsField.innerHTML = html;
-        var msgBox = document.getElementById("messageBox");
-        msgBox.insertBefore(resultsField, msgBox.firstChild);
-      })
-        .catch(e => {
-          displayText("an error occured, see console for details.")
-          console.error(e);
-        });
-
-      let vars = ["mac", "rssi", "resultTime"];
+        return list;
+      }, []);
 
       let html = '<tr>';
       vars.forEach(v => html += '<th>' + v + '</th>');
       html += '</tr>';
 
-      results.forEach(res => {
+      table.forEach(res => {
         html += '<tr>';
-        vars.forEach(v => {
-          html += '<td>' + (res[v] ? res[v].value : '') + '</td>'
-        });
+        vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
         html += '</tr>';
       });
 
+      let resultsField = document.createElement("table");
       resultsField.innerHTML = html;
-
-      var div = document.getElementById("messageBox");
-      div.insertBefore(resultsField, div.firstChild);
-    }
-
-    function switchLights(mac, r, y, g) {
-      var r_byte = r ? "ff" : "00";
-      var y_byte = y ? "ff" : "00";
-      var g_byte = g ? "ff" : "00";
-
-      var data = { type: "Write", data: { "@value": "7e000503" + r_byte + g_byte + y_byte + "00ef", "@type": "ble:HexString" } };
-
-      fetch(`http://192.168.178.22:8000/devices/${mac}/char/0009/`, {
-        method: "POST",
-        headers: new Headers({
-          "Content-Type": "application/json"
-        }),
-        body: JSON.stringify(data)
-      }).then(res => {
-        console.log("Request complete! response:", res);
-      })
-    }
-
-    var resultsMap = new Map();
-
-    function queryAlliBeacons(addresses) {
-      return new Promise((resolve, reject) => {
-        if (addresses.length == 0) {
-          resolve();
-        }
-        return Promise.all(addresses.map(address => {
-          console.log(address);
-          var url = new URL(address);
-          var baseUrl = url.protocol + "//" + url.host;
-          var path = url.pathname;
-
-          var query =
-            `BASE <${baseUrl}>
-            PREFIX rdf: <http://w3.org/1999/02/22-rdf-syntax-ns#>
-            PREFIX sosa: <http://www.w3.org/ns/sosa/>
-            PREFIX ble: <http://vocab.rapidthings.eu/ns/ble.ttl#>
-            PREFIX a: <http://vocab.rapidthings.eu/ns/ble/adapter.ttl#>
-
-            
-            SELECT ?mac ?rssi ?resultTime
-            FROM <${path}>
-            WHERE 
-            {
-                ?history ble:entries ?obs .
-                ?obs a ble:RssiObservation .
-                ?obs sosa:madeBySensor ?mac .
-                ?obs sosa:hasSimpleResult ?rssi .
-                ?obs sosa:resultTime ?resultTime .
-            }`;
-
-          urdf.clear();
-          urdf.query(query)
-            .then(result => {
-              let formattedResult = new Map();
-              for (r of result) {
-                formattedResult.set(r.mac.value, r);
-              }
-              resultsMap.set(address, formattedResult);
-              resolve();
-            })
-        }));
-      });
-    }
-
-    function getJSON(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'text';
-      xhr.onload = function () {
-        var status = xhr.status;
-        if (status === 200) {
-          callback(null, xhr.response);
-        } else {
-          callback(status, xhr.response);
-        }
-      };
-      xhr.send();
-    };
-
-    async function sparqlQuery(query) {
-      urdf.clear();
-      displayData(urdf.query(query));
-    }
-
-    function sendHttpRequest(url, method, headers, body, print) {
-      displayText(`sending ${method} request...`);
-      sendHttpRequestHelper(url, method, headers, body)
-        .then(res => {
-          if (print) displayText(res.response);
-        })
-        .catch(e => {
-          console.error(e);
-          displayText(`Error sending ${method} request. See console for details.`)
-        });
-    }
-
-    function sendHttpRequestHelper(url, method, headers, body) {
-      return new Promise((resolve, reject) => {
-        let xhr = new XMLHttpRequest();
-        xhr.open(method, url);
-
-        for (header of headers) {
-          values = header.split(':');
-
-          xhr.setRequestHeader(values[0].trim(), values[1].trim());
-        }
-
-        xhr.addEventListener('load', () => {
-          let { response, status } = xhr;
-          displayText(`Request response status: ${xhr.status}`);
-          if (status >= 200 && status < 400) {
-            resolve({ response: response, status });
-          } else {
-            reject({ response: response, status });
-          }
-        });
-
-        if (body) {
-          xhr.send(JSON.stringify(body));
-
-        } else {
-          xhr.send();
-        }
-
-      });
+      var msgBox = document.getElementById("messageBox");
+      msgBox.insertBefore(resultsField, msgBox.firstChild);
     }
   </script>
   <script src="js/sounds.js"></script>

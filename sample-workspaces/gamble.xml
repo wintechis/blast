@@ -1,0 +1,67 @@
+<xml>
+    <variables>
+        <variable id="P|HwG2}L{vYoy$..DI(Y">lottery</variable>
+    </variables>
+    <block type="controls_whileUntil" id="WGY@l}IDyr9snSKv0A-N" x="27" y="41">
+        <field name="MODE">UNTIL</field>
+        <value name="BOOL">
+            <block type="logic_compare" id="q-*o#~6|)VQ?*,si0^?=">
+                <field name="OP">GT</field>
+                <value name="A">
+                    <block type="variables_get" id="yx6v=BP3?)E8p[,SR-2`">
+                        <field name="VAR" id="P|HwG2}L{vYoy$..DI(Y">lottery</field>
+                    </block>
+                </value>
+                <value name="B">
+                    <block type="math_number" id=":37#kz0P!i/Gk{LRxRyO">
+                        <field name="NUM">90</field>
+                    </block>
+                </value>
+            </block>
+        </value>
+        <statement name="DO">
+            <block type="variables_set" id="MA#ud=YwV~HM:bxx|Xgc">
+                <field name="VAR" id="P|HwG2}L{vYoy$..DI(Y">lottery</field>
+                <value name="VALUE">
+                    <block type="math_random_int" id="rWT%HA8|UNlPr?8aAu]*">
+                        <value name="FROM">
+                            <shadow type="math_number" id="T:PgI=rD3K+Fs5y,iIGC">
+                                <field name="NUM">1</field>
+                            </shadow>
+                            <block type="math_number" id="EZNj:HAnSU+y!nNM!0.c">
+                                <field name="NUM">1</field>
+                            </block>
+                        </value>
+                        <value name="TO">
+                            <shadow type="math_number" id="Tf7[$Wh4fNSc)$_G8Fge">
+                                <field name="NUM">100</field>
+                            </shadow>
+                            <block type="math_number" id="$TGsr6LF(x}ip*BDH-{V">
+                                <field name="NUM">100</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </statement>
+        <next>
+            <block type="displayText" id="m7AGh$);,oXsOy6H4^vO">
+                <value name="text">
+                    <block type="text_join" id="7wK:#6}gIn.6XsQ*.#6}">
+                        <mutation items="2"></mutation>
+                        <value name="ADD0">
+                            <block type="variables_get" id="V9![%$Lswn-y}rw)KOn2">
+                                <field name="VAR" id="P|HwG2}L{vYoy$..DI(Y">lottery</field>
+                            </block>
+                        </value>
+                        <value name="ADD1">
+                            <block type="text" id="k7g!rCuq4ZA`?;g~6;?h">
+                                <field name="TEXT">, jackpot!</field>
+                            </block>
+                        </value>
+                    </block>
+                </value>
+            </block>
+        </next>
+    </block>
+</xml>

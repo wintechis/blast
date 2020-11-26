@@ -3,11 +3,8 @@
 BLAST is an acronym for **Bl**ock **A**pplication**s** for **t**hings. It offers a web-based, visual programming environment based on Google's [Blockly](https://developers.google.com/blockly). 
 
 In order to build and run a block-program, users can drag blocks together and then execute those by clicking the `execute` button on the bottom right. To stop a running program, click the `stop` button next to it.
-
+<!-- TODO New Screenshot -->
 ![BLAST screenshot](images/upload/blast-screenshot.png)
-
-
-The following describes the BLAST blocks in detail.
 
 In BLAST there are 6 categories of blocks:
 
@@ -19,6 +16,8 @@ In BLAST there are 6 categories of blocks:
 * **booleans**: A block representing a boolean value 
 * **text**: Text creation and manipulation blocks
 * **numbers**: represent numbers and enable basic arithmetic
+
+The following describes the BLAST blocks in detail.
 
 For a formal syntax definition check the first section [1. syntax](#1-Syntax) and to learn about the blocks semantic see [2. semantics](#2-Semantics).
 
@@ -132,9 +131,11 @@ The following describes BLAST's syntax using the [W3C EBNF Notation](https://www
 ### 1.1.1. block programs
 
 <pre>
-<a name="ebnf-block-program"></a>block-program            ::= (<a href="#ebnf-setup">setup</a> <a href="#ebnf-repeat">repeat</a>)
-<a name="ebnf-setup"></a>setup                    ::= setup ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-repeat"></a>repeat                   ::= repeat every <a href="#ebnf-number">number</a> s while <a href="#ebnf-boolean-expression">boolean-expression</a> do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-block-program"></a>block-program            ::= <a href="#ebnf-loop">loop</a> (<a href="#ebnf-loop">loop</a>)*
+<a name="ebnf-loop"></a>loop                     ::= (<a href="ebnf-repeat">repeat</a> | <a href="ebnf-whileUntil">whileUntil</a> | <a href="ebnf-for">for</a>)
+<a name="ebnf-repeat"></a>repeat                   ::= repeat <a href="#ebnf-number">number</a> times do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-whileUntil"></a>whileUntil               ::= repeat (while | until) <a href="#ebnf-conditional-statement">conditional-statement</a> do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
+<a name="ebnf-for"></a>for                      ::= count with <a href="ebnf-var">var</a> from <a href="#ebnf-number">number</a> to <a href="#ebnf-number">number</a> by <a href="#ebnf-number">number</a> do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
 <a name="ebnf-conditional-statement"></a>conditional-statement    ::= ( <a href="#ebnf-if">if</a> | <a href="#ebnf-if-else">if-else</a> )
 </pre>
 
