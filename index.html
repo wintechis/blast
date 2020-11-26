@@ -307,8 +307,6 @@
 
       let code = Blockly.JavaScript.workspaceToCode(workspace);
 
-      console.log(code);
-
       var myInterpreter = new Interpreter(code, initApi);
 
       interval = setInterval(function () {
