@@ -234,9 +234,13 @@
     var messageCounter = 0;
 
     function displayText(text) {
+      // save memory
+      if (messageCounter > 100) {
+        msgBox.lastChild.remove();
+      }
       msg = document.createElement("div");
       msg.classList.add("message");
-      msg.id = "message-" + messageCounter;
+      msg.id = "message-" + messageCounter++;
 
       textNode = document.createTextNode(text);
       msg.appendChild(textNode);
@@ -249,8 +253,43 @@
       msgBox = document.getElementById("messageBox");
       msgBox.insertBefore(msg, msgBox.firstChild);
     }
-
     displayText("Actionblock output will be displayed here");
+
+
+    function displayTable(table) {
+      // save memory
+      if (messageCounter > 100) {
+        msgBox.lastChild.remove();
+      }
+
+      if (table.length == 0) {
+        displayText("empty table")
+        return;
+      }
+
+      // deal with missing values
+      let vars = table.reduce((list, res) => {
+        for (let v in res) {
+          if (list.indexOf(v) === -1) list.push(v);
+        }
+        return list;
+      }, []);
+
+      let html = '<tr>';
+      vars.forEach(v => html += '<th>' + v + '</th>');
+      html += '</tr>';
+
+      table.forEach(res => {
+        html += '<tr>';
+        vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
+        html += '</tr>';
+      });
+
+      let resultsField = document.createElement("table");
+      resultsField.innerHTML = html;
+      var msgBox = document.getElementById("messageBox");
+      msgBox.insertBefore(resultsField, msgBox.firstChild);
+    }
 
 
     /*  
@@ -332,43 +371,6 @@
 
     // creates blocks in things category
     workspace.registerToolboxCategoryCallback("things_category", Blockly.Things.flyoutCallback);
-
-    /*
-    #############
-    # uRDF Code #
-    #############
-    */
-
-    function displayTable(table) {
-
-      if (table.length == 0) {
-        displayText("empty table")
-        return;
-      }
-
-      // deal with missing values
-      let vars = table.reduce((list, res) => {
-        for (let v in res) {
-          if (list.indexOf(v) === -1) list.push(v);
-        }
-        return list;
-      }, []);
-
-      let html = '<tr>';
-      vars.forEach(v => html += '<th>' + v + '</th>');
-      html += '</tr>';
-
-      table.forEach(res => {
-        html += '<tr>';
-        vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
-        html += '</tr>';
-      });
-
-      let resultsField = document.createElement("table");
-      resultsField.innerHTML = html;
-      var msgBox = document.getElementById("messageBox");
-      msgBox.insertBefore(resultsField, msgBox.firstChild);
-    }
   </script>
   <script src="js/sounds.js"></script>
 </body>
