@@ -2,6 +2,8 @@
  * @fileoverview Utility functions for handling (internet of) things
  */
 
+Blockly.Things = {};
+
 Blockly.Things.saveButtonHandler = async function (
     workspace, type, opt_callback) {
     Blockly.hideChaff();
