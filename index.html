@@ -379,22 +379,22 @@
     function save(url) {
 
       var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+      var serializer = new XMLSerializer();
+      var xmlStr = serializer.serializeToString(xmlDom);
 
       // send PUT request
       let xhr = new XMLHttpRequest();
       xhr.open("PUT", url);
+      //xhr.setRequestHeader("Content-Type", "text/xml");
 
-      // xhr.setRequestHeader("Content-Type", "text/xml");
-
-      xhr.addEventListener('load', (e) => {
-        var status = xhr.status;
-        if (status === 200) {
+      xhr.onload = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
           Blockly.alert("workspace saved!");
         } else {
           Blockly.alert("Error saving workspace, see console for details.");
         }
-      })
-      xhr.send();
+      }
+      xhr.send(xmlStr);
     }
 
     loadButtonHandler = async function () {
@@ -404,14 +404,13 @@
       let xhr = new XMLHttpRequest();
       xhr.open("GET", url);
 
-      xhr.addEventListener('load', (e) => {
-        let { status, reponse } = xhr;
-        if (status === 200) {
+      xhr.onload = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
           restore(xhr.response)
         } else {
           Blockly.alert("Error loading workspace, see console for details.");
         }
-      })
+      }
       xhr.send();
     };
 
