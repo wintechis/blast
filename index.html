@@ -14,7 +14,6 @@
   <script src="js/query_blocks.js"></script>
   <script src="js/query_stubs.js"></script>
   <script src="js/urdf-browser.js"></script>
-  <script src="js/blockly_things.js"></script>
   <script src="msg/js/en.js"></script>
   <script src="js/interpreter-api.js"></script>
   <style>
@@ -113,8 +112,8 @@
           <option value="./sample-workspaces/event.xml"></option>
           <option value="./sample-workspaces/lightsProximity.xml"></option>
         </datalist>
-        <button onclick="Blockly.Things.loadButtonHandler()">load</button>
-        <button><a onclick="Blockly.Things.saveButtonHandler()">save</a></button>
+        <button onclick="loadButtonHandler()">load</button>
+        <button><a onclick="saveButtonHandler()">save</a></button>
         <div class="status">
           <span id="status"></span>
           <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
@@ -366,11 +365,72 @@
       document.getElementById("status").innerHTML = message;
     }
 
+    saveButtonHandler = async function (
+      workspace, type, opt_callback) {
+      Blockly.hideChaff();
+      let url = document.getElementById("loadWorkspace-input").value;
+      save(url);
+    };
+
+    /**
+     * saves the current workspace to solid pod
+     * @param {string} url new url of the workspace
+     */
+    function save(url) {
+
+      var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
+
+      // send PUT request
+      let xhr = new XMLHttpRequest();
+      xhr.open("PUT", url);
+
+      // xhr.setRequestHeader("Content-Type", "text/xml");
+
+      xhr.addEventListener('load', (e) => {
+        var status = xhr.status;
+        if (status === 200) {
+          Blockly.alert("workspace saved!");
+        } else {
+          Blockly.alert("Error saving workspace, see console for details.");
+        }
+      })
+      xhr.send();
+    }
+
+    loadButtonHandler = async function () {
+      Blockly.hideChaff();
+      let url = document.getElementById("loadWorkspace-input").value;
+      // send GET request
+      let xhr = new XMLHttpRequest();
+      xhr.open("GET", url);
+
+      xhr.addEventListener('load', (e) => {
+        let { status, reponse } = xhr;
+        if (status === 200) {
+          restore(xhr.response)
+        } else {
+          Blockly.alert("Error loading workspace, see console for details.");
+        }
+      })
+      xhr.send();
+    };
+
+    /**
+     * restores a workspace from JSON
+     * @param {string} name name of the workspace
+     */
+    function restore(xmlText) {
+      stopCode("stopped");
+
+      // clear blocks
+      Blockly.mainWorkspace.clear();
+
+      var xmlDom = Blockly.Xml.textToDom(xmlText);
+      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
+    }
+
     // Setting blocks on startup
     Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), Blockly.mainWorkspace);
-
-    // creates blocks in things category
-    workspace.registerToolboxCategoryCallback("things_category", Blockly.Things.flyoutCallback);
   </script>
   <script src="js/sounds.js"></script>
 </body>
