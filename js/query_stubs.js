@@ -95,6 +95,12 @@ Blockly.JavaScript['randomsound'] = function (block) {
   return code;
 };
 
+Blockly.JavaScript['waitSeconds'] = function(block) {
+  var seconds = Number(block.getFieldValue('SECONDS'));
+  var code = 'waitForSeconds(' + seconds + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['event'] = function (block) {
   var measurement = Blockly.JavaScript.valueToCode(block, 'measurement', Blockly.JavaScript.ORDER_NONE);
   var dropdown_startstop = block.getFieldValue('startstop');

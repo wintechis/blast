@@ -140,6 +140,14 @@ function initApi(interpreter, globalObject) {
     }
     interpreter.setProperty(globalObject, 'switchLights', interpreter.createAsyncFunction(wrapper))
 
+    // API function for waitSeconds block.
+    var wrapper = interpreter.createAsyncFunction(
+        function(timeInSeconds, callback) {
+          // Delay the call to the callback.
+          setTimeout(callback, timeInSeconds * 1000);
+        });
+      interpreter.setProperty(globalObject, 'waitForSeconds', wrapper);
+
     // API function for highlighting blocks.
     var wrapper = function (cat) {
         return playRandomSoundFromCategory(cat);

@@ -175,6 +175,7 @@
       <block type="switchlights"></block>
       <block type="randomsound"></block>
       <block type="controls_flow_statements"></block>
+      <block type="waitSeconds"></block>
     </category>
     <category name="Logic" colour="210">
       <block type="controls_if"></block>
@@ -388,7 +389,7 @@
       //xhr.setRequestHeader("Content-Type", "text/xml");
 
       xhr.onload = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState == 4 && xhr.status == "200") {
           Blockly.alert("workspace saved!");
         } else {
           Blockly.alert("Error saving workspace, see console for details.");
@@ -405,7 +406,7 @@
       xhr.open("GET", url);
 
       xhr.onload = function () {
-        if (xhr.readyState == 4 && xhr.status == 200) {
+        if (xhr.readyState == 4 && xhr.status == "200") {
           restore(xhr.response)
         } else {
           Blockly.alert("Error loading workspace, see console for details.");
