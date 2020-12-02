@@ -7,7 +7,7 @@ Blockly.JavaScript['things'] = function (block) {
 
 Blockly.JavaScript['receiver'] = function (block) {
   var address = Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE);
-  code = `queryReceiver("${address}")`;
+  var code = `queryReceiver("${address}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -27,6 +27,23 @@ Blockly.JavaScript['ibeacon_data'] = function (block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['readdw'] = function (block) {
+  var mac = Blockly.JavaScript.valueToCode(block, 'MAC', Blockly.JavaScript.ORDER_NONE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `getDwValuesOfMac("${mac}")`;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['writedw'] = function (block) {
+  var value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_NONE);
+  var mac = Blockly.JavaScript.valueToCode(block, 'MAC', Blockly.JavaScript.ORDER_NONE);
+  // TODO: Assemble JavaScript into code variable.
+  var code = `setDwValuesOfMac("${mac}", ${value})`;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['displayText'] = function (block) {
   var text_msg = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_NONE) || '\'\'';
 
@@ -37,7 +54,7 @@ Blockly.JavaScript['displayText'] = function (block) {
 Blockly.JavaScript['displayTable'] = function (block) {
   var table = Blockly.JavaScript.valueToCode(block, 'table', Blockly.JavaScript.ORDER_NONE)
 
-  code = `displayTable(${table});\n`;
+  var code = `displayTable(${table});\n`;
   return code;
 }
 
@@ -51,7 +68,7 @@ Blockly.JavaScript['httprequest'] = function (block) {
   // escape " quotes in headers
   text_headers = text_headers.replace(/"/g, '\\\"');
 
-  var code = `sendHttpRequest("${uri}","${method}", "${text_headers}","${body}", "${output}")\n`;
+  var code = `sendHttpRequest("${uri}","${method}", "${text_headers}", ${body}, "${output}")\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -95,7 +112,7 @@ Blockly.JavaScript['randomsound'] = function (block) {
   return code;
 };
 
-Blockly.JavaScript['waitSeconds'] = function(block) {
+Blockly.JavaScript['waitSeconds'] = function (block) {
   var seconds = Number(block.getFieldValue('SECONDS'));
   var code = 'waitForSeconds(' + seconds + ');\n';
   return code;

@@ -71,6 +71,41 @@ Blockly.defineBlocksWithJsonArray([
     "helpUrl": ""
   },
   {
+    "type": "readdw",
+    "message0": "Read DW Values from MAC %1",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "MAC",
+        "check": "mac"
+      }
+    ],
+    "output": "String",
+    "colour": 45,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
+    "type": "writedw",
+    "message0": "Write value %1 to mac %2",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "value",
+        "check": "String"
+      },
+      {
+        "type": "input_value",
+        "name": "MAC",
+        "check": "mac"
+      }
+    ],
+    "output": "String",
+    "colour": 45,
+    "tooltip": "",
+    "helpUrl": ""
+  },
+  {
     "type": "displayText",
     "message0": "display text: %1",
     "args0": [

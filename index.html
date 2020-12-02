@@ -111,6 +111,7 @@
           <option value="./samples/httpRequests.xml"></option>
           <option value="./samples/event.xml"></option>
           <option value="./samples/lightsProximity.xml"></option>
+          <option value="./samples/stationIncrement.xml"></option>
         </datalist>
         <button onclick="loadButtonHandler()">load</button>
         <button><a onclick="saveButtonHandler()">save</a></button>
@@ -167,6 +168,8 @@
     </category>
     <category name="Variables" custom="VARIABLE" colour="330"></category>
     <category name="Actions" colour="0">
+      <block type="readdw"></block>
+      <block type="writedw"></block>
       <block type="displayText"></block>
       <block type="displayTable"></block>
       <block type="httprequest"></block>
@@ -345,6 +348,7 @@
       clearInterval(prevInterval);
 
       let code = Blockly.JavaScript.workspaceToCode(workspace);
+      console.log(code);
 
       var myInterpreter = new Interpreter(code, initApi);
 

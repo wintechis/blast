@@ -35,7 +35,7 @@ function initApi(interpreter, globalObject) {
 
     // API function for the ibeacon-data block.
     var wrapper = function (table, key, value, retValue) {
-        for (row of table) {
+        for (let row of table) {
             if (row[key].value == value) {
                 return row[retValue].value;
             }
@@ -64,8 +64,8 @@ function initApi(interpreter, globalObject) {
         var headers = headersString.replace(/"/g, "").split(',');
 
         // parse headers from comma separated string
-        for (header of headers) {
-            values = header.split(':');
+        for (var header of headers) {
+            let values = header.split(':');
 
             xhr.setRequestHeader(values[0].trim(), values[1].trim());
         }
@@ -86,7 +86,9 @@ function initApi(interpreter, globalObject) {
         });
 
         if (body) {
-            xhr.send(JSON.stringify(body));
+            console.log(JSON.stringify(body.a));
+            console.log(xhr);
+            xhr.send(JSON.stringify(body.a));
 
         } else {
             xhr.send();
@@ -119,13 +121,13 @@ function initApi(interpreter, globalObject) {
         var y_byte = y ? "ff" : "00";
         var g_byte = g ? "ff" : "00";
 
-        var data = { 
-            "type": "ble:Write", 
-            "handle": "0009", 
+        var data = {
+            "type": "ble:Write",
+            "handle": "0009",
             "data": {
-                "@value": "7e000503" + r_byte + g_byte + y_byte + "00ef", 
-                "@type": "xsd:hexBinary" 
-            } 
+                "@value": "7e000503" + r_byte + g_byte + y_byte + "00ef",
+                "@type": "xsd:hexBinary"
+            }
         };
 
         fetch(`http://dw-station-5.local:8000/devices/${mac}/gatt/instruction`, {
@@ -142,11 +144,11 @@ function initApi(interpreter, globalObject) {
 
     // API function for waitSeconds block.
     var wrapper = interpreter.createAsyncFunction(
-        function(timeInSeconds, callback) {
-          // Delay the call to the callback.
-          setTimeout(callback, timeInSeconds * 1000);
+        function (timeInSeconds, callback) {
+            // Delay the call to the callback.
+            setTimeout(callback, timeInSeconds * 1000);
         });
-      interpreter.setProperty(globalObject, 'waitForSeconds', wrapper);
+    interpreter.setProperty(globalObject, 'waitForSeconds', wrapper);
 
     // API function for highlighting blocks.
     var wrapper = function (cat) {
@@ -160,7 +162,7 @@ function initApi(interpreter, globalObject) {
 
 
 
-        prev_measurement = eventValues.get(blockId);
+        var prev_measurement = eventValues.get(blockId);
 
         // The first time eventblock with id blockId is executed, there's no stored values so return false
         if (eventValues.get(blockId) != undefined) {
@@ -169,7 +171,7 @@ function initApi(interpreter, globalObject) {
             console.log(s);
             console.log(event);
             eventValues.set(blockId, measurement);
-    
+
             return event;
         } else {
             eventValues.set(blockId, measurement);
@@ -178,4 +180,62 @@ function initApi(interpreter, globalObject) {
 
     };
     interpreter.setProperty(globalObject, 'eventChecker', interpreter.createNativeFunction(wrapper));
+
+    // API function for the readDw block.
+    var wrapper = function (mac, callback) {
+
+        var url = `http://192.168.178.22:8000/devices/${mac}/gatt/instruction`;
+        var headers = "Content-Type: application/json";
+        var body = { "handle": "001f", "type": "ble:Read" };
+
+        headers = headers.split(":");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("PUT", url);
+        xhr.setRequestHeader(headers[0].trim(), headers[1].trim());
+
+        xhr.addEventListener('load', (e) => {
+            callback(JSON.parse(xhr.response).result.utf8);
+        });
+
+        if (body) {
+            console.log(JSON.stringify(body));
+            return xhr.send(JSON.stringify(body));
+
+        } else {
+            return xhr.send();
+        }
+
+
+    }
+    interpreter.setProperty(globalObject, 'getDwValuesOfMac', interpreter.createAsyncFunction(wrapper));
+
+    // API function for the readDw block.
+    var wrapper = function (mac,value, callback) {
+
+        var url = `http://192.168.178.22:8000/devices/${mac}/gatt/instruction`;
+        var headers = "Content-Type: application/json";
+        var body = {    "handle": "001f", "type": "ble:Write", "data": { "@type": "xsd:string", "@value": value } };
+
+        headers = headers.split(":");
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("PUT", url);
+        xhr.setRequestHeader(headers[0].trim(), headers[1].trim());
+
+        xhr.addEventListener('load', (e) => {
+            callback(xhr.status);
+        });
+
+        if (body) {
+            console.log(JSON.stringify(body));
+            return xhr.send(JSON.stringify(body));
+
+        } else {
+            return xhr.send();
+        }
+
+
+    }
+    interpreter.setProperty(globalObject, 'setDwValuesOfMac', interpreter.createAsyncFunction(wrapper));
 }
