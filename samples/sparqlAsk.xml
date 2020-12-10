@@ -11,7 +11,7 @@ WHERE {
 }</field>
                 <value name="uri">
                     <block type="uri" id=".3=?6+r3q[%Pc]qoAO#~">
-                        <field name="URI">http://dw-station-5.local/ble/current</field>
+                        <field name="URI">http://dwpi4.local/ble/current</field>
                     </block>
                 </value>
             </block>
