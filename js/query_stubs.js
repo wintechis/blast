@@ -103,7 +103,7 @@ Blockly.JavaScript['httprequest'] = function(block) {
   const method = block.getFieldValue('METHOD');
   let headers = block.getFieldValue('HEADERS');
   const output = block.getFieldValue('OUTPUT');
-  const body = block.getFieldValue('BODY') || '';
+  const body = block.getFieldValue('BODY') || null;
 
   // escape " quotes in headers
   headers = headers.replace(/"/g, '\\"');
