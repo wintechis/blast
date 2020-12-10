@@ -1,155 +1,215 @@
+Blockly.JavaScript['things'] = function(block) {
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'mac',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
-Blockly.JavaScript['things'] = function (block) {
-  var value_mac = Blockly.JavaScript.valueToCode(block, 'mac', Blockly.JavaScript.ORDER_NONE);
-
-  return [value_mac, Blockly.JavaScript.ORDER_NONE];
+  return [mac, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['receiver'] = function (block) {
-  var address = Blockly.JavaScript.valueToCode(block, 'address', Blockly.JavaScript.ORDER_NONE);
-  var code = `queryReceiver("${address}")`;
+Blockly.JavaScript['receiver'] = function(block) {
+  const address = Blockly.JavaScript.valueToCode(
+      block,
+      'address',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const code = `queryReceiver("${address}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['ibeacon_data'] = function (block) {
-  var ibeacon = Blockly.JavaScript.valueToCode(block, 'ibeacon', Blockly.JavaScript.ORDER_NONE);
-  var receiver = Blockly.JavaScript.valueToCode(block, 'receiver', Blockly.JavaScript.ORDER_NONE);
-  var value = block.getFieldValue('value');
+Blockly.JavaScript['ibeacon_data'] = function(block) {
+  const ibeacon = Blockly.JavaScript.valueToCode(
+      block,
+      'ibeacon',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const receiver = Blockly.JavaScript.valueToCode(
+      block,
+      'receiver',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const value = block.getFieldValue('value');
 
-  var code = `getTableCell(${receiver}, 'mac', "${ibeacon}", "${value}")`
+  const code = `getTableCell(${receiver}, 'mac', "${ibeacon}", "${value}")`;
   // if(["mac", "proximity", "time"].includes(value)){
   //   code = Blockly.JavaScript.quote_(data[value].value);
   // } else {
-  //   code = data[value].value; 
+  //   code = data[value].value;
   // }{
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['readdw'] = function (block) {
-  var mac = Blockly.JavaScript.valueToCode(block, 'MAC', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['readdw'] = function(block) {
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'MAC',
+      Blockly.JavaScript.ORDER_NONE,
+  );
   // TODO: Assemble JavaScript into code variable.
-  var code = `getDwValuesOfMac("${mac}")`;
+  const code = `getDwValuesOfMac("${mac}")`;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['writedw'] = function (block) {
-  var value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_NONE);
-  var mac = Blockly.JavaScript.valueToCode(block, 'MAC', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['writedw'] = function(block) {
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'value',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'MAC',
+      Blockly.JavaScript.ORDER_NONE,
+  );
   // TODO: Assemble JavaScript into code variable.
-  var code = `setDwValuesOfMac("${mac}", ${value})`;
+  const code = `setDwValuesOfMac("${mac}", ${value})`;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['displayText'] = function (block) {
-  var text_msg = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_NONE) || '\'\'';
+Blockly.JavaScript['displayText'] = function(block) {
+  const message =
+    Blockly.JavaScript.valueToCode(
+        block,
+        'text',
+        Blockly.JavaScript.ORDER_NONE,
+    ) || '\'\'';
 
-  var code = `displayText(${text_msg});\n`;
+  const code = `displayText(${message});\n`;
   return code;
 };
 
-Blockly.JavaScript['displayTable'] = function (block) {
-  var table = Blockly.JavaScript.valueToCode(block, 'table', Blockly.JavaScript.ORDER_NONE)
+Blockly.JavaScript['displayTable'] = function(block) {
+  const table = Blockly.JavaScript.valueToCode(
+      block,
+      'table',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
-  var code = `displayTable(${table});\n`;
+  const code = `displayTable(${table});\n`;
   return code;
-}
+};
 
-Blockly.JavaScript['httprequest'] = function (block) {
-  var uri = Blockly.JavaScript.valueToCode(block, 'uri', Blockly.JavaScript.ORDER_NONE);
-  var method = block.getFieldValue('METHOD');
-  var text_headers = block.getFieldValue('HEADERS');
-  var output = block.getFieldValue('OUTPUT');
-  var body = block.getFieldValue('BODY') || "";
+Blockly.JavaScript['httprequest'] = function(block) {
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'uri',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const method = block.getFieldValue('METHOD');
+  let headers = block.getFieldValue('HEADERS');
+  const output = block.getFieldValue('OUTPUT');
+  const body = block.getFieldValue('BODY') || '';
 
   // escape " quotes in headers
-  text_headers = text_headers.replace(/"/g, '\\\"');
+  headers = headers.replace(/"/g, '\\"');
 
-  var code = `sendHttpRequest("${uri}","${method}", "${text_headers}", ${body}, "${output}")\n`;
+  const code = `sendHttpRequest("${uri}","${method}", "${headers}", ${body}, "${output}")\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['sparql_query'] = function (block) {
-  var query = block.getFieldValue('query');
-  var uri = Blockly.JavaScript.valueToCode(block, 'uri', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['sparql_query'] = function(block) {
+  let query = block.getFieldValue('query');
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'uri',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
   // escape " quotes and replace linebreaks (\n) with \ in query
-  query = query.replace(/"/g, '\\\"').replace(/[\n\r]/g, ' ');
+  query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
 
-  var code = `urdfQueryWrapper("${uri}", "${query}")`
+  const code = `urdfQueryWrapper("${uri}", "${query}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
-}
+};
 
-Blockly.JavaScript['sparql_ask'] = function (block) {
-  var query = block.getFieldValue('query');
-  var uri = Blockly.JavaScript.valueToCode(block, 'uri', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['sparql_ask'] = function(block) {
+  let query = block.getFieldValue('query');
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'uri',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
   // escape " quotes and replace linebreaks (\n) with \ in query
-  query = query.replace(/"/g, '\\\"').replace(/[\n\r]/g, ' ');
+  query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
 
-  var code = `urdfQueryWrapper("${uri}", "${query}")`
+  const code = `urdfQueryWrapper("${uri}", "${query}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['switchlights'] = function (block) {
-  var cb_red = block.getFieldValue('cb_red') == 'TRUE';
-  var cb_yellow = block.getFieldValue('cb_yellow') == 'TRUE';
-  var cb_green = block.getFieldValue('cb_green') == 'TRUE';
-  var mac = Blockly.JavaScript.valueToCode(block, 'mac', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['switchlights'] = function(block) {
+  const checkboxRed = block.getFieldValue('cb_red') == 'TRUE';
+  const checkboxYellow = block.getFieldValue('cb_yellow') == 'TRUE';
+  const checkboxGreen = block.getFieldValue('cb_green') == 'TRUE';
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'mac',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
-  var code = `switchLights("${mac}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
+  const code = `switchLights("${mac}", ${checkboxRed}, ${checkboxYellow}, ${checkboxGreen});`;
   return code;
 };
 
-Blockly.JavaScript['randomsound'] = function (block) {
-  var dropdown_category = block.getFieldValue('category');
-  var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
+Blockly.JavaScript['randomsound'] = function(block) {
+  const dropdownCategory = block.getFieldValue('category');
+  const code = `playRandomSoundFromCategory("${dropdownCategory}");\n`;
   return code;
 };
 
-Blockly.JavaScript['waitSeconds'] = function (block) {
-  var seconds = Number(block.getFieldValue('SECONDS'));
-  var code = 'waitForSeconds(' + seconds + ');\n';
+Blockly.JavaScript['waitSeconds'] = function(block) {
+  const seconds = Number(block.getFieldValue('SECONDS'));
+  const code = 'waitForSeconds(' + seconds + ');\n';
   return code;
 };
 
-Blockly.JavaScript['event'] = function (block) {
-  var measurement = Blockly.JavaScript.valueToCode(block, 'measurement', Blockly.JavaScript.ORDER_NONE);
-  var dropdown_startstop = block.getFieldValue('startstop');
-  var value = Blockly.JavaScript.valueToCode(block, 'value', Blockly.JavaScript.ORDER_NONE);
+Blockly.JavaScript['event'] = function(block) {
+  const measurement = Blockly.JavaScript.valueToCode(
+      block,
+      'measurement',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const dropdownStartsStops = block.getFieldValue('startstop');
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'value',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
-  var OPERATORS = {
-    'EQ': '==',
-    'NEQ': '!=',
-    'LT': '<',
-    'LTE': '<=',
-    'GT': '>',
-    'GTE': '>='
+  const OPERATORS = {
+    EQ: '==',
+    NEQ: '!=',
+    LT: '<',
+    LTE: '<=',
+    GT: '>',
+    GTE: '>=',
   };
 
-  var operator = OPERATORS[block.getFieldValue('operator')];
-  var negate = dropdown_startstop == "BECOMES" ? "" : "!";
+  const operator = OPERATORS[block.getFieldValue('operator')];
+  const negate = dropdownStartsStops == 'BECOMES' ? '' : '!';
 
-  code = `eventChecker(${measurement}, "${negate}", "${operator}", ${value}, "${block.id}")`
+  code = `eventChecker(${measurement}, "${negate}", "${operator}", ${value}, "${block.id}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['uri'] = function (block) {
-  var text_uri = block.getFieldValue('URI');
-  return [text_uri, Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['uri'] = function(block) {
+  const uri = block.getFieldValue('URI');
+  return [uri, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['mac'] = function (block) {
-  var text_mac = block.getFieldValue('MAC');
-  return [text_mac, Blockly.JavaScript.ORDER_NONE];
+Blockly.JavaScript['mac'] = function(block) {
+  const mac = block.getFieldValue('MAC');
+  return [mac, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['infinity'] = function (block) {
+Blockly.JavaScript['infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
-}
+};
