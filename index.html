@@ -123,8 +123,8 @@
         <button><a onclick="saveButtonHandler()">save</a></button>
         <div class="status">
           <span id="statusText">ready</span>
-          <button onclick="stopCode('stopped')" id="stopButton"
-            class="controlButtons" disabled>stop</button>
+          <button onclick="resetInterpreter();resetStepUi()" id="stopButton" class="controlButtons"
+            disabled>stop</button>
           <button onclick="runCode()" id="runButton"
             class="controlButtons">execute</button>
         </div>
@@ -366,7 +366,6 @@
       Blockly.JavaScript.addReservedWords('highlightBlock');
       // Generate JavaScript code and parse it.
       latestCode = Blockly.JavaScript.workspaceToCode(workspace);
-
       resetStepUi();
     }
 
@@ -477,6 +476,7 @@
      * @param {string} name name of the workspace
      */
     function restore(xmlText) {
+      resetInterpreter();
       resetStepUi();
 
       // clear blocks
