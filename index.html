@@ -4,8 +4,10 @@
 <head>
   <meta charset="utf-8">
   <title>BLAST Demo</title>
-  <script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
   <script src="js/solid.js" type="application/javascript"></script>
   <script src="js/blockly_compressed.js"></script>
   <script src="js/javascript_compressed.js"></script>
@@ -99,12 +101,16 @@
         <h1>BLAST - Block Applications for Things</h1>
         <p>
           The menu on the left contains different blocks.</br>
-          Move them into either the setup- or loop-block below to define a blockprogram.</br>
-          When finished click the execute button on the bottom-right to start the program.<br>
-          For more information on each of the blocks, check the <a href="docs/Blocks.md" target="_blank"
+          Move them into either the setup- or loop-block below to define a
+          blockprogram.</br>
+          When finished click the execute button on the bottom-right to start
+          the program.<br>
+          For more information on each of the blocks, check the <a
+            href="docs/Blocks.md" target="_blank"
             rel="noopener noreferrer">documentation</a>.
         </p>
-        <input list="samples" type="text" id="loadWorkspace-input" placeholder="samples/gamble.xml">
+        <input list="samples" type="text" id="loadWorkspace-input"
+          placeholder="samples/gamble.xml">
         <datalist id="samples">
           <option value="./samples/gamble.xml"></option>
           <option value="./samples/sparqlAsk.xml"></option>
@@ -116,9 +122,11 @@
         <button onclick="loadButtonHandler()">load</button>
         <button><a onclick="saveButtonHandler()">save</a></button>
         <div class="status">
-          <span id="status"></span>
-          <button onclick="stopCode('stopped')" id="stop" class="controlButtons" disabled>stop</button>
-          <button onclick="runCode()" id="run" class="controlButtons">execute</button>
+          <span id="statusText">ready</span>
+          <button onclick="stopCode('stopped')" id="stopButton"
+            class="controlButtons" disabled>stop</button>
+          <button onclick="runCode()" id="runButton"
+            class="controlButtons">execute</button>
         </div>
       </td>
     </tr>
@@ -133,7 +141,8 @@
 
   <div id="blocklyDiv" style="position: absolute"></div>
 
-  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox"
+    style="display: none">
     <category name="Program" colour="120">
       <block type="controls_repeat_ext">
         <value name="TIMES">
@@ -225,7 +234,8 @@
       </block>
     </category>
   </xml>
-  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks" style="display: none">
+  <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks"
+    style="display: none">
     <block type="controls_whileUntil" x="10" y="100">
       <value name="BOOL">
         <block type="logic_boolean"></block>
@@ -301,14 +311,11 @@
     ################
     */
 
-    // Highlight blocks
-    Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-    Blockly.JavaScript.addReservedWords('highlightBlock');
-
-    function highlightBlock(id) {
-      workspace.highlightBlock(id);
-    }
-
+    var runButton = document.getElementById('runButton');
+    var stopButton = document.getElementById('stopButton');
+    var statusText = document.getElementById('statusText');
+    var myInterpreter = null;
+    var runner;
     var blocklyArea = document.getElementById('blocklyArea');
     var blocklyDiv = document.getElementById('blocklyDiv');
     var workspace = Blockly.inject(blocklyDiv, { toolbox: document.getElementById('toolbox') });
@@ -334,41 +341,87 @@
     onresize();
     Blockly.svgResize(workspace);
 
-    // execution interval is global to make sure stopCode() works
-    var interval = null;
+    var highlightPause = false;
+    var latestCode = '';
 
-    runCode = function () {
-      // disable run button and enable stop button
-      document.getElementById("stop").disabled = false;
-      document.getElementById("run").disabled = true;
-      document.getElementById("status").innerHTML = "running... ";
-
-      // stop any previous loop interval
-      var prevInterval = interval;
-      clearInterval(prevInterval);
-
-      let code = Blockly.JavaScript.workspaceToCode(workspace);
-      console.log(code);
-
-      var myInterpreter = new Interpreter(code, initApi);
-
-      interval = setInterval(function () {
-        if (!myInterpreter.step()) {
-          clearInterval(interval);
-        }
-      }, 10)
-
+    function highlightBlock(id) {
+      workspace.highlightBlock(id);
+      highlightPause = true;
     }
 
-    stopCode = function (message) {
-      // enable run button and disable stop button
-      document.getElementById("stop").disabled = true;
-      document.getElementById("run").disabled = false;
-
-      // stop interval execution and set status text
-      clearInterval(interval)
-      document.getElementById("status").innerHTML = message;
+    function resetStepUi() {
+      workspace.highlightBlock(null);
+      highlightPause = false;
+      runButton.disabled = '';
+      stopButton.disabled = 'disabled';
+      setStatusText("ready")
     }
+
+    function setStatusText(status) {
+      statusText.innerHTML = status;
+    }
+
+    function generateCodeAndLoadIntoInterpreter() {
+      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+      Blockly.JavaScript.addReservedWords('highlightBlock');
+      // Generate JavaScript code and parse it.
+      latestCode = Blockly.JavaScript.workspaceToCode(workspace);
+
+      resetStepUi();
+    }
+
+    function resetInterpreter() {
+      myInterpreter = null;
+      if (runner) {
+        clearTimeout(runner);
+        runner = null;
+      }
+    }
+
+    function runCode() {
+      if (!myInterpreter) {
+        // First statement of this code.
+        // Clear the program output.
+        resetStepUi();
+        runButton.disabled = 'disabled';
+        stopButton.disabled = '';
+        setStatusText("running...");
+
+        // And then show generated code in an alert.
+        // In a timeout to allow the outputArea.value to reset first.
+        setTimeout(function () {
+          // Begin execution
+          highlightPause = false;
+          myInterpreter = new Interpreter(latestCode, initApi);
+          runner = function () {
+            if (myInterpreter) {
+              var hasMore = myInterpreter.step();
+              if (hasMore) {
+                // Execution is currently blocked by some async call.
+                // Try again later.
+                setTimeout(runner, 5);
+              } else {
+                // Program is complete.
+                resetInterpreter();
+                resetStepUi();
+              }
+            }
+          };
+          runner();
+        }, 1);
+        return;
+      }
+    }
+
+    // Load the interpreter now, and upon future changes.
+    generateCodeAndLoadIntoInterpreter();
+    workspace.addChangeListener(function (event) {
+      if (!(event instanceof Blockly.Events.Ui)) {
+        // Something changed. Parser needs to be reloaded.
+        resetInterpreter();
+        generateCodeAndLoadIntoInterpreter();
+      }
+    });
 
     saveButtonHandler = async function (
       workspace, type, opt_callback) {
@@ -424,7 +477,7 @@
      * @param {string} name name of the workspace
      */
     function restore(xmlText) {
-      stopCode("stopped");
+      resetStepUi();
 
       // clear blocks
       Blockly.mainWorkspace.clear();

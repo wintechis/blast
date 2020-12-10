@@ -15,9 +15,10 @@ function initApi(interpreter, globalObject) {
       'displayTable',
   );
 
-  // API function for highlighting blocks.
+  // Add an API function for highlighting blocks.
   let wrapper = function(id) {
-    return workspace.highlightBlock(id);
+    id = id ? id.toString() : '';
+    return interpreter.createPrimitive(highlightBlock(id));
   };
   interpreter.setProperty(
       globalObject,
