@@ -237,7 +237,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: 'field_input',
         name: 'URI',
-        text: 'http://dw-station-5.local/ble/current',
+        text: 'http://dwpi4.local/ble/current',
       },
     ],
     output: 'URI',
@@ -362,7 +362,7 @@ Blockly.Blocks['httprequest'] = {
     this.appendDummyInput().appendField('headers (comma separated)');
     this.appendDummyInput().appendField(
         new Blockly.FieldTextInput(
-            '"Content-Type: application/json", "Accept: application/json"',
+            '"Content-Type": "application/json", "Accept": "application/json"',
         ),
         'HEADERS',
     );
@@ -393,7 +393,6 @@ Blockly.Blocks['httprequest'] = {
   },
 
   updateOutput: function(outputValue) {
-    console.log(outputValue);
     if (outputValue == 'status') {
       this.outputConnection.setCheck('String');
     } else if (outputValue == 'body') {

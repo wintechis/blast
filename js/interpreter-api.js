@@ -88,39 +88,35 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the httpRequestBlock.
-  wrapper = function(url, method, headersString, body, output, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open(method, url);
+  wrapper = function(uri, method, headersString, data, output, callback) {
+    const headersJSON = JSON.parse(headersString);
+    const requestOptions = {
+      method: method,
+      headers: new Headers(headersJSON),
+    };
 
-    const headers = headersString.replace(/"/g, '').split(',');
-
-    // parse headers from comma separated string
-    for (const header of headers) {
-      const values = header.split(':');
-
-      xhr.setRequestHeader(values[0].trim(), values[1].trim());
+    if (data) {
+      requestOptions.body = JSON.stringify(data);
     }
 
-    xhr.addEventListener('load', (e) => {
-      if (output == 'status') {
-        callback(xhr[output]);
-      } else {
-        urdf.clear();
-        urdf.load(xhr.response).then(() => {
-          urdf.query('SELECT * WHERE {?s ?p ?o}').then((result) => {
-            callback(result);
+    fetch(uri, requestOptions)
+        .then((res) => {
+          if (output == 'status') {
+            callback(res.status);
+            Promise.resvole();
+          }
+          return res.text();
+        })
+        .then((resData) => {
+          urdf.clear();
+          urdf.load(resData).then(() => {
+            urdf
+                .query('SELECT * WHERE {?subject ?predicate ?object}')
+                .then((result) => {
+                  callback(result);
+                });
           });
         });
-      }
-    });
-
-    if (body) {
-      console.log(JSON.stringify(body.a));
-      console.log(xhr);
-      xhr.send(JSON.stringify(body.a));
-    } else {
-      xhr.send();
-    }
   };
   interpreter.setProperty(
       globalObject,
@@ -130,17 +126,18 @@ function initApi(interpreter, globalObject) {
 
   // API function for urdf querying.
   wrapper = function(uri, query, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', uri);
-    xhr.addEventListener('load', (e) => {
-      urdf.clear();
-      urdf.load(xhr.response).then(() => {
-        urdf.query(query).then((result) => {
-          callback(result);
+    fetch(uri)
+        .then((res) => {
+          return res.text();
+        })
+        .then((graph) => {
+          urdf.clear();
+          urdf.load(graph).then(() => {
+            urdf.query(query).then((result) => {
+              callback(result);
+            });
+          });
         });
-      });
-    });
-    xhr.send();
   };
   interpreter.setProperty(
       globalObject,
@@ -163,7 +160,7 @@ function initApi(interpreter, globalObject) {
       },
     };
 
-    fetch(`http://dw-station-5.local:8000/devices/${mac}/gatt/instruction`, {
+    fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',

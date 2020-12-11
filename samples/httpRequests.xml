@@ -12,10 +12,10 @@
                     <block type="httprequest" id="@L[1%hr9-zy(]%*R`mv2">
                         <field name="OUTPUT">status</field>
                         <field name="METHOD">GET</field>
-                        <field name="HEADERS">"Content-Type: application/json", "Accept: application/json"</field>
+                        <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
                         <value name="uri">
                             <block type="uri" id="(GFrJFN}$H;n?],Azi!z">
-                                <field name="URI">http://dw-station-5.local/ble/current</field>
+                                <field name="URI">http://dwpi4.local/ble/current</field>
                             </block>
                         </value>
                     </block>
@@ -26,10 +26,10 @@
                             <block type="httprequest" id="J{WWm#Jgud`%NJJqdB!]">
                                 <field name="OUTPUT">body</field>
                                 <field name="METHOD">GET</field>
-                                <field name="HEADERS">"Content-Type: application/json", "Accept: application/json"</field>
+                                <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
                                 <value name="uri">
                                     <block type="uri" id="P5B2olqGf$ayocYHgS(U">
-                                        <field name="URI">http://dw-station-5.local/ble/current</field>
+                                        <field name="URI">http://dwpi4.local/ble/current</field>
                                     </block>
                                 </value>
                             </block>

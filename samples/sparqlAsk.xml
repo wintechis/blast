@@ -26,12 +26,31 @@ WHERE {
             </block>
         </statement>
         <next>
-            <block type="displayText" id="4Pt%).(h#-2u~pkzmn?a">
-                <value name="text">
-                    <block type="text" id="l$0iH_f|(:Q5m;5x%|jF">
-                        <field name="TEXT">There is a beacon nearby!</field>
+            <block type="displayTable" id="3[i@nY4*IV}=TgxoEhLP">
+                <value name="table">
+                    <block type="sparql_query" id="9h|X-k|Iy)7iL^+;UFq`">
+                        <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;
+SELECT *
+WHERE {
+  ?node sosa:hasSimpleResult ?rssiValue 
+  FILTER (?rssiValue &gt; -40)
+}</field>
+                        <value name="uri">
+                            <block type="uri" id="T5IH3MA#dk3GY,A}=j6;">
+                                <field name="URI">http://dwpi4.local/ble/current</field>
+                            </block>
+                        </value>
                     </block>
                 </value>
+                <next>
+                    <block type="displayText" id="4Pt%).(h#-2u~pkzmn?a">
+                        <value name="text">
+                            <block type="text" id="l$0iH_f|(:Q5m;5x%|jF">
+                                <field name="TEXT">There is a beacon nearby!</field>
+                            </block>
+                        </value>
+                    </block>
+                </next>
             </block>
         </next>
     </block>

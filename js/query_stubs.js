@@ -101,14 +101,13 @@ Blockly.JavaScript['httprequest'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
   const method = block.getFieldValue('METHOD');
-  let headers = block.getFieldValue('HEADERS');
+  const headers = block.getFieldValue('HEADERS');
   const output = block.getFieldValue('OUTPUT');
   const body = block.getFieldValue('BODY') || null;
 
-  // escape " quotes in headers
-  headers = headers.replace(/"/g, '\\"');
 
-  const code = `sendHttpRequest("${uri}","${method}", "${headers}", ${body}, "${output}")\n`;
+  const code = `sendHttpRequest('${uri}','${method}', 
+  '{${headers}}', ${body}, '${output}')\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -154,7 +153,8 @@ Blockly.JavaScript['switchlights'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
 
-  const code = `switchLights("${mac}", ${checkboxRed}, ${checkboxYellow}, ${checkboxGreen});`;
+  const code = `switchLights("${mac}", ${checkboxRed}, 
+  ${checkboxYellow}, ${checkboxGreen});`;
   return code;
 };
 
@@ -195,7 +195,8 @@ Blockly.JavaScript['event'] = function(block) {
   const operator = OPERATORS[block.getFieldValue('operator')];
   const negate = dropdownStartsStops == 'BECOMES' ? '' : '!';
 
-  code = `eventChecker(${measurement}, "${negate}", "${operator}", ${value}, "${block.id}")`;
+  const code = `eventChecker(${measurement}, "${negate}", 
+  "${operator}", ${value}, "${block.id}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
