@@ -49,7 +49,7 @@ Blockly.JavaScript['readdw'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
   // TODO: Assemble JavaScript into code variable.
-  const code = `getDwValuesOfMac("${mac}")`;
+  const code = `getDwValuesOfMac(${mac})`;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -66,7 +66,7 @@ Blockly.JavaScript['writedw'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
   // TODO: Assemble JavaScript into code variable.
-  const code = `setDwValuesOfMac("${mac}", ${value})`;
+  const code = `setDwValuesOfMac(${mac}, ${value})`;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -106,7 +106,7 @@ Blockly.JavaScript['httprequest'] = function(block) {
   const body = block.getFieldValue('BODY') || null;
 
 
-  const code = `sendHttpRequest('${uri}','${method}', 
+  const code = `sendHttpRequest(${uri},'${method}', 
   '{${headers}}', ${body}, '${output}')\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -122,7 +122,7 @@ Blockly.JavaScript['sparql_query'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
 
-  const code = `urdfQueryWrapper("${uri}", "${query}")`;
+  const code = `urdfQueryWrapper(${uri}, "${query}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -138,7 +138,7 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
 
-  const code = `urdfQueryWrapper("${uri}", "${query}")`;
+  const code = `urdfQueryWrapper(${uri}, "${query}")`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -153,7 +153,7 @@ Blockly.JavaScript['switchlights'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
 
-  const code = `switchLights("${mac}", ${checkboxRed}, 
+  const code = `switchLights(${mac}, ${checkboxRed}, 
   ${checkboxYellow}, ${checkboxGreen});`;
   return code;
 };
@@ -202,12 +202,12 @@ Blockly.JavaScript['event'] = function(block) {
 };
 
 Blockly.JavaScript['uri'] = function(block) {
-  const uri = block.getFieldValue('URI');
+  const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['mac'] = function(block) {
-  const mac = block.getFieldValue('MAC');
+  const mac = Blockly.JavaScript.quote_(block.getFieldValue('MAC'));
   return [mac, Blockly.JavaScript.ORDER_NONE];
 };
 
