@@ -4,6 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>BLAST Demo</title>
+  <link rel="stylesheet" href="style.css">
   <script
     src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
   <script
@@ -18,80 +19,6 @@
   <script src="msg/js/en.js"></script>
   <script src="js/interpreter-api.js"></script>
   <script src="toolbox/default.js"></script>
-  <style>
-    html,
-    body {
-      height: 100%;
-      margin: 0;
-    }
-
-    body {
-      background-color: #fff;
-      font-family: sans-serif;
-      overflow: hidden;
-    }
-
-    h1 {
-      font-weight: normal;
-      font-size: 140%;
-    }
-
-    #page-body {
-      width: 100%;
-    }
-
-    #blocklyArea {
-      height: 99%;
-    }
-
-    #resultsArea {
-      height: calc(100vh - 215px);
-      width: 450px;
-      border: 1px solid #c6c6c6;
-      vertical-align: top;
-    }
-
-    .status {
-      float: right;
-    }
-
-    .controlButtons {
-      height: 30px;
-      margin-right: 15px;
-    }
-
-    .message {
-      border: 2px solid #dedede;
-      background-color: #f1f1f1;
-      border-radius: 5px;
-      padding: 10px;
-      margin: 10px 10px;
-    }
-
-    .time {
-      float: right;
-      color: #aaa;
-    }
-
-    #messageBox {
-      width: 450px;
-      height: 100%;
-      overflow: auto;
-    }
-
-    #messageBox table,
-    #messageBox th,
-    #messageBox td {
-      margin: 10px auto;
-      padding: 5px;
-      border-collapse: collapse;
-      border: 1px solid black;
-    }
-
-    #loadWorkspace-input {
-      width: 400px;
-    }
-  </style>
 </head>
 
 <body>
