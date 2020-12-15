@@ -8,7 +8,6 @@
     src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js"></script>
   <script
     src="https://cdn.jsdelivr.net/npm/solid-file-client@1.0.0/dist/window/solid-file-client.bundle.js"></script>
-  <script src="js/solid.js" type="application/javascript"></script>
   <script src="js/blockly_compressed.js"></script>
   <script src="js/javascript_compressed.js"></script>
   <script src="js/acorn_interpreter.js"></script>
@@ -18,6 +17,7 @@
   <script src="js/urdf-browser.js"></script>
   <script src="msg/js/en.js"></script>
   <script src="js/interpreter-api.js"></script>
+  <script src="toolbox/default.js"></script>
   <style>
     html,
     body {
@@ -123,8 +123,8 @@
         <button><a onclick="saveButtonHandler()">save</a></button>
         <div class="status">
           <span id="statusText">ready</span>
-          <button onclick="resetInterpreter();resetStepUi()" id="stopButton" class="controlButtons"
-            disabled>stop</button>
+          <button onclick="resetInterpreter();resetStepUi()" id="stopButton"
+            class="controlButtons" disabled>stop</button>
           <button onclick="runCode()" id="runButton"
             class="controlButtons">execute</button>
         </div>
@@ -140,100 +140,6 @@
   </table>
 
   <div id="blocklyDiv" style="position: absolute"></div>
-
-  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox"
-    style="display: none">
-    <category name="Program" colour="120">
-      <block type="controls_repeat_ext">
-        <value name="TIMES">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="controls_whileUntil"></block>
-      <block type="controls_for">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">10</field>
-          </shadow>
-        </value>
-        <value name="BY">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-    </category>
-    <category name="Things" colour="270">
-      <block type="things"></block>
-      <block type="receiver"></block>
-      <block type="ibeacon_data"></block>
-    </category>
-    <category name="Variables" custom="VARIABLE" colour="330"></category>
-    <category name="Actions" colour="0">
-      <block type="readdw"></block>
-      <block type="writedw"></block>
-      <block type="displayText"></block>
-      <block type="displayTable"></block>
-      <block type="httprequest"></block>
-      <block type="sparql_query"></block>
-      <block type="sparql_ask"></block>
-      <block type="switchlights"></block>
-      <block type="randomsound"></block>
-      <block type="controls_flow_statements"></block>
-      <block type="waitSeconds"></block>
-    </category>
-    <category name="Logic" colour="210">
-      <block type="controls_if"></block>
-      <block type="event"></block>
-      <block type="logic_compare"></block>
-      <block type="logic_operation"></block>
-      <block type="logic_negate"></block>
-    </category>
-    <category name="Booleans" colour="210">
-      <block type="logic_boolean"></block>
-    </category>
-    <category name="Text" colour="160">
-      <block type="uri"></block>
-      <block type="mac"></block>
-      <block type="text"></block>
-      <block type="text_join"></block>
-    </category>
-    <category name="Numbers" colour="230">
-      <block type="math_number"></block>
-      <block type="infinity"></block>
-      <block type="math_arithmetic">
-        <value name="A">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="B">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-      </block>
-      <block type="math_random_int">
-        <value name="FROM">
-          <shadow type="math_number">
-            <field name="NUM">1</field>
-          </shadow>
-        </value>
-        <value name="TO">
-          <shadow type="math_number">
-            <field name="NUM">100</field>
-          </shadow>
-        </value>
-      </block>
-    </category>
-  </xml>
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks"
     style="display: none">
     <block type="controls_whileUntil" x="10" y="100">
@@ -318,7 +224,7 @@
     var runner;
     var blocklyArea = document.getElementById('blocklyArea');
     var blocklyDiv = document.getElementById('blocklyDiv');
-    var workspace = Blockly.inject(blocklyDiv, { toolbox: document.getElementById('toolbox') });
+    var workspace = Blockly.inject(blocklyDiv, { toolbox: defaultToolbox });
 
     var onresize = function (e) {
       // Compute the absolute coordinates and dimensions of blocklyArea.
@@ -366,6 +272,7 @@
       Blockly.JavaScript.addReservedWords('highlightBlock');
       // Generate JavaScript code and parse it.
       latestCode = Blockly.JavaScript.workspaceToCode(workspace);
+      console.log(latestCode)
       resetStepUi();
     }
 
