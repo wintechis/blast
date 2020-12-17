@@ -18,7 +18,7 @@ function initApi(interpreter, globalObject) {
   // Add an API function for highlighting blocks.
   let wrapper = function(id) {
     id = id ? id.toString() : '';
-    return interpreter.createPrimitive(highlightBlock(id));
+    return interpreter.createPrimitive(Blast.highlightBlock(id));
   };
   interpreter.setProperty(
       globalObject,
@@ -39,7 +39,7 @@ function initApi(interpreter, globalObject) {
           WHERE {
             ?obs sosa:hasSimpleResult ?rssi .
             ?obs sosa:resultTime ?resultTime .
-            BIND (substr(?obs, 38, 12) AS ?mac)
+            BIND (substr(?obs, 31, 12) AS ?mac)
           } ORDER BY DESC(?rssi)`;
 
     urdf.clear();
@@ -55,6 +55,10 @@ function initApi(interpreter, globalObject) {
 
   // API function for the ibeacon-data block.
   wrapper = function(table, key, value, retValue) {
+    console.log(table);
+    console.log(key);
+    console.log(value);
+    console.log(retValue);
     for (const row of table) {
       if (row[key].value == value) {
         return row[retValue].value;
@@ -69,7 +73,7 @@ function initApi(interpreter, globalObject) {
 
   // API function for the displayText block.
   wrapper = function(text) {
-    return displayText(text);
+    return Blast.displayText(text);
   };
   interpreter.setProperty(
       globalObject,
@@ -79,7 +83,7 @@ function initApi(interpreter, globalObject) {
 
   // API function for the displayTable block.
   wrapper = function(text) {
-    return displayTable(text);
+    return Blast.displayTable(text);
   };
   interpreter.setProperty(
       globalObject,
@@ -88,15 +92,16 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the httpRequestBlock.
-  wrapper = function(uri, method, headersString, data, output, callback) {
+  wrapper = function(uri, method, headersString, body, output, callback) {
     const headersJSON = JSON.parse(headersString);
     const requestOptions = {
       method: method,
       headers: new Headers(headersJSON),
     };
 
-    if (data) {
-      requestOptions.body = JSON.stringify(data);
+    if (body) {
+      console.log(body);
+      requestOptions.body = body;
     }
 
     fetch(uri, requestOptions)

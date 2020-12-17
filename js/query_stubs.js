@@ -14,7 +14,7 @@ Blockly.JavaScript['receiver'] = function(block) {
       'address',
       Blockly.JavaScript.ORDER_NONE,
   );
-  const code = `queryReceiver("${address}")`;
+  const code = `queryReceiver(${address})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -31,13 +31,7 @@ Blockly.JavaScript['ibeacon_data'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
   const value = block.getFieldValue('value');
-
-  const code = `getTableCell(${receiver}, 'mac', "${ibeacon}", "${value}")`;
-  // if(["mac", "proximity", "time"].includes(value)){
-  //   code = Blockly.JavaScript.quote_(data[value].value);
-  // } else {
-  //   code = data[value].value;
-  // }{
+  const code = `getTableCell(${receiver}, 'mac', ${ibeacon}, '${value}')`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -103,13 +97,13 @@ Blockly.JavaScript['httprequest'] = function(block) {
   const method = block.getFieldValue('METHOD');
   const headers = block.getFieldValue('HEADERS');
   const output = block.getFieldValue('OUTPUT');
-  const body = block.getFieldValue('BODY') || null;
-
+  const body = JSON.stringify(block.getFieldValue('BODY')) || null;
 
   const code = `sendHttpRequest(${uri},'${method}', 
   '{${headers}}', ${body}, '${output}')\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
 
 Blockly.JavaScript['sparql_query'] = function(block) {
   let query = block.getFieldValue('query');

@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLAST Demo</title>
   <link rel="stylesheet" href="style.css">
   <script
@@ -15,56 +16,87 @@
   <script src="js/blocks_compressed.js"></script>
   <script src="js/query_blocks.js"></script>
   <script src="js/query_stubs.js"></script>
-  <script src="js/urdf-browser.js"></script>
   <script src="msg/js/en.js"></script>
   <script src="js/interpreter-api.js"></script>
   <script src="toolbox/default.js"></script>
+  <script src="blast.js"></script>
+  <script src="js/urdf-browser.js"></script>
+  <script src="js/svgxuse.js"></script>
 </head>
 
 <body>
-  <table id="page-body">
+  <table width="100%" height="100%">
     <tr>
       <td>
         <h1>BLAST - Block Applications for Things</h1>
-        <p>
-          The menu on the left contains different blocks.</br>
-          Move them into either the setup- or loop-block below to define a
-          blockprogram.</br>
-          When finished click the execute button on the bottom-right to start
-          the program.<br>
-          For more information on each of the blocks, check the <a
-            href="docs/Blocks.md" target="_blank"
-            rel="noopener noreferrer">documentation</a>.
-        </p>
-        <input list="samples" type="text" id="loadWorkspace-input"
-          placeholder="samples/gamble.xml">
-        <datalist id="samples">
-          <option value="./samples/gamble.xml"></option>
-          <option value="./samples/sparqlAsk.xml"></option>
-          <option value="./samples/httpRequests.xml"></option>
-          <option value="./samples/event.xml"></option>
-          <option value="./samples/lightsProximity.xml"></option>
-          <option value="./samples/stationIncrement.xml"></option>
-        </datalist>
-        <button onclick="loadButtonHandler()">load</button>
-        <button><a onclick="saveButtonHandler()">save</a></button>
-        <div class="status">
-          <span id="statusText">ready</span>
-          <button onclick="resetInterpreter();resetStepUi()" id="stopButton"
-            class="controlButtons" disabled>stop</button>
-          <button onclick="runCode()" id="runButton"
-            class="controlButtons">execute</button>
-        </div>
       </td>
     </tr>
     <tr>
-      <td id="blocklyArea">
+      <td class ="">
+
       </td>
-      <td id="resultsArea">
-        <div id="messageBox"></div>
+    </tr>
+    <tr>
+      <td>
+        <table width="100%">
+          <tr id="tabRow" height="1em">
+            <td id="tab_workspace" class="tabon">Workspace</td>
+            <td class="tabmin tab_collapse">&nbsp;</td>
+            <td id="tab_javascript" class="taboff tab_collapse">JavaScript</td>
+            <td class="tabmin tab_collapse">&nbsp;</td>
+            <td id="tab_xml" class="taboff tab_collapse">XML</td>
+            <td class="tabmin">&nbsp;</td>
+            <td class="tabmin tab_collapse">
+              <input list="samples" type="text" id="loadWorkspace-input"
+              placeholder="samples/gamble.xml">
+            <datalist id="samples">
+              <option value="./samples/gamble.xml"></option>
+              <option value="./samples/sparqlAsk.xml"></option>
+              <option value="./samples/httpRequests.xml"></option>
+              <option value="./samples/event.xml"></option>
+              <option value="./samples/lightsProximity.xml"></option>
+              <option value="./samples/stationIncrement.xml"></option>
+            </datalist>
+          </td>
+          <td class="tabmin tab_collapse">
+            <button id="loadButton" title="load workspace">
+              <svg class="icon icon-download">
+                <use xlink:href="media/symbol-defs.svg#icon-download"></use>
+              </svg>
+            </button>
+          </td>
+          <td class="tabmin tab_collapse">
+            <button id="saveButton" title="save workspace">
+              <svg class="icon icon-upload">
+                <use xlink:href="media/symbol-defs.svg#icon-upload"></use>
+              </svg>
+            </button>
+            </td>
+            <td class="tabmax">
+              <span id="statusContainer">ready</span>
+              <button id="runButton" class="primary" title="Run the program">
+                <svg class="icon icon-play3">
+                  <use xlink:href="media/symbol-defs.svg#icon-play3"></use>
+                </svg>
+              </button>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td id="content_area">
+      </td>
+      <td id="output_area">
+        <div id="msgOutputContainer">
+        </div>
       </td>
     </tr>
   </table>
+
+  <div id="content_workspace" class="content"></div>
+  <pre id="content_javascript" class="content prettyprint lang-js"></pre>
+  <textarea id="content_xml" class="content" wrap="off"></textarea>
 
   <div id="blocklyDiv" style="position: absolute"></div>
   <xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks"
@@ -75,254 +107,6 @@
       </value>
     </block>
   </xml>
-
-  <script>
-    var messageCounter = 0;
-
-    function displayText(text) {
-      // save memory
-      if (messageCounter > 100) {
-        msgBox.lastChild.remove();
-      }
-      msg = document.createElement("div");
-      msg.classList.add("message");
-      msg.id = "message-" + messageCounter++;
-
-      textNode = document.createTextNode(text);
-      msg.appendChild(textNode);
-
-      timeSpan = document.createElement("span");
-      timeSpan.classList.add("time");
-      timeSpan.innerHTML = new Date().toLocaleTimeString();
-      msg.appendChild(timeSpan);
-
-      msgBox = document.getElementById("messageBox");
-      msgBox.insertBefore(msg, msgBox.firstChild);
-    }
-    displayText("Actionblock output will be displayed here");
-
-
-    function displayTable(table) {
-      // save memory
-      if (messageCounter > 100) {
-        msgBox.lastChild.remove();
-      }
-
-      if (table.length == 0) {
-        displayText("empty table")
-        return;
-      }
-
-      // deal with missing values
-      let vars = table.reduce((list, res) => {
-        for (let v in res) {
-          if (list.indexOf(v) === -1) list.push(v);
-        }
-        return list;
-      }, []);
-
-      let html = '<tr>';
-      vars.forEach(v => html += '<th>' + v + '</th>');
-      html += '</tr>';
-
-      table.forEach(res => {
-        html += '<tr>';
-        vars.forEach(v => html += '<td>' + (res[v] ? res[v].value : '') + '</td>');
-        html += '</tr>';
-      });
-
-      let resultsField = document.createElement("table");
-      resultsField.innerHTML = html;
-      var msgBox = document.getElementById("messageBox");
-      msgBox.insertBefore(resultsField, msgBox.firstChild);
-    }
-
-
-    /*  
-    ################
-    # BLOCKLY CODE # 
-    ################
-    */
-
-    var runButton = document.getElementById('runButton');
-    var stopButton = document.getElementById('stopButton');
-    var statusText = document.getElementById('statusText');
-    var myInterpreter = null;
-    var runner;
-    var blocklyArea = document.getElementById('blocklyArea');
-    var blocklyDiv = document.getElementById('blocklyDiv');
-    var workspace = Blockly.inject(blocklyDiv, { toolbox: defaultToolbox });
-
-    var onresize = function (e) {
-      // Compute the absolute coordinates and dimensions of blocklyArea.
-      var element = blocklyArea;
-      var x = 0;
-      var y = 0;
-      do {
-        x += element.offsetLeft;
-        y += element.offsetTop;
-        element = element.offsetParent;
-      } while (element);
-      // Position blocklyDiv over blocklyArea.
-      blocklyDiv.style.left = x + 'px';
-      blocklyDiv.style.top = y + 'px';
-      blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
-      blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-      Blockly.svgResize(workspace);
-    };
-    window.addEventListener('resize', onresize, false);
-    onresize();
-    Blockly.svgResize(workspace);
-
-    var highlightPause = false;
-    var latestCode = '';
-
-    function highlightBlock(id) {
-      workspace.highlightBlock(id);
-      highlightPause = true;
-    }
-
-    function resetStepUi() {
-      workspace.highlightBlock(null);
-      highlightPause = false;
-      runButton.disabled = '';
-      stopButton.disabled = 'disabled';
-      setStatusText("ready")
-    }
-
-    function setStatusText(status) {
-      statusText.innerHTML = status;
-    }
-
-    function generateCodeAndLoadIntoInterpreter() {
-      Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-      Blockly.JavaScript.addReservedWords('highlightBlock');
-      // Generate JavaScript code and parse it.
-      latestCode = Blockly.JavaScript.workspaceToCode(workspace);
-      console.log(latestCode)
-      resetStepUi();
-    }
-
-    function resetInterpreter() {
-      myInterpreter = null;
-      if (runner) {
-        clearTimeout(runner);
-        runner = null;
-      }
-    }
-
-    function runCode() {
-      if (!myInterpreter) {
-        // First statement of this code.
-        // Clear the program output.
-        resetStepUi();
-        runButton.disabled = 'disabled';
-        stopButton.disabled = '';
-        setStatusText("running...");
-
-        // And then show generated code in an alert.
-        // In a timeout to allow the outputArea.value to reset first.
-        setTimeout(function () {
-          // Begin execution
-          highlightPause = false;
-          myInterpreter = new Interpreter(latestCode, initApi);
-          runner = function () {
-            if (myInterpreter) {
-              var hasMore = myInterpreter.step();
-              if (hasMore) {
-                // Execution is currently blocked by some async call.
-                // Try again later.
-                setTimeout(runner, 5);
-              } else {
-                // Program is complete.
-                resetInterpreter();
-                resetStepUi();
-              }
-            }
-          };
-          runner();
-        }, 1);
-        return;
-      }
-    }
-
-    // Load the interpreter now, and upon future changes.
-    generateCodeAndLoadIntoInterpreter();
-    workspace.addChangeListener(function (event) {
-      if (!(event instanceof Blockly.Events.Ui)) {
-        // Something changed. Parser needs to be reloaded.
-        resetInterpreter();
-        generateCodeAndLoadIntoInterpreter();
-      }
-    });
-
-    saveButtonHandler = async function (
-      workspace, type, opt_callback) {
-      Blockly.hideChaff();
-      let url = document.getElementById("loadWorkspace-input").value;
-      save(url);
-    };
-
-    /**
-     * saves the current workspace to solid pod
-     * @param {string} url new url of the workspace
-     */
-    function save(url) {
-
-      var xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-      var serializer = new XMLSerializer();
-      var xmlStr = serializer.serializeToString(xmlDom);
-
-      // send PUT request
-      let xhr = new XMLHttpRequest();
-      xhr.open("PUT", url);
-      //xhr.setRequestHeader("Content-Type", "text/xml");
-
-      xhr.onload = function () {
-        if (xhr.readyState == 4 && (xhr.status.toString() == "200" || xhr.status.toString() == "201")) {
-          Blockly.alert("workspace saved!");
-        } else {
-          Blockly.alert("Error saving workspace, see console for details.");
-        }
-      }
-      xhr.send(xmlStr);
-    }
-
-    loadButtonHandler = async function () {
-      Blockly.hideChaff();
-      let url = document.getElementById("loadWorkspace-input").value;
-      // send GET request
-      let xhr = new XMLHttpRequest();
-      xhr.open("GET", url);
-
-      xhr.onload = function () {
-        if (xhr.readyState == 4 && xhr.status == "200") {
-          restore(xhr.response)
-        } else {
-          Blockly.alert("Error loading workspace, see console for details.");
-        }
-      }
-      xhr.send();
-    };
-
-    /**
-     * restores a workspace from JSON
-     * @param {string} name name of the workspace
-     */
-    function restore(xmlText) {
-      resetInterpreter();
-      resetStepUi();
-
-      // clear blocks
-      Blockly.mainWorkspace.clear();
-
-      var xmlDom = Blockly.Xml.textToDom(xmlText);
-      Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xmlDom);
-    }
-
-    // Setting blocks on startup
-    Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), Blockly.mainWorkspace);
-  </script>
   <script src="js/sounds.js"></script>
 </body>
 
