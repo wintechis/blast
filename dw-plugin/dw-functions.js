@@ -173,7 +173,10 @@ Blast.generateCode = function() {
   Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
   Blockly.JavaScript.addReservedWords('highlightBlock');
   // Generate JavaScript code and parse it.
-  Blast.latestCode = Blockly.JavaScript.workspaceToCode(Blast.DW.workspace);
+  Blast.latestCode = '';
+  if (Blast.DW != null && Blast.DW.workspace != null) {
+    Blast.latestCode = Blockly.JavaScript.workspaceToCode(Blast.DW.workspace);
+  }
   Blast.latestCode += Blockly.JavaScript.workspaceToCode(Blast.workspace);
 
   Blast.resetUi(Blast.status.READY);
@@ -292,13 +295,6 @@ const dwToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'readdw'},
         {kind: 'BLOCK', type: 'writedw'},
@@ -328,6 +324,10 @@ const dwToolbox = {
       colour: '210',
     },
     {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
       kind: 'CATEGORY',
       contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
       name: 'Booleans',
@@ -354,6 +354,17 @@ const dwToolbox = {
       ],
       name: 'Numbers',
       colour: '230',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Variables',
+      custom: 'VARIABLE',
+      colour: '330',
     },
     {
       kind: 'CATEGORY',

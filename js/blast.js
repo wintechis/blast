@@ -403,6 +403,7 @@ Blast.generateCode = function() {
   Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
   Blockly.JavaScript.addReservedWords('highlightBlock');
   // Generate JavaScript code and parse it.
+  Blast.latestCode = '';
   Blast.latestCode = Blockly.JavaScript.workspaceToCode(Blast.workspace);
 
   Blast.resetUi(Blast.status.READY);
