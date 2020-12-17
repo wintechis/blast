@@ -19,11 +19,11 @@
   <script src="msg/js/en.js"></script>
   <script src="js/interpreter-api.js"></script>
   <script src="toolbox/default.js"></script>
-  <script src="blast.js"></script>
+  <script src="js/blast.js"></script>
+  <script src="dw-plugin/dw-functions.js"></script>
   <script src="js/urdf-browser.js"></script>
   <script src="js/svgxuse.js"></script>
 </head>
-
 <body>
   <table width="100%" height="100%">
     <tr>
@@ -32,7 +32,7 @@
       </td>
     </tr>
     <tr>
-      <td class ="">
+      <td class="">
 
       </td>
     </tr>
@@ -41,42 +41,42 @@
         <table width="100%">
           <tr id="tabRow" height="1em">
             <td id="tab_workspace" class="tabon">Workspace</td>
-            <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_javascript" class="taboff tab_collapse">JavaScript</td>
-            <td class="tabmin tab_collapse">&nbsp;</td>
-            <td id="tab_xml" class="taboff tab_collapse">XML</td>
             <td class="tabmin">&nbsp;</td>
-            <td class="tabmin tab_collapse">
+            <td id="tab_javascript" class="taboff">JavaScript</td>
+            <td class="tabmin">&nbsp;</td>
+            <td id="tab_xml" class="taboff">XML</td>
+            <td class="tabmin">&nbsp;</td>
+            <td id="inputs_td" class="tabmin">
               <input list="samples" type="text" id="loadWorkspace-input"
-              placeholder="samples/gamble.xml">
-            <datalist id="samples">
-              <option value="./samples/gamble.xml"></option>
-              <option value="./samples/sparqlAsk.xml"></option>
-              <option value="./samples/httpRequests.xml"></option>
-              <option value="./samples/event.xml"></option>
-              <option value="./samples/lightsProximity.xml"></option>
-              <option value="./samples/stationIncrement.xml"></option>
-            </datalist>
-          </td>
-          <td class="tabmin tab_collapse">
-            <button id="loadButton" title="load workspace">
-              <svg class="icon icon-download">
-                <use xlink:href="media/symbol-defs.svg#icon-download"></use>
-              </svg>
-            </button>
-          </td>
-          <td class="tabmin tab_collapse">
-            <button id="saveButton" title="save workspace">
-              <svg class="icon icon-upload">
-                <use xlink:href="media/symbol-defs.svg#icon-upload"></use>
-              </svg>
-            </button>
+                placeholder="samples/gamble.xml">
+              <datalist id="samples">
+                <option value="./samples/gamble.xml"></option>
+                <option value="./samples/sparqlAsk.xml"></option>
+                <option value="./samples/httpRequests.xml"></option>
+                <option value="./samples/event.xml"></option>
+                <option value="./samples/lightsProximity.xml"></option>
+                <option value="./samples/stationIncrement.xml"></option>
+              </datalist>
+            </td>
+            <td class="tabmin">
+              <button id="loadButton" title="load workspace">
+                <svg class="icon icon-download">
+                  <use xlink:href="media/symbol-defs.svg#icon-download"></use>
+                </svg>
+              </button>
+            </td>
+            <td class="tabmin">
+              <button id="saveButton" title="save workspace">
+                <svg class="icon icon-upload">
+                  <use xlink:href="media/symbol-defs.svg#icon-upload"></use>
+                </svg>
+              </button>
             </td>
             <td class="tabmax">
               <span id="statusContainer">ready</span>
               <button id="runButton" class="primary" title="Run the program">
-                <svg class="icon icon-play3">
-                  <use xlink:href="media/symbol-defs.svg#icon-play3"></use>
+                <svg class="icon icon-play">
+                  <use xlink:href="media/symbol-defs.svg#icon-play"></use>
                 </svg>
               </button>
             </td>

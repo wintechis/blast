@@ -74,15 +74,15 @@ Blast.status = {
 /**
  * Play icon used for the start/stop button.
  */
-Blast.playIcon = '<svg class="icon icon-play3">';
-Blast.playIcon += '<use xlink:href="media/symbol-defs.svg#icon-play3"></use>';
+Blast.playIcon = '<svg class="icon icon-play">';
+Blast.playIcon += '<use xlink:href="media/symbol-defs.svg#icon-play"></use>';
 Blast.playIcon += '</svg>';
 
 /**
  * Stop icon used for the start/stop button.
  */
-Blast.stopIcon = '<svg class="icon icon-stop2">';
-Blast.stopIcon += '<use xlink:href="media/symbol-defs.svg#icon-stop2">';
+Blast.stopIcon = '<svg class="icon icon-stop">';
+Blast.stopIcon += '<use xlink:href="media/symbol-defs.svg#icon-stop">';
 Blast.stopIcon += '</use></svg>';
 
 /**
@@ -189,14 +189,8 @@ Blast.getBox_ = function(element) {
 
 /**
  * List of tab names.
- * @private
  */
-Blast.TABS_ = ['workspace', 'javascript', 'xml'];
-
-/** List of tab names with casing and backspaces, for display in the UI.
- * @private
- */
-Blast.TABS_DISPLAY = ['workspace', 'JavaScript', 'XML'];
+Blast.TABS = ['workspace', 'javascript', 'xml'];
 
 Blast.selected = 'workspace';
 
@@ -230,8 +224,8 @@ Blast.getBBox_ = function(element) {
  */
 Blast.tabClick = function(clickedName) {
   // Deselect all tabs and hide all panes.
-  for (let i = 0; i < Blast.TABS_.length; i++) {
-    const name = Blast.TABS_[i];
+  for (let i = 0; i < Blast.TABS.length; i++) {
+    const name = Blast.TABS[i];
     const tab = document.getElementById('tab_' + name);
     tab.classList.add('taboff');
     tab.classList.remove('tabon');
@@ -285,8 +279,8 @@ Blast.init = function() {
   const container = document.getElementById('content_area');
   const onresize = function(e) {
     const bBox = Blast.getBBox_(container);
-    for (let i = 0; i < Blast.TABS_.length; i++) {
-      const el = document.getElementById('content_' + Blast.TABS_[i]);
+    for (let i = 0; i < Blast.TABS.length; i++) {
+      const el = document.getElementById('content_' + Blast.TABS[i]);
       el.style.top = bBox.y + 'px';
       el.style.left = bBox.x + 'px';
       // Height and width need to be set, read back, then set again to
@@ -323,8 +317,8 @@ Blast.init = function() {
   Blast.bindClick('loadButton', Blast.loadBlocks);
   Blast.bindClick('saveButton', Blast.saveBlocks);
 
-  for (let i = 0; i < Blast.TABS_.length; i++) {
-    const name = Blast.TABS_[i];
+  for (let i = 0; i < Blast.TABS.length; i++) {
+    const name = Blast.TABS[i];
     Blast.bindClick(
         'tab_' + name,
         (function(name_) {
