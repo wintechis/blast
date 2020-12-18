@@ -1,0 +1,29 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="controls_whileUntil" id="C!SW/Ej!/u5Y*?t4m69D" x="663" y="263">
+    <field name="MODE">WHILE</field>
+    <value name="BOOL">
+      <block type="logic_boolean" id="Kg7!^Cs|zO@(~F(g.B5.">
+        <field name="BOOL">TRUE</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="controls_if" id="zSjNpI4MpB5ch#I{Z][G">
+        <value name="IF0">
+          <block type="sparql_ask" id="/+con^QQM{0gJIyB;HYN">
+            <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;&amp;#10;PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;&amp;#10;PREFIX rawv2: &lt;http://vocab.rapidthings.eu/ns/ruuvi/rawv2.ttl#&gt;&amp;#10;&amp;#10;ASK&amp;#10;WHERE {&amp;#10;  [] sosa:hasResult [ rawv2:acceleration [ rawv2:acc-x ?x ; rawv2:acc-y ?y ; rawv2:acc-z ?z ] ] .&amp;#10;  FILTER (?z &lt; 1)&amp;#10;}</field>
+            <value name="uri">
+              <block type="uri" id="d{aigU0}Si~{3@q!8SZj">
+                <field name="URI">http://localhost/ble/devices/e141f011a5fe/current</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="randomsound" id="ClJTz6m0hu-*xr:2RAK:">
+            <field name="category">happy</field>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+</xml>
