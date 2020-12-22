@@ -23,13 +23,6 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'readdw'},
         {kind: 'BLOCK', type: 'writedw'},
@@ -59,6 +52,10 @@ const defaultToolbox = {
       colour: '210',
     },
     {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
       kind: 'CATEGORY',
       contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
       name: 'Booleans',
@@ -71,6 +68,12 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'mac'},
         {kind: 'BLOCK', type: 'text'},
         {kind: 'BLOCK', type: 'text_join'},
+        {kind: 'BLOCK', type: 'text_length'},
+        {kind: 'BLOCK', type: 'text_indexOf'},
+        {kind: 'BLOCK', type: 'text_charAt'},
+        {kind: 'BLOCK', type: 'text_getSubstring'},
+        {kind: 'BLOCK', type: 'text_changeCase'},
+        {kind: 'BLOCK', type: 'text_replace'},
       ],
       name: 'Text',
       colour: '160',
@@ -85,6 +88,17 @@ const defaultToolbox = {
       ],
       name: 'Numbers',
       colour: '230',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Variables',
+      custom: 'VARIABLE',
+      colour: '330',
     },
     {
       kind: 'CATEGORY',
