@@ -1,420 +1,68 @@
-# BLAST Documentation<!-- omit in toc -->
+# Semantics <!-- omit in toc -->
 
-BLAST is an acronym for **Bl**ock **A**pplication**s** for **t**hings. It offers a web-based, visual programming environment based on Google's [Blockly](https://developers.google.com/blockly). 
-
-In order to build and run a block-program, users can drag blocks together and then execute those by clicking the `execute` button on the bottom right. To stop a running program, click the `stop` button next to it.
-<!-- TODO New Screenshot -->
-![BLAST screenshot](images/upload/blast-screenshot.png)
-
-In BLAST there are 6 categories of blocks:
-
-* **program**: The setup- and repeat-block control the block programs process order
-* **things**: Blocks representing and retrieving data from things
-* **variables**: A variable is named value that can be changed (varies)
-* **actions**: Display measured data, custom messages or setting the LEDs of a signal light
-* **logic**: Everything concerning boolean logic, like if, if-else blocks and events
-* **booleans**: A block representing a boolean value 
-* **text**: Text creation and manipulation blocks
-* **numbers**: represent numbers and enable basic arithmetic
-
-The following describes the BLAST blocks in detail.
-
-For a formal syntax definition check the first section [1. syntax](#1-Syntax) and to learn about the blocks semantic see [2. semantics](#2-Semantics).
-
-# Contents:<!-- omit in toc -->
-- [1. Syntax](#1-syntax)
-  - [1.1. Extended Backus-Naur Form](#11-extended-backus-naur-form)
-    - [1.1.1. block programs](#111-block-programs)
-    - [1.1.2. things blocks](#112-things-blocks)
-    - [1.1.3. variables blocks](#113-variables-blocks)
-    - [1.1.4. action blocks](#114-action-blocks)
-    - [1.1.5. logic blocks](#115-logic-blocks)
-    - [1.1.6. text blocks](#116-text-blocks)
-    - [1.1.7. number blocks](#117-number-blocks)
-    - [1.1.8. booleans blocks](#118-booleans-blocks)
-    - [1.1.9. Symbols](#119-symbols)
-  - [1.2. block syntax](#12-block-syntax)
-    - [1.2.1. program-blocks syntax](#121-program-blocks-syntax)
-      - [1.2.1.1. setup-syntax](#1211-setup-syntax)
-      - [1.2.1.2. repeat-syntax](#1212-repeat-syntax)
-    - [1.2.2. things-blocks syntax](#122-things-blocks-syntax)
-      - [1.2.2.1. iBeacon-syntax](#1221-ibeacon-syntax)
-      - [1.2.2.2. receiver-syntax](#1222-receiver-syntax)
-      - [1.2.2.3. iBeacon-data](#1223-ibeacon-data)
-    - [1.2.3. variables blocks syntax](#123-variables-blocks-syntax)
-      - [1.2.3.1. variables set syntax](#1231-variables-set-syntax)
-      - [1.2.3.2. variables get syntax](#1232-variables-get-syntax)
-      - [1.2.3.3. variables change syntax](#1233-variables-change-syntax)
-    - [1.2.4. action blocks syntax](#124-action-blocks-syntax)
-      - [1.2.4.1. display text syntax](#1241-display-text-syntax)
-      - [1.2.4.2. display table syntax](#1242-display-table-syntax)
-      - [1.2.4.3. switch lights syntax](#1243-switch-lights-syntax)
-      - [1.2.4.4. random sound syntax](#1244-random-sound-syntax)
-      - [1.2.4.5. halt syntax](#1245-halt-syntax)
-    - [1.2.5. logic blocks syntax](#125-logic-blocks-syntax)
-      - [1.2.5.1. comparison syntax](#1251-comparison-syntax)
-      - [1.2.5.2. AND / OR syntax](#1252-and--or-syntax)
-      - [1.2.5.3. not syntax](#1253-not-syntax)
-      - [1.2.5.4. if / if-else syntax](#1254-if--if-else-syntax)
-      - [1.2.5.5. event syntax](#1255-event-syntax)
-    - [1.2.6. boolean blocks syntax](#126-boolean-blocks-syntax)
-      - [1.2.6.1. boolean-value syntax](#1261-boolean-value-syntax)
-    - [1.2.7. text blocks syntax](#127-text-blocks-syntax)
-      - [URI syntax](#uri-syntax)
-      - [mac syntax](#mac-syntax)
-      - [1.2.7.1. text-value syntax](#1271-text-value-syntax)
-      - [1.2.7.2. text concatenation syntax](#1272-text-concatenation-syntax)
-    - [1.2.8. number blocks syntax](#128-number-blocks-syntax)
-      - [1.2.8.1. number-value syntax](#1281-number-value-syntax)
-      - [1.2.8.2. infinity syntax](#1282-infinity-syntax)
-      - [1.2.8.3. arithmetic operations syntax](#1283-arithmetic-operations-syntax)
-      - [1.2.8.4. random integer syntax](#1284-random-integer-syntax)
-- [2. Semantics](#2-semantics)
-  - [2.1. functions](#21-functions)
-    - [2.1.1. general functions](#211-general-functions)
-      - [2.1.1.1. runCode](#2111-runcode)
-      - [2.1.1.2. getAllAddresses](#2112-getalladdresses)
-      - [2.1.1.3. queryAlliBeacons](#2113-queryallibeacons)
-      - [2.1.1.4. stopCode](#2114-stopcode)
-    - [2.1.2. block specific functions](#212-block-specific-functions)
-      - [2.1.2.1. displayTable](#2121-displaytable)
-      - [2.1.2.2. insertMessage](#2122-insertmessage)
-      - [2.1.2.3. playRandomSoundFromCategory](#2123-playrandomsoundfromcategory)
-    - [2.1.3. sc-ble-adapter only functions](#213-sc-ble-adapter-only-functions)
-      - [2.1.3.1. switchLights](#2131-switchlights)
-  - [2.2. block semantics](#22-block-semantics)
-    - [2.2.1. program-blocks semantics](#221-program-blocks-semantics)
-      - [2.2.1.1. setup semantics](#2211-setup-semantics)
-      - [2.2.1.2. repeat semantics](#2212-repeat-semantics)
-    - [2.2.2. things-blocks semantics](#222-things-blocks-semantics)
-      - [2.2.2.1. iBeacon semantics](#2221-ibeacon-semantics)
-      - [2.2.2.2. receiver semantics](#2222-receiver-semantics)
-      - [2.2.2.3. iBeacon-data semantics](#2223-ibeacon-data-semantics)
-    - [2.2.3. variables blocks semantics](#223-variables-blocks-semantics)
-      - [2.2.3.1. variables set semantics](#2231-variables-set-semantics)
-      - [2.2.3.2. variables get semantics](#2232-variables-get-semantics)
-      - [2.2.3.3. variables change semantics](#2233-variables-change-semantics)
-    - [2.2.4. action blocks semantics](#224-action-blocks-semantics)
-      - [2.2.4.1. display text semantics](#2241-display-text-semantics)
-      - [2.2.4.2. display data semantics](#2242-display-data-semantics)
-      - [2.2.4.3. switch lights semantics](#2243-switch-lights-semantics)
-      - [2.2.4.4. random sound semantics](#2244-random-sound-semantics)
-      - [2.2.4.5. halt semantics](#2245-halt-semantics)
-    - [2.2.5. logic blocks semantics](#225-logic-blocks-semantics)
-      - [2.2.5.1. comparison semantics](#2251-comparison-semantics)
-      - [2.2.5.2. AND / OR semantics](#2252-and--or-semantics)
-      - [2.2.5.3. not semantics](#2253-not-semantics)
-      - [2.2.5.4. if / if-else semantics](#2254-if--if-else-semantics)
-      - [2.2.5.5. event semantics](#2255-event-semantics)
-    - [2.2.6. boolean blocks semantics](#226-boolean-blocks-semantics)
-      - [2.2.6.1. boolean-value semantics](#2261-boolean-value-semantics)
-    - [2.2.7. text blocks semantics](#227-text-blocks-semantics)
-      - [URI semantics](#uri-semantics)
-      - [MAC semantics](#mac-semantics)
-      - [2.2.7.1. text-value semantics](#2271-text-value-semantics)
-      - [2.2.7.2. text concatenation semantics](#2272-text-concatenation-semantics)
-    - [2.2.8. number blocks semantics](#228-number-blocks-semantics)
-      - [2.2.8.1. number-value semantics](#2281-number-value-semantics)
-      - [2.2.8.2. infinity semantics](#2282-infinity-semantics)
-      - [2.2.8.3. arithmetic operations semantics](#2283-arithmetic-operations-semantics)
-      - [2.2.8.4. random integer semantics](#2284-random-integer-semantics)
-
-
-# 1. Syntax
-
-This section gives an overview of the syntax used in BLAST
-
-## 1.1. Extended Backus-Naur Form
-
-The following describes BLAST's syntax using the [W3C EBNF Notation](https://www.w3.org/TR/2010/REC-xquery-20101214/#EBNFNotation).
-
-### 1.1.1. block programs
-
-<pre>
-<a name="ebnf-block-program"></a>block-program            ::= <a href="#ebnf-loop">loop</a> (<a href="#ebnf-loop">loop</a>)*
-<a name="ebnf-loop"></a>loop                     ::= (<a href="ebnf-repeat">repeat</a> | <a href="ebnf-whileUntil">whileUntil</a> | <a href="ebnf-for">for</a>)
-<a name="ebnf-repeat"></a>repeat                   ::= repeat <a href="#ebnf-number">number</a> times do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-whileUntil"></a>whileUntil               ::= repeat (while | until) <a href="#ebnf-conditional-statement">conditional-statement</a> do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-for"></a>for                      ::= count with <a href="ebnf-var">var</a> from <a href="#ebnf-number">number</a> to <a href="#ebnf-number">number</a> by <a href="#ebnf-number">number</a> do ( <a href="#ebnf-ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-conditional-statement"></a>conditional-statement    ::= ( <a href="#ebnf-if">if</a> | <a href="#ebnf-if-else">if-else</a> )
-</pre>
-
-### 1.1.2. things blocks
-<pre>
-<a name="ebnf-iBeacon-data"></a>iBeacon-data             ::= "resultsMap.get(<a href="#ebnf-receiver">receiver</a> ).get(<a href="#ebnf-iBeacon">iBeacon</a>)[<a href="#ebnf-iBeacon-data-dropdown">iBeacon-data-dropdown</a>].value
-<a name="ebnf-iBeacon-dropdown"></a>iBeacon-data-dropdown    ::= "mac address" | "rssi" | "proximity" | "timestamp" | "measured power" | "accuracy" | "major" | "minor"
-<a name="ebnf-iBeacon"></a>iBeacon                  ::= <a href="#ebnf-MAC">MAC</a>
-<a name="ebnf-receiver"></a>receiver                 ::= <a href="#ebnf-URI">URI</a>
-</pre>
-
-### 1.1.3. variables blocks
-<pre>
-<a name="ebnf-variables-set"></a>variables-set            ::= var = <a href="#ebnf-number">number</a>
-<a name="ebnf-variables-get"></a>variables-get            ::= <a href="#ebnf-number">number</a>
-<a name="ebnf-variables-change"></a>variables-change         ::= var = (<a href="#ebnf-number">number</a> | <a href="#ebnf-text">text</a>)
-</pre>
-
-### 1.1.4. action blocks
-<pre>
-<a name="ebnf-action"></a>action                   ::= ( <a href="#ebnf-display-text">display-text</a> | <a href="#ebnf-display-data">display-data</a> | <a href="#ebnf-switch-lights">switch-lights</a> | <a href="#ebnf-playsound">play-sound</a> | <a href="#ebnf-halt">halt</a>)
-display-text             ::= displayText( (<a href="#ebnf-text">text</a> | <a href="#ebnf-number">number</a> | <a href="#ebnf-iBeacon-data">iBeacon-data</a>) )
-display-data             ::= displayData( <a href="#ebnf-iBeacon">iBeacon</a> , <a href="#ebnf-receiver">receiver</a> , <a href="#ebnf-boolean-array">boolean-array</a> )
-switch-lights            ::= switch-lights( <a href="#ebnf-iBeacon">iBeacon</a> , <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> , <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> , <a href="#ebnf-BooleanLiteral">BooleanLiteral</a> )
-play-sound               ::= playRandomSoundFromCategory( ("happy" | "sad") )
-halt                     ::= stopCode()
-</pre>
-
-### 1.1.5. logic blocks
-<pre>
-<a name="ebnf-if"></a>if                       ::= if <a href="#ebnf-boolean-expression">boolean-expression</a> then ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-if-else"></a>if-else                  ::= if <a href="#ebnf-boolean-expression">boolean-expression</a> then ( <a href="#ebnf-action">action</a> | <a href="#ebnf-conditional-statement">conditional-statement</a> )*
-<a name="ebnf-boolean-expression"></a>boolean-expression       ::= ( <a href="#ebnf-boolean-value">boolean-value</a> | <a href="#ebnf-comparison">comparison</a> | <a href="#ebnf-logical-comparison">logical-operation</a> | <a href="#ebnf-not">not</a> )
-<a name="ebnf-boolean-array"></a>boolean-array            ::= "[" (<a href="#ebnf-BooleanLiteral">BooleanLiteral</a> ( "," <a href="#ebnf-BooleanLiteral">BooleanLiteral</a>  )* )? "]"
-<a name="ebnf-comparison"></a>comparison               ::= (<a href="#ebnf-number">number</a> | <a href="#ebnf-text">text</a> ) (<a href="#ebnf-number">number</a> | <a href="#ebnf-text">text</a> )
-<a name="ebnf-logical-comparison"></a>logical-operation        ::= <a href="#ebnf-boolean-expression">boolean-expression</a> <a href="#ebnf-boolean-expression">boolean-expression</a>
-<a name="ebnf-not"></a>not                      ::= <a href="#ebnf-boolean-expression">boolean-expression</a>
-</pre>
-
-### 1.1.6. text blocks
-<pre>
-<a name="ebnf-text"></a>text                     ::= ( <a href="#ebnf-text-value">text-value</a> | <a href="#ebnf-text-concat">text-concat</a>)
-<a name="ebnf-text-value"></a>text-value               ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
-<a name="ebnf-text-concat"></a>text-concat              ::= <a href="#ebnf-text">text</a> (<a href="#ebnf-text">text</a>)*
-</pre>
-
-
-### 1.1.7. number blocks
-<pre>
-<a name="ebnf-number"></a>number                   ::= ( <a href="#ebnf-number-value">number-value</a> | <a href="#ebnf-number-infinity">number-infinity</a> | <a href="#ebnf-arithmetic-operations">arithmetic-operations</a> | <a href="#ebnf-number-random">number-random</a> )
-<a name="ebnf-number-value"></a>number-value             ::= <a href="#ebnf-DoubleLiteral">DoubleLiteral</a>
-<a name="ebnf-infinity"></a>number-infinity          ::= <a href="#ebnf-DoubleLiteral">DoubleLiteral</a>
-<a name="ebnf-arithmeti-operations"></a>arithmetic-operations    ::= <a href="#ebnf-number">number</a> <a href="#ebnf-number">number</a>
-<a name="ebnf-number-random"></a>number-random            ::= <a href="#ebnf-number">number</a> "+" | "-" | "x" | "÷" | "^" <a href="#ebnf-number">number</a>
-</pre>
-
-### 1.1.8. booleans blocks
-<pre>
-<a name="ebnf-boolean-value"></a>boolean-value            ::= <a href="#ebnf-booleanLiteral">BooleanLiteral</a>
-</pre>
-
-### 1.1.9. Symbols
-<pre>
-<a name="ebnf-URI"></a>URI                      ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
-<a name="ebnf-MAC"></a>MAC                      ::= <a href="#ebnf-StringLiteral">StringLiteral</a>
-<a name="ebnf-StringLiteral"></a>StringLiteral            ::= /* any visible character and the white-space character, no termination characters */
-<a name="ebnf-DoubleLiteral"></a>DoubleLiteral            ::= (("." <a href="#ebnf-Digits">Digits</a>) | (<a href="#ebnf-Digits">Digits</a> ("." [0-9]*)?)) [eE] [+-]? <a href="#ebnf-Digits">Digits</a>
-<a name="ebnf-Digits"></a>Digits                   ::= [0-9]+
-<a name="ebnf-BooleanLiteral"></a>BooleanLiteral           ::= true | false
-</pre>
-
-## 1.2. block syntax
-
-### 1.2.1. program-blocks syntax
-
-#### 1.2.1.1. setup-syntax
-![setup block](images/upload/process-setup.png)
-
-**input:** *action* or *conditional statement*  
-**output:** *no output*
-
-#### 1.2.1.2. repeat-syntax
-![repeat block](images/upload/process-loop.png)
-
-**input:** *number* *number*  
-**output:** *no output*
-
-### 1.2.2. things-blocks syntax
-
-There are 3 different blocks in this category: **iBeacon**, **receiver** and **iBeacon-data**.
-
-#### 1.2.2.1. iBeacon-syntax
-![iBeacon block](images/upload/things-ibeacon.png)
-
-**input:** *URI*  
-**output:** *thing*
-
-#### 1.2.2.2. receiver-syntax
-![receiver block](images/upload/things-receiver.png)
-
-**input:** *MAC*  
-**output:** *receiver*
-
-#### 1.2.2.3. iBeacon-data
-![iBeacon-data block](images/upload/things-ibeacon-data.png)![iBeacon-data block output](images/upload/things-ibeacon-data-outputs.png)
-
-**input:** *thing*  *receiver*  
-**output:** *string* | *number* - the retrieved data
-
-### 1.2.3. variables blocks syntax
-
-#### 1.2.3.1. variables set syntax
-![variables set block](images/upload/variables-set.png)
-
-**input:** *text* | *number*  
-**output:** *no output*
-
-#### 1.2.3.2. variables get syntax
-![variables get block](images/upload/variables-get.png)
-
-**input:** *no input*  
-**output:** *text* | *number*
-
-#### 1.2.3.3. variables change syntax
-![variables change block](images/upload/variables-change.png)
-
-**input:** *text* | *number*  
-**output:** *no output*
-
-### 1.2.4. action blocks syntax
-
-There are 5 different blocks in this category: **display text**, **display data**, **switch lights**, **random sound** and **halt**
-
-#### 1.2.4.1. display text syntax
-![display text block](images/upload/action-display-text.png)
-
-**input:** *text* | *number*  
-**output:** *no output*
-
-#### 1.2.4.2. display table syntax
-![display table block](images/upload/action-display-table.png)
-
-**input:** *receiver*  
-**output:** *no output*
-
-#### 1.2.4.3. switch lights syntax
-![switch lights block](images/upload/action-switch-lights.png)
-
-**input:** *iBeacon*  
-**output:** *no output*
-
-#### 1.2.4.4. random sound syntax
-![random sound block](images/upload/action-sound.png)
-
-**input:** *no input*
-**output:** *no output*
-
-#### 1.2.4.5. halt syntax
-![halt block](images/upload/action-stop.png)
-
-**input:** *no input*
-**output:** *no output*
-
-
-### 1.2.5. logic blocks syntax
-
-#### 1.2.5.1. comparison syntax
-![comparison blocks](images/upload/logic-compare.png)
-
-**input:** (*text* | *number*), (*text* | *number*)  
-**output:** *boolean*
-
-#### 1.2.5.2. AND / OR syntax
-![logical and block](images/upload/logic-and.png)
-
-![logical or block](images/upload/logic-or.png)
-
-**input:** *boolean*, *boolean*  
-**output:** *boolean*
-
-#### 1.2.5.3. not syntax
-![not block](images/upload/logic-not.png)
-
-**input:** *boolean*  
-**output:** *boolean*
-
-#### 1.2.5.4. if / if-else syntax
-![if example](images/upload/if.png)
-
-![if else example](images/upload/logic-if-else.png)
-
-**input:** *boolean* (*action* | *conditional-statement*)*  
-**output:** *conditional-statement*
-
-#### 1.2.5.5. event syntax
-![event block](images/upload/logic-event.png)
-
-**input:** *URI* ( *text* | *number* )  
-**output:** *boolean*
-
-### 1.2.6. boolean blocks syntax
-
-#### 1.2.6.1. boolean-value syntax
-![value block](images/upload/logic-true-false.png)
-
-**input:** *no input*  
-**output:** *boolean*
-
-### 1.2.7. text blocks syntax
-
-#### URI syntax
-![uri block](images/upload/text-uri.png)
-
-**input:** *no input*  
-**output:** *URI*
-
-#### mac syntax
-![mac block](images/upload/text-mac.png)
-
-**input:** *no input*  
-**output:** *MAC*
-
-#### 1.2.7.1. text-value syntax
-![text creation block](images/upload/text-text.png)
-
-**input:** *no input*  
-**output:** *text*
-
-#### 1.2.7.2. text concatenation syntax
-![text concatenation block](images/upload/text-create.png)
-
-**input:** { *text* }  
-**output** *text*
-
-### 1.2.8. number blocks syntax
-
-#### 1.2.8.1. number-value syntax
-![number block](images/upload/number.png)
-
-**input:** *no input*  
-**output:** *number*
-
-#### 1.2.8.2. infinity syntax
-![infinity block](images/upload/number-infinity.png)
-
-**input:** *no input*  
-**output:** *number*
-
-#### 1.2.8.3. arithmetic operations syntax
-![arithmetic operations block](images/upload/number-operations.png)
-
-**input:** *number* *number*  
-**output:** *number*
-
-#### 1.2.8.4. random integer syntax
-![random block](images/upload/number-random.png)
-
-**input:** *number* *number*  
-**output:** *number*
-
-
-# 2. Semantics
-
-This section explains what happens when a block program gets executed. In order to do so the first section lists and explains all static helper functions of BLAST and the second section describes each block in detail.
+This section explains what happens when a block program gets executed. In order to do so the first section lists and explains all of BLAST's static functions of BLAST and the second section describes block specific functions in detail.
 
 Click the links below to jump to each one of those sections.
-* [**functions**](#21-functions)
-* [**blocks**](#22-block-semantics)
 
-## 2.1. functions
+- [1. functions](#1-functions)
+  - [1.1. general functions](#11-general-functions)
+    - [1.1.1. runCode](#111-runcode)
+    - [1.1.2. getAllAddresses](#112-getalladdresses)
+    - [1.1.3. queryAlliBeacons](#113-queryallibeacons)
+    - [1.1.4. stopCode](#114-stopcode)
+  - [1.2. block specific functions](#12-block-specific-functions)
+    - [1.2.1. displayTable](#121-displaytable)
+    - [1.2.2. insertMessage](#122-insertmessage)
+    - [1.2.3. playRandomSoundFromCategory](#123-playrandomsoundfromcategory)
+  - [1.3. sc-ble-adapter only functions](#13-sc-ble-adapter-only-functions)
+    - [1.3.1. switchLights](#131-switchlights)
+- [2. block semantics](#2-block-semantics)
+  - [2.1. program-blocks semantics](#21-program-blocks-semantics)
+    - [2.1.1. setup semantics](#211-setup-semantics)
+    - [2.1.2. repeat semantics](#212-repeat-semantics)
+  - [2.2. things-blocks semantics](#22-things-blocks-semantics)
+    - [2.2.1. iBeacon semantics](#221-ibeacon-semantics)
+    - [2.2.2. receiver semantics](#222-receiver-semantics)
+    - [2.2.3. iBeacon-data semantics](#223-ibeacon-data-semantics)
+  - [2.3. variables blocks semantics](#23-variables-blocks-semantics)
+    - [2.3.1. variables set semantics](#231-variables-set-semantics)
+    - [2.3.2. variables get semantics](#232-variables-get-semantics)
+    - [2.3.3. variables change semantics](#233-variables-change-semantics)
+  - [2.4. action blocks semantics](#24-action-blocks-semantics)
+    - [2.4.1. display text semantics](#241-display-text-semantics)
+    - [2.4.2. display data semantics](#242-display-data-semantics)
+    - [2.4.3. switch lights semantics](#243-switch-lights-semantics)
+    - [2.4.4. random sound semantics](#244-random-sound-semantics)
+    - [2.4.5. halt semantics](#245-halt-semantics)
+  - [2.5. logic blocks semantics](#25-logic-blocks-semantics)
+    - [2.5.1. comparison semantics](#251-comparison-semantics)
+    - [2.5.2. AND / OR semantics](#252-and--or-semantics)
+    - [2.5.3. not semantics](#253-not-semantics)
+    - [2.5.4. if / if-else semantics](#254-if--if-else-semantics)
+    - [2.5.5. event semantics](#255-event-semantics)
+  - [2.6. boolean blocks semantics](#26-boolean-blocks-semantics)
+    - [2.6.1. boolean-value semantics](#261-boolean-value-semantics)
+  - [2.7. text blocks semantics](#27-text-blocks-semantics)
+    - [2.7.1. URI semantics](#271-uri-semantics)
+    - [2.7.2. MAC semantics](#272-mac-semantics)
+    - [2.7.3. text-value semantics](#273-text-value-semantics)
+    - [2.7.4. text concatenation semantics](#274-text-concatenation-semantics)
+  - [2.8. number blocks semantics](#28-number-blocks-semantics)
+    - [2.8.1. number-value semantics](#281-number-value-semantics)
+    - [2.8.2. infinity semantics](#282-infinity-semantics)
+    - [2.8.3. arithmetic operations semantics](#283-arithmetic-operations-semantics)
+    - [2.8.4. random integer semantics](#284-random-integer-semantics)
+
+# 1. functions
 BLAST's has a handful of predefined functions in order to execute block programs. These functions can be divided into the tow categories *general* and *specific*. 
 
 The *general* functions perform tasks used by the BLAST environment to handle execution of a block program. The *specific* functions are only used by single blocks and are not needed for execution of a block program without these blocks.
 
 The following describes all functions used by BLAST and it's blocks.
 
-### 2.1.1. general functions
+## 1.1. general functions
 
-#### 2.1.1.1. runCode
+### 1.1.1. runCode
 When a user clicks the execute button the **runCode()** function is called.
 This function handles execution of a block program.
 
@@ -489,7 +137,7 @@ runCode = function() {
 }
 ```
 
-#### 2.1.1.2. getAllAddresses
+### 1.1.2. getAllAddresses
 
 Before executing a block program, BLAST uses `getAllAddresses()` to parse the workspace for **receiver** blocks and saves their addresses.
 
@@ -511,7 +159,7 @@ getAllAddresses = function() {
 
 This enables parsing their RDF before each iteration of a program block, by calling `queryAlliBeacons(addresses)` . 
 
-#### 2.1.1.3. queryAlliBeacons
+### 1.1.3. queryAlliBeacons
 
 This function uses [µRDF](https://github.com/vcharpenay/uRDF.js) to query a resource with a predefined SPARQL query and stores the results into a JavaScript Map, enabling blocks to perform JavaScript operations like selecting properties and comparing values of the retrieved data.
 
@@ -571,7 +219,7 @@ function queryAlliBeacons(addresses) {
 
 Before each iteration of the **repeat** block if `resultsMap` is not empty BLAST will save a copy of it to enable the **event**#event block to compare values from `resultsMap` with values from previous Results.
 
-#### 2.1.1.4. stopCode
+### 1.1.4. stopCode
 
 The `stopCode` function stops the execution of a block-program.  
 `message` will be displayed next to the stop button.
@@ -591,9 +239,9 @@ stopCode = function(message) {
 }
 ```
 
-### 2.1.2. block specific functions
+## 1.2. block specific functions
 
-#### 2.1.2.1. displayTable
+### 1.2.1. displayTable
 
 This helper function creates an HTML table listing iBeacon data. 
 
@@ -663,7 +311,7 @@ promise().then(results => {
 }
 ```
 
-#### 2.1.2.2. insertMessage
+### 1.2.2. insertMessage
 
 insertMessage is a helper function used by the **display text** block. It creates a HTML div with the desired text and attaches it to the action block output container.
 
@@ -694,7 +342,7 @@ function insertMessage(text) {
 }
 ```
 
-#### 2.1.2.3. playRandomSoundFromCategory
+### 1.2.3. playRandomSoundFromCategory
 This functions is used by the **random sound** block. It plays a random audio file out of two predefined arrays `soundsCheerful` and `soundsSad`.
 
 **parameters:** 
@@ -722,8 +370,8 @@ function playRandomSoundFromCategory(category){
 ```
 
 
-### 2.1.3. sc-ble-adapter only functions
-#### 2.1.3.1. switchLights
+## 1.3. sc-ble-adapter only functions
+### 1.3.1. switchLights
 
 SwitchLights is a helper function, used by the **switch lights** block. It sends a HTTP-POST request to the [sc-ble-adapter](https://github.com/wintechis/sc-ble-adapter/) which controls the [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller) specified by `mac` .
 
@@ -761,13 +409,13 @@ function switchLights(address, r, y, g) {
 }
 ```
 
-## 2.2. block semantics
+# 2. block semantics
 
-### 2.2.1. program-blocks semantics
+## 2.1. program-blocks semantics
 
 The **setup** and **repeat** blocks control the block programs process order.
 
-#### 2.2.1.1. setup semantics
+### 2.1.1. setup semantics
 
 Every block in the setup-block get's executed once at program start.
 
@@ -777,7 +425,7 @@ To run the blocks in the setup block consecutively the block pushes its containi
 var code = `setup.push(\`${statements_onstart.trim()}\`);`;
 ```
 
-#### 2.2.1.2. repeat semantics
+### 2.1.2. repeat semantics
 
 The blocks withing the repeat-block are executed consecutively `n` -times every `x` seconds according to the parameters .
 
@@ -793,11 +441,11 @@ var code = `loop.push(\`${statements_loop.trim()}\`); var loopTime = ${value_sec
 return code;
 ```
 
-### 2.2.2. things-blocks semantics
+## 2.2. things-blocks semantics
 
 There are 3 different blocks in this category: **iBeacon**, **receiver** and **iBeacon-data**.
 
-#### 2.2.2.1. iBeacon semantics
+### 2.2.1. iBeacon semantics
 
 The iBeacon block represents an iBeacon
 
@@ -812,7 +460,7 @@ var value_name = Blockly.JavaScript.valueToCode(block, 'NAME', Blockly.JavaScrip
 return [value_name, Blockly.JavaScript.ORDER_ATOMIC];
 ```
 
-#### 2.2.2.2. receiver semantics
+### 2.2.2. receiver semantics
 
 The receiver block represents a Bluetooth receiver.
 
@@ -827,7 +475,7 @@ var value_address = Blockly.JavaScript.valueToCode(block, 'address', Blockly.Jav
 return [value_address, Blockly.JavaScript.ORDER_ATOMIC];
 ```
 
-#### 2.2.2.3. iBeacon-data semantics
+### 2.2.3. iBeacon-data semantics
 
 The iBeacon-data block retrieves iBeacon data.
 
@@ -838,17 +486,17 @@ var code = `resultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value`;
 return code;
 ```
 
-### 2.2.3. variables blocks semantics
+## 2.3. variables blocks semantics
 Blast uses the term variable the same as it is used in mathematics: a named value that can be changed (varies).
 
-#### 2.2.3.1. variables set semantics
+### 2.3.1. variables set semantics
 The variables set block sets a variable to a number or text value.
 
 ```JavaScript
 return varName + ' = ' + argument0 + ';\n';
 ```
 
-#### 2.2.3.2. variables get semantics
+### 2.3.2. variables get semantics
 Variables get returns the value of the selected variable
 
 ```JavaScript
@@ -856,17 +504,17 @@ var code = Blockly.JavaScript.variableDB_.getName(block.getFieldValue('VAR'), Bl
 return [code, Blockly.JavaScript.ORDER_ATOMIC];
 ```
 
-#### 2.2.3.3. variables change semantics
+### 2.3.3. variables change semantics
 This block changes a variable's value to the specified value.
 ```JavaScript
 return varName + ' = ' + argument0 + ';\n';
 ```
 
-### 2.2.4. action blocks semantics
+## 2.4. action blocks semantics
 
 There are 3 different blocks in this category: **display text**, **display data** and **switch lights**. 
 
-#### 2.2.4.1. display text semantics
+### 2.4.1. display text semantics
 
 The display text block adds a text container to the action-block output container on the right.
 
@@ -877,7 +525,7 @@ var code = `insertMessage(${text_msg})\n`;
 return code;
 ```
 
-#### 2.2.4.2. display data semantics
+### 2.4.2. display data semantics
 
 The display data block prints a table containing all the data received at a receiver to the action-block output container on the right.
 
@@ -890,7 +538,7 @@ code = `displayData(${value_thing});`;
 return code;
 ```
 
-#### 2.2.4.3. switch lights semantics
+### 2.4.3. switch lights semantics
 
 The switch lights block can be used to control the LEDs of a [LED strip controller](https://github.com/arduino12/ble_rgb_led_strip_controller).
 
@@ -901,14 +549,14 @@ var code = `switchLights("${iBeacon}", ${cb_red}, ${cb_yellow}, ${cb_green});`;
 return code;
 ```
 
-#### 2.2.4.4. random sound semantics
+### 2.4.4. random sound semantics
 This block plays a random sound out of the two predefined sound-sets "happy" and "sad" by calling the [playRandomSoundFromCategory](#218-playrandomsoundfromcategory)function.
 
 ```JavaScript
 var code = `playRandomSoundFromCategory("${dropdown_category}");\n`;
 return code;
 ```
-#### 2.2.4.5. halt semantics
+### 2.4.5. halt semantics
 The halt block stops execution of the current block program, by calling the [stopCode](#214-stopcode) function.
 
 ```JavaScript
@@ -917,13 +565,13 @@ return code;
 ```
 
 
-### 2.2.5. logic blocks semantics
+## 2.5. logic blocks semantics
 
 Logic blocks are used to implement [boolean logic](https://en.wikipedia.org/wiki/Boolean_algebra).  
 
 If a block expects a Boolean value as an input, it usually interprets an absent input as **false**. Non-Boolean values cannot be directly plugged in where Boolean values are expected.
 
-#### 2.2.5.1. comparison semantics
+### 2.5.1. comparison semantics
 
 There are six comparison operators. Each takes two inputs and returns true or false depending on how the inputs compare with each other.
 
@@ -950,7 +598,7 @@ var code = argument0 + ' ' + operator + ' ' + argument1;
 return [code, order];
 ```
 
-#### 2.2.5.2. AND / OR semantics
+### 2.5.2. AND / OR semantics
 
 This block represents the logical operations *and* and *or*.
 
@@ -981,11 +629,11 @@ var code = argument0 + ' ' + operator + ' ' + argument1;
 return [code, order];
 ```
 
-#### 2.2.5.3. not semantics
+### 2.5.3. not semantics
 
 The not block converts its Boolean input into its opposite. For example, the result of:  
 
-![not block](images/upload/logic-not-true.png) 
+![not block](images/logic-not-true.png) 
 
 is **false**
 
@@ -1001,17 +649,17 @@ var code = '!' + argument0;
 return [code, order];
 ```
 
-#### 2.2.5.4. if / if-else semantics
+### 2.5.4. if / if-else semantics
 
 The simplest conditional statement is an **if** block, as shown:
 
-![if example](images/upload/if-if.png)
+![if example](images/if-if.png)
 
 When run, this will compare the RSSI value of the thing **my beacon** to -30. If it is larger, "Beacon is close!" will be displayed. Otherwise, nothing happens.
 
 It is also possible to specify that something should happen if the condition is *not* true, as shown in this example:
 
-![if else example](images/upload/if-else.png)
+![if else example](images/if-else.png)
 
 As with the previous block, "Beacon is close!" will be displayed if the RSSI value of **my beacon** > -30; otherwise, "Beacon is not very close." will be displayed.
 An **if** block may have zero or one **else** sections but not more than one.
@@ -1056,7 +704,7 @@ Blockly.JavaScript['controls_if'] = function(block) {
 };
 ```
 
-#### 2.2.5.5. event semantics
+### 2.5.5. event semantics
 
 The event block is used to describe events.  
 iE it returns `true` or `false` when a measurement enters or leaves a specified range.
@@ -1076,9 +724,9 @@ ${negate} (resultsMap.get("${receiver}").get("${iBeacon}")["${value}"].value ${o
 return [code, Blockly.JavaScript.ORDER_NONE];
 ```
 
-### 2.2.6. boolean blocks semantics
+## 2.6. boolean blocks semantics
 
-#### 2.2.6.1. boolean-value semantics
+### 2.6.1. boolean-value semantics
 
 The value block represents a boolean value
 
@@ -1089,7 +737,7 @@ var code = (block.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
 return [code, Blockly.JavaScript.ORDER_ATOMIC];
 ```
 
-### 2.2.7. text blocks semantics
+## 2.7. text blocks semantics
 
 Examples of pieces of text are:
 
@@ -1100,7 +748,7 @@ Examples of pieces of text are:
 Text can contain letters (which may be lower-case or upper-case), numbers, punctuation marks, other symbols, and blank spaces between words.
 
 
-#### URI semantics
+### 2.7.1. URI semantics
 The URI block represents a URI.
 
 On execution this URI is returned
@@ -1109,7 +757,7 @@ var text_uri = block.getFieldValue('URI');
 return [text_uri, Blockly.JavaScript.ORDER_NONE];
 ```
 
-#### MAC semantics
+### 2.7.2. MAC semantics
 The MAc block represents a MAC address.
 
 On execution this MAC address is returned
@@ -1118,7 +766,7 @@ var text_mac = block.getFieldValue('MAC');
 return [text_mac, Blockly.JavaScript.ORDER_NONE];
 ```
 
-#### 2.2.7.1. text-value semantics
+### 2.7.3. text-value semantics
 
 The following block creates the piece of text "hello".
 
@@ -1129,13 +777,13 @@ var code = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
 return [code, Blockly.JavaScript.ORDER_ATOMIC];
 ```
 
-#### 2.2.7.2. text concatenation semantics
+### 2.7.4. text concatenation semantics
 
 The text concatenation block combines (concatenates) the value of two or more text blocks.
 
 To increase the number of text inputs, click on the gear icon, which changes the view to:
 
-![text create block modification](images/upload/text-create-modify.png)
+![text create block modification](images/text-create-modify.png)
 
 Additional inputs are added by dragging an "item" block from the gray toolbox on the left into the "join" block.
 
@@ -1169,11 +817,11 @@ switch (block.itemCount_) {
 }
 ```
 
-### 2.2.8. number blocks semantics
+## 2.8. number blocks semantics
 
 Number blocks are used to create and modify numbers.
 
-#### 2.2.8.1. number-value semantics
+### 2.8.1. number-value semantics
 
 The number-value block represents a numerical value
 
@@ -1186,7 +834,7 @@ var order = code >= 0 ? Blockly.JavaScript.ORDER_ATOMIC :
 return [code, order];
 ```
 
-#### 2.2.8.2. infinity semantics
+### 2.8.2. infinity semantics
 
 The infinity block represent the *infinity* constant.
 
@@ -1196,7 +844,7 @@ On execution this block returns a JavaScript representation of infinity
     return [Infinity, Blockly.JavaScript.ORDER_NONE];
 ```
 
-#### 2.2.8.3. arithmetic operations semantics
+### 2.8.3. arithmetic operations semantics
 
 The arithmetic operations block is used to create simple arithmetic operations.
 
@@ -1228,7 +876,7 @@ code = argument0 + operator + argument1;
 return [code, order];
 ```
 
-#### 2.2.8.4. random integer semantics
+### 2.8.4. random integer semantics
 
 This block creates a random integer in between the defined boundaries.
 
