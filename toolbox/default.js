@@ -7,8 +7,6 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'controls_repeat_ext'},
         {kind: 'BLOCK', type: 'controls_whileUntil'},
         {kind: 'BLOCK', type: 'controls_for'},
-        {kind: 'BLOCK', type: 'controls_flow_statements'},
-        {kind: 'BLOCK', type: 'waitSeconds'},
       ],
       name: 'Loops',
       colour: '120',
@@ -24,6 +22,8 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'table_cell'},
         {kind: 'BLOCK', type: 'switch_lights'},
         {kind: 'BLOCK', type: 'random_sound'},
+        {kind: 'BLOCK', type: 'controls_flow_statements'},
+        {kind: 'BLOCK', type: 'wait_seconds'},
       ],
       name: 'Actions',
       colour: '0',
@@ -43,12 +43,6 @@ const defaultToolbox = {
     {
       kind: 'sep',
       gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
-      name: 'Booleans',
-      colour: '210',
     },
     {
       kind: 'CATEGORY',
@@ -77,6 +71,12 @@ const defaultToolbox = {
       ],
       name: 'Numbers',
       colour: '230',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
+      name: 'Booleans',
+      colour: '210',
     },
     {
       kind: 'sep',

@@ -226,7 +226,7 @@ Blockly.defineBlocksWithJsonArray([
 
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'waitSeconds',
+    type: 'wait_seconds',
     message0: ' wait %1 seconds',
     args0: [
       {

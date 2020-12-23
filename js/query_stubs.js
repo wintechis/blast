@@ -158,7 +158,7 @@ Blockly.JavaScript['random-sound'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['waitSeconds'] = function(block) {
+Blockly.JavaScript['wait_seconds'] = function(block) {
   const seconds = Number(block.getFieldValue('SECONDS'));
   const code = 'waitForSeconds(' + seconds + ');\n';
   return code;
