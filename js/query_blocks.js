@@ -132,7 +132,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'infinity',
+    type: 'number_infinity',
     message0: 'infinity',
     output: null,
     colour: 230,
@@ -222,9 +222,6 @@ Blockly.defineBlocksWithJsonArray([
     tooltip: '',
     helpUrl: '',
   },
-]);
-
-Blockly.defineBlocksWithJsonArray([
   {
     type: 'wait_seconds',
     message0: ' wait %1 seconds',
@@ -242,6 +239,19 @@ Blockly.defineBlocksWithJsonArray([
     colour: '%{BKY_LOOPS_HUE}',
   },
 ]);
+
+Blockly.Blocks['loops_repeat'] = Blockly.Blocks['controls_repeat_ext'];
+Blockly.Blocks['loops_while_until'] = Blockly.Blocks['controls_whileUntil'];
+Blockly.Blocks['loops_for'] = Blockly.Blocks['controls_for'];
+Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
+Blockly.Blocks['conditional_statement'] = Blockly.Blocks['controls_if'];
+Blockly.Blocks['number_value'] = Blockly.Blocks['math_number'];
+Blockly.Blocks['number_arithmetic'] = Blockly.Blocks['math_arithmetic'];
+Blockly.Blocks['number_random'] = Blockly.Blocks['math_random_int'];
+
+Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
+    'loops_repeat', 'loops_while_until', 'loops_for',
+);
 
 Blockly.Blocks['sparql_query'] = {
   init: function() {

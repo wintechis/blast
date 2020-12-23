@@ -1,23 +1,13 @@
-Blockly.JavaScript['things'] = function(block) {
-  const mac = Blockly.JavaScript.valueToCode(
-      block,
-      'mac',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-
-  return [mac, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['receiver'] = function(block) {
-  const address = Blockly.JavaScript.valueToCode(
-      block,
-      'address',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  const code = `queryReceiver(${address})`;
-
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
+Blockly.JavaScript['loops_repeat'] = Blockly.JavaScript['controls_repeat_ext'];
+Blockly.JavaScript['loops_while_until'] =
+  Blockly.JavaScript['controls_whileUntil'];
+Blockly.JavaScript['loops_for'] = Blockly.JavaScript['controls_for'];
+Blockly.JavaScript['break_continue'] =
+  Blockly.JavaScript['controls_flow_statements'];
+Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
+Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
+Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
+Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
 
 Blockly.JavaScript['ibeacon_data'] = function(block) {
   const ibeacon = Blockly.JavaScript.valueToCode(
@@ -103,7 +93,6 @@ Blockly.JavaScript['http_request'] = function(block) {
   '{${headers}}', ${body}, '${output}')\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-
 
 Blockly.JavaScript['sparql_query'] = function(block) {
   let query = block.getFieldValue('query');
@@ -205,6 +194,6 @@ Blockly.JavaScript['mac'] = function(block) {
   return [mac, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['infinity'] = function(block) {
+Blockly.JavaScript['number_infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
 };

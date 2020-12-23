@@ -4,9 +4,9 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'controls_repeat_ext'},
-        {kind: 'BLOCK', type: 'controls_whileUntil'},
-        {kind: 'BLOCK', type: 'controls_for'},
+        {kind: 'BLOCK', type: 'loops_repeat'},
+        {kind: 'BLOCK', type: 'loops_while_until'},
+        {kind: 'BLOCK', type: 'loops_for'},
       ],
       name: 'Loops',
       colour: '120',
@@ -22,7 +22,7 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'table_cell'},
         {kind: 'BLOCK', type: 'switch_lights'},
         {kind: 'BLOCK', type: 'random_sound'},
-        {kind: 'BLOCK', type: 'controls_flow_statements'},
+        {kind: 'BLOCK', type: 'break_continue'},
         {kind: 'BLOCK', type: 'wait_seconds'},
       ],
       name: 'Actions',
@@ -31,7 +31,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'controls_if'},
+        {kind: 'BLOCK', type: 'conditional_statement'},
         {kind: 'BLOCK', type: 'event'},
         {kind: 'BLOCK', type: 'logic_compare'},
         {kind: 'BLOCK', type: 'logic_operation'},
@@ -64,10 +64,10 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'math_number'},
-        {kind: 'BLOCK', type: 'infinity'},
-        {kind: 'BLOCK', type: 'math_arithmetic'},
-        {kind: 'BLOCK', type: 'math_random_int'},
+        {kind: 'BLOCK', type: 'number_value'},
+        {kind: 'BLOCK', type: 'number_infinity'},
+        {kind: 'BLOCK', type: 'number_arithmetic'},
+        {kind: 'BLOCK', type: 'number_random'},
       ],
       name: 'Numbers',
       colour: '230',
