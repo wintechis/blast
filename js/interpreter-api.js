@@ -100,7 +100,6 @@ function initApi(interpreter, globalObject) {
     };
 
     if (body) {
-      console.log(body);
       requestOptions.body = body;
     }
 
