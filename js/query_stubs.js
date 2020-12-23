@@ -65,7 +65,7 @@ Blockly.JavaScript['writedw'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['displayText'] = function(block) {
+Blockly.JavaScript['display_text'] = function(block) {
   const message =
     Blockly.JavaScript.valueToCode(
         block,
@@ -77,7 +77,7 @@ Blockly.JavaScript['displayText'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['displayTable'] = function(block) {
+Blockly.JavaScript['display_table'] = function(block) {
   const table = Blockly.JavaScript.valueToCode(
       block,
       'table',
@@ -88,7 +88,7 @@ Blockly.JavaScript['displayTable'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['httprequest'] = function(block) {
+Blockly.JavaScript['http_request'] = function(block) {
   const uri = Blockly.JavaScript.valueToCode(
       block,
       'uri',
@@ -137,7 +137,7 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['switchlights'] = function(block) {
+Blockly.JavaScript['switch_lights'] = function(block) {
   const checkboxRed = block.getFieldValue('cb_red') == 'TRUE';
   const checkboxYellow = block.getFieldValue('cb_yellow') == 'TRUE';
   const checkboxGreen = block.getFieldValue('cb_green') == 'TRUE';
@@ -152,7 +152,7 @@ Blockly.JavaScript['switchlights'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['randomsound'] = function(block) {
+Blockly.JavaScript['random-sound'] = function(block) {
   const dropdownCategory = block.getFieldValue('category');
   const code = `playRandomSoundFromCategory("${dropdownCategory}");\n`;
   return code;

@@ -1,60 +1,22 @@
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'things',
-    message0: 'thing with mac: %1',
+    type: 'table_cell',
+    message0: 'get first cell from table %1 where %2',
     args0: [
       {
         type: 'input_value',
-        name: 'mac',
-        check: 'mac',
-      },
-    ],
-    output: 'thing',
-    colour: 270,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
-    type: 'receiver',
-    message0: 'receiver at URI %1',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'address',
-        check: 'URI',
-      },
-    ],
-    output: 'table',
-    colour: 270,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
-    type: 'ibeacon_data',
-    message0: 'beacon %1 data at receiver %2 value %3',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'ibeacon',
-        check: 'thing',
-      },
-      {
-        type: 'input_value',
-        name: 'receiver',
+        name: 'table',
         check: 'table',
       },
       {
-        type: 'field_dropdown',
-        name: 'value',
-        options: [
-          ['mac address', 'mac'],
-          ['rssi', 'rssi'],
-          ['resultTime', 'resultTime'],
-        ],
+        type: 'input_value',
+        name: 'conditions',
+        check: 'Boolean',
       },
     ],
     output: ['String', 'Number'],
-    colour: 330,
+    inputsInline: true,
+    colour: 0,
     tooltip: '',
     helpUrl: '',
   },
@@ -94,7 +56,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'displayText',
+    type: 'display_text',
     message0: 'display text: %1',
     args0: [
       {
@@ -154,7 +116,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'displayTable',
+    type: 'display_table',
     message0: 'display table %1',
     args0: [
       {
@@ -178,7 +140,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'switchlights',
+    type: 'switch_lights',
     message0: 'switch lights with mac: %1 %2 red %3 yellow %4 green %5',
     args0: [
       {
@@ -212,7 +174,7 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'randomsound',
+    type: 'random_sound',
     message0: 'play random sound %1',
     args0: [
       {
@@ -318,7 +280,7 @@ WHERE {
   },
 };
 
-Blockly.Blocks['httprequest'] = {
+Blockly.Blocks['http_request'] = {
   httpRequestValidator: function(newValue) {
     this.getSourceBlock().updateInputs(newValue);
     return newValue;
