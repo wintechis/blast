@@ -114,6 +114,11 @@ td {
 #content_blocks {
   padding: 0;
 }
+
+#content_javascript {
+  overflow: auto;
+}
+
 .blocklySvg {
   border-top: none !important;
 }
