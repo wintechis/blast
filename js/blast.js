@@ -338,8 +338,8 @@ Blast.init = function() {
     if (!(event instanceof Blockly.Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
       Blast.resetInterpreter();
-      Blast.generateCode();
       Blast.renderContent();
+      Blast.generateCode();
     }
   });
 
