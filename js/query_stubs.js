@@ -141,7 +141,7 @@ Blockly.JavaScript['switch_lights'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['random-sound'] = function(block) {
+Blockly.JavaScript['random_sound'] = function(block) {
   const dropdownCategory = block.getFieldValue('category');
   const code = `playRandomSoundFromCategory("${dropdownCategory}");\n`;
   return code;
