@@ -136,7 +136,7 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
-  // API function for the switchLights block.
+  // API function for the switch_lights block.
   wrapper = function(mac, r, y, g, callback) {
     const redByte = r ? 'ff' : '00';
     const yellowByte = y ? 'ff' : '00';
@@ -151,16 +151,33 @@ function initApi(interpreter, globalObject) {
       },
     };
 
-    fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
+    fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
       method: 'PUT',
       headers: new Headers({
         'Content-Type': 'application/json',
       }),
-      body: JSON.stringify(data),
-    }).then((res) => {
-      callback();
+      body: '{ "type": "ble:Connect" }',
+    }).then(() => {
+      fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
+        method: 'PUT',
+        headers: new Headers({
+          'Content-Type': 'application/json',
+        }),
+        body: JSON.stringify(data),
+      }).then(() => {
+        fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
+          method: 'PUT',
+          headers: new Headers({
+            'Content-Type': 'application/json',
+          }),
+          body: '{ "type": "ble:Disconnect" }',
+        }).then(() => {
+          callback();
+        });
+      });
     });
   };
+
   interpreter.setProperty(
       globalObject,
       'switchLights',
