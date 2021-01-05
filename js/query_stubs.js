@@ -12,12 +12,12 @@ Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
 Blockly.JavaScript['ibeacon_data'] = function(block) {
   const ibeacon = Blockly.JavaScript.valueToCode(
       block,
-      'ibeacon',
+      'MAC',
       Blockly.JavaScript.ORDER_NONE,
   );
   const receiver = Blockly.JavaScript.valueToCode(
       block,
-      'receiver',
+      'URI',
       Blockly.JavaScript.ORDER_NONE,
   );
   const value = block.getFieldValue('value');

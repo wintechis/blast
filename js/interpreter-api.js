@@ -26,8 +26,8 @@ function initApi(interpreter, globalObject) {
       interpreter.createNativeFunction(wrapper),
   );
 
-  // API function for urdf querying.
-  wrapper = function(address, callback) {
+  // API function for the ibeacon-data block.
+  wrapper = function(address, key, value, retValue, callback) {
     const url = new URL(address);
     const baseUrl = url.protocol + '//' + url.host;
     const path = url.pathname;
@@ -44,31 +44,18 @@ function initApi(interpreter, globalObject) {
 
     urdf.clear();
     urdf.query(query).then((result) => {
-      callback(result);
+      for (const row of result) {
+        if (row[key].value == value) {
+          callback(row[retValue].value);
+        }
+      }
     });
   };
-  interpreter.setProperty(
-      globalObject,
-      'queryReceiver',
-      interpreter.createAsyncFunction(wrapper),
-  );
 
-  // API function for the ibeacon-data block.
-  wrapper = function(table, key, value, retValue) {
-    console.log(table);
-    console.log(key);
-    console.log(value);
-    console.log(retValue);
-    for (const row of table) {
-      if (row[key].value == value) {
-        return row[retValue].value;
-      }
-    }
-  };
   interpreter.setProperty(
       globalObject,
       'getTableCell',
-      interpreter.createNativeFunction(wrapper),
+      interpreter.createAsyncFunction(wrapper),
   );
 
   // API function for the displayText block.

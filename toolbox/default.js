@@ -19,7 +19,6 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'sparql_ask'},
         {kind: 'BLOCK', type: 'display_text'},
         {kind: 'BLOCK', type: 'display_table'},
-        {kind: 'BLOCK', type: 'table_cell'},
         {kind: 'BLOCK', type: 'switch_lights'},
         {kind: 'BLOCK', type: 'random_sound'},
         {kind: 'BLOCK', type: 'break_continue'},
@@ -27,6 +26,14 @@ const defaultToolbox = {
       ],
       name: 'Actions',
       colour: '0',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'ibeacon_data'},
+      ],
+      name: 'Things',
+      colour: '330',
     },
     {
       kind: 'CATEGORY',

@@ -1,61 +1,5 @@
 Blockly.defineBlocksWithJsonArray([
   {
-    type: 'table_cell',
-    message0: 'get first cell from table %1 where %2',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'table',
-        check: 'table',
-      },
-      {
-        type: 'input_value',
-        name: 'conditions',
-        check: 'Boolean',
-      },
-    ],
-    output: ['String', 'Number'],
-    inputsInline: true,
-    colour: 0,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
-    type: 'readdw',
-    message0: 'Read DW Values from MAC %1',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'MAC',
-        check: 'mac',
-      },
-    ],
-    output: 'String',
-    colour: 45,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
-    type: 'writedw',
-    message0: 'Write value %1 to mac %2',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'value',
-        check: 'String',
-      },
-      {
-        type: 'input_value',
-        name: 'MAC',
-        check: 'mac',
-      },
-    ],
-    output: 'String',
-    colour: 45,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
     type: 'display_text',
     message0: 'display text: %1',
     args0: [
@@ -68,6 +12,36 @@ Blockly.defineBlocksWithJsonArray([
     previousStatement: ['state', 'config', 'action'],
     nextStatement: ['state', 'config', 'action'],
     colour: 0,
+    tooltip: '',
+    helpUrl: '',
+  },
+  {
+    type: 'ibeacon_data',
+    message0: 'get %3 of MAC %1 at URI %2',
+    args0: [
+      {
+        type: 'input_value',
+        name: 'MAC',
+        check: 'mac',
+      },
+      {
+        type: 'input_value',
+        name: 'URI',
+        check: 'URI',
+      },
+      {
+        type: 'field_dropdown',
+        name: 'value',
+        options: [
+          // ['mac address', 'mac'],
+          ['rssi', 'rssi'],
+          ['resultTime', 'resultTime'],
+        ],
+      },
+    ],
+    output: ['String', 'Number'],
+    colour: 330,
+    inputsInline: true,
     tooltip: '',
     helpUrl: '',
   },
@@ -250,7 +224,9 @@ Blockly.Blocks['number_arithmetic'] = Blockly.Blocks['math_arithmetic'];
 Blockly.Blocks['number_random'] = Blockly.Blocks['math_random_int'];
 
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
-    'loops_repeat', 'loops_while_until', 'loops_for',
+    'loops_repeat',
+    'loops_while_until',
+    'loops_for',
 );
 
 Blockly.Blocks['sparql_query'] = {
