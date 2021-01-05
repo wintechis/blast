@@ -1,57 +1,47 @@
-<xml>
-    <block type="controls_whileUntil" id="9E{9@8WDB+c?D3=UF=:[" x="10" y="10">
-        <field name="MODE">UNTIL</field>
-        <value name="BOOL">
-            <block type="sparql_ask" id="%IJjt5.{`nIe?MJY2KP_">
-                <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;
-ASK 
-WHERE {
-  ?node sosa:hasSimpleResult ?rssiValue 
-  FILTER (?rssiValue &gt; -40)
-}</field>
-                <value name="uri">
-                    <block type="uri" id=".3=?6+r3q[%Pc]qoAO#~">
-                        <field name="URI">http://dwpi4.local/ble/current</field>
-                    </block>
-                </value>
-            </block>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="loops_while_until" id="9E{9@8WDB+c?D3=UF=:[" x="10" y="10">
+    <field name="MODE">UNTIL</field>
+    <value name="BOOL">
+      <block type="sparql_ask" id="%IJjt5.{`nIe?MJY2KP_">
+        <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;&amp;#10;ASK &amp;#10;WHERE {&amp;#10;  ?node sosa:hasSimpleResult ?rssiValue &amp;#10;  FILTER (?rssiValue &gt; -40)&amp;#10;}</field>
+        <value name="uri">
+          <block type="uri" id=".3=?6+r3q[%Pc]qoAO#~">
+            <field name="URI">http://dwpi4.local/ble/current</field>
+          </block>
         </value>
-        <statement name="DO">
-            <block type="displayText" id="qCm{G(jFMxH^ORFYrz$(">
-                <value name="text">
-                    <block type="text" id="UHW5MST-#-:5XL$X)#oz">
-                        <field name="TEXT">No beacon is close :(</field>
-                    </block>
-                </value>
-            </block>
-        </statement>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="display_text" id="qCm{G(jFMxH^ORFYrz$(">
+        <value name="text">
+          <block type="text" id="UHW5MST-#-:5XL$X)#oz">
+            <field name="TEXT">No beacon is close :(</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+    <next>
+      <block type="display_text" id="4Pt%).(h#-2u~pkzmn?a">
+        <value name="text">
+          <block type="text" id="l$0iH_f|(:Q5m;5x%|jF">
+            <field name="TEXT">There is a beacon nearby!</field>
+          </block>
+        </value>
         <next>
-            <block type="displayTable" id="3[i@nY4*IV}=TgxoEhLP">
-                <value name="table">
-                    <block type="sparql_query" id="9h|X-k|Iy)7iL^+;UFq`">
-                        <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;
-SELECT *
-WHERE {
-  ?node sosa:hasSimpleResult ?rssiValue 
-  FILTER (?rssiValue &gt; -40)
-}</field>
-                        <value name="uri">
-                            <block type="uri" id="T5IH3MA#dk3GY,A}=j6;">
-                                <field name="URI">http://dwpi4.local/ble/current</field>
-                            </block>
-                        </value>
-                    </block>
+          <block type="display_table" id="3[i@nY4*IV}=TgxoEhLP">
+            <value name="table">
+              <block type="sparql_query" id="9h|X-k|Iy)7iL^+;UFq`">
+                <field name="query">PREFIX sosa: &lt;http://www.w3.org/ns/sosa/&gt;&amp;#10;SELECT *&amp;#10;WHERE {&amp;#10;  ?node sosa:hasSimpleResult ?rssiValue &amp;#10;  FILTER (?rssiValue &gt; -40)&amp;#10;}</field>
+                <value name="uri">
+                  <block type="uri" id="T5IH3MA#dk3GY,A}=j6;">
+                    <field name="URI">http://dwpi4.local/ble/current</field>
+                  </block>
                 </value>
-                <next>
-                    <block type="displayText" id="4Pt%).(h#-2u~pkzmn?a">
-                        <value name="text">
-                            <block type="text" id="l$0iH_f|(:Q5m;5x%|jF">
-                                <field name="TEXT">There is a beacon nearby!</field>
-                            </block>
-                        </value>
-                    </block>
-                </next>
-            </block>
+              </block>
+            </value>
+          </block>
         </next>
-    </block>
+      </block>
+    </next>
+  </block>
 </xml>

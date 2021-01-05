@@ -2,7 +2,7 @@
   <variables>
     <variable id="d7}.^;[8hW}5rjDuiXHM">currentValue</variable>
   </variables>
-  <block type="controls_whileUntil" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
+  <block type="loops_while_until" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
     <field name="MODE">WHILE</field>
     <value name="BOOL">
       <block type="logic_boolean" id="k^`g~s2v2M*oW!A-j{9y">
@@ -15,28 +15,20 @@
         <value name="VALUE">
           <block type="ibeacon_data" id="pu,?//lc?4B?_i]VzROp">
             <field name="value">rssi</field>
-            <value name="ibeacon">
-              <block type="things" id="dWx%[5avcU+g^hR422{k">
-                <value name="mac">
-                  <block type="mac" id="9RD0-e@p-Q!zFA](C,]q">
-                    <field name="MAC">c4eb72373fe8</field>
-                  </block>
-                </value>
+            <value name="MAC">
+              <block type="mac" id="WSig`$yrar/HV*)g{$lT">
+                <field name="MAC">f0346fbf4875</field>
               </block>
             </value>
-            <value name="receiver">
-              <block type="receiver" id="x{?k03Xa-@b}c?vV#F,^">
-                <value name="address">
-                  <block type="uri" id="$XD06fn.!}~b}dp{~NB~">
-                    <field name="URI">http://dwpi4.local/ble/current</field>
-                  </block>
-                </value>
+            <value name="URI">
+              <block type="uri" id=";L@O4p?~kYJ,y1ZD#4AM">
+                <field name="URI">http://dwpi4.local/ble/current</field>
               </block>
             </value>
           </block>
         </value>
         <next>
-          <block type="displayText" id="$U.:lB0.8k|sZKiHdI8C">
+          <block type="display_text" id="$U.:lB0.8k|sZKiHdI8C">
             <value name="text">
               <block type="variables_get" id="o5_EbID=R[XJ[~H1_t`:">
                 <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
@@ -61,13 +53,13 @@
                   </block>
                 </value>
                 <statement name="DO0">
-                  <block type="switchlights" id="{#O/d0:vl@W3+R=v,C6C">
+                  <block type="switch_lights" id="{#O/d0:vl@W3+R=v,C6C">
                     <field name="cb_red">FALSE</field>
                     <field name="cb_yellow">FALSE</field>
                     <field name="cb_green">TRUE</field>
                     <value name="mac">
                       <block type="mac" id="ht}NbPLd1U#,xKw`6o1{">
-                        <field name="MAC">be5860006ad4</field>
+                        <field name="MAC">be5860018744</field>
                       </block>
                     </value>
                   </block>
@@ -88,13 +80,13 @@
                   </block>
                 </value>
                 <statement name="DO1">
-                  <block type="switchlights" id="XMH=np*LX=jPP-p6]C-n">
+                  <block type="switch_lights" id="XMH=np*LX=jPP-p6]C-n">
                     <field name="cb_red">FALSE</field>
                     <field name="cb_yellow">TRUE</field>
-                    <field name="cb_green">TRUE</field>
+                    <field name="cb_green">FALSE</field>
                     <value name="mac">
                       <block type="mac" id="FnA#.}!sHB8{K*dM3#DP">
-                        <field name="MAC">be5860006ad4</field>
+                        <field name="MAC">be5860018744</field>
                       </block>
                     </value>
                   </block>
@@ -115,25 +107,25 @@
                   </block>
                 </value>
                 <statement name="DO2">
-                  <block type="switchlights" id="8$@42H0ODwLbn6YBC?%s">
+                  <block type="switch_lights" id="8$@42H0ODwLbn6YBC?%s">
                     <field name="cb_red">TRUE</field>
                     <field name="cb_yellow">FALSE</field>
                     <field name="cb_green">FALSE</field>
                     <value name="mac">
                       <block type="mac" id="8%64Hch3uUpM6wS9{$mX">
-                        <field name="MAC">be5860006ad4</field>
+                        <field name="MAC">be5860018744</field>
                       </block>
                     </value>
                   </block>
                 </statement>
                 <statement name="ELSE">
-                  <block type="switchlights" id="useSX*{I}g/},O2N;4Ur">
+                  <block type="switch_lights" id="useSX*{I}g/},O2N;4Ur">
                     <field name="cb_red">FALSE</field>
                     <field name="cb_yellow">FALSE</field>
                     <field name="cb_green">FALSE</field>
                     <value name="mac">
                       <block type="mac" id="4NjuYgV.dtX6I^=xfE0?">
-                        <field name="MAC">be5860006ad4</field>
+                        <field name="MAC">be5860018744</field>
                       </block>
                     </value>
                   </block>

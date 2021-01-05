@@ -1,70 +1,73 @@
-<xml>
-    <variables>
-        <variable id="d7}.^;[8hW}5rjDuiXHM">currentValue</variable>
-    </variables>
-    <block type="controls_whileUntil" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
-        <field name="MODE">WHILE</field>
-        <value name="BOOL">
-            <block type="logic_boolean" id="k^`g~s2v2M*oW!A-j{9y">
-                <field name="BOOL">TRUE</field>
-            </block>
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="d7}.^;[8hW}5rjDuiXHM">currentValue</variable>
+  </variables>
+  <block type="loops_while_until" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
+    <field name="MODE">WHILE</field>
+    <value name="BOOL">
+      <block type="logic_boolean" id="k^`g~s2v2M*oW!A-j{9y">
+        <field name="BOOL">TRUE</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="variables_set" id="!EtXTz@@E/_aE9Tk|]/!">
+        <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
+        <value name="VALUE">
+          <block type="ibeacon_data" id="pu,?//lc?4B?_i]VzROp">
+            <field name="value">rssi</field>
+            <value name="MAC">
+              <block type="mac" id="GfpPznlD^:$Y/zteS7SC">
+                <field name="MAC">f0346fbf4875</field>
+              </block>
+            </value>
+            <value name="URI">
+              <block type="uri" id="_l.EHE*siVTMt?CURPh=">
+                <field name="URI">http://dwpi4.local/ble/current</field>
+              </block>
+            </value>
+          </block>
         </value>
-        <statement name="DO">
-            <block type="variables_set" id="!EtXTz@@E/_aE9Tk|]/!">
-                <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-                <value name="VALUE">
-                    <block type="ibeacon_data" id="pu,?//lc?4B?_i]VzROp">
-                        <field name="value">rssi</field>
-                        <value name="ibeacon">
-                            <block type="things" id="dWx%[5avcU+g^hR422{k">
-                                <value name="mac">
-                                    <block type="mac" id="9RD0-e@p-Q!zFA](C,]q">
-                                        <field name="MAC">fcac03c93bb3</field>
-                                    </block>
-                                </value>
-                            </block>
-                        </value>
-                        <value name="receiver">
-                            <block type="receiver" id="x{?k03Xa-@b}c?vV#F,^">
-                                <value name="address">
-                                    <block type="uri" id="tjJqpn{}J*k2Br41J@Bq">
-                                        <field name="URI">http://dw-station-5.local/ble/current</field>
-                                    </block>
-                                </value>
-                            </block>
-                        </value>
-                    </block>
+        <next>
+          <block type="display_text" id="Hq4DVb1!!|@#_q*E;W2=">
+            <value name="text">
+              <block type="text_join" id="{i%EX9e=cMy|YIJ%8Ymw">
+                <mutation items="4"></mutation>
+                <value name="ADD0">
+                  <block type="text" id="Q!(8fhZE.V^R$WX~^-YT">
+                    <field name="TEXT">value: </field>
+                  </block>
                 </value>
-                <next>
-                    <block type="displayText" id="$U.:lB0.8k|sZKiHdI8C">
-                        <value name="text">
-                            <block type="variables_get" id="o5_EbID=R[XJ[~H1_t`:">
-                                <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-                            </block>
-                        </value>
-                        <next>
-                            <block type="displayText" id="Hq4DVb1!!|@#_q*E;W2=">
-                                <value name="text">
-                                    <block type="event" id="xoC%tp`x);b$9z5{747`">
-                                        <field name="startstop">BECOMES</field>
-                                        <field name="operator">GT</field>
-                                        <value name="measurement">
-                                            <block type="variables_get" id="9:07*9+I0cq`ZR;eNb.Z">
-                                                <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-                                            </block>
-                                        </value>
-                                        <value name="value">
-                                            <block type="text" id="P4b_WbLVcBvmb]sV/NMq">
-                                                <field name="TEXT">-50</field>
-                                            </block>
-                                        </value>
-                                    </block>
-                                </value>
-                            </block>
-                        </next>
-                    </block>
-                </next>
-            </block>
-        </statement>
-    </block>
+                <value name="ADD1">
+                  <block type="variables_get" id="o5_EbID=R[XJ[~H1_t`:">
+                    <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
+                  </block>
+                </value>
+                <value name="ADD2">
+                  <block type="text" id="IQY?gV,KhMjLGy1wt4AR">
+                    <field name="TEXT">, event: </field>
+                  </block>
+                </value>
+                <value name="ADD3">
+                  <block type="event" id="xoC%tp`x);b$9z5{747`">
+                    <field name="startstop">BECOMES</field>
+                    <field name="operator">GT</field>
+                    <value name="measurement">
+                      <block type="variables_get" id="9:07*9+I0cq`ZR;eNb.Z">
+                        <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
+                      </block>
+                    </value>
+                    <value name="value">
+                      <block type="text" id="P4b_WbLVcBvmb]sV/NMq">
+                        <field name="TEXT">-50</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
 </xml>
