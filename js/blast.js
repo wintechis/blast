@@ -602,7 +602,6 @@ Blast.BlockMethods.displayText = function(text) {
  * @public
  */
 Blast.BlockMethods.displayTable = function(table) {
-  console.log(table);
   // Limit messages to 100
   if (Blast.messageCounter_ > 100) {
     Blast.messageOutputContainer.lastChild.remove();
@@ -806,11 +805,13 @@ Blast.BlockMethods.getTableCell = function(
 
   urdf.clear();
   urdf.query(query).then((result) => {
+    let cbValue = null;
     for (const row of result) {
       if (row[key].value == value) {
-        callback(row[retValue].value);
+        cbValue = row[retValue].value;
       }
     }
+    callback(cbValue);
   });
 };
 
@@ -838,20 +839,20 @@ Blast.BlockMethods.eventChecker = function(
     value,
     blockId,
 ) {
-  const prevMeasurement = Blast.BlockMethods.eventValues .get(blockId);
+  const prevMeasurement = Blast.BlockMethods.eventValues.get(blockId);
 
   // The first time eventblock with id blockId is executed,
-  // there's no stored values so return false
-  if (Blast.BlockMethods.eventValues .get(blockId) != undefined) {
+  // there's no stored values so return undefined
+  if (prevMeasurement != undefined) {
     const wasNotBefore = `!(${prevMeasurement} ${operator} ${value})`;
     const isNow = `${negate} (${measurement} ${operator} ${value}`;
     const s = `${negate}(${wasNotBefore}) && ${isNow})`;
     const event = eval(s);
-    Blast.BlockMethods.eventValues .set(blockId, measurement);
+    Blast.BlockMethods.eventValues.set(blockId, measurement);
 
     return event;
   } else {
-    Blast.BlockMethods.eventValues .set(blockId, measurement);
-    return false;
+    Blast.BlockMethods.eventValues.set(blockId, measurement);
+    return undefined;
   }
 };
