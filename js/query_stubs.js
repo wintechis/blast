@@ -26,35 +26,6 @@ Blockly.JavaScript['ibeacon_data'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['readdw'] = function(block) {
-  const mac = Blockly.JavaScript.valueToCode(
-      block,
-      'MAC',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  // TODO: Assemble JavaScript into code variable.
-  const code = `getDwValuesOfMac(${mac})`;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
-Blockly.JavaScript['writedw'] = function(block) {
-  const value = Blockly.JavaScript.valueToCode(
-      block,
-      'value',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  const mac = Blockly.JavaScript.valueToCode(
-      block,
-      'MAC',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  // TODO: Assemble JavaScript into code variable.
-  const code = `setDwValuesOfMac(${mac}, ${value})`;
-  // TODO: Change ORDER_NONE to the correct strength.
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['display_text'] = function(block) {
   const message =
     Blockly.JavaScript.valueToCode(
