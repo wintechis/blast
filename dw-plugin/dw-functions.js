@@ -38,13 +38,13 @@ Blast.DW.addDWTab_ = function() {
   // Add content div to the HTML DOM.
   document.body.appendChild(dwContentDiv);
   // Append DW tab TD to Blast Tabs list.
-  Blast.TABS.push('dw_functions');
+  Blast.TABS_.push('dw_functions');
   // Add click listener to DW tab TD.
   Blast.bindClick(
       'tab_dw_functions',
       (function(name_) {
         return function() {
-          Blast.tabClick(name_);
+          Blast.tabClick_(name_);
         };
       })('dw_functions'),
   );
@@ -52,8 +52,8 @@ Blast.DW.addDWTab_ = function() {
   const container = document.getElementById('content_area');
   const onresize = function(e) {
     const bBox = Blast.getBBox_(container);
-    for (let i = 0; i < Blast.TABS.length; i++) {
-      const el = document.getElementById('content_' + Blast.TABS[i]);
+    for (let i = 0; i < Blast.TABS_.length; i++) {
+      const el = document.getElementById('content_' + Blast.TABS_[i]);
       el.style.top = bBox.y + 'px';
       el.style.left = bBox.x + 'px';
       // Height and width need to be set, read back, then set again to
@@ -95,7 +95,7 @@ Blast.DW.addDWTab_ = function() {
       // Something changed. Parser needs to be reloaded.
       Blast.resetInterpreter();
       Blast.generateCode();
-      Blast.renderContent();
+      Blast.renderContent_();
     }
   });
   let successMessage = 'DW-functions loaded successfully.\n';
