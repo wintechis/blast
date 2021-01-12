@@ -4,11 +4,12 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'loops_repeat'},
-        {kind: 'BLOCK', type: 'loops_while_until'},
-        {kind: 'BLOCK', type: 'loops_for'},
+        {kind: 'BLOCK', type: 'repeat'},
+        {kind: 'BLOCK', type: 'while_until'},
+        {kind: 'BLOCK', type: 'for'},
+        {kind: 'BLOCK', type: 'break_continue'},
       ],
-      name: 'Loops',
+      name: 'Control Flow',
       colour: '120',
     },
     {
@@ -21,7 +22,6 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'display_table'},
         {kind: 'BLOCK', type: 'switch_lights'},
         {kind: 'BLOCK', type: 'random_sound'},
-        {kind: 'BLOCK', type: 'break_continue'},
         {kind: 'BLOCK', type: 'wait_seconds'},
       ],
       name: 'Actions',
@@ -54,19 +54,26 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
+        {kind: 'BLOCK', type: 'string'},
+        {kind: 'BLOCK', type: 'string_join'},
+        {kind: 'BLOCK', type: 'string_length'},
+        {kind: 'BLOCK', type: 'string_indexOf'},
+        {kind: 'BLOCK', type: 'string_charAt'},
+        {kind: 'BLOCK', type: 'string_getSubstring'},
+        {kind: 'BLOCK', type: 'string_changeCase'},
+        {kind: 'BLOCK', type: 'string_replace'},
+      ],
+      name: 'Strings',
+      colour: '160',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [
         {kind: 'BLOCK', type: 'uri'},
         {kind: 'BLOCK', type: 'mac'},
-        {kind: 'BLOCK', type: 'text'},
-        {kind: 'BLOCK', type: 'text_join'},
-        {kind: 'BLOCK', type: 'text_length'},
-        {kind: 'BLOCK', type: 'text_indexOf'},
-        {kind: 'BLOCK', type: 'text_charAt'},
-        {kind: 'BLOCK', type: 'text_getSubstring'},
-        {kind: 'BLOCK', type: 'text_changeCase'},
-        {kind: 'BLOCK', type: 'text_replace'},
       ],
-      name: 'Text',
-      colour: '160',
+      name: 'Identifiers',
+      colour: '60',
     },
     {
       kind: 'CATEGORY',
@@ -86,15 +93,15 @@ const defaultToolbox = {
       colour: '210',
     },
     {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
       kind: 'CATEGORY',
       contents: [],
       name: 'Variables',
       custom: 'VARIABLE',
       colour: '330',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
     },
     {
       kind: 'CATEGORY',

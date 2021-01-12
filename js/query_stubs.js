@@ -1,13 +1,23 @@
-Blockly.JavaScript['loops_repeat'] = Blockly.JavaScript['controls_repeat_ext'];
-Blockly.JavaScript['loops_while_until'] =
+Blockly.JavaScript['repeat'] = Blockly.JavaScript['controls_repeat_ext'];
+Blockly.JavaScript['while_until'] =
   Blockly.JavaScript['controls_whileUntil'];
-Blockly.JavaScript['loops_for'] = Blockly.JavaScript['controls_for'];
+Blockly.JavaScript['for'] = Blockly.JavaScript['controls_for'];
 Blockly.JavaScript['break_continue'] =
   Blockly.JavaScript['controls_flow_statements'];
 Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
 Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
 Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
 Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
+Blockly.JavaScript['string'] = Blockly.JavaScript['text'];
+Blockly.JavaScript['string_join'] = Blockly.JavaScript['text_join'];
+Blockly.JavaScript['string_length'] = Blockly.JavaScript['text_length'];
+Blockly.JavaScript['string_indexOf'] = Blockly.JavaScript['text_indexOf'];
+Blockly.JavaScript['string_charAt'] = Blockly.JavaScript['text_charAt'];
+Blockly.JavaScript['string_getSubstring'] =
+Blockly.JavaScript['text_getSubstring'];
+Blockly.JavaScript['string_changeCase'] = Blockly.JavaScript['text_changeCase'];
+Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
+
 
 Blockly.JavaScript['ibeacon_data'] = function(block) {
   const ibeacon = Blockly.JavaScript.valueToCode(

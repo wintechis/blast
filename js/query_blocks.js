@@ -177,7 +177,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: 'URI',
-    colour: 160,
+    colour: 60,
     tooltip: '',
     helpUrl: '',
   },
@@ -192,7 +192,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: 'mac',
-    colour: 160,
+    colour: 60,
     tooltip: '',
     helpUrl: '',
   },
@@ -210,23 +210,31 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: '%{BKY_LOOPS_HUE}',
+    colour: 0,
   },
 ]);
 
-Blockly.Blocks['loops_repeat'] = Blockly.Blocks['controls_repeat_ext'];
-Blockly.Blocks['loops_while_until'] = Blockly.Blocks['controls_whileUntil'];
-Blockly.Blocks['loops_for'] = Blockly.Blocks['controls_for'];
+Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];
+Blockly.Blocks['while_until'] = Blockly.Blocks['controls_whileUntil'];
+Blockly.Blocks['for'] = Blockly.Blocks['controls_for'];
 Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
 Blockly.Blocks['conditional_statement'] = Blockly.Blocks['controls_if'];
 Blockly.Blocks['number_value'] = Blockly.Blocks['math_number'];
 Blockly.Blocks['number_arithmetic'] = Blockly.Blocks['math_arithmetic'];
 Blockly.Blocks['number_random'] = Blockly.Blocks['math_random_int'];
+Blockly.Blocks['string'] = Blockly.Blocks['text'];
+Blockly.Blocks['string_join'] = Blockly.Blocks['text_join'];
+Blockly.Blocks['string_length'] = Blockly.Blocks['text_length'];
+Blockly.Blocks['string_indexOf'] = Blockly.Blocks['text_indexOf'];
+Blockly.Blocks['string_charAt'] = Blockly.Blocks['text_charAt'];
+Blockly.Blocks['string_getSubstring'] = Blockly.Blocks['text_getSubstring'];
+Blockly.Blocks['string_changeCase'] = Blockly.Blocks['text_changeCase'];
+Blockly.Blocks['string_replace'] = Blockly.Blocks['text_replace'];
 
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
-    'loops_repeat',
-    'loops_while_until',
-    'loops_for',
+    'repeat',
+    'while_until',
+    'for',
 );
 
 Blockly.Blocks['sparql_query'] = {
