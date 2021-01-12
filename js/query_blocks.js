@@ -265,7 +265,8 @@ Blockly.Blocks['sparql_ask'] = {
 ASK 
 WHERE {
   ?node sosa:hasSimpleResult ?rssiValue 
-} HAVING (?rssiValue > -40)`),
+  FILTER (?rssiValue > -40)
+}`),
         'query',
     );
     this.setInputsInline(false);
