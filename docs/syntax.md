@@ -125,7 +125,7 @@ When tokenizing, the longest possible match that is consistent with the EBNF is 
 ## 2.1. Terminal Symbols
 
 **identifiers**
-```
+```ebnf
 URI                      ::= String_Literal
 MAC                      ::= String_Literal
 ```
