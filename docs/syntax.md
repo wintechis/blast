@@ -107,7 +107,7 @@ Patterns (including the above constructs) can be combined with grammatical opera
 | `(A)`      | `A` is treated as a unit and may be combined as described in this list.|
 | `A?` | matches `A` or nothing; optional `A`. |
 | `A B` | matches `A` followed by `B`. This operator has higher precedence than alternation; thus `A B | C D` is identical to `(A B) | (C D)`. |
-| `A | B`  | matches A or B but not both. |
+| `A \| B`  | matches A or B but not both. |
 | `A+` | matches one or more occurrences of `A`. Concatenation has higher precedence than alternation; thus `A+ | B+` is identical to `(A+) | (B+)`. |
 | `A*` | matches zero or more occurrences of `A`. Concatenation has higher precedence than alternation; thus `A* | B*` is identical to `(A*) | (B*)` |
 
