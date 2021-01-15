@@ -8,6 +8,7 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'while_until'},
         {kind: 'BLOCK', type: 'for'},
         {kind: 'BLOCK', type: 'break_continue'},
+        {kind: 'BLOCK', type: 'conditional_statement'},
       ],
       name: 'Control Flow',
       colour: '120',
@@ -38,13 +39,12 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'conditional_statement'},
         {kind: 'BLOCK', type: 'event'},
         {kind: 'BLOCK', type: 'logic_compare'},
         {kind: 'BLOCK', type: 'logic_operation'},
         {kind: 'BLOCK', type: 'logic_negate'},
       ],
-      name: 'Conditions',
+      name: 'Boolean Expressions',
       colour: '210',
     },
     {

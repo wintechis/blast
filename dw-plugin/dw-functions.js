@@ -17,7 +17,8 @@ Blast.DW.workspace = null;
 /**
  * XML for the DW function blocks.
  */
-const dwBlocks = '<xml><variables><variable id="Iv+nd1#p2IyBf=T,vfzj">host</variable><variable id="zUnqAV]GX9*X;yV{+Uhx">mac</variable><variable id="^r7(~uSh*cfuF~EmutCw">deviceUri</variable><variable id="t||]jaN*F%[Q,vucCbeA">connection status</variable></variables><block type="procedures_defnoreturn" id="I#Uxga;G3[~[uEU19VrU" x="10" y="10"><mutation><arg name="host" varid="Iv+nd1#p2IyBf=T,vfzj"></arg><arg name="mac" varid="zUnqAV]GX9*X;yV{+Uhx"></arg></mutation><field name="NAME">establish connection</field><comment pinned="false" h="80" w="160">connects bluetooth device with mac to the sc-ble-adapter at url</comment><statement name="STACK"><block type="controls_if" id="Q}fu30qnu:s!tIJ@U`@#"><value name="IF0"><block type="logic_compare" id="@~7htaGyCM^8PPSo]|ZB"><field name="OP">EQ</field><value name="A"><block type="text_charAt" id="%Vw4~yxzLpyZzm~kfaiq"><mutation at="false"></mutation><field name="WHERE">LAST</field><value name="VALUE"><block type="variables_get" id="uaSh-Y7?3t!;26Y|_12U"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value></block></value><value name="B"><block type="text" id="@he).FOTx#Wz-LH+#CIg"><field name="TEXT">/</field></block></value></block></value><statement name="DO0"><block type="variables_set" id="6Y9Sp*}Mp$HP|R/6np8P"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field><value name="VALUE"><block type="text_getSubstring" id="Vt1RdC?~!9Fy2.$y[$=4"><mutation at1="false" at2="true"></mutation><field name="WHERE1">FIRST</field><field name="WHERE2">FROM_END</field><value name="STRING"><block type="variables_get" id=".r2Xy8=^p(N~!g!{[2Sm"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="AT2"><block type="math_number" id="1rtiGvW_DJM(=51!^o0N"><field name="NUM">2</field></block></value></block></value></block></statement><next><block type="variables_set" id="D*f:NslR^44(`#8y(K^x"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field><value name="VALUE"><block type="text_join" id="+.)sEn)?OVrg(GW_3.k:"><mutation items="4"></mutation><value name="ADD0"><block type="variables_get" id="*;)t^/?K}-[jnV@9O=eE"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="ADD1"><block type="text" id="==hS+6;6j-A7cfSh:M8/"><field name="TEXT">/devices/</field></block></value><value name="ADD2"><block type="variables_get" id="VfQ1R5AXA~%yKK:[TWIv"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value><value name="ADD3"><block type="text" id="8o+e)Zl|*O.NvTAk`O7G"><field name="TEXT">/instruction</field></block></value></block></value><next><block type="variables_set" id=":ls9)}Qj}qY_/~e6@@e)"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field><value name="VALUE"><block type="http_request" id="oWR)gVQ2eQK$Y:NP.Lw?"><field name="OUTPUT">status</field><field name="METHOD">PUT</field><field name="HEADERS">"Content-Type": "application/json"</field><field name="BODY">{"type": "ble:Connect"}</field><value name="uri"><block type="variables_get" id="dn4o;]g^aMLRP-rwX8!z"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field></block></value></block></value><next><block type="controls_if" id="7:Xj^TGChe7/UL-xEAVg"><mutation else="1"></mutation><value name="IF0"><block type="logic_compare" id="!.I44utdOp)hY3-6;Y6]"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="q+Q3,Wqdse9}(2=ZYx^B"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value><value name="B"><block type="text" id="9_xZ4Qj[.l^^[`9Ge6f/"><field name="TEXT">200</field></block></value></block></value><statement name="DO0"><block type="display_text" id="G1kvVwu9{,Uc:5h=*9]K"><value name="text"><block type="text_join" id="(9D_)/Ic?8/tWTcYihcK"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="jb=lLzqzIT|C`zm?il)M"><field name="TEXT">connected to </field></block></value><value name="ADD1"><block type="variables_get" id="xJ+RvsQvFt2?]Pp-SeC+"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value></block></value></block></statement><statement name="ELSE"><block type="display_text" id="|J16.;2F:oRH$Qrq^@:o"><value name="text"><block type="text_join" id="V6)h(d~qB-HO_rwahPZh"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="~7q/.3D?S](Xm*gXivpt"><field name="TEXT">Connecting failed, Error Code:</field></block></value><value name="ADD1"><block type="variables_get" id="IK-wq{!p487R2i-GI[w="><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value></block></value></block></statement></block></next></block></next></block></next></block></statement></block><block type="procedures_defnoreturn" id="+8xkbf(:s:D4Vt`_EE6;" x="13" y="613"><mutation><arg name="host" varid="Iv+nd1#p2IyBf=T,vfzj"></arg><arg name="mac" varid="zUnqAV]GX9*X;yV{+Uhx"></arg></mutation><field name="NAME">disconnect</field><comment pinned="false" h="80" w="160">disconnects bluetooth device with mac from the sc-ble-adapter at url</comment><statement name="STACK"><block type="controls_if" id="j4Nq{8}S^F)^G`9YSZ.y"><value name="IF0"><block type="logic_compare" id=")k=.YpIP#+U}IBDqy{/;"><field name="OP">EQ</field><value name="A"><block type="text_charAt" id="7!.pzvS|.J%aLC1wr./}"><mutation at="false"></mutation><field name="WHERE">LAST</field><value name="VALUE"><block type="variables_get" id="`E6hZE7_ne:(Hg|4y=cl"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value></block></value><value name="B"><block type="text" id="[:,,Mx`oAYW][d.]9etz"><field name="TEXT">/</field></block></value></block></value><statement name="DO0"><block type="variables_set" id="iwixq$vApqE0E=n2n|M5"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field><value name="VALUE"><block type="text_getSubstring" id="c)]rCm6P^2nU9VzMhDjV"><mutation at1="false" at2="true"></mutation><field name="WHERE1">FIRST</field><field name="WHERE2">FROM_END</field><value name="STRING"><block type="variables_get" id="gOQc{uXRueQ^/ErT-pHR"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="AT2"><block type="math_number" id="s$*bCWdt(2%x$)SxsgZ8"><field name="NUM">2</field></block></value></block></value></block></statement><next><block type="variables_set" id=":-iQMk=~3C|gKS8,*]Ia"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field><value name="VALUE"><block type="text_join" id="JvcKt)OI/0ji(!$ld/hj"><mutation items="4"></mutation><value name="ADD0"><block type="variables_get" id="aR/*X96[$AvB%-MK#6Ne"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="ADD1"><block type="text" id="_.X]^%}4YmCn0cU#{s4#"><field name="TEXT">/devices/</field></block></value><value name="ADD2"><block type="variables_get" id="ccty6dtWh9bdOi4eD,z7"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value><value name="ADD3"><block type="text" id="S4D)nSI?3o?RgQ6-ZsMi"><field name="TEXT">/instruction</field></block></value></block></value><next><block type="variables_set" id="lz/tk?Qaa,k0(/2!iB|$"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field><value name="VALUE"><block type="http_request" id="#6x]mB4jh5Q^j9hN{vA["><field name="OUTPUT">status</field><field name="METHOD">PUT</field><field name="HEADERS">"Content-Type": "application/json"</field><field name="BODY">{"type": "ble:Disconnect"}</field><value name="uri"><block type="variables_get" id="KG_[$.8GR*l(^F1tFHAf"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field></block></value></block></value><next><block type="controls_if" id="YCD$z@281@c0ug1KLZof"><mutation else="1"></mutation><value name="IF0"><block type="logic_compare" id="hmNM$CZQ.Ni]I^M/o={T"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="sfuOs^xa}ip~?@m7U6SW"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value><value name="B"><block type="text" id="BXFcB8x_=8ig,E2$/|2Q"><field name="TEXT">200</field></block></value></block></value><statement name="DO0"><block type="display_text" id="`e2E.|IuP6Kom@lf=%-p"><value name="text"><block type="text_join" id="|B(CG[b=)u5dGB_kM-V-"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="Q9q}Nfsxrf[egQOm=1=E"><field name="TEXT">disconnected from </field></block></value><value name="ADD1"><block type="variables_get" id="U3X5wQK=7nl(KY]WaeJr"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value></block></value></block></statement><statement name="ELSE"><block type="display_text" id="w|vHi=:#EwBRKAN3RF$w"><value name="text"><block type="text_join" id="hDU=Dv;CPZ,9ws-z%-k!"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="b0?4)awW|qB)%HB8NdB2"><field name="TEXT">Disconnecting failed, Error Code:</field></block></value><value name="ADD1"><block type="variables_get" id="_rhUZ4!H9j4[zzRIj_3t"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value></block></value></block></statement></block></next></block></next></block></next></block></statement></block></xml>';
+const dwBlocks =
+  '<xml><variables><variable id="Iv+nd1#p2IyBf=T,vfzj">host</variable><variable id="zUnqAV]GX9*X;yV{+Uhx">mac</variable><variable id="^r7(~uSh*cfuF~EmutCw">deviceUri</variable><variable id="t||]jaN*F%[Q,vucCbeA">connection status</variable></variables><block type="procedures_defnoreturn" id="I#Uxga;G3[~[uEU19VrU" x="10" y="10"><mutation><arg name="host" varid="Iv+nd1#p2IyBf=T,vfzj"></arg><arg name="mac" varid="zUnqAV]GX9*X;yV{+Uhx"></arg></mutation><field name="NAME">establish connection</field><comment pinned="false" h="80" w="160">connects bluetooth device with mac to the sc-ble-adapter at url</comment><statement name="STACK"><block type="controls_if" id="Q}fu30qnu:s!tIJ@U`@#"><value name="IF0"><block type="logic_compare" id="@~7htaGyCM^8PPSo]|ZB"><field name="OP">EQ</field><value name="A"><block type="text_charAt" id="%Vw4~yxzLpyZzm~kfaiq"><mutation at="false"></mutation><field name="WHERE">LAST</field><value name="VALUE"><block type="variables_get" id="uaSh-Y7?3t!;26Y|_12U"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value></block></value><value name="B"><block type="text" id="@he).FOTx#Wz-LH+#CIg"><field name="TEXT">/</field></block></value></block></value><statement name="DO0"><block type="variables_set" id="6Y9Sp*}Mp$HP|R/6np8P"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field><value name="VALUE"><block type="text_getSubstring" id="Vt1RdC?~!9Fy2.$y[$=4"><mutation at1="false" at2="true"></mutation><field name="WHERE1">FIRST</field><field name="WHERE2">FROM_END</field><value name="STRING"><block type="variables_get" id=".r2Xy8=^p(N~!g!{[2Sm"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="AT2"><block type="math_number" id="1rtiGvW_DJM(=51!^o0N"><field name="NUM">2</field></block></value></block></value></block></statement><next><block type="variables_set" id="D*f:NslR^44(`#8y(K^x"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field><value name="VALUE"><block type="text_join" id="+.)sEn)?OVrg(GW_3.k:"><mutation items="4"></mutation><value name="ADD0"><block type="variables_get" id="*;)t^/?K}-[jnV@9O=eE"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="ADD1"><block type="text" id="==hS+6;6j-A7cfSh:M8/"><field name="TEXT">/devices/</field></block></value><value name="ADD2"><block type="variables_get" id="VfQ1R5AXA~%yKK:[TWIv"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value><value name="ADD3"><block type="text" id="8o+e)Zl|*O.NvTAk`O7G"><field name="TEXT">/instruction</field></block></value></block></value><next><block type="variables_set" id=":ls9)}Qj}qY_/~e6@@e)"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field><value name="VALUE"><block type="http_request" id="oWR)gVQ2eQK$Y:NP.Lw?"><field name="OUTPUT">status</field><field name="METHOD">PUT</field><field name="HEADERS">"Content-Type": "application/json"</field><field name="BODY">{"type": "ble:Connect"}</field><value name="uri"><block type="variables_get" id="dn4o;]g^aMLRP-rwX8!z"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field></block></value></block></value><next><block type="controls_if" id="7:Xj^TGChe7/UL-xEAVg"><mutation else="1"></mutation><value name="IF0"><block type="logic_compare" id="!.I44utdOp)hY3-6;Y6]"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="q+Q3,Wqdse9}(2=ZYx^B"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value><value name="B"><block type="text" id="9_xZ4Qj[.l^^[`9Ge6f/"><field name="TEXT">200</field></block></value></block></value><statement name="DO0"><block type="display_text" id="G1kvVwu9{,Uc:5h=*9]K"><value name="text"><block type="text_join" id="(9D_)/Ic?8/tWTcYihcK"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="jb=lLzqzIT|C`zm?il)M"><field name="TEXT">connected to </field></block></value><value name="ADD1"><block type="variables_get" id="xJ+RvsQvFt2?]Pp-SeC+"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value></block></value></block></statement><statement name="ELSE"><block type="display_text" id="|J16.;2F:oRH$Qrq^@:o"><value name="text"><block type="text_join" id="V6)h(d~qB-HO_rwahPZh"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="~7q/.3D?S](Xm*gXivpt"><field name="TEXT">Connecting failed, Error Code:</field></block></value><value name="ADD1"><block type="variables_get" id="IK-wq{!p487R2i-GI[w="><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value></block></value></block></statement></block></next></block></next></block></next></block></statement></block><block type="procedures_defnoreturn" id="+8xkbf(:s:D4Vt`_EE6;" x="13" y="613"><mutation><arg name="host" varid="Iv+nd1#p2IyBf=T,vfzj"></arg><arg name="mac" varid="zUnqAV]GX9*X;yV{+Uhx"></arg></mutation><field name="NAME">disconnect</field><comment pinned="false" h="80" w="160">disconnects bluetooth device with mac from the sc-ble-adapter at url</comment><statement name="STACK"><block type="controls_if" id="j4Nq{8}S^F)^G`9YSZ.y"><value name="IF0"><block type="logic_compare" id=")k=.YpIP#+U}IBDqy{/;"><field name="OP">EQ</field><value name="A"><block type="text_charAt" id="7!.pzvS|.J%aLC1wr./}"><mutation at="false"></mutation><field name="WHERE">LAST</field><value name="VALUE"><block type="variables_get" id="`E6hZE7_ne:(Hg|4y=cl"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value></block></value><value name="B"><block type="text" id="[:,,Mx`oAYW][d.]9etz"><field name="TEXT">/</field></block></value></block></value><statement name="DO0"><block type="variables_set" id="iwixq$vApqE0E=n2n|M5"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field><value name="VALUE"><block type="text_getSubstring" id="c)]rCm6P^2nU9VzMhDjV"><mutation at1="false" at2="true"></mutation><field name="WHERE1">FIRST</field><field name="WHERE2">FROM_END</field><value name="STRING"><block type="variables_get" id="gOQc{uXRueQ^/ErT-pHR"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="AT2"><block type="math_number" id="s$*bCWdt(2%x$)SxsgZ8"><field name="NUM">2</field></block></value></block></value></block></statement><next><block type="variables_set" id=":-iQMk=~3C|gKS8,*]Ia"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field><value name="VALUE"><block type="text_join" id="JvcKt)OI/0ji(!$ld/hj"><mutation items="4"></mutation><value name="ADD0"><block type="variables_get" id="aR/*X96[$AvB%-MK#6Ne"><field name="VAR" id="Iv+nd1#p2IyBf=T,vfzj">host</field></block></value><value name="ADD1"><block type="text" id="_.X]^%}4YmCn0cU#{s4#"><field name="TEXT">/devices/</field></block></value><value name="ADD2"><block type="variables_get" id="ccty6dtWh9bdOi4eD,z7"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value><value name="ADD3"><block type="text" id="S4D)nSI?3o?RgQ6-ZsMi"><field name="TEXT">/instruction</field></block></value></block></value><next><block type="variables_set" id="lz/tk?Qaa,k0(/2!iB|$"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field><value name="VALUE"><block type="http_request" id="#6x]mB4jh5Q^j9hN{vA["><field name="OUTPUT">status</field><field name="METHOD">PUT</field><field name="HEADERS">"Content-Type": "application/json"</field><field name="BODY">{"type": "ble:Disconnect"}</field><value name="uri"><block type="variables_get" id="KG_[$.8GR*l(^F1tFHAf"><field name="VAR" id="^r7(~uSh*cfuF~EmutCw">deviceUri</field></block></value></block></value><next><block type="controls_if" id="YCD$z@281@c0ug1KLZof"><mutation else="1"></mutation><value name="IF0"><block type="logic_compare" id="hmNM$CZQ.Ni]I^M/o={T"><field name="OP">EQ</field><value name="A"><block type="variables_get" id="sfuOs^xa}ip~?@m7U6SW"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value><value name="B"><block type="text" id="BXFcB8x_=8ig,E2$/|2Q"><field name="TEXT">200</field></block></value></block></value><statement name="DO0"><block type="display_text" id="`e2E.|IuP6Kom@lf=%-p"><value name="text"><block type="text_join" id="|B(CG[b=)u5dGB_kM-V-"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="Q9q}Nfsxrf[egQOm=1=E"><field name="TEXT">disconnected from </field></block></value><value name="ADD1"><block type="variables_get" id="U3X5wQK=7nl(KY]WaeJr"><field name="VAR" id="zUnqAV]GX9*X;yV{+Uhx">mac</field></block></value></block></value></block></statement><statement name="ELSE"><block type="display_text" id="w|vHi=:#EwBRKAN3RF$w"><value name="text"><block type="text_join" id="hDU=Dv;CPZ,9ws-z%-k!"><mutation items="2"></mutation><value name="ADD0"><block type="text" id="b0?4)awW|qB)%HB8NdB2"><field name="TEXT">Disconnecting failed, Error Code:</field></block></value><value name="ADD1"><block type="variables_get" id="_rhUZ4!H9j4[zzRIj_3t"><field name="VAR" id="t||]jaN*F%[Q,vucCbeA">connection status</field></block></value></block></value></block></statement></block></next></block></next></block></next></block></statement></block></xml>';
 
 /**
  * Adds the DW Tab to the Tabrow
@@ -238,115 +239,11 @@ Blockly.Procedures.getDefinition = function(name, workspace) {
 // initialize DW-plugin when page dom is loaded
 window.addEventListener('load', Blast.DW.init);
 
-const dwToolbox = {
-  kind: 'categoryToolbox',
-  contents: [
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'loops_repeat'},
-        {kind: 'BLOCK', type: 'loops_while_until'},
-        {kind: 'BLOCK', type: 'loops_for'},
-      ],
-      name: 'Loops',
-      colour: '120',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'http_request'},
-        {kind: 'BLOCK', type: 'sparql_query'},
-        {kind: 'BLOCK', type: 'sparql_ask'},
-        {kind: 'BLOCK', type: 'display_text'},
-        {kind: 'BLOCK', type: 'display_table'},
-        {kind: 'BLOCK', type: 'switch_lights'},
-        {kind: 'BLOCK', type: 'random_sound'},
-        {kind: 'BLOCK', type: 'break_continue'},
-        {kind: 'BLOCK', type: 'wait_seconds'},
-      ],
-      name: 'Actions',
-      colour: '0',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'ibeacon_data'}],
-      name: 'Things',
-      colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'conditional_statement'},
-        {kind: 'BLOCK', type: 'event'},
-        {kind: 'BLOCK', type: 'logic_compare'},
-        {kind: 'BLOCK', type: 'logic_operation'},
-        {kind: 'BLOCK', type: 'logic_negate'},
-      ],
-      name: 'Conditions',
-      colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'uri'},
-        {kind: 'BLOCK', type: 'mac'},
-        {kind: 'BLOCK', type: 'text'},
-        {kind: 'BLOCK', type: 'text_join'},
-        {kind: 'BLOCK', type: 'text_length'},
-        {kind: 'BLOCK', type: 'text_indexOf'},
-        {kind: 'BLOCK', type: 'text_charAt'},
-        {kind: 'BLOCK', type: 'text_getSubstring'},
-        {kind: 'BLOCK', type: 'text_changeCase'},
-        {kind: 'BLOCK', type: 'text_replace'},
-      ],
-      name: 'Text',
-      colour: '160',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'number_value'},
-        {kind: 'BLOCK', type: 'number_infinity'},
-        {kind: 'BLOCK', type: 'number_arithmetic'},
-        {kind: 'BLOCK', type: 'number_random'},
-      ],
-      name: 'Numbers',
-      colour: '230',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
-      name: 'Booleans',
-      colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Functions',
-      colour: '290',
-      custom: 'PROCEDURE',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'DW',
-      colour: '30',
-      custom: 'DW',
-    },
-  ],
-};
+const dwToolbox = defaultToolbox;
+dwToolbox.contents.push({
+  kind: 'CATEGORY',
+  contents: [],
+  name: 'DW',
+  colour: '30',
+  custom: 'DW',
+});
