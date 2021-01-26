@@ -1,0 +1,40 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="while_until" id="$.u*rz?=yp`-9z37@Z0(" x="198" y="144">
+    <field name="MODE">WHILE</field>
+    <value name="BOOL">
+      <block type="logic_boolean" id="ow|p^,+pzKa%1|x3]S(!">
+        <field name="BOOL">TRUE</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="display_text" id="YA_NmguJy+M~oC=6B``7">
+        <value name="text">
+          <block type="event" id="Zf;Gnl?Z^w0,^htb^H]|">
+            <field name="startstop">BECOMES</field>
+            <field name="operator">GT</field>
+            <value name="measurement">
+              <block type="ibeacon_data" id="-0^rFcZydRX=y+o?3R1M">
+                <field name="value">rssi</field>
+                <value name="MAC">
+                  <block type="mac" id="x#qBLre~n$=oU$hLEeri">
+                    <field name="MAC">f0346fbf4875</field>
+                  </block>
+                </value>
+                <value name="URI">
+                  <block type="uri" id="3KNiC-[W9B|_iyLkGKO-">
+                    <field name="URI">http://dwpi4.local/ble/current</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <value name="value">
+              <block type="number_value" id="vyscDc2r.GVo7v{8R};u">
+                <field name="NUM">-255</field>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>

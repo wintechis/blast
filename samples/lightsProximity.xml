@@ -2,7 +2,7 @@
   <variables>
     <variable id="d7}.^;[8hW}5rjDuiXHM">currentValue</variable>
   </variables>
-  <block type="loops_while_until" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
+  <block type="while_until" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
     <field name="MODE">WHILE</field>
     <value name="BOOL">
       <block type="logic_boolean" id="k^`g~s2v2M*oW!A-j{9y">

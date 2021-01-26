@@ -1,5 +1,5 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="loops_while_until" id="9E{9@8WDB+c?D3=UF=:[" x="10" y="10">
+  <block type="while_until" id="9E{9@8WDB+c?D3=UF=:[" x="10" y="10">
     <field name="MODE">UNTIL</field>
     <value name="BOOL">
       <block type="sparql_ask" id="%IJjt5.{`nIe?MJY2KP_">
