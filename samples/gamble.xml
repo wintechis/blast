@@ -60,8 +60,12 @@
               </block>
             </value>
             <next>
-              <block type="random_sound" id="Hg%:7a@E1CTEd(m@vBgn">
-                <field name="category">sad</field>
+              <block type="play_audio" id="Hg%:7a@E1CTEd(m@vBgn">
+                <value name="URI">
+                  <block type="uri">
+                    <field name="URI">sounds/short/magic_immune.mp3</field>
+                  </block>
+                </value>
                 <next>
                   <block type="variables_set" id="MA#ud=YwV~HM:bxx|Xgc">
                     <field name="VAR" id="P|HwG2}L{vYoy$..DI(Y">lottery</field>
@@ -109,8 +113,12 @@
               </block>
             </value>
             <next>
-              <block type="random_sound" id="UL2e?q6+/ZL{R1yDAcFn">
-                <field name="category">happy</field>
+              <block type="play_audio" id="Hg%:7a@E1CTEd(m@vBgn">
+                <value name="URI">
+                  <block type="uri">
+                    <field name="URI">sounds/short/ssbb_crowd_gasp3_1.mp3</field>
+                  </block>
+                </value>
               </block>
             </next>
           </block>
