@@ -1,0 +1,9 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="play_audio" id="+23N4e*%]8WYjjVxzNo#" x="84" y="87">
+    <value name="URI">
+      <block type="uri" id="1{jSrBmY)k.fne,44?Mk">
+        <field name="URI">https://interactive-examples.mdn.mozilla.net/media/cc0-audio/t-rex-roar.mp3</field>
+      </block>
+    </value>
+  </block>
+</xml>
