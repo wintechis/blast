@@ -603,7 +603,7 @@ Blast.BlockMethods = {};
 Blast.BlockMethods.displayText = function(text) {
   // Limit messages to 100
   if (Blast.messageCounter_ > 100) {
-    Blast.messageOutputContainer.lastChild.remove();
+    Blast.messageOutputContainer.firstChild.remove();
   }
   // container for the new message
   const msg = document.createElement('div');
@@ -619,10 +619,14 @@ Blast.BlockMethods.displayText = function(text) {
   msg.appendChild(timeSpan);
 
   // insert new message
-  Blast.messageOutputContainer.insertBefore(
+  Blast.messageOutputContainer.appendChild(
       msg,
       Blast.messageOutputContainer.firstChild,
   );
+
+  // scroll to bottom
+  Blast.messageOutputContainer.scrollTop =
+    Blast.messageOutputContainer.scrollHeight;
 };
 
 /**
@@ -634,7 +638,7 @@ Blast.BlockMethods.displayText = function(text) {
 Blast.BlockMethods.displayTable = function(table) {
   // Limit messages to 100
   if (Blast.messageCounter_ > 100) {
-    Blast.messageOutputContainer.lastChild.remove();
+    Blast.messageOutputContainer.firstChild.remove();
   }
   // display message if table is empty
   if (table.length == 0) {
@@ -665,10 +669,14 @@ Blast.BlockMethods.displayTable = function(table) {
   resultsField.classList.add('output_table');
   resultsField.innerHTML = html;
   // insert new table
-  Blast.messageOutputContainer.insertBefore(
+  Blast.messageOutputContainer.appendChild(
       resultsField,
       Blast.messageOutputContainer.firstChild,
   );
+
+  // scroll to bottom
+  Blast.messageOutputContainer.scrollTop =
+    Blast.messageOutputContainer.scrollHeight;
 };
 
 /**
