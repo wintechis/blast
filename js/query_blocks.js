@@ -148,16 +148,13 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'random_sound',
-    message0: 'play random sound %1',
+    type: 'play_audio',
+    message0: 'play audio from URI %1',
     args0: [
       {
-        type: 'field_dropdown',
-        name: 'category',
-        options: [
-          ['happy', 'happy'],
-          ['sad', 'sad'],
-        ],
+        type: 'input_value',
+        name: 'URI',
+        check: 'URI',
       },
     ],
     previousStatement: null,

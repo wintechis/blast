@@ -99,13 +99,13 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
-  // API function for highlighting blocks.
-  wrapper = function(cat) {
-    return playRandomSoundFromCategory(cat);
+  // API function for playSound block.
+  wrapper = function(uri) {
+    return Blast.BlockMethods.playAudioFromURI(uri);
   };
   interpreter.setProperty(
       globalObject,
-      'playRandomSoundFromCategory',
+      'playAudioFromURI',
       interpreter.createNativeFunction(wrapper),
   );
 

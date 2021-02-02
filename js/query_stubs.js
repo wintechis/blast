@@ -142,9 +142,13 @@ Blockly.JavaScript['switch_lights'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['random_sound'] = function(block) {
-  const dropdownCategory = block.getFieldValue('category');
-  const code = `playRandomSoundFromCategory("${dropdownCategory}");\n`;
+Blockly.JavaScript['play_audio'] = function(block) {
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'URI',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const code = `playAudioFromURI(${uri});\n`;
   return code;
 };
 
@@ -198,7 +202,6 @@ Blockly.JavaScript['mac'] = function(block) {
 Blockly.JavaScript['number_infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
 };
-
 
 // TEMPORARY dw blocks for demonstration on 22.1.2021
 Blockly.JavaScript['readdw'] = function(block) {

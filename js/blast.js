@@ -927,3 +927,14 @@ Blast.BlockMethods.eventChecker = function(
     return undefined;
   }
 };
+
+/**
+ * Plays an audio file provided by URI
+ * @param {string} uri URI of the audio file to play
+ * @public
+ */
+Blast.BlockMethods.playAudioFromURI = function(uri) {
+  const audio = new Audio(uri);
+  audio.setOrigin
+  audio.play();
+};
