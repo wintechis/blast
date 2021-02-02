@@ -40,7 +40,7 @@ action_statement         ::= ( display_text | display_table | switch_lights | pl
 display_text             ::= "displayText(" ( string | number ) ")"
 display_table            ::= "displayData(" http_request ")"
 switch_lights            ::= "switchLights(" MAC "," Boolean_Literal "," Boolean_Literal "," Boolean_Literal ")"
-play_sound               ::= "playRandomSoundFromCategory(" ( "happy" | "sad") ")"
+play_audio               ::= "playAudioFromURI(" ( "happy" | "sad") ")"
 wait                     ::= "waitForSeconds(" number ")"
 http_request             ::= "sendHttpRequest(" URI "," ( "GET" | "PUT" | "POST" | "DELETE" ) "," string_value "," string_value "," ( "status" | "response" ) ")"
 sparql_query             ::= "urdfQueryWrapper(" URI "," string ")"
@@ -76,7 +76,7 @@ number                   ::= ( number_value | number_infinity | number_arithmeti
 number_value             ::= Double_Literal
 number_infinity          ::= "Infinity"
 number_arithmetic        ::= ( number "+" | "-" | "*" | "/"  number ) | "Math.pow(" Number ", " Number ")"
-number_random            ::= number number
+number_random            ::= "mathRandom(" number ", " number ")"
 ```
 
 **booleans**
