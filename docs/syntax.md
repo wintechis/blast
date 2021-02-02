@@ -1,6 +1,6 @@
 # Grammar <!-- omit in toc -->
 
-This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form).
+This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS.
 
 - [1. Extended Backus-Naur Form](#1-extended-backus-naur-form)
   - [1.1. Notation](#11-notation)
@@ -21,30 +21,30 @@ The EBNF notation is described in more detail in [1.1 Notation ](#28-number-bloc
 
 ```ebnf
 block_program            ::= statement+
-statement                ::= ( control_flow_statement | action_statement )
+statement                ::= ( control_flow_statement | action_statement ) ";"
 ```
 
 **control flow**
 ```ebnf
-control_flow_statement   ::= ( repeat | while_until | for | conditional_statement | break)
+control_flow_statement   ::= ( repeat | while_until | for | conditional_statement | break )
 conditional_statement    ::= "if (" boolean_expression ") {" statement* "}"
 repeat                   ::= "for (var count = 0; count <" number "; count++) {" statement* "}"
 while_until              ::= "while(" "!"? conditional_statement ") {" statement* "}"
 for                      ::= "for (i = " number "; i <=" number "; i +=" number ") {" statement* "}"
-break                    ::= ( "break;" | "continue;" )
+break_continue           ::= ( "break" | "continue" )
 ```
 
 **actions**
 ```ebnf
-action_statement         ::= ( display_text | display_table | switch_lights | play_sound | break | wait )
-display_text             ::= "displayText(" ( string | number ) ");"
-display_table            ::= "displayData(" http_request ");"
-switch_lights            ::= "switchLights(" MAC "," Boolean_Literal "," Boolean_Literal "," Boolean_Literal ");"
-play_sound               ::= "playRandomSoundFromCategory(" ( "happy" | "sad") ");"
-wait                     ::= "waitForSeconds(" number ");"
-http_request             ::= "sendHttpRequest(" URI "," ( "GET" | "PUT" | "POST" | "DELETE" ) "," string_value "," string_value "," ( "status" | "response" ) ");"
-sparql_query             ::= "urdfQueryWrapper(" URI "," string ");"
-sparql_ask               ::= "urdfQueryWrapper(" URI "," string ");"
+action_statement         ::= ( display_text | display_table | switch_lights | play_sound | wait )
+display_text             ::= "displayText(" ( string | number ) ")"
+display_table            ::= "displayData(" http_request ")"
+switch_lights            ::= "switchLights(" MAC "," Boolean_Literal "," Boolean_Literal "," Boolean_Literal ")"
+play_sound               ::= "playRandomSoundFromCategory(" ( "happy" | "sad") ")"
+wait                     ::= "waitForSeconds(" number ")"
+http_request             ::= "sendHttpRequest(" URI "," ( "GET" | "PUT" | "POST" | "DELETE" ) "," string_value "," string_value "," ( "status" | "response" ) ")"
+sparql_query             ::= "urdfQueryWrapper(" URI "," string ")"
+sparql_ask               ::= "urdfQueryWrapper(" URI "," string ")"
 ```
 
 **boolean expressions**
@@ -74,8 +74,8 @@ string_replace           ::= string string string
 ```ebnf
 number                   ::= ( number_value | number_infinity | number_arithmetic | number_random )
 number_value             ::= Double_Literal
-number_infinity          ::= Double_Literal
-number_arithmetic        ::= number "+" | "-" | "x" | "÷" | "^" number
+number_infinity          ::= "Infinity"
+number_arithmetic        ::= ( number "+" | "-" | "*" | "/"  number ) | "Math.pow(" Number ", " Number ")"
 number_random            ::= number number
 ```
 
