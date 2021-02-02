@@ -1,6 +1,5 @@
 Blockly.JavaScript['repeat'] = Blockly.JavaScript['controls_repeat_ext'];
-Blockly.JavaScript['while_until'] =
-  Blockly.JavaScript['controls_whileUntil'];
+Blockly.JavaScript['while_until'] = Blockly.JavaScript['controls_whileUntil'];
 Blockly.JavaScript['for'] = Blockly.JavaScript['controls_for'];
 Blockly.JavaScript['break_continue'] =
   Blockly.JavaScript['controls_flow_statements'];
@@ -14,10 +13,9 @@ Blockly.JavaScript['string_length'] = Blockly.JavaScript['text_length'];
 Blockly.JavaScript['string_indexOf'] = Blockly.JavaScript['text_indexOf'];
 Blockly.JavaScript['string_charAt'] = Blockly.JavaScript['text_charAt'];
 Blockly.JavaScript['string_getSubstring'] =
-Blockly.JavaScript['text_getSubstring'];
+  Blockly.JavaScript['text_getSubstring'];
 Blockly.JavaScript['string_changeCase'] = Blockly.JavaScript['text_changeCase'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
-
 
 Blockly.JavaScript['ibeacon_data'] = function(block) {
   const ibeacon = Blockly.JavaScript.valueToCode(
@@ -60,15 +58,37 @@ Blockly.JavaScript['display_table'] = function(block) {
 };
 
 Blockly.JavaScript['http_request'] = function(block) {
-  const uri = Blockly.JavaScript.valueToCode(
-      block,
-      'uri',
-      Blockly.JavaScript.ORDER_NONE,
-  );
+  const uri =
+    Blockly.JavaScript.valueToCode(
+        block,
+        'uri',
+        Blockly.JavaScript.ORDER_NONE,
+    ) || null;
   const method = block.getFieldValue('METHOD');
   const headers = block.getFieldValue('HEADERS');
   const output = block.getFieldValue('OUTPUT');
   const body = JSON.stringify(block.getFieldValue('BODY')) || null;
+
+  const code = `sendHttpRequest(${uri},'${method}', 
+  '{${headers}}', ${body}, '${output}')\n`;
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['http_request_new'] = function(block) {
+  const uri =
+    Blockly.JavaScript.valueToCode(
+        block,
+        'uri',
+        Blockly.JavaScript.ORDER_NONE,
+    ) || null;
+  const method = block.getFieldValue('METHOD');
+  const headers = block.getFieldValue('HEADERS');
+  const output = block.getFieldValue('OUTPUT');
+  const body = Blockly.JavaScript.valueToCode(
+      block,
+      'body',
+      Blockly.JavaScript.ORDER_NONE,
+  );
 
   const code = `sendHttpRequest(${uri},'${method}', 
   '{${headers}}', ${body}, '${output}')\n`;
@@ -177,4 +197,35 @@ Blockly.JavaScript['mac'] = function(block) {
 
 Blockly.JavaScript['number_infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
+};
+
+
+// TEMPORARY dw blocks for demonstration on 22.1.2021
+Blockly.JavaScript['readdw'] = function(block) {
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'MAC',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  // TODO: Assemble JavaScript into code variable.
+  const code = `getDwValuesOfMac(${mac})`;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['writedw'] = function(block) {
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'value',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'MAC',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  // TODO: Assemble JavaScript into code variable.
+  const code = `setDwValuesOfMac(${mac}, ${value})`;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };

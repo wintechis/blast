@@ -173,7 +173,7 @@ Blockly.defineBlocksWithJsonArray([
       {
         type: 'field_input',
         name: 'URI',
-        text: 'http://dwpi4.local/ble/current',
+        text: 'http://192.168.178.22/ble/current',
       },
     ],
     output: 'URI',
@@ -212,8 +212,45 @@ Blockly.defineBlocksWithJsonArray([
     nextStatement: null,
     colour: 0,
   },
+  // Temporary dw blocks for demonstration on 22.1.2021
+  {
+    type: 'readdw',
+    message0: 'Read DW Values from MAC %1',
+    args0: [
+      {
+        type: 'input_value',
+        name: 'MAC',
+        check: 'mac',
+      },
+    ],
+    output: 'String',
+    colour: 45,
+    tooltip: '',
+    helpUrl: '',
+  },
+  {
+    type: 'writedw',
+    message0: 'Write value %1 to mac %2',
+    args0: [
+      {
+        type: 'input_value',
+        name: 'value',
+        check: 'String',
+      },
+      {
+        type: 'input_value',
+        name: 'MAC',
+        check: 'mac',
+      },
+    ],
+    output: 'String',
+    colour: 45,
+    tooltip: '',
+    helpUrl: '',
+  },
 ]);
 
+// renaming blockly blocks for consistency withing blast
 Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];
 Blockly.Blocks['while_until'] = Blockly.Blocks['controls_whileUntil'];
 Blockly.Blocks['for'] = Blockly.Blocks['controls_for'];
@@ -230,6 +267,9 @@ Blockly.Blocks['string_charAt'] = Blockly.Blocks['text_charAt'];
 Blockly.Blocks['string_getSubstring'] = Blockly.Blocks['text_getSubstring'];
 Blockly.Blocks['string_changeCase'] = Blockly.Blocks['text_changeCase'];
 Blockly.Blocks['string_replace'] = Blockly.Blocks['text_replace'];
+
+// setting math_change to null to omi it's creation in variable category
+Blockly.Blocks['math_change'] = null;
 
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
     'repeat',
@@ -354,6 +394,66 @@ Blockly.Blocks['http_request'] = {
       this.outputConnection.setCheck('String');
     } else if (outputValue == 'body') {
       this.outputConnection.setCheck('table');
+    }
+  },
+};
+
+Blockly.Blocks['http_request_new'] = {
+  httpRequestValidator: function(newValue) {
+    this.getSourceBlock().updateInputs(newValue);
+    return newValue;
+  },
+
+  httpRequestOutputValidator: function(output) {
+    return output;
+  },
+
+  init: function() {
+    this.appendValueInput('uri')
+        .appendField('send HTTP request to URI')
+        .setCheck(['URI', 'String']);
+    this.appendDummyInput()
+        .appendField('output')
+        .appendField(
+            new Blockly.FieldDropdown(
+                [
+                  ['status (string)', 'status'],
+                  ['response (string)', 'body'],
+                ],
+                this.httpRequestOutputValidator,
+            ),
+            'OUTPUT',
+        );
+    this.appendDummyInput()
+        .appendField('method')
+        .appendField(
+            new Blockly.FieldDropdown(
+                [
+                  ['GET', 'GET'],
+                  ['PUT', 'PUT'],
+                  ['POST', 'POST'],
+                  ['DELETE', 'DELETE'],
+                ],
+                this.httpRequestValidator,
+            ),
+            'METHOD',
+        );
+    this.appendDummyInput().appendField('headers (comma separated)');
+    this.appendDummyInput().appendField(
+        new Blockly.FieldTextInput(
+            '"Content-Type": "application/json", "Accept": "application/json"',
+        ),
+        'HEADERS',
+    );
+    this.setOutput(true, 'String');
+    this.setColour(0);
+  },
+
+  updateInputs: function(newValue) {
+    this.removeInput('BODYINPUT', /* no error */ true);
+
+    if (newValue != 'GET') {
+      this.appendValueInput('body').setCheck('String').appendField('body');
     }
   },
 };

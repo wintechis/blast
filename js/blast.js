@@ -519,6 +519,7 @@ Blast.runJS = function() {
         } catch (error) {
           Blockly.alert('Error executing program:\n%e'.replace('%e', error));
           Blast.setStatus(Blast.status.ERROR);
+          Blast.resetInterpreter();
           console.error(error);
         }
       }
@@ -553,6 +554,35 @@ Blast.discard = function() {
       window.location.hash = '';
     }
   }
+};
+
+/**
+ * Stop execution and adds an error message to the
+ * {@link Blast.messageOutputContainer}.
+ * @param {string} [text] optional, a custom error text
+ */
+Blast.throwError = function(text) {
+  if (!text) {
+    text = `Error executing program - See console for details.`;
+  }
+
+  Blockly.alert('Error executing program:\n%e'.replace('%e', text));
+  Blast.setStatus(Blast.status.ERROR);
+  Blast.resetInterpreter();
+};
+
+/**
+ * Helper function checking fetch's response status.
+ * Returns the response object if it was successfull.
+ * Otherwise it throws an error.
+ * @param   {Object} response A fetch response object.
+ * @return {Object} the response object
+ */
+Blast.handleFetchErrors = function(response) {
+  if (!response.ok) {
+    Blast.throwError(`Error processing HTTP Request.`);
+  }
+  return response;
 };
 
 // initialize blast when page dom is loaded
@@ -661,6 +691,10 @@ Blast.BlockMethods.sendHttpRequest = function(
     output,
     callback,
 ) {
+  if (uri == null || uri == undefined || uri == '') {
+    Blast.throwError('URI input of HttpRequest blocks must not be empty');
+  }
+
   const headersJSON = JSON.parse(headersString);
   const requestOptions = {
     method: method,
@@ -672,10 +706,10 @@ Blast.BlockMethods.sendHttpRequest = function(
   }
 
   fetch(uri, requestOptions)
+      .then(Blast.handleFetchErrors)
       .then((res) => {
         if (output == 'status') {
           callback(res.status);
-          Promise.resvole();
         }
         return res.text();
       })
@@ -688,6 +722,9 @@ Blast.BlockMethods.sendHttpRequest = function(
                 callback(result);
               });
         });
+      })
+      .catch((error) => {
+        Blast.throwError(`${error.message}\nSee console for details.`);
       });
 };
 
@@ -726,6 +763,9 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
   const redByte = r ? 'ff' : '00';
   const yellowByte = y ? 'ff' : '00';
   const greenByte = g ? 'ff' : '00';
+  const headers = new Headers({
+    'Content-Type': 'application/json',
+  });
 
   const data = {
     type: 'ble:Write',
@@ -736,31 +776,53 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
     },
   };
 
-  fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
-    method: 'PUT',
-    headers: new Headers({
-      'Content-Type': 'application/json',
-    }),
-    body: '{ "type": "ble:Connect" }',
-  }).then(() => {
-    fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
+  (async () => {
+    console.log(1);
+    await fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
       method: 'PUT',
-      headers: new Headers({
-        'Content-Type': 'application/json',
-      }),
-      body: JSON.stringify(data),
-    }).then(() => {
-      fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
-        method: 'PUT',
-        headers: new Headers({
-          'Content-Type': 'application/json',
-        }),
-        body: '{ "type": "ble:Disconnect" }',
-      }).then(() => {
-        callback();
-      });
+      headers: headers,
+      body: '{ "type": "ble:Connect" }',
     });
-  });
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    console.log(2);
+    await fetch(`http://192.168.178.22:8000/devices/${mac}/gatt/instruction`, {
+      method: 'PUT',
+      headers: headers,
+      body: JSON.stringify(data),
+    });
+    console.log(3);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    await fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
+      method: 'PUT',
+      headers: headers,
+      body: '{ "type": "ble:Disconnect" }',
+    });
+    console.log(4);
+    callback();
+  })();
+
+  // fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
+  //   method: 'PUT',
+  //   headers: headers,
+  //   body: '{ "type": "ble:Connect" }',
+  // }).then((res) => {
+  //   console.log(res.text());
+  //   fetch(`http://192.168.178.22:8000/devices/${mac}/gatt/instruction`, {
+  //     method: 'PUT',
+  //     headers: headers,
+  //     body: JSON.stringify(data),
+  //   }).then((res2) => {
+  //     console.log(res2.text());
+  //     fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
+  //       method: 'PUT',
+  //       headers: headers,
+  //       body: '{ "type": "ble:Disconnect" }',
+  //     }).then((res3) => {
+  //       console.log(res3.text());
+  //       callback();
+  //     });
+  //   });
+  // });
 };
 
 /**
@@ -800,7 +862,8 @@ Blast.BlockMethods.getTableCell = function(
       WHERE {
         ?obs sosa:hasSimpleResult ?rssi .
         ?obs sosa:resultTime ?resultTime .
-        BIND (substr(?obs, 31, 12) AS ?mac)
+        BIND (STRLEN(?obs) AS ?URILEN)
+        BIND (substr(?obs, ?URILEN - 12, 12) AS ?mac)
       }`;
 
   urdf.clear();
