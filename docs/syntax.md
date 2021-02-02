@@ -1,6 +1,6 @@
 # Grammar <!-- omit in toc -->
 
-This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS.
+This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS. Documentation for JavaScript functions used by BLAST's blocks can be found in the [jsdoc](../docs/jsdoc).
 
 - [1. Extended Backus-Naur Form](#1-extended-backus-naur-form)
   - [1.1. Notation](#11-notation)
