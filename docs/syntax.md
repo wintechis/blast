@@ -58,15 +58,15 @@ not                      ::= boolean_expression
 **strings**
 ```ebnf
 string                   ::= ( string_value | string_operation )
-string_value             ::= String_Literal  
-string_operation         ::= ( string_concat | string_length | string_index_of | string_char_at | string_substring | string_change_case | string_replace )
-string_concat            ::= string (string)+
-string_length            ::= string
-string_index_of          ::= string string
-string_char_at           ::= string number
-string_substring         ::= string number number
-string_change_case       ::= string
-string_replace           ::= string string string
+string_value             ::= "'" String_Literal "'"
+string_operation         ::= ( string_concat | string_length | string_index_of | string_char_at | string_substring | string_change_case | string_replace ) ";"
+string_concat            ::= ("'" string "'" "+" "'" string "'") | ( "[" ( "'" string "', ")+ string "].join('')" )
+string_length            ::= "'" string "'.length" 
+string_index_of          ::= "'" string ("'.indexOf('" | "'lastIndexOf(" ) string "')"
+string_char_at           ::= ("'" string "'" ( ".charAt(" number ")" | ".slice(-" number ").charAt(0)" | ".charAt(0)" | ".slice(-1)" )) | "textRandomLetter('" string "')"
+string_substring         ::= "'" string "'.slice(" (string ".length - ")? number ", " (string ".length - ")? number ")" 
+string_change_case       ::= string (".toUpperCase()" | ".toLowerCase()" ) | "textToTitleCase('" string "')"
+string_replace           ::= "textReplace('" string "', '" string "', '" string "')"
 ```
 
 
@@ -134,7 +134,7 @@ MAC                      ::= String_Literal
 
 **symbols**
 ```ebnf
-String_Literal           ::= "'" Char+ "'"
+String_Literal           ::= Char+
 Double_Literal           ::= (("." Digits) | (Digits ("." [0-9]*)?)) [eE] [+-]? Digits
 Boolean_Literal          ::= "true" | "false"
 ```
