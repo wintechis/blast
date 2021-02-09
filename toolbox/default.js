@@ -22,7 +22,7 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'display_text'},
         {kind: 'BLOCK', type: 'display_table'},
         {kind: 'BLOCK', type: 'switch_lights'},
-        {kind: 'BLOCK', type: 'random_sound'},
+        {kind: 'BLOCK', type: 'play_audio'},
         {kind: 'BLOCK', type: 'wait_seconds'},
       ],
       name: 'Actions',
