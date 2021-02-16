@@ -158,37 +158,6 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
   return code;
 };
 
-Blockly.JavaScript['event'] = function(block) {
-  const measurement = Blockly.JavaScript.valueToCode(
-      block,
-      'measurement',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  const dropdownStartsStops = block.getFieldValue('startstop');
-  const value = Blockly.JavaScript.valueToCode(
-      block,
-      'value',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-
-  const OPERATORS = {
-    EQ: '==',
-    NEQ: '!=',
-    LT: '<',
-    LTE: '<=',
-    GT: '>',
-    GTE: '>=',
-  };
-
-  const operator = OPERATORS[block.getFieldValue('operator')];
-  const negate = dropdownStartsStops == 'BECOMES' ? '' : '!';
-
-  const code = `eventChecker(${measurement}, "${negate}", 
-  "${operator}", ${value}, "${block.id}")`;
-
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['uri'] = function(block) {
   const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, Blockly.JavaScript.ORDER_NONE];
@@ -201,6 +170,26 @@ Blockly.JavaScript['mac'] = function(block) {
 
 Blockly.JavaScript['number_infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
+};
+
+Blockly.JavaScript['state_definition'] = function(block) {
+  const name = block.getFieldValue('NAME');
+  const condition = Blockly.JavaScript.valueToCode(
+      block,
+      'state_condition',
+      Blockly.JavaScript.ORDER_ATOMIC,
+  );
+
+  const code = `defineState('${name}', '${condition}')`;
+  return code;
+};
+
+Blockly.JavaScript['event'] = function(block) {
+  const entersexits = block.getFieldValue('entersExits');
+  const stateName = block.getFieldValue('STATE');
+  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
+  const code = '';
+  return code;
 };
 
 // TEMPORARY dw blocks for demonstration on 22.1.2021

@@ -46,50 +46,6 @@ Blockly.defineBlocksWithJsonArray([
     helpUrl: '',
   },
   {
-    type: 'event',
-    message0: '%1 %2 %3 %4 %5',
-    args0: [
-      {
-        type: 'input_value',
-        name: 'measurement',
-        check: ['Number', 'String'],
-      },
-      {
-        type: 'field_dropdown',
-        name: 'startstop',
-        options: [
-          ['becomes', 'BECOMES'],
-          ['stops being', 'STOPS'],
-        ],
-      },
-      {
-        type: 'field_dropdown',
-        name: 'operator',
-        options: [
-          ['=', 'EQ'],
-          ['\u2260', 'NEQ'],
-          ['\u200F<', 'LT'],
-          ['\u200F\u2264', 'LTE'],
-          ['\u200F>', 'GT'],
-          ['\u200F\u2265', 'GTE'],
-        ],
-      },
-      {
-        type: 'input_dummy',
-      },
-      {
-        type: 'input_value',
-        name: 'value',
-        check: ['Number', 'String'],
-      },
-    ],
-    inputsInline: true,
-    output: 'Boolean',
-    colour: 210,
-    tooltip: '',
-    helpUrl: '',
-  },
-  {
     type: 'display_table',
     message0: 'display table %1',
     args0: [
@@ -452,5 +408,82 @@ Blockly.Blocks['http_request_new'] = {
     if (newValue != 'GET') {
       this.appendValueInput('body').setCheck('String').appendField('body');
     }
+  },
+};
+
+Blockly.Blocks['state_definition'] = {
+  /**
+   * Block for defining a state.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    const initName = Blast.States.findLegalName('', this);
+    const nameField = new Blockly.FieldTextInput(initName, Blast.States.rename);
+    nameField.setSpellcheck(false);
+    this.appendValueInput('state_condition')
+        .setCheck(null)
+        .appendField('define state')
+        .appendField(nameField, 'NAME');
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+  /**
+   * Returns the name of this state.
+   * @return {string} State name.
+   * @this {Blockly.Block}
+   */
+  getStateName: function() {
+    // The NAME field is guaranteed to exist, null will never be returned.
+    return /** @type {string} */ (this.getFieldValue('NAME'));
+  },
+};
+
+Blockly.Blocks['event'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('when blast')
+        .appendField(
+            new Blockly.FieldDropdown([
+              ['enters', 'ENTERS'],
+              ['exits', 'EXITS'],
+            ]),
+            'entersExits',
+        )
+        .appendField('state')
+        .appendField(new Blockly.FieldLabelSerializable('state name'), 'NAME');
+    this.appendStatementInput('statements').setCheck(null);
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+  /**
+   * Returns the state name of this event.
+   * @return {string} State name.
+   * @this {Blockly.Block}
+   */
+  getStateName: function() {
+    // The NAME field is guaranteed to exist, null will never be returned.
+    return /** @type {string} */ (this.getFieldValue('NAME'));
+  },
+  /**
+   * Notification that a state is renaming.
+   * If the name matches this block's state, rename it.
+   * @param {string} oldName Previous name of state.
+   * @param {string} newName Renamed procedure.
+   * @this {Blockly.Block}
+   */
+  renameState: function(oldName, newName) {
+    if (Blockly.Names.equals(oldName, this.getStateName())) {
+      this.setFieldValue(newName, 'NAME');
+    }
+  },
+  /**
+   * Return the signature of this event's state definition.
+   * @return {String} the name of the defined state
+   * @this {Blockly.Block}
+   */
+  getStateDef: function() {
+    return this.getFieldValue('NAME');
   },
 };

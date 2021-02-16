@@ -39,7 +39,6 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'event'},
         {kind: 'BLOCK', type: 'logic_compare'},
         {kind: 'BLOCK', type: 'logic_operation'},
         {kind: 'BLOCK', type: 'logic_negate'},
@@ -91,6 +90,13 @@ const defaultToolbox = {
       contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
       name: 'Booleans',
       colour: '210',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'States',
+      custom: 'STATES',
+      colour: '180',
     },
     {
       kind: 'CATEGORY',

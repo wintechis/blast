@@ -16,8 +16,12 @@ function initApi(interpreter, globalObject) {
       'displayText',
       'displayTable',
       'sendHttpRequest',
-      'queryReceiver',
+      'urdfQueryWrapper',
+      'switchLights',
+      'waitForSeconds',
+      'playAudioFromURI',
       'getTableCell',
+      'eventChecker',
   );
 
   // API function for highlighting blocks.
