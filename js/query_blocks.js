@@ -427,6 +427,17 @@ Blockly.Blocks['state_definition'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.conditions_ = [];
+  },
+  /**
+   * Return the name and condition of this state.
+   * @return {!Array} Tuple containing two elements:
+   *    - the name of the defined state,
+   *    - this state's conditions.
+   * @this {Blockly.Block}
+   */
+  getStateDef: function() {
+    return [this.getFieldValue('NAME'), this.conditions_];
   },
   /**
    * Returns the name of this state.
@@ -479,14 +490,6 @@ Blockly.Blocks['event'] = {
     }
   },
   /**
-   * Return the signature of this event's state definition.
-   * @return {String} the name of the defined state
-   * @this {Blockly.Block}
-   */
-  getStateDef: function() {
-    return this.getFieldValue('NAME');
-  },
-  /**
    * Create XML to represent the (non-editable) name.
    * @return {!Element} XML storage element.
    * @this {Blockly.Block}
@@ -528,7 +531,7 @@ Blockly.Blocks['event'] = {
       // paste) and there is no matching state.  In this case, create
       // an empty state definition block with the correct name.
       const name = this.getStateName();
-      const def = Blast.States.getDefinition(name, this.workspace);
+      let def = Blast.States.getDefinition(name, this.workspace);
       if (def && def.type != this.defType_) {
         // The signatures don't match.
         def = null;
@@ -573,6 +576,7 @@ Blockly.Blocks['event'] = {
       // the orphan.
       const name = this.getStateName();
       const def = Blast.States.getDefinition(name, this.workspace);
+      console.log(def);
       if (!def) {
         Blockly.Events.setGroup(event.group);
         this.dispose(true);

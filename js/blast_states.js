@@ -92,7 +92,7 @@ Blast.States.isNameUsed = function(name, workspace, opt_exclude) {
     }
     if (blocks[i].getStateDef) {
       const stateBlock = /** @type {!Blast.States.StateBlock} */ (blocks[i]);
-      const stateName = stateBlock.getStateDef();
+      const stateName = stateBlock.getStateDef()[0];
       if (Blockly.Names.equals(stateName, name)) {
         return true;
       }
