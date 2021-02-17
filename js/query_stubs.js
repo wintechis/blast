@@ -173,7 +173,10 @@ Blockly.JavaScript['number_infinity'] = function(block) {
 };
 
 Blockly.JavaScript['state_definition'] = function(block) {
-  const name = block.getFieldValue('NAME');
+  const name = Blockly.JavaScript.variableDB_.getName(
+      block.getFieldValue('NAME'),
+      Blockly.PROCEDURE_CATEGORY_NAME,
+  );
   const condition = Blockly.JavaScript.valueToCode(
       block,
       'state_condition',
@@ -181,14 +184,18 @@ Blockly.JavaScript['state_definition'] = function(block) {
   );
 
   const code = `defineState('${name}', '${condition}')`;
-  return code;
+  Blockly.JavaScript.definitions_['%' + name] = code;
+  return null;
 };
 
 Blockly.JavaScript['event'] = function(block) {
-  const entersexits = block.getFieldValue('entersExits');
-  const stateName = block.getFieldValue('STATE');
+  const entersExits = block.getFieldValue('entersExits');
+  const stateName = Blockly.JavaScript.variableDB_.getName(
+      block.getFieldValue('NAME'),
+      Blockly.PROCEDURE_CATEGORY_NAME,
+  );
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
-  const code = '';
+  const code = '...\n';
   return code;
 };
 

@@ -155,7 +155,7 @@ Blast.States.flyoutCategory = function(workspace) {
 
   /**
    * Creates an event block for each state in stateList.
-   * @param {*} stateList Array containing states.
+   * @param {string[]} stateList Array containing states.
    */
   function populateEvents(stateList) {
     for (let i = 0; i < stateList.length; i++) {
@@ -163,7 +163,9 @@ Blast.States.flyoutCategory = function(workspace) {
       const block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
-      block.setAttribute('name', name);
+      const mutation = Blockly.utils.xml.createElement('mutation');
+      mutation.setAttribute('name', name);
+      block.appendChild(mutation);
       xmlList.push(block);
     }
   }
