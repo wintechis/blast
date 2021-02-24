@@ -1,42 +1,103 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="state_definition" id="[~L9U!f0TH*0CD4LqP.n" x="50" y="33">
-    <field name="NAME">state name</field>
+  <variables>
+    <variable id="]aNs3r*-qzDB,-E/cRIX">i</variable>
+    <variable id="f}inCOOlLo-0g{CdDO[p">number</variable>
+  </variables>
+  <block type="state_definition" id="[~L9U!f0TH*0CD4LqP.n" x="43" y="43">
+    <field name="NAME">ten</field>
     <value name="state_condition">
       <block type="logic_compare" id="Y@Z?z;jx,0{gms3Aq)4#">
         <field name="OP">EQ</field>
         <value name="A">
-          <block type="number_random" id="XN]D8{dZum#qqHr^W4uV">
-            <value name="FROM">
-              <block type="number_value" id=")y]1MvE9C])^oMkEJPhq">
-                <field name="NUM">0</field>
-              </block>
-            </value>
-            <value name="TO">
-              <block type="number_value" id="3:jP$e.`a%Z[#T/7Qv5?">
-                <field name="NUM">5</field>
-              </block>
-            </value>
+          <block type="variables_get" id="l:B$q)BTe+dhjB61Iq`C">
+            <field name="VAR" id="f}inCOOlLo-0g{CdDO[p">number</field>
           </block>
         </value>
         <value name="B">
           <block type="number_value" id="KitJ.|$c-rs2a[I2$z?k">
-            <field name="NUM">0</field>
+            <field name="NUM">10</field>
           </block>
         </value>
       </block>
     </value>
   </block>
-  <block type="event" id="8=5O$@]s^NnK]p(z=];H" x="46" y="142">
-    <mutation name="state name"></mutation>
+  <block type="event" id="8=5O$@]s^NnK]p(z=];H" x="45" y="98">
+    <mutation name="ten"></mutation>
     <field name="entersExits">ENTERS</field>
-    <field name="NAME">state name</field>
+    <field name="NAME">ten</field>
     <statement name="statements">
       <block type="display_text" id="4clx!_gH|Ld`sc~ADf{q">
         <value name="text">
           <block type="string" id="1,vDaC^,}U*.XEQQ^-=w">
-            <field name="TEXT">zero</field>
+            <field name="TEXT">EVENT!</field>
           </block>
         </value>
+      </block>
+    </statement>
+  </block>
+  <block type="while_until" id="kVz)7.+?9Xhjn%%WGp3t" x="49" y="182">
+    <field name="MODE">WHILE</field>
+    <value name="BOOL">
+      <block type="logic_boolean" id="-|WrUG6YEI3g^~j_qMYM">
+        <field name="BOOL">TRUE</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="for" id="ytcB+lP{]6Z4[@I[kXR.">
+        <field name="VAR" id="]aNs3r*-qzDB,-E/cRIX">i</field>
+        <value name="FROM">
+          <block type="number_value" id="@]V.jwYy.N#D?{|l(be|">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <value name="TO">
+          <block type="number_value" id="Se_WWGIPCDBg.4J4~`w`">
+            <field name="NUM">10</field>
+          </block>
+        </value>
+        <value name="BY">
+          <block type="number_value" id=")(5yJ!%h*)G$dUJ!6tXj">
+            <field name="NUM">1</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="variables_set" id="/0OpT*VbANlo/,?x7[SR">
+            <field name="VAR" id="f}inCOOlLo-0g{CdDO[p">number</field>
+            <value name="VALUE">
+              <block type="variables_get" id="?C:GeTr1f*@98``!6Yy]">
+                <field name="VAR" id="]aNs3r*-qzDB,-E/cRIX">i</field>
+              </block>
+            </value>
+            <next>
+              <block type="display_text" id="x-4VMO}9GoeSJNqRTIn2">
+                <value name="text">
+                  <block type="variables_get" id="N`uW6G=37k1Zjv`Nj,PY">
+                    <field name="VAR" id="f}inCOOlLo-0g{CdDO[p">number</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="variables_set" id="o7W+eA8:%t7ZZ(.5WFvs">
+            <field name="VAR" id="f}inCOOlLo-0g{CdDO[p">number</field>
+            <value name="VALUE">
+              <block type="number_value" id="ROZJT6P+ql`[4]coM7Tx">
+                <field name="NUM">10</field>
+              </block>
+            </value>
+            <next>
+              <block type="display_text" id="zg1*r5IjACpOD?P3wDp6">
+                <value name="text">
+                  <block type="variables_get" id="Ex$lt@)H9$rIr{$Yr@(O">
+                    <field name="VAR" id="f}inCOOlLo-0g{CdDO[p">number</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
       </block>
     </statement>
   </block>
