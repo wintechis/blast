@@ -1,0 +1,43 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="state_definition" id="[~L9U!f0TH*0CD4LqP.n" x="50" y="33">
+    <field name="NAME">state name</field>
+    <value name="state_condition">
+      <block type="logic_compare" id="Y@Z?z;jx,0{gms3Aq)4#">
+        <field name="OP">EQ</field>
+        <value name="A">
+          <block type="number_random" id="XN]D8{dZum#qqHr^W4uV">
+            <value name="FROM">
+              <block type="number_value" id=")y]1MvE9C])^oMkEJPhq">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="TO">
+              <block type="number_value" id="3:jP$e.`a%Z[#T/7Qv5?">
+                <field name="NUM">5</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="B">
+          <block type="number_value" id="KitJ.|$c-rs2a[I2$z?k">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </value>
+  </block>
+  <block type="event" id="8=5O$@]s^NnK]p(z=];H" x="46" y="142">
+    <mutation name="state name"></mutation>
+    <field name="entersExits">ENTERS</field>
+    <field name="NAME">state name</field>
+    <statement name="statements">
+      <block type="display_text" id="4clx!_gH|Ld`sc~ADf{q">
+        <value name="text">
+          <block type="string" id="1,vDaC^,}U*.XEQQ^-=w">
+            <field name="TEXT">zero</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
