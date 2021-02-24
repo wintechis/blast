@@ -118,6 +118,9 @@ Blast.States.startEventChecker = function() {
   Blast.States.Interpreter = null;
   // Begin execution
   Blast.States.Interpreter = new Interpreter(Blast.States.latestCode, initApi);
+  console.log(Blast.Interpreter);
+  Blast.States.Interpreter.stateStack[0].scope =
+    Blast.Interpreter.stateStack[0].scope;
 
   const runner_ = function() {
     if (Blast.States.Interpreter) {
