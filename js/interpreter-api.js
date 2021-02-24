@@ -21,7 +21,9 @@ function initApi(interpreter, globalObject) {
       'waitForSeconds',
       'playAudioFromURI',
       'getTableCell',
+      'addEvent',
       'eventChecker',
+      'numberRandom',
   );
 
   // API function for highlighting blocks.
@@ -131,18 +133,42 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the event blocks.
-  wrapper = function(measurement, negate, operator, value, blockId) {
-    return Blast.BlockMethods.eventChecker(
-        measurement,
-        negate,
-        operator,
-        value,
-        blockId,
-    );
+  wrapper = function(conditions, statements, blockId) {
+    return Blast.BlockMethods.addEvent(conditions, statements, blockId);
+  };
+  interpreter.setProperty(
+      globalObject,
+      'addEvent',
+      interpreter.createNativeFunction(wrapper),
+  );
+
+  // API function for the event blocks.
+  wrapper = function(blockId, conditions) {
+    return Blast.States.eventChecker(blockId, conditions);
   };
   interpreter.setProperty(
       globalObject,
       'eventChecker',
+      interpreter.createNativeFunction(wrapper),
+  );
+
+  // API function for the event blocks.
+  wrapper = function(blockId, conditions) {
+    return Blast.States.startEventChecker();
+  };
+  interpreter.setProperty(
+      globalObject,
+      'startEventChecker',
+      interpreter.createNativeFunction(wrapper),
+  );
+
+  // API function for the number_random blocks.
+  wrapper = function(a, b) {
+    return Blast.BlockMethods.numberRandom(a, b);
+  };
+  interpreter.setProperty(
+      globalObject,
+      'numberRandom',
       interpreter.createNativeFunction(wrapper),
   );
 

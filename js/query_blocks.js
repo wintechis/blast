@@ -448,6 +448,14 @@ Blockly.Blocks['state_definition'] = {
     // The NAME field is guaranteed to exist, null will never be returned.
     return /** @type {string} */ (this.getFieldValue('NAME'));
   },
+  /**
+   * Return this state's conditions.
+   * @return {string} state conditions.
+   * @this {Blockly.Block}
+   */
+  getConditions: function() {
+    return this.conditions_;
+  },
 };
 
 Blockly.Blocks['event'] = {
@@ -610,5 +618,5 @@ Blockly.Blocks['event'] = {
       }
     }
   },
-  defType_: 'event',
+  defType_: 'state_definition',
 };

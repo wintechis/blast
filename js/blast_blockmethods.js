@@ -305,45 +305,14 @@ Blast.BlockMethods.getTableCell = function(
 };
 
 /**
- * Map containing previous values (as graph) for events identified by Block IDs.
- * @type {Map<!Blockly.Block.id, graph>}
+ * Add an event to the Event interpreter.
+ * @param {string} conditions the state conditions.
+ * @param {string} statements code to be executed if condtions are true.
+ * @param {Blockly.Block.id} blockId id of the state defintion block.
  * @public
  */
-Blast.BlockMethods.eventValues = new Map();
-
-/**
- * Checks wether a comparison becomes or stops being true.
- * @param {string} measurement the current measurement.
- * @param {string} negate '!' if checking for stops being true, '' otherwise.
- * @param {string} operator compare operator.
- * @param {string} value the value to compare to.
- * @param {Blockly.Block.id} blockId
- * @public
- * @return {boolean} true if the event condition is true, false otherwise
- */
-Blast.BlockMethods.eventChecker = function(
-    measurement,
-    negate,
-    operator,
-    value,
-    blockId,
-) {
-  const prevMeasurement = Blast.BlockMethods.eventValues.get(blockId);
-
-  // The first time eventblock with id blockId is executed,
-  // there's no stored values so return undefined
-  if (prevMeasurement != undefined) {
-    const wasNotBefore = `!(${prevMeasurement} ${operator} ${value})`;
-    const isNow = `${negate} (${measurement} ${operator} ${value}`;
-    const s = `${negate}(${wasNotBefore}) && ${isNow})`;
-    const event = eval(s);
-    Blast.BlockMethods.eventValues.set(blockId, measurement);
-
-    return event;
-  } else {
-    Blast.BlockMethods.eventValues.set(blockId, measurement);
-    return undefined;
-  }
+Blast.BlockMethods.addEvent = function(conditions, statements, blockId) {
+  Blast.States.addEvent(conditions, statements, blockId);
 };
 
 /**
@@ -356,4 +325,19 @@ Blast.BlockMethods.playAudioFromURI = function(uri) {
   audio.play();
 };
 
-
+/**
+ * Generates and returns a random integer between a and b, inclusively.
+ * @param {number} a lower limit
+ * @param {number} b upper limit
+ * @return {number} generated random number.
+ * @public
+ */
+Blast.BlockMethods.numberRandom = function(a, b) {
+  if (a > b) {
+    // Swap a and b to ensure a is smaller.
+    const c = a;
+    a = b;
+    b = c;
+  }
+  return Math.floor(Math.random() * (b - a + 1) + a);
+};

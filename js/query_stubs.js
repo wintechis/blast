@@ -6,7 +6,6 @@ Blockly.JavaScript['break_continue'] =
 Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
 Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
 Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
-Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
 Blockly.JavaScript['string'] = Blockly.JavaScript['text'];
 Blockly.JavaScript['string_join'] = Blockly.JavaScript['text_join'];
 Blockly.JavaScript['string_length'] = Blockly.JavaScript['text_length'];
@@ -106,7 +105,7 @@ Blockly.JavaScript['sparql_query'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
 
-  const code = `urdfQueryWrapper(${uri}, "${query}")`;
+  const code = `urdfQueryWrapper(${uri}, '${query}')`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -158,6 +157,25 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['number_random'] = function(block) {
+  // Random integer between [X] and [Y].
+  const argument0 =
+    Blockly.JavaScript.valueToCode(
+        block,
+        'FROM',
+        Blockly.JavaScript.ORDER_NONE,
+    ) || '0';
+  const argument1 =
+    Blockly.JavaScript.valueToCode(
+        block,
+        'TO',
+        Blockly.JavaScript.ORDER_NONE,
+    ) || '0';
+
+  const code = `numberRandom(${argument0}, ${argument1})`;
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['uri'] = function(block) {
   const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, Blockly.JavaScript.ORDER_NONE];
@@ -183,8 +201,7 @@ Blockly.JavaScript['state_definition'] = function(block) {
       Blockly.JavaScript.ORDER_ATOMIC,
   );
 
-  const code = `defineState('${name}', '${condition}')`;
-  Blockly.JavaScript.definitions_['%' + name] = code;
+  Blast.States['%' + name] = condition;
   return null;
 };
 
@@ -195,8 +212,18 @@ Blockly.JavaScript['event'] = function(block) {
       Blockly.PROCEDURE_CATEGORY_NAME,
   );
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
-  const code = '...\n';
-  return code;
+
+  const negate = entersExits == 'enters' ? '!' : '';
+  const conditions = negate + Blast.States['%' + stateName];
+
+  Blast.States.addEvent(
+      conditions,
+      statements,
+      block.id,
+  );
+  Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
+
+  return null;
 };
 
 // TEMPORARY dw blocks for demonstration on 22.1.2021
