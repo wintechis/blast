@@ -114,11 +114,9 @@ Blast.States.generateCode = function() {
  */
 Blast.States.startEventChecker = function() {
   Blast.States.generateCode();
-  console.log(Blast.States.latestCode);
   Blast.States.Interpreter = null;
   // Begin execution
   Blast.States.Interpreter = new Interpreter(Blast.States.latestCode, initApi);
-  console.log(Blast.Interpreter);
   Blast.States.Interpreter.stateStack[0].scope =
     Blast.Interpreter.stateStack[0].scope;
 
