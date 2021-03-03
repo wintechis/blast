@@ -5,7 +5,6 @@ Blockly.JavaScript['break_continue'] =
   Blockly.JavaScript['controls_flow_statements'];
 Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
 Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
-Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
 Blockly.JavaScript['string'] = Blockly.JavaScript['text'];
 Blockly.JavaScript['string_join'] = Blockly.JavaScript['text_join'];
 Blockly.JavaScript['string_length'] = Blockly.JavaScript['text_length'];
@@ -176,6 +175,31 @@ Blockly.JavaScript['number_random'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['number_arithmetic'] = function(block) {
+  // Basic arithmetic operators, and modulo and power.
+  const OPERATORS = {
+    ADD: [' + ', Blockly.JavaScript.ORDER_ADDITION],
+    MINUS: [' - ', Blockly.JavaScript.ORDER_SUBTRACTION],
+    MULTIPLY: [' * ', Blockly.JavaScript.ORDER_MULTIPLICATION],
+    DIVIDE: [' / ', Blockly.JavaScript.ORDER_DIVISION],
+    MODULO: [' % ', Blockly.JavaScript.ORDER_DIVISION],
+    POWER: [null, Blockly.JavaScript.ORDER_NONE], // Handle power separately.
+  };
+  const tuple = OPERATORS[block.getFieldValue('OP')];
+  const operator = tuple[0];
+  const order = tuple[1];
+  const argument0 = Blockly.JavaScript.valueToCode(block, 'A', order) || '0';
+  const argument1 = Blockly.JavaScript.valueToCode(block, 'B', order) || '0';
+  let code;
+  // Power in JavaScript requires a special case since it has no operator.
+  if (!operator) {
+    code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
+    return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  }
+  code = argument0 + operator + argument1;
+  return [code, order];
+};
+
 Blockly.JavaScript['uri'] = function(block) {
   const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, Blockly.JavaScript.ORDER_NONE];
@@ -216,11 +240,7 @@ Blockly.JavaScript['event'] = function(block) {
   const negate = entersExits == 'enters' ? '!' : '';
   const conditions = negate + Blast.States['%' + stateName];
 
-  Blast.States.addEvent(
-      conditions,
-      statements,
-      block.id,
-  );
+  Blast.States.addEvent(conditions, statements, block.id);
   Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
 
   return null;
