@@ -2,19 +2,18 @@
 
 This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS. Documentation for JavaScript functions used by BLAST's blocks can be found in the [jsdoc](../docs/jsdoc).
 
-- [1. Extended Backus-Naur Form](#1-extended-backus-naur-form)
-  - [1.1. Notation](#11-notation)
-- [2. Lexical structure](#2-lexical-structure)
-  - [2.1. Terminal Symbols](#21-terminal-symbols)
-- [Example program EBNF](#example-program-ebnf)
-
-# 1. Extended Backus-Naur Form
+- [1. EBNF](#1-ebnf)
+- [2. Notation](#2-notation)
+- [3. Terminal Symbols](#3-terminal-symbols)
+- [4. Example program EBNF](#4-example-program-ebnf)
 
 This grammar of BLAST uses the [W3C's Extended Backus-Naur Form (EBNF)](https://www.w3.org/TR/2010/REC-xquery-20101214/#EBNFNotation)
 
-The terminal symbols for this grammar include the quoted strings used in the production rules below, and the terminal symbols defined in section  [2.1. Terminal Symbols](#21-terminal-symbols).
+The EBNF notation is described in more detail in [2 Notation ](#2-notation).
 
-The EBNF notation is described in more detail in [1.1 Notation ](#28-number-blocks-semantics).
+The terminal symbols for this grammar include the quoted strings used in the production rules below, and the terminal symbols defined in section  [3. Terminal Symbols](#3-terminal-symbols).
+
+## 1. EBNF
 
 
 **block programs**
@@ -43,13 +42,17 @@ switch_lights            ::= "switchLights(" MAC "," Boolean_Literal "," Boolean
 play_audio               ::= "playAudioFromURI(" ( "happy" | "sad") ")"
 wait                     ::= "waitForSeconds(" number ")"
 http_request             ::= "sendHttpRequest(" URI "," ( "GET" | "PUT" | "POST" | "DELETE" ) "," string_value "," string_value "," ( "status" | "response" ) ")"
+```
+
+**queries**
+```ebnf
 sparql_query             ::= "urdfQueryWrapper(" URI "," string ")"
 sparql_ask               ::= "urdfQueryWrapper(" URI "," string ")"
 ```
 
 **boolean expressions**
 ```ebnf
-boolean_expression       ::= ( comparison | logical_operation | boolean_value | not )
+boolean_expression       ::= ( comparison | logical_operation | boolean_value | not | sparql_ask )
 comparison               ::= "(" ( number | string ) ("=" | "!=" | "<" | "<=" | ">" | ">=" ) ( number | string ) ")"
 logical_operation        ::= boolean_expression boolean_expression
 not                      ::= boolean_expression
@@ -84,7 +87,7 @@ number_random            ::= "mathRandom(" number ", " number ")"
 boolean_value            ::= Boolean_Literal
 ```
 
-## 1.1. Notation
+## 2. Notation
 This section explains all relevant definitions of the [W3C's Extended Backus-Naur Form (EBNF)](https://www.w3.org/TR/2010/REC-xquery-20101214/#EBNFNotation).
 > Definition: Each rule in the grammar defines one **symbol**, using the following format:
 > ```ebnf
@@ -114,17 +117,17 @@ Patterns (including the above constructs) can be combined with grammatical opera
 | `A*` | matches zero or more occurrences of `A`. Concatenation has higher precedence than alternation; thus `A* | B*` is identical to `(A*) | (B*)` |
 
 
-# 2. Lexical structure
+## 3. Terminal Symbols
 
 The terminal symbols assumed by the grammar above are described in this section.
 
 Quoted strings appearing in production rules are terminal symbols.
 
-Other terminal symbols are defined in [2.1 Terminal Symbols](#21-terminal-symbols).
+Other terminal symbols are defined below.
 
 When tokenizing, the longest possible match that is consistent with the EBNF is used.
 
-## 2.1. Terminal Symbols
+**Terminal Symbols**
 
 **identifiers**
 ```ebnf
@@ -139,20 +142,20 @@ Double_Literal           ::= (("." Digits) | (Digits ("." [0-9]*)?)) [eE] [+-]? 
 Boolean_Literal          ::= "true" | "false"
 ```
 
-The following symbols are used only in the definition of terminal symbols; they are not terminal symbols in the grammar of [1. Extended Backus-Naur Form](#1-extended-backus-naur-form).
+The following symbols are used only in the definition of terminal symbols; they are not terminal symbols in the grammar of [1. EBNF](#1-ebnf).
 ```ebnf
 Digits                   ::= [0-9]+
 Char                     ::= #x9 | #xA | #xD | [#x20-#xD7FF] | [#xE000-#xFFFD] | [#x10000-#x10FFFF]	/* any Unicode character, excluding the surrogate blocks, FFFE, and FFFF. */
 ```
 
-# Example program EBNF
+## 4. Example program EBNF
 This section provides a syntax description of [gamble](../samples/gamble.xml), one of BLAST's sample programs. 
 
 Here's what the program's blocks look like:
 
 ![gamble screenshot](images/gamble.png)
 
-Its corresponding JavaScript can be generated using the rules of the grammar of [1. Extended Backus-Naur Form](#1-extended-backus-naur-form):
+Its corresponding JavaScript can be generated using the rules of the grammar of [1. EBNF](#1-ebnf):
 ```JavaScript
 while (!(mathRandomInt(1, 100) > 90)) {
     displayText('you loser!');
