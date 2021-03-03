@@ -14,11 +14,18 @@
 const Blast = {};
 
 /**
- * Blockly's main workspace.
+ * Blast's main workspace.
  * @type {Blockly.workspaceSvg}
  * @public
  */
 Blast.workspace = null;
+
+/**
+ * The currently used toolbox.
+ * @type {Blockly.toolbox}
+ * @public
+ */
+Blast.toolbox = defaultToolbox;
 
 /**
  * is block highlighting paused.
@@ -367,7 +374,7 @@ Blast.init = function() {
   Blast.workspace = Blockly.inject('content_workspace', {
     // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
     media: 'media/',
-    toolbox: defaultToolbox,
+    toolbox: Blast.toolbox,
     zoom: {controls: true, wheel: true},
   });
 
@@ -414,10 +421,31 @@ Blast.init = function() {
       Blast.States.flyoutCategory,
   );
 
+  // register advanced toolbox mock button callback
+  Blast.workspace.registerToolboxCategoryCallback(
+      'ADVANCEDTOOLBOX',
+      Blast.switchToolbox,
+  );
+
   // Display output hint
   Blast.BlockMethods.displayText('Actionblock output will be displayed here');
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Blast.importPrettify, 1);
+};
+
+/**
+ * Switches between the default and advanced toolboxes.
+ * @public
+ */
+Blast.switchToolbox = function() {
+  let newToolbox = {};
+  if (Blast.toolbox === defaultToolbox) {
+    newToolbox = advancedToolbox;
+  } else {
+    newToolbox = defaultToolbox;
+  }
+  Blast.toolbox = newToolbox;
+  Blast.workspace.updateToolbox(newToolbox);
 };
 
 /**
