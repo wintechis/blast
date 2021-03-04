@@ -444,6 +444,27 @@ Blockly.Blocks['http_request_new'] = {
   },
 };
 
+Blockly.Blocks['mirobot_pickup'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('Robot-arm, pick up')
+        .appendField(
+            new Blockly.FieldDropdown([
+              ['red', 'RED'],
+              ['yellow', 'YELLOW'],
+              ['green', 'GREEN'],
+            ]),
+            'box',
+        )
+        .appendField('box');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
 Blockly.Blocks['state_definition'] = {
   /**
    * Block for defining a state.

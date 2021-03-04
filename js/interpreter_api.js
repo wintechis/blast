@@ -95,6 +95,23 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
+  // API function for the miroBot_pickup block.
+  wrapper = function(box) {
+    return Blast.BlockMethods.sendHttpRequest(
+        'http://uri',
+        'POST',
+        '{"Content-Type": "application/json", "Accept": "application/json"}',
+        '{}',
+        'table',
+    );
+  };
+
+  interpreter.setProperty(
+      globalObject,
+      'mirobotPickUpBox',
+      interpreter.createAsyncFunction(wrapper),
+  );
+
   // API function for waitSeconds block.
   wrapper = function(timeInSeconds, callback) {
     return Blast.BlockMethods.waitForSeconds(timeInSeconds, callback);

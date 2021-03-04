@@ -140,6 +140,13 @@ Blockly.JavaScript['switch_lights'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['mirobot_pickup'] = function(block) {
+  const box = block.getFieldValue('box');
+
+  const code = `mirobotPickUpBox(${box})`;
+  return code;
+};
+
 Blockly.JavaScript['play_audio'] = function(block) {
   const uri = Blockly.JavaScript.valueToCode(
       block,
