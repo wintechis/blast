@@ -74,6 +74,20 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
+  // API function for the http_request block.
+  wrapper = function(uri, headers, callback) {
+    return Blast.BlockMethods.getRequest(
+        uri,
+        headers,
+        callback,
+    );
+  };
+  interpreter.setProperty(
+      globalObject,
+      'getRequest',
+      interpreter.createAsyncFunction(wrapper),
+  );
+
   // API function for urdf querying.
   wrapper = function(uri, query, callback) {
     return Blast.BlockMethods.urdfQueryWrapper(uri, query, callback);
@@ -95,10 +109,21 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
+  // API function for the get_temperature block.
+  wrapper = function(mac, callback) {
+    return Blast.BlockMethods.getTemperature(mac, callback);
+  };
+
+  interpreter.setProperty(
+      globalObject,
+      'getTemperature',
+      interpreter.createAsyncFunction(wrapper),
+  );
+
   // API function for the miroBot_pickup block.
-  wrapper = function(box) {
+  wrapper = function(box, callback) {
     return Blast.BlockMethods.sendHttpRequest(
-        'http://uri',
+        'http://131.188.245.174:5000/thing/action/grab_'+box,
         'POST',
         '{"Content-Type": "application/json", "Accept": "application/json"}',
         '{}',
@@ -132,20 +157,17 @@ function initApi(interpreter, globalObject) {
       interpreter.createNativeFunction(wrapper),
   );
 
-  // API function for the ibeacon-data block.
-  wrapper = function(address, key, value, retValue, callback) {
-    return Blast.BlockMethods.getTableCell(
-        address,
-        key,
-        value,
-        retValue,
+  // API function for the get_rssi block.
+  wrapper = function(mac, callback) {
+    return Blast.BlockMethods.getRSSI(
+        mac,
         callback,
     );
   };
 
   interpreter.setProperty(
       globalObject,
-      'getTableCell',
+      'getRSSI',
       interpreter.createAsyncFunction(wrapper),
   );
 

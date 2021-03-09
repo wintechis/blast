@@ -16,18 +16,12 @@ Blockly.JavaScript['string_changeCase'] = Blockly.JavaScript['text_changeCase'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
 
 Blockly.JavaScript['ibeacon_data'] = function(block) {
-  const ibeacon = Blockly.JavaScript.valueToCode(
+  const mac = Blockly.JavaScript.valueToCode(
       block,
       'MAC',
       Blockly.JavaScript.ORDER_NONE,
   );
-  const receiver = Blockly.JavaScript.valueToCode(
-      block,
-      'URI',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  const value = block.getFieldValue('value');
-  const code = `getTableCell(${receiver}, 'mac', ${ibeacon}, '${value}')`;
+  const code = `getRSSI(${mac})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -93,6 +87,19 @@ Blockly.JavaScript['http_request_new'] = function(block) {
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
+Blockly.JavaScript['get_request'] = function(block) {
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'URI',
+      Blockly.JavaScript.ORDER_ATOMIC,
+  );
+  const headers = block.getFieldValue('HEADERS');
+
+  const code = `getRequest(${uri}, '{${headers}}')`;
+
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['sparql_query'] = function(block) {
   let query = block.getFieldValue('query');
   const uri = Blockly.JavaScript.valueToCode(
@@ -140,8 +147,18 @@ Blockly.JavaScript['switch_lights'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['get_temperature'] = function(block) {
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'MAC',
+      Blockly.JavaScript.ORDER_ATOMIC,
+  );
+  const code = `getTemperature(${mac})`;
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['mirobot_pickup'] = function(block) {
-  const box = block.getFieldValue('box');
+  const box = Blockly.JavaScript.quote_(block.getFieldValue('box'));
 
   const code = `mirobotPickUpBox(${box})`;
   return code;

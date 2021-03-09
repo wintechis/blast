@@ -154,6 +154,30 @@ Blast.BlockMethods.sendHttpRequest = function(
       });
 };
 
+Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
+  if (uri == null || uri == undefined || uri == '') {
+    Blast.throwError('URI input of HttpRequest blocks must not be empty');
+  }
+
+  const headersJSON = JSON.parse(headersString);
+  const requestOptions = {
+    method: 'GET',
+    headers: new Headers(headersJSON),
+  };
+
+  fetch(uri, requestOptions)
+      .then(Blast.handleFetchErrors)
+      .then((res) => {
+        return res.text();
+      })
+      .then((resData) => {
+        callback(result);
+      })
+      .catch((error) => {
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
+};
+
 /**
  * Wrapper for urdf's query function.
  * @param {*} uri URI to query.
@@ -203,27 +227,23 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
   };
 
   (async () => {
-    console.log(1);
-    await fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
+    await fetch(`http://bt.rapidthings.eu/devices/${mac}/instruction`, {
       method: 'PUT',
       headers: headers,
       body: '{ "type": "ble:Connect" }',
     });
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    console.log(2);
-    await fetch(`http://192.168.178.22:8000/devices/${mac}/gatt/instruction`, {
+    await fetch(`http://bt.rapidthings.eu/devices/${mac}/gatt/instruction`, {
       method: 'PUT',
       headers: headers,
       body: JSON.stringify(data),
     });
-    console.log(3);
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    await fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
+    await fetch(`http://bt.rapidthings.eu/devices/${mac}/instruction`, {
       method: 'PUT',
       headers: headers,
       body: '{ "type": "ble:Disconnect" }',
     });
-    console.log(4);
     callback();
   })();
 
@@ -252,6 +272,32 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
 };
 
 /**
+ * Fetches the current temperature of the xiaomi bluetooth thermomether
+ * @param {string} mac MAC address of the thermometer.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+Blast.BlockMethods.getTemperature = function(mac, callback) {
+  const uri = 'http://bt.rapidthings.eu/devices/' + mac + '/current';
+  const requestOptions = {
+    method: 'GET',
+  };
+
+  fetch(uri, requestOptions)
+      .then(Blast.handleFetchErrors)
+      .then((res) => {
+        return res.text();
+      })
+      .then((resData) => {
+        const temp = JSON.parse(resData)['@graph'][1].result.temperature;
+        callback(temp);
+      })
+      .catch((error) => {
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
+};
+
+/**
  * Sets a timeout of timeInSeconds.
  * @param {*} timeInSeconds time in seconds to wait
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
@@ -262,46 +308,38 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
 };
 
 /**
- * Get table cell in column retValue where key.value = value.
- * @param {string} address URI to get table from.
- * @param {string} key column searched for value.
- * @param {string} value identifier row.
- * @param {string} retValue column to return.
+ * Get the RSSI of a bluetooth device.
+ * @param {string} mac MAC of the Bluetooth device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getTableCell = function(
-    address,
-    key,
-    value,
-    retValue,
-    callback,
-) {
-  const url = new URL(address);
-  const baseUrl = url.protocol + '//' + url.host;
-  const path = url.pathname;
-  const query = `BASE <${baseUrl}>
-      PREFIX sosa: <http://www.w3.org/ns/sosa/>
+Blast.BlockMethods.getRSSI = function(mac, callback) {
+  const uri = 'http://bt.rapidthings.eu/current';
+  const requestOptions = {
+    method: 'GET',
+  };
 
-      SELECT ?mac ?rssi ?resultTime
-      FROM <${path}>
-      WHERE {
-        ?obs sosa:hasSimpleResult ?rssi .
-        ?obs sosa:resultTime ?resultTime .
-        BIND (STRLEN(?obs) AS ?URILEN)
-        BIND (substr(?obs, ?URILEN - 12, 12) AS ?mac)
-      }`;
-
-  urdf.clear();
-  urdf.query(query).then((result) => {
-    let cbValue = null;
-    for (const row of result) {
-      if (row[key].value == value) {
-        cbValue = row[retValue].value;
-      }
-    }
-    callback(cbValue);
-  });
+  fetch(uri, requestOptions)
+      .then(Blast.handleFetchErrors)
+      .then((res) => {
+        return res.text();
+      })
+      .then((resData) => {
+        const currentGraph = JSON.parse(resData)['@graph'];
+        let found = false;
+        for (const node of currentGraph) {
+          if (node.id == '#' + mac) {
+            found = true;
+            callback(node.rssiValue);
+          }
+        }
+        if (!found) {
+          Blast.throwError(`${mac} not found.`);
+        }
+      })
+      .catch((error) => {
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
 };
 
 /**

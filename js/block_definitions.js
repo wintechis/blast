@@ -17,31 +17,16 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     type: 'ibeacon_data',
-    message0: 'get %3 of MAC %1 at URI %2',
+    message0: 'get signal-strength of mac %1',
     args0: [
       {
         type: 'input_value',
         name: 'MAC',
         check: 'mac',
       },
-      {
-        type: 'input_value',
-        name: 'URI',
-        check: 'URI',
-      },
-      {
-        type: 'field_dropdown',
-        name: 'value',
-        options: [
-          // ['mac address', 'mac'],
-          ['rssi', 'rssi'],
-          ['resultTime', 'resultTime'],
-        ],
-      },
     ],
     output: ['String', 'Number'],
-    colour: 330,
-    inputsInline: true,
+    colour: 0,
     tooltip: '',
     helpUrl: '',
   },
@@ -71,7 +56,7 @@ Blockly.defineBlocksWithJsonArray([
   },
   {
     type: 'switch_lights',
-    message0: 'switch lights with mac: %1 %2 red %3 yellow %4 green %5',
+    message0: 'switch lights with mac %1 %2 red %3 yellow %4 green %5',
     args0: [
       {
         type: 'input_dummy',
@@ -444,12 +429,44 @@ Blockly.Blocks['http_request_new'] = {
   },
 };
 
+Blockly.Blocks['get_request'] = {
+  init: function() {
+    this.appendValueInput('URI')
+        .setCheck('URI')
+        .appendField('send HTTP-GET request to URI');
+    this.appendDummyInput()
+        .appendField('headers:')
+        .appendField(
+            new Blockly.FieldTextInput('"Accept": "text/plain"'),
+            'HEADERS',
+        );
+    this.setInputsInline(false);
+    this.setOutput(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
+Blockly.Blocks['get_temperature'] = {
+  init: function() {
+    this.appendValueInput('MAC')
+        .setCheck('mac')
+        .appendField('get temperature of thermometer with mac');
+    this.setOutput(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
 Blockly.Blocks['mirobot_pickup'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('Robot-arm, pick up')
         .appendField(
             new Blockly.FieldDropdown([
+              ['blue', 'BLUE'],
               ['red', 'RED'],
               ['yellow', 'YELLOW'],
               ['green', 'GREEN'],
@@ -475,7 +492,7 @@ Blockly.Blocks['state_definition'] = {
     const nameField = new Blockly.FieldTextInput(initName, Blast.States.rename);
     nameField.setSpellcheck(false);
     this.appendValueInput('state_condition')
-        .setCheck(null)
+        .setCheck('Boolean')
         .appendField('define state')
         .appendField(nameField, 'NAME');
     this.setColour(180);
