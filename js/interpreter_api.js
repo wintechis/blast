@@ -123,7 +123,7 @@ function initApi(interpreter, globalObject) {
   // API function for the miroBot_pickup block.
   wrapper = function(box, callback) {
     return Blast.BlockMethods.sendHttpRequest(
-        'http://131.188.245.174:5000/thing/action/grab_'+box,
+        'https://bot.rapidthings.eu/thing/action/grab_'+box.toLowerCase(),
         'POST',
         '{"Content-Type": "application/json", "Accept": "application/json"}',
         '{}',
