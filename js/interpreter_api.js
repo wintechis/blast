@@ -128,6 +128,7 @@ function initApi(interpreter, globalObject) {
         '{"Content-Type": "application/json", "Accept": "application/json"}',
         '{}',
         'table',
+        callback,
     );
   };
 
