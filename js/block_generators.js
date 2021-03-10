@@ -277,7 +277,9 @@ Blockly.JavaScript['event'] = function(block) {
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
 
   const negate = entersExits == 'enters' ? '!' : '';
+  console.log(stateName);
   const conditions = negate + Blast.States['%' + stateName];
+  console.log(conditions);
 
   Blast.States.addEvent(conditions, statements, block.id);
   Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';

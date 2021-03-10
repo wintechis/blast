@@ -4,7 +4,7 @@
     <variable id="cYm0DH.BJf1qBT~r2aT0">counter</variable>
     <variable id="L*N=XB:`$YV4r~@`UCNr">i</variable>
   </variables>
-  <block type="variables_set" id="`Khx%={g:M^=#_7ThS:h" x="139" y="62">
+  <block type="variables_set" id="`Khx%={g:M^=#_7ThS:h" x="161" y="118">
     <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
     <value name="VALUE">
       <block type="mac" id="QzzHnJX?+@bP.p06!()D">
@@ -19,12 +19,12 @@
           </block>
         </value>
         <statement name="DO">
-          <block type="switch_lights" id="/PkTCO!aT8g5Ep/e(K=d">
-            <field name="cb_red">FALSE</field>
-            <field name="cb_yellow">TRUE</field>
+          <block type="switch_lights" id="!~|iCvPOZ@y_boL?|VTw">
+            <field name="cb_red">TRUE</field>
+            <field name="cb_yellow">FALSE</field>
             <field name="cb_green">FALSE</field>
             <value name="mac">
-              <block type="variables_get" id="f:}_/m.ERF^fSP?cTGG~">
+              <block type="variables_get" id="w/Vv%9XBcQQuEorBGDRJ">
                 <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
               </block>
             </value>
@@ -66,45 +66,26 @@
                           </block>
                         </statement>
                         <next>
-                          <block type="switch_lights" id="!~|iCvPOZ@y_boL?|VTw">
-                            <field name="cb_red">TRUE</field>
-                            <field name="cb_yellow">FALSE</field>
-                            <field name="cb_green">FALSE</field>
-                            <value name="mac">
-                              <block type="variables_get" id="w/Vv%9XBcQQuEorBGDRJ">
-                                <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
-                              </block>
-                            </value>
+                          <block type="mirobot_pickup" id="23bLLGR?s=e9E[Oxc$X$">
+                            <field name="box">RED</field>
                             <next>
-                              <block type="switch_lights" id="}/LOg(+|)2QsN(*d9vl.">
-                                <field name="cb_red">FALSE</field>
-                                <field name="cb_yellow">FALSE</field>
-                                <field name="cb_green">FALSE</field>
-                                <value name="mac">
-                                  <block type="variables_get" id=",Oqww*)YC}(J`l2qQ#Cy">
-                                    <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
-                                  </block>
-                                </value>
-                                <next>
-                                  <block type="variables_set" id="s:{8XF#sz,5KSDTHo6t0">
-                                    <field name="VAR" id="cYm0DH.BJf1qBT~r2aT0">counter</field>
-                                    <value name="VALUE">
-                                      <block type="number_arithmetic" id="|Y$+3Q4Fd08h_Dm!%?EY">
-                                        <field name="OP">ADD</field>
-                                        <value name="A">
-                                          <block type="variables_get" id="mUIm}amHpb)[1M|1t2$7">
-                                            <field name="VAR" id="cYm0DH.BJf1qBT~r2aT0">counter</field>
-                                          </block>
-                                        </value>
-                                        <value name="B">
-                                          <block type="number_value" id=".H.f6rjvCjf11r1^Hi];">
-                                            <field name="NUM">1</field>
-                                          </block>
-                                        </value>
+                              <block type="variables_set" id="s:{8XF#sz,5KSDTHo6t0">
+                                <field name="VAR" id="cYm0DH.BJf1qBT~r2aT0">counter</field>
+                                <value name="VALUE">
+                                  <block type="number_arithmetic" id="|Y$+3Q4Fd08h_Dm!%?EY">
+                                    <field name="OP">ADD</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="mUIm}amHpb)[1M|1t2$7">
+                                        <field name="VAR" id="cYm0DH.BJf1qBT~r2aT0">counter</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="number_value" id=".H.f6rjvCjf11r1^Hi];">
+                                        <field name="NUM">1</field>
                                       </block>
                                     </value>
                                   </block>
-                                </next>
+                                </value>
                               </block>
                             </next>
                           </block>
@@ -112,66 +93,78 @@
                       </block>
                     </statement>
                     <next>
-                      <block type="for" id="ofhh=xj{HDOY$s?Fs]!r">
-                        <field name="VAR" id="L*N=XB:`$YV4r~@`UCNr">i</field>
-                        <value name="FROM">
-                          <block type="number_value" id="!l6v;SXFh_/!Uax8yr+(">
-                            <field name="NUM">1</field>
+                      <block type="switch_lights" id="}/LOg(+|)2QsN(*d9vl.">
+                        <field name="cb_red">FALSE</field>
+                        <field name="cb_yellow">FALSE</field>
+                        <field name="cb_green">FALSE</field>
+                        <value name="mac">
+                          <block type="variables_get" id=",Oqww*)YC}(J`l2qQ#Cy">
+                            <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
                           </block>
                         </value>
-                        <value name="TO">
-                          <block type="number_value" id="{51Hol~EZWJk/}RKeM+S">
-                            <field name="NUM">10</field>
-                          </block>
-                        </value>
-                        <value name="BY">
-                          <block type="number_value" id="zvmF9zq,=rcPe1)Y[[aw">
-                            <field name="NUM">2</field>
-                          </block>
-                        </value>
-                        <statement name="DO">
-                          <block type="conditional_statement" id="W;:v)Yynz4Ai,*Ge/@ox">
-                            <value name="IF0">
-                              <block type="logic_compare" id="3X-|CyBsbaYd@bqtt4{o">
-                                <field name="OP">EQ</field>
-                                <value name="A">
-                                  <block type="variables_get" id="[$ZO|D7xfE|pxx],`-IY">
-                                    <field name="VAR" id="L*N=XB:`$YV4r~@`UCNr">i</field>
-                                  </block>
-                                </value>
-                                <value name="B">
-                                  <block type="number_value" id="v}UK}-}3-!]~.?8t=Owg">
-                                    <field name="NUM">4</field>
-                                  </block>
-                                </value>
+                        <next>
+                          <block type="for" id="ofhh=xj{HDOY$s?Fs]!r">
+                            <field name="VAR" id="L*N=XB:`$YV4r~@`UCNr">i</field>
+                            <value name="FROM">
+                              <block type="number_value" id="!l6v;SXFh_/!Uax8yr+(">
+                                <field name="NUM">1</field>
                               </block>
                             </value>
-                            <statement name="DO0">
-                              <block type="switch_lights" id="g}]vOv1K$F}Qm7fsmx?}">
-                                <field name="cb_red">FALSE</field>
-                                <field name="cb_yellow">FALSE</field>
-                                <field name="cb_green">TRUE</field>
-                                <value name="mac">
-                                  <block type="variables_get" id="-sVNoIC/NAvzq+DjutN5">
-                                    <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
-                                  </block>
-                                </value>
-                                <next>
-                                  <block type="switch_lights" id="%Zv#D6HD9lut@96?XM,)">
-                                    <field name="cb_red">FALSE</field>
-                                    <field name="cb_yellow">FALSE</field>
-                                    <field name="cb_green">FALSE</field>
-                                    <value name="mac">
-                                      <block type="variables_get" id="ocyhZ;YpL$z?6HNw~o0H">
-                                        <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
+                            <value name="TO">
+                              <block type="number_value" id="{51Hol~EZWJk/}RKeM+S">
+                                <field name="NUM">10</field>
+                              </block>
+                            </value>
+                            <value name="BY">
+                              <block type="number_value" id="zvmF9zq,=rcPe1)Y[[aw">
+                                <field name="NUM">2</field>
+                              </block>
+                            </value>
+                            <statement name="DO">
+                              <block type="conditional_statement" id="W;:v)Yynz4Ai,*Ge/@ox">
+                                <value name="IF0">
+                                  <block type="logic_compare" id="3X-|CyBsbaYd@bqtt4{o">
+                                    <field name="OP">EQ</field>
+                                    <value name="A">
+                                      <block type="variables_get" id="[$ZO|D7xfE|pxx],`-IY">
+                                        <field name="VAR" id="L*N=XB:`$YV4r~@`UCNr">i</field>
+                                      </block>
+                                    </value>
+                                    <value name="B">
+                                      <block type="number_value" id="v}UK}-}3-!]~.?8t=Owg">
+                                        <field name="NUM">4</field>
                                       </block>
                                     </value>
                                   </block>
-                                </next>
+                                </value>
+                                <statement name="DO0">
+                                  <block type="switch_lights" id="g}]vOv1K$F}Qm7fsmx?}">
+                                    <field name="cb_red">FALSE</field>
+                                    <field name="cb_yellow">FALSE</field>
+                                    <field name="cb_green">TRUE</field>
+                                    <value name="mac">
+                                      <block type="variables_get" id="-sVNoIC/NAvzq+DjutN5">
+                                        <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="switch_lights" id="%Zv#D6HD9lut@96?XM,)">
+                                        <field name="cb_red">FALSE</field>
+                                        <field name="cb_yellow">FALSE</field>
+                                        <field name="cb_green">FALSE</field>
+                                        <value name="mac">
+                                          <block type="variables_get" id="ocyhZ;YpL$z?6HNw~o0H">
+                                            <field name="VAR" id="EF`rcS87E5qLF8vfsNXP">Signal light</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </statement>
                               </block>
                             </statement>
                           </block>
-                        </statement>
+                        </next>
                       </block>
                     </next>
                   </block>
