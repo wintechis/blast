@@ -146,6 +146,20 @@ Blockly.JavaScript['switch_lights'] = function(block) {
   return code;
 };
 
+Blockly.JavaScript['switch_lights'] = function(block) {
+  const cbRed = block.getFieldValue('cb_red') == 'TRUE';
+  const cbYellow = block.getFieldValue('cb_yellow') == 'TRUE';
+  const cbGreen = block.getFieldValue('cb_green') == 'TRUE';
+  const mac = Blockly.JavaScript.valueToCode(
+      block,
+      'mac',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+
+  const code = `switchLights(${mac}, ${cbRed}, ${cbYellow}, ${cbGreen});\n`;
+  return code;
+};
+
 Blockly.JavaScript['get_temperature'] = function(block) {
   const mac = Blockly.JavaScript.valueToCode(
       block,
