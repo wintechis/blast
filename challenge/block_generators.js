@@ -1,6 +1,6 @@
 Blockly.JavaScript['robot'] = function(block) {
   const box = block.getFieldValue('box');
-  const code = '["bot", "' + box + '"],';
+  const code = '["bot", "' + box.toLowerCase() + '"],';
   return code;
 };
 
@@ -23,9 +23,13 @@ Blockly.JavaScript['submit'] = function(block) {
       Blockly.JavaScript.ORDER_ATOMIC,
   );
   const name = block.getFieldValue('NAME');
-  const solution = Blockly.JavaScript.statementToCode(block, 'solution');
+  let solution = Blockly.JavaScript.statementToCode(block, 'solution');
 
-  const solutionJSON = `{"${name}": [${solution}]}`;
+  solution = solution.slice(0, -1);
+
+  const solutionJSON = Blockly.JavaScript.quote_(
+      `{"${name}": [${solution.replace(/highlightBlock\('.*'\);\n/gm, '')}]}`,
+  );
 
   const code = `submitSolution(${challenge}, ${solutionJSON})`;
   return code;
@@ -33,14 +37,13 @@ Blockly.JavaScript['submit'] = function(block) {
 
 const submitSolution = function(challenge, solution, callback) {
   const uri = 'https://referee.rapidthings.eu/challenge/' + challenge;
-  console.log(uri);
   const headers = JSON.parse('{"Content-Type": "application/json"}');
+  console.log(solution);
   const requestOptions = {
     method: 'POST',
-    headers: new Headers(headers),
+    headers: headers,
     body: solution,
   };
-
 
   fetch(uri, requestOptions)
       .then(Blast.handleFetchErrors)
@@ -49,6 +52,13 @@ const submitSolution = function(challenge, solution, callback) {
       })
       .then((resData) => {
         console.log(resData);
+        if (resData == '') {
+          Blast.BlockMethods.displayText(
+              `Solution for challenge ${challenge} submitted.`,
+          );
+        } else {
+          Blast.BlockMethods.displayText(resData);
+        }
         callback();
       })
       .catch((error) => {

@@ -108,8 +108,8 @@
                         </value>
                         <statement name="DO0">
                           <block type="switch_lights" id="OFo?I,p?uaZefBabh|=p">
-                            <field name="cb_red">TRUE</field>
-                            <field name="cb_yellow">FALSE</field>
+                            <field name="cb_red">FALSE</field>
+                            <field name="cb_yellow">TRUE</field>
                             <field name="cb_green">FALSE</field>
                             <value name="mac">
                               <block type="variables_get" id="!eQzd$cc*}2k+akPD/G4">
@@ -137,7 +137,7 @@
                                 <field name="OP">EQ</field>
                                 <value name="A">
                                   <block type="variables_get" id="WG/)Ex4gK#pPFw:2t7Py">
-                                    <field name="VAR" id=";;Qbf1]#R}sF{EW;Dx@~">divisor</field>
+                                    <field name="VAR" id="o.$(!9tl%,QRZ7aXAbb%">i</field>
                                   </block>
                                 </value>
                                 <value name="B">

@@ -39,6 +39,7 @@ function initApi(interpreter, globalObject) {
 
   // API function for the display_text block.
   wrapper = function(challenge, solution, callback) {
+    console.log(solution);
     return submitSolution(challenge, solution, callback);
   };
   interpreter.setProperty(

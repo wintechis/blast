@@ -33,8 +33,8 @@
                 <field name="box">BLUE</field>
                 <next>
                   <block type="switch_lights" id="22K0u-0q[-w3b}zi#mT#">
-                    <field name="cb_red">FALSE</field>
-                    <field name="cb_yellow">TRUE</field>
+                    <field name="cb_red">TRUE</field>
+                    <field name="cb_yellow">FALSE</field>
                     <field name="cb_green">FALSE</field>
                     <value name="mac">
                       <block type="variables_get" id="#mEh(Oh}`6Ws3M3}{C%B">
