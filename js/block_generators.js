@@ -152,7 +152,7 @@ Blockly.JavaScript['get_temperature'] = function(block) {
       'MAC',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getTemperature(${mac});\n`;
+  const code = `getTemperature(${mac})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
