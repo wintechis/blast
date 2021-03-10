@@ -20,7 +20,7 @@
             <field name="HEADERS">"Accept": "text/plain"</field>
             <value name="URI">
               <block type="uri" id="8Q:lpmJ{oyeqx~!:8TM|">
-                <field name="URI">http://referee.rapidthings.eu/image</field>
+                <field name="URI">https://referee.rapidthings.eu/image</field>
               </block>
             </value>
           </block>
