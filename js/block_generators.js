@@ -133,17 +133,16 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
 };
 
 Blockly.JavaScript['switch_lights'] = function(block) {
-  const checkboxRed = block.getFieldValue('cb_red') == 'TRUE';
-  const checkboxYellow = block.getFieldValue('cb_yellow') == 'TRUE';
-  const checkboxGreen = block.getFieldValue('cb_green') == 'TRUE';
+  const cbRed = block.getFieldValue('cb_red') == 'TRUE';
+  const cbYellow = block.getFieldValue('cb_yellow') == 'TRUE';
+  const cbGreen = block.getFieldValue('cb_green') == 'TRUE';
   const mac = Blockly.JavaScript.valueToCode(
       block,
       'mac',
       Blockly.JavaScript.ORDER_NONE,
   );
 
-  const code = `switchLights(${mac}, ${checkboxRed}, 
-  ${checkboxYellow}, ${checkboxGreen});`;
+  const code = `switchLights(${mac}, ${cbRed}, ${cbYellow}, ${cbGreen});\n`;
   return code;
 };
 
@@ -153,14 +152,16 @@ Blockly.JavaScript['get_temperature'] = function(block) {
       'MAC',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getTemperature(${mac})`;
+  const code = `getTemperature(${mac});\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['mirobot_pickup'] = function(block) {
-  const box = Blockly.JavaScript.quote_(block.getFieldValue('box'));
+  const box = Blockly.JavaScript.quote_(
+      block.getFieldValue('box').toLowerCase(),
+  );
 
-  const code = `mirobotPickUpBox(${box})`;
+  const code = `mirobotPickUpBox(${box});\n`;
   return code;
 };
 

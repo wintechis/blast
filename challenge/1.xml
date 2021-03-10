@@ -1,0 +1,53 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="ZV%.ixob:yJ$7yuiKxpF">Signal light</variable>
+    <variable id=")FxOs|n$A82Z3N+8Ur_P">LED Strip</variable>
+  </variables>
+  <block type="variables_set" id="3[Jf[-1|{EGj|1ZLmay8" x="15" y="29">
+    <field name="VAR" id="ZV%.ixob:yJ$7yuiKxpF">Signal light</field>
+    <value name="VALUE">
+      <block type="mac" id="MCUd#Y$1MfaG8Gn{F.s|">
+        <field name="MAC">be580000b652</field>
+      </block>
+    </value>
+    <next>
+      <block type="variables_set" id=".,8^ffFrn@[(4^^:77?U">
+        <field name="VAR" id=")FxOs|n$A82Z3N+8Ur_P">LED Strip</field>
+        <value name="VALUE">
+          <block type="mac" id="~_*Jmg}KwAn||,oV6j{3">
+            <field name="MAC">be5860063d1c</field>
+          </block>
+        </value>
+        <next>
+          <block type="switch_lights" id="s1c$S,6AzIJT_(=7VuW6">
+            <field name="cb_red">TRUE</field>
+            <field name="cb_yellow">FALSE</field>
+            <field name="cb_green">FALSE</field>
+            <value name="mac">
+              <block type="variables_get" id="S^@qZN(+y|26I_%KH.N(">
+                <field name="VAR" id="ZV%.ixob:yJ$7yuiKxpF">Signal light</field>
+              </block>
+            </value>
+            <next>
+              <block type="mirobot_pickup" id="`u^}g@IrS}l14Jt(@aW|">
+                <field name="box">BLUE</field>
+                <next>
+                  <block type="switch_lights" id="22K0u-0q[-w3b}zi#mT#">
+                    <field name="cb_red">FALSE</field>
+                    <field name="cb_yellow">TRUE</field>
+                    <field name="cb_green">FALSE</field>
+                    <value name="mac">
+                      <block type="variables_get" id="#mEh(Oh}`6Ws3M3}{C%B">
+                        <field name="VAR" id=")FxOs|n$A82Z3N+8Ur_P">LED Strip</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

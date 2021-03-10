@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en" xml:lang="en">
+
+<head>
+    <meta content="text/html;" charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BLAST - Block applications for things</title>
+    <link rel="stylesheet" href="../style.css">
+
+    <!-- JS Interpreter -->
+    <script src="../js/lib/JSInterpreter/acorn_interpreter.js"></script>
+
+    <!-- blockly with js generator -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/blockly.min.js"
+        integrity="sha512-EyUOZEYiWEOhBwEXZ/5g+Ut51HPHI2MmILgaVusS5fkYH9X82qCqQYO5h1dKkMK8Tl6GDjS6DaZRn6asxJJeLg=="
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/msg/en.min.js"
+        integrity="sha512-CcZSuOhlsHqLLiF3M8hvMc8aWqTE36GEaE/cP7HMNOSZytGihNqhQxFzkXigYQp4psZWCVjEXY2oYFN4+vLAYg=="
+        crossorigin="anonymous"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/javascript_compressed.min.js"
+        integrity="sha512-6cZbi8+9x76YNmjTciXgQrhz1LWnfEVw8FbSf+pMrDu042lGFymzWZQtEl5mpwnVyfzFU1TEKvjodDF07rlgNQ=="
+        crossorigin="anonymous"></script>
+
+    <!-- play/stop icons -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js"
+        integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg=="
+        crossorigin="anonymous"></script>
+
+    <!-- <script src="block_definitions.js"></script>
+  <script src="block_generators.js"></script> -->
+    <script src="toolbox.js"></script>
+    <script src="interpreter_api.js"></script>
+    <script src="block_definitions.js"></script>
+    <script src="block_generators.js"></script>
+    <script src="blast.js"></script>
+    <script src="../js/blast_blockmethods.js"></script>
+</head>
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+<script>
+    function runJS() {
+        var code = Blockly.JavaScript.workspaceToCode(Blast.workspace);
+        console.log(code);
+    }
+</script>
+<xml xmlns="https://developers.google.com/blockly/xml" id="startBlocks"
+    style="display: none">
+    <block type="submit" inline="false" x="20" y="20">
+        <value name="challenge">
+            <block type="math_number">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+    </block>
+</xml>
+
+<body>
+    <table width="100%" height="100%">
+        <tr>
+            <td>
+                <table width="100%">
+                    <tr id="tabRow" height="1em">
+                        <td id="tab_workspace" class="tabon">Workspace</td>
+                        <td class="tabmin">&nbsp;</td>
+                        <td id="tab_javascript" class="taboff">JavaScript</td>
+                        <td class="tabmin">&nbsp;</td>
+                        <td id="tab_xml" class="taboff">XML</td>
+                        <td class="tabmin">&nbsp;</td>
+                        <td id="inputs_td" class="tabmin hide">
+                            <input list="samples" type="text"
+                                id="loadWorkspace-input"
+                                placeholder="samples/gamble.xml">
+                            <datalist id="samples">
+                                <option value="./samples/gamble.xml"></option>
+                                <option value="./samples/sparqlAsk.xml">
+                                </option>
+                                <option value="./samples/httpRequests.xml">
+                                </option>
+                                <option value="./samples/event.xml"></option>
+                                <option value="./samples/lightsProximity.xml">
+                                </option>
+                                <option value="./samples/stationIncrement.xml">
+                                </option>
+                            </datalist>
+                        </td>
+                        <td class="tabmin hide">
+                            <button id="loadButton" title="load workspace">
+                                <svg class="icon icon-download">
+                                    <use
+                                        xlink:href="../media/symbol-defs.svg#icon-download">
+                                    </use>
+                                </svg>
+                            </button>
+                        </td>
+                        <td class="tabmin hide">
+                            <button id="saveButton" title="save workspace">
+                                <svg class="icon icon-upload">
+                                    <use
+                                        xlink:href="../media/symbol-defs.svg#icon-upload">
+                                    </use>
+                                </svg>
+                            </button>
+                        </td>
+                        <td class="tabmax">
+                            <span id="statusContainer">ready</span>
+                            <button id="runButton" class="primary"
+                                title="Run the program">
+                                <svg class="icon icon-play">
+                                    <use
+                                        xlink:href="../media/symbol-defs.svg#icon-play">
+                                    </use>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td id="content_area">
+            </td>
+            <td id="output_area">
+                <div id="msgOutputContainer">
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <div id="content_workspace" class="content"></div>
+    <pre id="content_javascript" class="content prettyprint lang-js"></pre>
+    <textarea id="content_xml" class="content" wrap="off"></textarea>
+</body>
+
+</html>
