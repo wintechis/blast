@@ -154,6 +154,8 @@ Blast.BlockMethods.sendHttpRequest = function(
       });
 };
 
+// temporary method for the th-praxistag works for getting integer values only
+// TODO remove or fix after praxistag
 Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
   if (uri == null || uri == undefined || uri == '') {
     Blast.throwError('URI input of HttpRequest blocks must not be empty');
@@ -172,7 +174,7 @@ Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
       })
       .then((resData) => {
         console.log(resData);
-        callback(resData);
+        callback(parseInt(resData));
       })
       .catch((error) => {
         Blast.throwError(`${error.message}\nSee console for details.`);
@@ -245,6 +247,7 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
       headers: headers,
       body: '{ "type": "ble:Disconnect" }',
     });
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     callback();
   })();
 
