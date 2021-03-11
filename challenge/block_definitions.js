@@ -4,10 +4,10 @@ Blockly.Blocks['robot'] = {
         .appendField('robot')
         .appendField(
             new Blockly.FieldDropdown([
-              ['red', 'RED'],
+              ['red', 'red'],
               ['green', 'green'],
-              ['blue', 'BLUE'],
-              ['yellow', 'YELLOW'],
+              ['blue', 'blue'],
+              ['yellow', 'yellow'],
             ]),
             'box',
         );
