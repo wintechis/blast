@@ -25,8 +25,8 @@ Blockly.Blocks['strip'] = {
         .appendField('LED strip')
         .appendField(
             new Blockly.FieldDropdown([
-              ['red', 'RED'],
-              ['yellow', 'YELLOW'],
+              ['red', 'red'],
+              ['yellow', 'yellow'],
               ['green', 'green'],
             ]),
             'color',
