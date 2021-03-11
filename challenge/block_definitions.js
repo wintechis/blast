@@ -45,8 +45,8 @@ Blockly.Blocks['signal'] = {
         .appendField('Signal light')
         .appendField(
             new Blockly.FieldDropdown([
-              ['red', 'RED'],
-              ['yellow', 'YELLOW'],
+              ['red', 'red'],
+              ['yellow', 'yellow'],
               ['green', 'green'],
             ]),
             'color',
