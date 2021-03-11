@@ -28,6 +28,7 @@ Blockly.Blocks['strip'] = {
               ['red', 'red'],
               ['yellow', 'yellow'],
               ['green', 'green'],
+              ['off', 'off'],
             ]),
             'color',
         );
@@ -48,6 +49,7 @@ Blockly.Blocks['signal'] = {
               ['red', 'red'],
               ['yellow', 'yellow'],
               ['green', 'green'],
+              ['off', 'off'],
             ]),
             'color',
         );
