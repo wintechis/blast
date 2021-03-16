@@ -1,68 +1,84 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <variables>
-    <variable id="d7}.^;[8hW}5rjDuiXHM">currentValue</variable>
-  </variables>
-  <block type="while_until" id="c.!hL_mZLFA]dj6J#u2X" x="10" y="10">
+  <block type="while_until" id="E6NI%kO?9nCrs#01Wd7D" x="-410" y="15">
     <field name="MODE">WHILE</field>
     <value name="BOOL">
-      <block type="logic_boolean" id="k^`g~s2v2M*oW!A-j{9y">
+      <block type="logic_boolean" id="0ka=i3uWM^C9%3JVO?,_">
         <field name="BOOL">TRUE</field>
       </block>
     </value>
     <statement name="DO">
-      <block type="variables_set" id="!EtXTz@@E/_aE9Tk|]/!">
-        <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-        <value name="VALUE">
-          <block type="ibeacon_data" id="pu,?//lc?4B?_i]VzROp">
-            <field name="value">rssi</field>
+      <block type="wait_seconds" id="hkpd:63*eXDqtdRf{VaG">
+        <field name="SECONDS">600</field>
+      </block>
+    </statement>
+  </block>
+  <block type="state_definition" id="A;NIIG:MQL.FUc[:t-hV" x="32" y="28">
+    <field name="NAME">beacon is close</field>
+    <value name="state_condition">
+      <block type="logic_compare" id="izyBPA7V]!SZa43mZ#,,">
+        <field name="OP">GT</field>
+        <value name="A">
+          <block type="ibeacon_data" id="-u{Ua~@rl{*$`=X2I3:N">
             <value name="MAC">
-              <block type="mac" id="GfpPznlD^:$Y/zteS7SC">
+              <block type="mac" id="M*^=ov*a}cU}aFL0Cg,[">
                 <field name="MAC">f0346fbf4875</field>
-              </block>
-            </value>
-            <value name="URI">
-              <block type="uri" id="_l.EHE*siVTMt?CURPh=">
-                <field name="URI">http://dwpi4.local/ble/current</field>
               </block>
             </value>
           </block>
         </value>
+        <value name="B">
+          <block type="number_value" id="o?HBB7}VXmsfE6Lp{ilu">
+            <field name="NUM">-35</field>
+          </block>
+        </value>
+      </block>
+    </value>
+  </block>
+  <block type="event" id=";jc!NRKkzT%{2{lHf/_l" x="35" y="99">
+    <mutation name="beacon is close"></mutation>
+    <field name="entersExits">ENTERS</field>
+    <field name="NAME">beacon is close</field>
+    <statement name="statements">
+      <block type="display_text" id="1{=WZ},!VI22!I9f3+l#">
+        <value name="text">
+          <block type="string" id="v?Dyjo^DCTn+=(%JL|}4">
+            <field name="TEXT">Hi beacon!</field>
+          </block>
+        </value>
         <next>
-          <block type="display_text" id="Hq4DVb1!!|@#_q*E;W2=">
-            <value name="text">
-              <block type="text_join" id="{i%EX9e=cMy|YIJ%8Ymw">
-                <mutation items="4"></mutation>
-                <value name="ADD0">
-                  <block type="text" id="Q!(8fhZE.V^R$WX~^-YT">
-                    <field name="TEXT">value: </field>
-                  </block>
-                </value>
-                <value name="ADD1">
-                  <block type="variables_get" id="o5_EbID=R[XJ[~H1_t`:">
-                    <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-                  </block>
-                </value>
-                <value name="ADD2">
-                  <block type="text" id="IQY?gV,KhMjLGy1wt4AR">
-                    <field name="TEXT">, event: </field>
-                  </block>
-                </value>
-                <value name="ADD3">
-                  <block type="event" id="xoC%tp`x);b$9z5{747`">
-                    <field name="startstop">BECOMES</field>
-                    <field name="operator">GT</field>
-                    <value name="measurement">
-                      <block type="variables_get" id="9:07*9+I0cq`ZR;eNb.Z">
-                        <field name="VAR" id="d7}.^;[8hW}5rjDuiXHM">currentValue</field>
-                      </block>
-                    </value>
-                    <value name="value">
-                      <block type="text" id="P4b_WbLVcBvmb]sV/NMq">
-                        <field name="TEXT">-50</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
+          <block type="switch_lights" id="hI-FkCKoTiJ(`Xz!UR_2">
+            <field name="cb_red">FALSE</field>
+            <field name="cb_yellow">FALSE</field>
+            <field name="cb_green">TRUE</field>
+            <value name="mac">
+              <block type="mac" id="S[3nP(}4x_QWUaUZw}?{">
+                <field name="MAC">be5860018744</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="event" id="C0NVY[^!ltY4)xM?]P8i" x="28" y="242">
+    <mutation name="beacon is close"></mutation>
+    <field name="entersExits">EXITS</field>
+    <field name="NAME">beacon is close</field>
+    <statement name="statements">
+      <block type="display_text" id=".c@KLgfmnhlq?2fMwqi;">
+        <value name="text">
+          <block type="string" id="j85VcAg?+Ut!gv~t?;Yf">
+            <field name="TEXT">Bye beacon :(</field>
+          </block>
+        </value>
+        <next>
+          <block type="switch_lights" id="1F6R7t?2.Iv}*793h4eo">
+            <field name="cb_red">FALSE</field>
+            <field name="cb_yellow">FALSE</field>
+            <field name="cb_green">FALSE</field>
+            <value name="mac">
+              <block type="mac" id="a*8r|sL8].k}=(`2Qpj_">
+                <field name="MAC">be5860018744</field>
               </block>
             </value>
           </block>

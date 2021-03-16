@@ -417,7 +417,7 @@ Blast.init = function() {
 
   // register states category flyout callback
   Blast.workspace.registerToolboxCategoryCallback(
-      'STATES',
+      'EVENTS',
       Blast.States.flyoutCategory,
   );
 

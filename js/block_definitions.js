@@ -26,7 +26,7 @@ Blockly.defineBlocksWithJsonArray([
       },
     ],
     output: ['String', 'Number'],
-    colour: 0,
+    colour: 255,
     tooltip: '',
     helpUrl: '',
   },
@@ -148,7 +148,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     previousStatement: null,
     nextStatement: null,
-    colour: 0,
+    colour: 120,
   },
   // Temporary dw blocks for demonstration on 22.1.2021
   {
@@ -454,7 +454,7 @@ Blockly.Blocks['get_temperature'] = {
         .setCheck('mac')
         .appendField('get temperature of thermometer with mac');
     this.setOutput(true, null);
-    this.setColour(0);
+    this.setColour(255);
     this.setTooltip('');
     this.setHelpUrl('');
   },
