@@ -230,24 +230,24 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
   };
 
   (async () => {
-    await fetch(`https://bt.rapidthings.eu/devices/${mac}/instruction`, {
+    await fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
       method: 'PUT',
       headers: headers,
       body: '{ "type": "ble:Connect" }',
     });
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-    await fetch(`https://bt.rapidthings.eu/devices/${mac}/gatt/instruction`, {
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    await fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
       method: 'PUT',
       headers: headers,
       body: JSON.stringify(data),
     });
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    await fetch(`https://bt.rapidthings.eu/devices/${mac}/instruction`, {
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    await fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
       method: 'PUT',
       headers: headers,
       body: '{ "type": "ble:Disconnect" }',
     });
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    await new Promise((resolve) => setTimeout(resolve, 200));
     callback();
   })();
 
@@ -282,7 +282,7 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
  * @public
  */
 Blast.BlockMethods.getTemperature = function(mac, callback) {
-  const uri = 'https://bt.rapidthings.eu/devices/' + mac + '/current';
+  const uri = 'http://dwpi4.local:8000/devices/' + mac + '/current';
   const requestOptions = {
     method: 'GET',
   };
@@ -318,7 +318,7 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
  * @public
  */
 Blast.BlockMethods.getRSSI = function(mac, callback) {
-  const uri = 'https://bt.rapidthings.eu/current';
+  const uri = 'http://dwpi4.local:8000/current';
   const requestOptions = {
     method: 'GET',
   };
