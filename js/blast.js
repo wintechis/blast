@@ -405,6 +405,7 @@ Blast.init = function() {
   Blockly.svgResize(Blast.workspace);
 
   // Load the interpreter now, and upon future changes.
+  Blast.setStatus(Blast.status.READY);
   Blast.generateCode();
   Blast.workspace.addChangeListener(function(event) {
     if (!(event instanceof Blockly.Events.Ui)) {
