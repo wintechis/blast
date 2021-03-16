@@ -270,6 +270,18 @@ Blast.States.flyoutCategory = function(workspace) {
    * @param {string[]} stateList Array containing states.
    */
   function populateEvents(stateList) {
+    // if stateList is empty create disabled event block.
+    if (stateList.length == 0) {
+      const block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', 'event');
+      block.setAttribute('gap', 16);
+      block.setAttribute('disabled', true);
+      const mutation = Blockly.utils.xml.createElement('mutation');
+      mutation.setAttribute('name', 'state name');
+      block.appendChild(mutation);
+      xmlList.push(block);
+    }
+
     for (let i = 0; i < stateList.length; i++) {
       const name = stateList[i];
       const block = Blockly.utils.xml.createElement('block');
