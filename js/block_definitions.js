@@ -671,9 +671,10 @@ Blockly.Blocks['event'] = {
         // in most cases the old group should be ''
         const oldGroup = Blockly.Events.getGroup();
         if (oldGroup) {
-          // This should only be possible programmatically and may indicate a problem
-          // with event grouping. If you see this message please investigate. If the
-          // use ends up being valid we may need to reorder events in the undo stack.
+          // This should only be possible programmatically and may indicate a
+          // problem with event grouping. If you see this message please
+          // investigate. If the use ends up being valid we may need to reorder
+          // events in the undo stack.
           console.log(
               'Saw an existing group while responding to a definition change',
           );
