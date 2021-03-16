@@ -37,44 +37,11 @@ Blast.States.Interpreter = null;
 Blast.States.latestCode = '';
 
 /**
- * Map containing every event's code identified by block IDs.
- * @type {Map<!Blockly.Block.id, string>}
- * @public
- */
-Blast.States.events = new Map();
-
-/**
- * Map containing the state conditions identified by block IDs.
- * @type {Map<!Blockly.Block.id, string>}
- * @public
- */
-Blast.States.eventConditions = new Map();
-
-/**
  * Map containing previous values for events identified by block IDs.
  * @type {Map<!Blockly.Block.id, boolean>}
  * @public
  */
 Blast.States.eventValues = new Map();
-
-/**
- * Adds event's code to {@link Blast.States.latestCode}.
- * and event conditions to {@link Blast.States.eventConditions}.
- * @param {string} conditions the state conditions.
- * @param {string} statements code to be executed if condtions are true.
- * @param {Blockly.Block.id} blockId id of the state defintion block.
- * @public
- */
-Blast.States.addEvent = function(conditions, statements, blockId) {
-  // event conditions
-  Blast.States.eventConditions.set(blockId, conditions);
-
-  // event code
-  const code = `if(eventChecker("${blockId}", ${conditions})) { 
-    ${statements}
-  }`;
-  Blast.States.events.set(blockId, code);
-};
 
 /**
  * Checks whether a given state condition is true or false
@@ -93,17 +60,41 @@ Blast.States.eventChecker = function(blockId, curValue) {
 };
 
 /**
- * Iterates over {@link Blast.States.events},
- *  inserting all events to {@link Blast.States.latestCode}.
+ * Generates the code for all events a workspace.
+ * @param {!Blockly.Workspace} workspace Root workspace.
  */
 Blast.States.generateCode = function() {
   // event blocks are continuously checking for state condditions.
   let code = 'while (true) {\n \n}';
 
-  Blast.States.events.forEach((value, key, map) => {
-    // inserting code before the closing '\n}'
-    code = code.slice(0, -2) + value + '\n' + code.slice(-1);
-  });
+  // generate all events' code
+
+  const stateNames = Blast.States.allStates(Blast.workspace);
+  for (const name of stateNames) {
+    console.log(name);
+    // get all events of state name and add their code to Blast.States.events
+    const events = Blast.States.getEvents(name, Blast.workspace);
+    for (const block of events) {
+      const entersExits = block.getFieldValue('entersExits');
+      const stateName = Blockly.JavaScript.variableDB_.getName(
+          block.getFieldValue('NAME'),
+          Blockly.PROCEDURE_CATEGORY_NAME,
+      );
+      const statements = Blockly.JavaScript.statementToCode(
+          block,
+          'statements',
+      );
+      const negate = entersExits == 'ENTERS' ? '' : '!';
+      const conditions = negate + Blast.States['%' + stateName];
+
+      const eventCode = `      if(eventChecker("${block.id}", ${conditions})) { 
+        ${statements}
+      }`;
+
+      // insert event code before the closing '\n}'
+      code = code.slice(0, -1) + eventCode + '\n' + code.slice(-1);
+    }
+  }
 
   // prepend generated code with variable and function definitions
   Blast.States.latestCode = Blockly.JavaScript.finish(code);
@@ -113,7 +104,6 @@ Blast.States.generateCode = function() {
  * executes {@link Blast.States.latestCode} using {@link Blast.Interpreter}.
  */
 Blast.States.startEventChecker = function() {
-  Blast.States.generateCode();
   Blast.States.Interpreter = null;
   // Begin execution
   Blast.States.Interpreter = new Interpreter(Blast.States.latestCode, initApi);
@@ -145,7 +135,7 @@ Blast.States.allStates = function(root) {
   const states = root
       .getBlocksByType('state_definition', false)
       .map(function(block) {
-        return /** @type {!Blast.States.StateBlock} */ (block).getStateName();
+        return /** @type {!Blast.States.StateBlock} */ (block).getStateDef()[0];
       });
   return states;
 };
@@ -311,8 +301,8 @@ Blast.States.getEvents = function(name, workspace) {
   // Iterate through every block and check the name.
   for (let i = 0; i < blocks.length; i++) {
     if (blocks[i].getStateName) {
-      const stateBlock = /** @type {!Blast.States.StateBlock} */ (blocks[i]);
-      const stateName = stateBlock.getStateName();
+      const eventBlock = /** @type {!Blast.States.EventBlock} */ (blocks[i]);
+      const stateName = eventBlock.getStateName();
       // State name may be null if the block is only half-built.
       if (stateName && Blockly.Names.equals(stateName, name)) {
         events.push(blocks[i]);

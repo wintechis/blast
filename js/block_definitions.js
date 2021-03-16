@@ -655,7 +655,6 @@ Blockly.Blocks['event'] = {
       // the orphan.
       const name = this.getStateName();
       const def = Blast.States.getDefinition(name, this.workspace);
-      console.log(def);
       if (!def) {
         Blockly.Events.setGroup(event.group);
         this.dispose(true);

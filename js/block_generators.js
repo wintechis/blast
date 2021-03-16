@@ -269,17 +269,6 @@ Blockly.JavaScript['state_definition'] = function(block) {
 };
 
 Blockly.JavaScript['event'] = function(block) {
-  const entersExits = block.getFieldValue('entersExits');
-  const stateName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('NAME'),
-      Blockly.PROCEDURE_CATEGORY_NAME,
-  );
-  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
-
-  const negate = entersExits == 'ENTERS' ? '' : '!';
-  const conditions = negate + Blast.States['%' + stateName];
-
-  Blast.States.addEvent(conditions, statements, block.id);
   Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
 
   return null;

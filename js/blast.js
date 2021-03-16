@@ -409,9 +409,9 @@ Blast.init = function() {
   Blast.workspace.addChangeListener(function(event) {
     if (!(event instanceof Blockly.Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
-      Blast.resetInterpreter();
       Blast.renderContent_();
       Blast.generateCode();
+      Blast.States.generateCode();
     }
   });
 
@@ -508,8 +508,6 @@ Blast.generateCode = function() {
   // Generate JavaScript code and parse it.
   Blast.latestCode = '';
   Blast.latestCode = Blockly.JavaScript.workspaceToCode(Blast.workspace);
-
-  Blast.resetUi(Blast.status.READY);
 };
 
 /**
