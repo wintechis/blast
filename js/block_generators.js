@@ -254,22 +254,36 @@ Blockly.JavaScript['number_infinity'] = function(block) {
 };
 
 Blockly.JavaScript['state_definition'] = function(block) {
-  const name = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('NAME'),
-      Blockly.PROCEDURE_CATEGORY_NAME,
-  );
-  const condition = Blockly.JavaScript.valueToCode(
-      block,
-      'state_condition',
-      Blockly.JavaScript.ORDER_ATOMIC,
-  );
-
-  Blast.States['%' + name] = condition;
+  // event code is generated at Blast.States.generateCode(),
+  // and the event block generator
   return null;
 };
 
 Blockly.JavaScript['event'] = function(block) {
+  // read block inputs
+  const entersExits = block.getFieldValue('entersExits');
+  const stateName = block.getFieldValue('NAME');
+  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
+
+  // When an event block is in the workspace start the event interpreter
   Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
+
+  // get this events' conditions
+  const stateBlock = Blast.States.getDefinition(stateName, Blast.workspace);
+  if (stateBlock) {
+    const stateConditions = Blockly.JavaScript.valueToCode(
+        stateBlock,
+        'state_condition',
+        Blockly.JavaScript.ORDER_ATOMIC,
+    );
+    const negate = entersExits == 'ENTERS' ? '' : '!';
+    const conditions = negate + stateConditions;
+
+    const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
+    ${statements} }\n`;
+
+    Blast.States.addEventCode(block.id, eventCode);
+  }
 
   return null;
 };

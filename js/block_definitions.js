@@ -498,7 +498,6 @@ Blockly.Blocks['state_definition'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.conditions_ = [];
   },
   /**
    * Return the name and condition of this state.
@@ -508,16 +507,8 @@ Blockly.Blocks['state_definition'] = {
    * @this {Blockly.Block}
    */
   getStateDef: function() {
-    return [this.getFieldValue('NAME'), this.conditions_];
-  },
-  /**
-   * Returns the name of this state.
-   * @return {string} State name.
-   * @this {Blockly.Block}
-   */
-  getStateName: function() {
-    // The NAME field is guaranteed to exist, null will never be returned.
-    return /** @type {string} */ (this.getFieldValue('NAME'));
+    const conditions = this.getFieldValue('state_condition');
+    return [this.getFieldValue('NAME'), conditions];
   },
   /**
    * Return this state's conditions.
@@ -525,7 +516,7 @@ Blockly.Blocks['state_definition'] = {
    * @this {Blockly.Block}
    */
   getConditions: function() {
-    return this.conditions_;
+    return this.getFieldValue('state_condition');
   },
 };
 

@@ -42,7 +42,7 @@ Blast.highlightPause = false;
 Blast.latestCode = '';
 
 /**
- * Singleton instance of the JS Interpreter.
+ * Instance of the JS Interpreter.
  * @type {?Interpreter}
  * @public
  */
@@ -548,6 +548,9 @@ Blast.runJS = function() {
             // Execution is currently blocked by some async call.
             // Try again later.
             setTimeout(Blast.runner_, 5);
+          } else if (Blast.States.Interpreter) {
+            // eventChecker is running,
+            // dont reset UI until stop button is clicked.
           } else {
             // Program is complete.
             Blast.resetUi(Blast.status.READY);
