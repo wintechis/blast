@@ -29,7 +29,7 @@ function initApi(interpreter, globalObject) {
   // API function for highlighting blocks.
   let wrapper = function(id) {
     id = id ? id.toString() : '';
-    return interpreter.createPrimitive(Blast.highlightBlock(id));
+    return Blast.highlightBlock(id);
   };
   interpreter.setProperty(
       globalObject,
