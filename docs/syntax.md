@@ -1,13 +1,14 @@
 # Grammar <!-- omit in toc -->
 
-This document describes in BLAST's grammar using [EBNF](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS. Documentation for JavaScript functions used by BLAST's blocks can be found in the [jsdoc](../docs/jsdoc).
+This document describes in BLAST's grammar using the [Extended Backus-Naur Format (EBNF)](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS. Documentation for JavaScript functions used by BLAST's blocks can be found in the [jsdoc](../docs/jsdoc).
 
 - [1. EBNF](#1-ebnf)
 - [2. Notation](#2-notation)
 - [3. Terminal Symbols](#3-terminal-symbols)
 - [4. Example program EBNF](#4-example-program-ebnf)
 
-This grammar of BLAST uses the [W3C's Extended Backus-Naur Form (EBNF)](https://www.w3.org/TR/2010/REC-xquery-20101214/#EBNFNotation)
+The grammar of BLAST is described in the Extended Backus-Naur Form (EBNF) used by the W3C. An informal definition of the W3C EBNF format is available at
+http://www.w3.org/TR/REC-xml/#sec-notation. Note that the W3C EBNF is *not* the same as the ISO EBNF format defined in [ISO/IEC 14977:1996](https://www.iso.org/standard/26153.html).
 
 The EBNF notation is described in more detail in [2 Notation ](#2-notation).
 
@@ -15,26 +16,19 @@ The terminal symbols for this grammar include the quoted strings used in the pro
 
 ## 1. EBNF
 
-
-**block programs**
-
-```ebnf
+```ebnf-w3c
 block_program            ::= statement+
 statement                ::= ( control_flow_statement | action_statement ) ";"
-```
 
-**control flow**
-```ebnf
+/* Control Flow */
 control_flow_statement   ::= ( repeat | while_until | for | conditional_statement | break )
 conditional_statement    ::= "if (" boolean_expression ") {" statement* "}"
 repeat                   ::= "for (var count = 0; count <" number "; count++) {" statement* "}"
 while_until              ::= "while(" "!"? conditional_statement ") {" statement* "}"
 for                      ::= "for (i = " number "; i <=" number "; i +=" number ") {" statement* "}"
 break_continue           ::= ( "break" | "continue" )
-```
 
-**actions**
-```ebnf
+/* Actions */
 action_statement         ::= ( display_text | display_table | switch_lights | play_sound | wait )
 display_text             ::= "displayText(" ( string | number ) ")"
 display_table            ::= "displayData(" http_request ")"
@@ -42,24 +36,17 @@ switch_lights            ::= "switchLights(" MAC "," Boolean_Literal "," Boolean
 play_audio               ::= "playAudioFromURI(" ( "happy" | "sad") ")"
 wait                     ::= "waitForSeconds(" number ")"
 http_request             ::= "sendHttpRequest(" URI "," ( "GET" | "PUT" | "POST" | "DELETE" ) "," string_value "," string_value "," ( "status" | "response" ) ")"
-```
 
-**queries**
-```ebnf
+/* Queries */
 sparql_query             ::= "urdfQueryWrapper(" URI "," string ")"
 sparql_ask               ::= "urdfQueryWrapper(" URI "," string ")"
-```
-
-**boolean expressions**
-```ebnf
+/* Boolean Expressions */
 boolean_expression       ::= ( comparison | logical_operation | boolean_value | not | sparql_ask )
 comparison               ::= "(" ( number | string ) ("=" | "!=" | "<" | "<=" | ">" | ">=" ) ( number | string ) ")"
 logical_operation        ::= boolean_expression boolean_expression
 not                      ::= boolean_expression
-```
 
-**strings**
-```ebnf
+/* Strings */
 string                   ::= ( string_value | string_operation )
 string_value             ::= "'" String_Literal "'"
 string_operation         ::= ( string_concat | string_length | string_index_of | string_char_at | string_substring | string_change_case | string_replace ) ";"
@@ -70,20 +57,15 @@ string_char_at           ::= ("'" string "'" ( ".charAt(" number ")" | ".slice(-
 string_substring         ::= "'" string "'.slice(" (string ".length - ")? number ", " (string ".length - ")? number ")" 
 string_change_case       ::= string (".toUpperCase()" | ".toLowerCase()" ) | "textToTitleCase('" string "')"
 string_replace           ::= "textReplace('" string "', '" string "', '" string "')"
-```
 
-
-**numbers**
-```ebnf
+/* Numbers */
 number                   ::= ( number_value | number_infinity | number_arithmetic | number_random )
 number_value             ::= Double_Literal
 number_infinity          ::= "Infinity"
 number_arithmetic        ::= ( number "+" | "-" | "*" | "/"  number ) | "Math.pow(" Number ", " Number ")"
 number_random            ::= "mathRandom(" number ", " number ")"
-```
 
-**booleans**
-```ebnf
+/* Booleans */
 boolean_value            ::= Boolean_Literal
 ```
 
@@ -116,6 +98,10 @@ Patterns (including the above constructs) can be combined with grammatical opera
 | `A+` | matches one or more occurrences of `A`. Concatenation has higher precedence than alternation; thus `A+ | B+` is identical to `(A+) | (B+)`. |
 | `A*` | matches zero or more occurrences of `A`. Concatenation has higher precedence than alternation; thus `A* | B*` is identical to `(A*) | (B*)` |
 
+Other notations used in the productions are:
+| pattern      | description                                                          |
+| ------------ | -------------------------------------------------------------------- |
+| `/* ... */`      | comment.|
 
 ## 3. Terminal Symbols
 
