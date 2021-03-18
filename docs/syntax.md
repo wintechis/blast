@@ -10,7 +10,7 @@ This document describes in BLAST's grammar using the [Extended Backus-Naur Forma
 The grammar of BLAST is described in the Extended Backus-Naur Form (EBNF) used by the W3C. An informal definition of the W3C EBNF format is available at
 http://www.w3.org/TR/REC-xml/#sec-notation. Note that the W3C EBNF is *not* the same as the ISO EBNF format defined in [ISO/IEC 14977:1996](https://www.iso.org/standard/26153.html).
 
-The EBNF notation is described in more detail in [2 Notation ](#2-notation).
+The EBNF notation is described in more detail in [2. Notation](#2-notation).
 
 The terminal symbols for this grammar include the quoted strings used in the production rules below, and the terminal symbols defined in section  [3. Terminal Symbols](#3-terminal-symbols).
 
