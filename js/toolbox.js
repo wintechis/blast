@@ -50,6 +50,13 @@ const defaultToolbox = {
       colour: '0',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Events',
+      custom: 'EVENTS',
+      colour: '180',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -88,18 +95,15 @@ const defaultToolbox = {
       colour: '210',
     },
     {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
       kind: 'CATEGORY',
       contents: [],
       name: 'Variables',
       custom: 'VARIABLE',
       colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Events',
-      custom: 'EVENTS',
-      colour: '180',
     },
     {
       kind: 'sep',
@@ -174,6 +178,13 @@ const advancedToolbox = {
       colour: '0',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Events',
+      custom: 'EVENTS',
+      colour: '180',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -219,11 +230,8 @@ const advancedToolbox = {
       colour: '210',
     },
     {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Events',
-      custom: 'EVENTS',
-      colour: '180',
+      kind: 'sep',
+      gap: '32',
     },
     {
       kind: 'CATEGORY',
@@ -231,10 +239,6 @@ const advancedToolbox = {
       name: 'Variables',
       custom: 'VARIABLE',
       colour: '330',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
     },
     {
       kind: 'CATEGORY',
