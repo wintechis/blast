@@ -1,27 +1,40 @@
 <!DOCTYPE html>
 <!DOCTYPE html>
 <html lang="en" xml:lang="en">
+
 <head>
   <meta content="text/html;" charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BLAST - Block applications for things</title>
   <link rel="stylesheet" href="style.css">
-  
+
   <!-- JS Interpreter -->
   <script src="js/lib/JSInterpreter/acorn.js"></script>
   <script src="js/lib/JSInterpreter/interpreter.js"></script>
-  
+
   <!-- blockly with js generator -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/blockly.min.js" integrity="sha512-EyUOZEYiWEOhBwEXZ/5g+Ut51HPHI2MmILgaVusS5fkYH9X82qCqQYO5h1dKkMK8Tl6GDjS6DaZRn6asxJJeLg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/msg/en.min.js" integrity="sha512-CcZSuOhlsHqLLiF3M8hvMc8aWqTE36GEaE/cP7HMNOSZytGihNqhQxFzkXigYQp4psZWCVjEXY2oYFN4+vLAYg==" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/javascript_compressed.min.js" integrity="sha512-6cZbi8+9x76YNmjTciXgQrhz1LWnfEVw8FbSf+pMrDu042lGFymzWZQtEl5mpwnVyfzFU1TEKvjodDF07rlgNQ==" crossorigin="anonymous"></script>
-  
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/blockly.min.js"
+    integrity="sha512-EyUOZEYiWEOhBwEXZ/5g+Ut51HPHI2MmILgaVusS5fkYH9X82qCqQYO5h1dKkMK8Tl6GDjS6DaZRn6asxJJeLg=="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/msg/en.min.js"
+    integrity="sha512-CcZSuOhlsHqLLiF3M8hvMc8aWqTE36GEaE/cP7HMNOSZytGihNqhQxFzkXigYQp4psZWCVjEXY2oYFN4+vLAYg=="
+    crossorigin="anonymous"></script>
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/blockly/4.20201217.0/javascript_compressed.min.js"
+    integrity="sha512-6cZbi8+9x76YNmjTciXgQrhz1LWnfEVw8FbSf+pMrDu042lGFymzWZQtEl5mpwnVyfzFU1TEKvjodDF07rlgNQ=="
+    crossorigin="anonymous"></script>
+
   <!-- urdf -->
   <script src="js/lib/urdf/urdf-browser.js"></script>
-  
+
   <!-- play/stop icons -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js" integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg==" crossorigin="anonymous"></script>
-  
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js"
+    integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg=="
+    crossorigin="anonymous"></script>
+
   <!-- blast libraries -->
   <script src="js/interpreter_api.js"></script>
   <script src="js/block_definitions.js"></script>
@@ -30,8 +43,9 @@
   <script src="js/blast.js"></script>
   <script src="js/blast_blockmethods.js"></script>
   <script src="js/blast_states.js"></script>
-  
+
 </head>
+
 <body>
   <table width="100%" height="100%">
     <tr>
@@ -81,6 +95,13 @@
           </tr>
         </table>
       </td>
+      <td class="tabmin">
+        <button id="configButton" title="settings">
+          <svg class="icon icon-config">
+            <use xlink:href="media/symbol-defs.svg#icon-config"></use>
+          </svg>
+        </button>
+      </td>
     </tr>
     <tr>
       <td id="content_area">
@@ -92,9 +113,104 @@
     </tr>
   </table>
 
+  <!-- Config Modal -->
+  <div id="configModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h1>Settings</h1>
+      <hr>
+      <div class="row">
+        <div class="col-25">
+          <label for="api-type">API type:</label>
+        </div>
+        <div class="col-75">
+          <select id="api-type" name="api-type">
+            <option value="sc-ble-adapter">SC-BLE-Adapter</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-25">
+          <label for="api-address">API address</label>
+        </div>
+        <div class="col-75">
+          <input type="text" id="api-address" name="api-address" value="http://dwpi4.local:8000/">
+        </div>
+      </div>
+      <div class="row">
+        <br><input id="configSubmit" type="submit" value="Save">
+      </div>
+    </div>
+  </div>
+
   <div id="content_workspace" class="content"></div>
   <pre id="content_javascript" class="content prettyprint lang-js"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 </body>
+<script>
+  const configModal = document.getElementById("configModal");
+  const configButton = document.getElementById("configButton");
+  const span = document.getElementsByClassName("close")[0];
+
+  const addressInput = document.getElementById('api-address');
+
+  // When the user clicks the button, open the modal 
+  configButton.onclick = function () {
+    configModal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function () {
+    configModal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == configModal) {
+      configModal.style.display = "none";
+    }
+  }
+
+  const saveSettings = function() {
+    // load script for api type
+    const apiTypeInput = document.getElementById('api-type');
+    const apiType = apiTypeInput.value;
+    const script = document.createElement('script');
+    script.src = `js/bluetooth_apis/${apiType}.js`;
+    document.head.appendChild(script);
+
+    // set host address
+    let address = addressInput.value;
+    // make sure address has trailing slash
+    if(address.slice(-1) != '/'){
+      address += '/';
+    }
+    // if no protocol specified, add http://
+    if(address.slice(0, 4) != 'http'){
+      address = 'http://'+address;
+    }
+    // to make changes apparent, show new address in input
+    addressInput.value = address;
+    // save address in config
+    Blast.config.hostAddress = address;
+
+    // close the settings modal
+    configModal.style.display = "none";
+  }
+
+  // set default values
+  saveSettings();
+
+  // save settings on submit
+  const submitButton = document.getElementById('configSubmit');
+  Blast.bindClick(submitButton, saveSettings);
+
+  // save settings on enter
+  addressInput.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+      saveSettings();
+    }
+  });
+</script>
 
 </html>

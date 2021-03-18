@@ -1,0 +1,191 @@
+/**
+ * @fileoverview implements Bluetooth-Operations of the
+ * sc-ble-adapter (github.com/wintechis/sc-ble-adapter) in
+ * JavaScript for use with Blast.
+ * @author derwehr@gmail.com (Thomas Wehr)
+ */
+'use strict';
+
+/**
+ * Bluetooth API namespace.
+ * @name Blast.Bluetooth
+ * @namespace
+ * @public
+ */
+Blast.Bluetooth = {};
+
+Blast.Bluetooth.headers = new Headers({
+  'Content-Type': 'application/json',
+});
+
+/**
+ * Sends a connect command,
+ * afterwards wait for sleep miliseconds.
+ * @param {string} mac mac address for the host to connect to.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.connect = async function(mac, sleep = 0) {
+  const data = {
+    type: 'ble:Connect',
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Sends a disconnect command,
+ * afterwards wait for sleep miliseconds.
+ * @param {string} mac mac address for the host to disconnect from.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.disconnect = async function(mac, sleep = 0) {
+  const data = {
+    type: 'ble:Disconnect',
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Writes data from Bluetooth device using the gatt protocol.
+ * @param {string} mac mac address of the device.
+ * @param {string} handle characteristic handle.
+ * @param {string} type datatype of value to write.
+ * @param {string} value value to write.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.gatt_write = async function(
+    mac,
+    handle,
+    type,
+    value,
+    sleep = 0,
+) {
+  const data = {
+    type: 'ble:Write',
+    handle: handle,
+    data: {
+      '@value': value,
+      '@type': type,
+    },
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Reads data from Bluetooth device using the gatt protocol.
+ * @param {string} mac mac address of the device.
+ * @param {string} handle characteristic handle.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.gatt_read = async function(mac, handle, sleep = 0) {
+  const data = {
+    type: 'ble:Read',
+    handle: handle,
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Subscribes to characteristic of Bluetooth device using the gatt protocol.
+ * @param {string} mac mac address of the device.
+ * @param {string} handle characteristic handle.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.gatt_subscribe = async function(mac, handle, sleep = 0) {
+  const data = {
+    type: 'ble:Subscribe',
+    handle: handle,
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Unsubscribes from characteristic of Bluetooth device using the gatt protocol.
+ * @param {string} mac mac address of the device.
+ * @param {string} handle characteristic handle.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.gatt_unsubscribe = async function(mac, handle, sleep = 0) {
+  const data = {
+    type: 'ble:UnSubscribe',
+    handle: handle,
+  };
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+      {
+        method: 'PUT',
+        headers: Blast.Bluetooth.headers,
+        body: JSON.stringify(data),
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};
+
+/**
+ * Reads current value of a subscribed handle.
+ * @param {string} mac mac address of the device.
+ * @param {number} sleep time in ms to wait after command, defaults to 0.
+ * @return {Object} representation of the complete request with response.
+ */
+Blast.Bluetooth.gatt_get_current = async function(mac, sleep = 0) {
+  const response = await fetch(
+      `${Blast.config.hostAddress}devices/${mac}/gatt/current`,
+      {
+        method: 'GET',
+        headers: Blast.Bluetooth.headers,
+      },
+  );
+  await new Promise((resolve) => setTimeout(resolve, sleep));
+  return response;
+};

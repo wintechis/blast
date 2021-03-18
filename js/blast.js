@@ -14,6 +14,12 @@
 const Blast = {};
 
 /**
+ * Contains configurable parameters of Blast.
+ * @property {string} hostAddress - address of the API host.
+ */
+Blast.config = {};
+
+/**
  * Blast's main workspace.
  * @type {Blockly.workspaceSvg}
  * @public

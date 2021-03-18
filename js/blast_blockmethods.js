@@ -216,63 +216,16 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
   const redByte = r ? 'ff' : '00';
   const yellowByte = y ? 'ff' : '00';
   const greenByte = g ? 'ff' : '00';
-  const headers = new Headers({
-    'Content-Type': 'application/json',
-  });
 
-  const data = {
-    type: 'ble:Write',
-    handle: '0009',
-    data: {
-      '@value': '7e000503' + redByte + greenByte + yellowByte + '00ef',
-      '@type': 'xsd:hexBinary',
-    },
-  };
+  const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
+  const type = 'xsd:hexBinary';
 
-  (async () => {
-    await fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
-      method: 'PUT',
-      headers: headers,
-      body: '{ "type": "ble:Connect" }',
-    });
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    await fetch(`http://dwpi4.local:8000/devices/${mac}/gatt/instruction`, {
-      method: 'PUT',
-      headers: headers,
-      body: JSON.stringify(data),
-    });
-    await new Promise((resolve) => setTimeout(resolve, 400));
-    await fetch(`http://dwpi4.local:8000/devices/${mac}/instruction`, {
-      method: 'PUT',
-      headers: headers,
-      body: '{ "type": "ble:Disconnect" }',
-    });
-    await new Promise((resolve) => setTimeout(resolve, 200));
-    callback();
-  })();
-
-  // fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
-  //   method: 'PUT',
-  //   headers: headers,
-  //   body: '{ "type": "ble:Connect" }',
-  // }).then((res) => {
-  //   console.log(res.text());
-  //   fetch(`http://192.168.178.22:8000/devices/${mac}/gatt/instruction`, {
-  //     method: 'PUT',
-  //     headers: headers,
-  //     body: JSON.stringify(data),
-  //   }).then((res2) => {
-  //     console.log(res2.text());
-  //     fetch(`http://192.168.178.22:8000/devices/${mac}/instruction`, {
-  //       method: 'PUT',
-  //       headers: headers,
-  //       body: '{ "type": "ble:Disconnect" }',
-  //     }).then((res3) => {
-  //       console.log(res3.text());
-  //       callback();
-  //     });
-  //   });
-  // });
+  Blast.Bluetooth.connect(mac, 1500)
+      .then(() => {
+        Blast.Bluetooth.gatt_write(mac, '0009', type, value, 1000);
+      })
+      .then(() => Blast.Bluetooth.disconnect(mac, 500))
+      .then(() => callback());
 };
 
 /**
@@ -282,7 +235,7 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
  * @public
  */
 Blast.BlockMethods.getTemperature = function(mac, callback) {
-  const uri = 'http://dwpi4.local:8000/devices/' + mac + '/current';
+  const uri = `${Blast.config.hostAddress}devices/${mac}/current`;
   const requestOptions = {
     method: 'GET',
   };
@@ -318,7 +271,7 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
  * @public
  */
 Blast.BlockMethods.getRSSI = function(mac, callback) {
-  const uri = 'http://dwpi4.local:8000/current';
+  const uri = `${Blast.config.hostAddress}current`;
   const requestOptions = {
     method: 'GET',
   };
