@@ -60,7 +60,7 @@ Blast.BlockMethods.displayTable = function(table) {
   }
   // display message if table is empty
   if (table.length == 0) {
-    Blast.displayText('empty table');
+    Blast.BlockMethods.displayText('empty table');
     return;
   }
   // deal with missing values
@@ -189,18 +189,12 @@ Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
  * @public
  */
 Blast.BlockMethods.urdfQueryWrapper = function(uri, query, callback) {
-  fetch(uri)
-      .then((res) => {
-        return res.text();
-      })
-      .then((graph) => {
-        urdf.clear();
-        urdf.load(graph).then(() => {
-          urdf.query(query).then((result) => {
-            callback(result);
-          });
-        });
-      });
+  urdf.clear();
+  urdf.loadFrom(uri).then(() => {
+    urdf.query(query).then((result) => {
+      callback(result);
+    });
+  });
 };
 
 /**
