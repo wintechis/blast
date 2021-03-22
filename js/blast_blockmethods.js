@@ -216,9 +216,9 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
 
   Blast.Bluetooth.connect(mac, 1500)
       .then(() => {
-        Blast.Bluetooth.gatt_write(mac, '0009', type, value, 1000);
+        Blast.Bluetooth.gatt_write(mac, '0009', type, value, 1500);
       })
-      .then(() => Blast.Bluetooth.disconnect(mac, 500))
+      .then(() => Blast.Bluetooth.disconnect(mac, 1000))
       .then(() => callback());
 };
 
