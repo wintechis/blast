@@ -214,11 +214,11 @@ Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
   const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
   const type = 'xsd:hexBinary';
 
-  Blast.Bluetooth.connect(mac, 1500)
+  Blast.Bluetooth.connect(mac)
       .then(() => {
         Blast.Bluetooth.gatt_write(mac, '0009', type, value, 1500);
       })
-      .then(() => Blast.Bluetooth.disconnect(mac, 1000))
+      .then(() => Blast.Bluetooth.disconnect(mac))
       .then(() => callback());
 };
 
