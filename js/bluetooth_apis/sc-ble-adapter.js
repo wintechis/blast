@@ -4,7 +4,7 @@
  * JavaScript for use with Blast.
  * @author derwehr@gmail.com (Thomas Wehr)
  */
-'use strict';
+"use strict";
 
 /**
  * Bluetooth API namespace.
@@ -14,10 +14,6 @@
  */
 Blast.Bluetooth = {};
 
-Blast.Bluetooth.headers = new Headers({
-  'Content-Type': 'application/json',
-});
-
 /**
  * Sends a connect command,
  * afterwards wait for sleep miliseconds.
@@ -25,18 +21,23 @@ Blast.Bluetooth.headers = new Headers({
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.connect = async function(mac, sleep = 1000) {
+Blast.Bluetooth.connect = async function (mac, sleep = 1000) {
   const data = {
-    type: 'ble:Connect',
+    type: "ble:Connect",
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error connecting to ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -48,18 +49,23 @@ Blast.Bluetooth.connect = async function(mac, sleep = 1000) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.disconnect = async function(mac, sleep = 1000) {
+Blast.Bluetooth.disconnect = async function (mac, sleep = 1000) {
   const data = {
-    type: 'ble:Disconnect',
+    type: "ble:Disconnect",
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error disconnecting from ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -73,29 +79,34 @@ Blast.Bluetooth.disconnect = async function(mac, sleep = 1000) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_write = async function(
-    mac,
-    handle,
-    type,
-    value,
-    sleep = 0,
+Blast.Bluetooth.gatt_write = async function (
+  mac,
+  handle,
+  type,
+  value,
+  sleep = 0
 ) {
   const data = {
-    type: 'ble:Write',
+    type: "ble:Write",
     handle: handle,
     data: {
-      '@value': value,
-      '@type': type,
+      "@value": value,
+      "@type": type,
     },
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error executing gatt-write on ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -107,19 +118,24 @@ Blast.Bluetooth.gatt_write = async function(
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_read = async function(mac, handle, sleep = 0) {
+Blast.Bluetooth.gatt_read = async function (mac, handle, sleep = 0) {
   const data = {
-    type: 'ble:Read',
+    type: "ble:Read",
     handle: handle,
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error executing gatt-read on ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -131,19 +147,24 @@ Blast.Bluetooth.gatt_read = async function(mac, handle, sleep = 0) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_subscribe = async function(mac, handle, sleep = 0) {
+Blast.Bluetooth.gatt_subscribe = async function (mac, handle, sleep = 0) {
   const data = {
-    type: 'ble:Subscribe',
+    type: "ble:Subscribe",
     handle: handle,
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error executing gatt-subscribe on ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -155,19 +176,24 @@ Blast.Bluetooth.gatt_subscribe = async function(mac, handle, sleep = 0) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_unsubscribe = async function(mac, handle, sleep = 0) {
+Blast.Bluetooth.gatt_unsubscribe = async function (mac, handle, sleep = 0) {
   const data = {
-    type: 'ble:UnSubscribe',
+    type: "ble:UnSubscribe",
     handle: handle,
   };
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
-      {
-        method: 'PUT',
-        headers: Blast.Bluetooth.headers,
-        body: JSON.stringify(data),
-      },
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/gatt/instruction`,
+    {
+      method: "PUT",
+      headers: Blast.Bluetooth.headers,
+      body: JSON.stringify(data),
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error executing gatt-unsubscribe on ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };
@@ -178,14 +204,19 @@ Blast.Bluetooth.gatt_unsubscribe = async function(mac, handle, sleep = 0) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_get_current = async function(mac, sleep = 0) {
-  const response = await fetch(
-      `${Blast.config.hostAddress}devices/${mac}/gatt/current`,
-      {
-        method: 'GET',
-        headers: Blast.Bluetooth.headers,
-      },
+Blast.Bluetooth.gatt_get_current = async function (mac, sleep = 0) {
+  let response = await fetch(
+    `${Blast.config.hostAddress}devices/${mac}/gatt/current`,
+    {
+      method: "GET",
+      headers: Blast.Bluetooth.headers,
+    }
   );
+  response = Blast.handleFetchErrors(
+    response,
+    `Error executing gatt-get-current on ${mac}, see console for details.`
+  );
+
   await new Promise((resolve) => setTimeout(resolve, sleep));
   return response;
 };

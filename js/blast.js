@@ -624,9 +624,13 @@ Blast.throwError = function(text) {
  * @param   {Object} response A fetch response object.
  * @return {Object} the response object
  */
-Blast.handleFetchErrors = function(response) {
+Blast.handleFetchErrors = function(response, message) {
   if (!response.ok) {
-    Blast.throwError(`Error processing HTTP Request.`);
+    if (!message) {
+      Blast.throwError(`Error processing HTTP Request.`);
+    } else {
+      Blast.throwError(message);
+    }
   }
   return response;
 };
