@@ -25,7 +25,7 @@ Blast.Bluetooth.headers = new Headers({
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.connect = async function(mac, sleep = 0) {
+Blast.Bluetooth.connect = async function(mac, sleep = 1000) {
   const data = {
     type: 'ble:Connect',
   };
@@ -48,7 +48,7 @@ Blast.Bluetooth.connect = async function(mac, sleep = 0) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.disconnect = async function(mac, sleep = 0) {
+Blast.Bluetooth.disconnect = async function(mac, sleep = 1000) {
   const data = {
     type: 'ble:Disconnect',
   };
