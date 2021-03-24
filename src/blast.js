@@ -1,17 +1,21 @@
 /**
- * @fileoverview JavaScript for the Blast UI and execution.
+ * @fileoverview Core JavaScript library for Blast.
  * https://github.com/wintechis/blast
  * @author derwehr@gmail.com (Thomas Wehr)
  */
 'use strict';
 
 /**
- * Blast application namespace.
+ * Top level namespace used to access the Blast library.
  * @name Blast
  * @namespace
- * @public
  */
-const Blast = {};
+goog.provide('Blast');
+
+goog.require('Blast.States');
+goog.require('Blast.BlockMethods');
+goog.require('Blast.Ui');
+goog.require('Blast.Toolbox');
 
 /**
  * Contains configurable parameters of Blast.
@@ -25,13 +29,6 @@ Blast.config = {};
  * @public
  */
 Blast.workspace = null;
-
-/**
- * The currently used toolbox.
- * @type {Blockly.toolbox}
- * @public
- */
-Blast.toolbox = defaultToolbox;
 
 /**
  * is block highlighting paused.
@@ -62,41 +59,6 @@ Blast.Interpreter = null;
 Blast.runner_ = null;
 
 /**
- * Number of messages in the Message Output Container.
- * @type {number}
- * @private
- */
-Blast.messageCounter_ = 0;
-
-/**
- * Message output Container.
- * @type {?HTMLElement}
- * @public
- */
-Blast.messageOutputContainer = null;
-
-/**
- * Button to start/stop execution of the user's code.
- * @type {?HTMLElement}
- * @public
- */
-Blast.runButton = null;
-
-/**
- * Container displaying Blast's current status.
- * @type {?HTMLElement}
- * @public
- */
-Blast.statusContainer = null;
-
-/**
- * Input to defining URIs for safing and loading blocks.
- * @type {?HTMLElement}
- * @public
- */
-Blast.uriInput = null;
-
-/**
  * Enum for Blast status
  * @enum {string}
  * @public
@@ -107,54 +69,6 @@ Blast.status = {
   STOPPED: 'stopped',
   ERROR: 'error',
 };
-
-/**
- * Simplified typedef for nodes as returned by urdf.
- * @typedef {Object} node
- * @property {string} value the node's values
- * @property {string} type the node's type
- * @property {string} datatype the node's datatype
- */
-
-/**
- * Simplified typedef for graphs as returned by urdf.
- * @typedef {Object} graph
- * @property {node} subject RDF subject.
- * @property {node} predicate RDF predicate.
- * @property {node} object RDF object.
- */
-
-/**
- * List of tab names.
- * @type {Array.<string>}
- * @private
- */
-Blast.TABS_ = ['workspace', 'javascript', 'xml'];
-
-/**
- * Name of currently selected tab.
- * @type {string}
- * @private
- */
-Blast.selected_ = 'workspace';
-
-/**
- * Play icon used for the start/stop button.
- * @type {HTMLElement}
- * @private
- */
-Blast.playIcon_ = '<svg class="icon icon-play">';
-Blast.playIcon_ += '<use xlink:href="media/symbol-defs.svg#icon-play"></use>';
-Blast.playIcon_ += '</svg>';
-
-/**
- * Stop icon used for the start/stop button.
- * @type {HTMLElement}
- * @private
- */
-Blast.stopIcon_ = '<svg class="icon icon-stop">';
-Blast.stopIcon_ += '<use xlink:href="media/symbol-defs.svg#icon-stop">';
-Blast.stopIcon_ += '</use></svg>';
 
 /**
  * Load blocks from URI defined in {@link Blast.uriInput}.
@@ -246,30 +160,6 @@ Blast.importPrettify = function() {
 /**
  * Compute the absolute coordinates and dimensions of an HTML element.
  * @param {!Element} element Element to match.
- * @return {!Object} Contains heightm, width, x, and y properties.
- * @private
- */
-Blast.getBox_ = function(element) {
-  const height = element.offsetHeight;
-  const width = element.offsetWidth;
-  let x = 0;
-  let y = 0;
-  do {
-    x += element.offsetLeft;
-    y += element.offsetTop;
-    element = element.offsetParent;
-  } while (element);
-  return {
-    height: height,
-    width: width,
-    x: x,
-    y: y,
-  };
-};
-
-/**
- * Compute the absolute coordinates and dimensions of an HTML element.
- * @param {!Element} element Element to match.
  * @return {!Object} Contains height, width, x, and y properties.
  * @private
  */
@@ -292,73 +182,23 @@ Blast.getBBox_ = function(element) {
 };
 
 /**
- * Switch the visible pane when a tab is clicked.
- * @param {string} clickedName Name of tab clicked.
- * @private
- */
-Blast.tabClick_ = function(clickedName) {
-  // Deselect all tabs and hide all panes.
-  for (let i = 0; i < Blast.TABS_.length; i++) {
-    const name = Blast.TABS_[i];
-    const tab = document.getElementById('tab_' + name);
-    tab.classList.add('taboff');
-    tab.classList.remove('tabon');
-    document.getElementById('content_' + name).style.visibility = 'hidden';
-  }
-
-  // Select the active tab.
-  Blast.selected_ = clickedName;
-  const selectedTab = document.getElementById('tab_' + clickedName);
-  selectedTab.classList.remove('taboff');
-  selectedTab.classList.add('tabon');
-  // Show the selected pane.
-  document.getElementById('content_' + clickedName).style.visibility =
-    'visible';
-  Blockly.svgResize(Blast.workspace);
-};
-
-/**
- * Populate the JS pane with pretty printed code generated from the blocks.
- * @private
- */
-Blast.renderContent_ = function() {
-  // render the xml content.
-  const xmlTextarea = document.getElementById('content_xml');
-  const xmlDom = Blockly.Xml.workspaceToDom(Blast.workspace);
-  const xmlText = Blockly.Xml.domToPrettyText(xmlDom);
-  xmlTextarea.value = xmlText;
-  xmlTextarea.focus();
-
-  // render the JavaScript content.
-  const content = document.getElementById('content_javascript');
-
-  // remove highlightblock functions from the js code tab
-  content.textContent = Blast.latestCode.replace(
-      /highlightBlock\('.*'\);\n/gm,
-      '',
-  );
-  // Remove the 'prettyprinted' class, so that Prettify will recalculate.
-  content.className = content.className.replace('prettyprinted', '');
-  if (typeof PR == 'object') {
-    PR.prettyPrint();
-  }
-};
-
-/**
  * Initialize Blast. Called on page load.
  * @public
  */
 Blast.init = function() {
-  // Set remaining properties
-  Blast.messageOutputContainer = document.getElementById('msgOutputContainer');
-  Blast.runButton = document.getElementById('runButton');
-  Blast.statusContainer = document.getElementById('statusContainer');
+  Blast.workspace = Blockly.inject('content_workspace', {
+    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
+    media: 'media/',
+    toolbox: Blast.Toolbox.currentToolbox,
+    zoom: {controls: true, wheel: true},
+  });
 
+  // adjust workspace and toolbox on resize
   const container = document.getElementById('content_area');
-  const onresize = function(e) {
+  const onresize = function() {
     const bBox = Blast.getBBox_(container);
-    for (let i = 0; i < Blast.TABS_.length; i++) {
-      const el = document.getElementById('content_' + Blast.TABS_[i]);
+    for (let i = 0; i < Blast.Ui.TABS_.length; i++) {
+      const el = document.getElementById('content_' + Blast.Ui.TABS_[i]);
       el.style.top = bBox.y + 'px';
       el.style.left = bBox.x + 'px';
       // Height and width need to be set, read back, then set again to
@@ -376,83 +216,31 @@ Blast.init = function() {
     }
   };
   window.addEventListener('resize', onresize, false);
-
-  Blast.workspace = Blockly.inject('content_workspace', {
-    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-    media: 'media/',
-    toolbox: Blast.toolbox,
-    zoom: {controls: true, wheel: true},
-  });
-
-  Blast.tabClick_(Blast.selected_);
-  Blast.uriInput = document.getElementById('loadWorkspace-input');
-  Blast.uriInput.addEventListener('keyup', (event) => {
-    // load blocks from URI on Enter
-    if (event.keyCode === 13) {
-      Blast.loadBlocks();
-    }
-  });
-  Blast.bindClick('loadButton', Blast.loadBlocks);
-  Blast.bindClick('saveButton', Blast.saveBlocks);
-
-  for (let i = 0; i < Blast.TABS_.length; i++) {
-    const name = Blast.TABS_[i];
-    Blast.bindClick(
-        'tab_' + name,
-        (function(name_) {
-          return function() {
-            Blast.tabClick_(name_);
-          };
-        })(name),
-    );
-  }
-
   onresize();
   Blockly.svgResize(Blast.workspace);
 
+  // initialize toolbox
+  Blast.Toolbox.init();
+
+  // Initialize UI
+  Blast.Ui.init();
+  Blast.Ui.setStatus(Blast.status.READY);
+
   // Load the interpreter now, and upon future changes.
-  Blast.setStatus(Blast.status.READY);
   Blast.generateCode();
   Blast.workspace.addChangeListener(function(event) {
     if (!(event instanceof Blockly.Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
-      Blast.renderContent_();
+      Blast.Ui.renderContent_();
       Blast.generateCode();
       Blast.States.generateCode();
     }
   });
 
-  // register states category flyout callback
-  Blast.workspace.registerToolboxCategoryCallback(
-      'EVENTS',
-      Blast.States.flyoutCategory,
-  );
-
-  // register advanced toolbox mock button callback
-  Blast.workspace.registerToolboxCategoryCallback(
-      'ADVANCEDTOOLBOX',
-      Blast.switchToolbox,
-  );
-
   // Display output hint
   Blast.BlockMethods.displayText('Actionblock output will be displayed here');
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Blast.importPrettify, 1);
-};
-
-/**
- * Switches between the default and advanced toolboxes.
- * @public
- */
-Blast.switchToolbox = function() {
-  let newToolbox = {};
-  if (Blast.toolbox === defaultToolbox) {
-    newToolbox = advancedToolbox;
-  } else {
-    newToolbox = defaultToolbox;
-  }
-  Blast.toolbox = newToolbox;
-  Blast.workspace.updateToolbox(newToolbox);
 };
 
 /**
@@ -475,34 +263,7 @@ Blast.resetUi = function(status) {
   Blast.workspace.highlightBlock(null);
   Blast.highlightPause = false;
   // set Blast stauts
-  Blast.setStatus(status);
-};
-
-/**
- * Set the start/stop button and status text.
- * @param {Blast.status} status new Blast status text.
- * @public
- */
-Blast.setStatus = function(status) {
-  let icon;
-  let func;
-  let title;
-  if (status === Blast.status.RUNNING) {
-    func = Blast.stopJS;
-    icon = Blast.stopIcon_;
-    title = 'Stop the execution';
-  } else {
-    func = Blast.runJS;
-    icon = Blast.playIcon_;
-    title = 'Run block program';
-  }
-
-  // Set start/stop button click event and icon
-  Blast.runButton.onclick = func;
-  Blast.runButton.title = title;
-  Blast.runButton.innerHTML = icon;
-  // set status text
-  Blast.statusContainer.innerHTML = status;
+  Blast.Ui.setStatus(status);
 };
 
 /**
@@ -564,7 +325,7 @@ Blast.runJS = function() {
           }
         } catch (error) {
           Blockly.alert('Error executing program:\n%e'.replace('%e', error));
-          Blast.setStatus(Blast.status.ERROR);
+          Blast.Ui.setStatus(Blast.status.ERROR);
           Blast.resetInterpreter();
           console.error(error);
         }
@@ -586,34 +347,17 @@ Blast.stopJS = function() {
 };
 
 /**
- * Discard all blocks from the workspace.
- * @public
- */
-Blast.discard = function() {
-  const count = Blast.workspace.getAllBlocks(false).length;
-  if (
-    count < 2 ||
-    window.confirm(Blockly.Msg['DELETE_ALL_BLOCKS'].replace('%1', count))
-  ) {
-    Blast.workspace.clear();
-    if (window.location.hash) {
-      window.location.hash = '';
-    }
-  }
-};
-
-/**
  * Stop execution and adds an error message to the
  * {@link Blast.messageOutputContainer}.
  * @param {string} [text] optional, a custom error text
  */
 Blast.throwError = function(text) {
   if (!text) {
-    text = `Error executing program - See console for details.`;
+    text = 'Error executing program - See console for details.';
   }
 
   Blockly.alert('Error executing program:\n%e'.replace('%e', text));
-  Blast.setStatus(Blast.status.ERROR);
+  Blast.Ui.setStatus(Blast.status.ERROR);
   Blast.resetInterpreter();
 };
 
@@ -621,13 +365,14 @@ Blast.throwError = function(text) {
  * Helper function checking fetch's response status.
  * Returns the response object if it was successfull.
  * Otherwise it throws an error.
- * @param   {Object} response A fetch response object.
+ * @param {Object} response A fetch response object.
+ * @param {string=} message Alert message, optional.
  * @return {Object} the response object
  */
 Blast.handleFetchErrors = function(response, message) {
   if (!response.ok) {
     if (!message) {
-      Blast.throwError(`Error processing HTTP Request.`);
+      Blast.throwError('Error processing HTTP Request.');
     } else {
       Blast.throwError(message);
     }

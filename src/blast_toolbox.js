@@ -1,3 +1,12 @@
+/**
+ * @fileoverview Defines the toolbox and its helper methods.
+ * https://github.com/wintechis/blast
+ * @author derwehr@gmail.com (Thomas Wehr)
+ */
+'use strict';
+
+goog.provide('Blast.Toolbox');
+
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -32,7 +41,7 @@ const defaultToolbox = {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'ibeacon_data'},
+        {kind: 'BLOCK', type: 'get_signal_strength'},
       ],
       name: 'Properties',
       colour: '255',
@@ -72,9 +81,7 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'mac'},
-      ],
+      contents: [{kind: 'BLOCK', type: 'mac'}],
       name: 'Identifiers',
       colour: '60',
     },
@@ -156,7 +163,7 @@ const advancedToolbox = {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'ibeacon_data'},
+        {kind: 'BLOCK', type: 'get_signal_strength'},
       ],
       name: 'Properties',
       colour: '255',
@@ -262,4 +269,37 @@ const advancedToolbox = {
       custom: 'ADVANCEDTOOLBOX',
     },
   ],
+};
+
+/**
+ * The currently used toolbox.
+ * @type {Blockly.toolbox}
+ * @public
+ */
+Blast.Toolbox.currentToolbox = defaultToolbox;
+
+/**
+ * Switches between the default and advanced toolboxes.
+ * @public
+ */
+Blast.switchToolbox = function() {
+  let newToolbox = {};
+  if (Blast.Toolbox.currentToolbox === defaultToolbox) {
+    newToolbox = advancedToolbox;
+  } else {
+    newToolbox = defaultToolbox;
+  }
+  Blast.Toolbox.currentToolbox = newToolbox;
+  Blast.workspace.updateToolbox(newToolbox);
+};
+
+/**
+ * Initialize the toolbox
+ */
+Blast.Toolbox.init = function() {
+  // register states category flyout callback
+  Blast.workspace.registerToolboxCategoryCallback('EVENTS', Blast.States.flyoutCategory);
+
+  // register advanced toolbox mock button callback
+  Blast.workspace.registerToolboxCategoryCallback('ADVANCEDTOOLBOX', Blast.switchToolbox);
 };

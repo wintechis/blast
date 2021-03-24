@@ -9,62 +9,36 @@
  * Namespace for methods used by Blast's blocks.
  * @name Blast.BlockMethods
  * @namespace
- * @public
  */
-Blast.BlockMethods = {};
+goog.provide('Blast.BlockMethods');
+
+goog.require('Blast.Ui');
+goog.require('Blast.Bluetooth');
+goog.require('Blast.States');
 
 /**
- * Add a text message to the {@link Blast.messageOutputContainer}.
+ * Add a text message to the {@link Blast.Ui.messageOutputContainer}.
  * @param {string} text text message to output.
  * @public
  */
 Blast.BlockMethods.displayText = function(text) {
-  // Limit messages to 100
-  if (Blast.messageCounter_ > 100) {
-    Blast.messageOutputContainer.firstChild.remove();
-  }
-  // container for the new message
-  const msg = document.createElement('div');
-  msg.classList.add('message');
-  msg.id = 'message-' + Blast.messageCounter_++;
-
-  const textNode = document.createTextNode(text);
-  msg.appendChild(textNode);
-
-  const timeSpan = document.createElement('span');
-  timeSpan.classList.add('time');
-  timeSpan.innerHTML = new Date().toLocaleTimeString();
-  msg.appendChild(timeSpan);
-
-  // insert new message
-  Blast.messageOutputContainer.appendChild(
-      msg,
-      Blast.messageOutputContainer.firstChild,
-  );
-
-  // scroll to bottom
-  Blast.messageOutputContainer.scrollTop =
-    Blast.messageOutputContainer.scrollHeight;
+  Blast.Ui.addMessage(text);
 };
 
 /**
  * Generate HTML Table from graph
- * and add it to {@link Blast.messageOutputContainer}.
- * @param {graph} table table to output.
+ * and add it to {@link Blast.Ui.messageOutputContainer}.
+ * @param {graph} graph graph to output.
  * @public
  */
-Blast.BlockMethods.displayTable = function(table) {
-  // Limit messages to 100
-  if (Blast.messageCounter_ > 100) {
-    Blast.messageOutputContainer.firstChild.remove();
-  }
+Blast.BlockMethods.displayTable = function(graph) {
   // display message if table is empty
-  if (table.length == 0) {
-    Blast.BlockMethods.displayText('empty table');
+  if (graph.length == 0) {
+    Blast.Ui.addMessage('empty table');
     return;
   }
   // deal with missing values
-  const vars = table.reduce((list, res) => {
+  const vars = graph.reduce((list, res) => {
     for (const v in res) {
       if (list.indexOf(v) === -1) list.push(v);
     }
@@ -75,26 +49,17 @@ Blast.BlockMethods.displayTable = function(table) {
   vars.forEach((v) => (html += '<th>' + v + '</th>'));
   html += '</tr>';
 
-  table.forEach((res) => {
+  graph.forEach((res) => {
     html += '<tr>';
-    vars.forEach(
-        (v) => (html += '<td>' + (res[v] ? res[v].value : '') + '</td>'),
-    );
+    vars.forEach((v) => (html += '<td>' + (res[v] ? res[v].value : '') + '</td>'));
     html += '</tr>';
   });
 
-  const resultsField = document.createElement('table');
-  resultsField.classList.add('output_table');
-  resultsField.innerHTML = html;
+  const table = document.createElement('table');
+  table.classList.add('output_table');
+  table.innerHTML = html;
   // insert new table
-  Blast.messageOutputContainer.appendChild(
-      resultsField,
-      Blast.messageOutputContainer.firstChild,
-  );
-
-  // scroll to bottom
-  Blast.messageOutputContainer.scrollTop =
-    Blast.messageOutputContainer.scrollHeight;
+  Blast.Ui.addElementToOutputContainer(table);
 };
 
 /**
@@ -109,14 +74,7 @@ Blast.BlockMethods.displayTable = function(table) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.sendHttpRequest = function(
-    uri,
-    method,
-    headersString,
-    body,
-    output,
-    callback,
-) {
+Blast.BlockMethods.sendHttpRequest = function(uri, method, headersString, body, output, callback) {
   if (uri == null || uri == undefined || uri == '') {
     Blast.throwError('URI input of HttpRequest blocks must not be empty');
   }
@@ -142,11 +100,9 @@ Blast.BlockMethods.sendHttpRequest = function(
       .then((resData) => {
         urdf.clear();
         urdf.load(resData).then(() => {
-          urdf
-              .query('SELECT * WHERE {?subject ?predicate ?object}')
-              .then((result) => {
-                callback(result);
-              });
+          urdf.query('SELECT * WHERE {?subject ?predicate ?object}').then((result) => {
+            callback(result);
+          });
         });
       })
       .catch((error) => {

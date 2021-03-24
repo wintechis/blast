@@ -1,0 +1,39 @@
+/**
+ * @fileoverview Action blocks for Blast.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ */
+
+'use strict';
+
+Blockly.Blocks['mac'] = {
+  /**
+   * Block representing a mac address.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendDummyInput()
+        .appendField('mac')
+        .appendField(new Blockly.FieldTextInput('deadbeef'), 'MAC');
+    this.setOutput(true, 'mac');
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
+
+Blockly.Blocks['uri'] = {
+  /**
+   * Block representing a URI.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendDummyInput()
+        .appendField('URI')
+        .appendField(new Blockly.FieldTextInput('http://example.com'), 'URI');
+    this.setOutput(true, 'URI');
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};

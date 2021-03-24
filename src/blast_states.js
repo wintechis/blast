@@ -10,7 +10,7 @@
  * @namespace
  * @public
  */
-Blast.States = {};
+goog.provide('Blast.States');
 
 /**
  * State block type.
@@ -88,14 +88,12 @@ Blast.States.removeEventCode = function(blockId) {
  */
 Blast.States.generateCode = function() {
   // event blocks are continuously checking for state condditions.
-  let code = `while (true) {\n \n}`;
+  let code = 'while (true) {\n \n}';
 
   // get all event blocks in the workspace
-  const eventIds = Blast.workspace
-      .getBlocksByType('event', false)
-      .map(function(block) {
-        return block.id;
-      });
+  const eventIds = Blast.workspace.getBlocksByType('event', false).map(function(block) {
+    return block.id;
+  });
 
   for (const [id, eventCode] of Blast.States.eventCode) {
     // only add code for event blocks in the workspace
@@ -115,8 +113,7 @@ Blast.States.startEventChecker = function() {
   Blast.States.Interpreter = null;
   // Begin execution
   Blast.States.Interpreter = new Interpreter(Blast.States.latestCode, initApi);
-  Blast.States.Interpreter.stateStack[0].scope =
-    Blast.Interpreter.stateStack[0].scope;
+  Blast.States.Interpreter.stateStack[0].scope = Blast.Interpreter.stateStack[0].scope;
 
   const runner_ = function() {
     if (Blast.States.Interpreter) {
@@ -140,11 +137,9 @@ Blast.States.startEventChecker = function() {
  * @return {!Array} Array containing states.
  */
 Blast.States.allStates = function(root) {
-  const states = root
-      .getBlocksByType('state_definition', false)
-      .map(function(block) {
-        return /** @type {!Blast.States.StateBlock} */ (block).getStateDef()[0];
-      });
+  const states = root.getBlocksByType('state_definition', false).map(function(block) {
+    return /** @type {!Blast.States.StateBlock} */ (block).getStateDef()[0];
+  });
   return states;
 };
 

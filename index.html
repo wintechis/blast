@@ -36,13 +36,7 @@
     crossorigin="anonymous"></script>
 
   <!-- blast libraries -->
-  <script src="js/interpreter_api.js"></script>
-  <script src="js/block_definitions.js"></script>
-  <script src="js/block_generators.js"></script>
-  <script src="js/toolbox.js"></script>
-  <script src="js/blast.js"></script>
-  <script src="js/blast_blockmethods.js"></script>
-  <script src="js/blast_states.js"></script>
+  <script src="js/blast.min.js"></script>
 
 </head>
 
@@ -134,7 +128,8 @@
           <label for="api-address">API address</label>
         </div>
         <div class="col-75">
-          <input type="text" id="api-address" name="api-address" value="http://dwpi4.local:8000/">
+          <input type="text" id="api-address" name="api-address"
+            value="http://dwpi4.local:8000/">
         </div>
       </div>
       <div class="row">
@@ -171,7 +166,7 @@
     }
   }
 
-  const saveSettings = function() {
+  const saveSettings = function () {
     // load script for api type
     const apiTypeInput = document.getElementById('api-type');
     const apiType = apiTypeInput.value;
@@ -182,12 +177,12 @@
     // set host address
     let address = addressInput.value;
     // make sure address has trailing slash
-    if(address.slice(-1) != '/'){
+    if (address.slice(-1) != '/') {
       address += '/';
     }
     // if no protocol specified, add http://
-    if(address.slice(0, 4) != 'http'){
-      address = 'http://'+address;
+    if (address.slice(0, 4) != 'http') {
+      address = 'http://' + address;
     }
     // to make changes apparent, show new address in input
     addressInput.value = address;

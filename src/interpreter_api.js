@@ -1,5 +1,6 @@
 /**
- * @fileoverview defines an API for the JS Interpreter (https://github.com/NeilFraser/JS-Interpreter)
+ * @fileoverview defines an API for the JS Interpreter
+ * (https://github.com/NeilFraser/JS-Interpreter)
  * @author derwehr@gmail.com (Thomas Wehr)
  */
 'use strict';
@@ -123,7 +124,7 @@ function initApi(interpreter, globalObject) {
   // API function for the miroBot_pickup block.
   wrapper = function(box, callback) {
     return Blast.BlockMethods.sendHttpRequest(
-        'https://bot.rapidthings.eu/thing/action/grab_'+box.toLowerCase(),
+        'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase(),
         'POST',
         '{"Content-Type": "application/json", "Accept": "application/json"}',
         '{}',

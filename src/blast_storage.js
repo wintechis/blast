@@ -18,7 +18,7 @@ var BlocklyStorage = {};
  * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.backupBlocks_ = function(workspace) {
+BlocklyStorage.backupBlocks_ = function (workspace) {
   if ('localStorage' in window) {
     const xml = Blockly.Xml.workspaceToDom(workspace);
     // Gets the current URL, not including the hash.
@@ -31,14 +31,14 @@ BlocklyStorage.backupBlocks_ = function(workspace) {
  * Bind the localStorage backup function to the unload event.
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
-BlocklyStorage.backupOnUnload = function(opt_workspace) {
+BlocklyStorage.backupOnUnload = function (opt_workspace) {
   const workspace = opt_workspace || Blockly.getMainWorkspace();
   window.addEventListener(
-      'unload',
-      function() {
-        BlocklyStorage.backupBlocks_(workspace);
-      },
-      false,
+    'unload',
+    function () {
+      BlocklyStorage.backupBlocks_(workspace);
+    },
+    false
   );
 };
 
@@ -46,7 +46,7 @@ BlocklyStorage.backupOnUnload = function(opt_workspace) {
  * Restore code blocks from localStorage.
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
-BlocklyStorage.restoreBlocks = function(opt_workspace) {
+BlocklyStorage.restoreBlocks = function (opt_workspace) {
   const url = window.location.href.split('#')[0];
   if ('localStorage' in window && window.localStorage[url]) {
     const workspace = opt_workspace || Blockly.getMainWorkspace();
@@ -59,7 +59,7 @@ BlocklyStorage.restoreBlocks = function(opt_workspace) {
  * Save blocks to database and return a link containing key to XML.
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
-BlocklyStorage.link = function(opt_workspace) {
+BlocklyStorage.link = function (opt_workspace) {
   const workspace = opt_workspace || Blockly.getMainWorkspace();
   const xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
@@ -80,7 +80,7 @@ BlocklyStorage.link = function(opt_workspace) {
  * @param {string} key Key to XML, obtained from href.
  * @param {Blockly.WorkspaceSvg=} opt_workspace Workspace.
  */
-BlocklyStorage.retrieveXml = function(key, opt_workspace) {
+BlocklyStorage.retrieveXml = function (key, opt_workspace) {
   const workspace = opt_workspace || Blockly.getMainWorkspace();
   BlocklyStorage.makeRequest_('/storage', 'key', key, workspace);
 };
@@ -100,20 +100,16 @@ BlocklyStorage.httpRequest_ = null;
  * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.makeRequest_ = function(url, name, content, workspace) {
+BlocklyStorage.makeRequest_ = function (url, name, content, workspace) {
   if (BlocklyStorage.httpRequest_) {
     // AJAX call is in-flight.
     BlocklyStorage.httpRequest_.abort();
   }
   BlocklyStorage.httpRequest_ = new XMLHttpRequest();
   BlocklyStorage.httpRequest_.name = name;
-  BlocklyStorage.httpRequest_.onreadystatechange =
-    BlocklyStorage.handleRequest_;
+  BlocklyStorage.httpRequest_.onreadystatechange = BlocklyStorage.handleRequest_;
   BlocklyStorage.httpRequest_.open('POST', url);
-  BlocklyStorage.httpRequest_.setRequestHeader(
-      'Content-Type',
-      'application/x-www-form-urlencoded',
-  );
+  BlocklyStorage.httpRequest_.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   BlocklyStorage.httpRequest_.send(name + '=' + encodeURIComponent(content));
   BlocklyStorage.httpRequest_.workspace = workspace;
 };
@@ -122,27 +118,23 @@ BlocklyStorage.makeRequest_ = function(url, name, content, workspace) {
  * Callback function for AJAX call.
  * @private
  */
-BlocklyStorage.handleRequest_ = function() {
+BlocklyStorage.handleRequest_ = function () {
   if (BlocklyStorage.httpRequest_.readyState == 4) {
     if (BlocklyStorage.httpRequest_.status != 200) {
       BlocklyStorage.alert(
-          BlocklyStorage.HTTPREQUEST_ERROR +
+        BlocklyStorage.HTTPREQUEST_ERROR +
           '\n' +
           'httpRequest_.status: ' +
-          BlocklyStorage.httpRequest_.status,
+          BlocklyStorage.httpRequest_.status
       );
     } else {
       const data = BlocklyStorage.httpRequest_.responseText.trim();
       if (BlocklyStorage.httpRequest_.name == 'xml') {
         window.location.hash = data;
-        BlocklyStorage.alert(
-            BlocklyStorage.LINK_ALERT.replace('%1', window.location.href),
-        );
+        BlocklyStorage.alert(BlocklyStorage.LINK_ALERT.replace('%1', window.location.href));
       } else if (BlocklyStorage.httpRequest_.name == 'key') {
         if (!data.length) {
-          BlocklyStorage.alert(
-              BlocklyStorage.HASH_ERROR.replace('%1', window.location.hash),
-          );
+          BlocklyStorage.alert(BlocklyStorage.HASH_ERROR.replace('%1', window.location.hash));
         } else {
           BlocklyStorage.loadXml_(data, BlocklyStorage.httpRequest_.workspace);
         }
@@ -160,7 +152,7 @@ BlocklyStorage.handleRequest_ = function() {
  * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.monitorChanges_ = function(workspace) {
+BlocklyStorage.monitorChanges_ = function (workspace) {
   const startXmlDom = Blockly.Xml.workspaceToDom(workspace);
   const startXmlText = Blockly.Xml.domToText(startXmlDom);
   function change() {
@@ -180,7 +172,7 @@ BlocklyStorage.monitorChanges_ = function(workspace) {
  * @param {!Blockly.WorkspaceSvg} workspace Workspace.
  * @private
  */
-BlocklyStorage.loadXml_ = function(xml, workspace) {
+BlocklyStorage.loadXml_ = function (xml, workspace) {
   try {
     xml = Blockly.Xml.textToDom(xml);
   } catch (e) {
@@ -197,6 +189,6 @@ BlocklyStorage.loadXml_ = function(xml, workspace) {
  * Designed to be overridden if an app has custom dialogs, or a butter bar.
  * @param {string} message Text to alert.
  */
-BlocklyStorage.alert = function(message) {
+BlocklyStorage.alert = function (message) {
   window.alert(message);
 };
