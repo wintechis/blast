@@ -171,7 +171,7 @@
     const apiTypeInput = document.getElementById('api-type');
     const apiType = apiTypeInput.value;
     const script = document.createElement('script');
-    script.src = `js/bluetooth_apis/${apiType}.js`;
+    script.src = `src/bluetooth_apis/${apiType}.js`;
     document.head.appendChild(script);
 
     // set host address
