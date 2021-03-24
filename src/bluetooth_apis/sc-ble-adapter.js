@@ -3,6 +3,7 @@
  * sc-ble-adapter (github.com/wintechis/sc-ble-adapter) in
  * JavaScript for use with Blast.
  * @author derwehr@gmail.com (Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 'use strict';
 

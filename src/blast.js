@@ -350,6 +350,7 @@ Blast.stopJS = function() {
  * Stop execution and adds an error message to the
  * {@link Blast.messageOutputContainer}.
  * @param {string} [text] optional, a custom error text
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 Blast.throwError = function(text) {
   if (!text) {
