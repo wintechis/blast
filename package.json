@@ -1,0 +1,30 @@
+{
+  "name": "blast",
+  "version": "0.0.1",
+  "description": "Block Applications for Things",
+  "directories": {
+    "doc": "docs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/blast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wintechis/blast/issues"
+  },
+  "homepage": "https://github.com/wintechis/blast#readme",
+  "author": "Thomas Wehr",
+  "scripts": {
+    "build": "gulp build",
+    "lint": "eslint ."
+  },
+  "main": "index.html",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "eslint": "^7.15.0",
+    "eslint-config-google": "^0.14.0",
+    "google-closure-compiler": "^20210302.0.0",
+    "gulp": "^4.0.2"
+  },
+  "dependencies": {}
+}
