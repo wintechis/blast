@@ -186,13 +186,6 @@ Blast.getBBox_ = function(element) {
  * @public
  */
 Blast.init = function() {
-  Blast.workspace = Blockly.inject('content_workspace', {
-    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-    media: 'media/',
-    toolbox: Blast.Toolbox.currentToolbox,
-    zoom: {controls: true, wheel: true},
-  });
-
   // adjust workspace and toolbox on resize
   const container = document.getElementById('content_area');
   const onresize = function() {
@@ -216,11 +209,19 @@ Blast.init = function() {
     }
   };
   window.addEventListener('resize', onresize, false);
-  onresize();
-  Blockly.svgResize(Blast.workspace);
+
+  Blast.workspace = Blockly.inject('content_workspace', {
+    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
+    media: 'media/',
+    toolbox: Blast.Toolbox.currentToolbox,
+    zoom: {controls: true, wheel: true},
+  });
 
   // initialize toolbox
   Blast.Toolbox.init();
+
+  onresize();
+  Blockly.svgResize(Blast.workspace);
 
   // Initialize UI
   Blast.Ui.init();
