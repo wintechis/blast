@@ -1,0 +1,116 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="7QbH3)$8Ai[Xlfl;@(G]">ruuvi</variable>
+    <variable id="|j/1crLaU+rESrr07s*c">thermo</variable>
+    <variable id="b6~E;S3?12`ZQlY;z8t4">leds</variable>
+  </variables>
+  <block type="variables_set" id="u.O[D.mzrAM4U[jpi6ml" x="139" y="102">
+    <field name="VAR" id="7QbH3)$8Ai[Xlfl;@(G]">ruuvi</field>
+    <value name="VALUE">
+      <block type="mac" id="3:J~/7%o-,Db)lD`IKS/">
+        <field name="MAC">ceedb9703543</field>
+      </block>
+    </value>
+    <next>
+      <block type="while_until" id="V!yB6Nl^KO-i.,0k.!9h">
+        <field name="MODE">WHILE</field>
+        <value name="BOOL">
+          <block type="logic_boolean" id="/,QZ7p@Pk)[L-UojBF=7">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="display_text" id=":aA*Cw|Ra4%INY0N|1~[">
+            <value name="text">
+              <block type="string" id="zx/4Pin3`|h!+WBWlTb@">
+                <field name="TEXT">Getting RSSI values...</field>
+              </block>
+            </value>
+            <next>
+              <block type="display_text" id="RYuw+?dmIX4tV5V[k3Qn">
+                <value name="text">
+                  <block type="ibeacon_data" id="hE:(J35VwZ@x+84PKo1,">
+                    <value name="MAC">
+                      <block type="mac" id="QNH,/1[bad62H[WPtVpC">
+                        <field name="MAC">be5860063d1c</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="display_text" id="~GsDQC@lGl[%XB+e*2!k">
+                    <value name="text">
+                      <block type="ibeacon_data" id="_pmStxy;l?Xnp:vwJ3ng">
+                        <value name="MAC">
+                          <block type="variables_get" id="!r~$UccJ}a15Qj`%wWN~">
+                            <field name="VAR" id="7QbH3)$8Ai[Xlfl;@(G]">ruuvi</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="display_text" id="9{W1e|4z=hU|f6]Lfz7w">
+                        <value name="text">
+                          <block type="ibeacon_data" id=":VM+Cuu8m@KRG:}Np~]q">
+                            <value name="MAC">
+                              <block type="mac" id="G3bZw{nGhy3$bVi#Xnl4">
+                                <field name="MAC">a4c138aa882e</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+        <next>
+          <block type="display_text" id="*6YY+:Dg`RlwYu6+QK?K">
+            <value name="text">
+              <block type="get_temperature" id="CV{#*usG]QI?6Oi#L)?P">
+                <value name="MAC">
+                  <block type="variables_get" id="q=0aO.w_`.BQMpoS3@Iq">
+                    <field name="VAR" id="|j/1crLaU+rESrr07s*c">thermo</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="display_text" id="=DWicwW6/=H5Z4.)BL-1">
+                <value name="text">
+                  <block type="string" id="SNxhJ2#c#|srgV;I1:uw">
+                    <field name="TEXT">Switching lights...</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="switch_lights" id="*zmG3@IKoGlobre,6+dQ">
+                    <field name="cb_red">TRUE</field>
+                    <field name="cb_yellow">TRUE</field>
+                    <field name="cb_green">TRUE</field>
+                    <value name="mac">
+                      <block type="variables_get" id="m)Pw82lylYA(xBmT8Rm%">
+                        <field name="VAR" id="b6~E;S3?12`ZQlY;z8t4">leds</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="play_audio" id="EHr|C78(9rpTO%$AOMs$">
+                        <value name="URI">
+                          <block type="uri" id="`T}F}`HnV%5T|`Nwqv~h">
+                            <field name="URI">https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg</field>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
