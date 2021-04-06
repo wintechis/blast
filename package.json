@@ -16,6 +16,7 @@
   "author": "Thomas Wehr",
   "scripts": {
     "build": "gulp build",
+    "jsdoc": "gulp jsdoc",
     "lint": "eslint ."
   },
   "main": "index.html",
@@ -24,7 +25,9 @@
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20210302.0.0",
-    "gulp": "^4.0.2"
+    "gulp": "^4.0.2",
+    "gulp-shell": "0.8.0",
+    "jsdoc": "3.6.6"
   },
   "dependencies": {}
 }

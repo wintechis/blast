@@ -5,6 +5,7 @@
 
 const gulp = require('gulp');
 const closureCompiler = require('google-closure-compiler').gulp();
+const shell = require('gulp-shell');
 
 gulp.task('build', function() {
   return gulp.src(['src/bluetooth_apis/bluetooth.js',
@@ -17,3 +18,5 @@ gulp.task('build', function() {
           }))
       .pipe(gulp.dest('./js'));
 });
+
+gulp.task('jsdoc', shell.task(['./node_modules/.bin/jsdoc src -d docs/jsdoc']));

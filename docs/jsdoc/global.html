@@ -94,22 +94,14 @@
     
 
     
-
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
+        <h3 class="subsection-title">Members</h3>
 
         
-                
-<h4 class="name" id="graph">graph</h4>
+            
+<h4 class="name" id="%5B0%5D"><span class="type-signature">(non-null) </span>[0]<span class="type-signature"> :<a href="Blast.States.html#.StateBlock">Blast.States.StateBlock</a></span></h4>
 
 
 
-
-<div class="description">
-    Simplified typedef for graphs as returned by urdf.
-</div>
 
 
 
@@ -117,110 +109,12 @@
     <ul>
         <li>
             
-<span class="param-type">Object</span>
+<span class="param-type"><a href="Blast.States.html#.StateBlock">Blast.States.StateBlock</a></span>
 
 
         </li>
     </ul>
 
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>subject</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#node">node</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">RDF subject.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>predicate</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#node">node</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">RDF predicate.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>object</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="global.html#node">node</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">RDF object.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -254,7 +148,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="blast.js.html">blast.js</a>, <a href="blast.js.html#line104">line 104</a>
+        <a href="blast_states.js.html">blast_states.js</a>, <a href="blast_states.js.html#line142">line 142</a>
     </li></ul></dd>
     
 
@@ -270,38 +164,41 @@
 
 
 
-            
-                
-<h4 class="name" id="node">node</h4>
+        
+    
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="initApi"><span class="type-signature"></span>initApi<span class="signature">(interpreter<span class="signature-attributes">non-null</span>, globalObject<span class="signature-attributes">non-null</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
 
 
 
 <div class="description">
-    Simplified typedef for nodes as returned by urdf.
+    defines an API for the JS Interpreter.
 </div>
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
 
 
 
 
 
-    <h5 class="subsection-title">Properties:</h5>
 
+    <h5>Parameters:</h5>
     
 
-<table class="props">
+<table class="params">
     <thead>
     <tr>
         
@@ -323,13 +220,13 @@
 
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>interpreter</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Interpreter</span>
 
 
             
@@ -339,20 +236,20 @@
 
             
 
-            <td class="description last">the node's values</td>
+            <td class="description last">interpreter object.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>type</code></td>
+                <td class="name"><code>globalObject</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">Interpreter.Object</span>
 
 
             
@@ -362,35 +259,14 @@
 
             
 
-            <td class="description last">the node's type</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>datatype</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">the node's datatype</td>
+            <td class="description last">global scope object.</td>
         </tr>
 
     
     </tbody>
 </table>
+
+
 
 
 
@@ -424,7 +300,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="blast.js.html">blast.js</a>, <a href="blast.js.html#line96">line 96</a>
+        <a href="interpreter_api.js.html">interpreter_api.js</a>, <a href="interpreter_api.js.html#line14">line 14</a>
     </li></ul></dd>
     
 
@@ -440,7 +316,23 @@
 
 
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
     
 
     
@@ -454,13 +346,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Blast.html">Blast</a></li><li><a href="Blast.BlockMethods.html">BlockMethods</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Namespaces</h3><ul><li><a href="Blast.html">Blast</a></li><li><a href="Blast.BlockMethods.html">BlockMethods</a></li><li><a href="Blast.States.html">States</a></li><li><a href="Blast.Ui.html">Ui</a></li></ul><h3>Global</h3><ul><li><a href="global.html#%255B0%255D">[0]</a></li><li><a href="global.html#initApi">initApi</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Feb 02 2021 11:33:36 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Apr 06 2021 15:34:12 GMT+0200 (Central European Summer Time)
 </footer>
 
 <script> prettyPrint(); </script>
