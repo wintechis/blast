@@ -210,11 +210,11 @@ Blast.Ui.init = function() {
   Blast.Ui.uriInput.addEventListener('keyup', (event) => {
     // load blocks from URI on Enter
     if (event.keyCode === 13) {
-      Blast.loadBlocks();
+      Blast.Storage.load();
     }
   });
-  Blast.bindClick('loadButton', Blast.loadBlocks);
-  Blast.bindClick('saveButton', Blast.saveBlocks);
+  Blast.bindClick('loadButton', Blast.Storage.load);
+  Blast.bindClick('saveButton', Blast.Storage.link);
 
   for (let i = 0; i < Blast.Ui.TABS_.length; i++) {
     const name = Blast.Ui.TABS_[i];

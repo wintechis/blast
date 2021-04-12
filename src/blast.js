@@ -71,66 +71,6 @@ Blast.status = {
 };
 
 /**
- * Load blocks from URI defined in {@link Blast.uriInput}.
- * @public
- */
-Blast.loadBlocks = async function() {
-  Blockly.hideChaff();
-  // stop execution
-  Blast.resetInterpreter();
-  Blast.resetUi(Blast.status.READY);
-
-  const url = document.getElementById('loadWorkspace-input').value;
-
-  // if input is empty show warning and return.
-  if (url == '') {
-    Blockly.alert('Enter a URI first.');
-    return;
-  }
-
-  // send GET request
-  fetch(url)
-      .then((response) => response.text())
-      .then((xmlText) => {
-      // clear blocks
-        Blast.workspace.clear();
-
-        const xmlDom = Blockly.Xml.textToDom(xmlText);
-        Blockly.Xml.domToWorkspace(xmlDom, Blast.workspace);
-      })
-      .catch((error) => {
-        Blockly.alert('Error loading workspace, see console for details.');
-        console.error(error);
-      });
-};
-
-/**
- * Save the current workspace to URL defined in input.
- * @public
- */
-Blast.saveBlocks = function() {
-  Blockly.hideChaff();
-  const url = document.getElementById('loadWorkspace-input').value;
-  // Generate Block XML
-  const xmlDom = Blockly.Xml.workspaceToDom(Blockly.mainWorkspace);
-  const serializer = new XMLSerializer();
-  const xmlStr = serializer.serializeToString(xmlDom);
-
-  // Send put request.
-  fetch(url, {
-    method: 'PUT',
-    body: xmlStr,
-  }).then((response) => {
-    if (response.ok) {
-      Blockly.alert('workspace saved!');
-    } else {
-      Blockly.alert(`Error saving workspace: 
-${response.status}: ${response.statusText}`);
-    }
-  });
-};
-
-/**
  * Bind a function to a button's click event.
  * @param {!Element|string} el Button element or ID thereof.
  * @param {!Function} func func Event handler to bind.
