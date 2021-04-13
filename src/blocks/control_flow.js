@@ -27,13 +27,16 @@ Blockly.Blocks['wait_seconds'] = {
      */
   init: function() {
     this.appendDummyInput()
-        .appendField('wait %1 seconds')
+        .appendField('wait')
         .appendField(
             new Blockly.FieldNumber('1, 0, 600'),
             'SECONDS',
-        );
+        )
+        .appendField('seconds');
     this.setColour(120);
     this.setTooltip('Wait x seconds before executing the next block.');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setHelpUrl('');
   },
 };
