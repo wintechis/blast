@@ -147,10 +147,14 @@ Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
  */
 Blast.BlockMethods.urdfQueryWrapper = function(uri, query, callback) {
   urdf.clear();
-  urdf.loadFrom(uri).then(() => {
-    urdf.query(query).then((result) => {
-      callback(result);
-    });
+
+  // write uri into FROM clause of the query as a workaround for
+  // https://github.com/vcharpenay/uRDF.js/issues/21#issuecomment-802860330
+  const fromClause = `\n FROM <${uri}>\n`;
+  query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
+
+  urdf.query(query).then((result) => {
+    callback(result);
   });
 };
 
