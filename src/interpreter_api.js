@@ -151,13 +151,13 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for playSound block.
-  wrapper = function(uri) {
-    return Blast.BlockMethods.playAudioFromURI(uri);
+  wrapper = function(uri, callback) {
+    return Blast.BlockMethods.playAudioFromURI(uri, callback);
   };
   interpreter.setProperty(
       globalObject,
       'playAudioFromURI',
-      interpreter.createNativeFunction(wrapper),
+      interpreter.createAsyncFunction(wrapper),
   );
 
   // API function for the get_rssi block.

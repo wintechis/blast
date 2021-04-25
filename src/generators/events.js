@@ -7,7 +7,6 @@
 
 'use strict';
 
-
 Blockly.JavaScript['state_definition'] = function(block) {
   // event code is generated at Blast.States.generateCode(),
   // and the event block generator

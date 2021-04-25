@@ -1,6 +1,7 @@
 /**
  * @fileoverview Interface for implementing Bluetooth-Operations of the sc-ble-adapter
  * (github.com/wintechis/sc-ble-adapter).
+ * TODO ADD prototype methods.
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */

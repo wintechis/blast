@@ -2,6 +2,7 @@
  * @fileoverview implements Bluetooth-Operations of the
  * sc-ble-adapter (github.com/wintechis/sc-ble-adapter) in
  * JavaScript for use with Blast.
+ * TODO change to prototype methods from bluetooth.js
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -14,6 +15,15 @@
   * @public
   */
 Blast.Bluetooth = {};
+
+Blast.Bluetooth.identifiers = 'handle';
+
+/**
+ * Common headers for communicating with the sc-ble-adapter.
+*/
+Blast.Bluetooth.headers = new Headers({
+  'Content-Type': 'application/json',
+});
 
 /**
  * Sends a connect command,
@@ -74,7 +84,7 @@ Blast.Bluetooth.disconnect = async function(mac, sleep = 1000) {
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Object} representation of the complete request with response.
  */
-Blast.Bluetooth.gatt_write = async function(mac, handle, type, value, sleep = 0) {
+Blast.Bluetooth.gatt_writeWithoutResponse = async function(mac, handle, type, value, sleep = 0) {
   const data = {
     type: 'ble:Write',
     handle: handle,

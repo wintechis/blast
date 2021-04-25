@@ -1,6 +1,5 @@
 /**
  * @fileoverview Methods used by Blast's Blocks.
- * https://github.com/wintechis/blast
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -16,6 +15,7 @@ goog.provide('Blast.BlockMethods');
 goog.require('Blast.Ui');
 goog.require('Blast.Bluetooth');
 goog.require('Blast.States');
+goog.require('Blast.Things.ConsumedThing.BLE_RGB_LED_controller');
 
 /**
  * Add a text message to the {@link Blast.Ui.messageOutputContainer}.
@@ -23,7 +23,7 @@ goog.require('Blast.States');
  * @public
  */
 Blast.BlockMethods.displayText = function(text) {
-  Blast.Ui.addMessage(text);
+  Blast.Things.ConsumedThing.Blast.blast.invokeAction('displayText', [text]);
 };
 
 /**
@@ -60,7 +60,7 @@ Blast.BlockMethods.displayTable = function(graph) {
   table.classList.add('output_table');
   table.innerHTML = html;
   // insert new table
-  Blast.Ui.addElementToOutputContainer(table);
+  Blast.Things.ConsumedThing.Blast.blast.invokeAction('displayTable', [text]);
 };
 
 /**
@@ -75,67 +75,21 @@ Blast.BlockMethods.displayTable = function(graph) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.sendHttpRequest = function(uri, method, headersString, body, output, callback) {
-  if (uri == null || uri == undefined || uri == '') {
-    Blast.throwError('URI input of HttpRequest blocks must not be empty');
-  }
-
-  const headersJSON = JSON.parse(headersString);
-  const requestOptions = {
-    method: method,
-    headers: new Headers(headersJSON),
-  };
-
-  if (body) {
-    requestOptions.body = body;
-  }
-
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        if (output == 'status') {
-          callback(res.status);
-        }
-        return res.text();
-      })
-      .then((resData) => {
-        urdf.clear();
-        urdf.load(resData).then(() => {
-          urdf.query('SELECT * WHERE {?subject ?predicate ?object}').then((result) => {
-            callback(result);
-          });
-        });
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+Blast.BlockMethods.sendHttpRequest = async function(
+    uri, method, headersString, body, output, callback) {
+  const retValue = await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'sendHttpRequest', [uri, method, headersString, body, output, callback],
+  );
+  callback(retValue);
 };
 
 // temporary method for the th-praxistag works for getting integer values only
 // TODO remove or fix after praxistag
-Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
-  if (uri == null || uri == undefined || uri == '') {
-    Blast.throwError('URI input of HttpRequest blocks must not be empty');
-  }
-
-  const headersJSON = JSON.parse(headersString);
-  const requestOptions = {
-    method: 'GET',
-    headers: new Headers(headersJSON),
-  };
-
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        return res.text();
-      })
-      .then((resData) => {
-        console.log(resData);
-        callback(parseInt(resData));
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+Blast.BlockMethods.getRequest = async function(uri, headersString, callback) {
+  const retValue = await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'getRequest', [uri, headersString],
+  );
+  callback(retValue);
 };
 
 /**
@@ -145,17 +99,11 @@ Blast.BlockMethods.getRequest = function(uri, headersString, callback) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.urdfQueryWrapper = function(uri, query, callback) {
-  urdf.clear();
-
-  // write uri into FROM clause of the query as a workaround for
-  // https://github.com/vcharpenay/uRDF.js/issues/21#issuecomment-802860330
-  const fromClause = `\n FROM <${uri}>\n`;
-  query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
-
-  urdf.query(query).then((result) => {
-    callback(result);
-  });
+Blast.BlockMethods.urdfQueryWrapper = async function(uri, query, callback) {
+  const retValue = await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'queryRDF', [uri, query],
+  );
+  callback(retValue);
 };
 
 /**
@@ -167,20 +115,18 @@ Blast.BlockMethods.urdfQueryWrapper = function(uri, query, callback) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.switchLights = function(mac, r, y, g, callback) {
+Blast.BlockMethods.switchLights = async function(mac, r, y, g, callback) {
+  // create value byte with checkboxes
   const redByte = r ? 'ff' : '00';
   const yellowByte = y ? 'ff' : '00';
   const greenByte = g ? 'ff' : '00';
-
   const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
-  const type = 'xsd:hexBinary';
 
-  Blast.Bluetooth.connect(mac)
-      .then(() => {
-        Blast.Bluetooth.gatt_write(mac, '0009', type, value, 1500);
-      })
-      .then(() => Blast.Bluetooth.disconnect(mac))
-      .then(() => callback());
+  const light = new Blast.Things.ConsumedThing.BLE_RGB_LED_controller(mac);
+
+  await light.switchLights(value);
+
+  callback();
 };
 
 /**
@@ -225,33 +171,14 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getRSSI = function(mac, callback) {
+Blast.BlockMethods.getRSSI = async function(mac, callback) {
   const uri = `${Blast.config.hostAddress}current`;
-  const requestOptions = {
-    method: 'GET',
-  };
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        return res.text();
-      })
-      .then((resData) => {
-        const currentGraph = JSON.parse(resData)['@graph'];
-        let found = false;
-        for (const node of currentGraph) {
-          if (node.id == '#' + mac) {
-            found = true;
-            callback(node.rssiValue);
-          }
-        }
-        if (!found) {
-          Blast.throwError(`${mac} not found.`);
-        }
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+  const scBleAdapter = new Blast.Things.ConsumedThing.sc_ble_adapter(uri);
+  
+  const rssi = await scBleAdapter.readProperty('rssiValue', {'mac': mac});
+
+  callback(rssi);
 };
 
 /**
@@ -266,19 +193,22 @@ Blast.BlockMethods.addEvent = function(conditions, statements, blockId) {
 };
 
 /**
- * Plays an audio file provided by URI
- * @param {string} uri URI of the audio file to play
+ * Plays an audio file provided by URI.
+ * @param {string} uri URI of the audio file to play.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.playAudioFromURI = function(uri) {
-  const audio = new Audio(uri);
-  audio.play();
+Blast.BlockMethods.playAudioFromURI = async function(uri, callback) {
+  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'playAudioFromURI', [uri],
+  );
+  callback();
 };
 
 /**
  * Generates and returns a random integer between a and b, inclusively.
- * @param {number} a lower limit
- * @param {number} b upper limit
+ * @param {number} a lower limit.
+ * @param {number} b upper limit.
  * @return {number} generated random number.
  * @public
  */

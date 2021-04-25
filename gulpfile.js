@@ -8,9 +8,7 @@ const closureCompiler = require('google-closure-compiler').gulp();
 const shell = require('gulp-shell');
 
 gulp.task('build', function() {
-  return gulp.src(['src/bluetooth_apis/bluetooth.js',
-    'src/*.js', 'src/blocks/*.js',
-    'src/generators/*.js'],
+  return gulp.src(['src/**/*.js'],
   {base: './'})
       .pipe(
           closureCompiler({

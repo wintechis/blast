@@ -115,21 +115,43 @@
       <hr>
       <div class="row">
         <div class="col-25">
-          <label for="api-type">API type:</label>
+          <label for="api-type">API type</label>
         </div>
         <div class="col-75">
           <select id="api-type" name="api-type">
             <option value="sc-ble-adapter">SC-BLE-Adapter</option>
+            <option value="webBluetooth">Web Bluetooth API</option>
           </select>
         </div>
       </div>
-      <div class="row">
+      <div class="row" id="api-address-row">
         <div class="col-25">
           <label for="api-address">API address</label>
         </div>
         <div class="col-75">
           <input type="text" id="api-address" name="api-address"
             value="http://dwpi4.local:8000/">
+        </div>
+      </div>      
+      <div class="row" id="web-bluetooth-connect-row">
+        <div class="col-25">
+          <label for="web-bluetooth-connect">Pair a Bluetooth device</label>
+        </div>
+        <div class="col-75">
+          <form>
+            <label for="wb-allDevices">All Devices</label><input id="wb-allDevices" type="checkbox" checked>
+            <input id="wb-name" type="text" size="17" placeholder="Device Name">
+            <br><br>
+            <input id="wb-namePrefix" type="text" size="17" placeholder="Device Name Prefix">
+            <br><br>
+            <input type="button" id="wb-connect" value="pair">
+          </form>
+          <div>
+            <h3>Output:</h3>note down the id and use it as mac-address in BLAST
+            <div id="wb-output" class="wb-output">
+              <pre id="wb-log"></pre>
+            </div>
+          </div>
         </div>
       </div>
       <div class="row">
@@ -148,6 +170,87 @@
   const span = document.getElementsByClassName("close")[0];
 
   const addressInput = document.getElementById('api-address');
+  const apiTypeInput = document.getElementById('api-type');
+
+  apiTypeInput.addEventListener('change', function (event) {
+    saveSettings(false);
+    wbRow = document.getElementById('web-bluetooth-connect-row');
+    apiAddress = document.getElementById('api-address-row');
+    if(apiTypeInput.value == 'webBluetooth'){
+      wbRow.style.display = 'block';
+      apiAddress.style.display = 'none'
+    } else {
+      wbRow.style.display = 'none';
+      apiAddress.style.display = 'block';
+    }
+  });
+
+  // logs webBluetooth to wb-output div
+  const wbLog = function(){
+    var line = Array.prototype.slice.call(arguments).map(function(argument) {
+      return typeof argument === 'string' ? argument : JSON.stringify(argument);
+    }).join(' ');
+
+    document.getElementById('wb-log').textContent += line + '\n';
+  }
+
+  // request bt devices when pair button is clicked
+  const pairButton = document.getElementById('wb-connect');
+  pairButton.addEventListener('click', function() {
+    let filters = [];
+
+    let filterName = document.getElementById('wb-name').value;
+    if (filterName) {
+      filters.push({name: filterName});
+    }
+
+    let filterNamePrefix = document.getElementById('wb-namePrefix').value;
+    if (filterNamePrefix) {
+      filters.push({namePrefix: filterNamePrefix});
+    }
+
+    let options = {
+      optionalServices: ['0000fff0-0000-1000-8000-00805f9b34fb']
+    };
+    if (document.getElementById('wb-allDevices').checked) {
+      options.acceptAllDevices = true;
+    } else {
+      options.filters = filters;
+    }
+
+    navigator.bluetooth.requestDevice(options)
+    .then(device => {
+      wbLog('> Name:             ' + device.name);
+      wbLog('> Id:               ' + device.id);
+      wbLog('> Connected:        ' + device.gatt.connected);
+    })
+    .catch(error => {
+      wbLog('Argh! ' + error);
+    });
+  });
+
+  // Make sure web bluetooth filters are correct
+  const wballDevices = document.getElementById('wb-allDevices');
+  const wbName = document.getElementById('wb-name');
+  const wbnamePrefix = document.getElementById('wb-namePrefix');
+  const updateFiltersCb = function() {
+    const name = wbName.value;
+    const namePrefix = wbnamePrefix.value;
+    const allDevice = wballDevices.checked;
+
+    if(name != '' || namePrefix != ''){
+      wballDevices.checked = false;
+    }
+  }
+  wbnamePrefix.addEventListener('change', updateFiltersCb);
+  wbName.addEventListener('keyup', updateFiltersCb);
+  wballDevices.addEventListener('change', function() {
+    if(wballDevices.checked){
+      wbName.value = '';
+      wbnamePrefix.value = '';
+    }
+  })
+
 
   // When the user clicks the button, open the modal 
   configButton.onclick = function () {
@@ -166,12 +269,18 @@
     }
   }
 
-  const saveSettings = function () {
+  const saveSettings = function (close = true) {
+    // unload previous bt api
+    const btApi = document.getElementById('bluetooth-api');
+    if(btApi){
+      document.head.removeChild(btApi);
+    }
+
     // load script for api type
-    const apiTypeInput = document.getElementById('api-type');
     const apiType = apiTypeInput.value;
     const script = document.createElement('script');
     script.src = `src/bluetooth_apis/${apiType}.js`;
+    script.id = 'bluetooth-api';
     document.head.appendChild(script);
 
     // set host address
@@ -190,7 +299,8 @@
     Blast.config.hostAddress = address;
 
     // close the settings modal
-    configModal.style.display = "none";
+    if(close)
+      configModal.style.display = "none";
   }
 
   // set default values

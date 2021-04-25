@@ -17,17 +17,27 @@
   "scripts": {
     "build": "gulp build",
     "jsdoc": "gulp jsdoc",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "test": "mocha"
   },
   "main": "index.html",
+  "mocha": {
+    "ui": "tdd",
+    "reporter": "landing"
+  },
   "license": "AGPL-3.0",
   "devDependencies": {
+    "chai": "^4.3.4",
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
+    "fs": "^0.0.1-security",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
     "gulp-shell": "0.8.0",
-    "jsdoc": "3.6.6"
+    "jsdoc": "3.6.6",
+    "mocha": "^8.3.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "libxmljs": "^0.19.7"
+  }
 }

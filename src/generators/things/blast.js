@@ -1,11 +1,20 @@
 /**
- * @fileoverview Generating JavaScript for Blast's action blocks.
- * @author derwehr@gmail.com (Thomas Wehr)
+ * @fileoverview Javascript generators for BLAST's properties, actions and events Blocks.
+ * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 'use strict';
 
+/*****************
+ * Action blocks.*
+ *****************/
+
+/**
+ * Generates JavaScript code for the get_request block.
+ * @param {Blockly.Block} block the get_request block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['get_request'] = function(block) {
   const uri = Blockly.JavaScript.valueToCode(
       block,
@@ -13,29 +22,39 @@ Blockly.JavaScript['get_request'] = function(block) {
       Blockly.JavaScript.ORDER_ATOMIC,
   );
   const headers = block.getFieldValue('HEADERS');
-  
+    
   const code = `getRequest(${uri}, '{${headers}}')`;
-  
+    
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-
+ 
+/**
+ * Generates JavaScript code for the http_request block.
+ * @param {Blockly.Block} block the http_request block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['http_request'] = function(block) {
   const uri =
-      Blockly.JavaScript.valueToCode(
-          block,
-          'uri',
-          Blockly.JavaScript.ORDER_NONE,
-      ) || null;
+        Blockly.JavaScript.valueToCode(
+            block,
+            'uri',
+            Blockly.JavaScript.ORDER_NONE,
+        ) || null;
   const method = block.getFieldValue('METHOD');
   const headers = block.getFieldValue('HEADERS');
   const output = block.getFieldValue('OUTPUT');
   const body = JSON.stringify(block.getFieldValue('BODY')) || null;
-  
+    
   const code = `sendHttpRequest(${uri},'${method}', 
-    '{${headers}}', ${body}, '${output}')\n`;
+      '{${headers}}', ${body}, '${output}')\n`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-  
+    
+/**
+ * Generates JavaScript code for the sparql_query block.
+ * @param {Blockly.Block} block the sparql_query block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['sparql_query'] = function(block) {
   let query = block.getFieldValue('query');
   const uri = Blockly.JavaScript.valueToCode(
@@ -43,15 +62,20 @@ Blockly.JavaScript['sparql_query'] = function(block) {
       'uri',
       Blockly.JavaScript.ORDER_NONE,
   );
-  
+    
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
-  
+    
   const code = `urdfQueryWrapper(${uri}, '${query}')`;
-  
+    
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-  
+
+/**
+ * Generates JavaScript code for the sparql_ask block.
+ * @param {Blockly.Block} block the sparql_ask block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['sparql_ask'] = function(block) {
   let query = block.getFieldValue('query');
   const uri = Blockly.JavaScript.valueToCode(
@@ -59,61 +83,53 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
       'uri',
       Blockly.JavaScript.ORDER_NONE,
   );
-  
+    
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
-  
+    
   const code = `urdfQueryWrapper(${uri}, "${query}")`;
-  
+    
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-  
+    
+/**
+ * Generates JavaScript code for the display_text block.
+ * @param {Blockly.Block} block the display_text block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['display_text'] = function(block) {
   const message =
-      Blockly.JavaScript.valueToCode(
-          block,
-          'text',
-          Blockly.JavaScript.ORDER_NONE,
-      ) || '\'\'';
-  
+        Blockly.JavaScript.valueToCode(
+            block,
+            'text',
+            Blockly.JavaScript.ORDER_NONE,
+        ) || '\'\'';
+    
   const code = `displayText(${message});\n`;
   return code;
 };
-  
+    
+/**
+ * Generates JavaScript code for the display_table block.
+ * @param {Blockly.Block} block the display_table block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['display_table'] = function(block) {
   const table = Blockly.JavaScript.valueToCode(
       block,
       'table',
       Blockly.JavaScript.ORDER_NONE,
   );
-  
+    
   const code = `displayTable(${table});\n`;
   return code;
 };
-
-Blockly.JavaScript['switch_lights'] = function(block) {
-  const cbRed = block.getFieldValue('cb_red') == 'TRUE';
-  const cbYellow = block.getFieldValue('cb_yellow') == 'TRUE';
-  const cbGreen = block.getFieldValue('cb_green') == 'TRUE';
-  const mac = Blockly.JavaScript.valueToCode(
-      block,
-      'mac',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-  
-  const code = `switchLights(${mac}, ${cbRed}, ${cbYellow}, ${cbGreen});\n`;
-  return code;
-};
-  
-Blockly.JavaScript['mirobot_pickup'] = function(block) {
-  const box = Blockly.JavaScript.quote_(
-      block.getFieldValue('box').toLowerCase(),
-  );
-  
-  const code = `mirobotPickUpBox(${box});\n`;
-  return code;
-};
-  
+    
+/**
+ * Generates JavaScript code for the play_audio block.
+ * @param {Blockly.Block} block the play_audio block.
+ * @returns {String} the generated code.
+ */
 Blockly.JavaScript['play_audio'] = function(block) {
   const uri = Blockly.JavaScript.valueToCode(
       block,
@@ -122,4 +138,20 @@ Blockly.JavaScript['play_audio'] = function(block) {
   );
   const code = `playAudioFromURI(${uri});\n`;
   return code;
+};
+
+/*******************
+ * Property blocks.*
+ *******************/
+
+/**
+ * Generates JavaScript code for the get_signal_strength block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['get_signal_strength_wb'] = function(block) {
+  const mac = block.mac;
+  const code = `getRSSIWb(${mac})`;
+
+  return [code, Blockly.JavaScript.ORDER_NONE];
 };

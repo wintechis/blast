@@ -1,14 +1,18 @@
 /**
- * @fileoverview Action blocks for Blast.
+ * @fileoverview Blocks definitions for BLAST properties, actions and events.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 'use strict';
 
+/*****************
+ * Action blocks.*
+ *****************/
+
 Blockly.Blocks['get_request'] = {
   /**
-   * Block for executing http get requests.
+   * Block for executing http get requests, returns body as text.
    * @this {Blockly.Block}
    */
   init: function() {
@@ -24,26 +28,16 @@ Blockly.Blocks['get_request'] = {
     this.setInputsInline(false);
     this.setOutput(true, null);
     this.setColour(0);
-    this.setTooltip('');
+    this.setTooltip('Invokes a HTTP GET request, returns body as text.');
     this.setHelpUrl('');
   },
 };
 
 Blockly.Blocks['http_request'] = {
-  httpRequestValidator: function(newValue) {
-    this.getSourceBlock().updateInputs(newValue);
-    return newValue;
-  },
-  
-  httpRequestOutputValidator: function(output) {
-    this.getSourceBlock().updateOutput(output);
-    return output;
-  },
-  
   /**
-   * Block for executing http requests.
-   * @this {Blockly.Block}
-   */
+     * Block for executing http requests.
+     * @this {Blockly.Block}
+     */
   init: function() {
     this.appendValueInput('uri')
         .appendField('send HTTP request to URI')
@@ -82,31 +76,42 @@ Blockly.Blocks['http_request'] = {
         'HEADERS',
     );
     this.setOutput(true, 'String');
+    this.setTooltip('Invokes a HTTP request.');
     this.setColour(0);
   },
-  
+
+  httpRequestValidator: function(newValue) {
+    this.getSourceBlock().updateInputs(newValue);
+    return newValue;
+  },
+    
+  httpRequestOutputValidator: function(output) {
+    this.getSourceBlock().updateOutput(output);
+    return output;
+  },
+    
   updateInputs: function(newValue) {
     this.removeInput('BODYINPUT', /* no error */ true);
-  
+    
     if (newValue != 'GET') {
       this.appendDummyInput('BODYINPUT').appendField('body').appendField(
           new Blockly.FieldMultilineInput(`{
-  "object": {
-    "a": "b",
-    "c": "d",
-    "e": "f"
-  },
-  "array": [
-    1,
-    2
-  ],
-  "string": "Hello World"
-  }`),
+    "object": {
+      "a": "b",
+      "c": "d",
+      "e": "f"
+    },
+    "array": [
+      1,
+      2
+    ],
+    "string": "Hello World"
+    }`),
           'BODY',
       );
     }
   },
-  
+    
   updateOutput: function(outputValue) {
     if (outputValue == 'status') {
       this.outputConnection.setCheck('String');
@@ -115,58 +120,60 @@ Blockly.Blocks['http_request'] = {
     }
   },
 };
-  
+
 Blockly.Blocks['sparql_query'] = {
   /**
-     * Block for executing sparql queries.
-     * @this {Blockly.Block}
-     */
+       * Block for executing sparql queries.
+       * @this {Blockly.Block}
+       */
   init: function() {
     this.appendValueInput('uri')
         .appendField('run SPARQL Query from URI')
         .setCheck('URI');
     this.appendDummyInput().appendField(
         new Blockly.FieldMultilineInput(`SELECT *
-    WHERE { 
-      ?s ?p ?o
-    }`),
+      WHERE { 
+        ?s ?p ?o
+      }`),
         'query',
     );
     this.setInputsInline(false);
     this.setColour(0);
     this.setOutput(true, 'table');
+    this.setTooltip('Executes a sparql query');
   },
 };
 
 Blockly.Blocks['sparql_ask'] = {
   /**
-   * Block for executing sparql ask queries.
-   * @this {Blockly.Block}
-   */
+     * Block for executing sparql ask queries.
+     * @this {Blockly.Block}
+     */
   init: function() {
     this.appendValueInput('uri')
         .appendField('run SPARQL ASK Query from URI')
         .setCheck('URI');
     this.appendDummyInput().appendField(
         new Blockly.FieldMultilineInput(`PREFIX sosa: <http://www.w3.org/ns/sosa/>
-  ASK 
-  WHERE {
-    ?node sosa:hasSimpleResult ?rssiValue 
-    FILTER (?rssiValue > -40)
-  }`),
+    ASK 
+    WHERE {
+      ?node sosa:hasSimpleResult ?rssiValue 
+      FILTER (?rssiValue > -40)
+    }`),
         'query',
     );
     this.setInputsInline(false);
     this.setOutput(true, 'Boolean');
+    this.setTooltip('executes a sparql ASK query');
     this.setColour(0);
   },
 };
-  
+    
 Blockly.Blocks['display_text'] = {
   /**
-     * Block for outputting text.
-     * @this {Blockly.Block}
-     */
+       * Block for outputting text.
+       * @this {Blockly.Block}
+       */
   init: function() {
     this.appendValueInput('text')
         .setCheck(['String', 'Number', 'Boolean', 'URI'])
@@ -178,12 +185,12 @@ Blockly.Blocks['display_text'] = {
     this.setNextStatement(true, null);
   },
 };
-    
+      
 Blockly.Blocks['display_table'] = {
   /**
-     * Block for outputting data tables (rdf graphs).
-     * @this {Blockly.Block}
-     */
+       * Block for outputting data tables (rdf graphs).
+       * @this {Blockly.Block}
+       */
   init: function() {
     this.appendValueInput('table')
         .setCheck(['table'])
@@ -195,63 +202,12 @@ Blockly.Blocks['display_table'] = {
     this.setNextStatement(true, null);
   },
 };
-
-Blockly.Blocks['switch_lights'] = {
-  /**
-   * Block for switchling lights using a WoT interface.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendDummyInput()
-        .appendField('switch lights with mac');
-    this.appendValueInput('mac')
-        .setCheck('mac');
-    this.appendDummyInput()
-        .appendField('red')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_red')
-        .appendField('yellow')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_yellow')
-        .appendField('green')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(0);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  },
-};
-
-Blockly.Blocks['mirobot_pickup'] = {
-  /**
-   * Block for controlling the mirobot.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendDummyInput()
-        .appendField('Robot-arm, pick up')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['blue', 'BLUE'],
-              ['red', 'RED'],
-              ['yellow', 'YELLOW'],
-              ['green', 'GREEN'],
-            ]),
-            'box',
-        )
-        .appendField('box');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(0);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  },
-};
   
 Blockly.Blocks['play_audio'] = {
   /**
-     * Block for playing audio from URIs.
-     * @this {Blockly.Block}
-     */
+       * Block for playing audio from URIs.
+       * @this {Blockly.Block}
+       */
   init: function() {
     this.appendValueInput('URI')
         .appendField('play audio from URI')
@@ -259,9 +215,35 @@ Blockly.Blocks['play_audio'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
-    this.setTooltip('');
+    this.setTooltip('Plays an audio file from URI.');
     this.setHelpUrl('');
   },
 };
 
-
+/*******************
+  * Property blocks.*
+  *******************/
+ 
+Blockly.Blocks['get_signal_strength_wb'] = {
+  /**
+    * Block for reading the strength of the signal (rssiValue property) sent by a ble device,
+    * measured at the sc-ble-adapter.
+    * @this {Blockly.Block}
+    */
+  init: function() {
+    this.appendDummyInput()
+        .appendField('get signal-strength of mac at this machine');
+    this.setOutput(true, ['String', 'Number']);
+    this.setColour(255);
+    this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
+    this.setHelpUrl('');
+    this.requested = false;
+    this.device = '';
+  },
+  onchange: async function() {
+    if (!this.isInFlyout && !this.requested && this.rendered) {
+      this.requested = true;
+      this.device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+    }
+  },
+};
