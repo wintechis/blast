@@ -1,5 +1,5 @@
 /**
- * @fileoverview Blocks definitions for a BLE RGB LED controller
+ * @fileoverview Blocks definitions for a BLE RYG LED controller
  * (https://github.com/arduino12/ble_rgb_led_strip_controller).
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
@@ -12,23 +12,23 @@
  *******************/
 
 
-Blockly.Blocks['switch_lights_rgb'] = {
+Blockly.Blocks['switch_lights_ryg'] = {
   /**
     * Block for switchling lights.
     * @this {Blockly.Block}
     */
   init: function() {
     this.appendDummyInput()
-        .appendField('switch RGB lights with mac');
+        .appendField('switch RYG lights with mac');
     this.appendValueInput('mac')
         .setCheck('mac');
     this.appendDummyInput()
         .appendField('red')
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_red')
+        .appendField('yellow')
+        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_yellow')
         .appendField('green')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green')
-        .appendField('blue')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_blue');
+        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
