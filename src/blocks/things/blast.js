@@ -238,12 +238,19 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
     this.setHelpUrl('');
     this.requested = false;
-    this.device = '';
+    this.deviceId = '';
   },
-  onchange: async function() {
+  setDeviceId: async function() {
+    let device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+    this.deviceId = device.id;
+    // after setting device id, trigger code generation.
+    Blast.generateCode();
+    Blast.Ui.renderContent_();
+  },
+  onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       this.requested = true;
-      this.device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+      this.setDeviceId();
     }
   },
 };

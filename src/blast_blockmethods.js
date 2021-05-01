@@ -171,7 +171,7 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getRSSI = async function(mac, callback) {
+ Blast.BlockMethods.getRSSI = async function(mac, callback) {
   const uri = `${Blast.config.hostAddress}current`;
 
   const scBleAdapter = new Blast.Things.ConsumedThing.sc_ble_adapter(uri);
@@ -179,6 +179,36 @@ Blast.BlockMethods.getRSSI = async function(mac, callback) {
   const rssi = await scBleAdapter.readProperty('rssiValue', {'mac': mac});
 
   callback(rssi);
+};
+
+/**
+ * Get the RSSI of a bluetooth device, using webBluetooth.
+ * @param {string} mac MAC of the Bluetooth device.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+ Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
+  const devices = await navigator.bluetooth.getDevices();
+  let device = null;
+
+  for(let d of devices){
+    if(d.id == deviceId){
+      device = d;
+      break;
+    }
+  }
+  if(device == null){
+    Blast.throwError('Error pairing with Bluetooth device.');
+  }
+
+  await device.watchAdvertisements();
+
+  device.addEventListener('advertisementreceived', async (evt) => {
+    // Advertisement data can be read from |evt|.
+    callback(evt.rssi);
+  });
+
+
 };
 
 /**

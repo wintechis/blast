@@ -172,9 +172,9 @@ Blast.init = function() {
   Blast.workspace.addChangeListener(function(event) {
     if (!(event instanceof Blockly.Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
-      Blast.Ui.renderContent_();
       Blast.generateCode();
       Blast.States.generateCode();
+      Blast.Ui.renderContent_();
     }
   });
 

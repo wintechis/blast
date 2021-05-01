@@ -174,6 +174,20 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
+  // API function for the get_rssi block.
+  wrapper = function(deviceId, callback) {
+    return Blast.BlockMethods.getRSSIWb(
+        deviceId,
+        callback,
+    );
+  };
+
+  interpreter.setProperty(
+      globalObject,
+      'getRSSIWb',
+      interpreter.createAsyncFunction(wrapper),
+  );
+
   // API function for the event blocks.
   wrapper = function(conditions, statements, blockId) {
     return Blast.BlockMethods.addEvent(conditions, statements, blockId);

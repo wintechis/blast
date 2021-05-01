@@ -150,8 +150,7 @@ Blockly.JavaScript['play_audio'] = function(block) {
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['get_signal_strength_wb'] = function(block) {
-  const mac = block.mac;
-  const code = `getRSSIWb(${mac})`;
+  const code = `getRSSIWb('${block.deviceId}')`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
