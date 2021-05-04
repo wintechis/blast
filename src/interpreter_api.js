@@ -160,6 +160,16 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
+  // API function for playSound block.
+  wrapper = function(text, callback) {
+    return Blast.BlockMethods.textToSpeech(text, callback);
+  };
+  interpreter.setProperty(
+      globalObject,
+      'textToSpeech',
+      interpreter.createAsyncFunction(wrapper),
+  );
+
   // API function for the get_rssi block.
   wrapper = function(mac, callback) {
     return Blast.BlockMethods.getRSSI(

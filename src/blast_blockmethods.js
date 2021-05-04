@@ -171,7 +171,7 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
- Blast.BlockMethods.getRSSI = async function(mac, callback) {
+Blast.BlockMethods.getRSSI = async function(mac, callback) {
   const uri = `${Blast.config.hostAddress}current`;
 
   const scBleAdapter = new Blast.Things.ConsumedThing.sc_ble_adapter(uri);
@@ -183,32 +183,30 @@ Blast.BlockMethods.waitForSeconds = function(timeInSeconds, callback) {
 
 /**
  * Get the RSSI of a bluetooth device, using webBluetooth.
- * @param {string} mac MAC of the Bluetooth device.
+ * @param {string} deviceId WebBluetooth ID of the Bluetooth device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
- Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
+Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
-  for(let d of devices){
-    if(d.id == deviceId){
+  for (const d of devices) {
+    if (d.id == deviceId) {
       device = d;
       break;
     }
   }
-  if(device == null){
+  if (device == null) {
     Blast.throwError('Error pairing with Bluetooth device.');
   }
 
   await device.watchAdvertisements();
 
-  device.addEventListener('advertisementreceived', async (evt) => {
+  device.addEventListener('advertisementreceived', async(evt) => {
     // Advertisement data can be read from |evt|.
     callback(evt.rssi);
   });
-
-
 };
 
 /**
@@ -231,6 +229,19 @@ Blast.BlockMethods.addEvent = function(conditions, statements, blockId) {
 Blast.BlockMethods.playAudioFromURI = async function(uri, callback) {
   await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
       'playAudioFromURI', [uri],
+  );
+  callback();
+};
+
+/**
+ * Plays an audio file provided by URI.
+ * @param {string} uri URI of the audio file to play.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+Blast.BlockMethods.textToSpeech = async function(uri, callback) {
+  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'textToSpeech', [uri],
   );
   callback();
 };

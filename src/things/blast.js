@@ -33,7 +33,7 @@ async function(actionName, params, options) {
  * Not needed when method is GET.
  * @param {string} output Output can be status or response.
  * @returns {string} the response status code or body, depending on output parameter.
- * @public
+ * @private
  */
 Blast.Things.ConsumedThing.Blast.sendHttpRequest = async function(
     uri, method, headersString, body, output) {
@@ -141,6 +141,25 @@ Blast.Things.ConsumedThing.Blast.playAudio = async function(uri) {
 };
 
 /**
+ * Invokes a SpeechSynthesisUtterance to read out a text.
+ * @param {string} text text that will be synthesised when the utterance is spoken.
+ * @param {SpeechSynthesisVoice=} voice voice that will be used to speak the utterance.
+ * @param {Number=} rate speed at which the utterance will be spoken at
+ * @param {Number=} volume volume that the utterance will be spoken at.
+ * @param {Number=} pitch pitch at which the utterance will be spoken at
+ * @param {string} lang language of the utterance.
+ */
+Blast.Things.ConsumedThing.Blast.textToSpeech = async function(text) {
+  const speech = new SpeechSynthesisUtterance();
+  speech.text = text;
+  window.speechSynthesis.speak(speech);
+  // return after speaking has ended
+  await new Promise((resolve) => {
+    speech.onend = resolve;
+  });
+};
+
+/**
  * Instance of a Blast-Thing, used by methods in src/blast_blockmethods.js.
  */
 Blast.Things.ConsumedThing.Blast.blast = new Blast.Things.ConsumedThing.Blast();
@@ -155,4 +174,5 @@ Blast.Things.ConsumedThing.Blast.actions = new Map([
   ['getRequest', Blast.Things.ConsumedThing.Blast.getRequest],
   ['queryRDF', Blast.Things.ConsumedThing.Blast.urdfQueryWrapper],
   ['playAudioFromURI', Blast.Things.ConsumedThing.Blast.playAudio],
+  ['textToSpeech', Blast.Things.ConsumedThing.Blast.textToSpeech],
 ]);
