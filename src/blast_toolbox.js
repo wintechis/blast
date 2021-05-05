@@ -62,6 +62,14 @@ const defaultToolbox = {
       colour: '0',
     },
     {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'streamdeck_buttons'},
+      ],
+      name: 'Events',
+      colour: '180',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
