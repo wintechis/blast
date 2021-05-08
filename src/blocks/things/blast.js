@@ -241,7 +241,7 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.deviceId = '';
   },
   setDeviceId: async function() {
-    let device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
+    const device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
     this.deviceId = device.id;
     // after setting device id, trigger code generation.
     Blast.generateCode();
