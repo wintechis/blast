@@ -52,6 +52,17 @@ Blast.latestCode = '';
 Blast.Interpreter = null;
 
 /**
+ * Indicates wheter BLAST is current interrupted.
+ * @type {boolean}
+ * @public
+ */
+Blast.Interrupted = false;
+
+/**
+ * Stores event handlers of webHID devices, in order to remove them on code completion.
+ */
+Blast.deviceEventHandlers = [];
+/**
  * Instance of runner function.
  * @type {?function}
  * @private
@@ -232,6 +243,17 @@ Blast.resetInterpreter = function() {
 };
 
 /**
+ * removes all event handlers of webHID devices from {@link Blast.deviceEventHandlers}
+ */
+Blast.removeDeviceHandlers = function() {
+  for (handler of Blast.deviceEventHandlers) {
+    const device = handler.device;
+    device.removeEventListener(handler.type, handler.fn);
+  }
+  Blast.deviceEventHandlers = [];
+};
+
+/**
  * Execute the user's code.
  * @public
  */
@@ -251,22 +273,29 @@ Blast.runJS = function() {
     Blast.runner_ = function() {
       if (Blast.Interpreter) {
         try {
-          const hasMore = Blast.Interpreter.step();
-          if (hasMore) {
-            // Execution is currently blocked by some async call.
-            // Try again later.
+          if (Blast.Interrupted) {
+            // Execution is currently interrupted, try again later.
             setTimeout(Blast.runner_, 5);
-          } else if (Blast.States.Interpreter) {
-            // eventChecker is running,
-            // dont reset UI until stop button is clicked.
           } else {
-            // Program is complete.
-            Blast.resetUi(Blast.status.READY);
-            Blast.resetInterpreter();
+            const hasMore = Blast.Interpreter.step();
+            if (hasMore) {
+              // Execution is currently blocked by some async call.
+              // Try again later.
+              setTimeout(Blast.runner_, 5);
+            } else if (Blast.States.Interpreter || Blast.eventInWorkspace) {
+              // eventChecker is running,
+              // dont reset UI until stop button is clicked.
+            } else {
+              // Program is complete.
+              Blast.removeDeviceHandlers();
+              Blast.resetUi(Blast.status.READY);
+              Blast.resetInterpreter();
+            }
           }
         } catch (error) {
           Blockly.alert('Error executing program:\n%e'.replace('%e', error));
           Blast.Ui.setStatus(Blast.status.ERROR);
+          Blast.removeDeviceHandlers();
           Blast.resetInterpreter();
           console.error(error);
         }
@@ -283,6 +312,7 @@ Blast.runJS = function() {
  * @public
  */
 Blast.stopJS = function() {
+  Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
   Blast.resetUi(Blast.status.STOPPED);
 };
@@ -300,6 +330,7 @@ Blast.throwError = function(text) {
 
   Blockly.alert('Error executing program:\n%e'.replace('%e', text));
   Blast.Ui.setStatus(Blast.status.ERROR);
+  Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
 };
 

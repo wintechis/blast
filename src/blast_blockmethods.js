@@ -183,7 +183,7 @@ Blast.BlockMethods.getRSSI = async function(mac, callback) {
 
 /**
  * Get the RSSI of a bluetooth device, using webBluetooth.
- * @param {string} deviceId WebBluetooth ID of the Bluetooth device.
+ * @param {string} deviceId identifier of the bluetooth device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
@@ -261,4 +261,62 @@ Blast.BlockMethods.numberRandom = function(a, b) {
     b = c;
   }
   return Math.floor(Math.random() * (b - a + 1) + a);
+};
+
+/**
+ * Adds handler for button pushes on an elGato Stream Deck
+ * @param {Blockly.Block.id} blockId id of the streamdeck block.
+ * @param {boolean[]} buttonArray array containing pushed buttons.
+ */
+Blast.BlockMethods.handleStreamdeck = async function(blockId, buttonArray) {
+  const block = Blast.workspace.getBlockById(blockId);
+  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
+  const type = 'inputreport';
+
+  const device = block.device;
+  if (!device.opened) {
+    try {
+      await device.open();
+    } catch (error) {
+      Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+    }
+  }
+
+  const fn = function(event) {
+    if (event.reportId === 0x01) {
+      const keys = new Int8Array(event.data.buffer);
+      const start = 0;
+      const end = 6;
+      const data = Array.from(keys).slice(start, end);
+       
+      // convert jsInterpreter Object to numbers array.
+      buttonArray = buttonArray.toString().split(',').map(Number);
+      // check if defined buttons are pushed.
+      if (data.every((val, index) => val === buttonArray[index])) {
+        // interrupt BLAST execution.
+        Blast.Interrupted = true;
+        
+        const interpreter = new Interpreter(statements, initApi);
+        const interruptRunner_ = function() {
+          try {
+            const hasMore = interpreter.step();
+            if (hasMore) {
+              setTimeout(interruptRunner_, 5);
+            } else {
+              // Continue BLAST execution.
+              Blast.Interrupted = false;
+            }
+          } catch (error) {
+            Blockly.alert('Error executing program:\n%e'.replace('%e', error));
+            Blast.Ui.setStatus(Blast.status.ERROR);
+            Blast.resetInterpreter();
+            console.error(error);
+          }
+        };
+        interruptRunner_();
+      }
+    }
+  };
+  Blast.deviceEventHandlers.push({device: device, type: type, fn: fn});
+  device.addEventListener(type, fn);
 };
