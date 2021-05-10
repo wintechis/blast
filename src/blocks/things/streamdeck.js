@@ -40,29 +40,13 @@ Blockly.Blocks['streamdeck_buttons'] = {
     this.keyState = new Array(6).fill(false);
   },
   setDevice: async function() {
-    console.log('set device');
     const devices = await navigator.hid.requestDevice({filters: [
       {vendorId: 0x0fd9, productId: 99},
     ]});
     this.device = devices[0];
-    if (!this.device.opened) {
-      try {
-        await this.device.open();
-      } catch (error) {
-        Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
-      }
-    }
-    this.device.addEventListener('inputreport', (event) => {
-      console.log(event);
-      if (event.reportId === 0x01) {
-        this.onButtonPushed(event.data.buffer);
-      }
-    });
-    console.log(this.device);
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
-      console.log('one time change');
       this.requested = true;
       this.setDevice();
     }
@@ -110,7 +94,6 @@ Blockly.Blocks['streamdeck_buttons'] = {
    */
   onButtonPushed: function(buffer) {
     const keys = new Int8Array(buffer);
-    console.log(keys);
     const start = 0;
     const end = 6;
     const data = Array.from(keys).slice(start, end);

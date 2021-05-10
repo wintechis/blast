@@ -217,6 +217,16 @@ function initApi(interpreter, globalObject) {
       'startEventChecker',
       interpreter.createNativeFunction(wrapper),
   );
+  
+  // API function for the event blocks.
+  wrapper = function(blockId, buttonArray) {
+    return Blast.BlockMethods.handleStreamdeck(blockId, buttonArray);
+  };
+  interpreter.setProperty(
+      globalObject,
+      'handleStreamdeck',
+      interpreter.createNativeFunction(wrapper),
+  );
 
   // API function for the number_random blocks.
   wrapper = function(a, b) {
