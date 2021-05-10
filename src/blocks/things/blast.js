@@ -220,9 +220,22 @@ Blockly.Blocks['play_audio'] = {
   },
 };
 
+Blockly.Blocks['text_to_speech'] = {
+  init: function() {
+    this.appendValueInput('text')
+        .appendField('Text to Speech')
+        .setCheck('String');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
 /*******************
-  * Property blocks.*
-  *******************/
+ * Property blocks.*
+ *******************/
  
 Blockly.Blocks['get_signal_strength_wb'] = {
   /**

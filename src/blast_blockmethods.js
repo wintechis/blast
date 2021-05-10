@@ -191,7 +191,7 @@ Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
-  for (let d of devices) {
+  for (const d of devices) {
     if (d.id == deviceId) {
       device = d;
       break;
@@ -229,6 +229,19 @@ Blast.BlockMethods.addEvent = function(conditions, statements, blockId) {
 Blast.BlockMethods.playAudioFromURI = async function(uri, callback) {
   await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
       'playAudioFromURI', [uri],
+  );
+  callback();
+};
+
+/**
+ * Plays an audio file provided by URI.
+ * @param {string} uri URI of the audio file to play.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+Blast.BlockMethods.textToSpeech = async function(uri, callback) {
+  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'textToSpeech', [uri],
   );
   callback();
 };
