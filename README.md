@@ -4,9 +4,10 @@ This project aims to provide an easy to use [Blockly](https://developers.google.
 Check [./docs/](docs/) for detailed documentation.
 
 ## Usage
-This application works out of the box. Just open the index.html file in your favorite Browser.
+Most of this application (see bold text below) works out of the box. Just open the index.html file in your favorite Browser.
 If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more infos on this.
 
+**Blocks that perform fetch request, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 **Some of BLAST's block require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
 ### Saving & Loading
