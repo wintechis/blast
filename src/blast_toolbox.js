@@ -64,14 +64,22 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
+      contents: [
+        {kind: 'BLOCK', type: 'streamdeck_buttons'},
+      ],
       name: 'Events',
-      custom: 'EVENTS',
       colour: '180',
     },
     {
       kind: 'sep',
       gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'States',
+      custom: 'STATES',
+      colour: '180',
     },
     {
       kind: 'CATEGORY',
@@ -305,7 +313,7 @@ Blast.switchToolbox = function() {
  */
 Blast.Toolbox.init = function() {
   // register states category flyout callback
-  Blast.workspace.registerToolboxCategoryCallback('EVENTS', Blast.States.flyoutCategory);
+  Blast.workspace.registerToolboxCategoryCallback('STATES', Blast.States.flyoutCategory);
 
   // register advanced toolbox mock button callback
   Blast.workspace.registerToolboxCategoryCallback('ADVANCEDTOOLBOX', Blast.switchToolbox);

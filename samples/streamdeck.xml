@@ -1,0 +1,89 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="^,c_==H308Jb={GklNFg">seconds</variable>
+  </variables>
+  <block type="streamdeck_buttons" id="}#:R$ig4^qc/ST48;u-v" x="90" y="45">
+    <field name="button1">TRUE</field>
+    <field name="button2">FALSE</field>
+    <field name="button3">FALSE</field>
+    <field name="button4">FALSE</field>
+    <field name="button5">FALSE</field>
+    <field name="button6">FALSE</field>
+    <statement name="statements">
+      <block type="display_text" id="8[T}ZXCzFK)jHhtd[XrY">
+        <value name="text">
+          <block type="string" id="1j-Ma!{*}@wBE/A]xw|T">
+            <field name="TEXT">interrupt</field>
+          </block>
+        </value>
+        <next>
+          <block type="wait_seconds" id="keEo@=P%Wu,3_Am7KM/(">
+            <field name="SECONDS">5</field>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="variables_set" id="@l]R/pxgC6zb3l|NMXt?" x="81" y="314">
+    <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+    <value name="VALUE">
+      <block type="number_value" id="hW7WpB`(:82-TC;6VQA0">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <next>
+      <block type="while_until" id="4PJSr,XdB)Ji6jqY#eRw">
+        <field name="MODE">WHILE</field>
+        <value name="BOOL">
+          <block type="logic_boolean" id="9opL|t#G#CG8W!Bsqc%4">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="display_text" id="s95ozR{FolI{+9:groPJ">
+            <value name="text">
+              <block type="string_join" id="dN3]q}WZ$b/!41:X8_gs">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                  <block type="string" id="?MYv^+PB%k~%#UY9!5aX">
+                    <field name="TEXT">BLAST execution time:</field>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="variables_get" id="IUj~(`[QJ6}cC6UJo|A}">
+                    <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set" id="t=c2(Kb!GT89D#1i!8Cv">
+                <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                <value name="VALUE">
+                  <block type="number_arithmetic" id=")hkQ?,XcfYxb+q5OuCqY">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                      <block type="variables_get" id="lX^ei7,z@+s+uZ-J)~+m">
+                        <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="number_value" id="-J6{zH0-pveO3WgDVMe,">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="wait_seconds" id="E)~P2jO%EQ`-XP2IzHq?">
+                    <field name="SECONDS">1</field>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>
