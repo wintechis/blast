@@ -43,6 +43,9 @@ Blockly.Blocks['streamdeck_buttons'] = {
     const devices = await navigator.hid.requestDevice({filters: [
       {vendorId: 0x0fd9, productId: 99},
     ]});
+    if (devices.length == 0) {
+      this.dispose();
+    }
     this.device = devices[0];
   },
   onchange: function() {
