@@ -17,6 +17,7 @@ Blast.Things.ConsumedThing.Blast = function() {
 };
 
 Blast.Things.ConsumedThing.Blast.prototype.invokeAction =
+// eslint-disable-next-line no-unused-vars -- TODO implement options parameter to match BT GATT
 async function(actionName, params, options) {
   const action = Blast.Things.ConsumedThing.Blast.actions.get(actionName);
   const returnVal = await action(...params);
