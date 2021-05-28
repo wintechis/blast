@@ -23,12 +23,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@master
 
-      - name: SCP deploy action
-        uses: nogsantos/ssh-scp-deploy@v1.2.1
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
         with:
-          src: ./
-          host: ${{ secrets.SSH_HOST }}
-          remote: ${{ secrets.SSH_DIR }}
-          user: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "./"
+          target: "./public_html/foo/"
 
