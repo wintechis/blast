@@ -22,6 +22,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@master
+      
+      - name: run ESLint
+        run: eslint ./src/**/*.js
 
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
