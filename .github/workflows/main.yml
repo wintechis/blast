@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: CI/CD
 
 # Controls when the action will run. 
 on:
@@ -32,6 +32,8 @@ jobs:
         run: yarn
       - name: run ESLint
         run: yarn run eslint ./src/**/*.js
+      - name: compile
+        run: yarn run build
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
