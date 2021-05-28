@@ -155,7 +155,9 @@ Blockly.Blocks['conditional_statement'] = {
     while (clauseBlock) {
       switch (clauseBlock.type) {
         case 'controls_if_elseif':
+          // eslint-disable-next-line no-case-declarations
           const inputIf = this.getInput('IF' + i);
+          // eslint-disable-next-line no-case-declarations
           let inputDo = this.getInput('DO' + i);
           clauseBlock.valueConnection_ =
               inputIf && inputIf.connection.targetConnection;

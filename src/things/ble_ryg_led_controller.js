@@ -30,6 +30,7 @@ Blast.Things.ConsumedThing.BLE_RGB_LED_controller.prototype.switchLights = async
 };
 
 Blast.Things.ConsumedThing.BLE_RGB_LED_controller.prototype.writePropertyByHandle =
+// eslint-disable-next-line no-unused-vars -- TODO implement options parameter to match BT GATT
 async function(handle, value, options) {
   const mac = this.mac;
   await Blast.Bluetooth.connect(mac);
@@ -39,6 +40,7 @@ async function(handle, value, options) {
 };
 
 Blast.Things.ConsumedThing.BLE_RGB_LED_controller.prototype.writePropertyByUUID =
+// eslint-disable-next-line no-unused-vars -- TODO implement options parameter to match BT GATT
 async function(serviceUUID, characteristcUUID, value, options) {
   const mac = this.mac;
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, serviceUUID, characteristcUUID, value);

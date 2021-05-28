@@ -151,6 +151,17 @@ Blockly.JavaScript['text_to_speech'] = function(block) {
   return code;
 };
 
+/**
+ * Outputs speech command from microphone as a string.
+ * @param {Blockly.Block} block the web_speech block.
+ * @returns {String} the speech command.
+ */
+Blockly.JavaScript['web_speech'] = function(block) {
+  
+  var code = '...';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 /*******************
  * Property blocks.*
  *******************/

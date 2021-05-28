@@ -8,6 +8,7 @@
 
 Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
 
+// eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['number_infinity'] = function(block) {
   return [Infinity, Blockly.JavaScript.ORDER_NONE];
 };

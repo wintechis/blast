@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * @fileoverview Interface for classes that represent ConsumedThings
  * (https://www.w3.org/TR/wot-scripting-api/#the-consumedthing-interface).
@@ -60,6 +61,11 @@ Blast.Things.ConsumedThing.prototype.invokeAction = async function(actionName, p
    * @param {Object=} options options.
    * @return {Promise} Promise Object signaling success or failure.
    */
-Blast.Things.ConsumedThing.prototype.subscribeEvent = async function(eventName, listener, onError, options) {
+Blast.Things.ConsumedThing.prototype.subscribeEvent = async function(
+    eventName,
+    listener,
+    onError,
+    options,
+) {
   throw new Error('Method subscribeEvent is not implemented.');
 };
