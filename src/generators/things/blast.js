@@ -149,7 +149,7 @@ Blockly.JavaScript['text_to_speech'] = function(block) {
   const text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
   const code = `textToSpeech(${text});\n`;
 
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return code;
 };
 
 /**
