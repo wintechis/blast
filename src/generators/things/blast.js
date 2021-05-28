@@ -148,7 +148,8 @@ Blockly.JavaScript['play_audio'] = function(block) {
 Blockly.JavaScript['text_to_speech'] = function(block) {
   const text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
   const code = `textToSpeech(${text});\n`;
-  return code;
+
+  return [code, Block.JavaScript.ORDER_NONE];
 };
 
 /**
@@ -157,8 +158,8 @@ Blockly.JavaScript['text_to_speech'] = function(block) {
  * @returns {String} the speech command.
  */
 Blockly.JavaScript['web_speech'] = function(block) {
-  
-  var code = '...';
+  const code = `webSpeech('${block.id}')`;
+
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 

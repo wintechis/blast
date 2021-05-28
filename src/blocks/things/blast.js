@@ -233,6 +233,34 @@ Blockly.Blocks['text_to_speech'] = {
   },
 };
 
+Blockly.Blocks['web_speech'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('speech to text');
+    this.setOutput(true, 'String');
+    this.setColour(0);
+    this.setTooltip('outputs speech command from microphone as a string');
+    this.setHelpUrl('');
+    this.firstTime = true;
+    this.recognition = null;
+  },
+  onchange: function() {
+    // on creating this block check speech API availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!('webkitSpeechRecognition' in window)) {
+        Blockly.alert(`Web Speech API is not supported by this browser.
+        Upgrade to <a href="//www.google.com/chrome">Chrome</a>
+        version 25 or later.`);
+        this.dispose();
+      } else {
+        // eslint-disable-next-line new-cap
+        this.recognition = new webkitSpeechRecognition();
+      }
+    }
+  },
+};
+
 /*******************
  * Property blocks.*
  *******************/
