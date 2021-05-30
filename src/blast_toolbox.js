@@ -83,6 +83,10 @@ const defaultToolbox = {
       colour: '180',
     },
     {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'string'},
@@ -203,9 +207,21 @@ const advancedToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
+      contents: [
+        {kind: 'BLOCK', type: 'streamdeck_buttons'},
+      ],
       name: 'Events',
-      custom: 'EVENTS',
+      colour: '180',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'States',
+      custom: 'STATES',
       colour: '180',
     },
     {
