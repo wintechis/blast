@@ -41,5 +41,5 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "./"
-          target: "./public_html/foo/blast/"
+          target: "./public_html/testing/blast/"
 
