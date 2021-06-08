@@ -115,7 +115,7 @@
   <!-- Config Modal -->
   <div id="configModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
+      <span id="configClose" class="close">&times;</span>
       <h1>Settings</h1>
       <hr>
       <div class="row">
@@ -125,7 +125,6 @@
         <div class="col-75">
           <select id="api-type" name="api-type">
             <option value="sc-ble-adapter">SC-BLE-Adapter</option>
-            <option value="webBluetooth">Web Bluetooth API</option>
           </select>
         </div>
       </div>
@@ -138,12 +137,22 @@
             value="http://dwpi4.local:8000/">
         </div>
       </div>      
+      <div class="row">
+        <br><input id="configSubmit" type="submit" value="Save">
+      </div>
+    </div>
+  </div>
+
+  <!-- WebBluetooth Modal -->
+  <div id="wbModal" class="modal">
+    <div class="modal-content">
+      <span id ="wbClose" class="close">&times;</span>
+      <h1>Connect a thing via WebBluetooth</h1>
+      <hr>     
       <div class="row" id="web-bluetooth-connect-row">
-        <div class="col-25">
-          <label for="web-bluetooth-connect">Pair a Bluetooth device</label>
-        </div>
-        <div class="col-75">
+        <div class="col">
           <form>
+            <h1>Filter for specific devices:</h1>
             <label for="wb-allDevices">All Devices</label><input id="wb-allDevices" type="checkbox" checked>
             <input id="wb-name" type="text" size="17" placeholder="Device Name">
             <br><br>
@@ -152,15 +161,12 @@
             <input type="button" id="wb-connect" value="pair">
           </form>
           <div>
-            <h3>Output:</h3>note down the id and use it as mac-address in BLAST
+            <h3>Error output:</h3>
             <div id="wb-output" class="wb-output">
               <pre id="wb-log"></pre>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row">
-        <br><input id="configSubmit" type="submit" value="Save">
       </div>
     </div>
   </div>
@@ -171,24 +177,13 @@
 </body>
 <script>
   const configModal = document.getElementById("configModal");
+  const wbModal = document.getElementById("wbModal");
   const configButton = document.getElementById("configButton");
-  const span = document.getElementsByClassName("close")[0];
+  const configClose = document.getElementById("configClose");
+  const wbClose = document.getElementById("wbClose");
 
   const addressInput = document.getElementById('api-address');
   const apiTypeInput = document.getElementById('api-type');
-
-  apiTypeInput.addEventListener('change', function (event) {
-    saveSettings(false);
-    wbRow = document.getElementById('web-bluetooth-connect-row');
-    apiAddress = document.getElementById('api-address-row');
-    if(apiTypeInput.value == 'webBluetooth'){
-      wbRow.style.display = 'block';
-      apiAddress.style.display = 'none'
-    } else {
-      wbRow.style.display = 'none';
-      apiAddress.style.display = 'block';
-    }
-  });
 
   // logs webBluetooth to wb-output div
   const wbLog = function(){
@@ -225,9 +220,12 @@
 
     navigator.bluetooth.requestDevice(options)
     .then(device => {
-      wbLog('> Name:             ' + device.name);
-      wbLog('> Id:               ' + device.id);
-      wbLog('> Connected:        ' + device.gatt.connected);
+      // wbLog('> Name:             ' + device.name);
+      // wbLog('> Id:               ' + device.id);
+      // wbLog('> Connected:        ' + device.gatt.connected);
+      wbModal.style.display = "none";
+      Blast.Things.addWebBluetoothDevice(device.id, device.name);
+      Blast.workspace.refreshToolboxSelection();
     })
     .catch(error => {
       wbLog('Argh! ' + error);
@@ -263,14 +261,20 @@
   }
 
   // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
+  configClose.onclick = function () {
     configModal.style.display = "none";
+  }
+  wbClose.onclick = function () {
+    wbModal.style.display = "none";
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == configModal) {
       configModal.style.display = "none";
+    }
+    if (event.target == wbModal) {
+      wbModal.style.display = "none";
     }
   }
 

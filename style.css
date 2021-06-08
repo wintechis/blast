@@ -260,11 +260,11 @@ button {
   
 }
 
-#configModal * {
+.modal * {
   box-sizing: border-box;
 }
 
-#configModal input[type=text], select {
+.modal input[type=text], select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -272,13 +272,13 @@ button {
   resize: vertical;
 }
 
-#configModal label {
+.modal label {
   padding: 12px 12px 12px 0;
   display: inline-block;
 }
 
 
-#configModal input[type=submit],#configModal input[type=button] {
+.modal input[type=submit],.modal input[type=button] {
   color: white;
   padding: 12px 20px;
   border: none;
@@ -311,10 +311,6 @@ button {
   float: left;
   width: 75%;
   margin-top: 6px;
-}
-
-#web-bluetooth-connect-row {
-  display: none;
 }
 
 #wb-connect {

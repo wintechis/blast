@@ -40,6 +40,17 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
+      contents: [],
+      name: 'Things',
+      custom: 'THINGS',
+      colour: '60',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'get_temperature'},
         {kind: 'BLOCK', type: 'get_signal_strength'},
@@ -171,6 +182,17 @@ const advancedToolbox = {
       ],
       name: 'Boolean Expressions',
       colour: '210',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Things',
+      custom: 'THINGS',
+      colour: '60',
     },
     {
       kind: 'sep',
@@ -332,6 +354,9 @@ Blast.switchToolbox = function() {
 Blast.Toolbox.init = function() {
   // register states category flyout callback
   Blast.workspace.registerToolboxCategoryCallback('STATES', Blast.States.flyoutCategory);
+
+  // register things category flyout callback
+  Blast.workspace.registerToolboxCategoryCallback('THINGS', Blast.Things.flyoutCategory);
 
   // register advanced toolbox mock button callback
   Blast.workspace.registerToolboxCategoryCallback('ADVANCEDTOOLBOX', Blast.switchToolbox);

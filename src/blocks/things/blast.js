@@ -176,7 +176,7 @@ Blockly.Blocks['display_text'] = {
        */
   init: function() {
     this.appendValueInput('text')
-        .setCheck(['String', 'Number', 'Boolean', 'URI'])
+        .setCheck(['String', 'Number', 'Boolean', 'URI', 'Thing'])
         .appendField('display text:');
     this.setColour(0);
     this.setTooltip('Add text output to the container on the right.');
