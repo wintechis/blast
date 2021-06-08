@@ -112,8 +112,8 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the get_temperature block.
-  wrapper = function(mac, callback) {
-    return Blast.BlockMethods.getTemperature(mac, callback);
+  wrapper = function(thing, callback) {
+    return Blast.BlockMethods.getTemperature(thing, callback);
   };
 
   interpreter.setProperty(

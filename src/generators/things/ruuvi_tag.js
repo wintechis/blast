@@ -17,11 +17,11 @@
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['get_temperature'] = function(block) {
-  const mac = Blockly.JavaScript.valueToCode(
+  const thing = Blockly.JavaScript.valueToCode(
       block,
-      'MAC',
+      'Thing',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getTemperature(${mac})`;
+  const code = `getTemperature(${thing})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };

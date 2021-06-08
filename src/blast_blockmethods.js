@@ -131,28 +131,31 @@ Blast.BlockMethods.switchLights = async function(mac, r, y, g, callback) {
 
 /**
  * Fetches the current temperature of the xiaomi bluetooth thermomether
- * @param {string} mac MAC address of the thermometer.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getTemperature = function(mac, callback) {
-  const uri = `${Blast.config.hostAddress}devices/${mac}/current`;
-  const requestOptions = {
-    method: 'GET',
-  };
+Blast.BlockMethods.getTemperature = async function(webBluetoothId, callback) {
+  const devices = await navigator.bluetooth.getDevices();
+  let device = null;
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        return res.text();
-      })
-      .then((resData) => {
-        const temp = JSON.parse(resData)['@graph'][1].result.temperature;
-        callback(temp);
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+  for (const d of devices) {
+    if (d.id == webBluetoothId) {
+      device = d;
+      break;
+    }
+  }
+  if (device == null) {
+    Blast.throwError('Error pairing with Bluetooth device.');
+  }
+
+  await device.watchAdvertisements();
+
+  device.addEventListener('advertisementreceived', async(evt) => {
+    // Advertisement data can be read from |evt|.
+    console.log(evt);
+    callback(evt.rssi);
+  });
 };
 
 /**
