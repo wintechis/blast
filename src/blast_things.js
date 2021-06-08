@@ -42,6 +42,7 @@ Blast.Things.flyoutCategory = function(workspace) {
   
   const blockList = Blast.Things.flyoutCategoryBlocks(workspace);
   xmlList = xmlList.concat(blockList);
+  
   return xmlList;
 };
 
@@ -52,9 +53,9 @@ Blast.Things.flyoutCategory = function(workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 Blast.Things.flyoutCategoryBlocks = function() {
-  console.log(Blast.Things.webBluetoothDevices.size);
-  
   const xmlList = [];
+
+  // add webBluetooth devices to xmlList
   if (Blast.Things.webBluetoothDevices.size > 0) {
     if (Blockly.Blocks['things_webBluetooth']) {
       const block = Blockly.utils.xml.createElement('block');
@@ -63,6 +64,7 @@ Blast.Things.flyoutCategoryBlocks = function() {
       xmlList.push(block);
     }
   }
+
   return xmlList;
 };
 
@@ -74,13 +76,17 @@ Blast.Things.flyoutCategoryBlocks = function() {
 Blast.Things.getWebBluetoothDevices = function() {
   const keysArray = [...Blast.Things.webBluetoothDevices.keys()];
   const keysSorted = keysArray.sort();
-  if (keysSorted.legnth === 0) return [];
-  const options = [];
 
+  // if no devices connected, return empty array
+  if (keysSorted.legnth === 0) return [];
+
+  // build options array
+  const options = [];
   for (const deviceName of keysSorted) {
     const deviceId = Blast.Things.webBluetoothDevices.get(deviceName);
     options.push([deviceName, deviceId]);
   }
+
   return options;
 };
 
