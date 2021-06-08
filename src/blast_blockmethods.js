@@ -140,7 +140,7 @@ Blast.BlockMethods.getTemperature = async function(webBluetoothId, callback) {
   let device = null;
 
   for (const d of devices) {
-    if (d.id == webBluetoothId) {
+    if (d.id == deviceId) {
       device = d;
       break;
     }
@@ -149,13 +149,22 @@ Blast.BlockMethods.getTemperature = async function(webBluetoothId, callback) {
     Blast.throwError('Error pairing with Bluetooth device.');
   }
 
-  await device.watchAdvertisements();
-
-  device.addEventListener('advertisementreceived', async(evt) => {
-    // Advertisement data can be read from |evt|.
-    console.log(evt);
-    callback(evt.rssi);
-  });
+  device.gatt.connect()
+      .then((server) => {
+        return server.getPrimaryService('000061fe-0000-1000-8000-00805f9b34fb');
+      })
+      .then((service) => {
+        return service.getCharacteristic('');
+      })
+      .then((characteristic) => {
+        return characteristic.readValue();
+      })
+      .then((value) => {
+        callback(value);
+      })
+      .catch((error) => {
+        Blast.throwError(error.message);
+      });
 };
 
 /**
@@ -186,16 +195,18 @@ Blast.BlockMethods.getRSSI = async function(mac, callback) {
 
 /**
  * Get the RSSI of a bluetooth device, using webBluetooth.
- * @param {string} deviceId identifier of the bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
+Blast.BlockMethods.getRSSIWb = async function(webBluetoothId, callback) {
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
   for (const d of devices) {
-    if (d.id == deviceId) {
+    console.log(d.id);
+    console.log(webBluetoothId);
+    if (d.id == webBluetoothId) {
       device = d;
       break;
     }
