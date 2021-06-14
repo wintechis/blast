@@ -41,6 +41,8 @@
 
   <!-- blast libraries -->
   <script src="js/blast.min.js"></script>
+  <!-- blast WebBluetooth api -->
+  <script src="src/bluetooth_apis/webBluetooth.js"></script>
 
 </head>
 
@@ -94,13 +96,6 @@
           </tr>
         </table>
       </td>
-      <td class="tabmin">
-        <button id="configButton" title="settings">
-          <svg class="icon icon-config">
-            <use xlink:href="media/symbol-defs.svg#icon-config"></use>
-          </svg>
-        </button>
-      </td>
     </tr>
     <tr>
       <td id="content_area">
@@ -111,37 +106,6 @@
       </td>
     </tr>
   </table>
-
-  <!-- Config Modal -->
-  <div id="configModal" class="modal">
-    <div class="modal-content">
-      <span id="configClose" class="close">&times;</span>
-      <h1>Settings</h1>
-      <hr>
-      <div class="row">
-        <div class="col-25">
-          <label for="api-type">API type</label>
-        </div>
-        <div class="col-75">
-          <select id="api-type" name="api-type">
-            <option value="sc-ble-adapter">SC-BLE-Adapter</option>
-          </select>
-        </div>
-      </div>
-      <div class="row" id="api-address-row">
-        <div class="col-25">
-          <label for="api-address">API address</label>
-        </div>
-        <div class="col-75">
-          <input type="text" id="api-address" name="api-address"
-            value="http://dwpi4.local:8000/">
-        </div>
-      </div>      
-      <div class="row">
-        <br><input id="configSubmit" type="submit" value="Save">
-      </div>
-    </div>
-  </div>
 
   <!-- WebBluetooth Modal -->
   <div id="wbModal" class="modal">
@@ -176,10 +140,7 @@
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 </body>
 <script>
-  const configModal = document.getElementById("configModal");
   const wbModal = document.getElementById("wbModal");
-  const configButton = document.getElementById("configButton");
-  const configClose = document.getElementById("configClose");
   const wbClose = document.getElementById("wbClose");
 
   const addressInput = document.getElementById('api-address');
@@ -254,77 +215,16 @@
     }
   })
 
-
-  // When the user clicks the button, open the modal 
-  configButton.onclick = function () {
-    configModal.style.display = "block";
-  }
-
-  // When the user clicks on <span> (x), close the modal
-  configClose.onclick = function () {
-    configModal.style.display = "none";
-  }
   wbClose.onclick = function () {
     wbModal.style.display = "none";
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target == configModal) {
-      configModal.style.display = "none";
-    }
     if (event.target == wbModal) {
       wbModal.style.display = "none";
     }
   }
-
-  const saveSettings = function (close = true) {
-    // unload previous bt api
-    const btApi = document.getElementById('bluetooth-api');
-    if(btApi){
-      document.head.removeChild(btApi);
-    }
-
-    // load script for api type
-    const apiType = apiTypeInput.value;
-    const script = document.createElement('script');
-    script.src = `src/bluetooth_apis/${apiType}.js`;
-    script.id = 'bluetooth-api';
-    document.head.appendChild(script);
-
-    // set host address
-    let address = addressInput.value;
-    // make sure address has trailing slash
-    if (address.slice(-1) != '/') {
-      address += '/';
-    }
-    // if no protocol specified, add http://
-    if (address.slice(0, 4) != 'http') {
-      address = 'http://' + address;
-    }
-    // to make changes apparent, show new address in input
-    addressInput.value = address;
-    // save address in config
-    Blast.config.hostAddress = address;
-
-    // close the settings modal
-    if(close)
-      configModal.style.display = "none";
-  }
-
-  // set default values
-  saveSettings();
-
-  // save settings on submit
-  const submitButton = document.getElementById('configSubmit');
-  Blast.bindClick(submitButton, saveSettings);
-
-  // save settings on enter
-  addressInput.addEventListener('keyup', (event) => {
-    if (event.keyCode === 13) {
-      saveSettings();
-    }
-  });
 </script>
 
 </html>
