@@ -47,11 +47,29 @@ Blockly.Blocks['streamdeck_buttons'] = {
       this.dispose();
     }
     this.device = devices[0];
+    Blast.eventInWorkspace.push(this.id);
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
+      // Block is newly created
       this.requested = true;
       this.setDevice();
+      Blast.workspace.addChangeListener((event) => this.onDispose(event));
+    }
+  },
+  onDispose: function(event) {
+    if (event.type === Blockly.Events.BLOCK_DELETE) {
+      if (event.type === Blockly.Events.BLOCK_DELETE && event.ids.indexOf(this.id) !== -1) {
+        this.removeFromEvents();
+      }
+    }
+  },
+  removeFromEvents: function() {
+    console.log('REMOVE');
+    // remove this block from the events array.
+    const index = Blast.eventInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      Blast.eventInWorkspace.splice(index, 1);
     }
   },
   /**

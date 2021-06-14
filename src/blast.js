@@ -59,6 +59,11 @@ Blast.Interpreter = null;
 Blast.Interrupted = false;
 
 /**
+ * Tracks event blocks currently in the workspace, in order to run indefinately if length.
+ */
+Blast.eventInWorkspace = [];
+
+/**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
  */
 Blast.deviceEventHandlers = [];
@@ -282,7 +287,7 @@ Blast.runJS = function() {
               // Execution is currently blocked by some async call.
               // Try again later.
               setTimeout(Blast.runner_, 5);
-            } else if (Blast.States.Interpreter || Blast.eventInWorkspace) {
+            } else if (Blast.States.Interpreter || Blast.eventInWorkspace.length > 0) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.
             } else {
