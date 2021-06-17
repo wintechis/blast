@@ -173,7 +173,12 @@ Blockly.JavaScript['web_speech'] = function(block) {
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['get_signal_strength_wb'] = function(block) {
-  const code = `getRSSIWb('${block.deviceId}')`;
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_ATOMIC,
+  );
+  const code = `getRSSIWb(${thing})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };

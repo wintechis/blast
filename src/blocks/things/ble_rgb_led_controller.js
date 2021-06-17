@@ -19,9 +19,9 @@ Blockly.Blocks['switch_lights_rgb'] = {
     */
   init: function() {
     this.appendDummyInput()
-        .appendField('switch RGB lights with mac');
+        .appendField('switch RGB lights of');
     this.appendValueInput('mac')
-        .setCheck('mac');
+        .setCheck('Thing');
     this.appendDummyInput()
         .appendField('red')
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_red')

@@ -41,6 +41,8 @@
 
   <!-- blast libraries -->
   <script src="js/blast.min.js"></script>
+  <!-- blast WebBluetooth api -->
+  <script src="src/bluetooth_apis/webBluetooth.js"></script>
 
 </head>
 
@@ -94,13 +96,6 @@
           </tr>
         </table>
       </td>
-      <td class="tabmin">
-        <button id="configButton" title="settings">
-          <svg class="icon icon-config">
-            <use xlink:href="media/symbol-defs.svg#icon-config"></use>
-          </svg>
-        </button>
-      </td>
     </tr>
     <tr>
       <td id="content_area">
@@ -112,38 +107,16 @@
     </tr>
   </table>
 
-  <!-- Config Modal -->
-  <div id="configModal" class="modal">
+  <!-- WebBluetooth Modal -->
+  <div id="wbModal" class="modal">
     <div class="modal-content">
-      <span class="close">&times;</span>
-      <h1>Settings</h1>
-      <hr>
-      <div class="row">
-        <div class="col-25">
-          <label for="api-type">API type</label>
-        </div>
-        <div class="col-75">
-          <select id="api-type" name="api-type">
-            <option value="sc-ble-adapter">SC-BLE-Adapter</option>
-            <option value="webBluetooth">Web Bluetooth API</option>
-          </select>
-        </div>
-      </div>
-      <div class="row" id="api-address-row">
-        <div class="col-25">
-          <label for="api-address">API address</label>
-        </div>
-        <div class="col-75">
-          <input type="text" id="api-address" name="api-address"
-            value="http://dwpi4.local:8000/">
-        </div>
-      </div>      
+      <span id ="wbClose" class="close">&times;</span>
+      <h1>Connect a thing via WebBluetooth</h1>
+      <hr>     
       <div class="row" id="web-bluetooth-connect-row">
-        <div class="col-25">
-          <label for="web-bluetooth-connect">Pair a Bluetooth device</label>
-        </div>
-        <div class="col-75">
+        <div class="col">
           <form>
+            <h1>Filter for specific devices:</h1>
             <label for="wb-allDevices">All Devices</label><input id="wb-allDevices" type="checkbox" checked>
             <input id="wb-name" type="text" size="17" placeholder="Device Name">
             <br><br>
@@ -152,15 +125,45 @@
             <input type="button" id="wb-connect" value="pair">
           </form>
           <div>
-            <h3>Output:</h3>note down the id and use it as mac-address in BLAST
+            <h3>Error output:</h3>
             <div id="wb-output" class="wb-output">
               <pre id="wb-log"></pre>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <br><input id="configSubmit" type="submit" value="Save">
+    </div>
+  </div>
+  
+  <!-- WebHID Modal -->
+  <div id="wHidModal" class="modal">
+    <div class="modal-content">
+      <span id ="wHidClose" class="close">&times;</span>
+      <h1>Connect a thing via WebHID</h1>
+      <hr>     
+      <div class="row" id="web-hid-connect-row">
+        <div class="col">
+          <form>
+            <h1>Filter for specific devices: (or leave empty)</h1>
+            <label for="wHid-knownDevices">List of known devices</label>
+            <select id="wHid-knownDevices">
+              <option value=""></option>
+              <option value='{ "filters": [{"vendorId": "0x0fd9", "productId": 99}] }'>elGato StreamDeck Mini</option>
+            </select>
+            <br><br>
+            <input id="wHid-vendorId" type="text" size="17" placeholder="Vendor ID">
+            <br><br>
+            <input id="wHid-productId" type="text" size="17" placeholder="Product ID">
+            <br><br>
+            <input type="button" id="wHid-connect" value="connect">
+          </form>
+          <div>
+            <h3>Error output:</h3>
+            <div id="wHid-output" class="wHid-output">
+              <pre id="wHid-log"></pre>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -170,25 +173,13 @@
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 </body>
 <script>
-  const configModal = document.getElementById("configModal");
-  const configButton = document.getElementById("configButton");
-  const span = document.getElementsByClassName("close")[0];
-
-  const addressInput = document.getElementById('api-address');
-  const apiTypeInput = document.getElementById('api-type');
-
-  apiTypeInput.addEventListener('change', function (event) {
-    saveSettings(false);
-    wbRow = document.getElementById('web-bluetooth-connect-row');
-    apiAddress = document.getElementById('api-address-row');
-    if(apiTypeInput.value == 'webBluetooth'){
-      wbRow.style.display = 'block';
-      apiAddress.style.display = 'none'
-    } else {
-      wbRow.style.display = 'none';
-      apiAddress.style.display = 'block';
-    }
-  });
+  /**
+   * WebBluetooth and WebHID modal methods
+   */
+  const wbModal = document.getElementById("wbModal");
+  const wbClose = document.getElementById("wbClose");
+  const wHidModal = document.getElementById("wHidModal");
+  const wHidClose = document.getElementById("wHidClose");
 
   // logs webBluetooth to wb-output div
   const wbLog = function(){
@@ -198,10 +189,19 @@
 
     document.getElementById('wb-log').textContent += line + '\n';
   }
+  
+  // logs webBluetooth to wb-output div
+  const wHidLog = function(){
+    var line = Array.prototype.slice.call(arguments).map(function(argument) {
+      return typeof argument === 'string' ? argument : JSON.stringify(argument);
+    }).join(' ');
+
+    document.getElementById('wHid-log').textContent += line + '\n';
+  }
 
   // request bt devices when pair button is clicked
-  const pairButton = document.getElementById('wb-connect');
-  pairButton.addEventListener('click', function() {
+  const wbPairButton = document.getElementById('wb-connect');
+  wbPairButton.addEventListener('click', function() {
     let filters = [];
 
     let filterName = document.getElementById('wb-name').value;
@@ -214,9 +214,8 @@
       filters.push({namePrefix: filterNamePrefix});
     }
 
-    let options = {
-      optionalServices: ['0000fff0-0000-1000-8000-00805f9b34fb']
-    };
+    let options = {};
+
     if (document.getElementById('wb-allDevices').checked) {
       options.acceptAllDevices = true;
     } else {
@@ -224,14 +223,49 @@
     }
 
     navigator.bluetooth.requestDevice(options)
-    .then(device => {
-      wbLog('> Name:             ' + device.name);
-      wbLog('> Id:               ' + device.id);
-      wbLog('> Connected:        ' + device.gatt.connected);
-    })
-    .catch(error => {
-      wbLog('Argh! ' + error);
-    });
+      .then(device => {
+        // wbLog('> Name:             ' + device.name);
+        // wbLog('> Id:               ' + device.id);
+        // wbLog('> Connected:        ' + device.gatt.connected);
+        wbModal.style.display = "none";
+        Blast.Things.addWebBluetoothDevice(device.id, device.name);
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch(error => {
+        wbLog('Argh! ' + error);
+      });
+  });
+
+  
+  // request HID devices when pair button is clicked
+  const hidPairButton = document.getElementById('wHid-connect');
+  hidPairButton.addEventListener('click', function() {
+    let filters = [];
+
+    let filterVendor = document.getElementById('wHid-vendorId').value;
+    if (filterVendor) {
+      filters.push({vendorId: filterVendor});
+    }
+
+    let filterProductId = document.getElementById('wHid-productId').value;
+    if (filterProductId) {
+      filters.push({vendorId: filterVendor, productId: filterProductId});
+    }
+
+    navigator.hid.requestDevice({filters})
+      .then(device => {
+        if (device.length === 0) throw new Error('Connection failed or cancelled by User.');
+        wHidModal.style.display = "none";
+        // generate a unique id for the new device
+        const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        // add device to the device map with its uid
+        Blast.Things.webHidDevices.set(uid, device[0]);
+        Blast.Things.addWebHidDevice(uid, '');
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch(error => {
+        wHidLog('Argh! ' + error);
+      });
   });
 
   // Make sure web bluetooth filters are correct
@@ -256,71 +290,35 @@
     }
   })
 
-
-  // When the user clicks the button, open the modal 
-  configButton.onclick = function () {
-    configModal.style.display = "block";
+  // Fill webHid filter inputs when known devices dropdown changes
+  const wHidKnownDevices = document.getElementById('wHid-knownDevices');
+  const wHidVendorIdFilter = document.getElementById('wHid-vendorId');
+  const wHidProductIdFilter = document.getElementById('wHid-productId');
+  const updateHidFilter = function() {
+    const jsonValue = JSON.parse(wHidKnownDevices.value);
+    wHidVendorIdFilter.value = jsonValue.filters[0].vendorId;
+    wHidProductIdFilter.value = jsonValue.filters[0].productId;
   }
 
-  // When the user clicks on <span> (x), close the modal
-  span.onclick = function () {
-    configModal.style.display = "none";
+  wHidKnownDevices.addEventListener('change', updateHidFilter);
+
+  wbClose.onclick = function () {
+    wbModal.style.display = "none";
+  }
+  
+  wHidClose.onclick = function () {
+    wHidModal.style.display = "none";
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
-    if (event.target == configModal) {
-      configModal.style.display = "none";
+    if (event.target == wbModal) {
+      wbModal.style.display = "none";
+    }
+    if (event.target == wHidModal) {
+      wHidModal.style.display = "none";
     }
   }
-
-  const saveSettings = function (close = true) {
-    // unload previous bt api
-    const btApi = document.getElementById('bluetooth-api');
-    if(btApi){
-      document.head.removeChild(btApi);
-    }
-
-    // load script for api type
-    const apiType = apiTypeInput.value;
-    const script = document.createElement('script');
-    script.src = `src/bluetooth_apis/${apiType}.js`;
-    script.id = 'bluetooth-api';
-    document.head.appendChild(script);
-
-    // set host address
-    let address = addressInput.value;
-    // make sure address has trailing slash
-    if (address.slice(-1) != '/') {
-      address += '/';
-    }
-    // if no protocol specified, add http://
-    if (address.slice(0, 4) != 'http') {
-      address = 'http://' + address;
-    }
-    // to make changes apparent, show new address in input
-    addressInput.value = address;
-    // save address in config
-    Blast.config.hostAddress = address;
-
-    // close the settings modal
-    if(close)
-      configModal.style.display = "none";
-  }
-
-  // set default values
-  saveSettings();
-
-  // save settings on submit
-  const submitButton = document.getElementById('configSubmit');
-  Blast.bindClick(submitButton, saveSettings);
-
-  // save settings on enter
-  addressInput.addEventListener('keyup', (event) => {
-    if (event.keyCode === 13) {
-      saveSettings();
-    }
-  });
 </script>
 
 </html>

@@ -260,11 +260,11 @@ button {
   
 }
 
-#configModal * {
+.modal * {
   box-sizing: border-box;
 }
 
-#configModal input[type=text], select {
+.modal input[type=text], select {
   width: 100%;
   padding: 12px;
   border: 1px solid #ccc;
@@ -272,13 +272,13 @@ button {
   resize: vertical;
 }
 
-#configModal label {
+.modal label {
   padding: 12px 12px 12px 0;
   display: inline-block;
 }
 
 
-#configModal input[type=submit],#configModal input[type=button] {
+.modal input[type=submit],.modal input[type=button] {
   color: white;
   padding: 12px 20px;
   border: none;
@@ -313,15 +313,11 @@ button {
   margin-top: 6px;
 }
 
-#web-bluetooth-connect-row {
-  display: none;
-}
-
-#wb-connect {
+#wb-connect, #wHid-connect {
   background: #4285f4;
 }
 
-#wb-output {
+#wb-output, #wHid-output {
   background-color: #f0f0f0;
   border-radius: 0.75em;
   display: block;
@@ -329,7 +325,7 @@ button {
   padding: 0.5em;
 }
 
-#wb-log {
+#wb-log, #wHid-log {
   margin: .5em 0;
   white-space: pre-wrap;
 }

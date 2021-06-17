@@ -131,27 +131,39 @@ Blast.BlockMethods.switchLights = async function(mac, r, y, g, callback) {
 
 /**
  * Fetches the current temperature of the xiaomi bluetooth thermomether
- * @param {string} mac MAC address of the thermometer.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getTemperature = function(mac, callback) {
-  const uri = `${Blast.config.hostAddress}devices/${mac}/current`;
-  const requestOptions = {
-    method: 'GET',
-  };
+Blast.BlockMethods.getTemperature = async function(webBluetoothId, callback) {
+  const devices = await navigator.bluetooth.getDevices();
+  let device = null;
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        return res.text();
+  for (const d of devices) {
+    if (d.id == deviceId) {
+      device = d;
+      break;
+    }
+  }
+  if (device == null) {
+    Blast.throwError('Error pairing with Bluetooth device.');
+  }
+
+  device.gatt.connect()
+      .then((server) => {
+        return server.getPrimaryService('6e400001-b5a3-f393-e0A9-e50e24dcca9e');
       })
-      .then((resData) => {
-        const temp = JSON.parse(resData)['@graph'][1].result.temperature;
-        callback(temp);
+      .then((service) => {
+        return service.getCharacteristic('');
+      })
+      .then((characteristic) => {
+        return characteristic.readValue();
+      })
+      .then((value) => {
+        callback(value);
       })
       .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
+        Blast.throwError(error.message);
       });
 };
 
@@ -183,16 +195,16 @@ Blast.BlockMethods.getRSSI = async function(mac, callback) {
 
 /**
  * Get the RSSI of a bluetooth device, using webBluetooth.
- * @param {string} deviceId identifier of the bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-Blast.BlockMethods.getRSSIWb = async function(deviceId, callback) {
+Blast.BlockMethods.getRSSIWb = async function(webBluetoothId, callback) {
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
   for (const d of devices) {
-    if (d.id == deviceId) {
+    if (d.id == webBluetoothId) {
       device = d;
       break;
     }
@@ -294,14 +306,15 @@ Blast.BlockMethods.numberRandom = function(a, b) {
 /**
  * Adds handler for button pushes on an elGato Stream Deck
  * @param {Blockly.Block.id} blockId id of the streamdeck block.
+ * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
  */
-Blast.BlockMethods.handleStreamdeck = async function(blockId, buttonArray) {
+Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
   const block = Blast.workspace.getBlockById(blockId);
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
   const type = 'inputreport';
 
-  const device = block.device;
+  const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
     try {
       await device.open();

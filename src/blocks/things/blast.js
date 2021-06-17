@@ -176,7 +176,7 @@ Blockly.Blocks['display_text'] = {
        */
   init: function() {
     this.appendValueInput('text')
-        .setCheck(['String', 'Number', 'Boolean', 'URI'])
+        .setCheck(['String', 'Number', 'Boolean', 'URI', 'Thing'])
         .appendField('display text:');
     this.setColour(0);
     this.setTooltip('Add text output to the container on the right.');
@@ -272,26 +272,14 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     * @this {Blockly.Block}
     */
   init: function() {
-    this.appendDummyInput()
-        .appendField('get signal-strength of mac at this machine');
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('get signal-strength of thing at this machine');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
     this.setHelpUrl('');
     this.requested = false;
     this.deviceId = '';
-  },
-  setDeviceId: async function() {
-    const device = await navigator.bluetooth.requestDevice({acceptAllDevices: true});
-    this.deviceId = device.id;
-    // after setting device id, trigger code generation.
-    Blast.generateCode();
-    Blast.Ui.renderContent_();
-  },
-  onchange: function() {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      this.requested = true;
-      this.setDeviceId();
-    }
   },
 };

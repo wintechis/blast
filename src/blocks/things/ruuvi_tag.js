@@ -17,9 +17,9 @@ Blockly.Blocks['get_temperature'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    this.appendValueInput('MAC')
-        .setCheck('mac')
-        .appendField('get temperature of Ruuvi Tag with mac');
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('get temperature of Ruuvi Tag');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
