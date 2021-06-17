@@ -151,7 +151,7 @@ Blast.BlockMethods.getTemperature = async function(webBluetoothId, callback) {
 
   device.gatt.connect()
       .then((server) => {
-        return server.getPrimaryService('000061fe-0000-1000-8000-00805f9b34fb');
+        return server.getPrimaryService('6e400001-b5a3-f393-e0A9-e50e24dcca9e');
       })
       .then((service) => {
         return service.getCharacteristic('');
@@ -204,8 +204,6 @@ Blast.BlockMethods.getRSSIWb = async function(webBluetoothId, callback) {
   let device = null;
 
   for (const d of devices) {
-    console.log(d.id);
-    console.log(webBluetoothId);
     if (d.id == webBluetoothId) {
       device = d;
       break;
@@ -308,14 +306,15 @@ Blast.BlockMethods.numberRandom = function(a, b) {
 /**
  * Adds handler for button pushes on an elGato Stream Deck
  * @param {Blockly.Block.id} blockId id of the streamdeck block.
+ * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
  */
-Blast.BlockMethods.handleStreamdeck = async function(blockId, buttonArray) {
+Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
   const block = Blast.workspace.getBlockById(blockId);
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
   const type = 'inputreport';
 
-  const device = block.device;
+  const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
     try {
       await device.open();

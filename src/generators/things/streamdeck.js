@@ -23,9 +23,14 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
   const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
   const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
+  const id = Blockly.JavaScript.valueToCode(
+      block,
+      'id',
+      Blockly.JavaScript.ORDER_NONE,
+  );
     
   const buttonArray = [button1, button2, button3, button4, button5, button6];
 
-  const code = `handleStreamdeck('${block.id}', [${buttonArray}]);\n`;
+  const code = `handleStreamdeck('${block.id}', ${id}, [${buttonArray}]);\n`;
   return code;
 };

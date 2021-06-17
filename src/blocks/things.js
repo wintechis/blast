@@ -17,3 +17,15 @@ Blockly.Blocks['things_webBluetooth'] = {
     this.setHelpUrl('');
   },
 };
+
+Blockly.Blocks['things_webHID'] = {
+  init: function() {
+    this.appendDummyInput()
+        .appendField('HID device')
+        .appendField(new Blockly.FieldDropdown(Blast.Things.getWebHIDDevices), 'id');
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};

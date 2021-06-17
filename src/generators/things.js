@@ -9,3 +9,9 @@ Blockly.JavaScript['things_webBluetooth'] = function(block) {
 
   return [id, Blockly.JavaScript.ORDER_NONE];
 };
+
+Blockly.JavaScript['things_webHID'] = function(block) {
+  const id = Blockly.JavaScript.quote_(block.getFieldValue('id'));
+
+  return [id, Blockly.JavaScript.ORDER_NONE];
+};
