@@ -313,11 +313,11 @@ button {
   margin-top: 6px;
 }
 
-#wb-connect {
+#wb-connect, #wHid-connect {
   background: #4285f4;
 }
 
-#wb-output {
+#wb-output, #wHid-output {
   background-color: #f0f0f0;
   border-radius: 0.75em;
   display: block;
@@ -325,7 +325,7 @@ button {
   padding: 0.5em;
 }
 
-#wb-log {
+#wb-log, #wHid-log {
   margin: .5em 0;
   white-space: pre-wrap;
 }
