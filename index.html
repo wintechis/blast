@@ -134,17 +134,52 @@
       </div>
     </div>
   </div>
+  
+  <!-- WebHID Modal -->
+  <div id="wHidModal" class="modal">
+    <div class="modal-content">
+      <span id ="wHidClose" class="close">&times;</span>
+      <h1>Connect a thing via WebHID</h1>
+      <hr>     
+      <div class="row" id="web-hid-connect-row">
+        <div class="col">
+          <form>
+            <h1>Filter for specific devices: (or leave empty)</h1>
+            <label for="wHid-knownDevices">List of known devices</label>
+            <select id="wHid-knownDevices">
+              <option value=""></option>
+              <option value='{ "filters": [{"vendorId": "0x0fd9", "productId": 99}] }'>elGato StreamDeck Mini</option>
+            </select>
+            <br><br>
+            <input id="wHid-vendorId" type="text" size="17" placeholder="Vendor ID">
+            <br><br>
+            <input id="wHid-productId" type="text" size="17" placeholder="Product ID">
+            <br><br>
+            <input type="button" id="wHid-connect" value="connect">
+          </form>
+          <div>
+            <h3>Error output:</h3>
+            <div id="wHid-output" class="wHid-output">
+              <pre id="wHid-log"></pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="content_workspace" class="content"></div>
   <pre id="content_javascript" class="content prettyprint lang-js"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
 </body>
 <script>
+  /**
+   * WebBluetooth and WebHID modal methods
+   */
   const wbModal = document.getElementById("wbModal");
   const wbClose = document.getElementById("wbClose");
-
-  const addressInput = document.getElementById('api-address');
-  const apiTypeInput = document.getElementById('api-type');
+  const wHidModal = document.getElementById("wHidModal");
+  const wHidClose = document.getElementById("wHidClose");
 
   // logs webBluetooth to wb-output div
   const wbLog = function(){
@@ -154,10 +189,19 @@
 
     document.getElementById('wb-log').textContent += line + '\n';
   }
+  
+  // logs webBluetooth to wb-output div
+  const wHidLog = function(){
+    var line = Array.prototype.slice.call(arguments).map(function(argument) {
+      return typeof argument === 'string' ? argument : JSON.stringify(argument);
+    }).join(' ');
+
+    document.getElementById('wHid-log').textContent += line + '\n';
+  }
 
   // request bt devices when pair button is clicked
-  const pairButton = document.getElementById('wb-connect');
-  pairButton.addEventListener('click', function() {
+  const wbPairButton = document.getElementById('wb-connect');
+  wbPairButton.addEventListener('click', function() {
     let filters = [];
 
     let filterName = document.getElementById('wb-name').value;
@@ -170,9 +214,8 @@
       filters.push({namePrefix: filterNamePrefix});
     }
 
-    let options = {
-      optionalServices: ['0000fff0-0000-1000-8000-00805f9b34fb']
-    };
+    let options = {};
+
     if (document.getElementById('wb-allDevices').checked) {
       options.acceptAllDevices = true;
     } else {
@@ -180,17 +223,49 @@
     }
 
     navigator.bluetooth.requestDevice(options)
-    .then(device => {
-      // wbLog('> Name:             ' + device.name);
-      // wbLog('> Id:               ' + device.id);
-      // wbLog('> Connected:        ' + device.gatt.connected);
-      wbModal.style.display = "none";
-      Blast.Things.addWebBluetoothDevice(device.id, device.name);
-      Blast.workspace.refreshToolboxSelection();
-    })
-    .catch(error => {
-      wbLog('Argh! ' + error);
-    });
+      .then(device => {
+        // wbLog('> Name:             ' + device.name);
+        // wbLog('> Id:               ' + device.id);
+        // wbLog('> Connected:        ' + device.gatt.connected);
+        wbModal.style.display = "none";
+        Blast.Things.addWebBluetoothDevice(device.id, device.name);
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch(error => {
+        wbLog('Argh! ' + error);
+      });
+  });
+
+  
+  // request HID devices when pair button is clicked
+  const hidPairButton = document.getElementById('wHid-connect');
+  hidPairButton.addEventListener('click', function() {
+    let filters = [];
+
+    let filterVendor = document.getElementById('wHid-vendorId').value;
+    if (filterVendor) {
+      filters.push({vendorId: filterVendor});
+    }
+
+    let filterProductId = document.getElementById('wHid-productId').value;
+    if (filterProductId) {
+      filters.push({vendorId: filterVendor, productId: filterProductId});
+    }
+
+    navigator.hid.requestDevice({filters})
+      .then(device => {
+        if (device.length === 0) throw new Error('Connection failed or cancelled by User.');
+        wHidModal.style.display = "none";
+        // generate a unique id for the new device
+        const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        // add device to the device map with its uid
+        Blast.Things.webHidDevices.set(uid, device[0]);
+        Blast.Things.addWebHidDevice(uid, '');
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch(error => {
+        wHidLog('Argh! ' + error);
+      });
   });
 
   // Make sure web bluetooth filters are correct
@@ -215,14 +290,33 @@
     }
   })
 
+  // Fill webHid filter inputs when known devices dropdown changes
+  const wHidKnownDevices = document.getElementById('wHid-knownDevices');
+  const wHidVendorIdFilter = document.getElementById('wHid-vendorId');
+  const wHidProductIdFilter = document.getElementById('wHid-productId');
+  const updateHidFilter = function() {
+    const jsonValue = JSON.parse(wHidKnownDevices.value);
+    wHidVendorIdFilter.value = jsonValue.filters[0].vendorId;
+    wHidProductIdFilter.value = jsonValue.filters[0].productId;
+  }
+
+  wHidKnownDevices.addEventListener('change', updateHidFilter);
+
   wbClose.onclick = function () {
     wbModal.style.display = "none";
+  }
+  
+  wHidClose.onclick = function () {
+    wHidModal.style.display = "none";
   }
 
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == wbModal) {
       wbModal.style.display = "none";
+    }
+    if (event.target == wHidModal) {
+      wHidModal.style.display = "none";
     }
   }
 </script>
