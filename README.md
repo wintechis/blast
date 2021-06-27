@@ -10,6 +10,8 @@ If you want to use the save/load features, however you have to host the files on
 **Blocks that perform fetch request, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 **Some of BLAST's block require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
+The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/.
+
 ### Saving & Loading
 Saving and loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions. 
 
