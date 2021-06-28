@@ -38,6 +38,16 @@ function initApi(interpreter, globalObject) {
       'highlightBlock',
       interpreter.createNativeFunction(wrapper),
   );
+  
+  // API function for setting {@link Blast.Interrupted}.
+  wrapper = function(val) {
+    Blast.Interrupted = val;
+  };
+  interpreter.setProperty(
+      globalObject,
+      'setInterrupt',
+      interpreter.createNativeFunction(wrapper),
+  );
 
   // API function for the display_text block.
   wrapper = function(text) {

@@ -35,7 +35,10 @@ Blockly.JavaScript['event'] = function(block) {
     const conditions = negate + stateConditions;
   
     const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
-      ${statements} }\n`;
+      setInterrupt(true);
+      ${statements} 
+      setInterrupt(false);
+      }`;
   
     Blast.States.addEventCode(block.id, eventCode);
   }
