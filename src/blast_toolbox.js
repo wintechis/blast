@@ -53,7 +53,6 @@ const defaultToolbox = {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'get_signal_strength'},
         {kind: 'BLOCK', type: 'get_signal_strength_wb'},
       ],
       name: 'Properties',
@@ -202,7 +201,6 @@ const advancedToolbox = {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'get_signal_strength'},
         {kind: 'BLOCK', type: 'get_signal_strength_wb'},
       ],
       name: 'Properties',
