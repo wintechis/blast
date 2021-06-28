@@ -30,7 +30,8 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   );
     
   const buttonArray = [button1, button2, button3, button4, button5, button6];
+  const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const code = `handleStreamdeck('${block.id}', ${id}, [${buttonArray}]);\n`;
+  const code = `handleStreamdeck('${block.id}', ${id}, [${buttonArray}], ${statements});\n`;
   return code;
 };

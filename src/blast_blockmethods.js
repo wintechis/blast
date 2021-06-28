@@ -308,10 +308,9 @@ Blast.BlockMethods.numberRandom = function(a, b) {
  * @param {Blockly.Block.id} blockId id of the streamdeck block.
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
+ * @param {String} statements .
  */
-Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
-  const block = Blast.workspace.getBlockById(blockId);
-  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
+Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray, statements) {
   const type = 'inputreport';
 
   console.log(statements);
@@ -339,8 +338,9 @@ Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
         // interrupt BLAST execution.
         Blast.Interrupted = true;
         
-        const interpreter = new Interpreter(statements, initApi);
-        interpreter.stateStack[0].scope = Blast.Interpreter.stateStack[0].scope;
+        const interpreter = new Interpreter('');
+        interpreter.stateStack[0].scope = Blast.Interpreter.globalScope;
+        interpreter.appendCode(statements);
 
         const interruptRunner_ = function() {
           try {

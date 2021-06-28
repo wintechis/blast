@@ -249,8 +249,8 @@ function initApi(interpreter, globalObject) {
   );
   
   // API function for the event blocks.
-  wrapper = function(blockId, id, buttonArray) {
-    return Blast.BlockMethods.handleStreamdeck(blockId, id, buttonArray);
+  wrapper = function(blockId, id, buttonArray, statements) {
+    return Blast.BlockMethods.handleStreamdeck(blockId, id, buttonArray, statements);
   };
   interpreter.setProperty(
       globalObject,
