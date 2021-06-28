@@ -56,3 +56,13 @@ Blockly.JavaScript['number_random'] = function(block) {
   const code = `numberRandom(${argument0}, ${argument1})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+Blockly.JavaScript['number_modulo'] = function(block) {
+  // Remainder computation.
+  const argument0 = Blockly.JavaScript.valueToCode(block, 'DIVIDEND',
+      Blockly.JavaScript.ORDER_MODULUS) || '0';
+  const argument1 = Blockly.JavaScript.valueToCode(block, 'DIVISOR',
+      Blockly.JavaScript.ORDER_MODULUS) || '0';
+  const code = argument0 + ' % ' + argument1;
+  return [code, Blockly.JavaScript.ORDER_MODULUS];
+};
