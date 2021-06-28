@@ -176,8 +176,7 @@ Blockly.JavaScript['get_signal_strength_wb'] = function(block) {
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',
-      Blockly.JavaScript.ORDER_ATOMIC,
-  );
+      Blockly.JavaScript.ORDER_NONE);
   const code = `getRSSIWb(${thing})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];

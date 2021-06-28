@@ -29,15 +29,15 @@ Blockly.JavaScript['event'] = function(block) {
     const stateConditions = Blockly.JavaScript.valueToCode(
         stateBlock,
         'state_condition',
-        Blockly.JavaScript.ORDER_ATOMIC,
+        Blockly.JavaScript.ORDER_NONE,
     );
     const negate = entersExits == 'ENTERS' ? '' : '!';
     const conditions = negate + stateConditions;
   
     const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
-      setInterrupt(true);
-      ${statements} 
-      setInterrupt(false);
+        setInterrupt(true);
+        ${statements} 
+        setInterrupt(false);
       }`;
   
     Blast.States.addEventCode(block.id, eventCode);

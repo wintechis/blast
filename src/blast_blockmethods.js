@@ -204,7 +204,7 @@ Blast.BlockMethods.getRSSIWb = async function(webBluetoothId, callback) {
   let device = null;
 
   for (const d of devices) {
-    if (d.id == webBluetoothId) {
+    if (d.id === webBluetoothId) {
       device = d;
       break;
     }
@@ -312,8 +312,6 @@ Blast.BlockMethods.numberRandom = function(a, b) {
  */
 Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray, statements) {
   const type = 'inputreport';
-
-  console.log(statements);
 
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
