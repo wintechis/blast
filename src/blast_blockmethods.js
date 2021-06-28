@@ -314,6 +314,8 @@ Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
   const statements = Blockly.JavaScript.statementToCode(block, 'statements');
   const type = 'inputreport';
 
+  console.log(statements);
+
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
     try {
@@ -338,6 +340,8 @@ Blast.BlockMethods.handleStreamdeck = async function(blockId, id, buttonArray) {
         Blast.Interrupted = true;
         
         const interpreter = new Interpreter(statements, initApi);
+        interpreter.stateStack[0].scope = Blast.Interpreter.stateStack[0].scope;
+
         const interruptRunner_ = function() {
           try {
             const hasMore = interpreter.step();
