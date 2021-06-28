@@ -68,7 +68,6 @@ Blast.States.eventChecker = function(blockId, curValue) {
   Blast.States.eventValues.set(blockId, curValue);
 
   if (prevValue != undefined) {
-    console.log(!prevValue && curValue);
     return !prevValue && curValue;
   }
   return false;
@@ -120,9 +119,11 @@ Blast.States.generateCode = function() {
  */
 Blast.States.startEventChecker = function() {
   Blast.States.Interpreter = null;
-  // Begin execution
-  Blast.States.Interpreter = new Interpreter(Blast.States.latestCode, initApi);
-  Blast.States.Interpreter.stateStack[0].scope = Blast.Interpreter.stateStack[0].scope;
+
+  // Initiate States interpreter.
+  Blast.States.Interpreter = new Interpreter('');
+  Blast.States.Interpreter.stateStack[0].scope = Blast.Interpreter.globalScope;
+  Blast.States.Interpreter.appendCode(Blast.States.latestCode);
 
   Blast.States.runner_ = function() {
     if (Blast.States.Interpreter) {
