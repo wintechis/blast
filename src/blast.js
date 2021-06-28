@@ -67,6 +67,7 @@ Blast.eventInWorkspace = [];
  * Stores event handlers of webHID devices, in order to remove them on code completion.
  */
 Blast.deviceEventHandlers = [];
+
 /**
  * Instance of runner function.
  * @type {?function}
@@ -319,6 +320,10 @@ Blast.runJS = function() {
 Blast.stopJS = function() {
   Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
+  if (Blast.States.Interpreter) {
+    clearTimeout(Blast.States.runner_);
+    Blast.States.runner_ = null;
+  }
   Blast.resetUi(Blast.status.STOPPED);
 };
 
