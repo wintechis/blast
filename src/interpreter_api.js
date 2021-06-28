@@ -191,20 +191,6 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the get_rssi block.
-  wrapper = function(mac, callback) {
-    return Blast.BlockMethods.getRSSI(
-        mac,
-        callback,
-    );
-  };
-
-  interpreter.setProperty(
-      globalObject,
-      'getRSSI',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for the get_rssi block.
   wrapper = function(deviceId, callback) {
     return Blast.BlockMethods.getRSSIWb(
         deviceId,
@@ -239,7 +225,7 @@ function initApi(interpreter, globalObject) {
   );
 
   // API function for the event blocks.
-  wrapper = function(blockId, conditions) {
+  wrapper = function() {
     return Blast.States.startEventChecker();
   };
   interpreter.setProperty(
