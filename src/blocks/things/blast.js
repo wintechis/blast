@@ -274,7 +274,7 @@ Blockly.Blocks['get_signal_strength_wb'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('get signal-strength of thing at this machine');
+        .appendField('get signal-strength of webBluetooth thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
