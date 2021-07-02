@@ -36,7 +36,6 @@ async function(handle, value, options) {
   await Blast.Bluetooth.connect(mac);
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, handle, 'xsd:hexBinary', value, 1500);
   await Blast.Bluetooth.disconnect(mac);
-  return;
 };
 
 Blast.Things.ConsumedThing.BLE_RGB_LED_controller.prototype.writePropertyByUUID =
@@ -44,5 +43,4 @@ Blast.Things.ConsumedThing.BLE_RGB_LED_controller.prototype.writePropertyByUUID 
 async function(serviceUUID, characteristcUUID, value, options) {
   const mac = this.mac;
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, serviceUUID, characteristcUUID, value);
-  return;
 };
