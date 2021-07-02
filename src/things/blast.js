@@ -126,7 +126,6 @@ Blast.Things.ConsumedThing.Blast.urdfQueryWrapper = async function(uri, query) {
  * @public
  */
 Blast.Things.ConsumedThing.Blast.playAudio = async function(uri) {
-  console.log(uri);
   await new Promise((resolve, reject) => {
     const audio = new Audio(uri);
     audio.preload = 'auto';
@@ -138,7 +137,6 @@ Blast.Things.ConsumedThing.Blast.playAudio = async function(uri) {
     });
     audio.onended = resolve;
   });
-  return;
 };
 
 /**
