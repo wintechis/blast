@@ -126,8 +126,7 @@ Blast.Ui.addMessage = function(message) {
  */
 Blast.Ui.tabClick_ = function(clickedName) {
   // Deselect all tabs and hide all panes.
-  for (let i = 0; i < Blast.Ui.TABS_.length; i++) {
-    const name = Blast.Ui.TABS_[i];
+  for (const name of Blast.Ui.TABS_) {
     const tab = document.getElementById('tab_' + name);
     tab.classList.add('taboff');
     tab.classList.remove('tabon');
@@ -216,8 +215,7 @@ Blast.Ui.init = function() {
   Blast.bindClick('loadButton', Blast.Storage.load);
   Blast.bindClick('saveButton', Blast.Storage.link);
 
-  for (let i = 0; i < Blast.Ui.TABS_.length; i++) {
-    const name = Blast.Ui.TABS_[i];
+  for (const name of Blast.Ui.TABS_) {
     Blast.bindClick(
         'tab_' + name,
         (function(name_) {
