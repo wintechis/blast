@@ -7,10 +7,6 @@
 
 'use strict';
 
-/*******************
- * Property blocks.*
- *******************/
-
 Blockly.Blocks['get_temperature'] = {
   /**
    * Block for the temperature property of a Ruuvi Tag.

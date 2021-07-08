@@ -6,10 +6,6 @@
  */
 
 'use strict';
-
-/*******************
- * Event blocks.   *
- *******************/
  
 /**
   * Generates JavaScript code for the streamdeck_buttons block.

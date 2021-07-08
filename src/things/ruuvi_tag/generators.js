@@ -7,10 +7,6 @@
 
 'use strict';
 
-/*******************
- * Property blocks.*
- *******************/
-
 /**
  * Generates JavaScript code for the get_temperature block.
  * @param {Blockly.Block} block the get_temperature block.

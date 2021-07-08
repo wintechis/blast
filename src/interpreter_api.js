@@ -49,15 +49,23 @@ function initApi(interpreter, globalObject) {
       interpreter.createNativeFunction(wrapper),
   );
 
-  // API function for the display_text block.
-  wrapper = function(text) {
-    return Blast.BlockMethods.displayText(text);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'displayText',
-      interpreter.createNativeFunction(wrapper),
-  );
+  // TODO Add all things function to functions array.
+  for (const f of Blast.apiFunctions) {
+    interpreter.setProperty(
+        globalObject,
+        f[0],
+        interpreter.createNativeFunction(f[1]),
+    );
+  }
+  
+  // TODO find a way to call callback from here.
+  for (const f of Blast.asyncApiFunction) {
+    interpreter.setProperty(
+        globalObject,
+        f[0],
+        interpreter.createAsyncFunction(f[1]),
+    );
+  }
 
   // API function for the display_table block.
   wrapper = function(text) {

@@ -7,11 +7,11 @@
 
 'use strict';
 
-/*******************
- * Event blocks.   *
- *******************/
-
 Blockly.Blocks['streamdeck_buttons'] = {
+  /**
+   * Block handling streamdeck button pushes.
+   * @this {Blockly.Block}
+   */
   init: function() {
     this.appendValueInput('id')
         .setCheck('Thing')
