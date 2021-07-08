@@ -7,10 +7,6 @@
 
 'use strict';
 
-/*******************
- * Property blocks.*
- *******************/
-
 Blockly.Blocks['mirobot_pickup'] = {
   /**
     * Block for picking up boxes from pre-defined locations.

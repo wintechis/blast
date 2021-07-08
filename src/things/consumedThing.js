@@ -7,7 +7,7 @@
  */
 
 'use strict';
-
+// TODO remove these classes, to ease things?
 goog.provide('Blast.Things.ConsumedThing');
 
 /**

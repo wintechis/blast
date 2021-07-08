@@ -7,10 +7,6 @@
 
 'use strict';
 
-/*******************
- * Property blocks.*
- *******************/
-
 /**
  * Generates JavaScript code for the mirobot_pickup block.
  * @param {Blockly.Block} block the mirobot_pickup block.
