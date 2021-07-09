@@ -24,6 +24,10 @@ Blockly.Blocks['text_to_speech'] = {
   },
 };
 
+// Add the block to the toolbox.
+// TODO implement this
+Blast.Toolbox.addBlockToCategory('text_to_speech', 'actions');
+
 Blockly.Blocks['web_speech'] = {
   /**
    * Block converting mic input into a string.
@@ -55,3 +59,8 @@ Blockly.Blocks['web_speech'] = {
     }
   },
 };
+
+
+// Add the block to the toolbox.
+// TODO implement this
+Blast.Toolbox.addBlockToCategory('web_speech', 'actions');

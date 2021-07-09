@@ -8,6 +8,7 @@
 
 goog.provide('Blast.Toolbox');
 
+// TODO implement add to category function.
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [

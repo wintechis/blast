@@ -29,4 +29,52 @@ Blockly.JavaScript['web_speech'] = function(block) {
   
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-  
+
+/**
+ * Plays an audio file provided by URI.
+ * @param {string} uri URI of the audio file to play.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+const textToSpeech = async function(uri, callback) {
+  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
+      'textToSpeech', [uri],
+  );
+  callback();
+};
+
+// add block functions to the interpreter's API
+// TODO implement persing this in initAPI
+Blast.asyncApiFunction.push(textToSpeech);
+
+/**
+ * Outputs speech input as string.
+ * @param {Blockly.Block.id} blockId id of the webSpeech block.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+const webSpeech = async function(blockId, callback) {
+  const block = Blast.workspace.getBlockById(blockId);
+  const recognition = block.recognition;
+  recognition.continuous = false;
+  recognition.lang = 'en-US';
+  let finalTranscript = '';
+
+  recognition.onresult = function(event) {
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      }
+    }
+  };
+
+  recognition.onend = function() {
+    callback(finalTranscript);
+  };
+
+  recognition.start();
+};
+
+// add block functions to the interpreter's API
+// TODO implement persing this in initAPI
+Blast.asyncApiFunction.push(webSpeech);

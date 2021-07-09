@@ -246,47 +246,6 @@ Blast.BlockMethods.playAudioFromURI = async function(uri, callback) {
 };
 
 /**
- * Plays an audio file provided by URI.
- * @param {string} uri URI of the audio file to play.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-Blast.BlockMethods.textToSpeech = async function(uri, callback) {
-  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
-      'textToSpeech', [uri],
-  );
-  callback();
-};
-
-/**
- * Outputs speech input as string.
- * @param {Blockly.Block.id} blockId id of the webSpeech block.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-Blast.BlockMethods.webSpeech = async function(blockId, callback) {
-  const block = Blast.workspace.getBlockById(blockId);
-  const recognition = block.recognition;
-  recognition.continuous = false;
-  recognition.lang = 'en-US';
-  let finalTranscript = '';
-
-  recognition.onresult = function(event) {
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        finalTranscript += event.results[i][0].transcript;
-      }
-    }
-  };
-
-  recognition.onend = function() {
-    callback(finalTranscript);
-  };
-
-  recognition.start();
-};
-
-/**
  * Generates and returns a random integer between a and b, inclusively.
  * @param {number} a lower limit.
  * @param {number} b upper limit.
