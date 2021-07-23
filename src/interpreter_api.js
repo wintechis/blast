@@ -15,14 +15,8 @@ function initApi(interpreter, globalObject) {
   // Ensure function names do not conflict with letiable names.
   Blockly.JavaScript.addReservedWords(
       'highlightBlock',
-      'displayText',
-      'displayTable',
-      'sendHttpRequest',
       'urdfQueryWrapper',
-      'switchLights',
       'waitForSeconds',
-      'playAudioFromURI',
-      'getTableCell',
       'addEvent',
       'eventChecker',
       'numberRandom',
@@ -53,29 +47,18 @@ function initApi(interpreter, globalObject) {
   for (const f of Blast.apiFunctions) {
     interpreter.setProperty(
         globalObject,
-        f[0],
-        interpreter.createNativeFunction(f[1]),
+        f[0], // the function name
+        interpreter.createNativeFunction(f[1]), // the function
     );
   }
   
-  // TODO find a way to call callback from here.
-  for (const f of Blast.asyncApiFunction) {
+  for (const f of Blast.asyncApiFunctions) {
     interpreter.setProperty(
         globalObject,
-        f[0],
-        interpreter.createAsyncFunction(f[1]),
+        f[0], // the function name
+        interpreter.createAsyncFunction(f[1]), // the function
     );
   }
-
-  // API function for the display_table block.
-  wrapper = function(text) {
-    return Blast.BlockMethods.displayTable(text);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'displayTable',
-      interpreter.createNativeFunction(wrapper),
-  );
 
   // API function for the http_request block.
   wrapper = function(uri, method, headersString, body, output, callback) {
@@ -94,20 +77,6 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
-  // API function for the http_request block.
-  wrapper = function(uri, headers, callback) {
-    return Blast.BlockMethods.getRequest(
-        uri,
-        headers,
-        callback,
-    );
-  };
-  interpreter.setProperty(
-      globalObject,
-      'getRequest',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
   // API function for urdf querying.
   wrapper = function(uri, query, callback) {
     return Blast.BlockMethods.urdfQueryWrapper(uri, query, callback);
@@ -118,46 +87,6 @@ function initApi(interpreter, globalObject) {
       interpreter.createAsyncFunction(wrapper),
   );
 
-  // API function for the switch_lights block.
-  wrapper = function(mac, r, y, g, callback) {
-    return Blast.BlockMethods.switchLights(mac, r, y, g, callback);
-  };
-
-  interpreter.setProperty(
-      globalObject,
-      'switchLights',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for the get_temperature block.
-  wrapper = function(thing, callback) {
-    return Blast.BlockMethods.getTemperature(thing, callback);
-  };
-
-  interpreter.setProperty(
-      globalObject,
-      'getTemperature',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for the miroBot_pickup block.
-  wrapper = function(box, callback) {
-    return Blast.BlockMethods.sendHttpRequest(
-        'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase(),
-        'POST',
-        '{"Content-Type": "application/json", "Accept": "application/json"}',
-        '{}',
-        'table',
-        callback,
-    );
-  };
-
-  interpreter.setProperty(
-      globalObject,
-      'mirobotPickUpBox',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
   // API function for waitSeconds block.
   wrapper = function(timeInSeconds, callback) {
     return Blast.BlockMethods.waitForSeconds(timeInSeconds, callback);
@@ -165,50 +94,6 @@ function initApi(interpreter, globalObject) {
   interpreter.setProperty(
       globalObject,
       'waitForSeconds',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for playSound block.
-  wrapper = function(uri, callback) {
-    return Blast.BlockMethods.playAudioFromURI(uri, callback);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'playAudioFromURI',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for playSound block.
-  wrapper = function(text, callback) {
-    return Blast.BlockMethods.textToSpeech(text, callback);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'textToSpeech',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for playSound block.
-  wrapper = function(blockId, callback) {
-    return Blast.BlockMethods.webSpeech(blockId, callback);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'webSpeech',
-      interpreter.createAsyncFunction(wrapper),
-  );
-
-  // API function for the get_rssi block.
-  wrapper = function(deviceId, callback) {
-    return Blast.BlockMethods.getRSSIWb(
-        deviceId,
-        callback,
-    );
-  };
-
-  interpreter.setProperty(
-      globalObject,
-      'getRSSIWb',
       interpreter.createAsyncFunction(wrapper),
   );
 
@@ -239,16 +124,6 @@ function initApi(interpreter, globalObject) {
   interpreter.setProperty(
       globalObject,
       'startEventChecker',
-      interpreter.createNativeFunction(wrapper),
-  );
-  
-  // API function for the event blocks.
-  wrapper = function(blockId, id, buttonArray, statements) {
-    return Blast.BlockMethods.handleStreamdeck(blockId, id, buttonArray, statements);
-  };
-  interpreter.setProperty(
-      globalObject,
-      'handleStreamdeck',
       interpreter.createNativeFunction(wrapper),
   );
 

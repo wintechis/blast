@@ -8,7 +8,6 @@
 
 goog.provide('Blast.Toolbox');
 
-// TODO implement add to category function.
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -52,10 +51,7 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'get_signal_strength_wb'},
-      ],
+      contents: [],
       name: 'Properties',
       colour: '255',
     },
@@ -64,21 +60,13 @@ const defaultToolbox = {
       contents: [
         {kind: 'BLOCK', type: 'get_request'},
         {kind: 'BLOCK', type: 'display_text'},
-        {kind: 'BLOCK', type: 'switch_lights_ryg'},
-        {kind: 'BLOCK', type: 'switch_lights_rgb'},
-        {kind: 'BLOCK', type: 'mirobot_pickup'},
-        {kind: 'BLOCK', type: 'play_audio'},
-        {kind: 'BLOCK', type: 'text_to_speech'},
-        {kind: 'BLOCK', type: 'web_speech'},
       ],
       name: 'Actions',
       colour: '0',
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'streamdeck_buttons'},
-      ],
+      contents: [],
       name: 'Events',
       colour: '180',
     },
@@ -201,37 +189,19 @@ const advancedToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'get_temperature'},
-        {kind: 'BLOCK', type: 'get_signal_strength_wb'},
-      ],
+      contents: [],
       name: 'Properties',
       colour: '255',
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'get_request'},
-        {kind: 'BLOCK', type: 'http_request'},
-        {kind: 'BLOCK', type: 'sparql_query'},
-        {kind: 'BLOCK', type: 'sparql_ask'},
-        {kind: 'BLOCK', type: 'display_text'},
-        {kind: 'BLOCK', type: 'display_table'},
-        {kind: 'BLOCK', type: 'switch_lights_ryg'},
-        {kind: 'BLOCK', type: 'switch_lights_rgb'},
-        {kind: 'BLOCK', type: 'mirobot_pickup'},
-        {kind: 'BLOCK', type: 'play_audio'},
-        {kind: 'BLOCK', type: 'text_to_speech'},
-        {kind: 'BLOCK', type: 'web_speech'},
-      ],
+      contents: [],
       name: 'Actions',
       colour: '0',
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'streamdeck_buttons'},
-      ],
+      contents: [],
       name: 'Events',
       colour: '180',
     },
@@ -361,4 +331,35 @@ Blast.Toolbox.init = function() {
 
   // register advanced toolbox mock button callback
   Blast.workspace.registerToolboxCategoryCallback('ADVANCEDTOOLBOX', Blast.switchToolbox);
+};
+
+/**
+ * Get category by name.
+ * @param {string} name The name of the category.
+ * @returns {Object} the category
+ * */
+Blast.Toolbox.getCategory = function(name) {
+  return Blast.Toolbox.currentToolbox.contents.find(function(category) {
+    if (category.name) {
+      return category.name.toLowerCase() === name.toLowerCase();
+    }
+    return false;
+  });
+};
+
+/**
+ * Adds a block to the toolbox.
+ * @param {string} type The type of block to add.
+ * @param {string} blockCategory The category of the block.
+ */
+Blast.Toolbox.addBlock = function(type, blockCategory) {
+  const block = {
+    kind: 'BLOCK',
+    type: type,
+  };
+  // Find the category and add the block to it.
+  const category = Blast.Toolbox.getCategory(blockCategory);
+  if (category) {
+    category.contents.push(block);
+  }
 };

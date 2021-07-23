@@ -22,3 +22,6 @@ Blockly.Blocks['get_temperature'] = {
     this.setHelpUrl('');
   },
 };
+
+// Add get_temperature block to the toolbox.
+Blast.Toolbox.addBlock('get_temperature', 'actions');

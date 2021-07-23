@@ -32,6 +32,8 @@ Blockly.Blocks['get_request'] = {
     this.setHelpUrl('');
   },
 };
+// Add get_request block to the toolbox.
+Blast.Toolbox.addBlock('get_request', 'Action');
  
 Blockly.Blocks['http_request'] = {
   /**
@@ -120,6 +122,8 @@ Blockly.Blocks['http_request'] = {
     }
   },
 };
+// Add http_request block to the toolbox.
+Blast.Toolbox.addBlock('http_request', 'Action');
  
 Blockly.Blocks['sparql_query'] = {
   /**
@@ -143,6 +147,8 @@ Blockly.Blocks['sparql_query'] = {
     this.setTooltip('Executes a sparql query');
   },
 };
+// Add sparql_query block to the toolbox.
+Blast.Toolbox.addBlock('sparql_query', 'Action');
  
 Blockly.Blocks['sparql_ask'] = {
   /**
@@ -168,6 +174,8 @@ Blockly.Blocks['sparql_ask'] = {
     this.setColour(0);
   },
 };
+// Add sparql_ask block to the toolbox.
+Blast.Toolbox.addBlock('sparql_ask', 'Action');
      
 Blockly.Blocks['display_text'] = {
   /**
@@ -185,6 +193,8 @@ Blockly.Blocks['display_text'] = {
     this.setNextStatement(true, null);
   },
 };
+// Add display_text block to the toolbox.
+Blast.Toolbox.addBlock('display_text', 'Action');
        
 Blockly.Blocks['display_table'] = {
   /**
@@ -202,6 +212,8 @@ Blockly.Blocks['display_table'] = {
     this.setNextStatement(true, null);
   },
 };
+// Add display_table block to the toolbox.
+Blast.Toolbox.addBlock('display_table', 'Action');
    
 Blockly.Blocks['play_audio'] = {
   /**
@@ -219,6 +231,8 @@ Blockly.Blocks['play_audio'] = {
     this.setHelpUrl('');
   },
 };
+// Add play_audio block to the toolbox.
+Blast.Toolbox.addBlock('play_audio', 'Action');
  
 /*******************
   * Property blocks.*
@@ -242,4 +256,6 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.deviceId = '';
   },
 };
+// Add get_signal_strength_wb block to the toolbox.
+Blast.Toolbox.addBlock('get_signal_strength_wb', 'Action');
  

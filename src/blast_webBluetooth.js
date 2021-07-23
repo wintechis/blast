@@ -1,28 +1,26 @@
 /**
  * @fileoverview implements Bluetooth-Operations using webBluetooth
  * (https://webbluetoothcg.github.io/web-bluetooth/).
- * TODO change to prototype methods from bluetooth.js
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 'use strict';
 
-/**
-   * Bluetooth API namespace.
-   * @name Blast.Bluetooth
-   * @namespace
-   * @public
-   */
-Blast.Bluetooth = {};
-
-Blast.Bluetooth.identifiers = 'UUID';
 
 /**
- * Returns a the paired bluetooth device with id.
+  * Bluetooth API namespace.
+  * @name Blast.Bluetooth
+  * @namespace
+  * @public
+  */
+goog.provide('Blast.Bluetooth');
+
+/**
+ * Returns a paired bluetooth device by their id.
  * @param {string} id identifier of the device to get.
  * @returns {BluetoothDevice} the bluetooth device with id.
  */
-Blast.Bluetooth.getDevices = async function(id) {
+Blast.Bluetooth.getDeviceById = async function(id) {
   const devices = await navigator.bluetooth.getDevices();
   for (const device of devices) {
     if (device.id == id) {

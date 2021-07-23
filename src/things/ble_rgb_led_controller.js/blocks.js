@@ -32,6 +32,9 @@ Blockly.Blocks['switch_lights_rgb'] = {
   },
 };
 
+// Add switch_lights_rgb block to the toolbox.
+Blast.Toolbox.addBlock('switch_lights_rgb', 'Action');
+
 Blockly.Blocks['switch_lights_ryg'] = {
   /**
     * Block for switchling ryg lights.
@@ -56,3 +59,6 @@ Blockly.Blocks['switch_lights_ryg'] = {
     this.setHelpUrl('');
   },
 };
+
+// Add switch_lights_ryg block to the toolbox.
+Blast.Toolbox.addBlock('switch_lights_ryg', 'Action');
