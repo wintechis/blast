@@ -43,7 +43,7 @@ Blast.highlightPause = false;
  * @public
  */
 Blast.apiFunctions = [];
-// TODO unify functions arrays.
+
 /**
  * Array of tuples, containg names and asynchronous functions defined in the
  * things folder, in order to add them to the interpreter API in {@link initAPI}.
