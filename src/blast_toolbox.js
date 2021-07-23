@@ -100,15 +100,6 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'uri'},
-        {kind: 'BLOCK', type: 'mac'},
-      ],
-      name: 'Identifiers',
-      colour: '60',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
         {kind: 'BLOCK', type: 'number_value'},
         {kind: 'BLOCK', type: 'number_infinity'},
         {kind: 'BLOCK', type: 'number_arithmetic'},
