@@ -95,4 +95,4 @@ const handleStreamdeck = async function(blockId, id, buttonArray, statements) {
 };
 
 // Add streamdeck function to the Interpreter's API
-Blast.asyncApiFunction.push(['handleStreamdeck', handleStreamdeck]);
+Blast.asyncApiFunctions.push(['handleStreamdeck', handleStreamdeck]);

@@ -70,5 +70,5 @@ const switchLights = async function(mac, value, callback) {
   callback();
 };
 // Add switchLights function to the interpreter's API.
-Blast.asyncApiFunction.push(['switchLights', switchLights]);
+Blast.asyncApiFunctions.push(['switchLights', switchLights]);
 

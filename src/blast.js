@@ -13,7 +13,6 @@
 goog.provide('Blast');
 
 goog.require('Blast.States');
-goog.require('Blast.BlockMethods');
 goog.require('Blast.Ui');
 goog.require('Blast.Toolbox');
 
@@ -213,7 +212,7 @@ Blast.init = function() {
   });
 
   // Display output hint
-  Blast.BlockMethods.displayText('Actionblock output will be displayed here');
+  Blast.Ui.addMessage('Actionblock output will be displayed here');
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Blast.importPrettify, 1);
 };
