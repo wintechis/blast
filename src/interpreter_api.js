@@ -39,7 +39,6 @@ function initApi(interpreter, globalObject) {
       interpreter.createNativeFunction(wrapper),
   );
 
-  // TODO Add all things function to functions array.
   for (const f of Blast.apiFunctions) {
     interpreter.setProperty(
         globalObject,
