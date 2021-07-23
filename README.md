@@ -1,11 +1,11 @@
 # BLAST - Block Applications For Things 
-This project aims to provide an easy to use [Blockly](https://developers.google.com/blockly) Application to communicate with the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).  
+This project aims to provide a visual programming environment for creating and executing applications, that communicate and interact with the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).
 
 Check [./docs/](docs/) for detailed documentation.
 
 ## Usage
-Most of this application (see bold text below) works out of the box. Just open the index.html file in your favorite Browser.
-If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more infos on this.
+Most of this application works out of the box. Just open the `index.html` file in your favorite Browser.
+If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
 
 > :warning: **Blocks that perform fetch request, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 
@@ -22,5 +22,5 @@ Saving and loading block programs requires BLAST to be hosted on a server. In ad
   
 For smaller planned improvements see [issues](https://github.com/wintechis/blast/issues)
 
-
-
+## Contributing
+Please see [.CONTRIBUTING.md](CONTRIBUTING.md).
