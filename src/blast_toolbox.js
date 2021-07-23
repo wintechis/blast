@@ -13,33 +13,6 @@ const defaultToolbox = {
   contents: [
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'repeat'},
-        {kind: 'BLOCK', type: 'while_until'},
-        {kind: 'BLOCK', type: 'for'},
-        {kind: 'BLOCK', type: 'wait_seconds'},
-        {kind: 'BLOCK', type: 'break_continue'},
-        {kind: 'BLOCK', type: 'conditional_statement'},
-      ],
-      name: 'Control Flow',
-      colour: '120',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'logic_compare'},
-        {kind: 'BLOCK', type: 'logic_operation'},
-        {kind: 'BLOCK', type: 'logic_negate'},
-      ],
-      name: 'Boolean Expressions',
-      colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
       contents: [],
       name: 'Things',
       custom: 'THINGS',
@@ -77,6 +50,33 @@ const defaultToolbox = {
       name: 'States',
       custom: 'STATES',
       colour: '180',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'repeat'},
+        {kind: 'BLOCK', type: 'while_until'},
+        {kind: 'BLOCK', type: 'for'},
+        {kind: 'BLOCK', type: 'wait_seconds'},
+        {kind: 'BLOCK', type: 'break_continue'},
+        {kind: 'BLOCK', type: 'conditional_statement'},
+      ],
+      name: 'Control Flow',
+      colour: '120',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'logic_compare'},
+        {kind: 'BLOCK', type: 'logic_operation'},
+        {kind: 'BLOCK', type: 'logic_negate'},
+      ],
+      name: 'Boolean Expressions',
+      colour: '210',
     },
     {
       kind: 'sep',
