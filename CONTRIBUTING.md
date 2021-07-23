@@ -136,3 +136,5 @@ Methods that are run asynchronously are always called with a callback function a
 > // add block function to the interpreter's API.
 > Blast.asyncApiFunctions.push(['getTemperature', getTemperature]);
 > ```
+
+**TODO** Add documentation of Bluetooth communication.
