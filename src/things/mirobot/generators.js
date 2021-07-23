@@ -27,14 +27,21 @@ Blockly.JavaScript['mirobot_pickup'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const mirobotPickUp = async function(box, callback) {
-  return Blast.BlockMethods.sendHttpRequest(
-      'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase(),
-      'POST',
-      '{"Content-Type": "application/json", "Accept": "application/json"}',
-      '{}',
-      'table',
-      callback,
-  );
+  const uri = 'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase();
+  const headers = {'Content-Type': 'application/json', 'Accept': 'application/json'};
+  const requestOptions = {
+    method: 'POST',
+    headers: new Headers(headers),
+  };
+
+  fetch(uri, requestOptions)
+      .then(Blast.handleFetchErrors)
+      .then((res) => {
+        callback(res.status);
+      })
+      .catch((error) => {
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
 };
 // add pick-up function to the interpreter's API.
-Blast.asyncApiFunction.push(['mirobot_pickup', mirobotPickUp]);
+Blast.asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);

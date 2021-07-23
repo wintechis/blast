@@ -61,4 +61,4 @@ const getTemperature = async function(webBluetoothId, callback) {
 };
 
 // add getTemperature function to the interpreter's API.
-Blast.asyncApiFunction.push(['getTemperature', getTemperature]);
+Blast.asyncApiFunctions.push(['getTemperature', getTemperature]);

@@ -59,7 +59,7 @@ const webSpeech = async function(blockId, callback) {
   recognition.start();
 };
 // add block webSpeech to the interpreter's API.
-Blast.asyncApiFunction.push(['webSpeech', webSpeech]);
+Blast.asyncApiFunctions.push(['webSpeech', webSpeech]);
 
 /**
  * Invokes a SpeechSynthesisUtterance to read out a text.
@@ -83,4 +83,4 @@ const textToSpeech = async function(text, callback) {
   callback();
 };
 // add textToSpeech function to the interpreter's API.
-Blast.asyncApiFunction.push(['textToSpeech', textToSpeech]);
+Blast.asyncApiFunctions.push(['textToSpeech', textToSpeech]);
