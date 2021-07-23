@@ -21,3 +21,44 @@ Blockly.JavaScript['get_temperature'] = function(block) {
   const code = `getTemperature(${thing})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
+
+/**
+ * Fetches the current temperature of the xiaomi bluetooth thermomether
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+const getTemperature = async function(webBluetoothId, callback) {
+  const devices = await navigator.bluetooth.getDevices();
+  let device = null;
+
+  for (const d of devices) {
+    if (d.id == deviceId) {
+      device = d;
+      break;
+    }
+  }
+  if (device == null) {
+    Blast.throwError('Error pairing with Bluetooth device.');
+  }
+
+  device.gatt.connect()
+      .then((server) => {
+        return server.getPrimaryService('6e400001-b5a3-f393-e0A9-e50e24dcca9e');
+      })
+      .then((service) => {
+        return service.getCharacteristic('');
+      })
+      .then((characteristic) => {
+        return characteristic.readValue();
+      })
+      .then((value) => {
+        callback(value);
+      })
+      .catch((error) => {
+        Blast.throwError(error.message);
+      });
+};
+
+// add getTemperature function to the interpreter's API.
+Blast.asyncApiFunction.push(['getTemperature', getTemperature]);

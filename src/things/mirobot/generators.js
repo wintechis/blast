@@ -20,3 +20,21 @@ Blockly.JavaScript['mirobot_pickup'] = function(block) {
   const code = `mirobotPickUpBox(${box});\n`;
   return code;
 };
+
+/**
+ * Invokes a pick up action on the Mirobot
+ * @param {String} box the box to pick up.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const mirobotPickUp = async function(box, callback) {
+  return Blast.BlockMethods.sendHttpRequest(
+      'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase(),
+      'POST',
+      '{"Content-Type": "application/json", "Accept": "application/json"}',
+      '{}',
+      'table',
+      callback,
+  );
+};
+// add pick-up function to the interpreter's API.
+Blast.asyncApiFunction.push(['mirobot_pickup', mirobotPickUp]);

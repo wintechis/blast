@@ -32,4 +32,6 @@ Blockly.Blocks['mirobot_pickup'] = {
     this.setHelpUrl('');
   },
 };
- 
+
+// Add the block to the toolbox.
+Blast.Toolbox.addBlock('mirobot_pickup', 'actions');

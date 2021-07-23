@@ -25,8 +25,7 @@ Blockly.Blocks['text_to_speech'] = {
 };
 
 // Add the block to the toolbox.
-// TODO implement this
-Blast.Toolbox.addBlockToCategory('text_to_speech', 'actions');
+Blast.Toolbox.addBlock('text_to_speech', 'actions');
 
 Blockly.Blocks['web_speech'] = {
   /**
@@ -60,7 +59,5 @@ Blockly.Blocks['web_speech'] = {
   },
 };
 
-
 // Add the block to the toolbox.
-// TODO implement this
-Blast.Toolbox.addBlockToCategory('web_speech', 'actions');
+Blast.Toolbox.addBlock('web_speech', 'actions');

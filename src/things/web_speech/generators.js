@@ -1,5 +1,5 @@
 /**
- * @fileoverview Block definitions for the the WebSpeech API, see
+ * @fileoverview Block generators for the the WebSpeech API, see
  * (https://wicg.github.io/speech-api/).
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
@@ -20,6 +20,7 @@ Blockly.JavaScript['text_to_speech'] = function(block) {
 };
   
 /**
+   * Generates Javascript code for the web_speech block.
    * Outputs speech command from microphone as a string.
    * @param {Blockly.Block} block the web_speech block.
    * @returns {String} the speech command.
@@ -29,23 +30,6 @@ Blockly.JavaScript['web_speech'] = function(block) {
   
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
-
-/**
- * Plays an audio file provided by URI.
- * @param {string} uri URI of the audio file to play.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-const textToSpeech = async function(uri, callback) {
-  await Blast.Things.ConsumedThing.Blast.blast.invokeAction(
-      'textToSpeech', [uri],
-  );
-  callback();
-};
-
-// add block functions to the interpreter's API
-// TODO implement persing this in initAPI
-Blast.asyncApiFunction.push(textToSpeech);
 
 /**
  * Outputs speech input as string.
@@ -74,7 +58,29 @@ const webSpeech = async function(blockId, callback) {
 
   recognition.start();
 };
+// add block webSpeech to the interpreter's API.
+Blast.asyncApiFunction.push(['webSpeech', webSpeech]);
 
-// add block functions to the interpreter's API
-// TODO implement persing this in initAPI
-Blast.asyncApiFunction.push(webSpeech);
+/**
+ * Invokes a SpeechSynthesisUtterance to read out a text.
+ * @param {string} text text that will be synthesised when the utterance is spoken.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * TODO #53 Add the following parameters (#53)
+ * @param {SpeechSynthesisVoice=} voice voice that will be used to speak the utterance.
+ * @param {Number=} rate speed at which the utterance will be spoken at
+ * @param {Number=} volume volume that the utterance will be spoken at.
+ * @param {Number=} pitch pitch at which the utterance will be spoken at
+ * @param {string} lang language of the utterance.
+ */
+const textToSpeech = async function(text, callback) {
+  const speech = new SpeechSynthesisUtterance();
+  speech.text = text;
+  window.speechSynthesis.speak(speech);
+  // return after speaking has ended
+  await new Promise((resolve) => {
+    speech.onend = resolve;
+  });
+  callback();
+};
+// add textToSpeech function to the interpreter's API.
+Blast.asyncApiFunction.push(['textToSpeech', textToSpeech]);
