@@ -19,4 +19,15 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
   const code = 'waitForSeconds(' + seconds + ');\n';
   return code;
 };
-  
+
+/**
+ * Sets a timeout of timeInSeconds.
+ * @param {*} timeInSeconds time in seconds to wait
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @public
+ */
+const waitForSeconds = function(timeInSeconds, callback) {
+  setTimeout(callback, timeInSeconds * 1000);
+};
+// Add waitForSeconds method to the interpreter's API
+Blast.asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);
