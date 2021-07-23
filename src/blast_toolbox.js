@@ -57,144 +57,6 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'get_request'},
-        {kind: 'BLOCK', type: 'display_text'},
-      ],
-      name: 'Actions',
-      colour: '0',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Events',
-      colour: '180',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'States',
-      custom: 'STATES',
-      colour: '180',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'string'},
-        {kind: 'BLOCK', type: 'string_join'},
-        {kind: 'BLOCK', type: 'string_length'},
-      ],
-      name: 'Strings',
-      colour: '160',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'mac'}],
-      name: 'Identifiers',
-      colour: '60',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'number_value'},
-        {kind: 'BLOCK', type: 'number_arithmetic'},
-        {kind: 'BLOCK', type: 'number_random'},
-        {kind: 'BLOCK', type: 'number_modulo'},
-      ],
-      name: 'Numbers',
-      colour: '230',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
-      name: 'Booleans',
-      colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'show advanced toolbox',
-      custom: 'ADVANCEDTOOLBOX',
-    },
-  ],
-};
-
-const advancedToolbox = {
-  kind: 'categoryToolbox',
-  contents: [
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'repeat'},
-        {kind: 'BLOCK', type: 'while_until'},
-        {kind: 'BLOCK', type: 'for'},
-        {kind: 'BLOCK', type: 'wait_seconds'},
-        {kind: 'BLOCK', type: 'break_continue'},
-        {kind: 'BLOCK', type: 'conditional_statement'},
-      ],
-      name: 'Control Flow',
-      colour: '120',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'logic_compare'},
-        {kind: 'BLOCK', type: 'logic_operation'},
-        {kind: 'BLOCK', type: 'logic_negate'},
-      ],
-      name: 'Boolean Expressions',
-      colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Things',
-      custom: 'THINGS',
-      colour: '60',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Properties',
-      colour: '255',
-    },
-    {
-      kind: 'CATEGORY',
       contents: [],
       name: 'Actions',
       colour: '0',
@@ -284,16 +146,6 @@ const advancedToolbox = {
       kind: 'sep',
       gap: '32',
     },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'show default toolbox',
-      custom: 'ADVANCEDTOOLBOX',
-    },
   ],
 };
 
@@ -305,21 +157,6 @@ const advancedToolbox = {
 Blast.Toolbox.currentToolbox = defaultToolbox;
 
 /**
- * Switches between the default and advanced toolboxes.
- * @public
- */
-Blast.switchToolbox = function() {
-  let newToolbox = {};
-  if (Blast.Toolbox.currentToolbox === defaultToolbox) {
-    newToolbox = advancedToolbox;
-  } else {
-    newToolbox = defaultToolbox;
-  }
-  Blast.Toolbox.currentToolbox = newToolbox;
-  Blast.workspace.updateToolbox(newToolbox);
-};
-
-/**
  * Initialize the toolbox
  */
 Blast.Toolbox.init = function() {
@@ -328,9 +165,6 @@ Blast.Toolbox.init = function() {
 
   // register things category flyout callback
   Blast.workspace.registerToolboxCategoryCallback('THINGS', Blast.Things.flyoutCategory);
-
-  // register advanced toolbox mock button callback
-  Blast.workspace.registerToolboxCategoryCallback('ADVANCEDTOOLBOX', Blast.switchToolbox);
 };
 
 /**

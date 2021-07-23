@@ -250,9 +250,10 @@ Blockly.JavaScript['play_audio'] = function(block) {
  * Plays an audio file provided by URI.
  * @param {string} uri URI of the audio file to play.
  * @returns {Promise} resolves on end of audio playback.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const playAudio = async function(uri) {
+const playAudio = async function(uri, callback) {
   await new Promise((resolve, reject) => {
     const audio = new Audio(uri);
     audio.preload = 'auto';
@@ -264,6 +265,7 @@ const playAudio = async function(uri) {
     });
     audio.onended = resolve;
   });
+  callback();
 };
 // add playAudio method to the interpreter's API.
 Blast.asyncApiFunctions.push(['playAudio', playAudio]);
