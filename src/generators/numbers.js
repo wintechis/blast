@@ -66,3 +66,22 @@ Blockly.JavaScript['number_modulo'] = function(block) {
   const code = argument0 + ' % ' + argument1;
   return [code, Blockly.JavaScript.ORDER_MODULUS];
 };
+
+/**
+ * Generates and returns a random integer between a and b, inclusively.
+ * @param {number} a lower limit.
+ * @param {number} b upper limit.
+ * @return {number} generated random number.
+ * @public
+ */
+const numberRandom = function(a, b) {
+  if (a > b) {
+    // Swap a and b to ensure a is smaller.
+    const c = a;
+    a = b;
+    b = c;
+  }
+  return Math.floor(Math.random() * (b - a + 1) + a);
+};
+// add numberRandom method to the interpreter's API.
+Blast.asyncApiFunctions.push(['numberRandom', numberRandom]);
