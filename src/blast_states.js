@@ -204,12 +204,12 @@ Blast.States.isLegalName_ = function(name, workspace, optExclude) {
 Blast.States.isNameUsed = function(name, workspace, optExclude) {
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
-  for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i] == optExclude) {
+  for (const block of blocks) {
+    if (block == optExclude) {
       continue;
     }
-    if (blocks[i].getStateDef) {
-      const stateBlock = /** @type {!Blast.States.StateBlock} */ (blocks[i]);
+    if (block.getStateDef) {
+      const stateBlock = /** @type {!Blast.States.StateBlock} */ (block);
       const stateName = stateBlock.getStateDef()[0];
       if (Blockly.Names.equals(stateName, name)) {
         return true;
@@ -237,9 +237,9 @@ Blast.States.rename = function(name) {
   if (oldName != name && oldName != legalName) {
     // Rename any events.
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
-    for (let i = 0; i < blocks.length; i++) {
-      if (blocks[i].renameState) {
-        const stateBlock = /** @type {!Blast.States.Stateblock} */ (blocks[i]);
+    for (const block of blocks) {
+      if (block.renameState) {
+        const stateBlock = /** @type {!Blast.States.Stateblock} */ (block);
         stateBlock.renameState(/** @type {string} */ (oldName), legalName);
       }
     }
@@ -286,13 +286,12 @@ Blast.States.flyoutCategory = function(workspace) {
       xmlList.push(block);
     }
 
-    for (let i = 0; i < stateList.length; i++) {
-      const name = stateList[i];
+    for (const stateName of stateList) {
       const block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
       const mutation = Blockly.utils.xml.createElement('mutation');
-      mutation.setAttribute('name', name);
+      mutation.setAttribute('name', stateName);
       block.appendChild(mutation);
       xmlList.push(block);
     }
@@ -313,13 +312,13 @@ Blast.States.getEvents = function(name, workspace) {
   const events = [];
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
-  for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i].getStateName) {
-      const eventBlock = /** @type {!Blast.States.EventBlock} */ (blocks[i]);
+  for (const block of blocks) {
+    if (block.getStateName) {
+      const eventBlock = /** @type {!Blast.States.EventBlock} */ (block);
       const stateName = eventBlock.getStateName();
       // State name may be null if the block is only half-built.
       if (stateName && Blockly.Names.equals(stateName, name)) {
-        events.push(blocks[i]);
+        events.push(block);
       }
     }
   }
@@ -335,12 +334,12 @@ Blast.States.getEvents = function(name, workspace) {
 Blast.States.getDefinition = function(name, workspace) {
   // Assume that a state definition is a top block.
   const blocks = workspace.getTopBlocks(false);
-  for (let i = 0; i < blocks.length; i++) {
-    if (blocks[i].getStateDef) {
-      const stateBlock = /** @type {!Blast.States.StateBlock} */ (blocks[i]);
+  for (const block of blocks) {
+    if (block.getStateDef) {
+      const stateBlock = /** @type {!Blast.States.StateBlock} */ (block);
       const stateName = stateBlock.getStateDef()[0];
       if (stateName && Blockly.Names.equals(stateName, name)) {
-        return blocks[i];
+        return block;
       }
     }
   }

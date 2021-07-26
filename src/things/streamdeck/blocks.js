@@ -7,11 +7,11 @@
 
 'use strict';
 
-/*******************
- * Event blocks.   *
- *******************/
-
 Blockly.Blocks['streamdeck_buttons'] = {
+  /**
+   * Block handling streamdeck button pushes.
+   * @this {Blockly.Block}
+   */
   init: function() {
     this.appendValueInput('id')
         .setCheck('Thing')
@@ -64,3 +64,6 @@ Blockly.Blocks['streamdeck_buttons'] = {
     }
   },
 };
+
+// Add streamdeck_buttons block to the toolbox.
+Blast.Toolbox.addBlock('streamdeck_buttons', 'Events');

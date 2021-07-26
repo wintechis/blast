@@ -1,0 +1,140 @@
+# Contributing to BLAST<!-- omit in toc -->
+For detailed guidelines on how to help make BLAST better, please read the corresponding section below.
+
+- [Reporting Bugs](#reporting-bugs)
+  - [Before Submitting A Bug Report](#before-submitting-a-bug-report)
+    - [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
+  - [Suggesting Enhancements](#suggesting-enhancements)
+    - [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
+- [Code Contributions](#code-contributions)
+  - [Adding new Things](#adding-new-things)
+    - [blocks.js](#blocksjs)
+    - [generators.js](#generatorsjs)
+
+
+## Reporting Bugs
+
+This section guides you through submitting a bug report for BLAST. Following these guidelines helps maintainers and the community understand your report :pencil:, reproduce the behavior :computer: :computer:, and find related reports :mag_right:.
+
+### Before Submitting A Bug Report
+
+* **Try using the newest Chrome on Windows**
+* **check to see if an [issue exists](https://github.com/wintechis/blast/issues)** already for the change you want to make.
+
+> **Note:** If you find a **Closed** issue that seems like it is the same thing that you're experiencing, open a new issue and include a link to the original issue in the body of your new one.
+
+#### How Do I Submit A (Good) Bug Report?
+
+Bugs are tracked as [GitHub issues](https://guides.github.com/features/issues/). To report one, create an issue on this repository and provide the following information by filling in [the template](). **TODO**
+
+Explain the problem and include additional details to help maintainers reproduce the problem:
+
+* **Use a clear and descriptive title** for the issue to identify the problem.
+* **Describe the exact steps which reproduce the problem** in as many details as possible. 
+* **Provide specific examples to demonstrate the steps**. If the problem occurs while executing a block program, provide its XML code.
+* **Describe the behavior you observed after following the steps** and point out what exactly is the problem with that behavior.
+* **Explain which behavior you expected to see instead and why.**
+
+### Suggesting Enhancements
+
+This section guides you through submitting an enhancement suggestion for BLAST, including completely new features and minor improvements to existing functionality. Following these guidelines helps maintainers and the community understand your suggestion :pencil: and find related suggestions :mag_right:.
+
+When you are creating an enhancement suggestion, please [include as many details as possible](#how-do-i-submit-a-good-enhancement-suggestion). Fill in [the template](https://github.com/atom/.github/blob/master/.github/ISSUE_TEMPLATE/feature_request.md), including the steps that you imagine you would take if the feature you're requesting existed.
+
+
+#### How Do I Submit A (Good) Enhancement Suggestion?
+
+Enhancement suggestions are tracked as [GitHub issues](https://guides.github.com/features/issues/). To create one, open an issue on this repository and provide the following information:
+
+* **Use a clear and descriptive title** for the issue to identify the suggestion.
+* **Provide a step-by-step description of the suggested enhancement** in as many details as possible.
+* **Describe the current behavior** and **explain which behavior you expected to see instead** and why.
+* **Explain why this enhancement would be useful** to most BLAST users.
+* **List some other applications where this enhancement exists.**
+
+## Code Contributions
+In general when making code contributions follow these steps to get your contribution reviewed:
+1. Create a new Branch to implement your contribution in.
+2. Follow [Google's JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml)
+3. Open a new [pull request](https://github.com/wintechis/blast/pulls) against the `master` branch.
+4. When your contribution is ready for review, and linting plus all tests from the GitHub actions succeed, request a review.j
+5. Complete additional design work, tests or other changes asked by the reviewer
+6. Then, when approved, your PR gets merged into the master branch
+
+### Adding new Things
+The most common contribution to BLAST probably is adding blocks for a new Thing, usually connected through Bluetooth or USB. This section provides a step-by-step guide on how to do so.
+
+To create blocks for a new thing two files `blocks.js` and `generators.js` have to be created. These should be located in a new directory in `src/things/`. Have a look at the sub-sections below, to learn about them.
+
+> :blue_book: **For example all code of the blocks interacting with the [Ruuvi Tag](https://ruuvi.com/ruuvitag/) is in `src/things/ruuvi_tag/`**
+
+#### blocks.js
+This file describe how a block looks and behaves, including the text, the colour, the shape, and what other blocks it can connect to.
+
+Most of this code can be generated by [Blockly's block factory](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html). Generated code by the this tool is enough to get you started. For more detailed information on defining blocks check out [this section of the blocky docs](https://developers.google.com/blockly/guides/create-custom-blocks/define-blocks).
+
+After writing a blocks definition, the block has to be added to the toolbox, by calling `Blast.Toolbox.addBlock`.
+
+> :blue_book: **The definition of a block reading Ruuvi Tag's temperature for example, looks like this:**
+> ```JavaScript
+> Blockly.Blocks['get_temperature'] = {
+>  /**
+>   * Block for the temperature property of a Ruuvi Tag.
+>   * @this {Blockly.Block}
+>   */
+>  init: function() {
+>    this.appendValueInput('Thing')
+>        .setCheck('Thing')
+>        .appendField('get temperature of Ruuvi Tag');
+>    this.setOutput(true, ['String', 'Number']);
+>    this.setColour(255);
+>    this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
+>    this.setHelpUrl('');
+>  },
+>};
+>
+>// Add the block to the toolbox.
+>Blast.Toolbox.addBlock('web_speech', 'actions');
+>```
+
+
+
+#### generators.js
+This file determines what happens, when a block gets executed. On execution each block returns a string containing JavaScript code. BLAST then combines all string to a block application and executes it.
+At most times, this string is a method call passing the block's input as parameters. 
+
+> :blue_book: **the [Ruuvi Tag](https://ruuvi.com/ruuvitag/)'s `get_temperature` block for example reads the Thing Identifier plugged into it, and passes this returns a string calling the internal method `getTemperature` using the Thing Identifier as parameter.**
+>```JavaScript
+>/**
+> * Generates JavaScript code for the get_temperature block.
+> * @param {Blockly.Block} block the get_temperature block.
+> * @returns {String} the generated code.
+> */
+>Blockly.JavaScript['get_temperature'] = function(block) {
+>  const thing = Blockly.JavaScript.valueToCode(
+>      block,
+>      'Thing',
+>      Blockly.JavaScript.ORDER_ATOMIC,
+>  );
+>  const code = `getTemperature(${thing})`;
+>  return [code, Blockly.JavaScript.ORDER_NONE];
+>};
+>```
+> **Note:** The skeleton of this code, like reading a block's input, can be generated by [Blockly's block factory](https://blockly-demo.appspot.com/static/demos/blockfactory/index.html).
+
+If a block returns a method call, of course the called method has to be implemented. Also each method called by blocks has to be added to the API of BLAST's interpreter. This is done by calling either `Blast.asyncApiFunctions.push` or `Blast.apiFunctions.push`. Depending on whether the method is meant to run asynchronously or not.
+Methods that are run asynchronously are always called with a callback function as their last parameter, which is to be called when the method has finished. 
+
+> :blue_book: **for example the following adds the `getTemperature` method to BLAST's interpreter API**
+> ```Javascript
+> const getTemperature = async function(thing, callback) {
+>   // function body
+>   ...
+>   callback()
+> };
+>
+> // add block function to the interpreter's API.
+> Blast.asyncApiFunctions.push(['getTemperature', getTemperature]);
+> ```
+
+**TODO** Add documentation of Bluetooth communication.
