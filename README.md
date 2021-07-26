@@ -17,7 +17,10 @@ The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa6
 Saving and loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions. 
 
 ### Building
-If you want to build BLAST yourself, run `npm run build` from within the root directory.
+In order to build BLAST yourself, follow these steps:
+1. install [node.js](https://nodejs.org/en/)
+2. run `npm run build` from within the root directory.
+This will create the `js/blast.min.js`, which is imported in the `index.html`.
 
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
