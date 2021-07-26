@@ -74,7 +74,15 @@ Blast.Things.flyoutCategory = function(workspace) {
   // add webHID blocks to xmlList
   const wHidBlockList = Blast.Things.flyoutCategoryBlocksWHid(workspace);
   xmlList = xmlList.concat(wHidBlockList);
-  
+
+  // add uri block to xmlList
+  let block = Blockly.utils.xml.createElement('block');
+  block.setAttribute('type', 'uri');
+  xmlList.push(block);
+  block = Blockly.utils.xml.createElement('block');
+  block.setAttribute('type', 'mac');
+  xmlList.push(block);
+
   return xmlList;
 };
 
