@@ -20,7 +20,7 @@ Saving and loading block programs requires BLAST to be hosted on a server. In ad
 In order to build BLAST yourself, follow these steps:
 1. install [node.js](https://nodejs.org/en/)
 2. run `npm run build` from within the root directory.
-This will create the `js/blast.min.js`, which is imported in the `index.html`.
+This will create the `js/blast.min.js` from all js files in `src`, which is then imported in the `index.html`.
 
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
