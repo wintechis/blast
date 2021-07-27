@@ -1,43 +1,32 @@
-# This is a basic workflow to help you get started with Actions
+name: Lint and Deploy
 
-name: CI/CD
+# Controls when the action will run. 
+on: [push, pull_request]]
 
-# Triggers the workflow on push or pull request events
-on: [push, pull_request]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # Install dev dependencies
-  install-yarn-modules:
+  lint:
     runs-on: ubuntu-latest
-    
+
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-    - uses: actions/checkout@master
-    # Chache modules to speed up job
-    - uses: actions/cache@v2
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-    - name: run yarn
-      run: yarn
-  run-ESLint:
-    needs: install-yarn-modules
-    runs-on: ubuntu-latest
-    
-    steps:
-    - name: yarn run lint
-      run: yarn run lint
-  compile:
-    needs: run-ESLint
-    runs-on: ubuntu-latest
-    steps:
-    - name: yarn run build
-      run: yarn run build
+      - uses: actions/checkout@master
+      # Use cache for node modules
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install npm modules
+        run: yarn
+      - name: run ESLint
+        run: yarn run lint
+      - name: compile
+        run: yarn run build
   deploy:
-    needs: compile
     runs-on: ubuntu-latest
+    needs: lint
+  
     steps:
+      - uses: actions/checkout@master
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
@@ -46,4 +35,3 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           source: "./"
           target: "./public_html/testing/blast/"
-
