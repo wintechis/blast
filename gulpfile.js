@@ -9,7 +9,7 @@ const shell = require('gulp-shell');
 
 gulp.task('build', function() {
   return gulp.src(['src/**/*.js'],
-  {base: './'})
+      {base: './'})
       .pipe(
           closureCompiler({
             js_output_file: 'blast.min.js',

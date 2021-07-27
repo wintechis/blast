@@ -1,5 +1,6 @@
-/**
- * @fileoverview Blast test cases testing the sample files.
+/* eslint-disable no-unused-vars */
+/** TODO REMOVE ES LINT DISABLE WHEN TEST IS COMPLETE
+ *  @fileoverview Blast test cases testing the sample files.
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */

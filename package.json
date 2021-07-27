@@ -17,7 +17,7 @@
   "scripts": {
     "build": "gulp build",
     "jsdoc": "gulp jsdoc",
-    "lint": "eslint .",
+    "lint": "eslint src/**",
     "test": "mocha"
   },
   "main": "index.html",

@@ -74,7 +74,7 @@ Blast.Interpreter = null;
 Blast.Interrupted = false;
 
 /**
- * Tracks event blocks currently in the workspace, 
+ * Tracks event blocks currently in the workspace,
  * in order to run indefinately if in case there are any.
  */
 Blast.eventInWorkspace = [];

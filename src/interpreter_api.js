@@ -11,7 +11,7 @@
  * @param {!Interpreter} interpreter interpreter object.
  * @param {!Interpreter.Object} globalObject global scope object.
  */
-function initApi(interpreter, globalObject) {
+function initApi(interpreter, globalObject) { // eslint-disable-line no-unused-vars
   // Ensure function names do not conflict with letiable names.
   Blockly.JavaScript.addReservedWords(
       'highlightBlock',
