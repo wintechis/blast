@@ -8,7 +8,7 @@ on: [push, pull_request]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # Install dev dependencies
-  install modules:
+  install-yarn-modules:
     runs-on: ubuntu-latest
     
     steps:
@@ -21,7 +21,7 @@ jobs:
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
     - name: run yarn
       run: yarn
-  run ESLint:
+  run-ESLint:
     runs-on: ubuntu-latest
     
     steps:
