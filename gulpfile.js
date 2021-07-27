@@ -1,6 +1,6 @@
 /**
  * @fileoverview Gulp script to compile Blast with the closure compiler.
- * Run this script by calling "npm install" in this directory.
+ * Run this script by calling "npm run build" in this directory.
  */
 
 const gulp = require('gulp');
