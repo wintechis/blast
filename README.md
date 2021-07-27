@@ -30,4 +30,4 @@ This will parse all js files from `src` analyze them, remove dead code and rewri
 For smaller planned improvements see [issues](https://github.com/wintechis/blast/issues)
 
 ## Contributing
-Please see [.CONTRIBUTING.md](CONTRIBUTING.md).
+Please see [CONTRIBUTING.md](CONTRIBUTING.md).
