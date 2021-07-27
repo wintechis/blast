@@ -112,3 +112,25 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   await characteristic.writeValueWithoutResponse(value);
   return;
 };
+
+/**
+ * Reads data from Bluetooth device using the gatt protocol.
+ * @param {string} id identifier of the device to disconnect from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @param {number} timeout time in ms to wait for response.
+ * @return {Object} representation of the complete request with response.
+ * @public
+ */
+Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, timeout) {
+  try {
+    const server = await Blast.Bluetooth.connect(id, serviceUUID);
+    const service = await server.getPrimaryService(serviceUUID);
+    const characteristic = await service.getCharacteristic(characteristcUUID);
+    const value = await characteristic.readValue();
+    return value;
+  } catch (error) {
+    Blast.throwError(`Error reading from Bluetooth device ${id}`);
+    console.error(error);
+  }
+}
