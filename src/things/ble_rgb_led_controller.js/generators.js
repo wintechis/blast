@@ -28,7 +28,7 @@ Blockly.JavaScript['switch_lights_rgb'] = function(block) {
   const blueByte = blue ? 'ff' : '00';
   const value = '7e000503' + redByte + greenByte + blueByte + '00ef';
 
-  const code = `switchLights(${mac}, ${value});\n`;
+  const code = `switchLights(${mac}, '${value}');\n`;
   return code;
 };
 
@@ -53,7 +53,7 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
   const greenByte = green ? 'ff' : '00';
   const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
     
-  const code = `switchLights(${mac}, ${value});\n`;
+  const code = `switchLights(${mac}, '${value}');\n`;
   return code;
 };
 

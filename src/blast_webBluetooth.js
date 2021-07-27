@@ -37,7 +37,7 @@ Blast.Bluetooth.getDeviceById = async function(id) {
   */
 Blast.Bluetooth.connect = async function(id) {
   try {
-    const device = await Blast.Bluetooth.getDevices(id);
+    const device = await Blast.Bluetooth.getDeviceById(id);
     const server = await device.gatt.connect();
     return server;
   } catch (error) {
