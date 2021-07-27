@@ -14,7 +14,7 @@ Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
 
 // add changed names to Loops constant to ensure correct execution.
 Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
-    'repeat',
+     'repeat',
     'while_until',
     'for',
 );
