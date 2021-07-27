@@ -19,7 +19,8 @@ Saving and loading block programs requires BLAST to be hosted on a server. In ad
 ### Building
 In order to build BLAST yourself, follow these steps:
 1. install [node.js](https://nodejs.org/en/)
-2. run `npm run build` from within the root directory.
+2. run `npm install` from within the root directory
+3. run `npm run build` from within the root directory
 This will parse all js files from `src` analyze them, remove dead code and rewrite and minimize whats left into `js/blast.min.js` which is imported in the `index.html`.
 
 ## Planned features
