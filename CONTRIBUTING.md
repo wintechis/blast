@@ -10,6 +10,7 @@ For detailed guidelines on how to help make BLAST better, please read the corres
   - [Adding new Things](#adding-new-things)
     - [blocks.js](#blocksjs)
     - [generators.js](#generatorsjs)
+    - [Bluetooth communication](#bluetooth-communication)
 
 
 ## Reporting Bugs
@@ -137,4 +138,31 @@ Methods that are run asynchronously are always called with a callback function a
 > Blast.asyncApiFunctions.push(['getTemperature', getTemperature]);
 > ```
 
-**TODO** Add documentation of Bluetooth communication.
+#### Bluetooth communication
+In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth implementations for `writeWithoutResponse` and `read`. To utilize them, call `Blast.Bluetooth.gatt_writeWithoutResponse` or `Blast.Bluetooth.gatt_read`. See below for their method signature, or browse to `src/blast_webBluetooth.js` to see their complete implementation.
+
+**Blast.Bluetooth.gatt_writeWithoutResponse**
+```JavaScript
+/**
+  * Writes data from Bluetooth device using the gatt protocol.
+  * @param {string} id identifier of the device to disconnect from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+  * @param {string} value hex value to write.
+  */
+Blast.Bluetooth.gatt_writeWithoutResponse = async function(id, serviceUUID, characteristcUUID, value)
+```
+
+**Blast.Bluetooth.gatt_read**
+```JavaScript
+/**
+ * Reads data from Bluetooth device using the gatt protocol.
+ * @param {string} id identifier of the device to disconnect from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @param {number} timeout time in ms to wait for response.
+ * @return {Object} representation of the complete request with response.
+ * @public
+ */
+Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, timeout)
+```
