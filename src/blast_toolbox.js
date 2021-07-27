@@ -52,6 +52,12 @@ const defaultToolbox = {
       colour: '180',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Requests & Queries',
+      colour: '0',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },

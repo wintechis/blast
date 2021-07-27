@@ -23,7 +23,7 @@ Blockly.JavaScript['get_temperature'] = function(block) {
 };
 
 /**
- * Fetches the current temperature of the xiaomi bluetooth thermomether
+ * Fetches the current temperature measured by the Ruuvi Tag's thermomether
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
@@ -33,7 +33,7 @@ const getTemperature = async function(webBluetoothId, callback) {
   let device = null;
 
   for (const d of devices) {
-    if (d.id == deviceId) {
+    if (d.id == webBluetoothId) {
       device = d;
       break;
     }
@@ -47,7 +47,7 @@ const getTemperature = async function(webBluetoothId, callback) {
         return server.getPrimaryService('6e400001-b5a3-f393-e0A9-e50e24dcca9e');
       })
       .then((service) => {
-        return service.getCharacteristic('');
+        return service.getCharacteristic(''); // TODO: Find out Temperature Characteristic.
       })
       .then((characteristic) => {
         return characteristic.readValue();
