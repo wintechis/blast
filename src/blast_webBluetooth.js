@@ -118,11 +118,10 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
  * @param {string} id identifier of the device to disconnect from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
- * @param {number} timeout time in ms to wait for response.
  * @return {Object} representation of the complete request with response.
  * @public
  */
-Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, timeout) {
+Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
   try {
     const server = await Blast.Bluetooth.connect(id, serviceUUID);
     const service = await server.getPrimaryService(serviceUUID);
@@ -133,4 +132,4 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, t
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);
   }
-}
+};
