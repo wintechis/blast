@@ -27,7 +27,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
-    this.setTooltip('Swichtes checked lights on and unchecked ones off.');
+    this.setTooltip('Switches checked lights on and unchecked ones off.');
     this.setHelpUrl('');
   },
 };
