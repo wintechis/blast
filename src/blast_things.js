@@ -79,9 +79,10 @@ Blast.Things.flyoutCategory = function(workspace) {
   let block = Blockly.utils.xml.createElement('block');
   block.setAttribute('type', 'uri');
   xmlList.push(block);
-  block = Blockly.utils.xml.createElement('block');
-  block.setAttribute('type', 'mac');
-  xmlList.push(block);
+  // temporarily comment out unused mac block, see #69
+  // block = Blockly.utils.xml.createElement('block');
+  // block.setAttribute('type', 'mac');
+  // xmlList.push(block);
 
   return xmlList;
 };
