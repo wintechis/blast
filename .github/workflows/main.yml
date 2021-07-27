@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: run yarn
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@master
     # Chache modules to speed up job
@@ -20,18 +19,19 @@ jobs:
       with:
         path: '**/node_modules'
         key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-    - run: yarn
+    - name: run yarn
+      run: yarn
   run ESLint:
     runs-on: ubuntu-latest
     
     steps:
     - name: yarn run lint
-    - run: yarn run lint
+      run: yarn run lint
   compile:
     runs-on: ubuntu-latest
     steps:
-      - name: yarn run build
-      - run: yarn run build
+    - name: yarn run build
+      run: yarn run build
   deploy:
     runs-on: ubuntu-latest
     steps:
