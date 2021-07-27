@@ -22,17 +22,20 @@ jobs:
     - name: run yarn
       run: yarn
   run-ESLint:
+    needs: install-yarn-modules
     runs-on: ubuntu-latest
     
     steps:
     - name: yarn run lint
       run: yarn run lint
   compile:
+    needs: run-ESLint
     runs-on: ubuntu-latest
     steps:
     - name: yarn run build
       run: yarn run build
   deploy:
+    needs: compile
     runs-on: ubuntu-latest
     steps:
       - name: copy file via ssh password
