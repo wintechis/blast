@@ -54,7 +54,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Requests & Queries',
+      name: 'Requests and Queries',
       colour: '0',
     },
     {
