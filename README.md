@@ -7,11 +7,30 @@ Check [./docs/](docs/) for detailed documentation.
 Most of this application works out of the box. Just open the `index.html` file in your favorite Browser.
 If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
 
+The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/.
+
 > :warning: **Blocks that perform fetch request, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 
-> :warning: **Some of BLAST's blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
+> :warning: **BLAST's BlueTooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
-The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/.
+### Compatibility
+This table displays all blocks with limited compatibility, assuming you're using **google chrome version 85, or newer**, and have the **`experimental web platform features flag` enabled**.
+
+
+
+| block | Windows | Linux | Mac | Android |
+|---|---|---|---|---|
+| switch LED | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
+| read signal strength | :heavy_check_mark: | :x: | :heavy_check_mark: | :heavy_check_mark: |
+
+### Notes
+
+* [Android](https://crbug.com/471536): Requires Android 6.0 Marshmallow or later.
+* [Mac](https://crbug.com/364359): Requires OS X Yosemite or later.
+  * Some MacBooks may not work: Check "About this Mac" / "System Report" / "Bluetooth" and verify that Low Energy is supported.
+* [Linux](https://crbug.com/570344): Requires Kernel 3.19+ and [BlueZ](http://www.bluez.org/) 5.41+ installed. Read [How to get Chrome Web Bluetooth working on Linux](https://acassis.wordpress.com/2016/06/28/how-to-get-chrome-web-bluetooth-working-on-linux/).
+  * Note that Bluetooth daemon needs to run with experimental interfaces if BlueZ version is lower than 5.43: `sudo /usr/sbin/bluetoothd -E`
+* [Windows](https://crbug.com/507419): Requires Windows 10 version 1706 (Creators Update) or later.
 
 ### Saving & Loading
 Saving and loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions. 
