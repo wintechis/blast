@@ -58,7 +58,7 @@ In general when making code contributions follow these steps to get your contrib
 1. Create a new Branch to implement your contribution in.
 2. Follow [Google's JavaScript Style Guide](https://google.github.io/styleguide/javascriptguide.xml)
 3. Open a new [pull request](https://github.com/wintechis/blast/pulls) against the `master` branch.
-4. When your contribution is ready for review, and linting plus all tests from the GitHub actions succeed, request a review.j
+4. When your contribution is ready for review, and linting plus all tests from the GitHub actions succeed, request a review.
 5. Complete additional design work, tests or other changes asked by the reviewer
 6. Then, when approved, your PR gets merged into the master branch
 
@@ -101,10 +101,10 @@ After writing a blocks definition, the block has to be added to the toolbox, by 
 
 
 #### generators.js
-This file determines what happens, when a block gets executed. On execution each block returns a string containing JavaScript code. BLAST then combines all string to a block application and executes it.
+This file determines what happens, when a block gets executed. On execution each block returns a string containing JavaScript code. BLAST then combines all of these code strings to a complete JavaScript application and executes it.
 At most times, this string is a method call passing the block's input as parameters. 
 
-> :blue_book: **the [Ruuvi Tag](https://ruuvi.com/ruuvitag/)'s `get_temperature` block for example reads the Thing Identifier plugged into it, and passes this returns a string calling the internal method `getTemperature` using the Thing Identifier as parameter.**
+> :blue_book: **the [Ruuvi Tag](https://ruuvi.com/ruuvitag/)'s `get_temperature` block for example reads the Thing Identifier plugged into it, and returns a string calling the internal method `getTemperature` using the Thing Identifier as parameter.**
 >```JavaScript
 >/**
 > * Generates JavaScript code for the get_temperature block.
@@ -139,7 +139,7 @@ Methods that are run asynchronously are always called with a callback function a
 > ```
 
 #### Bluetooth communication
-In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth implementations for `writeWithoutResponse` and `read`. To utilize them, call `Blast.Bluetooth.gatt_writeWithoutResponse` or `Blast.Bluetooth.gatt_read`. See below for their method signature, or browse to `src/blast_webBluetooth.js` to see their complete implementation.
+In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth implementations for `writeWithoutResponse` and `readCharacteristic`. To utilize them, call `Blast.Bluetooth.gatt_writeWithoutResponse` or `Blast.Bluetooth.gatt_read`. See below for their method signature, or browse to `src/blast_webBluetooth.js` to see their complete implementation.
 
 **Blast.Bluetooth.gatt_writeWithoutResponse**
 ```JavaScript
