@@ -144,7 +144,7 @@ In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth
 **Blast.Bluetooth.gatt_writeWithoutResponse**
 ```JavaScript
 /**
-  * Writes data from Bluetooth device using the gatt protocol.
+  * Writes data to Bluetooth device using the gatt protocol.
   * @param {string} id identifier of the device to disconnect from.
   * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
   * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
