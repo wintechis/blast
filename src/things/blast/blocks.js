@@ -33,7 +33,7 @@ Blockly.Blocks['get_request'] = {
   },
 };
 // Add get_request block to the toolbox.
-Blast.Toolbox.addBlock('get_request', 'Requests & Queries');
+Blast.Toolbox.addBlock('get_request', 'Requests and Queries');
  
 Blockly.Blocks['http_request'] = {
   /**
@@ -123,7 +123,7 @@ Blockly.Blocks['http_request'] = {
   },
 };
 // Add http_request block to the toolbox.
-Blast.Toolbox.addBlock('http_request', 'Requests & Queries');
+Blast.Toolbox.addBlock('http_request', 'Requests and Queries');
  
 Blockly.Blocks['sparql_query'] = {
   /**
@@ -148,7 +148,7 @@ Blockly.Blocks['sparql_query'] = {
   },
 };
 // Add sparql_query block to the toolbox.
-Blast.Toolbox.addBlock('sparql_query', 'Requests & Queries');
+Blast.Toolbox.addBlock('sparql_query', 'Requests and Queries');
  
 Blockly.Blocks['sparql_ask'] = {
   /**
@@ -175,7 +175,7 @@ Blockly.Blocks['sparql_ask'] = {
   },
 };
 // Add sparql_ask block to the toolbox.
-Blast.Toolbox.addBlock('sparql_ask', 'Requests & Queries');
+Blast.Toolbox.addBlock('sparql_ask', 'Requests and Queries');
      
 Blockly.Blocks['display_text'] = {
   /**
