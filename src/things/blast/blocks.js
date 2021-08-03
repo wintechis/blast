@@ -252,6 +252,7 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.setColour(255);
     this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
     this.setHelpUrl('');
+    this.firstTime = true;
     this.requested = false;
     this.deviceId = '';
   },

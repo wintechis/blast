@@ -69,6 +69,7 @@ Blockly.Blocks['switch_lights_ryg'] = {
     this.setColour(0);
     this.setTooltip('Swichtes checked lights on and unchecked ones off.');
     this.setHelpUrl('');
+    this.firstTime = true;
   },
   onchange: function() {
     // on creating this block check webBluetooth availability
