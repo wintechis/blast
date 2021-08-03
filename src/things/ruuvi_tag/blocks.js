@@ -21,6 +21,17 @@ Blockly.Blocks['get_temperature'] = {
     this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
     this.setHelpUrl('');
   },
+  onchange: function() {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blocly.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 // Add get_temperature block to the toolbox.

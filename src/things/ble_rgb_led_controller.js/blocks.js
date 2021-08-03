@@ -29,6 +29,18 @@ Blockly.Blocks['switch_lights_rgb'] = {
     this.setColour(0);
     this.setTooltip('Switches checked lights on and unchecked ones off.');
     this.setHelpUrl('');
+    this.firstTime = true;
+  },
+  onchange: function() {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blocly.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 85 or later.`);
+        this.dispose();
+      }
+    }
   },
 };
 

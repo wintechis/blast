@@ -255,6 +255,17 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.requested = false;
     this.deviceId = '';
   },
+  onchange: function() {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blocly.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 // Add get_signal_strength_wb block to the toolbox.
 Blast.Toolbox.addBlock('get_signal_strength_wb', 'Properties');
