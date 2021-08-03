@@ -36,8 +36,8 @@ Blockly.Blocks['switch_lights_rgb'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blocly.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to <a href="//www.google.com/chrome">Chrome</a> version 85 or later.`);
+        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
     }
