@@ -16,3 +16,4 @@ Blockly.JavaScript['string_getSubstring'] =
   Blockly.JavaScript['text_getSubstring'];
 Blockly.JavaScript['string_changeCase'] = Blockly.JavaScript['text_changeCase'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
+Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];

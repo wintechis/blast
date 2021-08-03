@@ -99,6 +99,7 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'string_getSubstring'},
         {kind: 'BLOCK', type: 'string_changeCase'},
         {kind: 'BLOCK', type: 'string_replace'},
+        {kind: 'BLOCK', type: 'string_showPrompt'},
       ],
       name: 'Strings',
       colour: '160',

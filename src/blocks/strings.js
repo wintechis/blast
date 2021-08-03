@@ -15,6 +15,7 @@ Blockly.Blocks['string_charAt'] = Blockly.Blocks['text_charAt'];
 Blockly.Blocks['string_getSubstring'] = Blockly.Blocks['text_getSubstring'];
 Blockly.Blocks['string_changeCase'] = Blockly.Blocks['text_changeCase'];
 Blockly.Blocks['string_replace'] = Blockly.Blocks['text_replace'];
+Blockly.Blocks['string_showPrompt'] = Blockly.Blocks['text_prompt_ext'];
 
 // Overwrite Blockly text for the concatenate block
 Blockly.Msg['TEXT_JOIN_TITLE_CREATEWITH'] = 'concatenate text';

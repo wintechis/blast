@@ -74,4 +74,14 @@ function initApi(interpreter, globalObject) { // eslint-disable-line no-unused-v
       'startEventChecker',
       interpreter.createNativeFunction(wrapper),
   );
+
+  // Add an API function for the prompt() block.
+  wrapper = function(text) {
+    return prompt(text);
+  };
+  interpreter.setProperty(
+      globalObject,
+      'prompt',
+      interpreter.createNativeFunction(wrapper),
+  );
 }
