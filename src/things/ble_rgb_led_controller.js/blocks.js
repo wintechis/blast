@@ -70,6 +70,17 @@ Blockly.Blocks['switch_lights_ryg'] = {
     this.setTooltip('Swichtes checked lights on and unchecked ones off.');
     this.setHelpUrl('');
   },
+  onchange: function() {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 // Add switch_lights_ryg block to the toolbox.
