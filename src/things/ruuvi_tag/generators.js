@@ -81,20 +81,20 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
     const value = event.manufacturerData.get(0x0499);
     // exit if device is not RuuviTag
     if (!value) {
-      Blockly.alert('The device is not a RuuviTag');
       return;
     }
     const dataFormat = value.getUint8(0);
     if (dataFormat != 5) {
       return;
     }
-    const a = [];
+    const rawValues = [];
     for (let i = 0; i < value.byteLength; i++) {
-      a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+      rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
     }
-    callback(parseRawRuuvi(a)[measurement]);
+    values = parseRawRuuvi(rawValues);
+    callback(valies[measurement]);
   };
-
+  await Blast.Bluetooth.requestLEScan();
   Blast.Bluetooth.addEventListener('advertisementreceived', handler);
 };
 
