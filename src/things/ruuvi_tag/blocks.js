@@ -35,14 +35,16 @@ Blockly.Blocks['get_ruuvi_measurement'] = {
     this.setHelpUrl('');
     this.firstTime = true;
   },
-  onchange: function() {
-    // on creating this block check webBluetooth availability
+  onchange: async function() {
+    // on creating this block check webBluetooth availability, then request LEScan.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
         Blockly.alert(`Webbluetooth is not supported by this browser.\n
         Upgrade to Chrome version 85 or later.`);
         this.dispose();
+      } else {
+        await Blast.Bluetooth.requestLEScan();
       }
     }
   },

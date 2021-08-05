@@ -70,7 +70,6 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
 
     return robject;
   };
-  await Blast.Bluetooth.requestLEScan();
 
   /**
    * Reads the selected property from incoming advertisements.
