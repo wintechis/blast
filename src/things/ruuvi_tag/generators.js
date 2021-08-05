@@ -70,11 +70,13 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
 
     return robject;
   };
-  await navigator.bluetooth.requestLEScan(
-      {acceptAllAdvertisements: true, keepRepeatedDevices: true},
-  );
+  await Blast.Bluetooth.requestLEScan();
 
-  navigator.bluetooth.addEventListener('advertisementreceived', (event) => {
+  /**
+   * Reads the selected property from incoming advertisements.
+   * @param {BluetoothAdvertisingEvent} event the received event.
+   */
+  const handler = function(event) {
     // early exit on wrong devices
     if (event.device.id != webBluetoothId) return;
     const value = event.manufacturerData.get(0x0499);
@@ -92,7 +94,9 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
       a.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
     }
     callback(parseRawRuuvi(a)[measurement]);
-  });
+  };
+
+  Blast.Bluetooth.addEventListener('advertisementreceived', handler);
 };
 
 // add get_ruuvi_measurement function to the interpreter's API.

@@ -133,3 +133,21 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
     console.error(error);
   }
 };
+
+/**
+ * Starts scan for BLE advertisements.
+ */
+Blast.Bluetooth.requestLEScan = async function() {
+  await navigator.bluetooth.requestLEScan(
+      {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+  );
+};
+
+/**
+ * Adds a webBluetooth eventListener.
+ * @param {string} event the event to add the listener to.
+ * @param {function} listener the listener to add.
+ */
+Blast.Bluetooth.addEventListener = function(event, listener) {
+  navigator.bluetooth.addEventListener(event, listener);
+};
