@@ -15,7 +15,7 @@ Blockly.Blocks['get_ruuvi_measurement'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('get')
+        .appendField('read')
         .appendField(new Blockly.FieldDropdown([
           ['temperature', 'temperature'],
           ['humidity', 'humidity'],
@@ -28,7 +28,7 @@ Blockly.Blocks['get_ruuvi_measurement'] = {
           ['movement counter', 'movementCounter'],
           ['measurement sequence counter', 'measurementSequenceCounter'],
         ]), 'measurement')
-        .appendField('temperature of Ruuvi Tag');
+        .appendField('property of RuuviTag');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
