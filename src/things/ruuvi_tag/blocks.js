@@ -7,7 +7,7 @@
 
 'use strict';
 
-Blockly.Blocks['get_temperature'] = {
+Blockly.Blocks['get_ruuvi_measurement'] = {
   /**
    * Block for the temperature property of a Ruuvi Tag.
    * @this {Blockly.Block}
@@ -15,7 +15,20 @@ Blockly.Blocks['get_temperature'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('get temperature of Ruuvi Tag');
+        .appendField('get')
+        .appendField(new Blockly.FieldDropdown([
+          ['temperature', 'temperature'],
+          ['humidity', 'humidity'],
+          ['pressure', 'pressure'],
+          ['acceleration X', 'accelerationX'],
+          ['acceleration Y', 'accelerationY'],
+          ['acceleration Z', 'accelerationZ'],
+          ['battery voltage', 'batteryVoltage'],
+          ['txPower', 'txPower'],
+          ['movement counter', 'movementCounter'],
+          ['measurement sequence counter', 'measurementSequenceCounter'],
+        ]), 'measurement')
+        .appendField('temperature of Ruuvi Tag');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
@@ -35,5 +48,5 @@ Blockly.Blocks['get_temperature'] = {
   },
 };
 
-// Add get_temperature block to the toolbox.
-Blast.Toolbox.addBlock('get_temperature', 'Properties');
+// Add get_ruuvi_measurement block to the toolbox.
+Blast.Toolbox.addBlock('get_ruuvi_measurement', 'Properties');
