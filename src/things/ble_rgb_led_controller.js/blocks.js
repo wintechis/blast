@@ -14,7 +14,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
      */
   init: function() {
     this.appendDummyInput()
-        .appendField('switch RGB lights of');
+        .appendField('write RGB lights property of');
     this.appendValueInput('mac')
         .setCheck('Thing');
     this.appendDummyInput()
@@ -26,7 +26,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_blue');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(0);
+    this.setColour(255);
     this.setTooltip('Switches checked lights on and unchecked ones off.');
     this.setHelpUrl('');
     this.firstTime = true;
@@ -54,7 +54,7 @@ Blockly.Blocks['switch_lights_ryg'] = {
     */
   init: function() {
     this.appendDummyInput()
-        .appendField('switch RYG lights of');
+        .appendField('write RYG lights property of');
     this.appendValueInput('mac')
         .setCheck('Thing');
     this.appendDummyInput()
@@ -66,7 +66,7 @@ Blockly.Blocks['switch_lights_ryg'] = {
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(0);
+    this.setColour(255);
     this.setTooltip('Swichtes checked lights on and unchecked ones off.');
     this.setHelpUrl('');
     this.firstTime = true;
