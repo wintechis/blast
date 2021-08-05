@@ -92,7 +92,7 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
       rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
     }
     values = parseRawRuuvi(rawValues);
-    callback(valies[measurement]);
+    callback(values[measurement]);
   };
   await Blast.Bluetooth.requestLEScan();
   Blast.Bluetooth.addEventListener('advertisementreceived', handler);
