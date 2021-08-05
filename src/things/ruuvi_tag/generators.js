@@ -19,7 +19,7 @@ Blockly.JavaScript['get_ruuvi_measurement'] = function(block) {
       'Thing',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getRuuviMmeasurement(${measurement}, ${thing})`;
+  const code = `getRuuviMmeasurement('${measurement}', ${thing})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
