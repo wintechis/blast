@@ -138,8 +138,10 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
  * Starts scan for BLE advertisements.
  */
 Blast.Bluetooth.requestLEScan = async function() {
-  await navigator.bluetooth.requestLEScan(
-      {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+  Blockly.alert('Please allow the Bluetooth-scan to continue.',
+      navigator.bluetooth.requestLEScan(
+          {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+      ),
   );
 };
 
