@@ -26,7 +26,7 @@ Blockly.Blocks['read_ruuvi_property'] = {
           ['battery voltage', 'batteryVoltage'],
           ['txPower', 'txPower'],
           ['movement counter', 'movementCounter'],
-          ['measurement sequence counter', 'measurementSequenceCounter'],
+          ['measurement sequence number', 'measurementSequenceNumber'],
         ]), 'measurement')
         .appendField('property of RuuviTag');
     this.setOutput(true, ['String', 'Number']);
