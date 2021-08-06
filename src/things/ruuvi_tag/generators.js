@@ -12,14 +12,14 @@
  * @param {Blockly.Block} block the get_temperature block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['get_ruuvi_measurement'] = function(block) {
+Blockly.JavaScript['read_ruuvi_property'] = function(block) {
   const measurement = block.getFieldValue('measurement');
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getRuuviMeasurement('${measurement}', ${thing})`;
+  const code = `getRuuviProperty('${measurement}', ${thing})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -30,7 +30,7 @@ Blockly.JavaScript['get_ruuvi_measurement'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const getRuuviMeasurement = async function(measurement, webBluetoothId, callback) {
+const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
 /**
  * Parses a raw RuuviTag data string.
  * @param {String} manufacturerDataString the raw data string.
@@ -101,4 +101,4 @@ const getRuuviMeasurement = async function(measurement, webBluetoothId, callback
 };
 
 // add get_ruuvi_measurement function to the interpreter's API.
-Blast.asyncApiFunctions.push(['getRuuviMeasurement', getRuuviMeasurement]);
+Blast.asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);
