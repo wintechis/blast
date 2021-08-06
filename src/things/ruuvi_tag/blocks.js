@@ -7,7 +7,7 @@
 
 'use strict';
 
-Blockly.Blocks['get_ruuvi_measurement'] = {
+Blockly.Blocks['read_ruuvi_property'] = {
   /**
    * Block for the temperature property of a Ruuvi Tag.
    * @this {Blockly.Block}
@@ -48,5 +48,5 @@ Blockly.Blocks['get_ruuvi_measurement'] = {
   },
 };
 
-// Add get_ruuvi_measurement block to the toolbox.
-Blast.Toolbox.addBlock('get_ruuvi_measurement', 'Properties');
+// Add read_ruuvi_property block to the toolbox.
+Blast.Toolbox.addBlock('read_ruuvi_property', 'Properties');
