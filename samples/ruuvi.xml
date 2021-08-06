@@ -1,0 +1,140 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="display_text" id="(JbY8`I(pX)Np_pF,WHn" x="62" y="82">
+    <value name="text">
+      <block type="read_ruuvi_property" id="Ufs+)x6|2kXNGYA@enpU">
+        <field name="measurement">temperature</field>
+        <value name="Thing">
+          <block type="things_webBluetooth" id="na:*?iy28xfK-|I60V5Y">
+            <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="display_text" id="mkGH{rsDdfU8*n$l1SOC">
+        <value name="text">
+          <block type="read_ruuvi_property" id="oTnoKigWhpLt3mg92@?[">
+            <field name="measurement">humidity</field>
+            <value name="Thing">
+              <block type="things_webBluetooth" id="-SV~UGukqWb(6RAvWZu(">
+                <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="display_text" id="+jHWvQx(;RO4taqeG^:,">
+            <value name="text">
+              <block type="read_ruuvi_property" id="BI!_.b;_8MWL]2cL!x?6">
+                <field name="measurement">pressure</field>
+                <value name="Thing">
+                  <block type="things_webBluetooth" id="o_uiI4{0g{bUgL3a+Rw8">
+                    <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="display_text" id="3}muB]C-UpKLm9fio@?m">
+                <value name="text">
+                  <block type="read_ruuvi_property" id=")1J{JKBvCb;f1QyUU$$W">
+                    <field name="measurement">accelerationX</field>
+                    <value name="Thing">
+                      <block type="things_webBluetooth" id="0K;-R^a[!i:9DW~C_sgW">
+                        <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="display_text" id="(2ZL*8dY|e60-!PP*Awu">
+                    <value name="text">
+                      <block type="read_ruuvi_property" id="Y^^J`l?3QaD_wh|#X-7L">
+                        <field name="measurement">accelerationY</field>
+                        <value name="Thing">
+                          <block type="things_webBluetooth" id="a[oF3L!/c/w]0~HHa?o{">
+                            <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="display_text" id="Iq6;JFk}[WQ?]:6g_F,|">
+                        <value name="text">
+                          <block type="read_ruuvi_property" id="Z,fp{+s_aBETvV_B|Pr5">
+                            <field name="measurement">accelerationZ</field>
+                            <value name="Thing">
+                              <block type="things_webBluetooth" id="szyX*xD_Jkf76DpO,^D-">
+                                <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="display_text" id=":m@2GM#=!D]/D+oBy{mr">
+                            <value name="text">
+                              <block type="read_ruuvi_property" id="NTKbe-d__N4d[lRn8lWS">
+                                <field name="measurement">batteryVoltage</field>
+                                <value name="Thing">
+                                  <block type="things_webBluetooth" id="lJ+tzU`%9+QC`x;{89w-">
+                                    <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                                  </block>
+                                </value>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="display_text" id="*$51t#C:*WwR6(%YK.(l">
+                                <value name="text">
+                                  <block type="read_ruuvi_property" id="+^xS#Tf8I,U*1pqIAWXo">
+                                    <field name="measurement">txPower</field>
+                                    <value name="Thing">
+                                      <block type="things_webBluetooth" id="k/{6d9dc)TuOQ4g%;eUe">
+                                        <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                                      </block>
+                                    </value>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="display_text" id="=FWlrxpL5@CMsNxk!Lj7">
+                                    <value name="text">
+                                      <block type="read_ruuvi_property" id="+mqX^#nM?k8aHtu)LY-!">
+                                        <field name="measurement">movementCounter</field>
+                                        <value name="Thing">
+                                          <block type="things_webBluetooth" id="RBK9|E_l^4e-*M%JB#q/">
+                                            <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="display_text" id="{dFM,,0#Ncp#png.#Ocz">
+                                        <value name="text">
+                                          <block type="read_ruuvi_property" id=":LI2DoWz,8)@*%69Ws[G">
+                                            <field name="measurement">measurementSequenceCounter</field>
+                                            <value name="Thing">
+                                              <block type="things_webBluetooth" id="#DgB{xWy:4H8RbYdJoTI">
+                                                <field name="id">rezqZWJmfb5zMr1tVeNmkA==</field>
+                                              </block>
+                                            </value>
+                                          </block>
+                                        </value>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

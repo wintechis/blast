@@ -71,34 +71,44 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     return robject;
   };
 
-  let value;
-  let tries = 0;
-  // Try getting advertisement data, retry once per second for 30 seconds
-  while (tries < 30) {
-    const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
-    if (events) {
-      for (const event of events) {
-        value = event.manufacturerData.get(0x0499);
-        if (value) {
-          const dataFormat = value.getUint8(0);
-          if (dataFormat == 5) {
-            tries = 30; // advertisement found, break out of the loop
+  /**
+   * Tries getting the measurements from the RuuviTag.
+   * @param {Number} tries the number of tries.
+   * @returns {DataView} the measurements.
+   */
+  const getAdvertisementData = function(tries) {
+    // try to get the measurements from the cache once per second for 30 seconds
+    if (tries < 30) {
+      const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
+      if (events) {
+        for (const event of events) {
+          const value = event.manufacturerData.get(0x0499);
+          if (value) {
+            const dataFormat = value.getUint8(0);
+            if (dataFormat == 5) {
+              return value; // advertisement found, break out of the loop
+            }
           }
         }
       }
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(getAdvertisementData(tries + 1));
+        }, 1000);
+      });
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    tries++;
-  }
+  };
+
+  const advertisementData = await getAdvertisementData(0);
   // If still no event data, return an error
-  if (!value) {
+  if (!advertisementData) {
     Blast.throwError('No BLE advertising data found for ' + webBluetoothId);
   }
 
   // Parse the event data
   const rawValues = [];
-  for (let i = 0; i < value.byteLength; i++) {
-    rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+  for (let i = 0; i < advertisementData.byteLength; i++) {
+    rawValues.push('0x' + ('00' + advertisementData.getUint8(i).toString(16)).slice(-2));
   }
   const values = parseRawRuuvi(rawValues);
   callback(values[measurement]);
