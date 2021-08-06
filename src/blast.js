@@ -325,7 +325,6 @@ Blast.runJS = function() {
     };
 
     Blast.runner_();
-    return;
   }
 };
 
