@@ -16,6 +16,25 @@
 goog.provide('Blast.Bluetooth');
 
 /**
+ * Contains block types that require a LE Scan.
+ * On runtine, if any of these blocks is in the workspace,
+ * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
+ * @type {Array<string>}
+ * @public
+ */
+Blast.Bluetooth.scanBlocks = [];
+
+/**
+ * Contains the results of a LE Scan.
+ */
+Blast.Bluetooth.LEScanResults = {};
+
+/**
+ * Indicates whether the LE Scan is running.
+ */
+Blast.Bluetooth.isLEScanRunning = false;
+
+/**
  * Returns a paired bluetooth device by their id.
  * @param {string} id identifier of the device to get.
  * @returns {BluetoothDevice} the bluetooth device with id.
@@ -38,8 +57,7 @@ Blast.Bluetooth.getDeviceById = async function(id) {
 Blast.Bluetooth.connect = async function(id) {
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
-    const server = await device.gatt.connect();
-    return server;
+    return await device.gatt.connect();
   } catch (error) {
     Blast.throwError(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
@@ -54,9 +72,8 @@ Blast.Bluetooth.connect = async function(id) {
   */
 Blast.Bluetooth.disconnect = async function(id) {
   try {
-    const device = await Blast.Bluetooth.getDevices(id);
-    await device.gatt.disconnect();
-    return;
+    const device = await Blast.Bluetooth.getDeviceById(id);
+    return await device.gatt.disconnect();
   } catch (error) {
     Blast.throwError(`Error disconnecting from Bluetooth device ${id}`);
     console.error(error);
@@ -110,7 +127,6 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   const characteristic = await service.getCharacteristic(characteristcUUID);
   value = hexStringToArrayBuffer(value);
   await characteristic.writeValueWithoutResponse(value);
-  return;
 };
 
 /**
@@ -126,8 +142,7 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
     const server = await Blast.Bluetooth.connect(id, serviceUUID);
     const service = await server.getPrimaryService(serviceUUID);
     const characteristic = await service.getCharacteristic(characteristcUUID);
-    const value = await characteristic.readValue();
-    return value;
+    return await characteristic.readValue();
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);
@@ -137,12 +152,46 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
 /**
  * Starts scan for BLE advertisements.
  */
-Blast.Bluetooth.requestLEScan = async function() {
-  Blockly.alert('Please allow the Bluetooth-scan to continue.',
-      navigator.bluetooth.requestLEScan(
-          {acceptAllAdvertisements: true, keepRepeatedDevices: true},
-      ),
+Blast.Bluetooth.startLEScan = async function() {
+  navigator.bluetooth.requestLEScan(
+      {acceptAllAdvertisements: true, keepRepeatedDevices: true},
   );
+};
+
+/**
+ * Checks if any of the blocks in {@link Blast.Bluetooth.scanBlocks}
+ * is in the workspace and no scan is currently running, if so, starts a BLE Scan.
+ */
+Blast.Bluetooth.checkForLEScan = function() {
+  console.log('foo');
+  // If no scan is currently running
+  if (!Blast.Bluetooth.isLEScanRunning) {
+    // And if any of the blocks in scanBlocks is in the workspace,
+    for (const block of Blast.Bluetooth.scanBlocks) {
+      const isInWorkspace = Blast.workspace.getBlocksByType(block).length > 0;
+      if (isInWorkspace) {
+        // Start a BLE Scan
+        Blast.Bluetooth.startLEScan();
+        Blast.Bluetooth.isLEScanRunning = true;
+        // And break out of the loop
+        return;
+      }
+    }
+  }
+};
+
+/**
+ * Caches the results of a LE Scan.
+ */
+Blast.Bluetooth.cacheLEScanResults = function() {
+  // Cache the results of the scan.
+  const handler = function(event) {
+    const device = event.device;
+    const deviceId = device.id;
+    Blast.Bluetooth.LEScanResults[deviceId] = event;
+  };
+  // Register the event handler.
+  Blast.Bluetooth.addEventListener('advertisementreceived', handler);
 };
 
 /**

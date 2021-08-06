@@ -50,3 +50,5 @@ Blockly.Blocks['read_ruuvi_property'] = {
 
 // Add read_ruuvi_property block to the toolbox.
 Blast.Toolbox.addBlock('read_ruuvi_property', 'Properties');
+// Add read_ruuvi_property block to the scanBlocks array.
+Blast.Bluetooth.scanBlocks.push('read_ruuvi_property');

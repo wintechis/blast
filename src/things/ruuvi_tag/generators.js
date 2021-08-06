@@ -71,33 +71,36 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     return robject;
   };
 
-  /**
-   * Reads the selected property from incoming advertisements.
-   * @param {BluetoothAdvertisingEvent} event the received event.
-   */
-  const handler = function(event) {
-    // early exit on wrong devices
-    if (event.device.id != webBluetoothId) return;
-    const value = event.manufacturerData.get(0x0499);
-    // exit if device is not RuuviTag
-    if (!value) {
-      return;
+  // Get the event data from cache
+  let event = Blast.Bluetooth.LEScanResults[webBluetoothId];
+  // If no event data is found, retry once per second for 20 seconds
+  if (!event) {
+    for (let i = 0; i < 20; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      event = Blast.Bluetooth.LEScanResults[webBluetoothId];
     }
-    const dataFormat = value.getUint8(0);
-    if (dataFormat != 5) {
-      return;
-    }
-    const rawValues = [];
-    for (let i = 0; i < value.byteLength; i++) {
-      rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
-    }
-    const values = parseRawRuuvi(rawValues);
-    callback(values[measurement]);
-  };
-  // register event handler
-  Blast.Bluetooth.addEventListener('advertisementreceived', handler);
-  // start scanning
-  Blast.Bluetooth.requestLEScan();
+  }
+  // If still no event data, return an error
+  if (!event) {
+    Blast.throwError('No LE advertising data found for ' + webBluetoothId);
+  }
+
+  if (event.device.id != webBluetoothId) return;
+  const value = event.manufacturerData.get(0x0499);
+  // exit if device is not RuuviTag
+  if (!value) {
+    return;
+  }
+  const dataFormat = value.getUint8(0);
+  if (dataFormat != 5) {
+    return;
+  }
+  const rawValues = [];
+  for (let i = 0; i < value.byteLength; i++) {
+    rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));
+  }
+  const values = parseRawRuuvi(rawValues);
+  callback(values[measurement]);
 };
 
 // add get_ruuvi_measurement function to the interpreter's API.

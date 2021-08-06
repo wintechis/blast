@@ -287,6 +287,9 @@ Blast.runJS = function() {
     Blast.highlightPause = false;
     Blast.Interpreter = new Interpreter(Blast.latestCode, initApi);
 
+    // check for blocks requiring a BLE scan
+    Blast.Bluetooth.checkForLEScan();
+
     /**
      * executes {@link Blast.latestCode} using {@link Blast.Interpreter}.
      * @function runner_
