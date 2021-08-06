@@ -268,7 +268,7 @@ Blast.resetInterpreter = function() {
  * removes all event handlers of webHID devices from {@link Blast.deviceEventHandlers}
  */
 Blast.removeDeviceHandlers = function() {
-  for (handler of Blast.deviceEventHandlers) {
+  for (const handler of Blast.deviceEventHandlers) {
     const device = handler.device;
     device.removeEventListener(handler.type, handler.fn);
   }
