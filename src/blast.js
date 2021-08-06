@@ -163,8 +163,8 @@ Blast.init = function() {
   const container = document.getElementById('content_area');
   const onresize = function() {
     const bBox = Blast.getBBox_(container);
-    for (let i = 0; i < Blast.Ui.TABS_.length; i++) {
-      const el = document.getElementById('content_' + Blast.Ui.TABS_[i]);
+    for (const tab of Blast.Ui.TABS_) {
+      const el = document.getElementById('content_' + tab);
       el.style.top = bBox.y + 'px';
       el.style.left = bBox.x + 'px';
       // Height and width need to be set, read back, then set again to
