@@ -78,13 +78,10 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
     if (events) {
       for (const event of events) {
-        console.log(event);
         value = event.manufacturerData.get(0x0499);
         if (value) {
-          console.log(value);
           const dataFormat = value.getUint8(0);
           if (dataFormat == 5) {
-            console.log(dataFormat);
             tries = 30; // advertisement found, break out of the loop
           }
         }
@@ -93,7 +90,6 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     tries++;
   }
-  console.log(value);
   // If still no event data, return an error
   if (!value) {
     Blast.throwError('No BLE advertising data found for ' + webBluetoothId);
