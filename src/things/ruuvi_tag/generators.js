@@ -71,30 +71,35 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     return robject;
   };
 
-  // Get the event data from cache
-  let event = Blast.Bluetooth.LEScanResults[webBluetoothId];
-  // If no event data is found, retry once per second for 20 seconds
-  if (!event) {
-    for (let i = 0; i < 20; i++) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      event = Blast.Bluetooth.LEScanResults[webBluetoothId];
+  let value;
+  let tries = 0;
+  // Try getting advertisement data, retry once per second for 30 seconds
+  while (tries < 30) {
+    const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
+    if (events) {
+      for (const event of events) {
+        console.log(event);
+        value = event.manufacturerData.get(0x0499);
+        if (value) {
+          console.log(value);
+          const dataFormat = value.getUint8(0);
+          if (dataFormat == 5) {
+            console.log(dataFormat);
+            tries = 30; // advertisement found, break out of the loop
+          }
+        }
+      }
     }
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    tries++;
   }
+  console.log(value);
   // If still no event data, return an error
-  if (!event) {
-    Blast.throwError('No LE advertising data found for ' + webBluetoothId);
+  if (!value) {
+    Blast.throwError('No BLE advertising data found for ' + webBluetoothId);
   }
 
-  if (event.device.id != webBluetoothId) return;
-  const value = event.manufacturerData.get(0x0499);
-  // exit if device is not RuuviTag
-  if (!value) {
-    return;
-  }
-  const dataFormat = value.getUint8(0);
-  if (dataFormat != 5) {
-    return;
-  }
+  // Parse the event data
   const rawValues = [];
   for (let i = 0; i < value.byteLength; i++) {
     rawValues.push('0x' + ('00' + value.getUint8(i).toString(16)).slice(-2));

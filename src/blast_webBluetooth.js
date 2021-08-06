@@ -153,8 +153,11 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
  * Starts scan for BLE advertisements.
  */
 Blast.Bluetooth.startLEScan = async function() {
-  navigator.bluetooth.requestLEScan(
-      {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+  Blast.Bluetooth.cacheLEScanResults();
+  Blockly.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
+      navigator.bluetooth.requestLEScan(
+          {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+      ),
   );
 };
 
@@ -163,7 +166,6 @@ Blast.Bluetooth.startLEScan = async function() {
  * is in the workspace and no scan is currently running, if so, starts a BLE Scan.
  */
 Blast.Bluetooth.checkForLEScan = function() {
-  console.log('foo');
   // If no scan is currently running
   if (!Blast.Bluetooth.isLEScanRunning) {
     // And if any of the blocks in scanBlocks is in the workspace,
@@ -188,7 +190,10 @@ Blast.Bluetooth.cacheLEScanResults = function() {
   const handler = function(event) {
     const device = event.device;
     const deviceId = device.id;
-    Blast.Bluetooth.LEScanResults[deviceId] = event;
+    if (!Blast.Bluetooth.LEScanResults[deviceId]) {
+      Blast.Bluetooth.LEScanResults[deviceId] = [];
+    }
+    Blast.Bluetooth.LEScanResults[deviceId].push(event);
   };
   // Register the event handler.
   Blast.Bluetooth.addEventListener('advertisementreceived', handler);
