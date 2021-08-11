@@ -6,7 +6,6 @@
  */
 'use strict';
 
-
 /**
   * Bluetooth API namespace.
   * @name Blast.Bluetooth
@@ -33,6 +32,12 @@ Blast.Bluetooth.LEScanResults = {};
  * Indicates whether the LE Scan is running.
  */
 Blast.Bluetooth.isLEScanRunning = false;
+
+/**
+ * Stores all event handlers for the LE Scan as tuples of event and handler.
+ * @private
+ */
+Blast.Bluetooth.eventListeners = [];
 
 /**
  * Returns a paired bluetooth device by their id.
@@ -205,5 +210,24 @@ Blast.Bluetooth.cacheLEScanResults = function() {
  * @param {function} listener the listener to add.
  */
 Blast.Bluetooth.addEventListener = function(event, listener) {
+  Blast.Bluetooth.eventListeners.push([event, listener]);
   navigator.bluetooth.addEventListener(event, listener);
+};
+
+/**
+ * Removes webBluetooth eventListeners and deletes cached advertisements.
+ */
+Blast.Bluetooth.tearDown = function() {
+  // Reset running scan flag
+  if (Blast.Bluetooth.isLEScanRunning) {
+    Blast.Bluetooth.isLEScanRunning = false;
+  }
+  // Remove all event handlers.
+  if (Blast.Bluetooth.eventListeners) {
+    for (const event of Blast.Bluetooth.eventListeners) {
+      navigator.bluetooth.removeEventListener(event[0], event[1]);
+    }
+  }
+  // Clear cached advertisements.
+  Blast.Bluetooth.LEScanResults = {};
 };

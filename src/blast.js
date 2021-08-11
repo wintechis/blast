@@ -262,7 +262,7 @@ Blast.resetInterpreter = function() {
     clearTimeout(Blast.runner_);
     Blast.runner_ = null;
   }
-  Blast.Bluetooth.isLEScanRunning = false;
+  Blast.Bluetooth.tearDown();
 };
 
 /**
