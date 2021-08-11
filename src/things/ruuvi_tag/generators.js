@@ -77,7 +77,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
    * @returns {DataView} the measurements.
    */
   const getAdvertisementData = function(tries) {
-    // try to get the measurements from the cache once per second for 30 seconds
+    // try to get the measurements from the cache once per second for 10 seconds
     if (tries < 30) {
       const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
       if (events) {
@@ -91,6 +91,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
           }
         }
       }
+      // no measurements found, try again in 1 second
       return new Promise((resolve) => {
         setTimeout(() => {
           resolve(getAdvertisementData(tries + 1));
@@ -98,11 +99,13 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
       });
     }
   };
+  // Start LE Scan.
+  Blast.Bluetooth.startLEScan(webBluetoothId);
 
   const advertisementData = await getAdvertisementData(0);
   // If still no event data, return an error
   if (!advertisementData) {
-    Blast.throwError('No BLE advertising data found for ' + webBluetoothId);
+    Blast.throwError('Timed out. No BLE advertising data found for ' + webBluetoothId);
   }
 
   // Parse the event data

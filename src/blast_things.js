@@ -75,6 +75,11 @@ Blast.Things.flyoutCategory = function(workspace) {
   const wHidBlockList = Blast.Things.flyoutCategoryBlocksWHid(workspace);
   xmlList = xmlList.concat(wHidBlockList);
 
+  // Create identifiers Label
+  const identifiersLabel = document.createElement('label');
+  identifiersLabel.setAttribute('text', 'additional identifiers');
+  xmlList.push(identifiersLabel);
+
   // add uri block to xmlList
   const block = Blockly.utils.xml.createElement('block');
   block.setAttribute('type', 'uri');

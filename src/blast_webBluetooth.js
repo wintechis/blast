@@ -154,36 +154,34 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
   }
 };
 
-/**
- * Starts scan for BLE advertisements.
+/** Start the LE Scan.
+ * public
  */
 Blast.Bluetooth.startLEScan = async function() {
+  // If the LE Scan is already running, do nothing.
+  if (Blast.Bluetooth.isLEScanRunning) {
+    return;
+  }
+  // If the LE Scan is not running, register the cache handler and start it.
   Blast.Bluetooth.cacheLEScanResults();
+  Blast.Bluetooth.isLEScanRunning = true;
   Blockly.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
       navigator.bluetooth.requestLEScan(
           {acceptAllAdvertisements: true, keepRepeatedDevices: true},
       ),
   );
+  // Stop scan after 30 seconds.
+  setTimeout(Blast.Bluetooth.stopLEScan, 30000);
 };
 
 /**
- * Checks if any of the blocks in {@link Blast.Bluetooth.scanBlocks}
- * is in the workspace and no scan is currently running, if so, starts a BLE Scan.
+ * Stops the BLE Scan.
+ * @public
  */
-Blast.Bluetooth.checkForLEScan = function() {
-  // If no scan is currently running
-  if (!Blast.Bluetooth.isLEScanRunning) {
-    // And if any of the blocks in scanBlocks is in the workspace,
-    for (const block of Blast.Bluetooth.scanBlocks) {
-      const isInWorkspace = Blast.workspace.getBlocksByType(block).length > 0;
-      if (isInWorkspace) {
-        // Start a BLE Scan
-        Blast.Bluetooth.startLEScan();
-        Blast.Bluetooth.isLEScanRunning = true;
-        // And break out of the loop
-        return;
-      }
-    }
+Blast.Bluetooth.stopLEScan = function() {
+  if (Blast.Bluetooth.isLEScanRunning) {
+    navigator.bluetooth.stopLEScan();
+    Blast.Bluetooth.isLEScanRunning = false;
   }
 };
 
@@ -198,7 +196,7 @@ Blast.Bluetooth.cacheLEScanResults = function() {
     if (!Blast.Bluetooth.LEScanResults[deviceId]) {
       Blast.Bluetooth.LEScanResults[deviceId] = [];
     }
-    Blast.Bluetooth.LEScanResults[deviceId].push(event);
+    Blast.Bluetooth.LEScanResults[deviceId].unshift(event);
   };
   // Register the event handler.
   Blast.Bluetooth.addEventListener('advertisementreceived', handler);
@@ -215,6 +213,22 @@ Blast.Bluetooth.addEventListener = function(event, listener) {
 };
 
 /**
+ * Removes a webBluetooth eventListener.
+ * @param {string} event the event to remove the listener from.
+ * @param {function} listener the listener to remove.
+ * @public
+ */
+Blast.Bluetooth.removeEventListener = function(event, listener) {
+  const index = Blast.Bluetooth.eventListeners.findIndex(function(element) {
+    return element[0] === event && element[1] === listener;
+  });
+  if (index !== -1) {
+    Blast.Bluetooth.eventListeners.splice(index, 1);
+  }
+  navigator.bluetooth.removeEventListener(event, listener);
+};
+
+/**
  * Removes webBluetooth eventListeners and deletes cached advertisements.
  */
 Blast.Bluetooth.tearDown = function() {
@@ -225,7 +239,7 @@ Blast.Bluetooth.tearDown = function() {
   // Remove all event handlers.
   if (Blast.Bluetooth.eventListeners) {
     for (const event of Blast.Bluetooth.eventListeners) {
-      navigator.bluetooth.removeEventListener(event[0], event[1]);
+      Blast.Bluetooth.removeEventListener(event[0], event[1]);
     }
   }
   // Clear cached advertisements.
