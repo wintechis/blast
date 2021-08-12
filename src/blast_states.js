@@ -68,7 +68,6 @@ Blast.States.eventChecker = function(blockId, curValue) {
   Blast.States.eventValues.set(blockId, curValue);
 
   if (prevValue != undefined) {
-    console.log(!prevValue && curValue);
     return !prevValue && curValue;
   }
   return false;
