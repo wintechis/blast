@@ -37,19 +37,13 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Events',
+      name: 'States and Events',
+      custom: 'STATES',
       colour: '180',
     },
     {
       kind: 'sep',
       gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'States',
-      custom: 'STATES',
-      colour: '180',
     },
     {
       kind: 'CATEGORY',

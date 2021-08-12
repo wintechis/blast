@@ -297,7 +297,20 @@ Blast.States.flyoutCategory = function(workspace) {
   }
 
   const states = Blast.States.allStates(workspace);
+  // Add event blocks to the list.
   populateEvents(states);
+
+  // Add all blocks from the categories contents array to the list.
+  const category = Blast.Toolbox.getCategory('States and Events');
+  if (category) {
+    for (const content of category.contents) {
+      const block = Blockly.utils.xml.createElement('block');
+      block.setAttribute('type', content.type);
+      block.setAttribute('gap', 16);
+      xmlList.push(block);
+    }
+  }
+
   return xmlList;
 };
 

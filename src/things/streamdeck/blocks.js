@@ -66,4 +66,4 @@ Blockly.Blocks['streamdeck_buttons'] = {
 };
 
 // Add streamdeck_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_buttons', 'Events');
+Blast.Toolbox.addBlock('streamdeck_buttons', 'States and Events');
