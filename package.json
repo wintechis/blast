@@ -15,7 +15,7 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "scripts": {
-    "build": "gulp build",
+    "build": "gulp closureCompiler && gulp workbox",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint src/**",
     "test": "mocha"
@@ -35,7 +35,8 @@
     "gulp": "^4.0.2",
     "gulp-shell": "0.8.0",
     "jsdoc": "3.6.6",
-    "mocha": "^8.3.2"
+    "mocha": "^8.3.2",
+    "workbox-cli": "6.2.4"
   },
   "dependencies": {
     "libxmljs": "^0.19.7"

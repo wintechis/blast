@@ -6,8 +6,11 @@
 const gulp = require('gulp');
 const closureCompiler = require('google-closure-compiler').gulp();
 const shell = require('gulp-shell');
+const workboxBuild = require('workbox-build');
 
-gulp.task('build', function() {
+gulp.task('jsdoc', shell.task(['./node_modules/.bin/jsdoc src -d docs/jsdoc']));
+
+gulp.task('closureCompiler', function() {
   return gulp.src(['src/**/*.js'],
       {base: './'})
       .pipe(
@@ -17,4 +20,17 @@ gulp.task('build', function() {
       .pipe(gulp.dest('./js'));
 });
 
-gulp.task('jsdoc', shell.task(['./node_modules/.bin/jsdoc src -d docs/jsdoc']));
+gulp.task('workbox', function() {
+  return workboxBuild.injectManifest({
+    globDirectory: './',
+    globPatterns: [
+      '.',
+      'index.html',
+      'style.css',
+      'js/**/*.js',
+      'media/**',
+    ],
+    swSrc: 'sw-pre-workbox.js',
+    swDest: 'sw.js',
+  });
+});
