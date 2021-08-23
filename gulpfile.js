@@ -27,6 +27,8 @@ gulp.task('workbox', function() {
       '.',
       'index.html',
       'style.css',
+      'mobile.html',
+      'mobile.css',
       'js/**/*.js',
       'media/**',
     ],
