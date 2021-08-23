@@ -204,6 +204,12 @@ Blast.Ui.init = function() {
   Blast.Ui.messageOutputContainer = document.getElementById('msgOutputContainer');
   Blast.Ui.statusContainer = document.getElementById('statusContainer');
 
+  // Mobile website does not have a tab bar.
+  if (window.location.href.includes('mobile.html')) {
+    // early exit
+    return;
+  }
+
   // Bind onClick events to tabs
   Blast.Ui.tabClick_(Blast.Ui.selected_);
   Blast.Ui.uriInput.addEventListener('keyup', (event) => {

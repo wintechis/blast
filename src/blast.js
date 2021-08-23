@@ -159,6 +159,18 @@ Blast.getBBox_ = function(element) {
  * @public
  */
 Blast.init = function() {
+  // On mobile website init headless workspace.
+  if (window.location.href.includes('mobile.html')) {
+    Blast.workspace = new Blockly.Workspace();
+    // Initialize UI
+    Blast.Ui.init();
+    Blast.Ui.setStatus(Blast.status.READY);
+    // Display output hint
+    Blast.Ui.addMessage('Actionblock output will be displayed here');
+    // early exit
+    return;
+  }
+
   // adjust workspace and toolbox on resize
   const container = document.getElementById('content_area');
   const onresize = function() {
