@@ -24,6 +24,35 @@
   <meta name="theme-color" content="#ffffff">
   <link rel="manifest" href="site.webmanifest">
 
+  <script>
+    // redirect mobile users to mobile site.
+
+    // mobile check for older browsers
+    const legacyIsMobileCheck = function () {
+      if (navigator.userAgent.match(/Android/i) ||
+      navigator.userAgent.match(/webOS/i) ||
+      navigator.userAgent.match(/iPhone/i) ||
+      navigator.userAgent.match(/iPad/i) ||
+      navigator.userAgent.match(/iPod/i) ||
+      navigator.userAgent.match(/BlackBerry/i) ||
+      navigator.userAgent.match(/Windows Phone/i)) {
+        return true;
+    }
+    return false;
+    }
+
+    // mobile check for newer browsers
+    const uaDataIsMobile = window.navigator.userAgentData?.mobile
+
+    // if either mobile check is true, redirect to mobile site.
+    const isMobile = typeof uaDataIsMobile === 'boolean'
+      ? uaDataIsMobile
+      : legacyIsMobileCheck()
+    if (isMobile) {
+      window.location.replace("mobile.html");
+    }
+  </script>
+
   <!-- JS Interpreter -->
   <script src="js/lib/JSInterpreter/acorn.js"></script>
   <script src="js/lib/JSInterpreter/interpreter.js"></script>
@@ -57,19 +86,6 @@
 
   <!-- blast libraries -->
   <script src="js/blast.min.js"></script>
-
-  <script>
-    // redirect on mobile devices
-    if (navigator.userAgent.match(/Android/i) ||
-      navigator.userAgent.match(/webOS/i) ||
-      navigator.userAgent.match(/iPhone/i) ||
-      navigator.userAgent.match(/iPad/i) ||
-      navigator.userAgent.match(/iPod/i) ||
-      navigator.userAgent.match(/BlackBerry/i) ||
-      navigator.userAgent.match(/Windows Phone/i)) {
-        window.location.replace("mobile.html");
-    }
-  </script>
 </head>
 
 <body>
