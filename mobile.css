@@ -73,7 +73,7 @@ body {
     width: 100%;
 }
 
-#load-uri-input {
+#loadWorkspace-input {
     border: none;
     line-height: 3rem;
     padding: 0 1rem;
@@ -81,7 +81,7 @@ body {
     box-sizing: border-box;
 }
 
-#load-uri-button {
+#load-button {
     background: rgb(91, 165, 91);
     line-height: 3rem;
     color: #FFF;
@@ -147,11 +147,12 @@ button.notext {
     font-size: 10%;
 }
 
-#output_area {
+#blast {
     height: calc(100vh - 365px);
     width: 100%;
     border: 1px solid #c6c6c6;
     vertical-align: top;
+    display: none;
 }
 
 #msgOutputContainer {
@@ -160,6 +161,96 @@ button.notext {
     background-color: #fff;
     overflow: auto;
 }
+
+/* Tabs */
+#tabRow > td {
+    border: 1px solid #ccc;
+    border-bottom: none;
+    white-space: nowrap;
+  }
+  td.tabon {
+    border-bottom-color: #ddd !important;
+    background-color: #ddd;
+    padding: 5px 19px;
+    white-space: nowrap;
+  }
+  td.taboff {
+    cursor: pointer;
+    padding: 5px 19px;
+  }
+  td.taboff:hover {
+    background-color: #eee;
+  }
+  td.tabmin {
+    border-top-style: none !important;
+    border-left-style: none !important;
+    border-right-style: none !important;
+  }
+  td.tabmax {
+    border-top-style: none !important;
+    border-left-style: none !important;
+    border-right-style: none !important;
+    width: 99%;
+    padding-left: 10px;
+    padding-right: 10px;
+    text-align: right;
+  }
+  
+  #tab_code {
+    display: none;
+  }
+  
+  table {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+  td {
+    padding: 0;
+    vertical-align: top;
+  }
+  .content {
+    visibility: hidden;
+    margin: 0;
+    padding: 1ex;
+    position: absolute;
+    direction: ltr;
+  }
+  
+  #content_blocks {
+    padding: 0;
+  }
+  
+  #content_javascript {
+    overflow: auto;
+  }
+  
+  .blocklySvg {
+    border-top: none !important;
+  }
+  
+  #content_area {
+    height: 99%;
+  }
+  
+  #content_workspace, #content_dw_functions {
+    padding: 0;
+  }
+  
+  #output_area {
+    height: calc(100vh - 215px);
+    width: 450px;
+    border: 1px solid #c6c6c6;
+    vertical-align: top;
+  }
+  
+  #msgOutputContainer {
+    width: 450px;
+    height: 100%;
+    overflow: auto;
+  }
+  
 
 /* Buttons */
 button {

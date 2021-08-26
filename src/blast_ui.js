@@ -204,22 +204,9 @@ Blast.Ui.init = function() {
   Blast.Ui.messageOutputContainer = document.getElementById('msgOutputContainer');
   Blast.Ui.statusContainer = document.getElementById('statusContainer');
 
-  // Mobile website does not have a tab bar.
-  if (window.location.href.includes('mobile.html')) {
-    // early exit
-    return;
-  }
 
   // Bind onClick events to tabs
   Blast.Ui.tabClick_(Blast.Ui.selected_);
-  Blast.Ui.uriInput.addEventListener('keyup', (event) => {
-    // load blocks from URI on Enter
-    if (event.keyCode === 13) {
-      Blast.Storage.load();
-    }
-  });
-  Blast.bindClick('loadButton', Blast.Storage.load);
-  Blast.bindClick('saveButton', Blast.Storage.link);
 
   for (const name of Blast.Ui.TABS_) {
     Blast.bindClick(
@@ -231,4 +218,18 @@ Blast.Ui.init = function() {
         })(name),
     );
   }
+
+  if (window.location.href.includes('mobile.html')) {
+    return;
+  }
+
+  Blast.bindClick('loadButton', Blast.Storage.load);
+  Blast.bindClick('saveButton', Blast.Storage.link);
+
+  // load blocks from URI on Enter
+  Blast.Ui.uriInput.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+      Blast.Storage.load();
+    }
+  });
 };

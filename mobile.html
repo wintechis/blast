@@ -70,27 +70,100 @@
             <div id="load">
                 <p>Load from URI</p>
                 <div class="input-group">
-                    <input type="text" id="load-uri-input" placeholder="URI">
-                    <button id="load-uri-button">Load</button>
+                    <input type="text" id="loadWorkspace-input" placeholder="URI">
+                    <button id="load-button">Load</button>
                 </div>
             </div>
-            <div id="controls">
-                <span id="statusContainer">ready</span>
-                <button id="runButton" class="primary" title="Run the program">
-                  <svg class="icon icon-play">
-                    <use xlink:href="media/symbol-defs.svg#icon-play"></use>
-                  </svg>
-                </button>
-            </div>
-            <div id="output_area">
-                <div id="msgOutputContainer"></div>
+            <div id="blast">
+                <div id="controls">
+                    <span id="statusContainer">ready</span>
+                    <button id="runButton" class="primary" title="Run the program">
+                      <svg class="icon icon-play">
+                        <use xlink:href="media/symbol-defs.svg#icon-play"></use>
+                      </svg>
+                    </button>
+                </div>
+                <table width="100%" height="100%">
+                    <tr>
+                      <td>
+                        <table width="100%">
+                          <tr id="tabRow" height="1em">
+                            <td id="tab_workspace" class="tabon">Workspace</td>
+                            <td class="tabmin">&nbsp;</td>
+                            <td id="tab_javascript" class="taboff">JavaScript</td>
+                            <td class="tabmin">&nbsp;</td>
+                            <td id="tab_xml" class="taboff">XML</td>
+                            <td class="tabmin">&nbsp;</td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td id="content_area">
+                      </td>
+                      <td id="output_area">
+                        <div id="msgOutputContainer">
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <div id="content_workspace" class="content"></div>
+                  <pre id="content_javascript" class="content prettyprint lang-js"></pre>
+                  <textarea id="content_xml" class="content" wrap="off"></textarea>
             </div>
         </div>
     </div>
-    <div style="height: 500px; width: 500px; display: none">
-        <div id="content_workspace" class="content"></div>
-        <pre id="content_javascript" class="content prettyprint lang-js"></pre>
-        <textarea id="content_xml" class="content" wrap="off"></textarea>
-    </div>
+    <script>
+        Blast.bindClick('load-button', function() {
+            // hide the load container
+            document.getElementById('load').style.display = 'none';
+            // show blast
+            document.getElementById('blast').style.display = 'block';
+            // adjust workspace and toolbox on resize
+            const container = document.getElementById('content_area');
+            const onresize = function() {
+                const bBox = Blast.getBBox_(container);
+                for (const tab of Blast.Ui.TABS_) {
+                const el = document.getElementById('content_' + tab);
+                el.style.top = bBox.y + 'px';
+                el.style.left = bBox.x + 'px';
+                // Height and width need to be set, read back, then set again to
+                // compensate for scrollbars.
+                el.style.height = bBox.height + 'px';
+                el.style.height = 2 * bBox.height - el.offsetHeight + 'px';
+                el.style.width = bBox.width + 'px';
+                el.style.width = 2 * bBox.width - el.offsetWidth + 'px';
+                }
+            };
+            window.addEventListener('resize', onresize, false);
+
+            Blast.workspace = Blockly.inject('content_workspace', {
+                // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
+                media: 'media/',
+                readOnly: true,
+            });
+
+            onresize();
+            Blockly.svgResize(Blast.workspace);
+
+            // Initialize UI
+            Blast.Ui.init();
+            Blast.Ui.setStatus(Blast.status.READY);
+
+            // Load the interpreter now, and upon future changes.
+            Blast.generateCode();
+            Blast.workspace.addChangeListener(function(event) {
+                if (!(event instanceof Blockly.Events.Ui)) {
+                // Something changed. Parser needs to be reloaded.
+                Blast.generateCode();
+                Blast.States.generateCode();
+                Blast.Ui.renderContent_();
+                }
+            });
+            // load the workspace
+            Blast.Storage.load();
+        });
+    </script>
 </body>
 </html>
