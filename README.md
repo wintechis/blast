@@ -1,3 +1,5 @@
+<img src="media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
+
 # BLAST - Block Applications For Things 
 This project aims to provide a visual programming environment for creating and executing applications, that communicate and interact with the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).
 
