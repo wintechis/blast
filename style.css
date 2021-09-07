@@ -279,6 +279,7 @@ button {
 
 
 .modal input[type=submit],.modal input[type=button] {
+  background: #4285f4;
   color: white;
   padding: 12px 20px;
   border: none;
