@@ -149,6 +149,21 @@
       </div>
     </div>
   </div>
+
+    <!-- Reconnect Modal -->
+    <div id="rcModal" class="modal">
+      <div class="modal-content">
+        <span id ="rcClose" class="close">&times;</span>
+        <h1>Please connect these devices to load the Program:</h1>
+        <hr>     
+        <div class="row" id="reconnect-row">
+          <div class="col">
+            <form id="rc-form">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
   
   <!-- WebHID Modal -->
   <div id="wHidModal" class="modal">
@@ -202,6 +217,7 @@
   const wbClose = document.getElementById("wbClose");
   const wHidModal = document.getElementById("wHidModal");
   const wHidClose = document.getElementById("wHidClose");
+  const rcClose = document.getElementById("rcClose");
 
   // logs webBluetooth to wb-output div
   const wbLog = function(){
@@ -334,6 +350,10 @@
     wHidModal.style.display = "none";
   }
 
+  rcClose.onclick = function () {
+    rcModal.style.display = "none";
+  }
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == wbModal) {
@@ -341,6 +361,9 @@
     }
     if (event.target == wHidModal) {
       wHidModal.style.display = "none";
+    }
+    if (event.target == rcModal) {
+      rcModal.style.display = "none";
     }
   }
 </script>
