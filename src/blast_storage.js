@@ -40,7 +40,7 @@ Blast.Storage.XML_ERROR = 'Could not load your saved file.\n' +
   */
 Blast.Storage.link = function() {
   const workspace = Blast.workspace;
-  const xml = Blockly.Xml.workspaceToDom(workspace, true);
+  let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
   if (workspace.getTopBlocks(false).length == 1 && xml.querySelector) {
     const block = xml.querySelector('block');
@@ -49,6 +49,9 @@ Blast.Storage.link = function() {
       block.removeAttribute('y');
     }
   }
+  // Remove device id from xml.
+  xml = Blast.Storage.removeDeviceId_(xml);
+
   let path = document.getElementById('loadWorkspace-input').value;
   if (!path || path.length == 0) {
     path = 'storage/' + Blast.Storage.generatePath();
@@ -56,7 +59,28 @@ Blast.Storage.link = function() {
   const data = Blockly.Xml.domToText(xml);
   Blast.Storage.saveXML_(path, data);
 };
- 
+
+/**
+ * Removes device ID children from all blocks of type things_webBluetooth in the xml.
+ * @param {!Element} xml XML to remove device ids from.
+ * @return {!Element} XML with device ids removed.
+ * @private
+ */
+Blast.Storage.removeDeviceId_ = function(xml) {
+  const blocks = xml.querySelectorAll('block');
+
+  for (const block of blocks) {
+    if (block.getAttribute('type') == 'things_webBluetooth') {
+      // first child is the device id
+      const child = block.firstElementChild;
+      if (child) {
+        child.remove();
+      }
+    }
+  }
+  return xml;
+};
+
 /**
  * Save the current workspace to URL defined in input.
  * @param {string} path path to save workspace at.
@@ -94,7 +118,7 @@ Blast.Storage.load = function() {
 /**
  * Load blocks from URI defined in {@link Blast.Ui.uriInput}.
  * @param {string} path path to the XML to load.
- * @public
+ * @private
  */
 Blast.Storage.retrieveXML_ = async function(path) {
   Blockly.hideChaff();
