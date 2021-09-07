@@ -61,7 +61,7 @@ Blast.Storage.link = function() {
 };
 
 /**
- * Removes device ID children from all blocks of type things_webBluetooth in the xml.
+ * Replaces device ID with user defined name in all blocks of type things_webBluetooth in the xml.
  * @param {!Element} xml XML to remove device ids from.
  * @return {!Element} XML with device ids removed.
  * @private
@@ -72,9 +72,19 @@ Blast.Storage.removeDeviceId_ = function(xml) {
   for (const block of blocks) {
     if (block.getAttribute('type') == 'things_webBluetooth') {
       // first child is the device id
-      const child = block.firstElementChild;
-      if (child) {
-        child.remove();
+      const device = block.firstElementChild;
+      if (device) {
+        const id = device.textContent;
+        const map = Blast.Things.webBluetoothDevices;
+        let name;
+        // get the key of the device id
+        for (const [key, value] of map.entries()) {
+          if (value === id) {
+            name = key;
+            break;
+          }
+        }
+        device.textContent = name;
       }
     }
   }
