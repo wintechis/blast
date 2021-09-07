@@ -212,7 +212,7 @@
     document.getElementById('wb-log').textContent += line + '\n';
   }
   
-  // logs webBluetooth to wb-output div
+  // logs webHid to wHid-output div
   const wHidLog = function(){
     var line = Array.prototype.slice.call(arguments).map(function(argument) {
       return typeof argument === 'string' ? argument : JSON.stringify(argument);
