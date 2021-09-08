@@ -161,6 +161,8 @@ Blast.Storage.retrieveXML_ = async function(path) {
           xml = Blast.Storage.generatePairButtons(xml);
           // show reconnect modal
           document.getElementById('rcModal').style.display = 'block';
+          // return. will continue after reconnecting to devices
+          return;
         }
                 
         Blockly.Xml.domToWorkspace(xml, Blast.workspace);
@@ -224,6 +226,13 @@ Blast.Storage.generatePairButtons = function(xml) {
               // change pair status to checkmark
               document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
               document.getElementById('pairStatus-' + name).style.color = 'green';
+              
+              // if all devices have been paired, enable done button
+              if (Blast.Storage.allConnected_()) {
+                document.getElementById('rc-done').disabled = false;
+                // add done button click listener
+                document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+              }
             })
             .catch((error) => {
               Blast.throwError('Error connecting to WebBluetooth device:\n' + error);
@@ -237,8 +246,47 @@ Blast.Storage.generatePairButtons = function(xml) {
       row.appendChild(pairCell);
       row.appendChild(statusCell);
       tbody.appendChild(row);
+      // add cancel button click listener
+      document.getElementById('rc-cancel').addEventListener('click', () => Blast.Storage.reconnectCancelHandler_());
     }
   }
+};
+
+/**
+ * Checks if all devices from the reconnect modal have been paired.
+ * @return {boolean} true if all devices have been paired.
+ * @private
+ */
+Blast.Storage.allConnected_ = function() {
+  const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
+  for (const block of blocks) {
+    const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
+    if (pairStatus.innerHTML == '&#x2718;') {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Continues loading blocks after reconnecting to web bluetooth devices.
+ * @param {!Element} xml XML to load into the workspace.
+ * @private
+ */
+Blast.Storage.reconnectDoneHandler_ = function(xml) {
+  // hide reconnect modal
+  document.getElementById('rcModal').style.display = 'none';
+  // rebuild workspace from xml
+  Blockly.Xml.domToWorkspace(xml, Blast.workspace);
+  Blast.Storage.monitorChanges_(Blast.workspace);
+};
+
+/**
+ * Cancels the reconnect modal.
+ */
+Blast.Storage.reconnectCancelHandler_ = function() {
+  // hide reconnect modal
+  document.getElementById('rcModal').style.display = 'none';
 };
  
 /**
