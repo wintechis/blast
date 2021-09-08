@@ -155,9 +155,90 @@ Blast.Storage.retrieveXML_ = async function(path) {
           Blast.throwError(Blast.Storage.XML_ERROR + '\nXML: ' + xml);
           return;
         }
+
+        // prompt to WebBluetooth device connection
+        if (xml.querySelector('block[type="things_webBluetooth"]')) {
+          xml = Blast.Storage.generatePairButtons(xml);
+          // show reconnect modal
+          document.getElementById('rcModal').style.display = 'block';
+        }
+                
         Blockly.Xml.domToWorkspace(xml, Blast.workspace);
         Blast.Storage.monitorChanges_(Blast.workspace);
       });
+};
+
+/**
+ * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
+ * @param {!Element} xml XML to parse for devices.
+ * @private
+ */
+Blast.Storage.generatePairButtons = function(xml) {
+  const blocks = xml.querySelectorAll('block');
+
+  const tbody = document.getElementById('rc-tbody');
+  // delete all table rows from tbody
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+
+  // add pair button for each web bluetooth block
+  for (const block of blocks) {
+    if (block.getAttribute('type') == 'things_webBluetooth') {
+      // get user defined name
+      const name = block.firstElementChild.textContent;
+
+      // add new row
+      const row = document.createElement('tr');
+      // generate name cell html
+      const nameCell = document.createElement('td');
+      nameCell.appendChild(document.createTextNode(name));
+      // pair cell html
+      const pairCell = document.createElement('td');
+      const pairButton = document.createElement('input');
+      pairButton.setAttribute('type', 'button');
+      pairButton.setAttribute('id', 'pairButton-' + name);
+      pairButton.setAttribute('value', 'Pair');
+      // pair status html
+      const statusCell = document.createElement('td');
+      const pairStatus = document.createElement('span');
+      pairStatus.setAttribute('id', 'pairStatus-' + name);
+      pairStatus.innerHTML = '&#x2718;';
+      pairStatus.style.color = 'red';
+      pairStatus.style.fontSize = '20px';
+      pairStatus.style.fontWeight = 'bold';
+      pairStatus.style.marginRight = '10px';
+      // add pair status to status cell
+      statusCell.appendChild(pairStatus);
+
+      // pair button click listener
+      pairButton.addEventListener('click', function() {
+        // set webbluetooth options
+        const options = {};
+        options.acceptAllDevices = true;
+        options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+      
+        navigator.bluetooth.requestDevice(options)
+            .then((device) => {
+              Blast.Things.addWebBluetoothDevice(device.id, name);
+              // change pair status to checkmark
+              document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
+              document.getElementById('pairStatus-' + name).style.color = 'green';
+            })
+            .catch((error) => {
+              Blast.throwError('Error connecting to WebBluetooth device:\n' + error);
+            });
+      });
+
+      pairCell.appendChild(pairButton);
+
+      // add new cells to row and row to table
+      row.appendChild(nameCell);
+      row.appendChild(pairCell);
+      row.appendChild(statusCell);
+      tbody.appendChild(row);
+    }
+  }
 };
  
 /**

@@ -158,8 +158,20 @@
         <hr>     
         <div class="row" id="reconnect-row">
           <div class="col">
-            <form id="rc-form">
-            </form>
+            <table id="rc-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Pair</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="rc-tbody">
+              </tbody>
+            </table>
+            <br>
+            <input type="button" id="rc-cancel" value="cancel">
+            <input type="button" id="rc-done" value="done" disabled>
           </div>
         </div>
       </div>
