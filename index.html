@@ -176,6 +176,33 @@
       </div>
     </div>
   </div>
+
+    <!-- Reconnect Modal -->
+    <div id="rcModal" class="modal">
+      <div class="modal-content">
+        <span id ="rcClose" class="close">&times;</span>
+        <h1>Please connect these devices to load the Program:</h1>
+        <hr>     
+        <div class="row" id="reconnect-row">
+          <div class="col">
+            <table id="rc-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Pair</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="rc-tbody">
+              </tbody>
+            </table>
+            <br>
+            <input type="button" id="rc-cancel" value="cancel">
+            <input type="button" id="rc-done" value="done" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
   
   <!-- WebHID Modal -->
   <div id="wHidModal" class="modal">
@@ -229,6 +256,7 @@
   const wbClose = document.getElementById("wbClose");
   const wHidModal = document.getElementById("wHidModal");
   const wHidClose = document.getElementById("wHidClose");
+  const rcClose = document.getElementById("rcClose");
 
   // logs webBluetooth to wb-output div
   const wbLog = function(){
@@ -239,7 +267,7 @@
     document.getElementById('wb-log').textContent += line + '\n';
   }
   
-  // logs webBluetooth to wb-output div
+  // logs webHid to wHid-output div
   const wHidLog = function(){
     var line = Array.prototype.slice.call(arguments).map(function(argument) {
       return typeof argument === 'string' ? argument : JSON.stringify(argument);
@@ -361,6 +389,10 @@
     wHidModal.style.display = "none";
   }
 
+  rcClose.onclick = function () {
+    rcModal.style.display = "none";
+  }
+
   // When the user clicks anywhere outside of the modal, close it
   window.onclick = function (event) {
     if (event.target == wbModal) {
@@ -368,6 +400,9 @@
     }
     if (event.target == wHidModal) {
       wHidModal.style.display = "none";
+    }
+    if (event.target == rcModal) {
+      rcModal.style.display = "none";
     }
   }
 </script>
