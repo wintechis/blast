@@ -1,7 +1,7 @@
 <img src="media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
 # BLAST - Block Applications For Things 
-This project aims to provide a visual programming environment for creating and executing applications, that communicate and interact with the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).
+This project aims to provide a visual programming environment for creating and executing applications, that communicate and interact with devices of the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).
 
 Check [./docs/](docs/) for detailed documentation.
 
@@ -11,7 +11,7 @@ If you want to use the save/load features, however you have to host the files on
 
 The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/.
 
-> :warning: **Blocks that perform fetch request, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
+> :warning: **Blocks that perform fetch requests, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 
 > :warning: **BLAST's BlueTooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
@@ -38,7 +38,7 @@ If you need Linux compatibility, it might help to star this [watchAdvertisement 
 * [Windows](https://crbug.com/507419): Requires Windows 10 version 1706 (Creators Update) or later.
 
 ### Saving & Loading
-Saving and loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions. 
+Loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions. 
 
 ### Building
 In order to build BLAST yourself, follow these steps:
