@@ -316,4 +316,142 @@ button {
     background-color: #4CAF50;
     color: white;
   }
-  
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* rc table styles */
+#rc-table {
+  display: table;
+  border-spacing: 0;
+  text-align: left;
+  width: 100%;
+}
+
+#rc-table tr {
+  display: table-row;
+  vertical-align: inherit;
+  border-color: inherit;
+}
+
+#rc-table tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+#rc-table td, #rc-table th {
+  border-bottom: 0.1rem solid #e1e1e1;
+  padding: 1.2rem 1.5rem;
+}
+
+#rc-table td:first-child, #rc-table th:first-child {
+  border-left: 0;
+  padding-left: 0;
+}
+
+#rc-table td:last-child, #rc-table th:last-child {
+  padding-right: 0;
+  border-right: none;
+}
+
+#rc-table thead {
+  display: table-header-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+#rc-table thead th {
+  font-weight: bold;
+  color: #333333;
+}
+
+#rc-cancel {
+  background-color: #f44336;
+}
+
+#rc-done {
+  background-color: #4CAF50;
+  float: right;
+}
+
+#rc-done:disabled {
+  background-color: #cccccc;
+}
+
+/* Modal background */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 99; /* blockly toolbox is 70 */
+  padding-top: 100px;
+  left: 0;
+  top: 0; 
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 60%;
+}
+
+/* Modal Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal * {
+  box-sizing: border-box;
+}
+
+.modal input[type=text], select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+.modal label {
+  padding: 12px 12px 12px 0;
+  display: inline-block;
+}
+
+
+.modal input[type=submit],.modal input[type=button] {
+  background: #4285f4;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

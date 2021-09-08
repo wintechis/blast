@@ -114,6 +114,32 @@
             </div>
         </div>
     </div>
+    <!-- Reconnect Modal -->
+    <div id="rcModal" class="modal">
+        <div class="modal-content">
+            <span id ="rcClose" class="close">&times;</span>
+            <h1>Please connect these devices to load the Program:</h1>
+            <hr>     
+            <div class="row" id="reconnect-row">
+            <div class="col">
+                <table id="rc-table">
+                <thead>
+                    <tr>
+                    <th>Name</th>
+                    <th>Pair</th>
+                    <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="rc-tbody">
+                </tbody>
+                </table>
+                <br>
+                <input type="button" id="rc-cancel" value="cancel">
+                <input type="button" id="rc-done" value="done" disabled>
+            </div>
+            </div>
+        </div>
+        </div>
     <script>
         Blast.bindClick('load-button', function() {
             // hide the load container
