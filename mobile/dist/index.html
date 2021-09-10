@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- import the Material stylesheet -->
+    <link rel="stylesheet" href="dist/bundle.css">
+    <link rel="apple-touch-icon" sizes="57x57" href="../media/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="../media/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="../media/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="../media/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="../media/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="../media/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="../media/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="../media/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../media/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="../media/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../media/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="../media/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../media/favicon-16x16.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="manifest" href="../site.webmanifest">
+    <title>BLAST - Block Applications for Things</title>
+
+    <!-- JS Interpreter -->
+    <script src="../js/lib/JSInterpreter/acorn.js"></script>
+    <script src="../js/lib/JSInterpreter/interpreter.js"></script>
+
+    <!-- blockly with js generator -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/blockly_compressed.min.js"
+        integrity="sha512-iqNC/BA2OwsMa0EMB4Xnxm7i+Y38C5j26CjgG/prCg74ILAJomPIIyp+I45hVfV9A50vnaGoh808fu6GaGAuHw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/msg/en.min.js"
+        integrity="sha512-CcZSuOhlsHqLLiF3M8hvMc8aWqTE36GEaE/cP7HMNOSZytGihNqhQxFzkXigYQp4psZWCVjEXY2oYFN4+vLAYg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/blocks_compressed.min.js"
+        integrity="sha512-2EDgchO+DLca8kTvZv5NGY57nB+fH3DelW4qIKEW94cUy+UpgHNdpO6GCSxUtGYuG6ny7f2fssqCIrlN3WrHvw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/javascript_compressed.min.js"
+        integrity="sha512-ATkMUjg1QwPS8AgpyN53xYVsIlqlYa8N3jxp0XYLRxdCXxzh1LmC+WmpilE/E9sFX1RVdxidf2bFI9O8Pl5bUw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+    </script>
+
+    <!-- urdf -->
+    <script src="../js/lib/urdf/urdf-browser.js"></script>
+
+    <!-- play/stop icons -->
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js"
+        integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg=="
+        crossorigin="anonymous"></script>
+
+    <!-- blast libraries -->
+    <script src="../js/blast.min.js"></script>
+  </head>
+  <body class="mdc-typography">
+    <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
+      <div class="mdc-top-app-bar__row">
+        <section class="mdc-top-app-bar__section">
+          <div class="mdc-tab-bar" role="tablist">
+            <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
+              <div class="mdc-tab-scroller__scroll-area">
+                <div class="mdc-tab-scroller__scroll-content">
+                  
+                  <button id="load-tab" class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                    <span class="mdc-tab__content">
+                      <span class="mdc-tab__icon material-icons" aria-hidden="true">get_app</span>
+                      <span class="mdc-tab__text-label">Load</span>
+                    </span>
+                    <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+                  
+                  <button id="execute-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
+                    <span class="mdc-tab__content">
+                      <span class="mdc-tab__icon material-icons" aria-hidden="true">play_circle</span>
+                      <span class="mdc-tab__text-label">Execute</span>
+                    </span>
+                    <span class="mdc-tab-indicator">
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+                  
+                  <button id="output-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
+                    <span class="mdc-tab__content">
+                      <span class="mdc-tab__icon material-icons" aria-hidden="true">comment</span>
+                      <span class="mdc-tab__text-label">Output</span>
+                    </span>
+                    <span class="mdc-tab-indicator">
+                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                    </span>
+                    <span class="mdc-tab__ripple"></span>
+                  </button>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </header>
+    
+    <main class="main-content">
+      <div class="mdc-top-app-bar--fixed-adjust">
+
+        <!-- load tab -->
+        <section id="load-content" class="tab-content">
+          <div class="mdc-card blast-card">
+            <div class="mdc-card__primary-action" tabindex="0">
+              <div class="blast-card__primary">
+                  <h3 class="blast-card__subtitle mdc-typography mdc-typography--overline">LOAD</h3>
+                <h2 class="blast-card__title mdc-typography mdc-typography--headline6">Enter an URI to a BLAST program below</h2>
+              </div>
+              <div class="blast-card__secondary mdc-typography mdc-typography--body2">
+                <div class="mdc-text-field text-field-with-input">
+                  <input id="loadWorkspace-input" class="mdc-text-field__input">
+                  <div class="mdc-line-ripple"></div>
+                  <label class="mdc-floating-label mdc-floating-label--float-above">URI</label>
+                </div>
+                <div class="mdc-text-field-helper-line">
+                  <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">e.g.: ../storage/gamble.xml</div>
+                </div>
+              </div>
+            </div>
+            <div class="mdc-card__actions">
+              <div class="mdc-card__action-icons">
+                <button class="mdc-button mdc-card__action mdc-card__action--button" id="load-button">
+                  <span class="mdc-tab__icon material-icons" aria-hidden="true">get_app</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <!-- execute tab -->
+        <section id="execute-content" class="tab-content">
+          <div class="mdc-card blast-card">
+            <div class="mdc-card__primary-action" tabindex="0">
+              <div class="blast-card__primary">
+                  <h3 class="blast-card__subtitle mdc-typography mdc-typography--overline">EXECUTE</h3>
+                <h2 class="blast-card__title mdc-typography mdc-typography--headline6">Click the run button to execute</h2>
+              </div>
+              <div class="blast-card__secondary mdc-typography mdc-typography--body2">
+                <!-- BLAST workspace -->
+                <div id="content_workspace"></div>
+                <pre id="content_javascript" class="content prettyprint lang-js"></pre>
+                <textarea id="content_xml" class="content" wrap="off"></textarea>
+              </div>
+            </div>
+            <div class="mdc-card__actions">
+              <div class="mdc-card__action-icons">
+                <div id="controls">
+                  <span id="statusContainer">ready</span>
+                  <button id="runButton" class="primary" title="Run the program">
+                    <svg class="icon icon-play">
+                      <use xlink:href="../media/symbol-defs.svg#icon-play"></use>
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        <section id="output-content" class="tab-content">
+          <div class="mdc-card blast-card">
+            <div class="mdc-card__primary-action" tabindex="0">
+              <div class="blast-card__primary">
+                  <h3 class="blast-card__subtitle mdc-typography mdc-typography--overline">OUTPUT</h3>
+                <h2 class="blast-card__title mdc-typography mdc-typography--headline6">Below is the program's output</h2>
+              </div>
+              <div class="blast-card__secondary mdc-typography mdc-typography--body2">
+                <div id="msgOutputContainer"></div>
+              </div>
+            </div>
+            <div class="mdc-card__actions">
+              <div class="mdc-card__action-buttons">
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    
+    <!-- import the Material javascript file -->
+    <script>
+      init = function() {
+        let input = document.querySelector('#load-content .mdc-text-field__input');
+        // early return if input is empty
+        if (input.value === '') {
+          return;
+        }
+
+        // load the program
+        // adjust workspace and toolbox on resize
+        const container = document.getElementById('content_workspace');
+        const onresize = function() {
+            const bBox = Blast.getBBox_(container);
+            for (const tab of Blast.Ui.TABS_) {
+            const el = document.getElementById('content_' + tab);
+            el.style.top = bBox.y + 'px';
+            el.style.left = bBox.x + 'px';
+            // Height and width need to be set, read back, then set again to
+            // compensate for scrollbars.
+            el.style.height = bBox.height + 'px';
+            el.style.height = 2 * bBox.height - el.offsetHeight + 'px';
+            el.style.width = bBox.width + 'px';
+            el.style.width = 2 * bBox.width - el.offsetWidth + 'px';
+            }
+        };
+        window.addEventListener('resize', onresize, false);
+
+        Blast.workspace = Blockly.inject('content_workspace', {
+            // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
+            media: 'media/',
+            readOnly: true,
+        });
+
+        onresize();
+        Blockly.svgResize(Blast.workspace);
+
+        // Initialize UI
+        Blast.Ui.init();
+        // overwrite icons paths
+        Blast.Ui.playIcon_ = '<svg class="icon icon-play">';
+        Blast.Ui.playIcon_ += '<use xlink:href="../media/symbol-defs.svg#icon-play"></use>';
+        Blast.Ui.playIcon_ += '</svg>';
+
+        Blast.Ui.stopIcon_ = '<svg class="icon icon-stop">';
+        Blast.Ui.stopIcon_ += '<use xlink:href="../media/symbol-defs.svg#icon-stop">';
+        Blast.Ui.stopIcon_ += '</use></svg>';
+
+        Blast.Ui.setStatus(Blast.status.READY);
+
+        // Load the interpreter now, and upon future changes.
+        Blast.generateCode();
+        Blast.workspace.addChangeListener(function(event) {
+            if (!(event instanceof Blockly.Events.Ui)) {
+            // Something changed. Parser needs to be reloaded.
+            Blast.generateCode();
+            Blast.States.generateCode();
+            Blast.Ui.renderContent_();
+            }
+        });
+        // load the workspace
+        Blast.Storage.load();
+      };
+  </script>
+  <script src="dist/bundle.js" async></script>
+  </body>
+</html>
