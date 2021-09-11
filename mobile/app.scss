@@ -1,6 +1,6 @@
 // Material Theming
-
-// Define theme variables before importing any MDC Web component styles
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+$mdc-typography-font-family: unquote("Roboto, sans-serif");
 // $mdc-theme-primary: midnightblue;
 
 // Import the styles for each MDC Web component
@@ -16,7 +16,11 @@
 @import "@material/tab/mdc-tab";
 @import "@material/textfield/mdc-text-field";
 @import "@material/textfield/helper-text/mdc-text-field-helper-text";
+@import "@material/theme/color-palette";
+@import "@material/theme/functions";
+@import "@material/theme/mixins";
 @import "@material/typography/mdc-typography";
+
 
 // Import site-specific CSS files
 @import "style";

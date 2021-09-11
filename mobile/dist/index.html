@@ -60,62 +60,62 @@
     <script src="../js/blast.min.js"></script>
   </head>
   <body class="mdc-typography">
+    <!-- Top app bar -->
     <header class="mdc-top-app-bar mdc-top-app-bar--fixed">
       <div class="mdc-top-app-bar__row">
         <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start">
           <img class="mdc-top-app-bar_navigation-icon logo" src="../media/logo.png">
-          <span class="mdc-top-app-bar__title">BLAST</span>
+          <span class="mdc-top-app-bar__title">BLAST - Block Applications for Things</span>
         </section>
+      </div>
+        <!-- Tab bar -->
+        <div class="mdc-tab-bar" role="tablist">
+          <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
+            <div class="mdc-tab-scroller__scroll-area">
+              <div class="mdc-tab-scroller__scroll-content">
+                <!-- Load tab button -->
+                <button id="load-tab" class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
+                  <span class="mdc-tab__content">
+                    <span class="mdc-tab__icon material-icons" aria-hidden="true">get_app</span>
+                    <span class="mdc-tab__text-label">Load</span>
+                  </span>
+                  <span class="mdc-tab-indicator mdc-tab-indicator--active">
+                    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                  </span>
+                  <span class="mdc-tab__ripple"></span>
+                </button>
+                <!-- Execute tab button-->
+                <button id="execute-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
+                  <span class="mdc-tab__content">
+                    <span class="mdc-tab__icon material-icons" aria-hidden="true">play_circle</span>
+                    <span class="mdc-tab__text-label">Execute</span>
+                  </span>
+                  <span class="mdc-tab-indicator">
+                    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                  </span>
+                  <span class="mdc-tab__ripple"></span>
+                </button>
+                <!-- Output tab button -->
+                <button id="output-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
+                  <span class="mdc-tab__content">
+                    <span class="mdc-tab__icon material-icons" aria-hidden="true">comment</span>
+                    <span class="mdc-tab__text-label">Output</span>
+                  </span>
+                  <span class="mdc-tab-indicator">
+                    <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
+                  </span>
+                  <span class="mdc-tab__ripple"></span>
+                </button>
 
-          <div class="mdc-tab-bar" role="tablist">
-            <div class="mdc-tab-scroller mdc-tab-scroller--align-center">
-              <div class="mdc-tab-scroller__scroll-area">
-                <div class="mdc-tab-scroller__scroll-content">
-                  
-                  <button id="load-tab" class="mdc-tab mdc-tab--min-width mdc-tab--active" role="tab" aria-selected="true" tabindex="0">
-                    <span class="mdc-tab__content">
-                      <span class="mdc-tab__icon material-icons" aria-hidden="true">get_app</span>
-                      <span class="mdc-tab__text-label">Load</span>
-                    </span>
-                    <span class="mdc-tab-indicator mdc-tab-indicator--active">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-                  
-                  <button id="execute-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
-                    <span class="mdc-tab__content">
-                      <span class="mdc-tab__icon material-icons" aria-hidden="true">play_circle</span>
-                      <span class="mdc-tab__text-label">Execute</span>
-                    </span>
-                    <span class="mdc-tab-indicator">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-                  
-                  <button id="output-tab" class="mdc-tab mdc-tab--min-width" role="tab" tabindex="0">
-                    <span class="mdc-tab__content">
-                      <span class="mdc-tab__icon material-icons" aria-hidden="true">comment</span>
-                      <span class="mdc-tab__text-label">Output</span>
-                    </span>
-                    <span class="mdc-tab-indicator">
-                      <span class="mdc-tab-indicator__content mdc-tab-indicator__content--underline"></span>
-                    </span>
-                    <span class="mdc-tab__ripple"></span>
-                  </button>
-
-                </div>
               </div>
             </div>
           </div>
-        </section>
-      </div>
+        </div> <!-- Tab bar -->
+      </div> <!-- Top app bar -->
     </header>
-    
     <main class="main-content">
+      
       <div class="mdc-top-app-bar--fixed-adjust">
-
         <!-- load tab -->
         <section id="load-content" class="tab-content">
           <div class="mdc-card blast-card">
@@ -138,7 +138,7 @@
             <div class="mdc-card__actions">
               <div class="mdc-card__action-icons">
                 <button class="mdc-button mdc-card__action mdc-card__action--button" id="load-button">
-                  <span class="mdc-tab__icon material-icons" aria-hidden="true">get_app</span>
+                  <span class="material-icons" aria-hidden="true">get_app</span>
                 </button>
               </div>
             </div>
@@ -216,6 +216,7 @@
           </div>
         </section>
         
+        <!-- Output tab -->
         <section id="output-content" class="tab-content">
           <div class="mdc-card blast-card">
             <div class="mdc-card__primary-action" tabindex="0">
@@ -233,9 +234,17 @@
             </div>
           </div>
         </section>
+
       </div>
     </main>
     <script>
+      // Add service worker to the page
+      window.addEventListener('load', function() {
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.register('../sw.js', { scope: './' });
+        }
+      });
+      
       init = function() {
         // request NOTIFICATION permission
         if (Notification.permission !== "granted") {
