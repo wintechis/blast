@@ -160,7 +160,9 @@ Blast.Storage.retrieveXML_ = async function(path) {
         if (xml.querySelector('block[type="things_webBluetooth"]')) {
           xml = Blast.Storage.generatePairButtons(xml);
           // show reconnect modal
-          document.getElementById('rcModal').style.display = 'block';
+          if (document.getElementById('rcModal')) {
+            document.getElementById('rcModal').style.display = 'block';
+          }
           // return. will continue after reconnecting to devices
           return;
         }
@@ -176,8 +178,21 @@ Blast.Storage.retrieveXML_ = async function(path) {
  * @private
  */
 Blast.Storage.generatePairButtons = function(xml) {
-  const blocks = xml.querySelectorAll('block');
+  if (window.location.href.includes('mobile')) {
+    window.app.openReconnectDialog();
+    this.generatePairButtonsMobile_(xml);
+  } else {
+    this.generatePairButtonsDesktop_(xml);
+  }
+};
 
+/**
+ * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
+ * @param {!Element} xml XML to parse for devices.
+ * @private
+ */
+Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
+  const blocks = xml.querySelectorAll('block');
   const tbody = document.getElementById('rc-tbody');
   // delete all table rows from tbody
   while (tbody.firstChild) {
@@ -228,7 +243,7 @@ Blast.Storage.generatePairButtons = function(xml) {
               document.getElementById('pairStatus-' + name).style.color = 'green';
               
               // if all devices have been paired, enable done button
-              if (Blast.Storage.allConnected_()) {
+              if (Blast.Storage.allConnectedDesktop_()) {
                 document.getElementById('rc-done').disabled = false;
                 // add done button click listener
                 document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
@@ -246,10 +261,87 @@ Blast.Storage.generatePairButtons = function(xml) {
       row.appendChild(pairCell);
       row.appendChild(statusCell);
       tbody.appendChild(row);
-      // add cancel button click listener
-      document.getElementById('rc-cancel').addEventListener('click', () => Blast.Storage.reconnectCancelHandler_());
+    }
+    // add cancel button click listener
+    document.getElementById('rc-cancel').addEventListener('click', () => Blast.Storage.reconnectCancelHandler_());
+  }
+};
+
+/**
+ * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
+ * @param {!Element} xml XML to parse for devices.
+ */
+Blast.Storage.generatePairButtonsMobile_ = function(xml) {
+  const blocks = xml.querySelectorAll('block');
+  // empty list
+  const list = document.getElementById('rc-list');
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
+  }
+  // add pair button for each web bluetooth block
+  for (const block of blocks) {
+    if (block.getAttribute('type') == 'things_webBluetooth') {
+      // get user defined name
+      const name = block.firstElementChild.textContent;
+
+      // add new list item
+      const item = document.createElement('li');
+      item.setAttribute('id', 'rc-item-' + name);
+      item.setAttribute('class', 'mdc-list-item');
+      // add bluetooth icon to list item
+      const icon = document.createElement('span');
+      icon.setAttribute('id', 'rc-icon-' + name);
+      icon.setAttribute('class', 'mdc-list-item__graphic material-icons');
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = 'bluetooth';
+      item.appendChild(icon);
+      // add name and status to list item
+      const text = document.createElement('span');
+      text.setAttribute('class', 'mdc-list-item__text');
+      const primaryText = document.createElement('span');
+      primaryText.setAttribute('class', 'mdc-list-item__primary-text');
+      primaryText.innerHTML = name;
+      text.appendChild(primaryText);
+      const secondaryText = document.createElement('span');
+      secondaryText.setAttribute('class', 'mdc-list-item__secondary-text');
+      secondaryText.setAttribute('id', 'rc-status-' + name);
+      secondaryText.innerHTML = 'unpaired';
+      text.appendChild(secondaryText);
+      item.appendChild(text);
+      // add click listener to list item
+      item.addEventListener('click', function() {
+        // set webbluetooth options
+        const options = {};
+        options.acceptAllDevices = true;
+        options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+              
+        navigator.bluetooth.requestDevice(options)
+            .then((device) => {
+              Blast.Things.addWebBluetoothDevice(device.id, name);
+              // change pair status to checkmark
+              document.getElementById('rc-status-' + name).innerHTML = 'connected';
+              // change icon to bluetooth connected
+              document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth_connected';
+              // change icon color to blue
+              document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+                      
+              // if all devices have been paired, enable done button
+              if (Blast.Storage.allConnectedMobile_()) {
+                document.getElementById('rc-done').disabled = false;
+                // add done button click listener
+                document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+              }
+            })
+            .catch((error) => {
+              Blast.throwError('Error connecting to WebBluetooth device:\n' + error);
+            });
+      });
+      // add list item to list
+      list.appendChild(item);
     }
   }
+  // Init material ui list
+  window.app.initLists();
 };
 
 /**
@@ -257,11 +349,26 @@ Blast.Storage.generatePairButtons = function(xml) {
  * @return {boolean} true if all devices have been paired.
  * @private
  */
-Blast.Storage.allConnected_ = function() {
+Blast.Storage.allConnectedDesktop_ = function() {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
     const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
     if (pairStatus.innerHTML == '&#x2718;') {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Checks if all devices from the reconnect modal have been paired.
+ * @returns {boolean} true if all devices have been paired.
+ */
+Blast.Storage.allConnectedMobile_ = function() {
+  const blocks = document.getElementById('rc-list').querySelectorAll('[id=rc-status-]');
+  for (const block of blocks) {
+    const pairStatus = document.getElementById('rc-status-' + block.textContent);
+    if (pairStatus.innerHTML == 'unpaired') {
       return false;
     }
   }
@@ -274,8 +381,13 @@ Blast.Storage.allConnected_ = function() {
  * @private
  */
 Blast.Storage.reconnectDoneHandler_ = function(xml) {
-  // hide reconnect modal
-  document.getElementById('rcModal').style.display = 'none';
+  if (window.location.href.includes('mobile')) {
+    // hide reconnect dialog
+    document.getElementById('rc-dialog').style.display = 'none';
+  } else {
+    // hide reconnect modal
+    document.getElementById('rcModal').style.display = 'none';
+  }
   // rebuild workspace from xml
   Blockly.Xml.domToWorkspace(xml, Blast.workspace);
   Blast.Storage.monitorChanges_(Blast.workspace);

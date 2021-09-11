@@ -159,6 +159,10 @@ Blast.getBBox_ = function(element) {
  * @public
  */
 Blast.init = function() {
+  // mobile website has its own init
+  if (window.location.href.includes('mobile')) {
+    return;
+  }
   // adjust workspace and toolbox on resize
   const container = document.getElementById('content_area');
   const onresize = function() {

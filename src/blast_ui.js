@@ -103,6 +103,20 @@ Blast.Ui.addElementToOutputContainer = function(elem) {
  * @public
  */
 Blast.Ui.addMessage = function(message) {
+  // Send notification if window is not focused.
+
+  let icon = 'media/blast-icon.png';
+  if (window.location.href.includes('mobile')) {
+    icon = '../' + icon;
+  }
+  navigator.serviceWorker.ready.then(function(registration) {
+    registration.showNotification('Blast', {
+      body: message,
+      icon: icon,
+      vibrate: [200, 100, 200, 100, 200, 100, 200],
+    });
+  });
+
   // container for the new message
   const msg = document.createElement('div');
   msg.classList.add('message');
@@ -204,16 +218,13 @@ Blast.Ui.init = function() {
   Blast.Ui.messageOutputContainer = document.getElementById('msgOutputContainer');
   Blast.Ui.statusContainer = document.getElementById('statusContainer');
 
+  // mobile website has its own tab system
+  if (window.location.href.includes('mobile')) {
+    return;
+  }
+
   // Bind onClick events to tabs
   Blast.Ui.tabClick_(Blast.Ui.selected_);
-  Blast.Ui.uriInput.addEventListener('keyup', (event) => {
-    // load blocks from URI on Enter
-    if (event.keyCode === 13) {
-      Blast.Storage.load();
-    }
-  });
-  Blast.bindClick('loadButton', Blast.Storage.load);
-  Blast.bindClick('saveButton', Blast.Storage.link);
 
   for (const name of Blast.Ui.TABS_) {
     Blast.bindClick(
@@ -225,4 +236,14 @@ Blast.Ui.init = function() {
         })(name),
     );
   }
+
+  Blast.bindClick('loadButton', Blast.Storage.load);
+  Blast.bindClick('saveButton', Blast.Storage.link);
+
+  // load blocks from URI on Enter
+  Blast.Ui.uriInput.addEventListener('keyup', (event) => {
+    if (event.keyCode === 13) {
+      Blast.Storage.load();
+    }
+  });
 };

@@ -29,6 +29,7 @@ gulp.task('workbox', function() {
       'style.css',
       'js/**/*.js',
       'media/**',
+      'mobile/**',
     ],
     swSrc: 'sw-pre-workbox.js',
     swDest: 'sw.js',
