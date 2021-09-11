@@ -187,7 +187,7 @@ Blast.Storage.generatePairButtons = function(xml) {
 
 /**
  * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
- * @param {!Element} blocks XML to parse for devices.
+ * @param {!Element} xml XML to parse for devices.
  * @private
  */
 Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
@@ -266,6 +266,10 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
   }
 };
 
+/**
+ * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
+ * @param {!Element} xml XML to parse for devices.
+ */
 Blast.Storage.generatePairButtonsMobile_ = function(xml) {
   const blocks = xml.querySelectorAll('block');
   // empty list
