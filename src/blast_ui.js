@@ -103,6 +103,18 @@ Blast.Ui.addElementToOutputContainer = function(elem) {
  * @public
  */
 Blast.Ui.addMessage = function(message) {
+  // Send notification if window is not focused.
+  if (!document.hasFocus()) {
+    let icon = 'media/blast-icon.png';
+    if (window.location.href.includes('mobile')) {
+      icon = '../' + icon;
+    }
+    new Notification('Blast', {
+      body: message,
+      icon: icon,
+    });
+  }
+  
   // container for the new message
   const msg = document.createElement('div');
   msg.classList.add('message');

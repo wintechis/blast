@@ -174,7 +174,7 @@
                 </ul>
               </div>
               <footer class="mdc-dialog__actions">
-                <button type="button" class="mdc-button mdc-dialog__button" id="rc-done">
+                <button type="button" class="mdc-button mdc-dialog__button" id="rc-done" disabled>
                   <span class="mdc-button__label">Done</span>
                 </button>
               </footer>
@@ -231,10 +231,13 @@
         </section>
       </div>
     </main>
-    
-    <!-- import the Material javascript file -->
     <script>
       init = function() {
+        // request NOTIFICATION permission
+        if (Notification.permission !== "granted") {
+          Notification.requestPermission();
+        }
+
         let input = document.querySelector('#load-content .mdc-text-field__input');
         // early return if input is empty
         if (input.value === '') {
