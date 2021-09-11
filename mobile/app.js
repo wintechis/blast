@@ -1,4 +1,6 @@
 import {
+  MDCDialog,
+  MDCList,
   MDCRipple,
   MDCTabBar,
   MDCTopAppBar,
@@ -53,9 +55,30 @@ loadButton.addEventListener('click', () => {
       return;
     }
 
+    // Activate dialog
+    const dialogEl = mainEl.querySelector('.mdc-dialog');
+    const dialog = new MDCDialog(dialogEl);
+    dialog.open();
+
     // switch to execute tab
     switchToTab('execute-tab');
 
     init();
   });
 });
+
+// List
+function initLists() {
+  const listEls = Array.from(mainEl.querySelectorAll('.mdc-list'));
+  listEls.forEach((el) => {
+    let list = new MDCList(el);
+    list.listElements.map((listItemEl) => new MDCRipple(listItemEl));
+    list.singleSelection = true;
+  });
+};
+
+initLists();
+
+export default{
+  initLists,
+}

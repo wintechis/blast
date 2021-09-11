@@ -6,6 +6,9 @@ module.exports = [{
   entry: ['./app.scss', './app.js'],
   output: {
     filename: 'bundle.js',
+    library: 'app',
+    libraryTarget: 'window',
+    libraryExport: 'default',
   },
   devServer: {
     contentBase: 'target',

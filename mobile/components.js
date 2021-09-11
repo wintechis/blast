@@ -1,7 +1,7 @@
-// We import components here instead of directly in app.js 
-// so that we can prebuild them into a Webpack DLL file.
+// This file is dynamically imported by the app.js file.
 
-
+export {MDCDialog} from '@material/dialog';
+export {MDCList} from '@material/list';
 export {MDCRipple} from '@material/ripple/index';
 export {MDCTabBar} from '@material/tab-bar';
 export {MDCTextField} from '@material/textfield';
