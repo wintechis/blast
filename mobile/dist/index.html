@@ -241,7 +241,7 @@
       // Add service worker to the page
       window.addEventListener('load', function() {
         if (navigator.serviceWorker) {
-          navigator.serviceWorker.register('../sw.js', { scope: './' });
+          navigator.serviceWorker.register('../sw.js', { scope: '../' });
         }
       });
       
