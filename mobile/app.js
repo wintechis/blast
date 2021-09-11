@@ -55,17 +55,18 @@ loadButton.addEventListener('click', () => {
       return;
     }
 
-    // Activate dialog
-    const dialogEl = mainEl.querySelector('.mdc-dialog');
-    const dialog = new MDCDialog(dialogEl);
-    dialog.open();
-
     // switch to execute tab
     switchToTab('execute-tab');
 
     init();
   });
 });
+
+function openReconnectDialog(){
+    const dialogEl = mainEl.querySelector('.mdc-dialog');
+    const dialog = new MDCDialog(dialogEl);
+    dialog.open();
+}
 
 // List
 function initLists() {
@@ -81,4 +82,5 @@ initLists();
 
 export default{
   initLists,
+  openReconnectDialog,
 }

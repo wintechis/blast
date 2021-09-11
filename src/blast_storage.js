@@ -179,6 +179,7 @@ Blast.Storage.retrieveXML_ = async function(path) {
  */
 Blast.Storage.generatePairButtons = function(xml) {
   if (window.location.href.includes('mobile')) {
+    window.app.openReconnectDialog();
     this.generatePairButtonsMobile_(xml);
   } else {
     this.generatePairButtonsDesktop_(xml);
