@@ -160,7 +160,7 @@ Blast.Storage.retrieveXML_ = async function(path) {
         if (xml.querySelector('block[type="things_webBluetooth"]')) {
           xml = Blast.Storage.generatePairButtons(xml);
           // show reconnect modal
-          if (document.getElementById('reconnectModal')) {
+          if (document.getElementById('rcModal')) {
             document.getElementById('rcModal').style.display = 'block';
           }
           // return. will continue after reconnecting to devices
