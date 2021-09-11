@@ -234,10 +234,17 @@
             </div>
           </div>
         </section>
-        
+
       </div>
     </main>
     <script>
+      // Add service worker to the page
+      window.addEventListener('load', function() {
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.register('../sw.js', { scope: './' });
+        }
+      });
+      
       init = function() {
         // request NOTIFICATION permission
         if (Notification.permission !== "granted") {

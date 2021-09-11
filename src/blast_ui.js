@@ -104,17 +104,19 @@ Blast.Ui.addElementToOutputContainer = function(elem) {
  */
 Blast.Ui.addMessage = function(message) {
   // Send notification if window is not focused.
-  if (!document.hasFocus()) {
-    let icon = 'media/blast-icon.png';
-    if (window.location.href.includes('mobile')) {
-      icon = '../' + icon;
-    }
-    new Notification('Blast', {
+
+  let icon = 'media/blast-icon.png';
+  if (window.location.href.includes('mobile')) {
+    icon = '../' + icon;
+  }
+  navigator.serviceWorker.ready.then(function(registration) {
+    registration.showNotification('Blast', {
       body: message,
       icon: icon,
+      vibrate: [200, 100, 200, 100, 200, 100, 200],
     });
-  }
-  
+  });
+
   // container for the new message
   const msg = document.createElement('div');
   msg.classList.add('message');
