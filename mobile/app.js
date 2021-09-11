@@ -10,6 +10,10 @@ import {
 
 const mainEl = document.querySelector('.main-content');
 
+// Top app bar
+const topAppBarEls = Array.from(mainEl.querySelectorAll('.mdc-top-app-bar'));
+topAppBarEls.forEach((el) => new MDCTopAppBar(el));
+
 // Tabs
 const topAppBar = new MDCTopAppBar(document.querySelector('.mdc-top-app-bar'));
 const tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));

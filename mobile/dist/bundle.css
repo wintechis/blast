@@ -3103,6 +3103,8 @@ body {
   color: rgba(0, 0, 0, 0.87);
   top: 0;
   left: 0; }
+  .mdc-top-app-bar .logo {
+    height: 40px; }
 
 #execute-content, #output-content {
   display: none; }
