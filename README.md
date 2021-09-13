@@ -1,7 +1,7 @@
 <img src="media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
 # BLAST - Block Applications For Things 
-This project aims to provide a visual programming environment for creating and executing applications, that communicate and interact with devices of the Web of Things [WoT](https://www.w3.org/TR/wot-architecture/).
+BLAST provides a visual programming environment (VPE) for creating and executing applications, that communicate and interact with devices from the Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)). Employing a VPE, BLAST makes creating WoT Applications more accessible. Without knowing any details of the technologies or communication protocols used by a device, users can create complete Programs that read or write a device's properties, invoke actions and listen to events. Programs can then be executed on desktop pcs, smartphones and tablets.
 
 Check [./docs/](docs/) for detailed documentation.
 
