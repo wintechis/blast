@@ -11,7 +11,7 @@
     <field name="button6">FALSE</field>
     <value name="id">
       <block type="things_webHID">
-        <field name="id">ktmzu6xhkhxdi4ivgzn</field>
+        <field name="id">Streamdeck</field>
       </block>
     </value>
     <statement name="statements">
