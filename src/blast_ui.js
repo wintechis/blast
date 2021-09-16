@@ -32,18 +32,14 @@ Blast.Ui.selected_ = 'workspace';
  * @type {HTMLElement}
  * @private
  */
-Blast.Ui.playIcon_ = '<svg class="icon icon-play">';
-Blast.Ui.playIcon_ += '<use xlink:href="media/symbol-defs.svg#icon-play"></use>';
-Blast.Ui.playIcon_ += '</svg>';
+Blast.Ui.playIcon_ = '<span class="icon material-icons">play_arrow</span>';
 
 /**
  * Stop icon used for the start/stop button.
  * @type {HTMLElement}
  * @private
  */
-Blast.Ui.stopIcon_ = '<svg class="icon icon-stop">';
-Blast.Ui.stopIcon_ += '<use xlink:href="media/symbol-defs.svg#icon-stop">';
-Blast.Ui.stopIcon_ += '</use></svg>';
+Blast.Ui.stopIcon_ = '<span class="icon material-icons">stop</span>';
 
 /**
  * Number of messages in the Message Output Container.

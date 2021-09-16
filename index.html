@@ -79,12 +79,6 @@
   <!-- urdf -->
   <script src="js/lib/urdf/urdf-browser.js"></script>
 
-  <!-- play/stop icons -->
-  <script
-    src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js"
-    integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg=="
-    crossorigin="anonymous"></script>
-
   <!-- blast libraries -->
   <script src="js/blast.min.js"></script>
 </head>
@@ -116,24 +110,24 @@
             </td>
             <td class="tabmin">
               <button id="loadButton" title="load workspace">
-                <svg class="icon icon-download">
-                  <use xlink:href="media/symbol-defs.svg#icon-download"></use>
-                </svg>
+                <span class="icon material-icons">
+                  file_download
+                  </span>
               </button>
             </td>
             <td class="tabmin">
               <button id="saveButton" title="save workspace">
-                <svg class="icon icon-upload">
-                  <use xlink:href="media/symbol-defs.svg#icon-upload"></use>
-                </svg>
+                <span class="icon material-icons">
+                  file_upload
+                  </span>
               </button>
             </td>
             <td class="tabmax">
               <span id="statusContainer">ready</span>
               <button id="runButton" class="primary" title="Run the program">
-                <svg class="icon icon-play">
-                  <use xlink:href="media/symbol-defs.svg#icon-play"></use>
-                </svg>
+                <span class="material-icons">
+                  play_arrow
+                </span>
               </button>
             </td>
           </tr>
