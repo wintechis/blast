@@ -77,10 +77,10 @@ Blast.Storage.removeDeviceId_ = function(xml) {
       const device = block.firstElementChild;
       if (device) {
         const id = device.textContent;
-        const map = type == 'things_webBluetooth' ? Blast.Things.webBluetoothDevices : Blast.Things.webHidDevices;
+        const tuples = type == 'things_webBluetooth' ? Blast.Things.getWebBluetoothDevices() : Blast.Things.getWebHIDDevices();
         let name;
         // get the key of the device id
-        for (const [key, value] of map.entries()) {
+        for (const [key, value] of tuples) {
           if (value === id) {
             name = key;
             break;
