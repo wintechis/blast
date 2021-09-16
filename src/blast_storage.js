@@ -380,6 +380,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
       });
       // add list item to list
       list.appendChild(item);
+      blocksAdded.push(name);
     }
   }
   // Init material ui list
