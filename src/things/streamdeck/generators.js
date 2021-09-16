@@ -28,20 +28,20 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const buttonArray = [button1, button2, button3, button4, button5, button6];
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const code = `handleStreamdeck('${block.id}', ${id}, [${buttonArray}], ${statements});\n`;
+  const code = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
   return code;
 };
 
 
 /**
  * Handles button pushes on an elGato Stream Deck
- * @param {Blockly.Block.id} blockId id of the streamdeck block.
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
- * @param {String} statements .
+ * @param {String} statements code to be executed when the buttons are pushed.
  */
-const handleStreamdeck = async function(blockId, id, buttonArray, statements) {
+const handleStreamdeck = async function(id, buttonArray, statements) {
   const type = 'inputreport';
+  console.log(statements);
 
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
@@ -95,4 +95,4 @@ const handleStreamdeck = async function(blockId, id, buttonArray, statements) {
 };
 
 // Add streamdeck function to the Interpreter's API
-Blast.asyncApiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+Blast.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
