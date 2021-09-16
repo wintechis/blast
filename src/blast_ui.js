@@ -105,13 +105,15 @@ Blast.Ui.addMessage = function(message, type) {
   if (window.location.href.includes('mobile')) {
     icon = '../' + icon;
   }
-  navigator.serviceWorker.ready.then(function(registration) {
-    registration.showNotification('Blast', {
-      body: message,
-      icon: icon,
-      vibrate: [200, 100, 200, 100, 200, 100, 200],
+  if (!document.hasFocus()) {
+    navigator.serviceWorker.ready.then(function(registration) {
+      registration.showNotification('Blast', {
+        body: message,
+        icon: icon,
+        vibrate: [200, 100, 200, 100, 200, 100, 200],
+      });
     });
-  });
+  }
 
   // container for the new message
   const msg = document.createElement('div');
