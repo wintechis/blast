@@ -100,11 +100,11 @@ Blast.Ui.addElementToOutputContainer = function(elem) {
 /**
  * Creates a message element and adds it to the {@link Blast.Ui.messageOutputContainer}.
  * @param {string} message the message to be added
+ * @param {string=} type optional, type of the message, can be 'error', 'warning', or 'info'
  * @public
  */
-Blast.Ui.addMessage = function(message) {
+Blast.Ui.addMessage = function(message, type) {
   // Send notification if window is not focused.
-
   let icon = 'media/logo-512x512.png';
   if (window.location.href.includes('mobile')) {
     icon = '../' + icon;
@@ -120,6 +120,9 @@ Blast.Ui.addMessage = function(message) {
   // container for the new message
   const msg = document.createElement('div');
   msg.classList.add('message');
+  if (type) {
+    msg.classList.add(`${type}-message`);
+  }
   msg.id = 'message-' + Blast.Ui.messageCounter_++;
 
   const textNode = document.createTextNode(message);
@@ -209,7 +212,7 @@ Blast.Ui.setStatus = function(status) {
 };
 
 /**
- * Initialize the Uri by binding onclick events.
+ * Initialize the UI by binding onclick events.
  */
 Blast.Ui.init = function() {
   // Set remaining properties.

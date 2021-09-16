@@ -216,7 +216,7 @@ Blast.init = function() {
   });
 
   // Display output hint
-  Blast.Ui.addMessage('Actionblock output will be displayed here');
+  Blast.Ui.addMessage('Actionblock output will be displayed here', 'info');
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Blast.importPrettify, 1);
 };
@@ -287,6 +287,7 @@ Blast.removeDeviceHandlers = function() {
 Blast.runJS = function() {
   // Reset Ui
   Blast.resetUi(Blast.status.RUNNING);
+  Blast.Ui.addMessage('execution started', 'info');
   if (Blast.Interpreter == null) {
     // Begin execution
     Blast.highlightPause = false;
@@ -316,11 +317,12 @@ Blast.runJS = function() {
               // Program is complete.
               Blast.removeDeviceHandlers();
               Blast.resetUi(Blast.status.READY);
+              Blast.Ui.addMessage('execution completed', 'info');
               Blast.resetInterpreter();
             }
           }
         } catch (error) {
-          Blockly.alert('Error executing program:\n%e'.replace('%e', error));
+          Blast.throwError(error);
           Blast.Ui.setStatus(Blast.status.ERROR);
           Blast.removeDeviceHandlers();
           Blast.resetInterpreter();
@@ -350,7 +352,7 @@ Blast.stopJS = function() {
 /**
  * Stop execution and adds an error message to the
  * {@link Blast.messageOutputContainer}.
- * @param {string} [text] optional, a custom error text
+ * @param {string=} text optional, a custom error text
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 Blast.throwError = function(text) {
@@ -358,8 +360,9 @@ Blast.throwError = function(text) {
     text = 'Error executing program - See console for details.';
   }
 
-  Blockly.alert('Error executing program:\n%e'.replace('%e', text));
+  Blast.Ui.addMessage(text, 'error');
   Blast.Ui.setStatus(Blast.status.ERROR);
+  Blast.Ui.addMessage('Execution stopped', 'info');
   Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
 };
