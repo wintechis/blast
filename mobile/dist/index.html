@@ -50,12 +50,6 @@
     <!-- urdf -->
     <script src="../js/lib/urdf/urdf-browser.js"></script>
 
-    <!-- play/stop icons -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/svgxuse/1.2.6/svgxuse.min.js"
-        integrity="sha512-yipBrwYdC4+gC3Rm6FY8KG+2xNTU+frQScGdqXFWanTQn9ZBRBNJ3R3vQ+7gkAxu2ilb5SuFer0DL+dNTTtyhg=="
-        crossorigin="anonymous"></script>
-
     <!-- blast libraries -->
     <script src="../js/blast.min.js"></script>
   </head>
@@ -206,9 +200,9 @@
                 <div id="controls">
                   <span id="statusContainer">ready</span>
                   <button id="runButton" class="primary" title="Run the program">
-                    <svg class="icon icon-play">
-                      <use xlink:href="../media/symbol-defs.svg#icon-play"></use>
-                    </svg>
+                    <span class="material-icons">
+                      play_arrow
+                    </span>
                   </button>
                 </div>
               </div>
@@ -287,14 +281,6 @@
 
         // Initialize UI
         Blast.Ui.init();
-        // overwrite icons paths
-        Blast.Ui.playIcon_ = '<svg class="icon icon-play">';
-        Blast.Ui.playIcon_ += '<use xlink:href="../media/symbol-defs.svg#icon-play"></use>';
-        Blast.Ui.playIcon_ += '</svg>';
-
-        Blast.Ui.stopIcon_ = '<svg class="icon icon-stop">';
-        Blast.Ui.stopIcon_ += '<use xlink:href="../media/symbol-defs.svg#icon-stop">';
-        Blast.Ui.stopIcon_ += '</use></svg>';
 
         Blast.Ui.setStatus(Blast.status.READY);
 

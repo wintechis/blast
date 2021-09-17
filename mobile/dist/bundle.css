@@ -3206,6 +3206,51 @@ body {
   padding: 10px;
   margin: 10px 10px; }
 
+.error-message {
+  border: 2px #fcd7d7;
+  border-style: solid none;
+  border-radius: 0;
+  background-color: #fff0f0;
+  color: #ff001f;
+  padding: 10px;
+  margin: 10px 0; }
+
+.error-message::before {
+  font-family: "Material Icons";
+  content: "\E5C9";
+  font-size: 20px;
+  vertical-align: bottom;
+  margin-right: 0.2em; }
+
+.warning-message {
+  border: 2px #fff4c6;
+  border-style: solid none;
+  border-radius: 0;
+  background-color: #fffbe6;
+  color: #664314;
+  padding: 10px;
+  margin: 10px 0; }
+
+.warning-message::before {
+  font-family: "Material Icons";
+  content: "\E002";
+  font-size: 20px;
+  vertical-align: bottom;
+  margin-right: 0.2em; }
+
+.info-message {
+  border: none;
+  background-color: #fff;
+  padding: 10px;
+  margin: 10px 0; }
+
+.info-message::before {
+  font-family: "Material Icons";
+  content: "\E88E";
+  font-size: 20px;
+  vertical-align: bottom;
+  margin-right: 0.2em; }
+
 .time {
   float: right;
   color: #aaa; }
