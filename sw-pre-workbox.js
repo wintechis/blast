@@ -13,6 +13,7 @@ const precacheAndRoute = workbox.precaching.precacheAndRoute;
 
 // Register routes for scripts from the CDN.
 const cdns = [
+  'https://fonts.googleapis.com/icon?family=Material+Icons',
   'https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/blockly_compressed.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/msg/en.min.js',
   'https://cdnjs.cloudflare.com/ajax/libs/blockly/5.20210325.1/blocks_compressed.min.js',
