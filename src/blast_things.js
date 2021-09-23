@@ -180,15 +180,20 @@ Blast.Things.getWebHIDDevices = function() {
 
 /**
  * Handles "connect via webBluetooth" button in the things toolbox category.
- * It will open the webBluetooth connect prompt, and upon successfull connection,
- * prompt the user for a name, including re-prompts if a name
- * is already in use among the workspace's things.
- *
- * @param {!Blockly.Workspace} workspace The workspace on which to create the variable.
  */
 Blast.Things.createWebBluetoothButtonHandler = function() {
-  // open the webBluetooth modal
-  wbModal.style.display = 'block';
+  const options = {};
+  options.acceptAllDevices = true;
+  options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+
+  navigator.bluetooth.requestDevice(options)
+      .then((device) => {
+        Blast.Things.addWebBluetoothDevice(device.id, device.name);
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch((error) => {
+        Blast.throwError(error);
+      });
 };
 
 /**
@@ -229,15 +234,24 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
 
 /**
  * Handles "connect via webHID" button in the things toolbox category.
- * It will open the webHID connect prompt, and upon successfull connection,
- * prompt the user for a name, including re-prompts if a name
- * is already in use among the workspace's things.
- *
- * @param {!Blockly.Workspace} workspace The workspace on which to create the variable.
  */
 Blast.Things.createWebHidButtonHandler = function() {
-  // open the webBluetooth modal
-  wHidModal.style.display = 'block';
+  navigator.hid.requestDevice({filters: []})
+      .then((device) => {
+        if (device.length === 0) {
+          Blast.throwError('Connection failed or cancelled by User.');
+          return;
+        }
+        // generate a unique id for the new device
+        const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        // add device to the device map with its uid
+        Blast.Things.webHidDevices.set(uid, device[0]);
+        Blast.Things.addWebHidDevice(uid, '');
+        Blast.workspace.refreshToolboxSelection();
+      })
+      .catch((error) => {
+        Blast.throwError(error);
+      });
 };
 
 /**
