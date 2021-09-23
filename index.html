@@ -31,6 +31,13 @@
       location.replace(`https:${location.href.substring(location.protocol.length)}`);
     }
 
+    // check if chrome on windows is used with experimental features enabled,
+    // if not, redirect to instructions page.
+    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    if (!isChrome || !navigator.bluetooth || navigator.userAgent.indexOf("Windows") == -1) {
+      location.href = "prerequisites.html";
+    }
+
     // redirect mobile users to mobile site.
     // mobile check for older browsers
     const legacyIsMobileCheck = function () {
