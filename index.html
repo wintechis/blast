@@ -26,8 +26,12 @@
   <link rel="manifest" href="site.webmanifest">
 
   <script>
-    // redirect mobile users to mobile site.
+    // redirect to HTTPS
+    if (location.protocol != 'https:') {
+      location.replace(`https:${location.href.substring(location.protocol.length)}`);
+    }
 
+    // redirect mobile users to mobile site.
     // mobile check for older browsers
     const legacyIsMobileCheck = function () {
       if (navigator.userAgent.match(/Android/i) ||
