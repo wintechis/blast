@@ -365,23 +365,6 @@ button {
   margin-top: 6px;
 }
 
-#wb-connect, #wHid-connect {
-  background: #4285f4;
-}
-
-#wb-output, #wHid-output {
-  background-color: #f0f0f0;
-  border-radius: 0.75em;
-  display: block;
-  margin: 0.5em;
-  padding: 0.5em;
-}
-
-#wb-log, #wHid-log {
-  margin: .5em 0;
-  white-space: pre-wrap;
-}
-
 /* Clear floats after the columns */
 .row:after {
   content: "";
