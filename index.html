@@ -221,8 +221,7 @@
     return new Promise(function(resolve, reject) {
       const fileReader = new FileReader();
       fileReader.onload = function(e) {
-        const xml = Blockly.Xml.textToDom(e.target.result);
-        Blockly.Xml.domToWorkspace(xml, Blast.workspace);
+        Blast.Storage.loadXML(e.target.result);
         resolve();
       };
       fileReader.onerror = function(evt) {

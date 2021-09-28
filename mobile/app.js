@@ -41,29 +41,29 @@ cardPrimaryActionEls.forEach((el) => new MDCRipple(el));
 const helperTextEls = Array.from(mainEl.querySelectorAll('.mdc-text-field-helper-text'));
 helperTextEls.forEach((el) => new MDCTextFieldHelperText(el));
 
-// bind validator to button with id load-button
+// bind validator to load-button
 const loadButton = document.getElementById('load-button');
 loadButton.addEventListener('click', () => {
-  const textFieldEls = Array.from(mainEl.querySelectorAll('.mdc-text-field'));
+  const textFieldInputs = Array.from(mainEl.querySelectorAll('.mdc-text-field__input'));
 
-  textFieldEls.forEach((el) => {
-    let textField = new MDCTextField(el);
-    
-    // Show error if empty
-    if(textField.input_.value.length == 0) {
+  // if both inputs are empty, show helper text
+  let empty = textFieldInputs.every(el => el.value === '')
+  if (empty) {
+    const textFieldEls = Array.from(mainEl.querySelectorAll('.mdc-text-field'));
+    textFieldEls.forEach((el) => {
+      let textField = new MDCTextField(el);
+      
+      // Highlight helper text
       textField.root_.classList.add('mdc-text-field--invalid');
       textField.valid = false;
-      textField.helperTextContent = 'This field is required';
-      textField.helperText_.classList.add('mdc-text-field-helper-text--persistent');
-      textField.helperText_.classList.add('mdc-text-field-helper-text--validation-msg');
-      return;
-    }
-
+      textField.helperTextContent = 'One of these fields is required';
+    });
+  } else {
     // switch to execute tab
     switchToTab('execute-tab');
 
     init();
-  });
+  }
 });
 
 function openReconnectDialog(){

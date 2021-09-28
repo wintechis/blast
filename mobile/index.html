@@ -115,9 +115,10 @@
           <div class="mdc-card blast-card">
             <div class="blast-card__primary">
                 <h3 class="blast-card__subtitle mdc-typography mdc-typography--overline">LOAD</h3>
-              <h2 class="blast-card__title mdc-typography mdc-typography--headline6">Enter an URI to a BLAST program below</h2>
+              <h2 class="blast-card__title mdc-typography mdc-typography--headline6">Load a BLAST program from XML</h2>
             </div>
             <div class="blast-card__secondary mdc-typography mdc-typography--body2">
+              Enter an URI to a BLAST program in XML format.
               <div class="mdc-text-field text-field-with-input">
                 <input id="loadWorkspace-input" class="mdc-text-field__input">
                 <div class="mdc-line-ripple"></div>
@@ -125,6 +126,16 @@
               </div>
               <div class="mdc-text-field-helper-line">
                 <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">e.g.: ../storage/gamble.xml</div>
+              </div>
+              <br>
+              Or upload an XML file:
+              <div class="mdc-text-field text-field-with-input">
+                <input id="loadWorkspace-file" class="mdc-text-field__input" type="file" accept=".xml">
+                <div class="mdc-line-ripple"></div>
+                <label class="mdc-floating-label mdc-floating-label--float-above">File upload</label>
+              </div>
+              <div class="mdc-text-field-helper-line">
+                <div class="mdc-text-field-helper-text mdc-text-field-helper-text--persistent">Load a BLAST program from harddisk (XML)</div>
               </div>
             </div>
             <div class="mdc-card__actions">
@@ -240,12 +251,12 @@
         }
 
         let input = document.querySelector('#load-content .mdc-text-field__input');
-        // early return if input is empty
-        if (input.value === '') {
+        let fileInput = document.querySelector('#loadWorkspace-file');
+        // early return if both inputs are empty
+        if (input.value === '' && fileInput.value === '') {
           return;
         }
 
-        // load the program
         // adjust workspace and toolbox on resize
         const container = document.getElementById('content_workspace');
         const onresize = function() {
@@ -289,7 +300,18 @@
             }
         });
         // load the workspace
-        Blast.Storage.load();
+        if(input.value.length > 0) {
+          Blast.Storage.load();
+        } else if (fileInput.files.length > 0) {
+          const fileReader = new FileReader();
+          fileReader.onload = function(e) {
+            Blast.Storage.loadXML(e.target.result);
+          };
+          fileReader.onerror = function(evt) {
+            reject(Blast.throwError('Error reading file.'));
+          };
+          fileReader.readAsText(fileInput.files[0]);
+        }
       };
       init();
   </script>

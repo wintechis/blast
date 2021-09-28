@@ -148,30 +148,38 @@ Blast.Storage.retrieveXML_ = async function(path) {
           Blast.throwError(Blast.Storage.NOT_FOUND_ERROR.replace('%1', path));
         }
       })
-      .then((xml) => {
-        // clear blocks
-        Blast.workspace.clear();
-        try {
-          xml = Blockly.Xml.textToDom(xml);
-        } catch (e) {
-          Blast.throwError(Blast.Storage.XML_ERROR + '\nXML: ' + xml);
-          return;
-        }
+      .then(Blast.Storage.loadXML);
+};
 
-        // prompt to WebBluetooth/webHID device connection
-        if (xml.querySelector('block[type="things_webBluetooth"]') || xml.querySelector('block[type="things_webHID"]')) {
-          xml = Blast.Storage.generatePairButtons(xml);
-          // show reconnect modal
-          if (document.getElementById('rcModal')) {
-            document.getElementById('rcModal').style.display = 'block';
-          }
-          // return. will continue after reconnecting to devices
-          return;
-        }
-                
-        Blockly.Xml.domToWorkspace(xml, Blast.workspace);
-        Blast.Storage.monitorChanges_(Blast.workspace);
-      });
+/**
+ * Loads the xml into the workspace.
+ * @param {string} xmlString the xml to load.
+ * @private
+ */
+Blast.Storage.loadXML = function(xmlString) {
+  let xml;
+  // clear blocks
+  Blast.workspace.clear();
+  try {
+    xml = Blockly.Xml.textToDom(xmlString);
+  } catch (e) {
+    Blast.throwError(Blast.Storage.XML_ERROR + '\nXML: ' + xml);
+    return;
+  }
+
+  // prompt to WebBluetooth/webHID device connection
+  if (xml.querySelector('block[type="things_webBluetooth"]') || xml.querySelector('block[type="things_webHID"]')) {
+    xml = Blast.Storage.generatePairButtons(xml);
+    // show reconnect modal
+    if (document.getElementById('rcModal')) {
+      document.getElementById('rcModal').style.display = 'block';
+    }
+    // return. will continue after reconnecting to devices
+    return;
+  }
+          
+  Blockly.Xml.domToWorkspace(xml, Blast.workspace);
+  Blast.Storage.monitorChanges_(Blast.workspace);
 };
 
 /**
