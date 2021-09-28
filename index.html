@@ -117,7 +117,7 @@
             <td class="tabmin">&nbsp;</td>
             <td id="inputs_td" class="tabmin">
               <input list="samples" type="text" id="loadWorkspace-input"
-                placeholder="samples/gamble.xml">
+                placeholder="save to or load from URI">
               <datalist id="samples">
                 <option value="samples/gamble.xml"></option>
                 <option value="samples/hello-world"></option>
@@ -134,13 +134,15 @@
                   file_download
                   </span>
               </button>
-            </td>
-            <td class="tabmin">
               <button id="saveButton" title="save workspace">
                 <span class="icon material-icons">
                   file_upload
                   </span>
               </button>
+            </td>
+            <td class="tabmin">&nbsp;</td>
+            <td class="tabmin">
+              <input type="file" id="file-selector" accept=".xml">
             </td>
             <td class="tabmax">
               <span id="statusContainer">ready</span>
@@ -202,6 +204,33 @@
       navigator.serviceWorker.register('sw.js', { scope: './' });
     }
   });
+
+  /**
+   * Load XML from file.
+   */
+  const fileSelector = document.getElementById('file-selector');
+  fileSelector.addEventListener('change', loadXMLFromFile);
+
+  /**
+   * Load XML from a file.
+   * @param {Event} evt
+   * @return {Promise}
+   * @private
+   */
+  function loadXMLFromFile(event) {
+    return new Promise(function(resolve, reject) {
+      const fileReader = new FileReader();
+      fileReader.onload = function(e) {
+        const xml = Blockly.Xml.textToDom(e.target.result);
+        Blockly.Xml.domToWorkspace(xml, Blast.workspace);
+        resolve();
+      };
+      fileReader.onerror = function(evt) {
+        reject(evt.target.error);
+      };
+      fileReader.readAsText(event.target.files[0]);
+    });
+  }
 
   /**
    * Reconnect modal methods

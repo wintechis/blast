@@ -99,10 +99,6 @@ table {
   padding: 0;
   border: none;
 }
-td {
-  padding: 0;
-  vertical-align: top;
-}
 .content {
   visibility: hidden;
   margin: 0;
