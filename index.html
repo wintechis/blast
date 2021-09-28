@@ -32,10 +32,17 @@
     }
 
     // check if chrome on windows is used with experimental features enabled,
-    // if not, redirect to instructions page.
-    var isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    if (!isChrome || !navigator.bluetooth || navigator.userAgent.indexOf("Windows") == -1) {
-      location.href = "prerequisites.html";
+    // if not, redirect to prerquisite page.
+    let urlParams = new URLSearchParams(window.location.search);
+    let skipCheck = false;
+    if (urlParams.has('skipCheck')) {
+      skipCheck = true;
+      console.log({skipCheck});
+    }
+    const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    if (!skipCheck && (!isChrome || !navigator.bluetooth || navigator.userAgent.indexOf("Windows") == -1)) {
+       location.href = "prerequisites.html";
+      console.log({isChrome, skipCheck, navigator});
     }
 
     // redirect mobile users to mobile site.
