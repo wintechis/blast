@@ -37,13 +37,12 @@
     let skipCheck = false;
     if (urlParams.has('skipCheck')) {
       skipCheck = true;
-      console.log({skipCheck});
     }
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
     const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
     const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
     const supportsWebBluetooth = 'bluetooth' in navigator;
-    if (!skipCheck && (!isChrome || (!isWindows || !isAndroid) || !supportsWebBluetooth)) {
+    if (!skipCheck && !(isChrome && (isWindows || isAndroid) && supportsWebBluetooth)) {
        location.href = "prerequisites.html";
     }
 
