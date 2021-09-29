@@ -45,7 +45,7 @@
     const supportsWebBluetooth = 'bluetooth' in navigator;
     console.log({isChrome, isWindows, isAndroid, supportsWebBluetooth});
     if (!skipCheck && (!isChrome || (!isWindows || !isAndroid) || !supportsWebBluetooth)) {
-       //location.href = "prerequisites.html";
+       location.href = "prerequisites.html";
     }
 
     // redirect mobile users to mobile site.
