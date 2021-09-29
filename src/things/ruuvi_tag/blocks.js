@@ -9,7 +9,7 @@
 
 Blockly.Blocks['read_ruuvi_property'] = {
   /**
-   * Block for the temperature property of a Ruuvi Tag.
+   * Block for reading a property of a Ruuvi Tag.
    * @this {Blockly.Block}
    */
   init: function() {
@@ -31,7 +31,7 @@ Blockly.Blocks['read_ruuvi_property'] = {
         .appendField('property of RuuviTag');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
-    this.setTooltip('Reads the temperature property of a Ruuvi Tag.');
+    this.setTooltip('Reads a property of a Ruuvi Tag.');
     this.setHelpUrl('');
     this.firstTime = true;
   },
