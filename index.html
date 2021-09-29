@@ -37,7 +37,6 @@
     let skipCheck = false;
     if (urlParams.has('skipCheck')) {
       skipCheck = true;
-      console.log({skipCheck});
     }
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
     const isWindows = navigator.platform.toLowerCase().indexOf('WIN') >= 0;
