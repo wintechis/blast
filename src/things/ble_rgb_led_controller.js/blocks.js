@@ -37,7 +37,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
       this.firstTime = false;
       if (!navigator.bluetooth) {
         Blockly.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later.`);
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
         this.dispose();
       }
     }
@@ -77,7 +77,7 @@ Blockly.Blocks['switch_lights_ryg'] = {
       this.firstTime = false;
       if (!navigator.bluetooth) {
         Blockly.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later.`);
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
         this.dispose();
       }
     }
