@@ -1,0 +1,38 @@
+name: Lint and Deploy ren branch
+
+# Controls when the action will run. 
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@ren
+      # Use cache for node modules
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install npm modules
+        run: yarn
+      - name: run ESLint
+        run: yarn run lint
+      - name: compile
+        run: yarn run build
+  deploy:
+    runs-on: ubuntu-latest
+    needs: lint
+    if: github.ref == 'refs/heads/master'
+  
+    steps:
+      - uses: actions/checkout@ren
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "./"
+          target: "./public_html/testing/ren/"
