@@ -13,6 +13,20 @@
         background-color: var(--color-neutral-muted);
         border-radius: 6px;
         }
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        }
+
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
     </style>
 </head>
 <body>
@@ -25,4 +39,43 @@
     <br>
     <br>
     <a href="index.html?skipCheck=true">Click here to continue anyway.</a>
+    <br>
+    <br>
+    Below is a list of the missing prerequisites:
+    <br>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody id="prerequisites">
+        </tbody>
+    </table>
+    <script>
+        // fill prerequisites table with url parameters
+        const tBody = document.getElementById('prerequisites');
+        let urlParams = new URLSearchParams(window.location.search);
+        const platform = new Map();
+        platform.set('using Google Chrome', urlParams.get('isChrome') || false);
+        platform.set('on Windows or Android', urlParams.get('isWindows') || urlParams.get('isAndroid') || false);
+        platform.set('experimental web platform features enabled', urlParams.get('supportsWebBluetooth') || false);
+            
+        for (const [key, value] of platform) {
+            if (value) {
+                const tr = document.createElement('tr');
+                const tdFeature = document.createElement('td');
+                const tdStatus = document.createElement('td');
+                tdFeature.innerText = key;
+                tdStatus.innerText = value === 'true' ? '✅' : '❌';
+                tr.appendChild(tdFeature);
+                tr.appendChild(tdStatus);
+                tBody.appendChild(tr);
+            }
+        }
+
+
+    </script>
 </body>

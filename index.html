@@ -37,14 +37,13 @@
     let skipCheck = false;
     if (urlParams.has('skipCheck')) {
       skipCheck = true;
-      console.log({skipCheck});
     }
     const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    const isWindows = navigator.platform.toLowerCase().indexOf('WIN') >= 0;
+    const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
     const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
     const supportsWebBluetooth = 'bluetooth' in navigator;
-    if (!skipCheck && (!isChrome || (!isWindows || !isAndroid) || !supportsWebBluetooth)) {
-       location.href = "prerequisites.html";
+    if (!skipCheck && !(isChrome && (isWindows || isAndroid) && supportsWebBluetooth)) {
+       location.href = `prerequisites.html?isChrome=${isChrome}&isWindows=${isWindows}&isAndroid=${isAndroid}&supportsWebBluetooth=${supportsWebBluetooth}`;
     }
 
     // redirect mobile users to mobile site.
@@ -73,6 +72,8 @@
       window.location.replace("mobile/index.html");
     }
   </script>
+  <!-- Joy Con WebHid implementation (https://github.com/tomayac/joy-con-webhid) -->
+  <script src="js/lib/joy-con-webhid.js"></script>
 
   <!-- JS Interpreter -->
   <script src="js/lib/JSInterpreter/acorn.js"></script>

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Block definitions for the streamdeck
+ * @fileoverview Code generators for the streamdeck blocks
  * (https://www.elgato.com/de/stream-deck).
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
@@ -41,7 +41,6 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  */
 const handleStreamdeck = async function(id, buttonArray, statements) {
   const type = 'inputreport';
-  console.log(statements);
 
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
