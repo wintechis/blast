@@ -36,3 +36,18 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           source: "./"
           target: "./public_html/testing/blast/"
+  deploy:
+    runs-on: ubuntu-latest
+    needs: lint
+    if: github.ref == 'refs/heads/ren'
+  
+    steps:
+      - uses: actions/checkout@master
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "./"
+          target: "./public_html/testing/ren/"
