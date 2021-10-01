@@ -250,7 +250,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
-          options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+          options.optionalServices = Blast.Bluetooth.optionalServices;
         
           navigator.bluetooth.requestDevice(options)
               .then((device) => {
@@ -363,7 +363,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
-          options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+          options.optionalServices = Blast.Bluetooth.optionalServices;
                 
           navigator.bluetooth.requestDevice(options)
               .then((device) => {
