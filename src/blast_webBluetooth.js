@@ -15,6 +15,11 @@
 goog.provide('Blast.Bluetooth');
 
 /**
+ * Optional serviceUUIDs to scan for.
+ */
+Blast.Bluetooth.optionalServices = [];
+
+/**
  * Contains block types that require a LE Scan.
  * On runtine, if any of these blocks is in the workspace,
  * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.

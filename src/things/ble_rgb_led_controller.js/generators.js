@@ -66,6 +66,7 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
 const switchLights = async function(mac, value, callback) {
   const serviceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
+  Blast.Bluetooth.optionalServices.push(serviceUUID);
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, serviceUUID, characteristicUUID, value);
   callback();
 };
