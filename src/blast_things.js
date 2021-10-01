@@ -184,7 +184,7 @@ Blast.Things.getWebHIDDevices = function() {
 Blast.Things.createWebBluetoothButtonHandler = function() {
   const options = {};
   options.acceptAllDevices = true;
-  options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb'];
+  options.optionalServices = ['0000fff0-0000-1000-8000-00805f9b34fb', '0000180a-0000-1000-8000-00805f9b34fb'];
 
   navigator.bluetooth.requestDevice(options)
       .then((device) => {

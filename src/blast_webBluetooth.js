@@ -128,10 +128,15 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     return array.buffer;
   }
   const server = await Blast.Bluetooth.connect(id, serviceUUID);
+  console.log(server);
   const service = await server.getPrimaryService(serviceUUID);
+  console.log(service);
   const characteristic = await service.getCharacteristic(characteristcUUID);
+  console.log(characteristic);
   value = hexStringToArrayBuffer(value);
+  console.log(value);
   await characteristic.writeValueWithoutResponse(value);
+  console.log(done);
 };
 
 /**
