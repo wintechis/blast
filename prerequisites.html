@@ -57,11 +57,19 @@
     <script>
         // fill prerequisites table with url parameters
         const tBody = document.getElementById('prerequisites');
-        let urlParams = new URLSearchParams(window.location.search);
+        const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+        const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
+        const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
+        const supportsWebBluetooth = 'bluetooth' in navigator;
         const platform = new Map();
-        platform.set('using Google Chrome', urlParams.get('isChrome') || false);
-        platform.set('on Windows or Android', urlParams.get('isWindows') || urlParams.get('isAndroid') || false);
-        platform.set('experimental web platform features enabled', urlParams.get('supportsWebBluetooth') || false);
+        platform.set('using Google Chrome', isChrome);
+        platform.set('on Windows or Android', isWindows || isAndroid);
+        platform.set('experimental web platform features enabled', supportsWebBluetooth);
+
+        if(isChrome && (isWindows || isAndroid) && supportsWebBluetooth) {
+            // redirect to index.html
+            window.location.href = 'index.html';
+        }
             
         for (const [key, value] of platform) {
             if (value) {
@@ -69,7 +77,7 @@
                 const tdFeature = document.createElement('td');
                 const tdStatus = document.createElement('td');
                 tdFeature.innerText = key;
-                tdStatus.innerText = value === 'true' ? '✅' : '❌';
+                tdStatus.innerText = value === true ? '✅' : '❌';
                 tr.appendChild(tdFeature);
                 tr.appendChild(tdStatus);
                 tBody.appendChild(tr);

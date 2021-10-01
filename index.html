@@ -43,7 +43,7 @@
     const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
     const supportsWebBluetooth = 'bluetooth' in navigator;
     if (!skipCheck && !(isChrome && (isWindows || isAndroid) && supportsWebBluetooth)) {
-       location.href = `prerequisites.html?isChrome=${isChrome}&isWindows=${isWindows}&isAndroid=${isAndroid}&supportsWebBluetooth=${supportsWebBluetooth}`;
+       location.href = `prerequisites.html`;
     }
 
     // redirect mobile users to mobile site.
