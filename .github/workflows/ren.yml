@@ -1,14 +1,17 @@
 name: Lint and Deploy ren branch
 
 # Controls when the action will run. 
-on: [push, pull_request]
+on: 
+  push:
+    branches:
+      - 'ren'
 
 jobs:
   lint:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@ren
+      - uses: actions/checkout@master
       # Use cache for node modules
       - uses: actions/cache@v2
         with:
@@ -27,7 +30,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
   
     steps:
-      - uses: actions/checkout@ren
+      - uses: actions/checkout@master
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
