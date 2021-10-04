@@ -224,13 +224,12 @@ Blockly.Blocks['play_audio'] = {
     this.appendValueInput('URI')
         .appendField('play audio from URI')
         .setCheck('URI');
-    this.setCommentText(
-        // eslint-disable-next-line no-multi-str
-        'Sample URIs: \n https://studio.code.org/blockly/media/skins/dance/win.mp3 \
-        \n https://studio.code.org/blockly/media/click.mp3 \
-        \n https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg \
-        \n https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg',
-    );
+    let commentText = 'Sample URIs:\n';
+    commentText += 'https://studio.code.org/blockly/media/skins/dance/win.mp3\n';
+    commentText += 'https://studio.code.org/blockly/media/click.mp3\n';
+    commentText += 'https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg\n';
+    commentText += 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg';
+    this.setCommentText(commentText);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
