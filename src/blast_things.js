@@ -203,7 +203,7 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
                   '%1', text);
               Blockly.alert(msg,
                   function() {
-                    promptAndCheckWithAlert(text);  // Recurse
+                    promptAndCheckWithAlert(text, id);  // Recurse
                   });
             } else {
               // No conflict
@@ -261,7 +261,7 @@ Blast.Things.addWebHidDevice = function(id, deviceName) {
                   '%1', text);
               Blockly.alert(msg,
                   function() {
-                    promptAndCheckWithAlert(text);  // Recurse
+                    promptAndCheckWithAlert(text, id);  // Recurse
                   });
             } else {
               // No conflict
