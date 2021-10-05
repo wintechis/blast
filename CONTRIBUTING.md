@@ -165,18 +165,21 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, t
 Before writing to or reading from a characteristic, you have to add its gatt service to the `Blast.Bluetooth.optionalServices` array, by invoking `Blast.Bluetooth.optionalServices.push(serviceUUID);`. See below for an example.
 
 ```JavaScript
+// Add the LED controller's serviceUUID to optinalServices
+const serviceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
+Blast.Bluetooth.optionalServices.push(serviceUUID);
+
 /**
- * Switches lights of an LED controller via Bluetooth, 
- * by writing a value to the corresponding characteristic.
+ * switches lights of an LED controller via Bluetooth, by writing a value to it.
  * @param {String} mac identifier of the LED controller.
  * @param {String} value the value to write on the LED controller.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const switchLights = async function(mac, value, callback) {
-  const serviceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
-  Blast.Bluetooth.optionalServices.push(serviceUUID);
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, serviceUUID, characteristicUUID, value);
   callback();
 };
+// Add switchLights function to the interpreter's API.
+Blast.asyncApiFunctions.push(['switchLights', switchLights]);
 ```
