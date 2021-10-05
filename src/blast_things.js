@@ -200,7 +200,7 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
                   Blast.Things.webBluetoothDevices.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
-                  '%1', existing.name);
+                  '%1', text);
               Blockly.alert(msg,
                   function() {
                     promptAndCheckWithAlert(text);  // Recurse
@@ -258,7 +258,7 @@ Blast.Things.addWebHidDevice = function(id, deviceName) {
                   Blast.Things.webHidNames.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
-                  '%1', existing.name);
+                  '%1', text);
               Blockly.alert(msg,
                   function() {
                     promptAndCheckWithAlert(text);  // Recurse
