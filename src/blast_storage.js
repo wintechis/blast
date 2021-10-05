@@ -245,7 +245,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
       statusCell.appendChild(pairStatus);
 
       // pair button click listener
-      pairButton.addEventListener('click', function() {
+      pairButton.addEventListener('click', async function() {
         if (type == 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
@@ -352,7 +352,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
       text.appendChild(secondaryText);
       item.appendChild(text);
       // add click listener to list item
-      item.addEventListener('click', function() {
+      item.addEventListener('click', async function() {
         if (type == 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
