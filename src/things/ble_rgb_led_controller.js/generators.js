@@ -58,7 +58,7 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
 };
 
 // Add the LED controller's LEDServiceUUID to optinalServices
-const LEDLEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
+const LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
 Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
 
 /**
