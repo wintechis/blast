@@ -113,7 +113,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     
     // ensure even number of characters
     if (hexString.length % 2 != 0) {
-      console.log('WARNING: expecting an even number of characters in the hexString');
+      hexString = '0' + hexString;
     }
     
     // check for some non-hex characters
