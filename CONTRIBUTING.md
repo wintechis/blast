@@ -3,14 +3,9 @@ For detailed guidelines on how to help make BLAST better, please read the corres
 
 - [Reporting Bugs](#reporting-bugs)
   - [Before Submitting A Bug Report](#before-submitting-a-bug-report)
-    - [How Do I Submit A (Good) Bug Report?](#how-do-i-submit-a-good-bug-report)
   - [Suggesting Enhancements](#suggesting-enhancements)
-    - [How Do I Submit A (Good) Enhancement Suggestion?](#how-do-i-submit-a-good-enhancement-suggestion)
 - [Code Contributions](#code-contributions)
   - [Adding new Things](#adding-new-things)
-    - [blocks.js](#blocksjs)
-    - [generators.js](#generatorsjs)
-    - [Bluetooth communication](#bluetooth-communication)
 
 
 ## Reporting Bugs
@@ -165,4 +160,26 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(id, serviceUUID, char
  * @public
  */
 Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, timeout)
+```
+
+Before writing to or reading from a characteristic, you have to add its gatt service to the `Blast.Bluetooth.optionalServices` array, by invoking `Blast.Bluetooth.optionalServices.push(serviceUUID);`. See below for an example.
+
+```JavaScript
+// Add the LED controller's serviceUUID to optinalServices
+const serviceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
+Blast.Bluetooth.optionalServices.push(serviceUUID);
+
+/**
+ * switches lights of an LED controller via Bluetooth, by writing a value to it.
+ * @param {String} mac identifier of the LED controller.
+ * @param {String} value the value to write on the LED controller.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const switchLights = async function(mac, value, callback) {
+  const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
+  await Blast.Bluetooth.gatt_writeWithoutResponse(mac, serviceUUID, characteristicUUID, value);
+  callback();
+};
+// Add switchLights function to the interpreter's API.
+Blast.asyncApiFunctions.push(['switchLights', switchLights]);
 ```
