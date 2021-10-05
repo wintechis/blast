@@ -91,8 +91,8 @@ Blockly.JavaScript['huskylens_forgetall'] = function(block) {
 
 
 // set the service UUID here， for all characteristics
-const serviceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
-Blast.Bluetooth.optionalServices.push(serviceUUID);
+const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
+Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
 
 
 /**
@@ -105,7 +105,12 @@ const chooseAlgo = async function(thing, value, callback) {
   const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
 
   // TODO: may be a problem here
-  await Blast.Bluetooth.gatt_writeWithoutResponse(thing, serviceUUID, characteristicUUID, value);
+  await Blast.Bluetooth.gatt_writeWithoutResponse(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+      value,
+  );
   callback();
 };
 
@@ -122,7 +127,7 @@ const learnID = async function(thing, id, callback) {
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
 
   // TODO: may be a problem here
-  await Blast.Bluetooth.gatt_writeWithoutResponse(thing, serviceUUID, characteristicUUID, id);
+  await Blast.Bluetooth.gatt_writeWithoutResponse(thing, HuskyServiceUUID, characteristicUUID, id);
   callback();
 };
 
@@ -138,7 +143,12 @@ const forgetAll = async function(thing, flag, callback) {
   const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
     
   // TODO: may be a problem here
-  await Blast.Bluetooth.gatt_writeWithoutResponse(thing, serviceUUID, characteristicUUID, flag);
+  await Blast.Bluetooth.gatt_writeWithoutResponse(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+      flag,
+  );
   callback();
 };
 
