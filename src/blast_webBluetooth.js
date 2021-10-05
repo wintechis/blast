@@ -16,6 +16,8 @@ goog.provide('Blast.Bluetooth');
 
 /**
  * Optional serviceUUIDs to scan for.
+ * @type {Array<String>}
+ * @public
  */
 Blast.Bluetooth.optionalServices = [];
 
