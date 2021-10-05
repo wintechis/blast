@@ -34,9 +34,9 @@
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
     "gulp-shell": "0.8.0",
-    "jsdoc": "3.6.6",
+    "jsdoc": "^3.6.7",
     "mocha": "^8.3.2",
-    "workbox-cli": "6.2.4"
+    "workbox-cli": "^6.3.0"
   },
   "dependencies": {
     "libxmljs": "^0.19.7"

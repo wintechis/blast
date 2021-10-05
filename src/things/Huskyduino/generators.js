@@ -37,8 +37,8 @@ Blockly.JavaScript['huskylens_choosealgo'] = function(block) {
     object_recognition: '0x03',
     line_tracking: '0x04',
     color_recognition: '0x05',
-    tag_recognition: '0x6',
-    object_classification: '0x7',
+    tag_recognition: '0x06',
+    object_classification: '0x07',
   };
   const value = dic[algorithm];
 
@@ -92,7 +92,7 @@ Blockly.JavaScript['huskylens_forgetall'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const chooseAlgo = async function(thing, value, callback) {
-  const serviceUUID = 0x180A;
+  const serviceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
   const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
   Blast.Bluetooth.optionalServices.push(serviceUUID);
 
@@ -111,7 +111,7 @@ Blast.asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const learnID = async function(thing, id, callback) {
-  const serviceUUID = '180A';
+  const serviceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
   Blast.Bluetooth.optionalServices.push(serviceUUID);
 
@@ -129,7 +129,7 @@ Blast.asyncApiFunctions.push(['learnID', learnID]);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const forgetAll = async function(thing, flag, callback) {
-  const serviceUUID = '180A';
+  const serviceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
   const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
   Blast.Bluetooth.optionalServices.push(serviceUUID);
     
