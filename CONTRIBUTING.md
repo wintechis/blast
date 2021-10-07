@@ -134,7 +134,7 @@ Methods that are run asynchronously are always called with a callback function a
 > ```
 
 #### Bluetooth communication
-In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth implementations for `writeWithoutResponse` and `readCharacteristic`. To utilize them, call `Blast.Bluetooth.gatt_writeWithoutResponse` or `Blast.Bluetooth.gatt_read`. See below for their method signature, or browse to `src/blast_webBluetooth.js` to see their complete implementation.
+In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth implementations for `writeWithoutResponse` and `readCharacteristic`. To utilize them, call `Blast.Bluetooth.gatt_writeWithoutResponse` or one of `Blast.Bluetooth.gatt_read_text`, `Blast.Bluetooth.gatt_read_number` or `Blast.Bluetooth.gatt_read_hex` depending on the datatype of the characteristic you're trying to read. See below for their method signature, or browse to `src/blast_webBluetooth.js` to see their complete implementation.
 
 **Blast.Bluetooth.gatt_writeWithoutResponse**
 ```JavaScript
@@ -148,18 +148,36 @@ In order to communicate with Bluetooth devices, BLAST provides gatt WebBluetooth
 Blast.Bluetooth.gatt_writeWithoutResponse = async function(id, serviceUUID, characteristcUUID, value)
 ```
 
-**Blast.Bluetooth.gatt_read**
+**Blast.Bluetooth.gatt_read_X**
 ```JavaScript
 /**
- * Reads data from Bluetooth device using the gatt protocol.
- * @param {string} id identifier of the device to disconnect from.
+ * Reads a text (UTF-8) characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
- * @param {number} timeout time in ms to wait for response.
- * @return {Object} representation of the complete request with response.
+ * @return {string} the value of the characteristic.
  * @public
  */
-Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID, timeout)
+Blast.Bluetooth.gatt_read_text = async function(id, serviceUUID, characteristcUUID)
+
+/**
+ * Reads a nummerical characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @returns {number} the value of the characteristic.
+ * @public
+ */
+Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristcUUID)
+
+/** Reads a hexadecimal characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @returns {string} the value of the characteristic.
+ * @public
+ */
+Blast.Bluetooth.gatt_read_hex = async function(id, serviceUUID, characteristcUUID)
 ```
 
 Before writing to or reading from a characteristic, you have to add its gatt service to the `Blast.Bluetooth.optionalServices` array, by invoking `Blast.Bluetooth.optionalServices.push(serviceUUID);`. See below for an example.
