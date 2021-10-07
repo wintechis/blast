@@ -172,7 +172,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
 
 /**
  * Reads data from Bluetooth device using the gatt protocol.
- * @param {string} id identifier of the device to disconnect from.
+ * @param {string} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
  * @return {Object} representation of the complete request with response.
@@ -183,13 +183,54 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
     const server = await Blast.Bluetooth.connect(id, serviceUUID);
     const service = await server.getPrimaryService(serviceUUID);
     const characteristic = await service.getCharacteristic(characteristcUUID);
-    const value = await characteristic.readValue();
-    const valueString = new TextDecoder().decode(value);
-    return valueString;
+    return await characteristic.readValue();
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);
   }
+};
+
+/**
+ * Reads a text (UTF-8) characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @return {string} the value of the characteristic.
+ * @public
+ */
+Blast.Bluetooth.gatt_read_text = async function(id, serviceUUID, characteristcUUID) {
+  const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristcUUID);
+  const stringValue = new TextDecoder().decode(value);
+  return stringValue;
+};
+
+/**
+ * Reads a nummerical characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @returns {number} the value of the characteristic.
+ * @public
+ */
+Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristcUUID) {
+  const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristcUUID);
+  const numberValue = new DataView(value).getUint8(0);
+  return numberValue;
+};
+
+/** Reads a hexadecimal characteristic value from a Bluetooth device.
+ * @param {string} id identifier of the device to read from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristcUUID identifier of the characteristic.
+ * @returns {string} the value of the characteristic.
+ * @public
+ */
+Blast.Bluetooth.gatt_read_hex = async function(id, serviceUUID, characteristcUUID) {
+  const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristcUUID);
+  const hexValue = new Uint8Array(value).reduce((acc, byte) => {
+    return acc + ('0' + byte.toString(16)).slice(-2);
+  }, '');
+  return hexValue;
 };
 
 /** Start the LE Scan.
