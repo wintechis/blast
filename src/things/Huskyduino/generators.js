@@ -183,7 +183,12 @@ const readID = async function(thing, callback) {
       HuskyServiceUUID,
       characteristicUUID,
   );
-  callback(id);
+  console.log(id);
+  
+  const idString = id.toString();
+  console.log(idString);
+
+  callback(idString);
 };
 
 Blast.asyncApiFunctions.push(['readID', readID]);
