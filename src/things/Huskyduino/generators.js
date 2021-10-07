@@ -100,9 +100,10 @@ Blockly.JavaScript['huskylens_readid'] = function(block) {
       block,
       'Thing',
       Blockly.JavaScript.ORDER_ATOMIC);
-  // TODO: Assemble JavaScript into code variable.
+  
+  // Assemble JavaScript into code variable.
   const code = `readID(${thing})`;
-  // TODO: Change ORDER_NONE to the correct strength.
+  // Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -121,7 +122,6 @@ Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
 const chooseAlgo = async function(thing, value, callback) {
   const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
 
-  // TODO: may be a problem here
   await Blast.Bluetooth.gatt_writeWithoutResponse(
       thing,
       HuskyServiceUUID,
@@ -143,7 +143,6 @@ Blast.asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 const learnID = async function(thing, id, callback) {
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
 
-  // TODO: may be a problem here
   await Blast.Bluetooth.gatt_writeWithoutResponse(
       thing,
       HuskyServiceUUID,
@@ -163,7 +162,6 @@ Blast.asyncApiFunctions.push(['learnID', learnID]);
 const forgetAll = async function(thing, flag, callback) {
   const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
     
-  // TODO: may be a problem here
   await Blast.Bluetooth.gatt_writeWithoutResponse(
       thing,
       HuskyServiceUUID,
@@ -175,20 +173,20 @@ const forgetAll = async function(thing, flag, callback) {
 
 Blast.asyncApiFunctions.push(['forgetAll', forgetAll]);
 
+/**
+ * read the output string from the Huskyduino via bluetooth
+ * @param {String} thing identifier of the Huskyduino.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  const id = await Blast.Bluetooth.gatt_read(
+  const id = await Blast.Bluetooth.gatt_read_text(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
   );
-  console.log(id);
-  
-  const idString = id.toString();
-  console.log(idString);
-
-  callback(idString);
+  callback(id);
 };
 
 Blast.asyncApiFunctions.push(['readID', readID]);
