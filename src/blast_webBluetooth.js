@@ -183,7 +183,9 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
     const server = await Blast.Bluetooth.connect(id, serviceUUID);
     const service = await server.getPrimaryService(serviceUUID);
     const characteristic = await service.getCharacteristic(characteristcUUID);
-    return await characteristic.readValue();
+    const value = await characteristic.readValue();
+    const valueString = new TextDecoder().decode(value);
+    return valueString;
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);
