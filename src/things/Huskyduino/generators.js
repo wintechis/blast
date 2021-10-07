@@ -101,7 +101,7 @@ Blockly.JavaScript['huskylens_readid'] = function(block) {
       'Thing',
       Blockly.JavaScript.ORDER_ATOMIC);
   // TODO: Assemble JavaScript into code variable.
-  const code = `readID(${thing});\n`;
+  const code = `readID(${thing})`;
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
