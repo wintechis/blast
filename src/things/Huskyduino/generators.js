@@ -90,6 +90,23 @@ Blockly.JavaScript['huskylens_forgetall'] = function(block) {
 };
 
 
+/**
+ * Generate JavaScript code for read ids out from arduino
+ * @param {Blockly.Block} block is the read id block
+ * @returns {String} the generated JavaScript code
+ */
+Blockly.JavaScript['huskylens_readid'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_ATOMIC);
+  // TODO: Assemble JavaScript into code variable.
+  const code = `readID(${thing});\n`;
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
 Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
@@ -127,7 +144,11 @@ const learnID = async function(thing, id, callback) {
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
 
   // TODO: may be a problem here
-  await Blast.Bluetooth.gatt_writeWithoutResponse(thing, HuskyServiceUUID, characteristicUUID, id);
+  await Blast.Bluetooth.gatt_writeWithoutResponse(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+      id);
   callback();
 };
 
@@ -153,3 +174,16 @@ const forgetAll = async function(thing, flag, callback) {
 };
 
 Blast.asyncApiFunctions.push(['forgetAll', forgetAll]);
+
+const readID = async function(thing, callback) {
+  const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
+
+  await Blast.Bluetooth.gatt_read(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+  );
+  callback();
+};
+
+Blast.asyncApiFunctions.push(['readID', readID]);

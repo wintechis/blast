@@ -104,3 +104,31 @@ Blockly.Blocks['huskylens_forgetall'] = {
 
 // Add write_huskylens_forget_flag block to the toolbox.
 Blast.Toolbox.addBlock('huskylens_forgetall', 'Properties');
+
+
+Blockly.Blocks['huskylens_readid'] = {
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck(null)
+        .appendField('read face IDs out from Huskyduino');
+    this.setOutput(true, 'String');
+    this.setColour(255);
+    this.setTooltip('read maximal 10 IDs out');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    // on creating this block check webBluetooth availability, then request LEScan.
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+                Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+
+// Add read face IDs block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_readid', 'Properties');
