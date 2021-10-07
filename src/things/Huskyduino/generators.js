@@ -55,7 +55,6 @@ Blockly.JavaScript['huskylens_choosealgo'] = function(block) {
  */
 Blockly.JavaScript['huskylens_learnid'] = function(block) {
   const id = '0x' + block.getFieldValue('ID').toString(16);
-  console.log('value of id is ' + id);
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',
