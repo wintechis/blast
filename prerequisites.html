@@ -72,16 +72,14 @@
         }
             
         for (const [key, value] of platform) {
-            if (value) {
-                const tr = document.createElement('tr');
-                const tdFeature = document.createElement('td');
-                const tdStatus = document.createElement('td');
-                tdFeature.innerText = key;
-                tdStatus.innerText = value === true ? '✅' : '❌';
-                tr.appendChild(tdFeature);
-                tr.appendChild(tdStatus);
-                tBody.appendChild(tr);
-            }
+            const tr = document.createElement('tr');
+            const tdFeature = document.createElement('td');
+            const tdStatus = document.createElement('td');
+            tdFeature.innerText = key;
+            tdStatus.innerText = value === true ? '✅' : '❌';
+            tr.appendChild(tdFeature);
+            tr.appendChild(tdStatus);
+            tBody.appendChild(tr);
         }
 
 

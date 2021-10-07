@@ -57,9 +57,9 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
   return code;
 };
 
-// Add the LED controller's LEDServiceUUID to optinalServices
-const LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
-Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
+// Add the LED controller's serviceUUID to optionalServices
+const serviceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
+Blast.Bluetooth.optionalServices.push(serviceUUID);
 
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.

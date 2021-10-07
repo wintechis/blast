@@ -47,6 +47,35 @@ Blast.Bluetooth.isLEScanRunning = false;
 Blast.Bluetooth.eventListeners = [];
 
 /**
+ * Pairs a Bluetooth device.
+ * @param {Object} options An object that sets options for the device request.
+ * @param {Array<BluetoothScanFilters>} options.filters An array of BluetoothScanFilters.
+ * @param {boolean} options.optionalServices An array of BluetoothServiceUUIDs.
+ * @param {boolean} [options.acceptAllDevices=false] whether script accepts all Bluetooth devices.
+ * @return {Promise<BluetoothDevice>} A Promise to a BluetoothDevice object.
+ */
+Blast.Bluetooth.requestDevice = async function(options) {
+  if (navigator.bluetooth) {
+    // if no options are given, use default ones
+    if (!options) {
+      options = {};
+      options.acceptAllDevices = true;
+      options.optionalServices = Blast.Bluetooth.optionalServices;
+    }
+
+    navigator.bluetooth.requestDevice(options)
+        .then((device) => {
+          Blast.Things.addWebBluetoothDevice(device.id, device.name);
+          Blast.workspace.refreshToolboxSelection();
+          return (device);
+        })
+        .catch((error) => {
+          Blast.throwError(error);
+        });
+  }
+};
+
+/**
  * Returns a paired bluetooth device by their id.
  * @param {string} id identifier of the device to get.
  * @returns {BluetoothDevice} the bluetooth device with id.
@@ -154,7 +183,9 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristcUUID) {
     const server = await Blast.Bluetooth.connect(id, serviceUUID);
     const service = await server.getPrimaryService(serviceUUID);
     const characteristic = await service.getCharacteristic(characteristcUUID);
-    return await characteristic.readValue();
+    const value = await characteristic.readValue();
+    const valueString = new TextDecoder().decode(value);
+    return valueString;
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);

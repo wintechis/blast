@@ -181,19 +181,8 @@ Blast.Things.getWebHIDDevices = function() {
 /**
  * Handles "connect via webBluetooth" button in the things toolbox category.
  */
-Blast.Things.createWebBluetoothButtonHandler = function() {
-  const options = {};
-  options.acceptAllDevices = true;
-  options.optionalServices = Blast.Bluetooth.optionalServices;
-
-  navigator.bluetooth.requestDevice(options)
-      .then((device) => {
-        Blast.Things.addWebBluetoothDevice(device.id, device.name);
-        Blast.workspace.refreshToolboxSelection();
-      })
-      .catch((error) => {
-        Blast.throwError(error);
-      });
+Blast.Things.createWebBluetoothButtonHandler = async function() {
+  await Blast.Bluetooth.requestDevice();
 };
 
 /**
@@ -211,10 +200,10 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
                   Blast.Things.webBluetoothDevices.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
-                  '%1', existing.name);
+                  '%1', text);
               Blockly.alert(msg,
                   function() {
-                    promptAndCheckWithAlert(text);  // Recurse
+                    promptAndCheckWithAlert(text, id);  // Recurse
                   });
             } else {
               // No conflict
@@ -269,10 +258,10 @@ Blast.Things.addWebHidDevice = function(id, deviceName) {
                   Blast.Things.webHidNames.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
-                  '%1', existing.name);
+                  '%1', text);
               Blockly.alert(msg,
                   function() {
-                    promptAndCheckWithAlert(text);  // Recurse
+                    promptAndCheckWithAlert(text, id);  // Recurse
                   });
             } else {
               // No conflict

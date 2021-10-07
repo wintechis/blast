@@ -245,30 +245,24 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
       statusCell.appendChild(pairStatus);
 
       // pair button click listener
-      pairButton.addEventListener('click', function() {
+      pairButton.addEventListener('click', async function() {
         if (type == 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
           options.optionalServices = Blast.Bluetooth.optionalServices;
         
-          navigator.bluetooth.requestDevice(options)
-              .then((device) => {
-                Blast.Things.addWebBluetoothDevice(device.id, name);
-                // change pair status to checkmark
-                document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
-                document.getElementById('pairStatus-' + name).style.color = 'green';
-                
-                // if all devices have been paired, enable done button
-                if (Blast.Storage.allConnectedDesktop_()) {
-                  document.getElementById('rc-done').disabled = false;
-                  // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
-                }
-              })
-              .catch((error) => {
-                Blast.throwError('Error connecting to WebBluetooth device:\n' + error);
-              });
+          await Blast.Bluetooth.requestDevice();
+          // change pair status to checkmark
+          document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
+          document.getElementById('pairStatus-' + name).style.color = 'green';
+          
+          // if all devices have been paired, enable done button
+          if (Blast.Storage.allConnectedDesktop_()) {
+            document.getElementById('rc-done').disabled = false;
+            // add done button click listener
+            document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+          }
         } else if (type == 'things_webHID') {
           const filters = [];
       
@@ -358,33 +352,28 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
       text.appendChild(secondaryText);
       item.appendChild(text);
       // add click listener to list item
-      item.addEventListener('click', function() {
+      item.addEventListener('click', async function() {
         if (type == 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
           options.optionalServices = Blast.Bluetooth.optionalServices;
                 
-          navigator.bluetooth.requestDevice(options)
-              .then((device) => {
-                Blast.Things.addWebBluetoothDevice(device.id, name);
-                // change pair status to connected
-                document.getElementById('rc-status-' + name).innerHTML = 'connected';
-                // change icon to bluetooth connected
-                document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
-                // change icon color to blue
-                document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
-                        
-                // if all devices have been paired, enable done button
-                if (Blast.Storage.allConnectedMobile_()) {
-                  document.getElementById('rc-done').disabled = false;
-                  // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
-                }
-              })
-              .catch((error) => {
-                Blast.throwError('Error connecting to WebBluetooth device:\n' + error);
-              });
+          await Blast.Bluetooth.requestDevice();
+          Blast.Things.addWebBluetoothDevice(device.id, name);
+          // change pair status to connected
+          document.getElementById('rc-status-' + name).innerHTML = 'connected';
+          // change icon to bluetooth connected
+          document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
+          // change icon color to blue
+          document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+                  
+          // if all devices have been paired, enable done button
+          if (Blast.Storage.allConnectedMobile_()) {
+            document.getElementById('rc-done').disabled = false;
+            // add done button click listener
+            document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+          }
         } else if (type == 'things_webHID') {
           const filters = [];
       
