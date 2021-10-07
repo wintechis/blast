@@ -178,12 +178,12 @@ Blast.asyncApiFunctions.push(['forgetAll', forgetAll]);
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  await Blast.Bluetooth.gatt_read(
+  const id = await Blast.Bluetooth.gatt_read(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
   );
-  callback();
+  callback(id);
 };
 
 Blast.asyncApiFunctions.push(['readID', readID]);
