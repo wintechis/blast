@@ -31,16 +31,6 @@
 </head>
 <body>
     <h1>Your platform is not fully supported.</h1>
-    Please use Google Chrome on Windows 10,
-    <br>
-    and enable experimental web platform features.
-    <br>
-    To do so, go to <code>chrome://flags/#enable-experimental-web-platform-features</code> and click enable.
-    <br>
-    <br>
-    <a href="index.html?skipCheck=true">Click here to continue anyway.</a>
-    <br>
-    <br>
     Below is a list of the missing prerequisites:
     <br>
     <br>
@@ -54,6 +44,35 @@
         <tbody id="prerequisites">
         </tbody>
     </table>
+    <br>
+    <br>
+    <a href="index.html?skipCheck=true">Click here to continue anyway.</a>
+    <br>
+    <br>
+    <div>
+        <h2>How to fix this:</h2>
+        <div id="fix-using-google-chrome">
+            <h3>Using Google Chrome:</h3>
+            <p>
+                Access this page using Google Chrome:
+                <a href="https://www.google.com/chrome/">Download Chrome</a>
+            </p>
+        </div>
+        <div id="fix-on-windows-or-android">
+            <h3>On Windows or Android:</h3>
+            <p>
+                Access this page using Chrome on Windows 10 or Android.
+            </p>
+        </div>
+        <div id="fix-experimental-web-platform-features-enabled">
+            <h3>Experimental Web Platform Features enabled:</h3>
+            <p>
+                To enable them, go to
+                <code>chrome://flags/#enable-experimental-web-platform-features</code>
+                and click enable.
+            </p>
+        </div>
+    </div>
     <script>
         // fill prerequisites table with url parameters
         const tBody = document.getElementById('prerequisites');
@@ -72,6 +91,7 @@
         }
             
         for (const [key, value] of platform) {
+            // fill table with missing prerequisites
             const tr = document.createElement('tr');
             const tdFeature = document.createElement('td');
             const tdStatus = document.createElement('td');
@@ -80,6 +100,9 @@
             tr.appendChild(tdFeature);
             tr.appendChild(tdStatus);
             tBody.appendChild(tr);
+            // show fix instructions
+            const container = document.getElementById(`fix-${key.toLowerCase().replace(/ /g, '-')}`);
+            container.style.display = value === true ? 'none' : 'block';
         }
 
 
