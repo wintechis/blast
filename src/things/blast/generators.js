@@ -141,9 +141,14 @@ const urdfQueryWrapper = async function(uri, query, callback) {
   const fromClause = `\n FROM <${uri}>\n`;
   query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
 
-  urdf.query(query).then((result) => {
-    callback(result);
-  });
+  urdf.query(query)
+      .then((result) => {
+        callback(result);
+      })
+      .catch((error) => {
+        console.error(error);
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
 };
 // add urdfQueryWrapper method to the interpreter's API.
 Blast.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
