@@ -76,7 +76,7 @@
     <script>
         // fill prerequisites table with url parameters
         const tBody = document.getElementById('prerequisites');
-        const isChrome = !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+        const isChrome = !!window.chrome;
         const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
         const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
         const supportsWebBluetooth = 'bluetooth' in navigator;
