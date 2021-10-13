@@ -1,5 +1,6 @@
 /**
- * @fileoverview Block definitions for [Huskyduino](https://github.com/wintechis/huskyduino)
+ * @fileoverview Block definitions for the Huskyduino blocks, see
+ * (https://github.com/wintechis/huskyduino) for the interface specification.
  * @author yongxu.ren1996@gmail.com
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -41,7 +42,7 @@ Blockly.Blocks['huskylens_choose_algo'] = {
   },
 };
 
-// Add choose algorithm block to the toolbox.
+// Add choose the huskylens_choose_algo to the toolbox.
 Blast.Toolbox.addBlock('huskylens_choose_algo', 'Properties');
 
 
@@ -71,14 +72,14 @@ Blockly.Blocks['huskylens_learn_id'] = {
   },
 };
 
-// Add learn face id block to the toolbox.
+// Add the huskylens_learn_id block to the toolbox.
 Blast.Toolbox.addBlock('huskylens_learn_id', 'Properties');
 
 
 Blockly.Blocks['huskylens_forget_all'] = {
   init: function() {
     this.appendValueInput('Thing')
-        .setCheck(null)
+        .setCheck('Thing')
         .appendField('write a forget flag to Huskyduino')
         .appendField(new Blockly.FieldCheckbox('TRUE'), 'ForgetFlag');
     this.setPreviousStatement(true, null);
@@ -101,14 +102,14 @@ Blockly.Blocks['huskylens_forget_all'] = {
   },
 };
 
-// Add forget all knowledge block to the toolbox.
+// Add the huskylens_forget_all block to the toolbox.
 Blast.Toolbox.addBlock('huskylens_forget_all', 'Properties');
 
 
 Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
-        .setCheck(null)
+        .setCheck('Thing')
         .appendField('read face IDs out from Huskyduino');
     this.setOutput(true, 'String');
     this.setColour(255);
@@ -129,5 +130,5 @@ Blockly.Blocks['huskylens_read_id'] = {
   },
 };
 
-// Add read face IDs block to the toolbox.
+// Add the huskylens_read_id block to the toolbox.
 Blast.Toolbox.addBlock('huskylens_read_id', 'Properties');
