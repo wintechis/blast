@@ -60,7 +60,7 @@ Blockly.Blocks['huskylens_learn_id'] = {
   },
 
   onchange: function() {
-    // on creating this block check webBluetooth availability, then request LEScan.
+    // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
@@ -90,7 +90,7 @@ Blockly.Blocks['huskylens_forget_all'] = {
   },
     
   onchange: function() {
-    // on creating this block check webBluetooth availability, then request LEScan.
+    // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
@@ -118,7 +118,7 @@ Blockly.Blocks['huskylens_read_id'] = {
   },
 
   onchange: function() {
-    // on creating this block check webBluetooth availability, then request LEScan.
+    // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
