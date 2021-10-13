@@ -1,13 +1,12 @@
 /**
- * @fileoverview Block definitions for Huskyduino
- *
+ * @fileoverview Block definitions for [Huskyduino](https://github.com/wintechis/huskyduino)
  * @author yongxu.ren1996@gmail.com
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 'use strict';
 
-Blockly.Blocks['huskylens_choosealgo'] = {
+Blockly.Blocks['huskylens_choose_algo'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
@@ -30,7 +29,7 @@ Blockly.Blocks['huskylens_choosealgo'] = {
   },
 
   onchange: function() {
-    // on creating this block check webBluetooth availability, then request LEScan.
+    // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
@@ -42,14 +41,14 @@ Blockly.Blocks['huskylens_choosealgo'] = {
   },
 };
 
-// Add write_huskylens_algo block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_choosealgo', 'Properties');
+// Add choose algorithm block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_choose_algo', 'Properties');
 
 
-Blockly.Blocks['huskylens_learnid'] = {
+Blockly.Blocks['huskylens_learn_id'] = {
   init: function() {
     this.appendValueInput('Thing')
-        .setCheck(null)
+        .setCheck('Thing')
         .appendField('learning a face with ID')
         .appendField(new Blockly.FieldNumber(0, 1, 255, 1), 'ID');
     this.setPreviousStatement(true, null);
@@ -72,11 +71,11 @@ Blockly.Blocks['huskylens_learnid'] = {
   },
 };
 
-// Add write_huskylens_faceid block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_learnid', 'Properties');
+// Add learn face id block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_learn_id', 'Properties');
 
 
-Blockly.Blocks['huskylens_forgetall'] = {
+Blockly.Blocks['huskylens_forget_all'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck(null)
@@ -102,11 +101,11 @@ Blockly.Blocks['huskylens_forgetall'] = {
   },
 };
 
-// Add write_huskylens_forget_flag block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_forgetall', 'Properties');
+// Add forget all knowledge block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_forget_all', 'Properties');
 
 
-Blockly.Blocks['huskylens_readid'] = {
+Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck(null)
@@ -131,4 +130,4 @@ Blockly.Blocks['huskylens_readid'] = {
 };
 
 // Add read face IDs block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_readid', 'Properties');
+Blast.Toolbox.addBlock('huskylens_read_id', 'Properties');
