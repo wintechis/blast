@@ -63,19 +63,12 @@ const sendHttpRequest = async function(
 
   fetch(uri, requestOptions)
       .then(Blast.handleFetchErrors)
-      .then((res) => {
+      .then(async(res) => {
         if (output == 'status') {
           callback(res.status);
         }
-        callback(res.text());
-      })
-      .then((resData) => {
-        urdf.clear();
-        urdf.load(resData).then(() => {
-          urdf.query('SELECT * WHERE {?subject ?predicate ?object}').then((result) => {
-            callback(result);
-          });
-        });
+        const response = await res.text();
+        callback(response);
       })
       .catch((error) => {
         Blast.throwError(`${error.message}\nSee console for details.`);
@@ -141,9 +134,14 @@ const urdfQueryWrapper = async function(uri, query, callback) {
   const fromClause = `\n FROM <${uri}>\n`;
   query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
 
-  urdf.query(query).then((result) => {
-    callback(result);
-  });
+  urdf.query(query)
+      .then((result) => {
+        callback(result);
+      })
+      .catch((error) => {
+        console.error(error);
+        Blast.throwError(`${error.message}\nSee console for details.`);
+      });
 };
 // add urdfQueryWrapper method to the interpreter's API.
 Blast.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
@@ -199,6 +197,7 @@ Blockly.JavaScript['display_table'] = function(block) {
  * @public
  */
 const displayTable = function(graph) {
+  console.log(graph);
   // display message if table is empty
   if (graph.length == 0) {
     Blast.Ui.addMessage('empty table');

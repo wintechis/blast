@@ -10,31 +10,6 @@
   * Action blocks.*
   *****************/
  
-Blockly.Blocks['get_request'] = {
-  /**
-    * Block for executing http get requests, returns body as text.
-    * @this {Blockly.Block}
-    */
-  init: function() {
-    this.appendValueInput('URI')
-        .setCheck('URI')
-        .appendField('send HTTP-GET request to URI');
-    this.appendDummyInput()
-        .appendField('headers:')
-        .appendField(
-            new Blockly.FieldTextInput('"Accept": "text/plain"'),
-            'HEADERS',
-        );
-    this.setInputsInline(false);
-    this.setOutput(true, null);
-    this.setColour(0);
-    this.setTooltip('Invokes a HTTP GET request, returns body as text.');
-    this.setHelpUrl('');
-  },
-};
-// Add get_request block to the toolbox.
-Blast.Toolbox.addBlock('get_request', 'Requests and Queries');
- 
 Blockly.Blocks['http_request'] = {
   /**
       * Block for executing http requests.
@@ -49,10 +24,9 @@ Blockly.Blocks['http_request'] = {
         .appendField(
             new Blockly.FieldDropdown(
                 [
-                  ['status (text)', 'status'],
-                  ['response (table)', 'body'],
+                  ['status', 'status'],
+                  ['response', 'body'],
                 ],
-                this.httpRequestOutputValidator,
             ),
             'OUTPUT',
         );
@@ -87,11 +61,6 @@ Blockly.Blocks['http_request'] = {
     return newValue;
   },
      
-  httpRequestOutputValidator: function(output) {
-    this.getSourceBlock().updateOutput(output);
-    return output;
-  },
-     
   updateInputs: function(newValue) {
     this.removeInput('BODYINPUT', /* no error */ true);
      
@@ -111,14 +80,6 @@ Blockly.Blocks['http_request'] = {
      }`),
           'BODY',
       );
-    }
-  },
-     
-  updateOutput: function(outputValue) {
-    if (outputValue == 'status') {
-      this.outputConnection.setCheck('String');
-    } else if (outputValue == 'body') {
-      this.outputConnection.setCheck('table');
     }
   },
 };
