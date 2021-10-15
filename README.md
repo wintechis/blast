@@ -18,7 +18,8 @@ The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa6
 > :warning: **BLAST's BlueTooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
 ### WebHID on Linux
-On most Linux systems, the udev subsystem blocks write access to HID devices. In order to **unblock access to the elGato Streamdeck** do the following:
+On most Linux systems, the udev subsystem blocks write access to HID devices.  
+In order to **unblock access to the elGato Streamdeck** do the following:
 1. create `/etc/udev/rules.d/10-streamdeck.rules`
 2. paste `SUBSYSTEMS=="usb", ATTRS{idVendor}=="0fd9", GROUP="users", TAG+="uaccess"`
 3. reload udev rules using `sudo udevadm control --reload-rules`
