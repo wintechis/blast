@@ -75,7 +75,7 @@ Blast.Things.flyoutCategory = function(workspace) {
   const wHidBlockList = Blast.Things.flyoutCategoryBlocksWHid(workspace);
   xmlList = xmlList.concat(wHidBlockList);
 
-  // Create identifiers Label
+  // Create identifiers label
   const identifiersLabel = document.createElement('label');
   identifiersLabel.setAttribute('text', 'additional identifiers');
   xmlList.push(identifiersLabel);
@@ -84,10 +84,33 @@ Blast.Things.flyoutCategory = function(workspace) {
   const block = Blockly.utils.xml.createElement('block');
   block.setAttribute('type', 'uri');
   xmlList.push(block);
+
   // temporarily comment out unused mac block, see #69
   // block = Blockly.utils.xml.createElement('block');
   // block.setAttribute('type', 'mac');
   // xmlList.push(block);
+
+  // create audio uris label
+  const audioLabel = document.createElement('label');
+  audioLabel.setAttribute('text', 'example audio URIs');
+  xmlList.push(audioLabel);
+
+  // add audio uri blocks to xmlList
+  const audioURIs = [
+    'https://studio.code.org/blockly/media/skins/dance/win.mp3',
+    'https://studio.code.org/blockly/media/click.mp3',
+    'https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg',
+    'https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg',
+  ];
+  for (const audioURI of audioURIs) {
+    const block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'uri');
+    const field = Blockly.utils.xml.createElement('field');
+    field.setAttribute('name', 'URI');
+    field.textContent = audioURI;
+    block.appendChild(field);
+    xmlList.push(block);
+  }
 
   return xmlList;
 };
