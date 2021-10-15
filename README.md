@@ -18,11 +18,30 @@ The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa6
 > :warning: **BLAST's BlueTooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
 ### WebHID on Linux
-On most Linux systems, the udev subsystem blocks access to HID devices. In order to unblock access to the elGato Streamdeck do the following:
-1. edit `/etc/udev/rules.d/10-streamdeck.rules`
+On most Linux systems, the udev subsystem blocks write access to HID devices. In order to **unblock access to the elGato Streamdeck** do the following:
+1. create `/etc/udev/rules.d/10-streamdeck.rules`
 2. paste `SUBSYSTEMS=="usb", ATTRS{idVendor}=="0fd9", GROUP="users", TAG+="uaccess"`
-3. reload with `sudo udevadm control --reload-rules`
+3. reload udev rules using `sudo udevadm control --reload-rules`
 4. unplug and replog the device
+
+And in order to **unblock access to Nintendo JoyCon Controllers** follow the steps below:
+1. Create `/etc/udev/rules.d/10-joycon.rules`
+2. paste the following rules into it 
+    ```bash
+    # Switch Joy-con (L) (Bluetooth only)
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2006.*", MODE="0666"
+
+    # Switch Joy-con (R) (Bluetooth only)
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2007.*", MODE="0666"
+
+    # Switch Pro controller (USB and Bluetooth)
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="2009", MODE="0666"
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", KERNELS=="0005:057E:2009.*", MODE="0666"
+
+    # Switch Joy-con charging grip (USB only)
+    KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", MODE="0666"
+    ```
+3. reload udev rules using `sudo udevadm control --reload-rules`
 
 ### Compatibility
 This table displays all blocks with limited compatibility, assuming you're using **google chrome version 85, or newer**, and have the **`experimental web platform features flag` enabled**.
