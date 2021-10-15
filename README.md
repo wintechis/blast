@@ -32,8 +32,11 @@ This table displays all blocks with limited compatibility, assuming you're using
 | block | Windows | Linux | Mac | Android |
 |---|---|---|---|---|
 | switch LED | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
-| read signal strength | :heavy_check_mark: | :x: | :heavy_check_mark: | :heavy_check_mark: |
-| read ruuvi property | :heavy_check_mark: | :x: | :heavy_check_mark: | :heavy_check_mark: |
+| read signal strength | :heavy_check_mark: | :x:[^1] | :heavy_check_mark: | :heavy_check_mark: |
+| read ruuvi property | :heavy_check_mark: | :x:[^2] | :heavy_check_mark: | :heavy_check_mark: |
+
+[^1]: https://bugs.chromium.org/p/chromium/issues/detail?id=897312
+[^2]: https://bugs.chromium.org/p/chromium/issues/detail?id=654897
 
 If you need Linux compatibility, it might help to star this [watchAdvertisement implementation issue](https://bugs.chromium.org/p/chromium/issues/detail?id=654897&q=watchAdvertisements&can=2) and to help us implement new features, star the [Bluetooth Scanning issue](https://bugs.chromium.org/p/chromium/issues/detail?id=897312). 
 
