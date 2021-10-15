@@ -79,6 +79,13 @@ const defaultToolbox = {
       colour: '210',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Functions',
+      colour: '290',
+      custom: 'PROCEDURE',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -126,17 +133,6 @@ const defaultToolbox = {
       name: 'Variables',
       custom: 'VARIABLE',
       colour: '330',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Functions',
-      colour: '290',
-      custom: 'PROCEDURE',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
     },
   ],
 };
