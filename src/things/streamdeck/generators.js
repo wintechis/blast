@@ -47,6 +47,7 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
     try {
       await device.open();
     } catch (error) {
+      console.error(error);
       Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
