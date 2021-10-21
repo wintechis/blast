@@ -11,7 +11,7 @@ Blockly.Blocks['huskylens_choose_algo'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('write')
+        .appendField('write algorithm property')
         .appendField(new Blockly.FieldDropdown([
           ['Face Recognition', 'face_recognition'],
           ['Object Tracking', 'object_tracking'],
@@ -21,11 +21,11 @@ Blockly.Blocks['huskylens_choose_algo'] = {
           ['Tag Recognition', 'tag_recognition'],
           ['Object Classification', 'object_classification'],
         ]), 'Algorithms')
-        .appendField('Algorithm to Huskyduino');
+        .appendField('to Huskyduino');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('Choose the algorithm for Huskylens');
+    this.setTooltip('Choose the algorithm of a HuskyDuino');
     this.setHelpUrl('');
   },
 
@@ -46,16 +46,19 @@ Blockly.Blocks['huskylens_choose_algo'] = {
 Blast.Toolbox.addBlock('huskylens_choose_algo', 'Properties');
 
 
-Blockly.Blocks['huskylens_learn_id'] = {
+Blockly.Blocks['huskylens_write_face_id'] = {
   init: function() {
+    this.appendValueInput('ID')
+        .setCheck('Number')
+        .appendField('write face ID property');
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('learning a face with ID')
-        .appendField(new Blockly.FieldNumber(0, 1, 255, 1), 'ID');
+        .appendField('of HuskyDuino');
+    this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('ID shoud be a value between 1 and 255');
+    this.setTooltip('Sets the ID of the face currently on camera. ID shoud be a value between 1 and 255');
     this.setHelpUrl('');
   },
 
@@ -72,20 +75,33 @@ Blockly.Blocks['huskylens_learn_id'] = {
   },
 };
 
-// Add the huskylens_learn_id block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_learn_id', 'Properties');
+// Define inner blocks XML for the huskylens_write_face_id block.
+const huskylensLearnIdXml = `
+<block type="huskylens_write_face_id">
+  <value name="ID">
+    <block type="math_number">
+      <field name="NUM">1</field>
+    </block>
+  </value>
+</block>
+`;
+// Add the huskylens_write_face_id block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_write_face_id', 'Properties', huskylensLearnIdXml);
 
 
-Blockly.Blocks['huskylens_forget_all'] = {
+Blockly.Blocks['huskylens_write_forget_flag'] = {
   init: function() {
+    this.appendValueInput('ForgetFlag')
+        .setCheck('Boolean')
+        .appendField('write forget flag');
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('write a forget flag to Huskyduino')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'ForgetFlag');
+        .appendField('to HuskyDuino');
+    this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('forget all learned knowledge under this algorithm');
+    this.setTooltip('forget all values of the currently selected algorithm');
     this.setHelpUrl('');
   },
     
@@ -102,18 +118,29 @@ Blockly.Blocks['huskylens_forget_all'] = {
   },
 };
 
-// Add the huskylens_forget_all block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_forget_all', 'Properties');
+// Define inner blocks XML for the huskylens_write_forget_flag block.
+const huskylensForgetFlagXml = `
+<block type="huskylens_write_forget_flag">
+  <value name="ForgetFlag">
+    <block type="logic_boolean">
+      <field name="BOOL">TRUE</field>
+    </block>
+  </value>
+</block>
+`;
+
+// Add the huskylens_write_forget_flag block to the toolbox.
+Blast.Toolbox.addBlock('huskylens_write_forget_flag', 'Properties', huskylensForgetFlagXml);
 
 
 Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read face IDs out from Huskyduino');
+        .appendField('read face IDs property from HuskyDuino');
     this.setOutput(true, 'String');
     this.setColour(255);
-    this.setTooltip('read maximal 10 IDs out');
+    this.setTooltip('returns up to 5 IDs of the faces currently visible to the HuskyLens');
     this.setHelpUrl('');
   },
 

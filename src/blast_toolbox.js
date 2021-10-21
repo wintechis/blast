@@ -173,11 +173,13 @@ Blast.Toolbox.getCategory = function(name) {
  * Adds a block to the toolbox.
  * @param {string} type The type of block to add.
  * @param {string} blockCategory The category of the block.
+ * @param {string=} blockxml optional, the xml of the block.
  */
-Blast.Toolbox.addBlock = function(type, blockCategory) {
+Blast.Toolbox.addBlock = function(type, blockCategory, blockxml) {
   const block = {
     kind: 'BLOCK',
     type: type,
+    blockxml: blockxml,
   };
   // Find the category and add the block to it.
   const category = Blast.Toolbox.getCategory(blockCategory);

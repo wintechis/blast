@@ -38,12 +38,15 @@ Blockly.JavaScript['huskylens_choose_algo'] = function(block) {
 
 
 /**
- * Generate JavaScript code for the huskylens_learn_id block.
- * @param {Blockly.Block} block the huskylens_learn_id block
+ * Generate JavaScript code for the huskylens_write_face_id block.
+ * @param {Blockly.Block} block the huskylens_write_face_id block
  * @returns {String} the generated JavaScript code
  */
-Blockly.JavaScript['huskylens_learn_id'] = function(block) {
-  const id = '0x' + block.getFieldValue('ID').toString(16);
+Blockly.JavaScript['huskylens_write_face_id'] = function(block) {
+  const id = '0x' + Blockly.JavaScript.valueToCode(
+      block,
+      'ID',
+      Blockly.JavaScript.ORDER_ATOMIC).toString(16);
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',
@@ -56,11 +59,11 @@ Blockly.JavaScript['huskylens_learn_id'] = function(block) {
 
 
 /**
- * Generate JavaScript code for the huskylens_forget_all block.
- * @param {Blockly.Block} block the huskylens_forget_all block
+ * Generate JavaScript code for the huskylens_write_forget_flag block.
+ * @param {Blockly.Block} block the huskylens_write_forget_flag block
  * @returns {String} the generated JavaScript code
  */
-Blockly.JavaScript['huskylens_forget_all'] = function(block) {
+Blockly.JavaScript['huskylens_write_forget_flag'] = function(block) {
   const flag = block.getFieldValue('ForgetFlag') == 'TRUE';
   const thing = Blockly.JavaScript.valueToCode(
       block,
