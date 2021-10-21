@@ -15,7 +15,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('write RGB lights property of');
-    this.appendValueInput('mac')
+    this.appendValueInput('thing')
         .setCheck('Thing');
     this.appendDummyInput()
         .appendField('red')
@@ -55,7 +55,7 @@ Blockly.Blocks['switch_lights_ryg'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('write RYG lights property of');
-    this.appendValueInput('mac')
+    this.appendValueInput('thing')
         .setCheck('Thing');
     this.appendDummyInput()
         .appendField('red')

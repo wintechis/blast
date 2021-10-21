@@ -16,9 +16,9 @@ Blockly.JavaScript['switch_lights_rgb'] = function(block) {
   const red = block.getFieldValue('cb_red') == 'TRUE';
   const green = block.getFieldValue('cb_green') == 'TRUE';
   const blue = block.getFieldValue('cb_blue') == 'TRUE';
-  const mac = Blockly.JavaScript.valueToCode(
+  const thing = Blockly.JavaScript.valueToCode(
       block,
-      'mac',
+      'thing',
       Blockly.JavaScript.ORDER_NONE,
   );
      
@@ -28,7 +28,7 @@ Blockly.JavaScript['switch_lights_rgb'] = function(block) {
   const blueByte = blue ? 'ff' : '00';
   const value = '7e000503' + redByte + greenByte + blueByte + '00ef';
 
-  const code = `switchLights(${mac}, '${value}');\n`;
+  const code = `switchLights(${thing}, '${value}');\n`;
   return code;
 };
 
@@ -41,9 +41,9 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
   const red = block.getFieldValue('cb_red') == 'TRUE';
   const yellow = block.getFieldValue('cb_yellow') == 'TRUE';
   const green = block.getFieldValue('cb_green') == 'TRUE';
-  const mac = Blockly.JavaScript.valueToCode(
+  const thing = Blockly.JavaScript.valueToCode(
       block,
-      'mac',
+      'thing',
       Blockly.JavaScript.ORDER_NONE,
   );
 
@@ -53,7 +53,7 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
   const greenByte = green ? 'ff' : '00';
   const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
     
-  const code = `switchLights(${mac}, '${value}');\n`;
+  const code = `switchLights(${thing}, '${value}');\n`;
   return code;
 };
 
