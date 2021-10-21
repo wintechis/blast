@@ -18,13 +18,18 @@ The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa6
 > :warning: **BLAST's BlueTooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
 ### WebHID on Linux
-On most Linux systems, the udev subsystem blocks write access to HID devices. In order to **unblock access to the elGato Streamdeck** do the following:
-1. create `/etc/udev/rules.d/10-streamdeck.rules`
-2. paste `SUBSYSTEMS=="usb", ATTRS{idVendor}=="0fd9", GROUP="users", TAG+="uaccess"`
-3. reload udev rules using `sudo udevadm control --reload-rules`
-4. unplug and replog the device
+On most Linux systems, the udev subsystem blocks write access to HID devices. In order to unblock access, each device requires its own udev rule. See below for step by step instructions for all devices used by BLAST.
 
-And in order to **unblock access to Nintendo JoyCon Controllers** follow the steps below:
+#### elGato Stream Deck ([elgato.com](https://www.elgato.com/stream-deck)), all variants:
+1. create `/etc/udev/rules.d/10-streamdeck.rules`
+2. paste the following rules into ot
+    ```bash
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="0fd9", GROUP="users", TAG+="uaccess"
+    ```
+3. Reload udev rules using `sudo udevadm control --reload-rules`
+4. Unplug and replug the device
+
+####  Nintendo Joy-Con Controllers ([nintendo.com/](https://www.nintendo.com/switch/tech-specs/#joycon-section)):
 1. Create `/etc/udev/rules.d/10-joycon.rules`
 2. paste the following rules into it 
     ```bash
@@ -42,6 +47,18 @@ And in order to **unblock access to Nintendo JoyCon Controllers** follow the ste
     KERNEL=="hidraw*", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="057e", ATTRS{idProduct}=="200e", MODE="0666"
     ```
 3. reload udev rules using `sudo udevadm control --reload-rules`
+4. Reconnect the device.
+
+#### tulogic BlinkStick ([blinkstick.com](https://www.blinkstick.com/))
+1. Create `/etc/udev/rules.d/85-blinkstick.rules`
+2. paste the following rule into it
+    ```bash
+    SUBSYSTEMS=="usb", ATTRS{idVendor}=="20a0", ATTRS{idProduct}=="41e5", MODE="0666"
+    ```
+3. reload udev rules using `sudo udevadm control --reload-rules`
+4. Unplug and re-plug the device.
+
+
 
 ### Compatibility
 This table displays all blocks with limited compatibility, assuming you're using **google chrome version 85, or newer**, and have the **`experimental web platform features flag` enabled**.
