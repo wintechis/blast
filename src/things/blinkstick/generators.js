@@ -11,7 +11,7 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
   const red = Blockly.JavaScript.valueToCode(block, 'red', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const green = Blockly.JavaScript.valueToCode(block, 'green', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const blue = Blockly.JavaScript.valueToCode(block, 'blue', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_ATOMIC);
+  const thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
 
   const code = `blinkstickSetColors(${thing}, ${red}, ${green}, ${blue})`;
   return code;
@@ -26,6 +26,13 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const blinkstickSetColors = async function(id, red, green, blue, callback) {
+  // If no things block is attached, return.
+  if (!id) {
+    Blast.throwError('No BlinkStick block set.');
+    callback();
+    return;
+  }
+
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
     try {
@@ -33,6 +40,13 @@ const blinkstickSetColors = async function(id, red, green, blue, callback) {
     } catch (error) {
       Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
+  }
+
+  // check if the device is a BlinkStick
+  if (device.vendorId !== 8352 || device.productId !== 16869) {
+    Blast.throwError('The connected device is not a BlinkStick.');
+    callback();
+    return;
   }
 
   const reportId = 5;
@@ -46,8 +60,7 @@ const blinkstickSetColors = async function(id, red, green, blue, callback) {
         await setColor(--retries);
       } else {
         console.error(error);
-        Blast.throwError(`Failed to set BlinkStick colors after ${retires} retries, \
-        please check its connection.`);
+        Blast.throwError('Failed to set BlinkStick colors, please check its connection.');
       }
     }
   };

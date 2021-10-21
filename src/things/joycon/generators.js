@@ -38,6 +38,13 @@ Blockly.JavaScript['joycon_read_property'] = function(block) {
  * @private
  */
 const readJoyConProperty = async function(id, property, subValue, subValue2, subValue3, callback) {
+  // If no things block is attached, return.
+  if (!id) {
+    Blast.throwError('No Joy-Con block set.');
+    callback();
+    return;
+  }
+
   const device = Blast.Things.webHidDevices.get(id);
   if (!device.opened) {
     try {
@@ -45,6 +52,13 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     } catch (error) {
       Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
+  }
+
+  // Check if device is a Joy-Con.
+  if (device.vendorId !== 1406 || device.productId !== 8198) {
+    Blast.throwError('The connected device is not a Joy-Con.');
+    callback();
+    return;
   }
 
   let joyCon;

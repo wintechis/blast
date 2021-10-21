@@ -40,6 +40,12 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * @param {String} statements code to be executed when the buttons are pushed.
  */
 const handleStreamdeck = async function(id, buttonArray, statements) {
+  // If no things block is attached, return.
+  if (!id) {
+    Blast.throwError('No streamdeck block set.');
+    callback();
+    return;
+  }
   const type = 'inputreport';
 
   const device = Blast.Things.webHidDevices.get(id);
@@ -51,6 +57,13 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
       Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
+
+  // check if device is a Stream Deck
+  if (device.vendorId != 4057) {
+    Blast.throwError('The connected device is not a Stream Deck.');
+    return;
+  }
+
 
   const fn = function(event) {
     if (event.reportId === 0x01) {
