@@ -30,5 +30,26 @@ Blockly.Blocks['blinkstick_set_colors'] = {
   },
 };
 
+// Define inner blocks XML for the blinkstick_set_colors block.
+const BLINKSTICK_SET_COLORS_XML = `
+<block type="blinkstick_set_colors">
+  <value name="red">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="green">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="blue">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+</block>
+`;
+
 // Add blinkstick_set_colors block to the toolbox.
-Blast.Toolbox.addBlock('blinkstick_set_colors', 'Properties');
+Blast.Toolbox.addBlock('blinkstick_set_colors', 'Properties', BLINKSTICK_SET_COLORS_XML);
