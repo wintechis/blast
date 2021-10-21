@@ -13,17 +13,19 @@ Blockly.Blocks['switch_lights_rgb'] = {
      * @this {Blockly.Block}
      */
   init: function() {
-    this.appendDummyInput()
-        .appendField('write RGB lights property of');
+    this.appendValueInput('red')
+        .setCheck('Number')
+        .appendField('write color properties: red ');
+    this.appendValueInput('green')
+        .setCheck('Number')
+        .appendField('green');
+    this.appendValueInput('blue')
+        .setCheck('Number')
+        .appendField('blue');
     this.appendValueInput('thing')
-        .setCheck('Thing');
-    this.appendDummyInput()
-        .appendField('red')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_red')
-        .appendField('green')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green')
-        .appendField('blue')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_blue');
+        .setCheck('Thing')
+        .appendField('to LED controller');
+    this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
@@ -44,8 +46,28 @@ Blockly.Blocks['switch_lights_rgb'] = {
   },
 };
 
+// Define inner block XML for the switch_lights_rgb block.
+const SWITCH_LIGHTS_RGB_XML = `
+<block type="switch_lights_rgb">
+  <value name="red">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="green">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="blue">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+</block>`;
+
 // Add switch_lights_rgb block to the toolbox.
-Blast.Toolbox.addBlock('switch_lights_rgb', 'Properties');
+Blast.Toolbox.addBlock('switch_lights_rgb', 'Properties', SWITCH_LIGHTS_RGB_XML);
 
 Blockly.Blocks['switch_lights_ryg'] = {
   /**
@@ -53,17 +75,19 @@ Blockly.Blocks['switch_lights_ryg'] = {
     * @this {Blockly.Block}
     */
   init: function() {
-    this.appendDummyInput()
-        .appendField('write RYG lights property of');
+    this.appendValueInput('red')
+        .setCheck('Number')
+        .appendField('write color properties: red ');
+    this.appendValueInput('yellow')
+        .setCheck('Number')
+        .appendField('yellow');
+    this.appendValueInput('green')
+        .setCheck('Number')
+        .appendField('green');
     this.appendValueInput('thing')
-        .setCheck('Thing');
-    this.appendDummyInput()
-        .appendField('red')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_red')
-        .appendField('yellow')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_yellow')
-        .appendField('green')
-        .appendField(new Blockly.FieldCheckbox('TRUE'), 'cb_green');
+        .setCheck('Thing')
+        .appendField('to LED controller');
+    this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
@@ -84,5 +108,25 @@ Blockly.Blocks['switch_lights_ryg'] = {
   },
 };
 
+// Define inner block XML for the switch_lights_ryg block.
+const SWITCH_LIGHTS_RYG_XML = `
+<block type="switch_lights_ryg">
+  <value name="red">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="yellow">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+  <value name="green">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+</block>`;
+
 // Add switch_lights_ryg block to the toolbox.
-Blast.Toolbox.addBlock('switch_lights_ryg', 'Properties');
+Blast.Toolbox.addBlock('switch_lights_ryg', 'Properties', SWITCH_LIGHTS_RYG_XML);
