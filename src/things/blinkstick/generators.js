@@ -11,21 +11,30 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
   const red = Blockly.JavaScript.valueToCode(block, 'red', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const green = Blockly.JavaScript.valueToCode(block, 'green', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const blue = Blockly.JavaScript.valueToCode(block, 'blue', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  const index = Blockly.JavaScript.valueToCode(block, 'index', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
 
-  const code = `blinkstickSetColors(${thing}, ${red}, ${green}, ${blue})`;
+  const code = `blinkstickSetColors(${thing}, ${index}, ${red}, ${green}, ${blue})\n;`;
   return code;
 };
 
 /**
  * Set the color of the BlinkStick.
  * @param {string} id the id identifier of the BlinkStick.
+ * @param {number} index index of the LED.
  * @param {number} red red color intensity 0 is off, 255 is full red intensity.
  * @param {number} green green color intensity 0 is off, 255 is full green intensity.
  * @param {number} blue blue color intensity 0 is off, 255 is full blue intensity.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const blinkstickSetColors = async function(id, red, green, blue, callback) {
+const blinkstickSetColors = async function(id, index, red, green, blue, callback) {
+  // check if index is between 0 and 7.
+  if (index < 0 || index > 7) {
+    Blast.throwError('BlinkStick index must be between 0 and 7.');
+    callback();
+    return;
+  }
+  
   // If no things block is attached, return.
   if (!id) {
     Blast.throwError('No BlinkStick block set.');
@@ -50,7 +59,7 @@ const blinkstickSetColors = async function(id, red, green, blue, callback) {
   }
 
   const reportId = 5;
-  const report = Int8Array.from([reportId, 1, red, green, blue]);
+  const report = Int8Array.from([reportId, index, red, green, blue]);
 
   const setColor = async function(retries) {
     try {

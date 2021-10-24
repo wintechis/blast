@@ -9,9 +9,11 @@
 
 Blockly.Blocks['blinkstick_set_colors'] = {
   init: function() {
-    this.appendValueInput('red')
+    this.appendValueInput('index')
         .setCheck('Number')
-        .appendField('write color properties: red ');
+        .appendField('write color properties of LED');
+    this.appendValueInput('red')
+        .appendField('red');
     this.appendValueInput('green')
         .setCheck('Number')
         .appendField('green');
@@ -33,6 +35,11 @@ Blockly.Blocks['blinkstick_set_colors'] = {
 // Define inner blocks XML for the blinkstick_set_colors block.
 const BLINKSTICK_SET_COLORS_XML = `
 <block type="blinkstick_set_colors">
+  <value name="index">
+    <block type="math_number">
+      <field name="NUM">0</field>
+    </block>
+  </value>
   <value name="red">
     <block type="math_number">
       <field name="NUM">0</field>
