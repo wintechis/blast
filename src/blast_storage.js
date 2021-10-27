@@ -472,7 +472,8 @@ Blast.Storage.allConnectedDesktop_ = function() {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
     const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
-    if (pairStatus.innerHTML == '&#x2718;') {
+    console.log(pairStatus.innerHTML);
+    if (pairStatus.innerHTML == '✘') {
       return false;
     }
   }
