@@ -64,11 +64,11 @@ Blast.Bluetooth.requestDevice = async function(options, deviceName) {
       options.optionalServices = Blast.Bluetooth.optionalServices;
     }
 
-    // if no device name is given, use default one
-    const name = deviceName || device.name;
-
     navigator.bluetooth.requestDevice(options)
         .then((device) => {
+          // if no device name is given, use default one
+          const name = deviceName || device.name;
+          
           Blast.Things.addWebBluetoothDevice(device.id, name);
           Blast.workspace.refreshToolboxSelection();
           return (device);
