@@ -307,6 +307,8 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
           document.getElementById('pairStatus-' + name).style.color = 'green';
 
+          console.log(device);
+
           // set block id to device id
           block.firstElementChild.textContent = device.id;
           
