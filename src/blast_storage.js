@@ -302,10 +302,13 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           options.acceptAllDevices = true;
           options.optionalServices = Blast.Bluetooth.optionalServices;
         
-          await Blast.Bluetooth.requestDevice();
+          const device = await Blast.Bluetooth.requestDevice();
           // change pair status to checkmark
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
           document.getElementById('pairStatus-' + name).style.color = 'green';
+
+          // set block id to device id
+          block.firstElementChild.textContent = device.id;
           
           // if all devices have been paired, enable done button
           if (Blast.Storage.allConnectedDesktop_()) {
@@ -327,6 +330,10 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
                 // change pair status to checkmark
                 document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
                 document.getElementById('pairStatus-' + name).style.color = 'green';
+
+                // set block id to device id
+                block.firstElementChild.textContent = uid;
+                console.log(block);
                                 
                 // if all devices have been paired, enable done button
                 if (Blast.Storage.allConnectedDesktop_()) {
