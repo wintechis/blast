@@ -416,7 +416,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
           options.acceptAllDevices = true;
           options.optionalServices = Blast.Bluetooth.optionalServices;
                 
-          await Blast.Bluetooth.requestDevice();
+          const device = await Blast.Bluetooth.requestDevice();
           Blast.Things.addWebBluetoothDevice(device.id, name);
           // change pair status to connected
           document.getElementById('rc-status-' + name).innerHTML = 'connected';
@@ -424,6 +424,9 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
           document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
           // change icon color to blue
           document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+
+          // set block id to device id
+          block.firstElementChild.textContent = device.id;
                   
           // if all devices have been paired, enable done button
           if (Blast.Storage.allConnectedMobile_()) {
@@ -448,6 +451,9 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
                 document.getElementById('rc-icon-' + name).innerHTML = 'usb';
                 // change icon color to blue
                 document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+
+                // set block id to device id
+                block.firstElementChild.textContent = uid;
                                 
                 // if all devices have been paired, enable done button
                 if (Blast.Storage.allConnectedDesktop_()) {
