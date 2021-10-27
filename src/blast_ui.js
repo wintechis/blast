@@ -238,8 +238,11 @@ Blast.Ui.init = function() {
     );
   }
 
-  Blast.bindClick('loadButton', Blast.Storage.load);
-  Blast.bindClick('saveButton', Blast.Storage.link);
+  Blast.bindClick('UriLoadButton', Blast.Storage.load);
+  Blast.bindClick('UriSaveButton', Blast.Storage.link);
+  Blast.bindClick('saveButton', () => {
+    Blast.Storage.link(true);
+  });
 
   // load blocks from URI on Enter
   Blast.Ui.uriInput.addEventListener('keyup', (event) => {

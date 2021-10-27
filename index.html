@@ -75,6 +75,12 @@
   <!-- Joy Con WebHid implementation (https://github.com/tomayac/joy-con-webhid) -->
   <script src="js/lib/joy-con-webhid.js"></script>
 
+  <!-- FileSaver.js used to open a save as interface in all browsers -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+    integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  </script>
+  
   <!-- JS Interpreter -->
   <script src="js/lib/JSInterpreter/acorn.js"></script>
   <script src="js/lib/JSInterpreter/interpreter.js"></script>
@@ -130,20 +136,25 @@
               </datalist>
             </td>
             <td class="tabmin">
-              <button id="loadButton" title="load workspace">
+              <button id="UriLoadButton" title="load workspace">
                 <span class="icon material-icons">
-                  file_download
+                  cloud_download
                   </span>
               </button>
-              <button id="saveButton" title="save workspace">
+              <button id="UriSaveButton" title="save workspace">
                 <span class="icon material-icons">
-                  save
+                  cloud_upload
                   </span>
               </button>
             </td>
             <td class="tabmin">&nbsp;</td>
             <td class="tabmin">
               <input type="file" id="file-selector" accept=".xml">
+              <button id="saveButton" title="save workspace">
+                <span class="icon material-icons">
+                  save
+                  </span>
+              </button>
             </td>
             <td class="tabmax">
               <span id="statusContainer">ready</span>
@@ -210,27 +221,7 @@
    * Load XML from file.
    */
   const fileSelector = document.getElementById('file-selector');
-  fileSelector.addEventListener('change', loadXMLFromFile);
-
-  /**
-   * Load XML from a file.
-   * @param {Event} evt
-   * @return {Promise}
-   * @private
-   */
-  function loadXMLFromFile(event) {
-    return new Promise(function(resolve, reject) {
-      const fileReader = new FileReader();
-      fileReader.onload = function(e) {
-        Blast.Storage.loadXML(e.target.result);
-        resolve();
-      };
-      fileReader.onerror = function(evt) {
-        reject(evt.target.error);
-      };
-      fileReader.readAsText(event.target.files[0]);
-    });
-  }
+  fileSelector.addEventListener('change', Blast.Storage.loadXMLFromFile);
 
   /**
    * Reconnect modal methods

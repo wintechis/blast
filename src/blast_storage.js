@@ -34,11 +34,18 @@ Blast.Storage.NOT_FOUND_ERROR = 'Sorry, couldn\'t find "%1".';
  */
 Blast.Storage.XML_ERROR = 'Could not load your saved file.\n' +
     'Perhaps it was created with a different version of Blast?';
- 
+
 /**
-  * Save blocks to database and return a link containing key to XML.
+ * Stores the filename when loading programs for saving, default is 'BLAST.xml'.
+ */
+Blast.Storage.filename = 'BLAST.xml';
+
+/**
+  * Save blocks to URI and return a link containing key to XML.
+  * @param {boolean=} download optional, if true, save to file.
   */
-Blast.Storage.link = function() {
+Blast.Storage.link = function(download) {
+  console.log(download);
   const workspace = Blast.workspace;
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
@@ -51,7 +58,17 @@ Blast.Storage.link = function() {
   }
   // Remove device id from xml.
   xml = Blast.Storage.removeDeviceId_(xml);
+  // prettify xml.
+  xml = Blockly.Xml.domToPrettyText(xml);
 
+  // Save XML using filesaver.js.
+  if (download === true) {
+    const blob = new Blob([xml], {type: 'text/xml'});
+    saveAs(blob, Blast.Storage.filename);
+    return;
+  }
+
+  // Save to server.
   let path = document.getElementById('loadWorkspace-input').value;
   if (!path || path.length == 0) {
     path = 'storage/' + Blast.Storage.generatePath();
@@ -124,7 +141,40 @@ Blast.Storage.load = function() {
     Blockly.alert('Enter a URI first.');
     return;
   }
+
+  // save filename to {@link Blast.Storage.filename}
+  const filename = url.split('/').pop();
+  if (filename.indexOf('.') > -1) {
+    Blast.Storage.filename = filename;
+  }
+
   Blast.Storage.retrieveXML_(url);
+};
+
+/**
+   * Load XML from a file.
+   * @param {Event} event A change event.
+   * @return {Promise} A promise that will be resolved when the file is loaded.
+   * @private
+   */
+Blast.Storage.loadXMLFromFile = function(event) {
+  return new Promise(function(resolve, reject) {
+    // Save filename to {@link Blast.Storage.filename}
+    const filename = event.target.files[0].name;
+    if (filename.indexOf('.') > -1) {
+      Blast.Storage.filename = filename;
+    }
+
+    const fileReader = new FileReader();
+    fileReader.onload = function(e) {
+      Blast.Storage.loadXML(e.target.result);
+      resolve();
+    };
+    fileReader.onerror = function(evt) {
+      reject(evt.target.error);
+    };
+    fileReader.readAsText(event.target.files[0]);
+  });
 };
 
 /**
