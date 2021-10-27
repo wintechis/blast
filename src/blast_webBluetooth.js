@@ -52,9 +52,10 @@ Blast.Bluetooth.eventListeners = [];
  * @param {Array<BluetoothScanFilters>} options.filters An array of BluetoothScanFilters.
  * @param {boolean} options.optionalServices An array of BluetoothServiceUUIDs.
  * @param {boolean} [options.acceptAllDevices=false] whether script accepts all Bluetooth devices.
+ * @param {string=} deviceName optional, name of the device to pair.
  * @return {Promise<BluetoothDevice>} A Promise to a BluetoothDevice object.
  */
-Blast.Bluetooth.requestDevice = async function(options) {
+Blast.Bluetooth.requestDevice = async function(options, deviceName) {
   if (navigator.bluetooth) {
     // if no options are given, use default ones
     if (!options) {
@@ -63,9 +64,12 @@ Blast.Bluetooth.requestDevice = async function(options) {
       options.optionalServices = Blast.Bluetooth.optionalServices;
     }
 
+    // if no device name is given, use default one
+    const name = deviceName || device.name;
+
     navigator.bluetooth.requestDevice(options)
         .then((device) => {
-          Blast.Things.addWebBluetoothDevice(device.id, device.name);
+          Blast.Things.addWebBluetoothDevice(device.id, name);
           Blast.workspace.refreshToolboxSelection();
           return (device);
         })

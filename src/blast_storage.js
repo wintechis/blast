@@ -323,7 +323,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
                 const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
                 // add device to the device map with its uid
                 Blast.Things.webHidDevices.set(uid, device[0]);
-                Blast.Things.addWebHidDevice(uid, '');
+                Blast.Things.addWebHidDevice(uid, name);
                 // change pair status to checkmark
                 document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
                 document.getElementById('pairStatus-' + name).style.color = 'green';
