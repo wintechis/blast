@@ -64,7 +64,11 @@ Blockly.JavaScript['huskylens_write_face_id'] = function(block) {
  * @returns {String} the generated JavaScript code
  */
 Blockly.JavaScript['huskylens_write_forget_flag'] = function(block) {
-  const flag = block.getFieldValue('ForgetFlag') == 'TRUE';
+  const flag = Blockly.JavaScript.valueToCode(
+      block,
+      'forgetFlag',
+      Blockly.JavaScript.ORDER_ATOMIC,
+  );
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',

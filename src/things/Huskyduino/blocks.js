@@ -91,7 +91,7 @@ Blast.Toolbox.addBlock('huskylens_write_face_id', 'Properties', HUSKYLENS_WRITE_
 
 Blockly.Blocks['huskylens_write_forget_flag'] = {
   init: function() {
-    this.appendValueInput('ForgetFlag')
+    this.appendValueInput('forgetFlag')
         .setCheck('Boolean')
         .appendField('write forget flag property');
     this.appendValueInput('Thing')
@@ -121,7 +121,7 @@ Blockly.Blocks['huskylens_write_forget_flag'] = {
 // Define inner blocks XML for the huskylens_write_forget_flag block.
 const HUSKYLENS_FORGET_FLAG_XML = `
 <block type="huskylens_write_forget_flag">
-  <value name="ForgetFlag">
+  <value name="forgetFlag">
     <block type="logic_boolean">
       <field name="BOOL">TRUE</field>
     </block>
