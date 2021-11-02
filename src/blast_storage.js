@@ -45,7 +45,6 @@ Blast.Storage.filename = 'BLAST.xml';
   * @param {boolean=} download optional, if true, save to file.
   */
 Blast.Storage.link = function(download) {
-  console.log(download);
   const workspace = Blast.workspace;
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
@@ -307,8 +306,6 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
           document.getElementById('pairStatus-' + name).style.color = 'green';
 
-          console.log(device);
-
           // set block id to device id
           block.firstElementChild.textContent = device.id;
           
@@ -335,7 +332,6 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
 
                 // set block id to device id
                 block.firstElementChild.textContent = uid;
-                console.log(block);
                                 
                 // if all devices have been paired, enable done button
                 if (Blast.Storage.allConnectedDesktop_()) {
@@ -487,7 +483,6 @@ Blast.Storage.allConnectedDesktop_ = function() {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
     const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
-    console.log(pairStatus.innerHTML);
     if (pairStatus.innerHTML == '✘') {
       return false;
     }
@@ -586,7 +581,8 @@ window.addEventListener('load', function() {
     try {
       Blast.Storage.retrieveXML_(path);
     } catch (e) {
-      console.log(e);
+      Blast.throwError('Could not load file.');
+      console.error(e);
     }
   }
 });

@@ -77,7 +77,6 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
       return;
     }
     
-    console.log(packet);
     joyCon.removeEventListener('hidinput', hidInputHandler);
     if (subValue2 !== '') {
       if (property === 'accelerometers') {

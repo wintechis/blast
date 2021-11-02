@@ -71,7 +71,6 @@ Blast.Bluetooth.requestDevice = async function(options, deviceName) {
           
       Blast.Things.addWebBluetoothDevice(device.id, name);
       Blast.workspace.refreshToolboxSelection();
-      console.log(device);
       return (device);
     } catch (error) {
       Blast.throwError(error);

@@ -197,7 +197,6 @@ Blockly.JavaScript['display_table'] = function(block) {
  * @public
  */
 const displayTable = function(graph) {
-  console.log(graph);
   // display message if table is empty
   if (graph.length == 0) {
     Blast.Ui.addMessage('empty table');
