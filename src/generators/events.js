@@ -31,8 +31,11 @@ Blockly.JavaScript['event'] = function(block) {
         'state_condition',
         Blockly.JavaScript.ORDER_NONE,
     );
-    const negate = entersExits == 'ENTERS' ? '' : '!';
-    const conditions = negate + stateConditions;
+    
+    let conditions = stateConditions;
+    if (entersExits != 'ENTERS') {
+      conditions = `!(${conditions})`;
+    }
   
     const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
         setInterrupt(true);

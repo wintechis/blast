@@ -307,12 +307,12 @@ const getRSSIWb = async function(webBluetoothId, callback) {
     Blast.throwError('Error pairing with Bluetooth device.');
   }
 
-  await device.watchAdvertisements();
-
   device.addEventListener('advertisementreceived', async(evt) => {
     // Advertisement data can be read from |evt|.
     callback(evt.rssi);
   });
+
+  await device.watchAdvertisements();
 };
 // add getRSSIWb method to the interpreter's API.
 Blast.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
