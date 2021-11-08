@@ -1,6 +1,6 @@
 # Samples
 
-This folder contains different examples demonstrating the BLAST core functionalities. These are very simple programs, for more complex use cases, see folder [useCases](./useCases). Each sample is described below.
+This folder contains different examples demonstrating the BLAST core functionalities. These are very simple programs, for more complex use cases, see [useCases folder](./useCases). Each sample is described below.
 
   - [events.xml](#eventsxml)
   - [gamble.xml](#gamblexml)
