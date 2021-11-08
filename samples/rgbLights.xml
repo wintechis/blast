@@ -1,0 +1,120 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="switch_lights_rgb">
+    <value name="red">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="green">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="blue">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="thing">
+      <block type="things_webBluetooth">
+        <field name="id">ELK-BLEDOM</field>
+      </block>
+    </value>
+    <next>
+      <block type="switch_lights_rgb">
+        <value name="red">
+          <block type="number_value">
+            <field name="NUM">255</field>
+          </block>
+        </value>
+        <value name="green">
+          <block type="number_value">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="blue">
+          <block type="number_value">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+        <value name="thing">
+          <block type="things_webBluetooth">
+            <field name="id">ELK-BLEDOM</field>
+          </block>
+        </value>
+        <next>
+          <block type="switch_lights_rgb">
+            <value name="red">
+              <block type="number_value">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="green">
+              <block type="number_value">
+                <field name="NUM">255</field>
+              </block>
+            </value>
+            <value name="blue">
+              <block type="number_value">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="thing">
+              <block type="things_webBluetooth">
+                <field name="id">ELK-BLEDOM</field>
+              </block>
+            </value>
+            <next>
+              <block type="switch_lights_rgb">
+                <value name="red">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="green">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="blue">
+                  <block type="number_value">
+                    <field name="NUM">255</field>
+                  </block>
+                </value>
+                <value name="thing">
+                  <block type="things_webBluetooth">
+                    <field name="id">ELK-BLEDOM</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="switch_lights_rgb">
+                    <value name="red">
+                      <block type="number_value">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                    <value name="green">
+                      <block type="number_value">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                    <value name="blue">
+                      <block type="number_value">
+                        <field name="NUM">0</field>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_webBluetooth">
+                        <field name="id">ELK-BLEDOM</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>
