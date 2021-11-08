@@ -13,13 +13,13 @@
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['read_ruuvi_property'] = function(block) {
-  const measurement = block.getFieldValue('measurement');
+  const measurement = Blockly.JavaScript.quote_(block.getFieldValue('measurement'));
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'Thing',
       Blockly.JavaScript.ORDER_ATOMIC,
   );
-  const code = `getRuuviProperty('${measurement}', ${thing})`;
+  const code = `getRuuviProperty(${measurement}, ${thing})`;
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -117,5 +117,5 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
   callback(values[measurement]);
 };
 
-// add get_ruuvi_measurement function to the interpreter's API.
+// add getRuuviProperty function to the interpreter's API.
 Blast.asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);
