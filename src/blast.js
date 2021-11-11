@@ -365,6 +365,7 @@ Blast.throwError = function(text) {
   Blast.Ui.setStatus(Blast.status.ERROR);
   Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
+  Blast.Ui.addMessage('Execution stopped', 'info');
 };
 
 /**

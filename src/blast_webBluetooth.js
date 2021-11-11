@@ -177,12 +177,15 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   const characteristic = await Blast.Bluetooth.getCharacteristic(
       id, serviceUUID, characteristicUUID,
   );
+  if (!characteristic) {
+    return;
+  }
   value = hexStringToArrayBuffer(value);
   try {
     await characteristic.writeValueWithoutResponse(value);
   } catch (error) {
-    Blast.throwError(`Error writing to Bluetooth device ${id}`);
-    Blast.throwError('Make sure the device is compatible and turned on.');
+    const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+    Blast.throwError(errorMsg);
     console.error(error);
   }
   Blast.Bluetooth.disconnect(id);
@@ -201,7 +204,8 @@ Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
   try {
     service = await server.getPrimaryService(serviceUUID);
   } catch (error) {
-    Blast.throwError(`Service ${serviceUUID} not found on device ${id}.`);
+    Blast.throwError('The device is not compatible with the connected block.');
+    console.error(error);
   }
   return service;
 };
@@ -218,11 +222,14 @@ Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
  */
 Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characteristicUUID) {
   const service = await Blast.Bluetooth.getPrimaryService(id, serviceUUID);
+  if (!service) {
+    return;
+  }
   let characteristic;
   try {
     characteristic = await service.getCharacteristic(characteristicUUID);
   } catch (error) {
-    Blast.throwError(`Characteristic ${characteristicUUID} not found on device ${id}.`);
+    Blast.throwError('The device is not compatible with the connected block.');
     console.error(error);
   }
   return characteristic;
@@ -242,7 +249,6 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) 
     return await characteristic.readValue();
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
-    Blast.throwError('Make sure the device is compatible and turned on.');
     console.error(error);
   }
 };
@@ -399,6 +405,8 @@ Blast.Bluetooth.tearDown = function() {
     for (const event of Blast.Bluetooth.eventListeners) {
       Blast.Bluetooth.removeEventListener(event[0], event[1]);
     }
+    // Reset event listeners.
+    Blast.Bluetooth.eventListeners = [];
   }
   if (Blast.Bluetooth.charEventListeners) {
     for (const characteristicUUID of Object.keys(Blast.Bluetooth.charEventListeners)) {
