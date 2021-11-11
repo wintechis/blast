@@ -49,6 +49,13 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
   const type = 'inputreport';
 
   const device = Blast.Things.webHidDevices.get(id);
+
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    callback();
+    return;
+  }
+
   if (!device.opened) {
     try {
       await device.open();
@@ -60,7 +67,7 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
 
   // check if device is a Stream Deck
   if (device.vendorId != 4057) {
-    Blast.throwError('The connected device is not a Stream Deck.');
+    Blast.throwError('The connected device is not a Streamdeck.');
     return;
   }
 
