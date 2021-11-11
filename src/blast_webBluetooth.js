@@ -174,11 +174,58 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     
     return array.buffer;
   }
-  const server = await Blast.Bluetooth.connect(id, serviceUUID);
-  const service = await server.getPrimaryService(serviceUUID);
-  const characteristic = await service.getCharacteristic(characteristicUUID);
+  const characteristic = await Blast.Bluetooth.getCharacteristic(
+      id, serviceUUID, characteristicUUID,
+  );
   value = hexStringToArrayBuffer(value);
-  await characteristic.writeValueWithoutResponse(value);
+  try {
+    await characteristic.writeValueWithoutResponse(value);
+  } catch (error) {
+    Blast.throwError(`Error writing to Bluetooth device ${id}`);
+    Blast.throwError('Make sure the device is compatible and turned on.');
+    console.error(error);
+  }
+  Blast.Bluetooth.disconnect(id);
+};
+
+/**
+ * Returns a promise to the primary BluetoothRemoteGATTService offered by
+ * the bluetooth device for a specified BluetoothServiceUUID.
+ * @param {string} id identifier of the device to get the service from.
+ * @param {ServiceUUID} serviceUUID identifier of the service.
+ * @returns {Promise<BluetoothRemoteGATTService>} Promise to a BluetoothRemoteGATTService object.
+ */
+Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
+  const server = await Blast.Bluetooth.connect(id, serviceUUID);
+  let service;
+  try {
+    service = await server.getPrimaryService(serviceUUID);
+  } catch (error) {
+    Blast.throwError(`Service ${serviceUUID} not found on device ${id}.`);
+  }
+  return service;
+};
+
+/**
+ * Returns a promise to the BluetoothRemoteGATTCharacteristic offered by
+ * the bluetooth device for a specified BluetoothServiceUUID and
+ * BluetoothCharacteristicUUID.
+ * @param {string} id identifier of the device to get the characteristic from.
+ * @param {ServiceUUID} serviceUUID identifier of the service.
+ * @param {CharacteristicUUID} characteristicUUID identifier of the characteristic.
+ * @returns {Promise<BluetoothRemoteGATTCharacteristic>} Promise to a
+ * BluetoothRemoteGATTCharacteristic object.
+ */
+Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characteristicUUID) {
+  const service = await Blast.Bluetooth.getPrimaryService(id, serviceUUID);
+  let characteristic;
+  try {
+    characteristic = await service.getCharacteristic(characteristicUUID);
+  } catch (error) {
+    Blast.throwError(`Characteristic ${characteristicUUID} not found on device ${id}.`);
+    console.error(error);
+  }
+  return characteristic;
 };
 
 /**
@@ -190,13 +237,12 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
  * @public
  */
 Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) {
+  const characteristic = Blast.Bluetooth.getCharacteristic(id, serviceUUID, characteristicUUID);
   try {
-    const server = await Blast.Bluetooth.connect(id, serviceUUID);
-    const service = await server.getPrimaryService(serviceUUID);
-    const characteristic = await service.getCharacteristic(characteristicUUID);
     return await characteristic.readValue();
   } catch (error) {
     Blast.throwError(`Error reading from Bluetooth device ${id}`);
+    Blast.throwError('Make sure the device is compatible and turned on.');
     console.error(error);
   }
 };
@@ -252,13 +298,18 @@ Blast.Bluetooth.gatt_read_hex = async function(id, serviceUUID, characteristicUU
  * @param {Function} handler handler to register for notifications.
  */
 Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, characteristicUUID, handler) {
-  const server = await Blast.Bluetooth.connect(id, serviceUUID);
-  const service = await server.getPrimaryService(serviceUUID);
-  const characteristic = await service.getCharacteristic(characteristicUUID);
+  const characteristic = await Blast.Bluetooth.getCharacteristic(
+      id, serviceUUID, characteristicUUID,
+  );
   characteristic.addEventListener('characteristicvaluechanged', handler);
   // add the event to the list of events.
   Blast.Bluetooth.charEventListeners[characteristicUUID] = [characteristic, 'characteristicvaluechanged', handler];
-  await characteristic.startNotifications();
+  try {
+    await characteristic.startNotifications();
+  } catch (error) {
+    Blast.throwError(`Error subscribing to Bluetooth device ${id}`);
+    console.error(error);
+  }
 };
 
 /** Start the LE Scan.
@@ -355,6 +406,7 @@ Blast.Bluetooth.tearDown = function() {
       const characteristic = triple[0];
       const event = triple[1];
       const handler = triple[2];
+      characteristic.stopNotifications();
       characteristic.removeEventListener(event, handler);
     }
   }
