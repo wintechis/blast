@@ -123,8 +123,11 @@ Blockly.JavaScript['joycon_button_events'] = function(block) {
   const button = Blockly.JavaScript.quote_(block.getFieldValue('button'));
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
   
-  const code = `handleJoyConButtons(${thing}, ${button}, ${statements});\n`;
-  return code;
+  const handler = `handleJoyConButtons(${thing}, ${button}, ${statements});\n`;
+  const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  
+  return '';
 };
 
 /**

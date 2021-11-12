@@ -28,8 +28,11 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const buttonArray = [button1, button2, button3, button4, button5, button6];
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const code = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
-  return code;
+  const handler = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
+  const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
 };
 
 
