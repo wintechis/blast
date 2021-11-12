@@ -38,8 +38,9 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
  * @param {String} statements code to be executed when the buttons are pushed.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttonArray, statements) {
+const handleStreamdeck = async function(id, buttonArray, statements, callback) {
   // If no things block is attached, return.
   if (!id) {
     Blast.throwError('No streamdeck block set.');
@@ -71,7 +72,6 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
     return;
   }
 
-
   const fn = function(event) {
     if (event.reportId === 0x01) {
       const keys = new Int8Array(event.data.buffer);
@@ -100,9 +100,7 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
               Blast.Interrupted = false;
             }
           } catch (error) {
-            Blockly.alert('Error executing program:\n%e'.replace('%e', error));
-            Blast.Ui.setStatus(Blast.status.ERROR);
-            Blast.resetInterpreter();
+            Blast.throwError(`Error executing program:\n ${e}`);
             console.error(error);
           }
         };

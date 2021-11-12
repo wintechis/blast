@@ -268,6 +268,7 @@ Blast.resetInterpreter = function() {
     Blast.runner_ = null;
   }
   Blast.Bluetooth.tearDown();
+  Blast.removeDeviceHandlers();
 };
 
 /**
@@ -276,7 +277,9 @@ Blast.resetInterpreter = function() {
 Blast.removeDeviceHandlers = function() {
   for (const handler of Blast.deviceEventHandlers) {
     const device = handler.device;
-    device.removeEventListener(handler.type, handler.fn);
+    console.log(device);
+    const status = device.removeEventListener(handler.type, handler.fn);
+    console.log(status);
   }
   Blast.deviceEventHandlers = [];
 };
@@ -316,7 +319,6 @@ Blast.runJS = function() {
               // dont reset UI until stop button is clicked.
             } else {
               // Program is complete.
-              Blast.removeDeviceHandlers();
               Blast.resetUi(Blast.status.READY);
               Blast.Ui.addMessage('execution completed', 'info');
               Blast.resetInterpreter();
@@ -325,7 +327,6 @@ Blast.runJS = function() {
         } catch (error) {
           Blast.throwError(error);
           Blast.Ui.setStatus(Blast.status.ERROR);
-          Blast.removeDeviceHandlers();
           Blast.resetInterpreter();
           console.error(error);
         }
@@ -341,7 +342,6 @@ Blast.runJS = function() {
  * @public
  */
 Blast.stopJS = function() {
-  Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
   if (Blast.States.Interpreter) {
     clearTimeout(Blast.States.runner_);
@@ -363,7 +363,6 @@ Blast.throwError = function(text) {
 
   Blast.Ui.addMessage(text, 'error');
   Blast.Ui.setStatus(Blast.status.ERROR);
-  Blast.removeDeviceHandlers();
   Blast.resetInterpreter();
   Blast.Ui.addMessage('Execution stopped', 'info');
 };
