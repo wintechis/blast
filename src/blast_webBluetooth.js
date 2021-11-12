@@ -417,6 +417,8 @@ Blast.Bluetooth.tearDown = function() {
       characteristic.stopNotifications();
       characteristic.removeEventListener(event, handler);
     }
+    // Reset event listeners.
+    Blast.Bluetooth.charEventListeners = {};
   }
   // Clear cached advertisements.
   Blast.Bluetooth.LEScanResults = {};
