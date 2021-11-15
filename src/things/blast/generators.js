@@ -310,7 +310,6 @@ const getRSSIWb = async function(webBluetoothId, callback) {
   const abortController = new AbortController();
 
   device.addEventListener('advertisementreceived', async(evt) => {
-    console.log(evt.rssi);
     // Stop watching advertisements
     abortController.abort();
     // Advertisement data can be read from |evt|.

@@ -365,7 +365,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
               })
               .catch((error) => {
                 Blast.throwError('Connection failed or cancelled by User.');
-                console.log(error);
+                console.error(error);
               });
         }
       });
@@ -492,7 +492,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
               })
               .catch((error) => {
                 Blast.throwError('Connection failed or cancelled by User.');
-                console.log(error);
+                console.error(error);
               });
         }
       });

@@ -277,9 +277,7 @@ Blast.resetInterpreter = function() {
 Blast.removeDeviceHandlers = function() {
   for (const handler of Blast.deviceEventHandlers) {
     const device = handler.device;
-    console.log(device);
-    const status = device.removeEventListener(handler.type, handler.fn);
-    console.log(status);
+    device.removeEventListener(handler.type, handler.fn);
   }
   Blast.deviceEventHandlers = [];
 };
