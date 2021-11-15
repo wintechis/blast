@@ -258,7 +258,7 @@ Blast.Things.createWebHidButtonHandler = function() {
         const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
         // add device to the device map with its uid
         Blast.Things.webHidDevices.set(uid, device[0]);
-        Blast.Things.addWebHidDevice(uid, '');
+        Blast.Things.addWebHidDevice(uid, device[0].productName);
         Blast.workspace.refreshToolboxSelection();
       })
       .catch((error) => {

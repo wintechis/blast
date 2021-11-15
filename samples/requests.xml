@@ -1,0 +1,95 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="display_text">
+    <value name="text">
+      <block type="http_request">
+        <field name="OUTPUT">status</field>
+        <field name="METHOD">GET</field>
+        <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
+        <value name="uri">
+          <block type="uri">
+            <field name="URI">https://httpbin.org/get</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="display_text">
+        <value name="text">
+          <block type="http_request">
+            <field name="OUTPUT">status</field>
+            <field name="METHOD">PUT</field>
+            <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
+            <field name="BODY">{&amp;#10;     "object": {&amp;#10;       "a": "b",&amp;#10;       "c": "d",&amp;#10;       "e": "f"&amp;#10;     },&amp;#10;     "array": [&amp;#10;       1,&amp;#10;       2&amp;#10;     ],&amp;#10;     "string": "Hello World"&amp;#10;     }</field>
+            <value name="uri">
+              <block type="uri">
+                <field name="URI">https://httpbin.org/put</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="display_text">
+            <value name="text">
+              <block type="http_request">
+                <field name="OUTPUT">status</field>
+                <field name="METHOD">POST</field>
+                <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
+                <field name="BODY">{&amp;#10;     "object": {&amp;#10;       "a": "b",&amp;#10;       "c": "d",&amp;#10;       "e": "f"&amp;#10;     },&amp;#10;     "array": [&amp;#10;       1,&amp;#10;       2&amp;#10;     ],&amp;#10;     "string": "Hello World"&amp;#10;     }</field>
+                <value name="uri">
+                  <block type="uri">
+                    <field name="URI">https://httpbin.org/post</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="display_text">
+                <value name="text">
+                  <block type="http_request">
+                    <field name="OUTPUT">status</field>
+                    <field name="METHOD">DELETE</field>
+                    <field name="HEADERS">"Content-Type": "application/json", "Accept": "application/json"</field>
+                    <field name="BODY">{&amp;#10;     "object": {&amp;#10;       "a": "b",&amp;#10;       "c": "d",&amp;#10;       "e": "f"&amp;#10;     },&amp;#10;     "array": [&amp;#10;       1,&amp;#10;       2&amp;#10;     ],&amp;#10;     "string": "Hello World"&amp;#10;     }</field>
+                    <value name="uri">
+                      <block type="uri">
+                        <field name="URI">https://httpbin.org/delete</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="display_table">
+                    <value name="table">
+                      <block type="sparql_query">
+                        <field name="query">SELECT *&amp;#10;       WHERE { &amp;#10;         ?s ?p ?o&amp;#10;       }</field>
+                        <value name="uri">
+                          <block type="uri">
+                            <field name="URI">https://harth.org/andreas/2020/ruuvi/e141f011a5fe.jsonld</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="display_text">
+                        <value name="text">
+                          <block type="sparql_ask">
+                            <field name="query">PREFIX wotruuvi: &lt;http://harth.org/andreas/2020/ruuvi/vocab&gt;&amp;#10;ASK &amp;#10;WHERE {&amp;#10;  ?obs wotruuvi:rssi ?rssiValue &amp;#10;  FILTER (?rssiValue &gt; -70)&amp;#10;}</field>
+                            <value name="uri">
+                              <block type="uri">
+                                <field name="URI">https://harth.org/andreas/2020/ruuvi/e141f011a5fe.jsonld</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

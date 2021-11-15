@@ -28,8 +28,11 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const buttonArray = [button1, button2, button3, button4, button5, button6];
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const code = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
-  return code;
+  const handler = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
+  const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
 };
 
 
@@ -38,8 +41,9 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {boolean[]} buttonArray array containing pushed buttons.
  * @param {String} statements code to be executed when the buttons are pushed.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttonArray, statements) {
+const handleStreamdeck = async function(id, buttonArray, statements, callback) {
   // If no things block is attached, return.
   if (!id) {
     Blast.throwError('No streamdeck block set.');
@@ -49,6 +53,13 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
   const type = 'inputreport';
 
   const device = Blast.Things.webHidDevices.get(id);
+
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    callback();
+    return;
+  }
+
   if (!device.opened) {
     try {
       await device.open();
@@ -60,10 +71,9 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
 
   // check if device is a Stream Deck
   if (device.vendorId != 4057) {
-    Blast.throwError('The connected device is not a Stream Deck.');
+    Blast.throwError('The connected device is not a Streamdeck.');
     return;
   }
-
 
   const fn = function(event) {
     if (event.reportId === 0x01) {
@@ -93,9 +103,7 @@ const handleStreamdeck = async function(id, buttonArray, statements) {
               Blast.Interrupted = false;
             }
           } catch (error) {
-            Blockly.alert('Error executing program:\n%e'.replace('%e', error));
-            Blast.Ui.setStatus(Blast.status.ERROR);
-            Blast.resetInterpreter();
+            Blast.throwError(`Error executing program:\n ${e}`);
             console.error(error);
           }
         };

@@ -2,7 +2,29 @@
   <variables>
     <variable id="aAPk`5_c7i]tths`k^uN">toggle</variable>
   </variables>
-  <block type="streamdeck_buttons">
+  <block type="switch_lights_rgb" x="43" y="39">
+    <value name="red">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="green">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="blue">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="thing">
+      <block type="things_webBluetooth">
+        <field name="id">ELK-BLEDOM</field>
+      </block>
+    </value>
+  </block>
+  <block type="streamdeck_buttons" x="41" y="94">
     <field name="button1">TRUE</field>
     <field name="button2">FALSE</field>
     <field name="button3">FALSE</field>
@@ -28,7 +50,7 @@
         </value>
         <next>
           <block type="conditional_statement">
-            <mutation else="1" />
+            <mutation else="1"></mutation>
             <value name="IF0">
               <block type="variables_get">
                 <field name="VAR" id="aAPk`5_c7i]tths`k^uN">toggle</field>
@@ -36,10 +58,22 @@
             </value>
             <statement name="DO0">
               <block type="switch_lights_rgb">
-                <field name="cb_red">TRUE</field>
-                <field name="cb_green">FALSE</field>
-                <field name="cb_blue">FALSE</field>
-                <value name="mac">
+                <value name="red">
+                  <block type="number_value">
+                    <field name="NUM">255</field>
+                  </block>
+                </value>
+                <value name="green">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="blue">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="thing">
                   <block type="things_webBluetooth">
                     <field name="id">ELK-BLEDOM</field>
                   </block>
@@ -48,10 +82,22 @@
             </statement>
             <statement name="ELSE">
               <block type="switch_lights_rgb">
-                <field name="cb_red">FALSE</field>
-                <field name="cb_green">FALSE</field>
-                <field name="cb_blue">FALSE</field>
-                <value name="mac">
+                <value name="red">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="green">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="blue">
+                  <block type="number_value">
+                    <field name="NUM">0</field>
+                  </block>
+                </value>
+                <value name="thing">
                   <block type="things_webBluetooth">
                     <field name="id">ELK-BLEDOM</field>
                   </block>

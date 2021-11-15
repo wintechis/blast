@@ -140,3 +140,76 @@ Blockly.Blocks['joycon_read_property'] = {
 
 // Add joycon_read_property block to the toolbox.
 Blast.Toolbox.addBlock('joycon_read_property', 'Properties');
+
+Blockly.Blocks['joycon_button_events'] = {
+  /**
+   * Block to read a property of a JoyCon.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('Nintendo JoyCon');
+    this.appendDummyInput()
+        .appendField('When')
+        .appendField(new Blockly.FieldDropdown(
+            [
+              ['A', 'a'],
+              ['B', 'b'],
+              ['X', 'x'],
+              ['Y', 'y'],
+              ['up', 'up'],
+              ['left', 'left'],
+              ['down', 'down'],
+              ['right', 'right'],
+              ['R', 'r'],
+              ['L', 'l'],
+              ['ZR', 'zr'],
+              ['ZL', 'zl'],
+            ],
+        ), 'button')
+        .appendField('pressed');
+    this.appendStatementInput('statements')
+        .setCheck(null);
+    this.setInputsInline(false);
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.requested = false;
+  },
+  /**
+   * Add this block's id to the events array.
+   */
+  addEvent: async function() {
+    Blast.eventInWorkspace.push(this.id);
+    // remove event if block is deleted
+    Blast.workspace.addChangeListener((event) => this.onDispose(event));
+  },
+  onchange: function() {
+    if (!this.isInFlyout && !this.requested && this.rendered) {
+      // Block is newly created
+      this.addEvent();
+    }
+  },
+  onDispose: function(event) {
+    if (event.type === Blockly.Events.BLOCK_DELETE) {
+      if (event.type === Blockly.Events.BLOCK_DELETE && event.ids.indexOf(this.id) !== -1) {
+        // Block is being deleted
+        this.removeFromEvents();
+      }
+    }
+  },
+  /**
+   * Remove this block's id from the events array.
+   */
+  removeFromEvents: function() {
+    // remove this block from the events array.
+    const index = Blast.eventInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      Blast.eventInWorkspace.splice(index, 1);
+    }
+  },
+};
+
+// Add joycon_button_events block to the toolbox.
+Blast.Toolbox.addBlock('joycon_button_events', 'States and Events');

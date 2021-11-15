@@ -43,6 +43,13 @@ const blinkstickSetColors = async function(id, index, red, green, blue, callback
   }
 
   const device = Blast.Things.webHidDevices.get(id);
+
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
+    callback();
+    return;
+  }
+
   if (!device.opened) {
     try {
       await device.open();
