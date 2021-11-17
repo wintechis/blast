@@ -99,10 +99,16 @@ table {
   padding: 0;
   border: none;
 }
+
+#outerTable {
+  width: 100%;
+  height: 100%;
+}
+
 .content {
   visibility: hidden;
   margin: 0;
-  padding: 1ex;
+  padding: 0;
   position: absolute;
   direction: ltr;
 }
@@ -121,10 +127,12 @@ table {
 
 #content_area {
   height: 99%;
+  width: calc(100vw - 450px);
 }
 
 #content_workspace, #content_dw_functions {
   padding: 0;
+  width: calc(100vw - 450px);
 }
 
 #output_area {
@@ -260,7 +268,7 @@ button {
 #loadWorkspace-input {
   vertical-align: bottom;
   margin-bottom: -5px;
-  width: 400px;
+  width: 25vw;
 }
 
 /* Modal background */

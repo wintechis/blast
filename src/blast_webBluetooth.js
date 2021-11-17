@@ -322,7 +322,9 @@ Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, characteristicU
  * public
  */
 Blast.Bluetooth.startLEScan = async function() {
+  console.log('startLEScan');
   // If the LE Scan is already running, do nothing.
+  console.log(Blast.Bluetooth.isLEScanRunning);
   if (Blast.Bluetooth.isLEScanRunning) {
     return;
   }
@@ -353,8 +355,11 @@ Blast.Bluetooth.stopLEScan = function() {
  * Caches the results of a LE Scan.
  */
 Blast.Bluetooth.cacheLEScanResults = function() {
+  console.log('Caching LE Scan results.');
   // Cache the results of the scan.
   const handler = function(event) {
+    console.log('Caching LE Scan results.');
+    console.log(event);
     const device = event.device;
     const deviceId = device.id;
     if (!Blast.Bluetooth.LEScanResults[deviceId]) {
@@ -396,6 +401,7 @@ Blast.Bluetooth.removeEventListener = function(event, listener) {
  * Removes webBluetooth eventListeners and deletes cached advertisements.
  */
 Blast.Bluetooth.tearDown = function() {
+  console.log('Tearing down webBluetooth.');
   // Reset running scan flag
   if (Blast.Bluetooth.isLEScanRunning) {
     Blast.Bluetooth.isLEScanRunning = false;
