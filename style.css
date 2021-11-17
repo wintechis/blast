@@ -58,7 +58,6 @@ h1 {
 /* Tabs */
 #tabRow > td {
   border: 1px solid #ccc;
-  border-bottom: none;
   white-space: nowrap;
 }
 td.tabon {
@@ -105,6 +104,10 @@ table {
   height: 100%;
 }
 
+#headerTr {
+  height: 35px;
+}
+
 .content {
   visibility: hidden;
   margin: 0;
@@ -126,7 +129,7 @@ table {
 }
 
 #content_area {
-  height: 99%;
+  height: calc(100vh - 30px);
   width: calc(100vw - 450px);
 }
 
@@ -136,9 +139,9 @@ table {
 }
 
 #output_area {
-  height: calc(100vh - 215px);
+  height: calc(100vh - 30px);
   width: 450px;
-  border: 1px solid #c6c6c6;
+  border-left: 1px solid #c6c6c6;
   vertical-align: top;
 }
 

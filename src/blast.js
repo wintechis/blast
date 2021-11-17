@@ -165,19 +165,15 @@ Blast.init = function() {
     return;
   }
   // adjust workspace and toolbox on resize
-  const container = document.getElementById('content_area');
   const onresize = function() {
-    const bBox = Blast.getBBox_(container);
     for (const tab of Blast.Ui.TABS_) {
       const el = document.getElementById('content_' + tab);
-      el.style.top = bBox.y + 'px';
-      el.style.left = bBox.x + 'px';
+      el.style.top = '35px';
+      el.style.left = '0px';
       // Height and width need to be set, read back, then set again to
       // compensate for scrollbars.
-      el.style.height = bBox.height + 'px';
-      el.style.height = 2 * bBox.height - el.offsetHeight + 'px';
-      el.style.width = bBox.width + 'px';
-      el.style.width = 2 * bBox.width - el.offsetWidth + 'px';
+      el.style.height = window.innerHeight - 35 + 'px';
+      el.style.width = window.innerWidth - 450 + 'px';
     }
     // Make the 'workspace' tab line up with the toolbox.
     if (Blast.workspace && Blast.workspace.getToolbox().width) {

@@ -181,7 +181,9 @@ Blast.Storage.loadXMLFromFile = function(event) {
  */
 Blast.Storage.resetFileInput = function() {
   const fileSelector = document.getElementById('file-selector');
-  fileSelector.value = '';
+  if (fileSelector) {
+    fileSelector.value = '';
+  }
 
   // reset filename
   Blast.Storage.filename = 'BLAST.xml';
