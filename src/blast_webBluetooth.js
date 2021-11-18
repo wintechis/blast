@@ -188,7 +188,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     Blast.throwError(errorMsg);
     console.error(error);
   }
-  Blast.Bluetooth.disconnect(id);
+  await Blast.Bluetooth.disconnect(id);
 };
 
 /**
