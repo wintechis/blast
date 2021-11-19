@@ -107,8 +107,10 @@ Blast.Bluetooth.getDeviceById = async function(id) {
   * @return {Object} representation of the complete request with response.
   */
 Blast.Bluetooth.connect = async function(id) {
+  console.log(`Connecting to ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
+    console.log(`Connected to ${device.name}`);
     await device.gatt.connect();
   } catch (error) {
     Blast.throwError(`Error connecting to Bluetooth device ${id}`);
@@ -123,8 +125,10 @@ Blast.Bluetooth.connect = async function(id) {
   * @return {Object} representation of the complete request with response.
   */
 Blast.Bluetooth.disconnect = async function(id) {
+  console.log(`Disconnecting from ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
+    console.log(`Disconnected from ${device.name}`);
     return await device.gatt.disconnect();
   } catch (error) {
     Blast.throwError(`Error disconnecting from Bluetooth device ${id}`);
