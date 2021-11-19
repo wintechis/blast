@@ -110,7 +110,6 @@ Blast.Bluetooth.connect = async function(id) {
   console.log(`Connecting to ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
-    console.log(`Connected to ${device.name}`);
     await device.gatt.connect();
   } catch (error) {
     Blast.throwError(`Error connecting to Bluetooth device ${id}`);
@@ -128,7 +127,6 @@ Blast.Bluetooth.disconnect = async function(id) {
   console.log(`Disconnecting from ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
-    console.log(`Disconnected from ${device.name}`);
     return await device.gatt.disconnect();
   } catch (error) {
     Blast.throwError(`Error disconnecting from Bluetooth device ${id}`);
@@ -186,7 +184,9 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   }
   value = hexStringToArrayBuffer(value);
   try {
+    console.log(`Writing to ${characteristic.uuid}`);
     await characteristic.writeValueWithoutResponse(value);
+    console.log(`Wrote to ${characteristic.uuid}`);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -204,9 +204,12 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
  */
 Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
   const server = await Blast.Bluetooth.connect(id, serviceUUID);
+  console.log(`connected to ${server}`);
   let service;
   try {
+    console.log(`Getting primary service ${serviceUUID} from ${id}`);
     service = await server.getPrimaryService(serviceUUID);
+    console.log(`Got primary service ${serviceUUID} from ${id}`);
   } catch (error) {
     console.error(error);
     Blast.throwError('The device is not compatible with the connected block.');
@@ -231,7 +234,9 @@ Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characterist
   }
   let characteristic;
   try {
+    console.log(`Getting characteristic ${characteristicUUID} from ${id}`);
     characteristic = await service.getCharacteristic(characteristicUUID);
+    console.log(`Got characteristic ${characteristicUUID} from ${id}`);
   } catch (error) {
     console.error(error);
     Blast.throwError('The device is not compatible with the connected block.');
