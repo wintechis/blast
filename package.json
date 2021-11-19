@@ -18,7 +18,7 @@
     "build": "gulp clean && gulp closureCompiler && gulp workbox",
     "clean": "gulp clean",
     "jsdoc": "gulp jsdoc",
-    "lint": "eslint src/**",
+    "lint": "eslint \"src/**/**.js\"",
     "test": "mocha"
   },
   "main": "index.html",
