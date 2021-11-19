@@ -26,32 +26,41 @@
     <field name="entersExits">ENTERS</field>
     <field name="NAME">in-range</field>
     <statement name="statements">
-      <block type="blinkstick_set_colors">
-        <value name="index">
-          <block type="math_number">
-            <field name="NUM">0</field>
+      <block type="play_audio">
+        <value name="URI">
+          <block type="uri">
+            <field name="URI">https://studio.code.org/blockly/media/click.mp3</field>
           </block>
         </value>
-        <value name="red">
-          <block type="math_number">
-            <field name="NUM">0</field>
+        <next>
+          <block type="blinkstick_set_colors">
+            <value name="index">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="red">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="green">
+              <block type="math_number">
+                <field name="NUM">255</field>
+              </block>
+            </value>
+            <value name="blue">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="thing">
+              <block type="things_webHID">
+                <field name="id">blinkstick</field>
+              </block>
+            </value>
           </block>
-        </value>
-        <value name="green">
-          <block type="math_number">
-            <field name="NUM">255</field>
-          </block>
-        </value>
-        <value name="blue">
-          <block type="math_number">
-            <field name="NUM">0</field>
-          </block>
-        </value>
-        <value name="thing">
-          <block type="things_webHID">
-            <field name="id">blinkstick</field>
-          </block>
-        </value>
+        </next>
       </block>
     </statement>
   </block>
@@ -60,32 +69,41 @@
     <field name="entersExits">EXITS</field>
     <field name="NAME">in-range</field>
     <statement name="statements">
-      <block type="blinkstick_set_colors">
-        <value name="index">
-          <block type="math_number">
-            <field name="NUM">0</field>
+      <block type="play_audio">
+        <value name="URI">
+          <block type="uri">
+            <field name="URI">https://studio.code.org/blockly/media/click.mp3</field>
           </block>
         </value>
-        <value name="red">
-          <block type="math_number">
-            <field name="NUM">255</field>
+        <next>
+          <block type="blinkstick_set_colors">
+            <value name="index">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="red">
+              <block type="math_number">
+                <field name="NUM">255</field>
+              </block>
+            </value>
+            <value name="green">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="blue">
+              <block type="math_number">
+                <field name="NUM">0</field>
+              </block>
+            </value>
+            <value name="thing">
+              <block type="things_webHID">
+                <field name="id">blinkstick</field>
+              </block>
+            </value>
           </block>
-        </value>
-        <value name="green">
-          <block type="math_number">
-            <field name="NUM">0</field>
-          </block>
-        </value>
-        <value name="blue">
-          <block type="math_number">
-            <field name="NUM">0</field>
-          </block>
-        </value>
-        <value name="thing">
-          <block type="things_webHID">
-            <field name="id">blinkstick</field>
-          </block>
-        </value>
+        </next>
       </block>
     </statement>
   </block>
