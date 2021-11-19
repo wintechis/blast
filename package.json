@@ -15,7 +15,8 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "scripts": {
-    "build": "gulp closureCompiler && gulp workbox",
+    "build": "gulp clean && gulp closureCompiler && gulp workbox",
+    "clean": "gulp clean",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint src/**",
     "test": "mocha"
@@ -28,11 +29,14 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "chai": "^4.3.4",
+    "del": "^6.0.0",
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
     "fs": "^0.0.1-security",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
+    "gulp-rev": "^9.0.0",
+    "gulp-rev-rewrite": "^5.0.0",
     "gulp-shell": "0.8.0",
     "jsdoc": "^3.6.7",
     "mocha": "^8.3.2",
