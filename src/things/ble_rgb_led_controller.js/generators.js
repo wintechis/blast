@@ -21,15 +21,8 @@ Blockly.JavaScript['switch_lights_rgb'] = function(block) {
       'thing',
       Blockly.JavaScript.ORDER_NONE,
   ) || 'null';
-     
-  // convert rgb values to hexadecimal and make sure length is 2 digits.
-  const redByte = parseInt(red).toString(16).padStart(2, '0');
-  const greenByte = parseInt(green).toString(16).padStart(2, '0');
-  const blueByte = parseInt(blue).toString(16).padStart(2, '0');
 
-  const value = '7e000503' + redByte + greenByte + blueByte + '00ef';
-
-  const code = `switchLights(${thing}, '${value}');\n`;
+  const code = `switchLights(${thing}, ${red}, ${green}, ${blue});\n`;
   return code;
 };
 
@@ -47,15 +40,8 @@ Blockly.JavaScript['switch_lights_ryg'] = function(block) {
       'thing',
       Blockly.JavaScript.ORDER_NONE,
   ) || 'null';
-
-  // convert rgb values to hexadecimal and make sure length is 2 digits.
-  const redByte = parseInt(red).toString(16).padStart(2, '0');
-  const yellowByte = parseInt(yellow).toString(16).padStart(2, '0');
-  const greenByte = parseInt(green).toString(16).padStart(2, '0');
-
-  const value = '7e000503' + redByte + greenByte + yellowByte + '00ef';
     
-  const code = `switchLights(${thing}, '${value}');\n`;
+  const code = `switchLights(${thing}, ${red}, ${yellow}, ${green});\n`;
   return code;
 };
 
@@ -66,16 +52,26 @@ Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
  * @param {String} mac identifier of the LED controller.
- * @param {String} value the value to write on the LED controller.
+ * @param {Number} r red value in the rgb color space.
+ * @param {Number} g green value in the rgb color space.
+ * @param {Number} b blue value in the rgb color space.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function(mac, value, callback) {
+const switchLights = async function(mac, r, g, b, callback) {
   // make sure a device is connected.
   if (!mac) {
     Blast.throwError('No LED Controller is set.');
     callback();
     return;
   }
+
+  // convert rgb values to hexadecimal and make sure length is 2 digits.
+  const redByte = parseInt(r).toString(16).padStart(2, '0');
+  const greenByte = parseInt(g).toString(16).padStart(2, '0');
+  const blueByte = parseInt(b).toString(16).padStart(2, '0');
+
+  const value = '7e000503' + redByte + greenByte + blueByte + '00ef';
+
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
   callback();

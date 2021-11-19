@@ -7,8 +7,8 @@
 'use strict';
 
 /*****************
-  * Action blocks.*
-  *****************/
+ * Action blocks.*
+ *****************/
  
 Blockly.Blocks['http_request'] = {
   /**
