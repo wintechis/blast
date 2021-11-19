@@ -110,7 +110,7 @@ Blast.Bluetooth.connect = async function(id) {
   console.log(`Connecting to ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
-    await device.gatt.connect();
+    return await device.gatt.connect();
   } catch (error) {
     Blast.throwError(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
@@ -203,7 +203,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
  * @returns {Promise<BluetoothRemoteGATTService>} Promise to a BluetoothRemoteGATTService object.
  */
 Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
-  const server = await Blast.Bluetooth.connect(id, serviceUUID);
+  const server = await Blast.Bluetooth.connect(id);
   console.log(`connected to ${server}`);
   let service;
   try {
