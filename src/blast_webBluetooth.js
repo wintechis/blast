@@ -109,7 +109,7 @@ Blast.Bluetooth.getDeviceById = async function(id) {
 Blast.Bluetooth.connect = async function(id) {
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
-    return await device.gatt.connect();
+    await device.gatt.connect();
   } catch (error) {
     Blast.throwError(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
@@ -185,8 +185,8 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     await characteristic.writeValueWithoutResponse(value);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
-    Blast.throwError(errorMsg);
     console.error(error);
+    Blast.throwError(errorMsg);
   }
   await Blast.Bluetooth.disconnect(id);
 };
@@ -204,8 +204,8 @@ Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
   try {
     service = await server.getPrimaryService(serviceUUID);
   } catch (error) {
-    Blast.throwError('The device is not compatible with the connected block.');
     console.error(error);
+    Blast.throwError('The device is not compatible with the connected block.');
   }
   return service;
 };
@@ -229,8 +229,8 @@ Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characterist
   try {
     characteristic = await service.getCharacteristic(characteristicUUID);
   } catch (error) {
-    Blast.throwError('The device is not compatible with the connected block.');
     console.error(error);
+    Blast.throwError('The device is not compatible with the connected block.');
   }
   return characteristic;
 };
@@ -248,8 +248,8 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) 
   try {
     return await characteristic.readValue();
   } catch (error) {
-    Blast.throwError(`Error reading from Bluetooth device ${id}`);
     console.error(error);
+    Blast.throwError(`Error reading from Bluetooth device ${id}`);
   }
 };
 
@@ -313,8 +313,8 @@ Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, characteristicU
   try {
     await characteristic.startNotifications();
   } catch (error) {
-    Blast.throwError(`Error subscribing to Bluetooth device ${id}`);
     console.error(error);
+    Blast.throwError(`Error subscribing to Bluetooth device ${id}`);
   }
 };
 
@@ -355,11 +355,8 @@ Blast.Bluetooth.stopLEScan = function() {
  * Caches the results of a LE Scan.
  */
 Blast.Bluetooth.cacheLEScanResults = function() {
-  console.log('Caching LE Scan results.');
   // Cache the results of the scan.
   const handler = function(event) {
-    console.log('Caching LE Scan results.');
-    console.log(event);
     const device = event.device;
     const deviceId = device.id;
     if (!Blast.Bluetooth.LEScanResults[deviceId]) {
