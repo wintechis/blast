@@ -23,7 +23,7 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
       block,
       'id',
       Blockly.JavaScript.ORDER_NONE,
-  );
+  ) || null;
     
   const buttonArray = [button1, button2, button3, button4, button5, button6];
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
@@ -31,6 +31,8 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const handler = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
   const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
   Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  console.log('foo');
 
   return '';
 };
@@ -43,7 +45,7 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * @param {String} statements code to be executed when the buttons are pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttonArray, statements, callback) {
+ const handleStreamdeck = async function(id, buttonArray, statements, callback) {
   // If no things block is attached, return.
   if (!id) {
     Blast.throwError('No streamdeck block set.');

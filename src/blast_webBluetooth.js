@@ -136,7 +136,7 @@ Blast.Bluetooth.disconnect = async function(id) {
  
 /**
   * Writes data to Bluetooth device using the gatt protocol.
-  * @param {string} id identifier of the device to disconnect from.
+  * @param {string} id identifier of the device to write to.
   * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
   * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
   * @param {string} value hex value to write.
@@ -193,6 +193,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     Blast.throwError(errorMsg);
   }
   await Blast.Bluetooth.disconnect(id);
+  console.log(`Disconnected from ${id}`);
 };
 
 /**

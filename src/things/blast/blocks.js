@@ -60,7 +60,7 @@ Blockly.Blocks['http_request'] = {
     this.getSourceBlock().updateInputs(newValue);
     return newValue;
   },
-     
+
   updateInputs: function(newValue) {
     this.removeInput('BODYINPUT', /* no error */ true);
      
