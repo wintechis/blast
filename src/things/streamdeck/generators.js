@@ -25,14 +25,14 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   ) || null;
     
-  const buttonArray = [button1, button2, button3, button4, button5, button6];
+  const buttons = Blockly.JavaScript.quote_(
+      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+  );
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const handler = `handleStreamdeck(${id}, [${buttonArray}], ${statements});\n`;
+  const handler = `handleStreamdeck(${id}, ${buttons}, ${statements});\n`;
   const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
   Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
-
-  console.log('foo');
 
   return '';
 };
@@ -41,18 +41,18 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
 /**
  * Handles button pushes on an elGato Stream Deck
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
- * @param {boolean[]} buttonArray array containing pushed buttons.
+ * @param {String} buttons string containing pushed buttons seperated by whitespaces.
  * @param {String} statements code to be executed when the buttons are pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttonArray, statements, callback) {
+const handleStreamdeck = async function(id, buttons, statements, callback) {
   // If no things block is attached, return.
-  if (!id) {
+  if (id === null) {
     Blast.throwError('No streamdeck block set.');
     callback();
     return;
   }
-  const type = 'inputreport';
+
 
   const device = Blast.Things.webHidDevices.get(id);
 
@@ -62,60 +62,59 @@ const handleStreamdeck = async function(id, buttonArray, statements, callback) {
     return;
   }
 
-  if (!device.opened) {
-    try {
-      await device.open();
-    } catch (error) {
-      console.error(error);
-      Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+  let streamdeck;
+  
+  try {
+    streamdeck = await StreamDeck.openDevice(device);
+  } catch (e) {
+    // if InvalidStateError error, device is probably already opened, do nothing
+    if (e.name !== 'InvalidStateError') {
+      Blast.throwError(e);
+      callback();
+      return;
     }
   }
 
-  // check if device is a Stream Deck
-  if (device.vendorId != 4057) {
-    Blast.throwError('The connected device is not a Streamdeck.');
+  let button;
+  for (let i = 0; i < buttons.length; i++) {
+    if (buttons.indexOf(i) === 1) {
+      button = i;
+      break;
+    }
+  }
+  
+  if (button === undefined) {
+    callback();
     return;
   }
 
-  const fn = function(event) {
-    if (event.reportId === 0x01) {
-      const keys = new Int8Array(event.data.buffer);
-      const start = 0;
-      const end = 6;
-      const data = Array.from(keys).slice(start, end);
-       
-      // convert jsInterpreter Object to numbers array.
-      buttonArray = buttonArray.toString().split(',').map(Number);
-      // check if defined buttons are pushed.
-      if (data.every((val, index) => val === buttonArray[index])) {
-        // interrupt BLAST execution.
-        Blast.Interrupted = true;
+  streamdeck.on('down', (keyIndex) => {
+    if (keyIndex === button) {
+      // interrupt BLAST execution.
+      Blast.Interrupted = true;
         
-        const interpreter = new Interpreter('');
-        interpreter.stateStack[0].scope = Blast.Interpreter.globalScope;
-        interpreter.appendCode(statements);
+      const interpreter = new Interpreter('');
+      interpreter.stateStack[0].scope = Blast.Interpreter.globalScope;
+      interpreter.appendCode(statements);
 
-        const interruptRunner_ = function() {
-          try {
-            const hasMore = interpreter.step();
-            if (hasMore) {
-              setTimeout(interruptRunner_, 5);
-            } else {
-              // Continue BLAST execution.
-              Blast.Interrupted = false;
-            }
-          } catch (error) {
-            Blast.throwError(`Error executing program:\n ${e}`);
-            console.error(error);
+      const interruptRunner_ = function() {
+        try {
+          const hasMore = interpreter.step();
+          if (hasMore) {
+            setTimeout(interruptRunner_, 5);
+          } else {
+            // Continue BLAST execution.
+            Blast.Interrupted = false;
           }
-        };
-        interruptRunner_();
-      }
+        } catch (error) {
+          Blast.throwError(`Error executing program:\n ${e}`);
+          console.error(error);
+        }
+      };
+      interruptRunner_();
     }
-  };
-  Blast.deviceEventHandlers.push({device: device, type: type, fn: fn});
-  device.addEventListener(type, fn);
+  });
 };
 
 // Add streamdeck function to the Interpreter's API
-Blast.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+Blast.asyncApiFunctions.push(['handleStreamdeck', handleStreamdeck]);

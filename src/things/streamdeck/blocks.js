@@ -20,14 +20,14 @@ Blockly.Blocks['streamdeck_buttons'] = {
         .appendField('on button press:');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button2')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button3');
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button1')), 'button1')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button2')), 'button2')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button3')), 'button3');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button4')), 'button4')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button5')), 'button5')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button6')), 'button6');
     this.appendDummyInput()
         .appendField('do');
     this.appendStatementInput('statements')
@@ -37,6 +37,20 @@ Blockly.Blocks['streamdeck_buttons'] = {
     this.setHelpUrl('');
     this.requested = false;
     this.keyState = new Array(6).fill(false);
+  },
+  /**
+   * Unchecks all other checkboxes than the one that was clicked.
+   * @param {string} value the new value of the checkbox.
+   * @param {string} checkboxName Name of the ceckbox that was clicked.
+   */
+  uncheckAllOtherCheckboxes: function(value, checkboxName) {
+    if (value === 'TRUE') {
+      for (let i = 1; i <= 6; i++) {
+        if ('button' + i != checkboxName) {
+          this.setFieldValue('FALSE', 'button' + i);
+        }
+      }
+    }
   },
   /**
    * Add this block's id to the events array.
