@@ -17,7 +17,11 @@ Blockly.Blocks['streamdeck_buttons'] = {
         .setCheck('Thing')
         .appendField('Streamdeck mini');
     this.appendDummyInput()
-        .appendField('on button press:');
+        .appendField('on button')
+        .appendField(new Blockly.FieldDropdown([
+          ['up', 'up'],
+          ['down', 'down'],
+        ]), 'upDown');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button1')), 'button1')

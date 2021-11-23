@@ -86,6 +86,12 @@ Blast.eventInWorkspace = [];
 Blast.deviceEventHandlers = [];
 
 /**
+ * Stores functions to invoke to reset, when the interpreter is stopped.
+ */
+Blast.cleanUpFunctions = [];
+
+
+/**
  * Instance of runner function.
  * @type {?function}
  * @private
@@ -265,6 +271,10 @@ Blast.resetInterpreter = function() {
   }
   Blast.Bluetooth.tearDown();
   Blast.removeDeviceHandlers();
+  
+  for (const func of Blast.cleanUpFunctions) {
+    func();
+  }
 };
 
 /**

@@ -19,6 +19,7 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
   const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
   const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
+  const upDown = Blockly.JavaScript.quote_(block.getFieldValue('upDown'));
   const id = Blockly.JavaScript.valueToCode(
       block,
       'id',
@@ -30,7 +31,7 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
   );
   const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
 
-  const handler = `handleStreamdeck(${id}, ${buttons}, ${statements});\n`;
+  const handler = `handleStreamdeck(${id}, ${buttons}, ${upDown}, ${statements});\n`;
   const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
   Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
@@ -42,10 +43,11 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * Handles button pushes on an elGato Stream Deck
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {String} buttons string containing pushed buttons seperated by whitespaces.
+ * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttons, statements, callback) {
+const handleStreamdeck = async function(id, buttons, upDown, statements, callback) {
   // If no things block is attached, return.
   if (id === null) {
     Blast.throwError('No streamdeck block set.');
@@ -67,8 +69,11 @@ const handleStreamdeck = async function(id, buttons, statements, callback) {
   try {
     streamdeck = await StreamDeck.openDevice(device);
   } catch (e) {
-    // if InvalidStateError error, device is probably already opened, do nothing
-    if (e.name !== 'InvalidStateError') {
+    // if InvalidStateError error, device is probably already opened
+    if (e.name == 'InvalidStateError') {
+      device.close();
+      streamdeck = await StreamDeck.openDevice(device);
+    } else {
       Blast.throwError(e);
       callback();
       return;
@@ -88,7 +93,7 @@ const handleStreamdeck = async function(id, buttons, statements, callback) {
     return;
   }
 
-  streamdeck.on('down', (keyIndex) => {
+  streamdeck.on(upDown, (keyIndex) => {
     if (keyIndex === button) {
       // interrupt BLAST execution.
       Blast.Interrupted = true;
@@ -114,6 +119,12 @@ const handleStreamdeck = async function(id, buttons, statements, callback) {
       interruptRunner_();
     }
   });
+
+  Blast.cleanUpFunctions.push(() => {
+    streamdeck.close();
+    streamdeck.removeAllListeners();
+  },
+  );
 };
 
 // Add streamdeck function to the Interpreter's API
