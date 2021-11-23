@@ -45,9 +45,8 @@ Blockly.JavaScript['streamdeck_buttons'] = function(block) {
  * @param {String} buttons string containing pushed buttons seperated by whitespaces.
  * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleStreamdeck = async function(id, buttons, upDown, statements, callback) {
+const handleStreamdeck = async function(id, buttons, upDown, statements) {
   // If no things block is attached, return.
   if (id === null) {
     Blast.throwError('No streamdeck block set.');
@@ -128,4 +127,4 @@ const handleStreamdeck = async function(id, buttons, upDown, statements, callbac
 };
 
 // Add streamdeck function to the Interpreter's API
-Blast.asyncApiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+Blast.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
