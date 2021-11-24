@@ -107,7 +107,6 @@ Blast.Bluetooth.getDeviceById = async function(id) {
   * @return {Object} representation of the complete request with response.
   */
 Blast.Bluetooth.connect = async function(id) {
-  console.log(`Connecting to ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
     return await device.gatt.connect();
@@ -124,7 +123,6 @@ Blast.Bluetooth.connect = async function(id) {
   * @return {Object} representation of the complete request with response.
   */
 Blast.Bluetooth.disconnect = async function(id) {
-  console.log(`Disconnecting from ${id}`);
   try {
     const device = await Blast.Bluetooth.getDeviceById(id);
     return await device.gatt.disconnect();
@@ -184,9 +182,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   }
   value = hexStringToArrayBuffer(value);
   try {
-    console.log(`Writing to ${characteristic.uuid}`);
     await characteristic.writeValueWithoutResponse(value);
-    console.log(`Wrote to ${characteristic.uuid}`);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -203,13 +199,9 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
  */
 Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
   const server = await Blast.Bluetooth.connect(id);
-  console.log('connected to');
-  console.log(server);
   let service;
   try {
-    console.log(`Getting primary service ${serviceUUID} from ${id}`);
     service = await server.getPrimaryService(serviceUUID);
-    console.log(`Got primary service ${serviceUUID} from ${id}`);
   } catch (error) {
     console.error(error);
     Blast.throwError('The device is not compatible with the connected block.');
@@ -233,9 +225,7 @@ Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characterist
   }
   let characteristic;
   try {
-    console.log(`Getting characteristic ${characteristicUUID} from ${id}`);
     characteristic = await service.getCharacteristic(characteristicUUID);
-    console.log(`Got characteristic ${characteristicUUID} from ${id}`);
   } catch (error) {
     console.error(error);
     Blast.throwError('The device is not compatible with the connected block.');
@@ -330,9 +320,7 @@ Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, characteristicU
  * public
  */
 Blast.Bluetooth.startLEScan = async function() {
-  console.log('startLEScan');
   // If the LE Scan is already running, do nothing.
-  console.log(Blast.Bluetooth.isLEScanRunning);
   if (Blast.Bluetooth.isLEScanRunning) {
     return;
   }
@@ -406,7 +394,6 @@ Blast.Bluetooth.removeEventListener = function(event, listener) {
  * Removes webBluetooth eventListeners and deletes cached advertisements.
  */
 Blast.Bluetooth.tearDown = function() {
-  console.log('Tearing down webBluetooth.');
   // Reset running scan flag
   if (Blast.Bluetooth.isLEScanRunning) {
     Blast.Bluetooth.isLEScanRunning = false;
