@@ -31,7 +31,7 @@ Blockly.Blocks['uri'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('URI')
-        .appendField(new Blockly.FieldTextInput('http://example.com'), 'URI');
+        .appendField(new Blockly.FieldTextInput('https://example.com'), 'URI');
     this.setOutput(true, 'URI');
     this.setColour(60);
     this.setTooltip('');
