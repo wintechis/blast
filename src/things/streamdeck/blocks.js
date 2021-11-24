@@ -7,7 +7,7 @@
 
 'use strict';
 
-Blockly.Blocks['streamdeck_buttons'] = {
+Blockly.Blocks['streamdeck_button_event'] = {
   /**
    * Block handling streamdeck button pushes.
    * @this {Blockly.Block}
@@ -90,5 +90,5 @@ Blockly.Blocks['streamdeck_buttons'] = {
   },
 };
 
-// Add streamdeck_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_buttons', 'States and Events');
+// Add streamdeck_button_event block to the toolbox.
+Blast.Toolbox.addBlock('streamdeck_button_event', 'States and Events');

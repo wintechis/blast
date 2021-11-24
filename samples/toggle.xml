@@ -24,7 +24,7 @@
       </block>
     </value>
   </block>
-  <block type="streamdeck_buttons" x="41" y="94">
+  <block type="streamdeck_button_event" x="41" y="94">
     <field name="button1">TRUE</field>
     <field name="button2">FALSE</field>
     <field name="button3">FALSE</field>

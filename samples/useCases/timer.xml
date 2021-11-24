@@ -228,7 +228,7 @@
       </block>
     </statement>
   </block>
-  <block type="streamdeck_buttons" x="96" y="84">
+  <block type="streamdeck_button_event" x="96" y="84">
     <field name="button1">TRUE</field>
     <field name="button2">FALSE</field>
     <field name="button3">FALSE</field>
@@ -256,7 +256,7 @@
       </block>
     </statement>
   </block>
-  <block type="streamdeck_buttons" x="92" y="293">
+  <block type="streamdeck_button_event" x="92" y="293">
     <field name="button1">FALSE</field>
     <field name="button2">TRUE</field>
     <field name="button3">FALSE</field>
@@ -317,7 +317,7 @@
       </block>
     </statement>
   </block>
-  <block type="streamdeck_buttons" x="85" y="542">
+  <block type="streamdeck_button_event" x="85" y="542">
     <field name="button1">FALSE</field>
     <field name="button2">FALSE</field>
     <field name="button3">TRUE</field>

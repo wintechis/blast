@@ -2,7 +2,7 @@
   <variables>
     <variable id="^,c_==H308Jb={GklNFg">seconds</variable>
   </variables>
-  <block type="streamdeck_buttons" x="90" y="45">
+  <block type="streamdeck_button_event" x="90" y="45">
     <field name="button1">TRUE</field>
     <field name="button2">FALSE</field>
     <field name="button3">FALSE</field>

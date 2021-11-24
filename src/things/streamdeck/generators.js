@@ -8,11 +8,11 @@
 'use strict';
  
 /**
-  * Generates JavaScript code for the streamdeck_buttons block.
-  * @param {Blockly.Block} block the streamdeck_buttons block.
+  * Generates JavaScript code for the streamdeck_button_event block.
+  * @param {Blockly.Block} block the streamdeck_button_event block.
   * @returns {String} the generated code.
   */
-Blockly.JavaScript['streamdeck_buttons'] = function(block) {
+Blockly.JavaScript['streamdeck_button_event'] = function(block) {
   const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
   const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
   const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
