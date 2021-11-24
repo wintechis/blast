@@ -10,6 +10,7 @@ This document explains what happens when a block program gets executed.
 * How to handle BLE connect/disconnect (see https://github.com/wintechis/blast/issues/115)?
 * How to make BLAST programs appear to execute synchronously while JavaScript programs executes asynchronously?
   + BLAST event loop vs. JavaScript event loop
+  + For reference of the JavaScript event loop: [Event loop explainer](https://github.com/atotic/event-loop) and [Concurrency model and the event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
 * ...
 
 ## Code generation
