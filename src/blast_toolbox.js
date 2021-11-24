@@ -59,7 +59,6 @@ const defaultToolbox = {
       kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'while_until'},
-        {kind: 'BLOCK', type: 'wait_seconds'},
         {kind: 'BLOCK', type: 'break_continue'},
         {kind: 'BLOCK', type: 'conditional_statement'},
       ],

@@ -292,12 +292,10 @@ Blockly.Blocks['wait_seconds'] = {
      * @this {Blockly.Block}
      */
   init: function() {
-    this.appendDummyInput()
+    this.appendValueInput('SECONDS')
         .appendField('wait')
-        .appendField(
-            new Blockly.FieldNumber('1, 0, 600'),
-            'SECONDS',
-        )
+        .setCheck('Number');
+    this.appendDummyInput()
         .appendField('seconds');
     this.setColour(120);
     this.setTooltip('Wait x seconds before executing the next block.');
@@ -306,6 +304,20 @@ Blockly.Blocks['wait_seconds'] = {
     this.setHelpUrl('');
   },
 };
+
+// Define inner block XML for the wait_seconds block
+const wait_seconds_XML = `
+<block type="wait_seconds">
+  <value name="SECONDS">
+    <block type="math_number">
+      <field name="NUM">1</field>
+    </block>
+  </value>
+</block>
+`;
+
+// Add the wait_seconds block to the toolbox
+Blast.Toolbox.addBlock('wait_seconds', 'Control Flow', wait_seconds_XML);
 
 // Mutator blocks.
 Blockly.Blocks['controls_if_if'] = {
