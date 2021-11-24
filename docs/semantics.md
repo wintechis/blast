@@ -1,7 +1,18 @@
 # Semantics <!-- omit in toc -->
 This document explains what happens when a block program gets executed.
 
-# Code generation
+## Questions
+
+* How to map the different low-level protocols to WoT?
+** BLE GAP advertisements of the Ruuvi tags to WoT read property
+** BLE Huskyduino forget flag to WoT action
+** BLE Xiaomi Mijia subscribe and notify to WoT read property
+* How to handle BLE connect/disconnect (see https://github.com/wintechis/blast/issues/115)?
+* How to make BLAST programs appear to execute synchronously while JavaScript programs executes asynchronously?
+** BLAST event loop vs. JavaScript event loop
+* ...
+
+## Code generation
 Every time the workspace changes, i.e. a block is added, moved or removed, BLAST generates JavaScript code.
 
 In order to generate this code, each block returns either a String with code-snippets, or a tuple consisting of such a string and an Integer value defining the [Operator Precedence](https://developers.google.com/blockly/guides/create-custom-blocks/operator-precedence). 
@@ -21,10 +32,10 @@ Blockly.JavaScript['play_audio'] = function(block) {
 
 The JavaScript files responsible for Block's code generation can be found at [src/generators/](../src/generators/)
 
-# Execution
+## Execution
 When a user clicks the execute button, BLAST uses a [JSInterpreter](https://neil.fraser.name/software/JS-Interpreter/docs.html) instance to execute the generated JavaScript in a sand-boxed JavaScript environment.
 
-# Events vs State transitions
+## Events vs State transitions
 In addition to the sequential block code, Blast evaluates events emitted by things and state transitions.  
 
 ### Events
