@@ -191,7 +191,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
 };
 
 /**
- * Returns a promise to the primary BluetoothRemoteGATTService offered by
+ * Returns the primary BluetoothRemoteGATTService offered by
  * the bluetooth device for a specified BluetoothServiceUUID.
  * @param {string} id identifier of the device to get the service from.
  * @param {ServiceUUID} serviceUUID identifier of the service.
@@ -210,7 +210,7 @@ Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
 };
 
 /**
- * Returns a promise to the BluetoothRemoteGATTCharacteristic offered by
+ * Returns the BluetoothRemoteGATTCharacteristic offered by
  * the bluetooth device for a specified BluetoothServiceUUID and
  * BluetoothCharacteristicUUID.
  * @param {string} id identifier of the device to get the characteristic from.
