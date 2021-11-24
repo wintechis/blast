@@ -13,35 +13,14 @@
   * @returns {String} the generated code.
   */
 Blockly.JavaScript['switch_lights_rgb'] = function(block) {
-  const red = Blockly.JavaScript.valueToCode(block, 'red', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const green = Blockly.JavaScript.valueToCode(block, 'green', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const blue = Blockly.JavaScript.valueToCode(block, 'blue', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  const colour = Blockly.JavaScript.valueToCode(block, 'colour', Blockly.JavaScript.ORDER_ATOMIC) || '#000000';
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'thing',
       Blockly.JavaScript.ORDER_NONE,
   ) || 'null';
 
-  const code = `switchLights(${thing}, ${red}, ${green}, ${blue});\n`;
-  return code;
-};
-
-/**
- * Generates JavaScript code for the switch_lights_RYG block.
- * @param {Blockly.Block} block the get_request block.
- * @returns {String} the generated code.
- */
-Blockly.JavaScript['switch_lights_ryg'] = function(block) {
-  const red = Blockly.JavaScript.valueToCode(block, 'red', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const yellow = Blockly.JavaScript.valueToCode(block, 'yellow', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const green = Blockly.JavaScript.valueToCode(block, 'green', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const thing = Blockly.JavaScript.valueToCode(
-      block,
-      'thing',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || 'null';
-    
-  const code = `switchLights(${thing}, ${red}, ${yellow}, ${green});\n`;
+  const code = `switchLights(${thing}, ${colour});\n`;
   return code;
 };
 
@@ -52,12 +31,10 @@ Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
  * @param {String} mac identifier of the LED controller.
- * @param {Number} r red value in the rgb color space.
- * @param {Number} g green value in the rgb color space.
- * @param {Number} b blue value in the rgb color space.
+ * @param {String} colour the colour to switch the lights to, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function(mac, r, g, b, callback) {
+const switchLights = async function(mac, colour, callback) {
   // make sure a device is connected.
   if (!mac) {
     Blast.throwError('No LED Controller is set.');
@@ -65,12 +42,9 @@ const switchLights = async function(mac, r, g, b, callback) {
     return;
   }
 
-  // convert rgb values to hexadecimal and make sure length is 2 digits.
-  const redByte = parseInt(r).toString(16).padStart(2, '0');
-  const greenByte = parseInt(g).toString(16).padStart(2, '0');
-  const blueByte = parseInt(b).toString(16).padStart(2, '0');
+  const value = '7e000503' + colour.substring(1, 7) + '00ef';
 
-  const value = '7e000503' + redByte + greenByte + blueByte + '00ef';
+  console.log(value);
 
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
   await Blast.Bluetooth.gatt_writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);

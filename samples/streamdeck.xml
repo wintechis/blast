@@ -3,6 +3,7 @@
     <variable id="^,c_==H308Jb={GklNFg">seconds</variable>
   </variables>
   <block type="streamdeck_button_event" x="90" y="45">
+    <field name="upDown">down</field>
     <field name="button1">TRUE</field>
     <field name="button2">FALSE</field>
     <field name="button3">FALSE</field>
@@ -23,7 +24,11 @@
         </value>
         <next>
           <block type="wait_seconds">
-            <field name="SECONDS">5</field>
+            <value name="SECONDS">
+              <block type="number_value">
+                <field name="NUM">5</field>
+              </block>
+            </value>
           </block>
         </next>
       </block>
@@ -81,7 +86,11 @@
                 </value>
                 <next>
                   <block type="wait_seconds">
-                    <field name="SECONDS">1</field>
+                    <value name="SECONDS">
+                      <block type="number_value">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
                   </block>
                 </next>
               </block>
