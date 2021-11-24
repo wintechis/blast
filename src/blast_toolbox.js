@@ -84,6 +84,13 @@ const defaultToolbox = {
       custom: 'PROCEDURE',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Variables',
+      custom: 'VARIABLE',
+      colour: '330',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -120,17 +127,6 @@ const defaultToolbox = {
       contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
       name: 'Booleans',
       colour: '210',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
     },
   ],
 };
