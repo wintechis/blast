@@ -306,7 +306,7 @@ Blockly.Blocks['wait_seconds'] = {
 };
 
 // Define inner block XML for the wait_seconds block
-const wait_seconds_XML = `
+const WAIT_SECONDS_XML = `
 <block type="wait_seconds">
   <value name="SECONDS">
     <block type="math_number">
@@ -317,7 +317,7 @@ const wait_seconds_XML = `
 `;
 
 // Add the wait_seconds block to the toolbox
-Blast.Toolbox.addBlock('wait_seconds', 'Control Flow', wait_seconds_XML);
+Blast.Toolbox.addBlock('wait_seconds', 'Control Flow', WAIT_SECONDS_XML);
 
 // Mutator blocks.
 Blockly.Blocks['controls_if_if'] = {
