@@ -4,12 +4,12 @@ This document explains what happens when a block program gets executed.
 ## Questions
 
 * How to map the different low-level protocols to WoT?
-** BLE GAP advertisements of the Ruuvi tags to WoT read property
-** BLE Huskyduino forget flag to WoT action
-** BLE Xiaomi Mijia subscribe and notify to WoT read property
++ BLE GAP advertisements of the Ruuvi tags to WoT read property
++ BLE Huskyduino forget flag to WoT action
++ BLE Xiaomi Mijia subscribe and notify to WoT read property
 * How to handle BLE connect/disconnect (see https://github.com/wintechis/blast/issues/115)?
 * How to make BLAST programs appear to execute synchronously while JavaScript programs executes asynchronously?
-** BLAST event loop vs. JavaScript event loop
++ BLAST event loop vs. JavaScript event loop
 * ...
 
 ## Code generation
