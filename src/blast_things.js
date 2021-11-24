@@ -45,7 +45,7 @@ Blast.Things.flyoutCategory = function(workspace) {
 
   // Create WebBluetooth add device button
   const webBluetoothButton = document.createElement('button');
-  webBluetoothButton.setAttribute('text', 'connect via webBluetooth');
+  webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
   workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', function(_button) {
     Blast.Things.createWebBluetoothButtonHandler();
@@ -202,7 +202,7 @@ Blast.Things.getWebHIDDevices = function() {
 };
 
 /**
- * Handles "connect via webBluetooth" button in the things toolbox category.
+ * Handles "pair via webBluetooth" button in the things toolbox category.
  */
 Blast.Things.createWebBluetoothButtonHandler = async function() {
   await Blast.Bluetooth.requestDevice();
