@@ -92,3 +92,37 @@ Blockly.Blocks['streamdeck_button_event'] = {
 
 // Add streamdeck_button_event block to the toolbox.
 Blast.Toolbox.addBlock('streamdeck_button_event', 'States and Events');
+
+
+Blockly.Blocks['streamdeck_color_buttons'] = {
+  /**
+   * Block for coloring stream deck buttons.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendValueInput('id')
+        .setCheck('Thing')
+        .appendField('Streamdeck mini');
+    this.appendDummyInput()
+        .appendField('on button')
+        .appendField(new Blockly.FieldDropdown([
+          ['up', 'up'],
+          ['down', 'down'],
+        ]), 'upDown');
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button1')), 'button1')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button2')), 'button2')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button3')), 'button3');
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button4')), 'button4')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button5')), 'button5')
+        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button6')), 'button6');
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.requested = false;
+    this.keyState = new Array(6).fill(false);
+  },
+};

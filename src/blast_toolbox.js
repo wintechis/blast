@@ -127,6 +127,15 @@ const defaultToolbox = {
       name: 'Booleans',
       colour: '210',
     },
+    {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'colour_picker'},
+        {kind: 'BLOCK', type: 'colour_random'},
+      ],
+      name: 'Colours',
+      colour: '20',
+    },
   ],
 };
 
