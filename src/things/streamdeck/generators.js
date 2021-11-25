@@ -66,7 +66,7 @@ Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
       `${button1}${button2}${button3}${button4}${button5}${button6}`,
   );
 
-  const code = `streamdeck_color_buttons(${id}, ${buttons}, ${color})`;
+  const code = `streamdeck_color_buttons(${id}, ${buttons}, ${color});\n`;
   return code;
 };
 
