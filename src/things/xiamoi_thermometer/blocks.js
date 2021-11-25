@@ -14,7 +14,7 @@ Blockly.Blocks['read_mijia_property'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('get')
+        .appendField('read')
         .appendField(new Blockly.FieldDropdown(
             [
               ['temperature', 'temperature'],
