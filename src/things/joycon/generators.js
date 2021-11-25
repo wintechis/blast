@@ -125,6 +125,7 @@ Blockly.JavaScript['joycon_button_events'] = function(block) {
   
   const handler = `handleJoyConButtons(${thing}, ${button}, ${statements});\n`;
   const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
   Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
   
   return '';
