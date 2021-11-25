@@ -116,7 +116,7 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
-    this.setColour(255);
+    this.setColour(0);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
@@ -127,5 +127,5 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
 };
 
 // Add streamdeck_color_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Properties');
+Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions');
 
