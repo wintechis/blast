@@ -13,7 +13,7 @@
   * @returns {String} the generated code.
   */
 Blockly.JavaScript['switch_lights_rgb'] = function(block) {
-  const colour = Blockly.JavaScript.valueToCode(block, 'colour', Blockly.JavaScript.ORDER_ATOMIC) || '#000000';
+  const colour = Blockly.JavaScript.valueToCode(block, 'colour', Blockly.JavaScript.ORDER_ATOMIC) || Blockly.JavaScript.quote_('#000000');
   const thing = Blockly.JavaScript.valueToCode(
       block,
       'thing',
