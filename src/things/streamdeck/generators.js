@@ -55,7 +55,7 @@ Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
       block,
       'color',
       Blockly.JavaScript.ORDER_NONE,
-  ) || '#000000';
+  ) || Blockly.JavaScript.quote_('#000000');
   const id = Blockly.JavaScript.valueToCode(
       block,
       'id',
