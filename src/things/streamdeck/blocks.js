@@ -126,6 +126,17 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
   },
 };
 
+// Define inner block XML for the streamdeck_color_buttons block.
+const STREAMDECK_COLOR_BUTTONS_XML = `
+<block type="streamdeck_color_buttons">
+  <value name="color">
+    <block type="colour_picker">
+      <field name="COLOUR">#ffff00</field>
+    </block>
+  </value>
+</block>
+`;
+
 // Add streamdeck_color_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions');
+Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions', STREAMDECK_COLOR_BUTTONS_XML);
 
