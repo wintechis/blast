@@ -103,26 +103,40 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
     this.appendValueInput('id')
         .setCheck('Thing')
         .appendField('Streamdeck mini');
-    this.appendDummyInput()
-        .appendField('on button')
-        .appendField(new Blockly.FieldDropdown([
-          ['up', 'up'],
-          ['down', 'down'],
-        ]), 'upDown');
+    this.appendValueInput('color')
+        .setCheck('Colour')
+        .appendField('fill button with colour');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button1')), 'button1')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button2')), 'button2')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button3')), 'button3');
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button2')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button3');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button4')), 'button4')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button5')), 'button5')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button6')), 'button6');
-    this.setColour(180);
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
+    this.setColour(0);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setTooltip('');
     this.setHelpUrl('');
     this.requested = false;
     this.keyState = new Array(6).fill(false);
   },
 };
+
+// Define inner block XML for the streamdeck_color_buttons block.
+const STREAMDECK_COLOR_BUTTONS_XML = `
+<block type="streamdeck_color_buttons">
+  <value name="color">
+    <block type="colour_picker">
+      <field name="COLOUR">#ffff00</field>
+    </block>
+  </value>
+</block>
+`;
+
+// Add streamdeck_color_buttons block to the toolbox.
+Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions', STREAMDECK_COLOR_BUTTONS_XML);
+

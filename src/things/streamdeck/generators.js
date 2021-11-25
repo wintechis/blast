@@ -33,16 +33,47 @@ Blockly.JavaScript['streamdeck_button_event'] = function(block) {
 
   const handler = `handleStreamdeck(${id}, ${buttons}, ${upDown}, ${statements});\n`;
   const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
   Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
   return '';
 };
 
+/**
+ * Generates JavaScript code for the streamdeck_color_buttons block.
+  * @param {Blockly.Block} block the streamdeck_button_event block.
+  * @returns {String} the generated code.
+ */
+Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
+  const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
+  const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
+  const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
+  const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
+  const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
+  const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
+  const color = Blockly.JavaScript.valueToCode(
+      block,
+      'color',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || Blockly.JavaScript.quote_('#000000');
+  const id = Blockly.JavaScript.valueToCode(
+      block,
+      'id',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || null;
+
+  const buttons = Blockly.JavaScript.quote_(
+      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+  );
+
+  const code = `streamdeck_color_buttons(${id}, ${buttons}, ${color});\n`;
+  return code;
+};
 
 /**
  * Handles button pushes on an elGato Stream Deck
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
- * @param {String} buttons string containing pushed buttons seperated by whitespaces.
+ * @param {String} buttons string containing pushed buttons.
  * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
  */
@@ -50,7 +81,6 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
   // If no things block is attached, return.
   if (id === null) {
     Blast.throwError('No streamdeck block set.');
-    callback();
     return;
   }
 
@@ -59,7 +89,6 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
 
   if (!device) {
     Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
-    callback();
     return;
   }
 
@@ -74,21 +103,19 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
       streamdeck = await StreamDeck.openDevice(device);
     } else {
       Blast.throwError(e);
-      callback();
       return;
     }
   }
 
   let button;
   for (let i = 0; i < buttons.length; i++) {
-    if (buttons.indexOf(i) === 1) {
+    if (buttons.charAt(i) === '1') {
       button = i;
       break;
     }
   }
   
   if (button === undefined) {
-    callback();
     return;
   }
 
@@ -128,3 +155,61 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
 
 // Add streamdeck function to the Interpreter's API
 Blast.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+
+/**
+ * Fills the buttons of a Stream Deck with a color.
+ * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
+ * @param {String} buttons string containing pushed buttons.
+ * @param {String} color color to fill the buttons with, as hex value.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const streamdeckColorButtons = async function(id, buttons, color, callback) {
+  // If no things block is attached, return.
+  if (id === null) {
+    Blast.throwError('No streamdeck block set.');
+    callback();
+    return;
+  }
+  
+  
+  const device = Blast.Things.webHidDevices.get(id);
+  
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    callback();
+    return;
+  }
+  
+  let streamdeck;
+    
+  try {
+    streamdeck = await StreamDeck.openDevice(device);
+  } catch (e) {
+    // if InvalidStateError error, device is probably already opened
+    if (e.name == 'InvalidStateError') {
+      device.close();
+      streamdeck = await StreamDeck.openDevice(device);
+    } else {
+      Blast.throwError(e);
+      callback();
+      return;
+    }
+  }
+
+  // convert color to rgb
+  const red = parseInt(color.substring(1, 3), 16);
+  const green = parseInt(color.substring(3, 5), 16);
+  const blue = parseInt(color.substring(5, 7), 16);
+
+  // fill selected buttons with color
+  for (let i = 0; i < buttons.length; i++) {
+    if (buttons.charAt(i) === '1') {
+      await streamdeck.fillKeyColor(i, red, green, blue);
+    }
+  }
+
+  callback();
+};
+
+// Add streamdeck_color_buttons function to the Interpreter's API
+Blast.asyncApiFunctions.push(['streamdeck_color_buttons', streamdeckColorButtons]);
