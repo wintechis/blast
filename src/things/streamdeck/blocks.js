@@ -105,7 +105,9 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
         .appendField('Streamdeck mini');
     this.appendValueInput('color')
         .setCheck('Colour')
-        .appendField('fill button with colour');
+        .appendField('fill with color');
+    this.appendDummyInput()
+        .appendField('of button(s)');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
@@ -140,3 +142,40 @@ const STREAMDECK_COLOR_BUTTONS_XML = `
 // Add streamdeck_color_buttons block to the toolbox.
 Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions', STREAMDECK_COLOR_BUTTONS_XML);
 
+
+Blockly.Blocks['streamdeck_write_on_buttons'] = {
+  /**
+   * Block for writing on stream deck buttons.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendValueInput('id')
+        .setCheck('Thing')
+        .appendField('Streamdeck mini');
+    this.appendValueInput('value')
+        .setCheck(['String', 'Number', 'Boolean'])
+        .appendField('write Number/String/Boolean');
+    this.appendDummyInput()
+        .appendField('on button(s)');
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button2')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button3');
+    this.appendDummyInput()
+        .setAlign(Blockly.ALIGN_CENTRE)
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
+        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
+    this.setColour(0);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.requested = false;
+    this.keyState = new Array(6).fill(false);
+  },
+};
+
+// Add streamdeck_write_on_buttons block to the toolbox.
+Blast.Toolbox.addBlock('streamdeck_write_on_buttons', 'Actions');

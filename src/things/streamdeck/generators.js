@@ -66,7 +66,7 @@ Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
       `${button1}${button2}${button3}${button4}${button5}${button6}`,
   );
 
-  const code = `streamdeck_color_buttons(${id}, ${buttons}, ${color});\n`;
+  const code = `streamdeckColorButtons(${id}, ${buttons}, ${color});\n`;
   return code;
 };
 
@@ -211,5 +211,110 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
   callback();
 };
 
-// Add streamdeck_color_buttons function to the Interpreter's API
-Blast.asyncApiFunctions.push(['streamdeck_color_buttons', streamdeckColorButtons]);
+// Add streamdeckColorButtons function to the Interpreter's API
+Blast.asyncApiFunctions.push(['streamdeckColorButtons', streamdeckColorButtons]);
+
+
+/**
+ * Displays a value on a Stream Deck's buttons.
+  * @param {Blockly.Block} block the streamdeck_button_event block.
+  * @returns {String} the generated code.
+ */
+Blockly.JavaScript['streamdeck_write_on_buttons'] = function(block) {
+  const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
+  const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
+  const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
+  const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
+  const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
+  const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'value',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || Blockly.JavaScript.quote_('');
+  const id = Blockly.JavaScript.valueToCode(
+      block,
+      'id',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || null;
+
+  const buttons = Blockly.JavaScript.quote_(
+      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+  );
+
+  const code = `streamdeckWriteOnButtons(${id}, ${buttons}, ${value});\n`;
+  return code;
+};
+
+/**
+ * Displays a value on a Stream Deck's buttons.
+ * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
+ * @param {String} buttons string containing pushed buttons.
+ * @param {String} value value to display on the buttons.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
+  // If no things block is attached, return.
+  if (id === null) {
+    Blast.throwError('No streamdeck block set.');
+    callback();
+    return;
+  }
+  
+  
+  const device = Blast.Things.webHidDevices.get(id);
+  
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    callback();
+    return;
+  }
+  
+  let streamdeck;
+    
+  try {
+    streamdeck = await StreamDeck.openDevice(device);
+  } catch (e) {
+    // if InvalidStateError error, device is probably already opened
+    if (e.name == 'InvalidStateError') {
+      device.close();
+      streamdeck = await StreamDeck.openDevice(device);
+    } else {
+      Blast.throwError(e);
+      callback();
+      return;
+    }
+  }
+
+  const ps = [];
+
+  const canvas = document.createElement('canvas');
+  canvas.width = streamdeck.ICON_SIZE;
+  canvas.height = streamdeck.ICON_SIZE;
+
+  const ctx = canvas.getContext('2d');
+  ctx.save();
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.font = canvas.height * 0.8 + 'px Arial';
+  ctx.strokeStyle = 'blue';
+  ctx.lineWidth = 1;
+  ctx.strokeText(value.toString(), 8, 60, canvas.width * 0.8);
+  ctx.fillStyle = 'white';
+  ctx.fillText(value.toString(), 8, 60, canvas.width * 0.8);
+
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+  for (let i = 0; i < buttons.length; i++) {
+    if (buttons.charAt(i) === '1') {
+      ps.push(streamdeck.fillKeyBuffer(i, buffer.Buffer.from(imageData.data), {format: 'rgba'}));
+    }
+  }
+
+  ctx.restore();
+
+  await Promise.all(ps);
+  callback();
+};
+
+// Add streamdeckWriteOnButtons function to the Interpreter's API
+Blast.asyncApiFunctions.push(['streamdeckWriteOnButtons', streamdeckWriteOnButtons]);
