@@ -2,9 +2,9 @@
 
 ## Structure
 
-A process is a graph (tree?) of events with connectives.
+A process is a graph (tree?) of events (or instances of wild:Activity) with connectives.
 
-Basic connectives are sequence or anyorder.
+Basic connectives are sequence or anyorder ([OWL-S](https://www.w3.org/Submission/OWL-S/#5) calls those Control Constructs).
 
 A simple process is a sequence of events.
 
