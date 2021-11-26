@@ -33,4 +33,6 @@ A literal can be:
 
 Punya (see punya_doc.md), https://punya.mit.edu/ has SPARQL blocks
 
+Some early work on graphical RDF querying: https://scholar.google.de/scholar?hl=de&as_sdt=0%2C5&q=Graphical+Representation+of+RDF+Queries
+
 See also https://github.com/wintechis/blast/issues/118
