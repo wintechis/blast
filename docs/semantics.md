@@ -12,6 +12,7 @@ This document explains what happens when a block program gets executed.
   * [Playing sound synchronously vs. asynchronously](https://github.com/wintechis/blast/issues/22#issuecomment-758677857)
   + BLAST event loop vs. JavaScript event loop
   + For reference of the JavaScript event loop: [Event loop explainer](https://github.com/atotic/event-loop) and [Concurrency model and the event loop](https://developer.mozilla.org/en-US/docs/Web/JavaScript/EventLoop)
+  + Is there a way to show the current state of a BLAST program execution, i.e., the values of all variables right now?
 * ...
 
 ## Code generation
