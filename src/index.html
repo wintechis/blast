@@ -219,6 +219,24 @@
       </div>
     </div>
 
+    <!-- Debug info modal -->
+    <div id="debugModal" class="modal">
+      <div class="modal-content">
+        <span id ="debugClose" class="close">&times;</span>
+        <h1>Debug Info:</h1>
+        Please attach these Information to any issue you are reporting on <a href="https://github.com/wintechis/blast/issues">GitHub</a>:
+        <hr>     
+        <div class="row" id="debug-row">
+          <div class="col">
+            <table id="debug-table">
+              <tbody id="debug-tbody">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <div id="content_workspace" class="content"></div>
   <pre id="content_javascript" class="content prettyprint lang-js"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
@@ -230,6 +248,9 @@
       navigator.serviceWorker.register('sw.js', { scope: './' });
     }
   });
+
+  // Track current gulp revision for bug reporting
+  const rev = 'blast.min.js';
 
   /**
    * Load XML from file.
@@ -253,5 +274,23 @@
       rcModal.style.display = "none";
     }
   }
+
+  /**
+   * Debug info modal methods
+   */
+  const debugClose = document.getElementById("debugClose");
+  const debugModal = document.getElementById("debugModal");
+
+  debugClose.onclick = function () {
+    debugModal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function (event) {
+    if (event.target == debugModal) {
+      debugModal.style.display = "none";
+    }
+  }
+
 </script>
 </html>

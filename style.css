@@ -185,7 +185,6 @@ button {
   color: #ff001f;
   padding: 10px;
   margin: 10px 0;
-  white-space: pre;
 }
 
 .error-message::before {
@@ -194,6 +193,10 @@ button {
   font-size: 20px;
   vertical-align: bottom;
   margin-right: 0.2em;
+}
+
+.debug-info {
+  padding: 5px;
 }
 
 .warning-message {
