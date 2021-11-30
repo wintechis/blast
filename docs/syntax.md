@@ -1,5 +1,13 @@
 # Grammar <!-- omit in toc -->
 
+## Questions
+
+* What is a good way to specify a textual syntax for the visual blocks? Hint: Merino et al. Getting Grammars into Shape for Block-Based Editors, 2021
+* Should we create a dedicated language or just use JavaScript as the syntax of BLAST programs?
+* ...
+
+## Introduction
+
 This document describes in BLAST's grammar using the [Extended Backus-Naur Format (EBNF)](https://en.wikipedia.org/wiki/Extended_Backus%E2%80%93Naur_form). As all blocks get translated into JavaScript the resulting language is a subset of JS. Documentation for JavaScript functions used by BLAST's blocks can be found in the [jsdoc](../docs/jsdoc).
 
 - [1. EBNF](#1-ebnf)
