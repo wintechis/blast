@@ -179,3 +179,38 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
 
 // Add streamdeck_write_on_buttons block to the toolbox.
 Blast.Toolbox.addBlock('streamdeck_write_on_buttons', 'Properties');
+
+
+Blockly.Blocks['streamdeck_set_brightness'] = {
+  /**
+   * Block for setting the brightness of a stream deck.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendValueInput('value')
+        .setCheck('Number')
+        .appendField('write brightness property');
+    this.appendValueInput('id')
+        .setCheck('Thing')
+        .appendField('to Stream Deck');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(255);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+
+const STREAMDECK_SET_BRIGHTNESS_XML = `
+<block type="streamdeck_set_brightness">
+  <value name="value">
+    <block type="math_number">
+      <field name="NUM">100</field>
+    </block>
+  </value>
+</block>
+`;
+
+// Add streamdeck_set_brightness block to the toolbox.
+Blast.Toolbox.addBlock('streamdeck_set_brightness', 'Properties', STREAMDECK_SET_BRIGHTNESS_XML);

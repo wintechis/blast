@@ -318,3 +318,65 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 
 // Add streamdeckWriteOnButtons function to the Interpreter's API
 Blast.asyncApiFunctions.push(['streamdeckWriteOnButtons', streamdeckWriteOnButtons]);
+
+Blockly.JavaScript['streamdeck_set_brightness'] = function(block) {
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'value',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || Blockly.JavaScript.quote_('100');
+  const id = Blockly.JavaScript.valueToCode(
+      block,
+      'id',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || null;
+  
+  const code = `streamdeckSetBrightness(${id}, ${value});\n`;
+  return code;
+};
+
+const streamdeckSetBrightness = async function(id, value, callback) {
+  // If no things block is attached, return.
+  if (id === null) {
+    Blast.throwError('No streamdeck block set.');
+    callback();
+    return;
+  }
+
+  if (value < 1 || value > 100) {
+    Blast.throwError('Brightness must be between 1 and 100.');
+    callback();
+    return;
+  }
+  
+  
+  const device = Blast.Things.webHidDevices.get(id);
+  
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    callback();
+    return;
+  }
+  
+  let streamdeck;
+    
+  try {
+    streamdeck = await StreamDeck.openDevice(device);
+  } catch (e) {
+    // if InvalidStateError error, device is probably already opened
+    if (e.name == 'InvalidStateError') {
+      device.close();
+      streamdeck = await StreamDeck.openDevice(device);
+    } else {
+      Blast.throwError(e);
+      callback();
+      return;
+    }
+  }
+
+  await streamdeck.setBrightness(value);
+  callback();
+};
+
+// Add streamdeckSetBrightness function to the Interpreter's API
+Blast.asyncApiFunctions.push(['streamdeckSetBrightness', streamdeckSetBrightness]);
