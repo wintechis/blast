@@ -95,6 +95,14 @@ Blockly.Blocks['sparql_query'] = {
     this.appendValueInput('uri')
         .appendField('run SPARQL Query from URI')
         .setCheck('URI');
+    this.appendDummyInput()
+        .appendField('Resource format')
+        .appendField(new Blockly.FieldDropdown(
+            [
+              ['JSON-LD', 'application/ld+json'],
+              ['Turtle (TriG)', 'application/trig'],
+              ['N-Quads', 'application/n-quads'],
+            ]), 'format');
     this.appendDummyInput().appendField(
         new Blockly.FieldMultilineInput(`SELECT *
        WHERE { 
@@ -120,6 +128,14 @@ Blockly.Blocks['sparql_ask'] = {
     this.appendValueInput('uri')
         .appendField('run SPARQL ASK Query from URI')
         .setCheck('URI');
+    this.appendDummyInput()
+        .appendField('Resource format')
+        .appendField(new Blockly.FieldDropdown(
+            [
+              ['JSON-LD', 'application/ld+json'],
+              ['Turtle (TriG)', 'application/trig'],
+              ['N-Quads', 'application/n-quads'],
+            ]), 'format');
     this.appendDummyInput().appendField(
         new Blockly.FieldMultilineInput(`PREFIX sosa: <http://www.w3.org/ns/sosa/>
      ASK 

@@ -89,11 +89,12 @@ Blockly.JavaScript['sparql_query'] = function(block) {
       'uri',
       Blockly.JavaScript.ORDER_NONE,
   );
+  const format = Blockly.JavaScript.quote_(block.getFieldValue('format')) || '';
     
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
     
-  const code = `urdfQueryWrapper(${uri}, '${query}')`;
+  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
     
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -105,6 +106,7 @@ Blockly.JavaScript['sparql_query'] = function(block) {
  */
 Blockly.JavaScript['sparql_ask'] = function(block) {
   let query = block.getFieldValue('query');
+  const format = Blockly.JavaScript.quote_(block.getFieldValue('format')) || '';
   const uri = Blockly.JavaScript.valueToCode(
       block,
       'uri',
@@ -114,32 +116,35 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
     
-  const code = `urdfQueryWrapper(${uri}, "${query}")`;
+  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}'')`;
     
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 /**
  * Wrapper for urdf's query function.
- * @param {*} uri URI to query.
- * @param {*} query Query to execute.
+ * @param {String} uri URI to query.
+ * @param {String} format format of the resource to query
+ * @param {String} query Query to execute.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const urdfQueryWrapper = async function(uri, query, callback) {
-  urdf.clear();
+const urdfQueryWrapper = async function(uri, format, query, callback) {
+  let response;
+  
+  fetch(uri)
+      .then(Blast.handleFetchErrors)
+      .then(async(res) => {
+        response = await res.text();
 
-  // write uri into FROM clause of the query as a workaround for
-  // https://github.com/vcharpenay/uRDF.js/issues/21#issuecomment-802860330
-  const fromClause = `\n FROM <${uri}>\n`;
-  query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
 
-  urdf.query(query)
-      .then((result) => {
+        urdf.clear();
+        const opts = {format: format};
+        await urdf.load(response, opts);
+        const result = await urdf.query(query);
         callback(result);
       })
       .catch((error) => {
-        console.error(error);
         Blast.throwError(`${error.message}\nSee console for details.`);
       });
 };
