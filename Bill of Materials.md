@@ -1,5 +1,5 @@
 # Bill of Materials
-This tracks lists all dependencies used to build and run BLAST.
+This list is used to keep track of all dependencies used to build and run BLAST.
 
 ## Libraries used at run-time
 | Name | Description | License |
