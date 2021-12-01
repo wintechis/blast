@@ -100,14 +100,11 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('Streamdeck mini');
     this.appendValueInput('color')
         .setCheck('Colour')
-        .appendField('fill with color');
+        .appendField('write color');
     this.appendDummyInput()
-        .appendField('of button(s)');
+        .appendField('to display property of button(s)');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
@@ -118,7 +115,10 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
-    this.setColour(0);
+    this.appendValueInput('id')
+        .setCheck('Thing')
+        .appendField('of Stream Deck mini');
+    this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
@@ -140,7 +140,7 @@ const STREAMDECK_COLOR_BUTTONS_XML = `
 `;
 
 // Add streamdeck_color_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Actions', STREAMDECK_COLOR_BUTTONS_XML);
+Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Properties', STREAMDECK_COLOR_BUTTONS_XML);
 
 
 Blockly.Blocks['streamdeck_write_on_buttons'] = {
@@ -149,14 +149,11 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('Streamdeck mini');
     this.appendValueInput('value')
         .setCheck(['String', 'Number', 'Boolean'])
         .appendField('write Number/String/Boolean');
     this.appendDummyInput()
-        .appendField('on button(s)');
+        .appendField('to display property of button(s)');
     this.appendDummyInput()
         .setAlign(Blockly.ALIGN_CENTRE)
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
@@ -167,7 +164,10 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
-    this.setColour(0);
+    this.appendValueInput('id')
+        .setCheck('Thing')
+        .appendField('of Stream Deck mini');
+    this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setTooltip('');
@@ -178,4 +178,4 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
 };
 
 // Add streamdeck_write_on_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_write_on_buttons', 'Actions');
+Blast.Toolbox.addBlock('streamdeck_write_on_buttons', 'Properties');
