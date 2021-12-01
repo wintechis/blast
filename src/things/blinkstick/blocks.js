@@ -9,11 +9,12 @@
 
 Blockly.Blocks['blinkstick_set_colors'] = {
   init: function() {
+    this.appendValueInput('COLOUR')
+        .setCheck('Colour')
+        .appendField('write colour property');
     this.appendValueInput('index')
         .setCheck('Number')
-        .appendField('write colour property of LED');
-    this.appendValueInput('COLOUR')
-        .setCheck('Colour');
+        .appendField('of LED #');
     this.appendValueInput('thing')
         .setCheck('Thing')
         .appendField('to BlinkStick');

@@ -15,7 +15,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
   init: function() {
     this.appendValueInput('colour')
         .setCheck('Colour')
-        .appendField('write colour property: ');
+        .appendField('write colour property');
     this.appendValueInput('thing')
         .setCheck('Thing')
         .appendField('to LED controller');
