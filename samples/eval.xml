@@ -1,7 +1,7 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="Dhv5p6#p1rHi#4$prqh5">x</variable>
     <variable id="z4jf[p7empwd2}@e6rwY">i</variable>
+    <variable id="Dhv5p6#p1rHi#4$prqh5">x</variable>
   </variables>
   <block type="for" x="85" y="194">
     <field name="VAR" id="z4jf[p7empwd2}@e6rwY">i</field>
@@ -24,7 +24,7 @@
       <block type="display_text">
         <value name="text">
           <block type="procedures_calleval">
-            <mutation name="do something">
+            <mutation name="double">
               <arg name="x"></arg>
             </mutation>
             <value name="ARG0">
@@ -37,12 +37,12 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defeval" x="706" y="164">
+  <block type="procedures_defeval" x="557" y="194">
     <mutation statements="false">
       <arg name="x" varid="Dhv5p6#p1rHi#4$prqh5"></arg>
     </mutation>
-    <field name="NAME">do something</field>
+    <field name="NAME">double</field>
     <field name="STACK">return x * 2;</field>
-    <comment pinned="false" h="80" w="160">Describe this function...</comment>
+    <comment pinned="false" h="80" w="160">doubles the input</comment>
   </block>
 </xml>
