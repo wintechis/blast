@@ -34,14 +34,18 @@ const mirobotPickUp = async function(box, callback) {
     headers: new Headers(headers),
   };
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then((res) => {
-        callback(res.status);
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+  try {
+    const res = await fetch(uri, requestOptions);
+
+    if (!res.ok) {
+      Blast.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      return;
+    }
+
+    callback(res.status);
+  } catch (err) {
+    Blast.throwError(`Failed to get ${uri}, Error: ${err}`);
+  }
 };
 // add pick-up function to the interpreter's API.
 Blast.asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);
