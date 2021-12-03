@@ -20,6 +20,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="media/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="96x96" href="media/favicon-96x96.png">
   <link rel="icon" type="image/png" sizes="16x16" href="media/favicon-16x16.png">
+  <meta http-equiv=”Content-Security-Policy” content=”upgrade-insecure-requests”>
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
@@ -113,7 +114,7 @@
   <script src="js/lib/urdf/urdf-browser.js"></script>
 
   <!-- blast libraries -->
-  <script src="./blast-f14ae7bca8.min.js"></script>
+  <script src="./blast-f40498188f.min.js"></script>
 </head>
 
 <body>
@@ -132,6 +133,7 @@
               <input list="samples" type="text" id="loadWorkspace-input"
                 placeholder="save to or load from URI">
               <datalist id="samples">
+                <option value="samples/eval.xml"></option>
                 <option value="samples/events.xml"></option>
                 <option value="samples/gamble.xml"></option>
                 <option value="samples/hello-world"></option>
@@ -250,7 +252,7 @@
   });
 
   // Track current gulp revision for bug reporting
-  const rev = 'blast-f14ae7bca8.min.js';
+  const rev = 'blast-f40498188f.min.js';
 
   /**
    * Load XML from file.
