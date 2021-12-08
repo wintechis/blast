@@ -242,7 +242,11 @@ Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characterist
  * @public
  */
 Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) {
-  const characteristic = Blast.Bluetooth.getCharacteristic(id, serviceUUID, characteristicUUID);
+  const characteristic = await Blast.Bluetooth.getCharacteristic(
+      id,
+      serviceUUID,
+      characteristicUUID,
+  );
   try {
     return await characteristic.readValue();
   } catch (error) {
@@ -274,8 +278,12 @@ Blast.Bluetooth.gatt_read_text = async function(id, serviceUUID, characteristicU
  * @public
  */
 Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristicUUID) {
-  const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristicUUID);
-  const numberValue = new DataView(value).getUint8(0);
+  let dataView = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristicUUID);
+  // If value is not a DataView already, convert it.
+  if (!(dataView instanceof DataView)) {
+    dataView = new DataView(value);
+  }
+  const numberValue = dataView.getUint8(0);
   return numberValue;
 };
 
