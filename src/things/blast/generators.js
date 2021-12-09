@@ -325,3 +325,164 @@ const getRSSIWb = async function(webBluetoothId, callback) {
 };
 // add getRSSIWb method to the interpreter's API.
 Blast.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
+
+/**
+ * Generates JavaScript code for the write_eddystone_property block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['write_eddystone_property'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const property = Blockly.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = Blockly.JavaScript.valueToCode(
+      block,
+      'Slot',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'Value',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  
+  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${value});\n`;
+  return code;
+};
+
+const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
+Blast.Bluetooth.optionalServices.push(eddystoneServiceUUID);
+
+/**
+ * Writes an Eddystone property to a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {number} slot The slot to write to.
+ * @param {String} property The property to write.
+ * @param {String} value The value to write.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const writeEddystoneProperty = async function(webBluetoothId, slot, property, value, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    Blast.throwError('No bluetooth device set.');
+    callback();
+    return;
+  }
+
+  // make sure a slot is set
+  if (!slot) {
+    Blast.throwError('No slot set.');
+    callback();
+    return;
+  }
+
+  // make sure a property is set
+  if (!property) {
+    Blast.throwError('No property set.');
+    callback();
+    return;
+  }
+  
+  // Set the active slot.
+  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+
+  // write the property
+  switch (property) {
+    case 'advertisedTxPower':
+      await Blast.Bluetooth.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
+      break;
+    case 'advertisementData':
+      await Blast.Bluetooth.Eddystone.setAdvertisingData(webBluetoothId, value);
+      break;
+    case 'advertisingInterval':
+      await Blast.Bluetooth.Eddystone.setAdvertisingInterval(webBluetoothId, value);
+      break;
+    case 'radioTxPower':
+      await Blast.Bluetooth.Eddystone.setTxPowerLevel(webBluetoothId, value);
+      break;
+  }
+  callback();
+};
+
+// add writeEddystoneProperty method to the interpreter's API.
+Blast.asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
+
+/**
+ * Generates JavaScript code for the read_eddystone_property block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['read_eddystone_property'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const property = Blockly.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = Blockly.JavaScript.valueToCode(
+      block,
+      'Slot',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const code = `readEddystoneProperty(${thing}, ${slot}, ${property})`;
+
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+/**
+ * Reads an Eddystone property from a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {number} slot The slot to read from.
+ * @param {String} property The property to read.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const readEddystoneProperty = async function(webBluetoothId, slot, property, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    Blast.throwError('No bluetooth device set.');
+    callback();
+    return;
+  }
+
+  // make sure a slot is set
+  if (!slot) {
+    Blast.throwError('No slot set.');
+    callback();
+    return;
+  }
+
+  // make sure a property is set
+  if (!property) {
+    Blast.throwError('No property set.');
+    callback();
+    return;
+  }
+
+  // Set the active slot.
+  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+
+  // read the property
+  let value = null;
+  switch (property) {
+    case 'advertisedTxPower':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisedTxPower(webBluetoothId);
+      break;
+    case 'advertisementData':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisingData(webBluetoothId);
+      break;
+    case 'advertisingInterval':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisingInterval(webBluetoothId);
+      break;
+    case 'lockState':
+      value = await Blast.Bluetooth.Eddystone.getLockState(webBluetoothId);
+      break;
+    case 'publicECDHKey':
+      value = await Blast.Bluetooth.Eddystone.getPublicECDHKey(webBluetoothId);
+      break;
+    case 'radioTxPower':
+      value = await Blast.Bluetooth.Eddystone.getTxPowerLevel(webBluetoothId);
+      break;
+  }
+  callback(value);
+};
+
+// Add readEddystoneProperty method to the interpreter's API.
+Blast.asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);

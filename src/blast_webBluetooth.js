@@ -54,6 +54,41 @@ Blast.Bluetooth.eventListeners = [];
  */
 Blast.Bluetooth.charEventListeners = {};
 
+
+/**
+* Convert a hex string to an ArrayBuffer.
+*
+* @param {string} hexString - hex representation of bytes
+* @return {ArrayBuffer} - The bytes in an ArrayBuffer.
+*/
+function hexStringToArrayBuffer(hexString) {
+  // remove the leading 0x
+  hexString = hexString.replace(/^0x/, '');
+  
+  // ensure even number of characters
+  if (hexString.length % 2 != 0) {
+    hexString = '0' + hexString;
+  }
+  
+  // check for some non-hex characters
+  const bad = hexString.match(/[G-Z\s]/i);
+  if (bad) {
+    console.log('WARNING: found non-hex characters', bad);
+  }
+  
+  // split the string into pairs of octets
+  const pairs = hexString.match(/[\dA-F]{2}/gi);
+  
+  // convert the octets to integers
+  const integers = pairs.map(function(s) {
+    return parseInt(s, 16);
+  });
+  
+  const array = new Uint8Array(integers);
+  
+  return array.buffer;
+}
+
 /**
  * Pairs a Bluetooth device.
  * @param {Object} options An object that sets options for the device request.
@@ -141,48 +176,51 @@ Blast.Bluetooth.disconnect = async function(id) {
   */
 Blast.Bluetooth.gatt_writeWithoutResponse = async function(
     id, serviceUUID, characteristicUUID, value) {
-/**
- * Convert a hex string to an ArrayBuffer.
- *
- * @param {string} hexString - hex representation of bytes
- * @return {ArrayBuffer} - The bytes in an ArrayBuffer.
- */
-  function hexStringToArrayBuffer(hexString) {
-    // remove the leading 0x
-    hexString = hexString.replace(/^0x/, '');
-    
-    // ensure even number of characters
-    if (hexString.length % 2 != 0) {
-      hexString = '0' + hexString;
-    }
-    
-    // check for some non-hex characters
-    const bad = hexString.match(/[G-Z\s]/i);
-    if (bad) {
-      console.log('WARNING: found non-hex characters', bad);
-    }
-    
-    // split the string into pairs of octets
-    const pairs = hexString.match(/[\dA-F]{2}/gi);
-    
-    // convert the octets to integers
-    const integers = pairs.map(function(s) {
-      return parseInt(s, 16);
-    });
-    
-    const array = new Uint8Array(integers);
-    
-    return array.buffer;
+  const characteristic = await Blast.Bluetooth.getCharacteristic(
+      id, serviceUUID, characteristicUUID);
+  if (!characteristic) {
+    return;
   }
+  
+  // If value is a string, convert it to an ArrayBuffer.
+  if (typeof value === 'string') {
+    value = hexStringToArrayBuffer(value);
+  }
+  
+  try {
+    await characteristic.writeValueWithoutResponse(value);
+  } catch (error) {
+    const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+    console.error(error);
+    Blast.throwError(errorMsg);
+  }
+};
+
+ 
+/**
+  * Writes data to Bluetooth device using the gatt protocol.
+  * @param {string} id identifier of the device to write to.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+  * @param {string} value hex value to write.
+  * @return {Object} representation of the complete request with response.
+  */
+Blast.Bluetooth.gatt_writeWithResponse = async function(
+    id, serviceUUID, characteristicUUID, value) {
   const characteristic = await Blast.Bluetooth.getCharacteristic(
       id, serviceUUID, characteristicUUID,
   );
   if (!characteristic) {
     return;
   }
-  value = hexStringToArrayBuffer(value);
+    
+  // If value is a string, convert it to an ArrayBuffer.
+  if (typeof value === 'string') {
+    value = hexStringToArrayBuffer(value);
+  }
+
   try {
-    await characteristic.writeValueWithoutResponse(value);
+    await characteristic.writeValueWithResponse(value);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -283,8 +321,12 @@ Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristi
   if (!(dataView instanceof DataView)) {
     dataView = new DataView(value);
   }
-  const numberValue = dataView.getUint8(0);
-  return numberValue;
+  const arr = new Uint8Array(dataView.buffer);
+  const length = arr.length;
+  const arrayBuffer = buffer.Buffer.from(arr);
+  const result = arrayBuffer.readUIntBE(0, length);
+
+  return result;
 };
 
 /** Reads a hexadecimal characteristic value from a Bluetooth device.
@@ -296,7 +338,8 @@ Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristi
  */
 Blast.Bluetooth.gatt_read_hex = async function(id, serviceUUID, characteristicUUID) {
   const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristicUUID);
-  const hexValue = new Uint8Array(value).reduce((acc, byte) => {
+  console.log(value);
+  const hexValue = new Uint8Array(value.buffer).reduce((acc, byte) => {
     return acc + ('0' + byte.toString(16)).slice(-2);
   }, '');
   return hexValue;
