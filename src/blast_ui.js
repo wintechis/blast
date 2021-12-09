@@ -163,7 +163,6 @@ Blast.Ui.displaySystemInformation = function() {
       const td2 = document.createElement('td');
       td1.innerHTML = key;
       td2.innerHTML = navigator[key];
-      console.log(navigator[key]);
       tr.appendChild(td1);
       tr.appendChild(td2);
       debugTbody.appendChild(tr);

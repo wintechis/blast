@@ -61,18 +61,23 @@ const sendHttpRequest = async function(
     requestOptions.body = body;
   }
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then(async(res) => {
-        if (output == 'status') {
-          callback(res.status);
-        }
-        const response = await res.text();
-        callback(response);
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+  try {
+    const res = await fetch(uri, requestOptions);
+
+    if (!res.ok) {
+      Blast.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      return;
+    }
+
+    if (output == 'status') {
+      callback(res.status);
+    }
+
+    const response = await res.text();
+    callback(response);
+  } catch (error) {
+    Blast.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+  }
 };
 // add sendHTTPRequest method to the interpreter's API.
 Blast.asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
@@ -130,23 +135,27 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
  * @public
  */
 const urdfQueryWrapper = async function(uri, format, query, callback) {
-  let response;
+  let res;
   
-  fetch(uri)
-      .then(Blast.handleFetchErrors)
-      .then(async(res) => {
-        response = await res.text();
+  try {
+    res = await fetch(uri);
+      
+    if (!res.ok) {
+      Blast.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      return;
+    }
 
+    const response = await res.text();
 
-        urdf.clear();
-        const opts = {format: format};
-        await urdf.load(response, opts);
-        const result = await urdf.query(query);
-        callback(result);
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+    urdf.clear();
+    const opts = {format: format};
+    await urdf.load(response, opts);
+    const result = await urdf.query(query);
+
+    callback(result);
+  } catch (error) {
+    Blast.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+  }
 };
 // add urdfQueryWrapper method to the interpreter's API.
 Blast.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
