@@ -253,7 +253,6 @@ Blast.Bluetooth.Eddystone.getPublicECDHKey = async function(webBluetoothId) {
  */
 Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
   const decodeEddystoneUrl = function(data) {
-    console.log(data);
     // TX Power is the second byte of the advertising data.
     const txPower = parseInt(data.substring(2, 4));
 

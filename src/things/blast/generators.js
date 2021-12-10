@@ -379,7 +379,7 @@ const writeEddystoneProperty = async function(webBluetoothId, slot, property, va
   }
 
   // make sure a slot is set
-  if (!slot) {
+  if (slot === null || slot === undefined) {
     Blast.throwError('No slot set.');
     callback();
     return;
@@ -452,7 +452,7 @@ const readEddystoneProperty = async function(webBluetoothId, slot, property, cal
   }
 
   // make sure a slot is set
-  if (!slot) {
+  if (slot === null || slot === undefined) {
     Blast.throwError('No slot set.');
     callback();
     return;

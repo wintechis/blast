@@ -338,7 +338,6 @@ Blast.Bluetooth.gatt_read_number = async function(id, serviceUUID, characteristi
  */
 Blast.Bluetooth.gatt_read_hex = async function(id, serviceUUID, characteristicUUID) {
   const value = await Blast.Bluetooth.gatt_read(id, serviceUUID, characteristicUUID);
-  console.log(value);
   const hexValue = new Uint8Array(value.buffer).reduce((acc, byte) => {
     return acc + ('0' + byte.toString(16)).slice(-2);
   }, '');
