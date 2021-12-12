@@ -201,10 +201,12 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   
   try {
     Blast.Ui.addToLog(
-        `Invoke WriteValueWithoutResponse on characteristic ${characteristic} of device ${id}`);
+        `Invoke WriteValueWithoutResponse on characteristic ${characteristic}` +
+        ` of device ${id} with value ${value}`);
     await characteristic.writeValueWithoutResponse(value);
     Blast.Ui.addToLog(
-        `Finished WriteValueWithoutResponse on characteristic ${characteristic} of device ${id}`);
+        `Finished WriteValueWithoutResponse on characteristic ${characteristic}` +
+        ` of device ${id} with value ${value}`);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -239,10 +241,12 @@ Blast.Bluetooth.gatt_writeWithResponse = async function(
 
   try {
     Blast.Ui.addToLog(
-        `Invoke WriteValueWithResponse on characteristic ${characteristic} of device ${id}`);
+        `Invoke WriteValueWithResponse on characteristic ${characteristic}` +
+        ` of device ${id} with value ${value}`);
     await characteristic.writeValueWithResponse(value);
     Blast.Ui.addToLog(
-        `Finished WriteValueWithResponse on characteristic ${characteristic} of device ${id}`);
+        `Finished WriteValueWithResponse on characteristic ${characteristic}` +
+        ` of device ${id} with value ${value}`);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -315,10 +319,12 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) 
   );
   try {
     Blast.Ui.addToLog(
-        `Invoke ReadValue on characteristic ${characteristic} of device ${id}`);
+        `Invoke ReadValue on characteristic ${characteristic}` +
+        ` from service ${serviceUUID} of device ${id}`);
     const value = await characteristic.readValue();
     Blast.Ui.addToLog(
-        `Finished ReadValue on characteristic ${characteristic} of device ${id}`);
+        `Finished ReadValue on characteristic ${characteristic}` +
+        ` from service ${serviceUUID} of device ${id} - value: ${value}`);
     return value;
   } catch (error) {
     console.error(error);
