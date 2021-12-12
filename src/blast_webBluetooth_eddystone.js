@@ -252,12 +252,30 @@ Blast.Bluetooth.Eddystone.getPublicECDHKey = async function(webBluetoothId) {
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
 Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
-  const decodeEddystoneUrl = function(data) {
+  const decodeEddystoneUid = function(advData) {
+    // TX Power is the second byte of the advertised data.
+    const txPower = parseInt(advData.substring(2, 4), 16);
+
+    // Namespace is the next 10 bytes.
+    const namespace = advData.substring(4, 24);
+
+    // Instance is the next 6 bytes.
+    const instance = advData.substring(25, 37);
+
+    return {
+      frameType: 'UID',
+      txPower: txPower,
+      namespace: namespace,
+      instance: instance,
+    };
+  };
+
+  const decodeEddystoneUrl = function(advData) {
     // TX Power is the second byte of the advertising data.
-    const txPower = parseInt(data.substring(2, 4));
+    const txPower = parseInt(advData.substring(2, 4), 16);
 
     // URL Scheme is the third byte of the advertising data.
-    const urlScheme = data.substring(4, 6);
+    const urlScheme = advData.substring(4, 6);
     let urlPrefix = '';
     switch (urlScheme) {
       case '00':
@@ -295,7 +313,7 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
     ];
 
     // Encoded URL is the remaining bytes of the advertising data.
-    const encodedUrl = data.substring(6, data.length);
+    const encodedUrl = advData.substring(6, advData.length);
     let url = urlPrefix;
     for (let i = 0; i < encodedUrl.length; i += 2) {
       const charCode = parseInt(encodedUrl.substring(i, i + 2), 16);
@@ -314,6 +332,31 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
     };
   };
 
+  const decodeEddystoneTlm = function(advData) {
+    console.log(advData);
+    // Byte 0 is the frame type, byte 1 is the version.
+    // 2nd and 3rd bytes are the Barrery Voltage, 1mV/bit.
+    const batteryVoltage = parseInt(advData.substring(4, 8), 16);
+
+    // 4th and 5th bytes are the beacon temperature.
+    const beaconTemperature = parseInt(advData.substring(8, 10), 16) +
+                                parseInt(advData.substring(10, 12), 16) / 100;
+
+    // 6th to 9th bytes are the Advertising PDU count.
+    const pduCount = parseInt(advData.substring(12, 20), 16);
+
+    // 10th to 13th bytes are the time since the Beacon last rebooted.
+    const timeSinceReboot = parseInt(advData.substring(20, 28), 16);
+
+    return {
+      frameType: 'TLM',
+      batteryVoltage: batteryVoltage,
+      beaconTemperature: beaconTemperature,
+      pduCount: pduCount,
+      timeSinceReboot: timeSinceReboot,
+    };
+  };
+
   const advertisingData = await Blast.Bluetooth.gatt_read_hex(
       webBluetoothId,
       Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
@@ -322,13 +365,25 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
 
   // Frame type is the first byte of the advertising data.
   const frameType = advertisingData.substring(0, 2);
+  let data;
 
-  if (frameType !== '10') {
-    Blast.throwError('Currently Blast only supports the Eddystone URL frame type.');
-    return;
+  switch (frameType) {
+    case '00':
+      data = decodeEddystoneUid(advertisingData);
+      return data.namespace + data.instance;
+    case '10':
+      data = decodeEddystoneUrl(advertisingData);
+      return data.url;
+    case '20':
+      data = decodeEddystoneTlm(advertisingData);
+      return data.beaconTemperature;
+    case '30':
+      Blast.throwError('EID frame type is not supported by blast.');
+      return;
+    default:
+      Blast.throwError('Eddystone frame type is not valid.');
+      return;
   }
-
-  return decodeEddystoneUrl(advertisingData).url;
 };
 
 /**
