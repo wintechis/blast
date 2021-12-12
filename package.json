@@ -36,7 +36,7 @@
     "gulp-shell": "0.8.0",
     "jsdoc": "^3.6.7",
     "mocha": "^8.3.2",
-    "workbox-cli": "^6.3.0"
+    "workbox-cli": "^6.4.2"
   },
   "dependencies": {
     "libxmljs": "^0.19.7"
