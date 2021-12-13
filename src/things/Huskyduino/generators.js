@@ -42,7 +42,7 @@ Blockly.JavaScript['huskylens_choose_algo'] = function(block) {
  * @param {Blockly.Block} block the huskylens_write_face_id block
  * @returns {String} the generated JavaScript code
  */
-Blockly.JavaScript['huskylens_write_face_id'] = function(block) {
+Blockly.JavaScript['huskylens_write_id'] = function(block) {
   const id = '0x' + Blockly.JavaScript.valueToCode(
       block,
       'ID',
