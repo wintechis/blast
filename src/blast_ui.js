@@ -18,7 +18,7 @@ goog.provide('Blast.Ui');
  * @type {Array.<string>}
  * @private
  */
-Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml'];
+ Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
 
 /**
  * Name of currently selected tab.
@@ -216,6 +216,27 @@ Blast.Ui.renderContent_ = function() {
   if (typeof PR == 'object') {
     PR.prettyPrint();
   }
+};
+
+/**
+ * Adds a message to the device log tab.
+ * @param {string} msg Text to add to the log.
+ */
+Blast.Ui.addToLog = function(msg) {
+  const log = document.getElementById('content_deviceLogs');
+  const escaped = msg.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  // Generate timestamp.
+  const date = new Date();
+  const time = ('0' + date.getHours()).slice(-2) + ':' +
+      ('0' + date.getMinutes()).slice(-2) + ':' +
+      ('0' + date.getSeconds()).slice(-2);
+  const timestamp = '[' + time + '] ';
+  const logEntry = timestamp + escaped;
+  // Add logEntry to textArea.
+  log.innerHTML = log.innerHTML + logEntry + '\r\n';
+  // Scroll to bottom.
+  log.scrollTop = log.scrollHeight;
 };
 
 /**
