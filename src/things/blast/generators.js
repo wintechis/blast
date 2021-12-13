@@ -61,18 +61,23 @@ const sendHttpRequest = async function(
     requestOptions.body = body;
   }
 
-  fetch(uri, requestOptions)
-      .then(Blast.handleFetchErrors)
-      .then(async(res) => {
-        if (output == 'status') {
-          callback(res.status);
-        }
-        const response = await res.text();
-        callback(response);
-      })
-      .catch((error) => {
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+  try {
+    const res = await fetch(uri, requestOptions);
+
+    if (!res.ok) {
+      Blast.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      return;
+    }
+
+    if (output == 'status') {
+      callback(res.status);
+    }
+
+    const response = await res.text();
+    callback(response);
+  } catch (error) {
+    Blast.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+  }
 };
 // add sendHTTPRequest method to the interpreter's API.
 Blast.asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
@@ -89,11 +94,12 @@ Blockly.JavaScript['sparql_query'] = function(block) {
       'uri',
       Blockly.JavaScript.ORDER_NONE,
   );
+  const format = Blockly.JavaScript.quote_(block.getFieldValue('format')) || '';
     
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
     
-  const code = `urdfQueryWrapper(${uri}, '${query}')`;
+  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
     
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -105,6 +111,7 @@ Blockly.JavaScript['sparql_query'] = function(block) {
  */
 Blockly.JavaScript['sparql_ask'] = function(block) {
   let query = block.getFieldValue('query');
+  const format = Blockly.JavaScript.quote_(block.getFieldValue('format')) || '';
   const uri = Blockly.JavaScript.valueToCode(
       block,
       'uri',
@@ -114,34 +121,41 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
     
-  const code = `urdfQueryWrapper(${uri}, "${query}")`;
+  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}'')`;
     
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 /**
  * Wrapper for urdf's query function.
- * @param {*} uri URI to query.
- * @param {*} query Query to execute.
+ * @param {String} uri URI to query.
+ * @param {String} format format of the resource to query
+ * @param {String} query Query to execute.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const urdfQueryWrapper = async function(uri, query, callback) {
-  urdf.clear();
+const urdfQueryWrapper = async function(uri, format, query, callback) {
+  let res;
+  
+  try {
+    res = await fetch(uri);
+      
+    if (!res.ok) {
+      Blast.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      return;
+    }
 
-  // write uri into FROM clause of the query as a workaround for
-  // https://github.com/vcharpenay/uRDF.js/issues/21#issuecomment-802860330
-  const fromClause = `\n FROM <${uri}>\n`;
-  query = query.slice(0, query.indexOf('WHERE')) + fromClause + query.slice(query.indexOf('WHERE'));
+    const response = await res.text();
 
-  urdf.query(query)
-      .then((result) => {
-        callback(result);
-      })
-      .catch((error) => {
-        console.error(error);
-        Blast.throwError(`${error.message}\nSee console for details.`);
-      });
+    urdf.clear();
+    const opts = {format: format};
+    await urdf.load(response, opts);
+    const result = await urdf.query(query);
+
+    callback(result);
+  } catch (error) {
+    Blast.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+  }
 };
 // add urdfQueryWrapper method to the interpreter's API.
 Blast.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
@@ -307,12 +321,177 @@ const getRSSIWb = async function(webBluetoothId, callback) {
     Blast.throwError('Error pairing with Bluetooth device.');
   }
 
-  await device.watchAdvertisements();
+  const abortController = new AbortController();
 
   device.addEventListener('advertisementreceived', async(evt) => {
+    // Stop watching advertisements
+    abortController.abort();
     // Advertisement data can be read from |evt|.
     callback(evt.rssi);
   });
+
+  await device.watchAdvertisements({signal: abortController.signal});
 };
 // add getRSSIWb method to the interpreter's API.
 Blast.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
+
+/**
+ * Generates JavaScript code for the write_eddystone_property block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['write_eddystone_property'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const property = Blockly.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = Blockly.JavaScript.valueToCode(
+      block,
+      'Slot',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const value = Blockly.JavaScript.valueToCode(
+      block,
+      'Value',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  
+  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${value});\n`;
+  return code;
+};
+
+const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
+Blast.Bluetooth.optionalServices.push(eddystoneServiceUUID);
+
+/**
+ * Writes an Eddystone property to a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {number} slot The slot to write to.
+ * @param {String} property The property to write.
+ * @param {String} value The value to write.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const writeEddystoneProperty = async function(webBluetoothId, slot, property, value, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    Blast.throwError('No bluetooth device set.');
+    callback();
+    return;
+  }
+
+  // make sure a slot is set
+  if (slot === null || slot === undefined) {
+    Blast.throwError('No slot set.');
+    callback();
+    return;
+  }
+
+  // make sure a property is set
+  if (!property) {
+    Blast.throwError('No property set.');
+    callback();
+    return;
+  }
+  
+  // Set the active slot.
+  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+
+  // write the property
+  switch (property) {
+    case 'advertisedTxPower':
+      await Blast.Bluetooth.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
+      break;
+    case 'advertisementData':
+      await Blast.Bluetooth.Eddystone.setAdvertisingData(webBluetoothId, value);
+      break;
+    case 'advertisingInterval':
+      await Blast.Bluetooth.Eddystone.setAdvertisingInterval(webBluetoothId, value);
+      break;
+    case 'radioTxPower':
+      await Blast.Bluetooth.Eddystone.setTxPowerLevel(webBluetoothId, value);
+      break;
+  }
+  callback();
+};
+
+// add writeEddystoneProperty method to the interpreter's API.
+Blast.asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
+
+/**
+ * Generates JavaScript code for the read_eddystone_property block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['read_eddystone_property'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const property = Blockly.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = Blockly.JavaScript.valueToCode(
+      block,
+      'Slot',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const code = `readEddystoneProperty(${thing}, ${slot}, ${property})`;
+
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+/**
+ * Reads an Eddystone property from a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {number} slot The slot to read from.
+ * @param {String} property The property to read.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const readEddystoneProperty = async function(webBluetoothId, slot, property, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    Blast.throwError('No bluetooth device set.');
+    callback();
+    return;
+  }
+
+  // make sure a slot is set
+  if (slot === null || slot === undefined) {
+    Blast.throwError('No slot set.');
+    callback();
+    return;
+  }
+
+  // make sure a property is set
+  if (!property) {
+    Blast.throwError('No property set.');
+    callback();
+    return;
+  }
+
+  // Set the active slot.
+  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+
+  // read the property
+  let value = null;
+  switch (property) {
+    case 'advertisedTxPower':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisedTxPower(webBluetoothId);
+      break;
+    case 'advertisementData':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisingData(webBluetoothId);
+      break;
+    case 'advertisingInterval':
+      value = await Blast.Bluetooth.Eddystone.getAdvertisingInterval(webBluetoothId);
+      break;
+    case 'lockState':
+      value = await Blast.Bluetooth.Eddystone.getLockState(webBluetoothId);
+      break;
+    case 'publicECDHKey':
+      value = await Blast.Bluetooth.Eddystone.getPublicECDHKey(webBluetoothId);
+      break;
+    case 'radioTxPower':
+      value = await Blast.Bluetooth.Eddystone.getTxPowerLevel(webBluetoothId);
+      break;
+  }
+  callback(value);
+};
+
+// Add readEddystoneProperty method to the interpreter's API.
+Blast.asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);

@@ -15,7 +15,7 @@ Blockly.JavaScript['break_continue'] =
 Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
 
 Blockly.JavaScript['wait_seconds'] = function(block) {
-  const seconds = Number(block.getFieldValue('SECONDS'));
+  const seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_ATOMIC) || 0;
   const code = 'waitForSeconds(' + seconds + ');\n';
   return code;
 };

@@ -8,13 +8,11 @@
 'use strict';
  
 Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
-  const red = Blockly.JavaScript.valueToCode(block, 'red', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const green = Blockly.JavaScript.valueToCode(block, 'green', Blockly.JavaScript.ORDER_ATOMIC) || '0';
-  const blue = Blockly.JavaScript.valueToCode(block, 'blue', Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  const colour = Blockly.JavaScript.valueToCode(block, 'COLOUR', Blockly.JavaScript.ORDER_ATOMIC) || Blockly.JavaScript.quote_('#000000');
   const index = Blockly.JavaScript.valueToCode(block, 'index', Blockly.JavaScript.ORDER_ATOMIC) || '0';
   const thing = Blockly.JavaScript.valueToCode(block, 'thing', Blockly.JavaScript.ORDER_ATOMIC) || '\'\'';
 
-  const code = `blinkstickSetColors(${thing}, ${index}, ${red}, ${green}, ${blue})\n;`;
+  const code = `blinkstickSetColors(${thing}, ${index}, ${colour})\n;`;
   return code;
 };
 
@@ -22,12 +20,10 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
  * Set the color of the BlinkStick.
  * @param {string} id the id identifier of the BlinkStick.
  * @param {number} index index of the LED.
- * @param {number} red red color intensity 0 is off, 255 is full red intensity.
- * @param {number} green green color intensity 0 is off, 255 is full green intensity.
- * @param {number} blue blue color intensity 0 is off, 255 is full blue intensity.
+ * @param {string} colour the color to set, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const blinkstickSetColors = async function(id, index, red, green, blue, callback) {
+const blinkstickSetColors = async function(id, index, colour, callback) {
   // check if index is between 0 and 7.
   if (index < 0 || index > 7) {
     Blast.throwError('BlinkStick index must be between 0 and 7.');
@@ -43,6 +39,13 @@ const blinkstickSetColors = async function(id, index, red, green, blue, callback
   }
 
   const device = Blast.Things.webHidDevices.get(id);
+
+  if (!device) {
+    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
+    callback();
+    return;
+  }
+
   if (!device.opened) {
     try {
       await device.open();
@@ -58,6 +61,11 @@ const blinkstickSetColors = async function(id, index, red, green, blue, callback
     return;
   }
 
+  // convert hex colour to rgb
+  const red = parseInt(colour.substring(1, 3), 16);
+  const green = parseInt(colour.substring(3, 5), 16);
+  const blue = parseInt(colour.substring(5, 7), 16);
+  
   const reportId = 5;
   const report = Int8Array.from([reportId, index, red, green, blue]);
 

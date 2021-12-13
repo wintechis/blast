@@ -177,6 +177,19 @@ Blast.Storage.loadXMLFromFile = function(event) {
 };
 
 /**
+ * Resets the file selector.
+ */
+Blast.Storage.resetFileInput = function() {
+  const fileSelector = document.getElementById('file-selector');
+  if (fileSelector) {
+    fileSelector.value = '';
+  }
+
+  // reset filename
+  Blast.Storage.filename = 'BLAST.xml';
+};
+
+/**
  * Load blocks from URI defined in {@link Blast.Ui.uriInput}.
  * @param {string} path path to the XML to load.
  * @private
@@ -187,6 +200,12 @@ Blast.Storage.retrieveXML_ = async function(path) {
   Blast.resetInterpreter();
   Blast.resetUi(Blast.status.READY);
 
+  // Reset device lists.
+  Blast.Things.webHidDevices = new Map();
+  Blast.Things.webHidNames = new Map();
+  Blast.Things.webBluetoothDevices = new Map();
+
+  Blast.Storage.resetFileInput();
   
   // send GET request
   fetch(path)
@@ -218,7 +237,7 @@ Blast.Storage.loadXML = function(xmlString) {
 
   // prompt to WebBluetooth/webHID device connection
   if (xml.querySelector('block[type="things_webBluetooth"]') || xml.querySelector('block[type="things_webHID"]')) {
-    xml = Blast.Storage.generatePairButtons(xml);
+    Blast.Storage.generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
       document.getElementById('rcModal').style.display = 'block';
@@ -313,7 +332,10 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           if (Blast.Storage.allConnectedDesktop_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+            if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
+              document.getElementById('rc-done').setAttribute('data-hasEvent', true);
+              document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+            }
           }
         } else if (type == 'things_webHID') {
           const filters = [];
@@ -337,11 +359,15 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
                 if (Blast.Storage.allConnectedDesktop_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                  if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
+                    document.getElementById('rc-done').setAttribute('data-hasEvent', true);
+                    document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                  }
                 }
               })
               .catch((error) => {
-                wHidLog('Argh! ' + error);
+                Blast.throwError('Connection failed or cancelled by User.');
+                console.error(error);
               });
         }
       });
@@ -430,7 +456,10 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
           if (Blast.Storage.allConnectedMobile_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+            if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
+              document.getElementById('rc-done').setAttribute('data-hasEvent', true);
+              document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+            }
           }
         } else if (type == 'things_webHID') {
           const filters = [];
@@ -457,11 +486,15 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
                 if (Blast.Storage.allConnectedDesktop_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                  if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
+                    document.getElementById('rc-done').setAttribute('data-hasEvent', true);
+                    document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                  }
                 }
               })
               .catch((error) => {
-                wHidLog('Argh! ' + error);
+                Blast.throwError('Connection failed or cancelled by User.');
+                console.error(error);
               });
         }
       });

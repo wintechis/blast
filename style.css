@@ -58,7 +58,6 @@ h1 {
 /* Tabs */
 #tabRow > td {
   border: 1px solid #ccc;
-  border-bottom: none;
   white-space: nowrap;
 }
 td.tabon {
@@ -99,10 +98,20 @@ table {
   padding: 0;
   border: none;
 }
+
+#outerTable {
+  width: 100%;
+  height: 100%;
+}
+
+#headerTr {
+  height: 35px;
+}
+
 .content {
   visibility: hidden;
   margin: 0;
-  padding: 1ex;
+  padding: 0;
   position: absolute;
   direction: ltr;
 }
@@ -120,17 +129,19 @@ table {
 }
 
 #content_area {
-  height: 99%;
+  height: calc(100vh - 30px);
+  width: calc(100vw - 450px);
 }
 
 #content_workspace, #content_dw_functions {
   padding: 0;
+  width: calc(100vw - 450px);
 }
 
 #output_area {
-  height: calc(100vh - 215px);
+  height: calc(100vh - 30px);
   width: 450px;
-  border: 1px solid #c6c6c6;
+  border-left: 1px solid #c6c6c6;
   vertical-align: top;
 }
 
@@ -182,6 +193,10 @@ button {
   font-size: 20px;
   vertical-align: bottom;
   margin-right: 0.2em;
+}
+
+.debug-info {
+  padding: 5px;
 }
 
 .warning-message {
@@ -259,7 +274,7 @@ button {
 #loadWorkspace-input {
   vertical-align: bottom;
   margin-bottom: -5px;
-  width: 400px;
+  width: 12vw;
 }
 
 /* Modal background */

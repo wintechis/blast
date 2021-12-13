@@ -18,7 +18,7 @@ goog.provide('Blast.Ui');
  * @type {Array.<string>}
  * @private
  */
-Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml'];
+Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
 
 /**
  * Name of currently selected tab.
@@ -131,7 +131,43 @@ Blast.Ui.addMessage = function(message, type) {
   timeSpan.innerHTML = new Date().toLocaleTimeString();
   msg.appendChild(timeSpan);
 
+  if (type === 'error') {
+    const debugInfo = document.createElement('span');
+    debugInfo.classList.add('debug-info');
+    const openDebugInfo = document.createElement('a');
+    openDebugInfo.innerHTML = 'show debug info';
+    openDebugInfo.href = '#';
+    openDebugInfo.onclick = Blast.Ui.displaySystemInformation;
+    debugInfo.appendChild(openDebugInfo);
+    msg.appendChild(debugInfo);
+  }
+
   Blast.Ui.addElementToOutputContainer(msg);
+};
+
+Blast.Ui.displaySystemInformation = function() {
+  const debugInfo = document.getElementById('debugModal');
+  debugInfo.style.display = 'block';
+  const debugTbody = document.getElementById('debug-tbody');
+  debugTbody.innerHTML = '';
+  // Get current BLAST revision
+  const revisionRow = document.createElement('tr');
+  revisionRow.innerHTML = `<td>BLAST</td><td>${rev}</td>`;
+  debugTbody.appendChild(revisionRow);
+
+  // System information
+  for (const key in navigator) {
+    if (typeof(navigator[key]) === 'string') {
+      const tr = document.createElement('tr');
+      const td1 = document.createElement('td');
+      const td2 = document.createElement('td');
+      td1.innerHTML = key;
+      td2.innerHTML = navigator[key];
+      tr.appendChild(td1);
+      tr.appendChild(td2);
+      debugTbody.appendChild(tr);
+    }
+  }
 };
 
 /**
@@ -180,6 +216,27 @@ Blast.Ui.renderContent_ = function() {
   if (typeof PR == 'object') {
     PR.prettyPrint();
   }
+};
+
+/**
+ * Adds a message to the device log tab.
+ * @param {string} msg Text to add to the log.
+ */
+Blast.Ui.addToLog = function(msg) {
+  const log = document.getElementById('content_deviceLogs');
+  const escaped = msg.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  // Generate timestamp.
+  const date = new Date();
+  const time = ('0' + date.getHours()).slice(-2) + ':' +
+      ('0' + date.getMinutes()).slice(-2) + ':' +
+      ('0' + date.getSeconds()).slice(-2);
+  const timestamp = '[' + time + '] ';
+  const logEntry = timestamp + escaped;
+  // Add logEntry to textArea.
+  log.innerHTML = log.innerHTML + logEntry + '\r\n';
+  // Scroll to bottom.
+  log.scrollTop = log.scrollHeight;
 };
 
 /**

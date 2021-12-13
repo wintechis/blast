@@ -9,17 +9,12 @@
 
 Blockly.Blocks['blinkstick_set_colors'] = {
   init: function() {
+    this.appendValueInput('COLOUR')
+        .setCheck('Colour')
+        .appendField('write colour property');
     this.appendValueInput('index')
         .setCheck('Number')
-        .appendField('write color properties of LED');
-    this.appendValueInput('red')
-        .appendField('red');
-    this.appendValueInput('green')
-        .setCheck('Number')
-        .appendField('green');
-    this.appendValueInput('blue')
-        .setCheck('Number')
-        .appendField('blue');
+        .appendField('of LED #');
     this.appendValueInput('thing')
         .setCheck('Thing')
         .appendField('to BlinkStick');
@@ -40,19 +35,9 @@ const BLINKSTICK_SET_COLORS_XML = `
       <field name="NUM">0</field>
     </block>
   </value>
-  <value name="red">
-    <block type="math_number">
-      <field name="NUM">0</field>
-    </block>
-  </value>
-  <value name="green">
-    <block type="math_number">
-      <field name="NUM">0</field>
-    </block>
-  </value>
-  <value name="blue">
-    <block type="math_number">
-      <field name="NUM">0</field>
+  <value name="COLOUR">
+    <block type="colour_picker">
+      <field name="COLOUR">#00ff00</field>
     </block>
   </value>
 </block>

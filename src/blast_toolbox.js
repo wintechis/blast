@@ -58,10 +58,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [
-        {kind: 'BLOCK', type: 'repeat'},
         {kind: 'BLOCK', type: 'while_until'},
-        {kind: 'BLOCK', type: 'for'},
-        {kind: 'BLOCK', type: 'wait_seconds'},
         {kind: 'BLOCK', type: 'break_continue'},
         {kind: 'BLOCK', type: 'conditional_statement'},
       ],
@@ -84,6 +81,13 @@ const defaultToolbox = {
       name: 'Functions',
       colour: '290',
       custom: 'PROCEDURE',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Variables',
+      custom: 'VARIABLE',
+      colour: '330',
     },
     {
       kind: 'sep',
@@ -124,15 +128,13 @@ const defaultToolbox = {
       colour: '210',
     },
     {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
+      contents: [
+        {kind: 'BLOCK', type: 'colour_picker'},
+        {kind: 'BLOCK', type: 'colour_random'},
+      ],
+      name: 'Colours',
+      colour: '20',
     },
   ],
 };

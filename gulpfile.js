@@ -4,11 +4,20 @@
  */
 
 const gulp = require('gulp');
+const rev = require('gulp-rev');
+const revRewrite = require('gulp-rev-rewrite');
+const del = require('del');
 const closureCompiler = require('google-closure-compiler').gulp();
 const shell = require('gulp-shell');
 const workboxBuild = require('workbox-build');
 
 gulp.task('jsdoc', shell.task(['./node_modules/.bin/jsdoc src -d docs/jsdoc']));
+
+gulp.task('clean', () => {
+  return del([
+    './blast-*.min.js',
+  ]);
+});
 
 gulp.task('closureCompiler', function() {
   return gulp.src(['src/**/*.js'],
@@ -17,7 +26,10 @@ gulp.task('closureCompiler', function() {
           closureCompiler({
             js_output_file: 'blast.min.js',
           }))
-      .pipe(gulp.dest('./js'));
+      .pipe(rev())
+      .pipe(gulp.src(['src/index.html']))
+      .pipe(revRewrite())
+      .pipe(gulp.dest('./'));
 });
 
 gulp.task('workbox', function() {
