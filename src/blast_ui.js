@@ -18,7 +18,7 @@ goog.provide('Blast.Ui');
  * @type {Array.<string>}
  * @private
  */
- Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
+Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
 
 /**
  * Name of currently selected tab.
