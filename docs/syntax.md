@@ -4,6 +4,7 @@
 
 * What is a good way to specify a textual syntax for the visual blocks? Hint: Merino et al. Getting Grammars into Shape for Block-Based Editors, 2021
 * Should we create a dedicated language or just use JavaScript as the syntax of BLAST programs?
+* How to handle objects in BLAST? Currently we have primitive data types (string, number, boolean) and one class (colour)... what about HTTP requests? HTTP responses? Results of SPARQL SELECT queries? Triples/graphs? Results of SPARQL CONSTRUCT/DESCRIBE queries? Eddystone outputs?
 * ...
 
 ## Introduction
