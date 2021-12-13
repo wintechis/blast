@@ -46,11 +46,11 @@ Blockly.Blocks['huskylens_choose_algo'] = {
 Blast.Toolbox.addBlock('huskylens_choose_algo', 'Properties');
 
 
-Blockly.Blocks['huskylens_write_face_id'] = {
+Blockly.Blocks['huskylens_write_id'] = {
   init: function() {
     this.appendValueInput('ID')
         .setCheck('Number')
-        .appendField('write face ID property');
+        .appendField('write ID property');
     this.appendValueInput('Thing')
         .setCheck('Thing')
         .appendField('to HuskyDuino');
@@ -58,7 +58,7 @@ Blockly.Blocks['huskylens_write_face_id'] = {
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('Sets the ID of the face currently on camera. ID shoud be a value between 1 and 255');
+    this.setTooltip('Sets the ID of the object currently on camera. ID shoud be a value between 1 and 255');
     this.setHelpUrl('');
   },
 
@@ -76,8 +76,8 @@ Blockly.Blocks['huskylens_write_face_id'] = {
 };
 
 // Define inner blocks XML for the huskylens_write_face_id block.
-const HUSKYLENS_WRITE_FACE_ID_XML = `
-<block type="huskylens_write_face_id">
+const HUSKYLENS_WRITE_ID_XML = `
+<block type="huskylens_write_id">
   <value name="ID">
     <block type="math_number">
       <field name="NUM">1</field>
@@ -86,7 +86,7 @@ const HUSKYLENS_WRITE_FACE_ID_XML = `
 </block>
 `;
 // Add the huskylens_write_face_id block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_write_face_id', 'Properties', HUSKYLENS_WRITE_FACE_ID_XML);
+Blast.Toolbox.addBlock('huskylens_write_id', 'Properties', HUSKYLENS_WRITE_ID_XML);
 
 
 Blockly.Blocks['huskylens_write_forget_flag'] = {
@@ -137,10 +137,10 @@ Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read face IDs property of HuskyDuino');
+        .appendField('read ID property of HuskyDuino');
     this.setOutput(true, 'String');
     this.setColour(255);
-    this.setTooltip('returns up to 5 IDs of the faces currently visible to the HuskyLens');
+    this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
     this.setHelpUrl('');
   },
 
