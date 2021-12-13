@@ -137,10 +137,10 @@ Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read face IDs property of HuskyDuino');
+        .appendField('read ID property of HuskyDuino');
     this.setOutput(true, 'String');
     this.setColour(255);
-    this.setTooltip('returns up to 5 IDs of the faces currently visible to the HuskyLens');
+    this.setTooltip('returns up to 5 IDs of the currently visible to the HuskyLens');
     this.setHelpUrl('');
   },
 
