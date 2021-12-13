@@ -197,12 +197,12 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
 
   try {
     Blast.Ui.addToLog(
-        `Invoke WriteValueWithoutResponse on characteristic <code>${characteristicUUID}</code>` +
-         ` with value <code>${value.toString()}</code>`, 'Bluetooth', id);
+        'Invoke <code>WriteValueWithoutResponse</code> on characteristic ' +
+        `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
     await characteristic.writeValueWithoutResponse(value);
     Blast.Ui.addToLog(
-        `Finished WriteValueWithoutResponse on characteristic <code>${characteristicUUID}</code>` +
-         ` with value <code>${value.toString()}</code>`, 'Bluetooth', id);
+        'Finished <code>WriteValueWithoutResponse</code> on characteristic ' +
+        `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -232,17 +232,15 @@ Blast.Bluetooth.gatt_writeWithResponse = async function(
   if (typeof value === 'string') {
     value = hexStringToArrayBuffer(value);
   }
-
-  console.log(value);
  
   try {
     Blast.Ui.addToLog(
-        `Invoke WriteValueWithResponse on characteristic <code>${characteristicUUID}</code>` +
-         ` with value <code>${value.toString()}</code>`, 'Bluetooth', id);
+        'Invoke <code>WriteValueWithResponse</code> on characteristic ' +
+        `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
     await characteristic.writeValueWithResponse(value);
     Blast.Ui.addToLog(
-        `Finished WriteValueWithResponse on characteristic <code>${characteristicUUID}</code>` +
-         ` with value <code>${value.toString()}</code>`, 'Bluetooth', id);
+        'Finished <code>WriteValueWithResponse</code> on characteristic ' +
+        `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
@@ -315,11 +313,11 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) 
   );
   try {
     Blast.Ui.addToLog(
-        `Invoke ReadValue on characteristic <code>${characteristicUUID}</code>` +
+        `Invoke <code>ReadValue</code> on characteristic <code>${characteristicUUID}</code>` +
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
     const value = await characteristic.readValue();
     Blast.Ui.addToLog(
-        `Finished ReadValue on characteristic <code>${characteristicUUID}</code>` +
+        `Finished <code>ReadValue</code> on characteristic <code>${characteristicUUID}</code>` +
          ` from service <code>${serviceUUID}</code> - value: <code>${value.toString()}</code>`, 'Bluetooth', id);
     return value;
   } catch (error) {
@@ -398,11 +396,11 @@ Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, charUUID, handl
   Blast.Bluetooth.charEventListeners[charUUID] = [characteristic, 'characteristicvaluechanged', handler];
   try {
     Blast.Ui.addToLog(
-        `Invoke startNotifications on characteristic ${charUUID}` +
+        `Invoke <code>startNotifications</code> on characteristic ${charUUID}` +
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
     await characteristic.startNotifications();
     Blast.Ui.addToLog(
-        `Finished startNotifications on characteristic ${charUUID}` +
+        `Finished <code>startNotifications</code> on characteristic ${charUUID}` +
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);

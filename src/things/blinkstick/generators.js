@@ -71,7 +71,9 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 
   const setColor = async function(retries) {
     try {
+      Blast.Ui.addToLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
       await device.sendFeatureReport(reportId, report);
+      Blast.Ui.addToLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
     } catch (error) {
       if (retries > 0) {
         await setColor(--retries);

@@ -120,6 +120,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
   }
 
   streamdeck.on(upDown, (keyIndex) => {
+    Blast.Ui.addToLog(`Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`, 'hid', device.productName);
     if (keyIndex === button) {
       // interrupt BLAST execution.
       Blast.Interrupted = true;
@@ -147,6 +148,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
   });
 
   Blast.cleanUpFunctions.push(() => {
+    Blast.Ui.addToLog('Removing all listeners', 'hid', device.productName);
     streamdeck.close();
     streamdeck.removeAllListeners();
   },
@@ -204,7 +206,9 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
   // fill selected buttons with color
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
+      Blast.Ui.addToLog(`Invoke <code>fillKeyColor</code> with value <code>${[i, red, green, blue].toString()}</code>`, 'hid', device.productName);
       await streamdeck.fillKeyColor(i, red, green, blue);
+      Blast.Ui.addToLog('Finished <code>fillKeyColor</code>', 'hid', device.productName);
     }
   }
 
@@ -306,7 +310,9 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
+      Blast.Ui.addToLog(`Invoke <code>fillKeyImageData</code> with value <code>${[i, imageData].toString()}</code>`, 'hid', device.productName);
       ps.push(streamdeck.fillKeyBuffer(i, buffer.Buffer.from(imageData.data), {format: 'rgba'}));
+      Blast.Ui.addToLog('Finished <code>fillKeyImageData</code>', 'hid', device.productName);
     }
   }
 
@@ -374,7 +380,9 @@ const streamdeckSetBrightness = async function(id, value, callback) {
     }
   }
 
+  Blast.Ui.addToLog(`Invoke <code>setBrightness</code> with value <code>${value}</code>`, 'hid', device.productName);
   await streamdeck.setBrightness(value);
+  Blast.Ui.addToLog('Finished <code>setBrightness</code>', 'hid', device.productName);
   callback();
 };
 

@@ -84,7 +84,10 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     if (!packet || !packet.actualOrientation) {
       return;
     }
+
+    Blast.Ui.addToLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productname);
     
+    Blast.Ui.addToLog('Removing <code>hidinput</code> event listener', 'hid', device.productname);
     joyCon.removeEventListener('hidinput', hidInputHandler);
     if (subValue2 !== '') {
       if (property === 'accelerometers') {
@@ -104,6 +107,7 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     await joyCon.enableStandardFullMode();
     await joyCon.enableIMUMode();
     await joyCon.enableVibration();
+    Blast.Ui.addToLog('Adding <code>hidinput</code> event listener', 'hid', device.productname);
     joyCon.addEventListener('hidinput', hidInputHandler);
 
     joyCon.eventListenerAttached = true;
@@ -187,6 +191,8 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
       return;
     }
 
+    Blast.Ui.addToLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productName);
+
     if (packet.buttonStatus[button]) {
       if (!pushedInLastPacket) {
         pushedInLastPacket = true;
@@ -225,6 +231,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     await joyCon.enableStandardFullMode();
     await joyCon.enableIMUMode();
     await joyCon.enableVibration();
+    Blast.Ui.addToLog('Adding <code>hidinput</code> event listener', 'hid', device.productName);
     joyCon.addEventListener('hidinput', hidInputHandler);
 
     joyCon.eventListenerAttached = true;

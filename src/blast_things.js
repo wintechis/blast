@@ -248,6 +248,7 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
  * Handles "connect via webHID" button in the things toolbox category.
  */
 Blast.Things.createWebHidButtonHandler = function() {
+  Blast.Ui.addToLog('Requesting webHID device...', 'HID');
   navigator.hid.requestDevice({filters: []})
       .then((device) => {
         if (device.length === 0) {
@@ -260,6 +261,7 @@ Blast.Things.createWebHidButtonHandler = function() {
         Blast.Things.webHidDevices.set(uid, device[0]);
         Blast.Things.addWebHidDevice(uid, device[0].productName);
         Blast.workspace.refreshToolboxSelection();
+        Blast.Ui.addToLog('Connected', 'HID', device[0].productName);
       })
       .catch((error) => {
         Blast.throwError(error);
