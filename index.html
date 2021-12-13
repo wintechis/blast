@@ -114,7 +114,7 @@
   <script src="js/lib/urdf/urdf-browser.js"></script>
 
   <!-- blast libraries -->
-  <script src="./blast-563daca9bf.min.js"></script>
+  <script src="./blast-81f6e41af4.min.js"></script>
 </head>
 
 <body>
@@ -128,6 +128,8 @@
             <td id="tab_javascript" class="taboff">JavaScript</td>
             <td class="tabmin">&nbsp;</td>
             <td id="tab_xml" class="taboff">XML</td>
+            <td class="tabmin">&nbsp;</td>
+            <td id="tab_deviceLogs" class="taboff">Device Logs</td>
             <td class="tabmin">&nbsp;</td>
             <td id="inputs_td" class="tabmin">
               <input list="samples" type="text" id="loadWorkspace-input"
@@ -242,6 +244,7 @@
   <div id="content_workspace" class="content"></div>
   <pre id="content_javascript" class="content prettyprint lang-js"></pre>
   <textarea id="content_xml" class="content" wrap="off"></textarea>
+  <textarea id="content_deviceLogs" class="content" wrap="off"></textarea>
 </body>
 <script>
   // Add service worker to the page
@@ -252,7 +255,7 @@
   });
 
   // Track current gulp revision for bug reporting
-  const rev = 'blast-563daca9bf.min.js';
+  const rev = 'blast-81f6e41af4.min.js';
 
   /**
    * Load XML from file.
