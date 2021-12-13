@@ -124,6 +124,63 @@ table {
   overflow: auto;
 }
 
+#content_deviceLogs {
+  font-family: "Ubuntu", Arial, sans-serif;
+  font-size: 12px;
+  padding: 5px;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+#content_deviceLogs div {
+  display: block;
+  font-family: monospace;
+  line-height: 20px;
+  margin: 2px;
+}
+
+.log-adapter {
+  border: 1px solid;
+  border-radius: 2px;
+  font-weight: bold;
+  height: 14px;
+  margin-inline-end: 5px;
+  margin-top: 2px;
+  padding: 0 4px 2px 4px;
+  width: 65px;
+}
+
+.log-bluetooth {
+  color: blue;
+}
+
+.log-eddystone {
+  color: cyan;
+}
+
+.log-hid {
+  color: blueviolet;
+}
+
+.log-device {
+  border: 1px solid;
+  border-radius: 2px;
+  font-weight: bold;
+  height: 14px;
+  margin-inline-end: 5px;
+  margin-top: 2px;
+  padding: 0 4px 2px 4px;
+}
+
+.log-message code {
+  font-family: ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace;
+  padding: 0.2em 0.4em;
+  margin: 0;
+  font-size: 85%;
+  background-color: rgb(175 184 193 / 20%);
+  border-radius: 6px;
+}
+
 .blocklySvg {
   border-top: none !important;
 }

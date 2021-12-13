@@ -221,21 +221,58 @@ Blast.Ui.renderContent_ = function() {
 /**
  * Adds a message to the device log tab.
  * @param {string} msg Text to add to the log.
+ * @param {string=} adapter The name of the adapter that generated the message.
+ * @param {string=} device The name of the device that generated the message.
  */
-Blast.Ui.addToLog = function(msg) {
+Blast.Ui.addToLog = function(msg, adapter, device) {
   const log = document.getElementById('content_deviceLogs');
-  const escaped = msg.replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/\n/g, '<br>');
+  // Create a new log item.
+  const logItem = document.createElement('div');
+  logItem.className = 'logItem';
+
+  // Add adapter and device if specified.
+  if (adapter) {
+    const adapterName = document.createElement('span');
+    adapterName.classList.add('log-adapter');
+    if (adapter.toLowerCase() === 'bluetooth') {
+      adapterName.textContent = 'Bluetooth';
+      adapterName.classList.add('log-bluetooth');
+    } else if (adapter.toUpperCase() === 'HID') {
+      adapterName.textContent = 'HID';
+      adapterName.classList.add('log-hid');
+    } else if (adapter.toLowerCase() === 'eddystone') {
+      adapterName.textContent = 'Eddystone';
+      adapterName.classList.add('log-eddystone');
+    } else {
+      adapterName.textContent = adapter;
+    }
+    logItem.appendChild(adapterName);
+  }
+  if (device) {
+    const deviceName = document.createElement('span');
+    deviceName.classList.add('log-device');
+    deviceName.textContent = device;
+    logItem.appendChild(deviceName);
+  }
+
   // Generate timestamp.
   const date = new Date();
   const time = ('0' + date.getHours()).slice(-2) + ':' +
       ('0' + date.getMinutes()).slice(-2) + ':' +
       ('0' + date.getSeconds()).slice(-2);
   const timestamp = '[' + time + '] ';
-  const logEntry = timestamp + escaped;
-  // Add logEntry to textArea.
-  log.innerHTML = log.innerHTML + logEntry + '\r\n';
-  // Scroll to bottom.
+  const timestampSpan = document.createElement('span');
+  timestampSpan.classList.add('log-timestamp');
+  timestampSpan.textContent = timestamp;
+  logItem.appendChild(timestampSpan);
+  // Generate the message
+  const msgSpan = document.createElement('span');
+  msgSpan.classList.add('log-message');
+  msgSpan.innerHTML = msg;
+  logItem.appendChild(msgSpan);
+
+  // Add log item to the log.
+  log.appendChild(logItem);
   log.scrollTop = log.scrollHeight;
 };
 
