@@ -59,3 +59,6 @@ Blockly.JavaScript['procedures_calleval'] = function(block) {
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+// Add console to JSInterpreter for debugging with the procedures_calleval block.
+Blast.apiFunctions.push(['log', console.log]);
