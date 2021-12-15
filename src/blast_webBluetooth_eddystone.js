@@ -417,9 +417,10 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
 /**
   * Sets the advertising data of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
-  * @param {string} url The URL to set.
+  * @param {string} frameType The frame type of the data to set.
+  * @param {string} data The data to set.
   */
-Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, url) {
+Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, frameType, data) {
   Blast.Ui.addToLog('Set Eddystone advertising data...', 'Eddystone', webBluetoothId);
   const encodeEddystoneUrl = function(url) {
     const URL_SCHEMES = [
@@ -482,15 +483,27 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, ur
     encodedUrl.splice(0, 0, 0x10);
     return new Uint8Array(encodedUrl);
   };
-     
-  const encodedUrl = encodeEddystoneUrl(url);
+  
+  let encodedData;
+  if (frameType === 'URL') {
+    encodedData = encodeEddystoneUrl(data);
+  } else if (frameType === 'UID') {
+    // Checks if the UID is 32 hex chars.
+    if (!/^[0-9A-Fa-f]{32}$/.test(data)) {
+      Blast.throwError('Eddystone UID must be 32 hexadecimal characters.');
+      return;
+    }
+    
+    // prefix the frame type
+    encodedData = '0x00' + data;
+  }
      
   const response = await Blast.Bluetooth.gatt_writeWithResponse(
       webBluetoothId,
       Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
       Blast.Bluetooth.Eddystone.UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
-      encodedUrl,
+      encodedData,
   );
-  Blast.Ui.addToLog(`Eddystone advertising data set to <code>${url}</code>`, 'Eddystone', webBluetoothId);
+  Blast.Ui.addToLog(`Eddystone advertising data set to <code>${data}</code>`, 'Eddystone', webBluetoothId);
   return response;
 };

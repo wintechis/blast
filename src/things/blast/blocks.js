@@ -267,8 +267,17 @@ Blockly.Blocks['write_eddystone_property'] = {
         .appendField('property at slot');
     this.appendValueInput('Slot')
         .setCheck('Number');
+    this.appendDummyInput('FrameType')
+        .appendField('frame type')
+        .appendField(
+            new Blockly.FieldDropdown([
+              ['UID', 'UID'],
+              ['URL', 'URL'],
+            ], this.frameTypeValidator), 'FrameType')
+        .setVisible(false);
     this.appendValueInput('Value')
-        .appendField('value');
+        .appendField('value')
+        .setCheck('Number');
     this.appendValueInput('Thing')
         .appendField('to eddystone device')
         .setCheck('Thing');
@@ -281,20 +290,21 @@ Blockly.Blocks['write_eddystone_property'] = {
   },
   propertyValidator: function(property) {
     const block = this.getSourceBlock();
-    block.removeInput('Value', true);
-    block.removeInput('Thing', true);
+    const frameType = block.getInput('FrameType');
+    frameType.setVisible(false);
     if (property == 'advertisementData') {
-      block.appendValueInput('Value')
-          .setCheck(['String', 'Number', 'URI'])
-          .appendField('value');
+      frameType.setVisible(true);
     } else {
-      block.appendValueInput('Value')
-          .setCheck('Number')
-          .appendField('value');
+      block.getInput('Value').setCheck('Number');
     }
-    block.appendValueInput('Thing')
-        .appendField('to eddystone device')
-        .setCheck('Thing');
+  },
+  frameTypeValidator: function(frameType) {
+    const block = this.getSourceBlock();
+    if (frameType === 'UID') {
+      block.getInput('Value').setCheck('String');
+    } else if (frameType === 'URL') {
+      block.getInput('Value').setCheck('URI');
+    }
   },
 };
 

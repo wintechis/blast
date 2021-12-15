@@ -376,8 +376,9 @@ Blockly.JavaScript['write_eddystone_property'] = function(block) {
       block,
       'Value',
       Blockly.JavaScript.ORDER_NONE) || null;
+  const frameType = Blockly.JavaScript.quote_(block.getFieldValue('FrameType'));
   
-  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${value});\n`;
+  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${frameType}, ${value});\n`;
   return code;
 };
 
@@ -389,10 +390,11 @@ Blast.Bluetooth.optionalServices.push(eddystoneServiceUUID);
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {number} slot The slot to write to.
  * @param {String} property The property to write.
+ * @param {String} frameType The eddystone frame type to write.
  * @param {String} value The value to write.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const writeEddystoneProperty = async function(webBluetoothId, slot, property, value, callback) {
+const writeEddystoneProperty = async function(webBluetoothId, slot, property, frameType, value, callback) {
   // make sure a device block is connected
   if (!webBluetoothId) {
     Blast.throwError('No bluetooth device set.');
@@ -423,7 +425,7 @@ const writeEddystoneProperty = async function(webBluetoothId, slot, property, va
       await Blast.Bluetooth.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
       break;
     case 'advertisementData':
-      await Blast.Bluetooth.Eddystone.setAdvertisingData(webBluetoothId, value);
+      await Blast.Bluetooth.Eddystone.setAdvertisingData(webBluetoothId, frameType, value);
       break;
     case 'advertisingInterval':
       await Blast.Bluetooth.Eddystone.setAdvertisingInterval(webBluetoothId, value);
