@@ -3,8 +3,8 @@ This document explains what happens when a block program gets executed.
 
 ## Questions
 
-* How to map the different low-level protocols to WoT?
-  + BLE GAP advertisements of the Ruuvi tags to WoT read property
+* How to map the different low-level protocols to WoT? To BLAST?
+  + BLE GAP advertisements of the Ruuvi tags to WoT read property (or should those be WoT Events?)
   + BLE Huskyduino forget flag to WoT action
   + BLE Xiaomi Mijia subscribe and notify to WoT read property (or rather: WoT observable property? handled similar to events)
 * How to handle BLE connect/disconnect (see https://github.com/wintechis/blast/issues/115)?
