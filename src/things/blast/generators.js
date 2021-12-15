@@ -223,38 +223,42 @@ Blockly.JavaScript['display_table'] = function(block) {
 };
 
 /**
- * Generates an HTML Table from a sparql query result.
+ * Generates an HTML Table from a sparql query result (array of arrays).
  * and add it to {@link Blast.Ui.messageOutputContainer}.
- * @param {graph} graph graph to output.
+ * @param {graph} arr graph to output.
  * @public
  */
-const displayTable = function(graph) {
+const displayTable = function(arr) {
+  arr = Blast.Interpreter.pseudoToNative(arr);
   // display message if table is empty
-  if (graph.length == 0) {
+  if (arr.length == 0) {
     Blast.Ui.addMessage('empty table');
     return;
   }
-  // deal with missing values
-  const vars = graph.reduce((list, res) => {
-    for (const v in res) {
-      if (list.indexOf(v) === -1) list.push(v);
-    }
-    return list;
-  }, []);
-  // Element for new table
-  let html = '<tr>';
-  vars.forEach((v) => (html += '<th>' + v + '</th>'));
-  html += '</tr>';
-
-  graph.forEach((res) => {
-    html += '<tr>';
-    vars.forEach((v) => (html += '<td>' + (res[v] ? res[v].value : '') + '</td>'));
-    html += '</tr>';
-  });
-
+  
+  // create table
   const table = document.createElement('table');
   table.classList.add('output_table');
-  table.innerHTML = html;
+
+  console.log(arr);
+
+  // insert rows
+  for (const row of arr) {
+    const tr = document.createElement('tr');
+    if (row === undefined) {
+      continue;
+    }
+    for (const value of row) {
+      if (value === undefined) {
+        continue;
+      }
+      const td = document.createElement('td');
+      td.innerHTML = value;
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+
   // Insert new table
   Blast.Ui.addElementToOutputContainer(table);
 };

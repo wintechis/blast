@@ -180,7 +180,7 @@ Blockly.Blocks['display_table'] = {
         */
   init: function() {
     this.appendValueInput('table')
-        .setCheck(['table'])
+        .setCheck(['Array'])
         .appendField('display table:');
     this.setColour(0);
     this.setTooltip('Add data output to the container on the right.');
