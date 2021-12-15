@@ -1,0 +1,64 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="lbj7le[!.vU:KMO#{+7U">i</variable>
+  </variables>
+  <block type="for" x="67" y="65">
+    <field name="VAR" id="lbj7le[!.vU:KMO#{+7U">i</field>
+    <value name="FROM">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="TO">
+      <block type="math_number">
+        <field name="NUM">1000</field>
+      </block>
+    </value>
+    <value name="BY">
+      <block type="math_number">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="display_text">
+        <value name="text">
+          <block type="variables_get">
+            <field name="VAR" id="lbj7le[!.vU:KMO#{+7U">i</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="event_every_minutes" x="645" y="63">
+    <value name="minutes">
+      <block type="number_value">
+        <field name="NUM">0.016</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text">
+        <value name="text">
+          <block type="string">
+            <field name="TEXT">1 second passed</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="event_every_minutes" x="631" y="205">
+    <value name="minutes">
+      <block type="number_value">
+        <field name="NUM">0.032</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text">
+        <value name="text">
+          <block type="string">
+            <field name="TEXT">2 seconds passed</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
