@@ -81,8 +81,13 @@ Blast.Things.flyoutCategory = function(workspace) {
   xmlList.push(identifiersLabel);
 
   // add uri block to xmlList
-  const block = Blockly.utils.xml.createElement('block');
+  let block = Blockly.utils.xml.createElement('block');
   block.setAttribute('type', 'uri');
+  xmlList.push(block);
+
+  // add uri_from_string block to xmlList
+  block = Blockly.utils.xml.createElement('block');
+  block.setAttribute('type', 'uri_from_string');
   xmlList.push(block);
 
   // temporarily comment out unused mac block, see #69

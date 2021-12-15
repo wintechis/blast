@@ -38,3 +38,19 @@ Blockly.Blocks['uri'] = {
     this.setHelpUrl('');
   },
 };
+
+Blockly.Blocks['uri_from_string'] = {
+  /**
+   * Block parsing an URI from a string.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendValueInput('URI')
+        .setCheck('String')
+        .appendField('URI from string');
+    this.setOutput(true, 'URI');
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
