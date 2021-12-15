@@ -57,6 +57,12 @@ Blast.States.eventCode = new Map();
 Blast.States.eventValues = new Map();
 
 /**
+ * Array containing all interval events.
+ * @type {!Array<!Number>}
+ */
+Blast.States.intervalEvents = [];
+
+/**
  * Compares a given state condition with its' previous value.
  * @param {Blockly.Block.id} blockId id of the state definition block.
  * @param {boolean} curValue the current condition evaluated.
@@ -253,6 +259,11 @@ Blast.States.rename = function(name) {
  */
 Blast.States.flyoutCategory = function(workspace) {
   const xmlList = [];
+  // add event_every_minutes block
+  const eventEveryMinutes = Blockly.utils.xml.createElement('block');
+  eventEveryMinutes.setAttribute('type', 'event_every_minutes');
+  xmlList.push(eventEveryMinutes);
+
   if (Blockly.Blocks['state_definition']) {
     const block = Blockly.utils.xml.createElement('block');
     block.setAttribute('type', 'state_definition');
@@ -356,4 +367,11 @@ Blast.States.getDefinition = function(name, workspace) {
     }
   }
   return null;
+};
+
+Blast.States.clearIntervalEvents = function() {
+  for (const event of Blast.States.intervalEvents) {
+    clearInterval(event);
+  }
+  Blast.States.intervalEvents = [];
 };

@@ -49,3 +49,57 @@ Blockly.JavaScript['event'] = function(block) {
   return null;
 };
 
+Blockly.JavaScript['event_every_minutes'] = function(block) {
+  // read block inputs
+  const minutes = Blockly.JavaScript.valueToCode(
+      block,
+      'minutes',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+  const statements = Blockly.JavaScript.quote_(
+      Blockly.JavaScript.statementToCode(block, 'statements'),
+  );
+
+  // When an event block is in the workspace start the event interpreter
+  Blockly.JavaScript.definitions_[block.id] =
+  `addIntervalEvent(${minutes}, ${statements});\n`;
+
+  return null;
+};
+
+/**
+ * Executes statements every x minutes.
+ * @param {!number} minutes minutes to wait.
+ * @param {!string} statements statements to execute.
+ */
+const addIntervalEvent = (minutes, statements) => {
+  const func = function() {
+  // interrupt BLAST execution
+    Blast.Interrupted = false;
+
+    const interpreter = new Interpreter('');
+    interpreter.stateStack[0].scope = Blast.Interpreter.globalScope;
+    interpreter.appendCode(statements);
+
+    const interruptRunner_ = function() {
+      try {
+        const hasMore = interpreter.step();
+        if (hasMore) {
+          setTimeout(interruptRunner_, 5);
+        } else {
+        // Continue BLAST execution.
+          Blast.Interrupted = false;
+        }
+      } catch (error) {
+        Blast.throwError(`Error executing program:\n ${e}`);
+        console.error(error);
+      }
+    };
+    interruptRunner_();
+  };
+
+  const interval = setInterval(func, minutes * 60000);
+  Blast.States.intervalEvents.push(interval);
+};
+
+Blast.apiFunctions.push(['addIntervalEvent', addIntervalEvent]);

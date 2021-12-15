@@ -271,6 +271,7 @@ Blast.resetInterpreter = function() {
   }
   Blast.Bluetooth.tearDown();
   Blast.removeDeviceHandlers();
+  Blast.States.clearIntervalEvents();
   
   for (const func of Blast.cleanUpFunctions) {
     func();
