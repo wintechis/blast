@@ -51,28 +51,43 @@ Blockly.JavaScript['event'] = function(block) {
 
 Blockly.JavaScript['event_every_minutes'] = function(block) {
   // read block inputs
-  const minutes = Blockly.JavaScript.valueToCode(
+  const value = Blockly.JavaScript.valueToCode(
       block,
-      'minutes',
+      'value',
       Blockly.JavaScript.ORDER_NONE,
-  );
+  ) || 0;
+  const unit = block.getFieldValue('units');
   const statements = Blockly.JavaScript.quote_(
       Blockly.JavaScript.statementToCode(block, 'statements'),
   );
 
+  let seconds;
+  if (unit === 'seconds') {
+    seconds = value;
+  } else if (unit === 'minutes') {
+    seconds = value * 60;
+  } else if (unit === 'hours') {
+    seconds = value * 60 * 60;
+  }
+
   // When an event block is in the workspace start the event interpreter
   Blockly.JavaScript.definitions_[block.id] =
-  `addIntervalEvent(${minutes}, ${statements});\n`;
+  `addIntervalEvent(${seconds}, ${statements});\n`;
 
   return null;
 };
 
 /**
- * Executes statements every x minutes.
- * @param {!number} minutes minutes to wait.
+ * Executes statements every x seconds.
+ * @param {!number} seconds seconds to wait.
  * @param {!string} statements statements to execute.
  */
-const addIntervalEvent = (minutes, statements) => {
+const addIntervalEvent = (seconds, statements) => {
+  if (seconds === undefined || typeof seconds !== 'number' || seconds <= 0) {
+    Blast.throwError('Timed event interval must be a number greater than 0.');
+    return;
+  }
+
   const func = function() {
   // interrupt BLAST execution
     Blast.Interrupted = false;
@@ -98,7 +113,7 @@ const addIntervalEvent = (minutes, statements) => {
     interruptRunner_();
   };
 
-  const interval = setInterval(func, minutes * 60000);
+  const interval = setInterval(func, seconds * 1000);
   Blast.States.intervalEvents.push(interval);
 };
 

@@ -18,7 +18,8 @@ Blockly.Blocks['state_definition'] = {
     this.appendValueInput('state_condition')
         .setCheck('Boolean')
         .appendField('define state')
-        .appendField(nameField, 'NAME');
+        .appendField(nameField, 'NAME')
+        .appendField('condition');
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
@@ -213,11 +214,16 @@ Blockly.Blocks['event_every_minutes'] = {
    * @this Blockly.Block
    */
   init: function() {
-    this.appendValueInput('minutes')
+    this.appendValueInput('value')
         .setCheck('Number')
         .appendField('every');
-    this.appendDummyInput()
-        .appendField('minutes');
+    this.appendDummyInput('units')
+        .appendField(
+            new Blockly.FieldDropdown([
+              ['seconds', 'seconds'],
+              ['minutes', 'minutes'],
+              ['hours', 'hours'],
+            ]), 'units');
     this.appendStatementInput('statements')
         .appendField('do');
     this.setColour(180);
