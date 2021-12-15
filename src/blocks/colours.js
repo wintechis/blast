@@ -1,5 +1,5 @@
 /**
- * @fileoverview Control flow blocks for Blast.
+ * @fileoverview Colour blocks for Blast.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */

@@ -311,13 +311,13 @@ Blast.runJS = function() {
         try {
           if (Blast.Interrupted) {
             // Execution is currently interrupted, try again later.
-            setTimeout(Blast.runner_, 5);
+            setTimeout(Blast.runner_, 1);
           } else {
             const hasMore = Blast.Interpreter.step();
             if (hasMore) {
               // Execution is currently blocked by some async call.
               // Try again later.
-              setTimeout(Blast.runner_, 5);
+              setTimeout(Blast.runner_, 1);
             } else if (Blast.States.Interpreter || Blast.eventInWorkspace.length > 0) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.

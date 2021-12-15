@@ -112,7 +112,7 @@ Blockly.Blocks['sparql_query'] = {
     );
     this.setInputsInline(false);
     this.setColour(0);
-    this.setOutput(true, 'table');
+    this.setOutput(true, 'Array');
     this.setTooltip('Executes a sparql query');
   },
 };
@@ -161,7 +161,7 @@ Blockly.Blocks['display_text'] = {
         */
   init: function() {
     this.appendValueInput('text')
-        .setCheck(['String', 'Number', 'Boolean', 'URI', 'Thing'])
+        .setCheck(['String', 'Number', 'Boolean', 'URI', 'Thing', 'Array'])
         .appendField('display text:');
     this.setColour(0);
     this.setTooltip('Add text output to the container on the right.');

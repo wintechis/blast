@@ -150,12 +150,29 @@ const urdfQueryWrapper = async function(uri, format, query, callback) {
     urdf.clear();
     const opts = {format: format};
     await urdf.load(response, opts);
-    const result = await urdf.query(query);
-
-    callback(result);
+    res = await urdf.query(query);
   } catch (error) {
     Blast.throwError(`Failed to get ${uri}, Error: ${error.message}`);
   }
+
+  // if result is a boolean, return it.
+  if (typeof res === 'boolean') {
+    callback(res);
+  }
+
+  // Convert result from array of objects to array of arrays.
+  const resultArray = new Array(res.length);
+  for (const obj of res) {
+    const resultArrayRow = new Array(Object.keys(obj).length);
+    for (const value of Object.values(obj)) {
+      resultArrayRow.push(value.value);
+    }
+    resultArray.push(resultArrayRow);
+  }
+
+  const interpreterObj = Blast.Interpreter.nativeToPseudo(resultArray);
+
+  callback(interpreterObj);
 };
 // add urdfQueryWrapper method to the interpreter's API.
 Blast.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
