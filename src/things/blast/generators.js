@@ -121,7 +121,7 @@ Blockly.JavaScript['sparql_ask'] = function(block) {
   // escape " quotes and replace linebreaks (\n) with \ in query
   query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
     
-  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}'')`;
+  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
     
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -158,6 +158,7 @@ const urdfQueryWrapper = async function(uri, format, query, callback) {
   // if result is a boolean, return it.
   if (typeof res === 'boolean') {
     callback(res);
+    return;
   }
 
   // Convert result from array of objects to array of arrays.
