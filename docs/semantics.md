@@ -4,8 +4,9 @@ This document explains what happens when a block program gets executed.
 ## Questions
 
 * How to map the different low-level protocols to WoT? To BLAST?
-  + BLE GAP advertisements of the Ruuvi tags to WoT read property (or should those be WoT Events?)
+  + BLE GAP advertisements of the Ruuvi tags to WoT read property (or should those be WoT events?)
   + BLE Huskyduino forget flag to WoT action
+  + BLE Huskyduino face detection/object detection as WoT events?
   + BLE Xiaomi Mijia subscribe and notify to WoT read property (or rather: WoT observable property? handled similar to events)
 * How to handle BLE connect/disconnect (see https://github.com/wintechis/blast/issues/115)?
 * How to make BLAST programs appear to execute synchronously while JavaScript programs executes asynchronously?
