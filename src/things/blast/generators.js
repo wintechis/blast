@@ -394,7 +394,8 @@ Blast.Bluetooth.optionalServices.push(eddystoneServiceUUID);
  * @param {String} value The value to write.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const writeEddystoneProperty = async function(webBluetoothId, slot, property, frameType, value, callback) {
+const writeEddystoneProperty = async function(
+    webBluetoothId, slot, property, frameType, value, callback) {
   // make sure a device block is connected
   if (!webBluetoothId) {
     Blast.throwError('No bluetooth device set.');
