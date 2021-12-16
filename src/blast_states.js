@@ -138,7 +138,7 @@ Blast.States.startEventChecker = function() {
         setTimeout(Blast.States.runner_, 5);
       } catch (error) {
         Blockly.alert('Error executing program:\n%e'.replace('%e', error));
-        Blast.setStatus(Blast.status.ERROR);
+        Blast.Ui.setStatus(Blast.status.ERROR);
         Blast.resetInterpreter();
         console.error(error);
       }
