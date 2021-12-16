@@ -318,7 +318,7 @@ Blast.runJS = function() {
             if (hasMore) {
               // Execution is currently blocked by some async call.
               // Try again later.
-              setTimeout(Blast.runner_, 1);
+              setTimeout(Blast.runner_, 5);
             } else if (Blast.States.Interpreter || Blast.eventInWorkspace.length > 0) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.
