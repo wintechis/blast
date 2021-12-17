@@ -283,7 +283,6 @@ Blockly.JavaScript['play_audio'] = function(block) {
 /**
  * Plays an audio file provided by URI.
  * @param {string} uri URI of the audio file to play.
- * @returns {Promise} resolves on end of audio playback.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
@@ -303,6 +302,61 @@ const playAudio = async function(uri, callback) {
 };
 // add playAudio method to the interpreter's API.
 Blast.asyncApiFunctions.push(['playAudio', playAudio]);
+
+/**
+ * Generates JavaScript code for the capture_image block.
+ * @param {Blockly.Block} block the play_audio block.
+ * @returns {String} the generated code.
+ */
+// eslint-disable-next-line no-unused-vars
+Blockly.JavaScript['capture_image'] = function(block) {
+  const code = 'captureImage()';
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+/**
+ * Captures a snapshot from camera and returns it as a base64 encoded string.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const captureImage = async function(callback) {
+  console.log('captureImage');
+  const videoElem = document.createElement('video');
+  videoElem.id = 'video';
+  videoElem.setAttribute('autoplay', 'autoplay');
+  videoElem.setAttribute('muted', true);
+  videoElem.style.display = 'none';
+  document.body.appendChild(videoElem);
+  // Request access to the camera.
+  const constraints = {
+    video: true,
+  };
+  const stream = await navigator.mediaDevices.getUserMedia(constraints);
+  videoElem.srcObject = stream;
+  console.log(videoElem);
+  // draw stream to canvas
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  // wait for video to load
+  await new Promise((resolve, reject) => {
+    videoElem.onloadedmetadata = () => {
+      canvas.width = videoElem.videoWidth;
+      canvas.height = videoElem.videoHeight;
+      context.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
+      resolve();
+    };
+  });
+  const data = canvas.toDataURL('image/png');
+
+  // remove canvas and video element
+  videoElem.srcObject.getTracks().forEach((track) => track.stop());
+  videoElem.remove();
+  canvas.remove();
+
+  callback(data);
+};
+
+// add capture_image method to the interpreter's API.
+Blast.asyncApiFunctions.push(['captureImage', captureImage]);
 
 /*******************
  * Property blocks.*

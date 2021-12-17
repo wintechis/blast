@@ -210,6 +210,31 @@ Blockly.Blocks['play_audio'] = {
 };
 // Add play_audio block to the toolbox.
 Blast.Toolbox.addBlock('play_audio', 'Actions');
+
+Blockly.Blocks['capture_image'] = {
+  /**
+   * Block for capturing an image from a camera.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendDummyInput()
+        .appendField('capture image from camera');
+    this.setOutput(true, 'String');
+    this.setColour(0);
+    this.setTooltip('Captures an image from a camera.');
+    this.setHelpUrl('');
+  },
+  onChange: function() {
+    // Check if browser supports camera.
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      this.setWarningText('Your browser does not support mediaDevices.');
+    }
+  },
+};
+
+// Add capture_image block to the toolbox.
+Blast.Toolbox.addBlock('capture_image', 'Actions');
+
  
 /*******************
   * Property blocks.*
@@ -230,7 +255,6 @@ Blockly.Blocks['get_signal_strength_wb'] = {
     this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
     this.setHelpUrl('');
     this.firstTime = true;
-    this.requested = false;
     this.deviceId = '';
   },
   onchange: function() {
