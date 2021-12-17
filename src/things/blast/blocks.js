@@ -219,7 +219,7 @@ Blockly.Blocks['capture_image'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('capture image from camera');
-    this.setOutput(true, 'String');
+    this.setOutput(true, 'Image');
     this.setColour(0);
     this.setTooltip('Captures an image from a camera.');
     this.setHelpUrl('');
