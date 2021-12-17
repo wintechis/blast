@@ -341,6 +341,11 @@ const captureImage = async function(callback) {
       context.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
       resolve();
     };
+    video.onerror = ((error) => {
+      Blast.throwError('Error trying to capture image from camera. See console for details');
+      console.error(error);
+      reject(error);
+    });
   });
   const data = canvas.toDataURL('image/png');
 
