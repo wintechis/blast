@@ -240,8 +240,6 @@ const displayTable = function(arr) {
   const table = document.createElement('table');
   table.classList.add('output_table');
 
-  console.log(arr);
-
   // insert rows
   for (const row of arr) {
     const tr = document.createElement('tr');
@@ -319,7 +317,7 @@ Blockly.JavaScript['capture_image'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const captureImage = async function(callback) {
-  console.log('captureImage');
+  // Create video element.
   const videoElem = document.createElement('video');
   videoElem.id = 'video';
   videoElem.setAttribute('autoplay', 'autoplay');
@@ -332,7 +330,6 @@ const captureImage = async function(callback) {
   };
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   videoElem.srcObject = stream;
-  console.log(videoElem);
   // draw stream to canvas
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
