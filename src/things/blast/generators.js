@@ -360,6 +360,36 @@ const captureImage = async function(callback) {
 // add capture_image method to the interpreter's API.
 Blast.asyncApiFunctions.push(['captureImage', captureImage]);
 
+/**
+ * Generates JavaScript code for the capture_image block.
+ * @param {Blockly.Block} block the display_image block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['display_image'] = function(block) {
+  const image = Blockly.JavaScript.valueToCode(
+      block,
+      'image',
+      Blockly.JavaScript.ORDER_NONE,
+  );
+
+  const code = `displayImage(${image});\n`;
+  return code;
+};
+
+/**
+ * Adds an image to {@link Blast.Ui.messageOutputContainer}.
+ * @param {string} image base64 encoded image.
+ */
+const displayImage = function(image) {
+  const img = document.createElement('img');
+  img.src = image;
+  img.classList.add('output_image');
+  Blast.Ui.addElementToOutputContainer(img);
+};
+
+// Add displayImage method to the interpreter's API.
+Blast.apiFunctions.push(['displayImage', displayImage]);
+
 /*******************
  * Property blocks.*
  *******************/

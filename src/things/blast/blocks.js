@@ -235,6 +235,25 @@ Blockly.Blocks['capture_image'] = {
 // Add capture_image block to the toolbox.
 Blast.Toolbox.addBlock('capture_image', 'Actions');
 
+Blockly.Blocks['display_image'] = {
+  /**
+   * Block for displaying an image.
+   * @this {Blockly.Block}
+   */
+  init: function() {
+    this.appendValueInput('image')
+        .setCheck('Image')
+        .appendField('display image');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('Displays an image.');
+    this.setHelpUrl('');
+  },
+};
+
+// Add display_image block to the toolbox.
+Blast.Toolbox.addBlock('display_image', 'Actions');
  
 /*******************
   * Property blocks.*
