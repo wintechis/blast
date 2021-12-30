@@ -78,6 +78,7 @@ const sendHttpRequest = async function(
 
     if (output == 'status') {
       callback(res.status);
+      return;
     }
 
     const response = await res.text();
