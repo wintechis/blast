@@ -277,6 +277,27 @@ Blast.Ui.addToLog = function(msg, adapter, device) {
 };
 
 /**
+ * Removes all children from the {@link Blast.Ui.messageOutputContainer}
+ */
+Blast.Ui.ClearOutputContainer = function() {
+  const container = Blast.Ui.messageOutputContainer;
+  while (container.lastChild.id !== 'clearOutputButton') {
+    console.log(container.lastChild.id);
+    container.removeChild(container.lastChild);
+  }
+};
+
+/**
+ * Removes all children from the device log tab.
+ */
+Blast.Ui.ClearLog = function() {
+  const log = document.getElementById('content_deviceLogs');
+  while (log.lastChild.id !== 'clearDeviceLogsButton') {
+    log.removeChild(log.lastChild);
+  }
+};
+
+/**
  * Set the start/stop button and status text.
  * @param {Blast.status} status new Blast status text.
  * @public
@@ -337,6 +358,8 @@ Blast.Ui.init = function() {
   Blast.bindClick('saveButton', () => {
     Blast.Storage.link(true);
   });
+  Blast.bindClick('clearDeviceLogsButton', Blast.Ui.ClearLog);
+  Blast.bindClick('clearOutputButton', Blast.Ui.ClearOutputContainer);
 
   // load blocks from URI on Enter
   Blast.Ui.uriInput.addEventListener('keyup', (event) => {
