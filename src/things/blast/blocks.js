@@ -44,13 +44,13 @@ Blockly.Blocks['http_request'] = {
             ),
             'METHOD',
         );
-    this.appendDummyInput().appendField('headers (comma separated)');
-    this.appendDummyInput().appendField(
-        new Blockly.FieldTextInput(
-            '"Content-Type": "application/json", "Accept": "application/json"',
-        ),
-        'HEADERS',
-    );
+    this.appendValueInput('headers')
+        .appendField('headers')
+        .setCheck('String');
+    this.appendValueInput('body')
+        .appendField('body')
+        .setCheck('String')
+        .setVisible(false);
     this.setOutput(true, 'String');
     this.setTooltip('Invokes a HTTP request.');
     this.setColour(0);
@@ -62,29 +62,53 @@ Blockly.Blocks['http_request'] = {
   },
 
   updateInputs: function(newValue) {
-    this.removeInput('BODYINPUT', /* no error */ true);
-     
-    if (newValue != 'GET') {
-      this.appendDummyInput('BODYINPUT').appendField('body').appendField(
-          new Blockly.FieldMultilineInput(`{
-     "object": {
-       "a": "b",
-       "c": "d",
-       "e": "f"
-     },
-     "array": [
-       1,
-       2
-     ],
-     "string": "Hello World"
-     }`),
-          'BODY',
-      );
+    const bodyInput = this.getInput('body');
+    if (newValue == 'GET') {
+      bodyInput.setVisible(false);
+    } else {
+      bodyInput.setVisible(true);
     }
   },
 };
+// Define http_request default xml.
+const HTTP_REQUEST_XML = `
+<block type="http_request">
+  <value name="uri">
+    <block type="uri_from_string">
+      <value name="URI">
+        <block type="string">
+          <field name="TEXT">https://example.com</field>
+        </block>
+      </value>
+    </block>
+  </value>
+  <value name="headers">
+    <block type="string">
+      <field name="TEXT">"Content-Type": "application/json", "Accept": "application/json"</field>
+    </block>
+  </value>
+  <value name="body">
+    <block type="string_multiline">
+      <field name="TEXT">
+{
+  "object": {
+    "a": "b",
+    "c": "d",
+    "e": "f"
+  },
+  "array": [
+    1,
+    2
+  ],
+  "string": "Hello World"
+}
+      </field>
+    </block>
+  </value>
+</block>`;
+
 // Add http_request block to the toolbox.
-Blast.Toolbox.addBlock('http_request', 'Requests and Queries');
+Blast.Toolbox.addBlock('http_request', 'Requests and Queries', HTTP_REQUEST_XML);
  
 Blockly.Blocks['sparql_query'] = {
   /**

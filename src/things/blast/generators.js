@@ -16,16 +16,23 @@
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['http_request'] = function(block) {
-  const uri =
-        Blockly.JavaScript.valueToCode(
-            block,
-            'uri',
-            Blockly.JavaScript.ORDER_NONE,
-        ) || null;
+  const uri = Blockly.JavaScript.valueToCode(
+      block,
+      'uri',
+      Blockly.JavaScript.ORDER_NONE,
+  ) || null;
   const method = block.getFieldValue('METHOD');
-  const headers = block.getFieldValue('HEADERS');
+  const headers = Blockly.JavaScript.valueToCode(
+      block,
+      'header',
+      Blockly.JavaScript.ORDER_NONE,
+  );
   const output = block.getFieldValue('OUTPUT');
-  const body = JSON.stringify(block.getFieldValue('BODY')) || null;
+  const body = Blockly.JavaScript.valueToCode(
+      block,
+      'body',
+      Blockly.JavaScript.ORDER_NONE,
+  );
     
   const code = `sendHttpRequest(${uri},'${method}', 
       '{${headers}}', ${body}, '${output}')\n`;
@@ -51,13 +58,16 @@ const sendHttpRequest = async function(
     Blast.throwError('URI input of HttpRequest blocks must not be empty');
   }
 
+  console.log(headersString);
   const headersJSON = JSON.parse(headersString);
+  console.log(headersJSON);
   const requestOptions = {
     method: method,
     headers: new Headers(headersJSON),
   };
 
   if (body) {
+    console.log(body);
     requestOptions.body = body;
   }
 
