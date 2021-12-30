@@ -6,7 +6,13 @@
  */
 'use strict';
 
-goog.provide('Blast.Toolbox');
+/**
+ * The namespace used to access the Blast library.
+ * @name Blast.Ui
+ * @namespace
+ */
+goog.module('Blast.Toolbox');
+goog.module.declareLegacyNamespace();
 
 const defaultToolbox = {
   kind: 'categoryToolbox',
@@ -178,32 +184,35 @@ const defaultToolbox = {
  * @type {Blockly.toolbox}
  * @public
  */
-Blast.Toolbox.currentToolbox = defaultToolbox;
+const currentToolbox = defaultToolbox;
+exports.currentToolbox = currentToolbox;
 
 /**
  * Initialize the toolbox
  */
-Blast.Toolbox.init = function() {
+const init = function() {
   // register states category flyout callback
   Blast.workspace.registerToolboxCategoryCallback('STATES', Blast.States.flyoutCategory);
 
   // register things category flyout callback
   Blast.workspace.registerToolboxCategoryCallback('THINGS', Blast.Things.flyoutCategory);
 };
+exports.init = init;
 
 /**
  * Get category by name.
  * @param {string} name The name of the category.
  * @returns {Object} the category
  * */
-Blast.Toolbox.getCategory = function(name) {
-  return Blast.Toolbox.currentToolbox.contents.find(function(category) {
+const getCategory = function(name) {
+  return currentToolbox.contents.find(function(category) {
     if (category.name) {
       return category.name.toLowerCase() === name.toLowerCase();
     }
     return false;
   });
 };
+exports.getCategory = getCategory;
 
 /**
  * Adds a block to the toolbox.
@@ -211,15 +220,16 @@ Blast.Toolbox.getCategory = function(name) {
  * @param {string} blockCategory The category of the block.
  * @param {string=} blockxml optional, the xml of the block.
  */
-Blast.Toolbox.addBlock = function(type, blockCategory, blockxml) {
+const addBlock = function(type, blockCategory, blockxml) {
   const block = {
     kind: 'BLOCK',
     type: type,
     blockxml: blockxml,
   };
   // Find the category and add the block to it.
-  const category = Blast.Toolbox.getCategory(blockCategory);
+  const category = getCategory(blockCategory);
   if (category) {
     category.contents.push(block);
   }
 };
+exports.addBlock = addBlock;

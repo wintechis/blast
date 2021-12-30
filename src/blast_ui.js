@@ -7,7 +7,7 @@
 'use strict';
 
 /**
- * The top level namespace used to access the Blast library.
+ * The namespace used to access the Blast library.
  * @name Blast.Ui
  * @namespace
  */
