@@ -58,16 +58,13 @@ const sendHttpRequest = async function(
     Blast.throwError('URI input of HttpRequest blocks must not be empty');
   }
 
-  console.log(headersString);
   const headersJSON = JSON.parse(headersString);
-  console.log(headersJSON);
   const requestOptions = {
     method: method,
     headers: new Headers(headersJSON),
   };
 
-  if (body) {
-    console.log(body);
+  if (method !== 'GET' && body) {
     requestOptions.body = body;
   }
 
