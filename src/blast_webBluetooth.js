@@ -488,7 +488,6 @@ Blast.Bluetooth.removeEventListener = function(event, listener) {
   * Removes webBluetooth eventListeners and deletes cached advertisements.
   */
 Blast.Bluetooth.tearDown = function() {
-  Blast.Ui.addToLog('Tearing down webBluetooth', 'Bluetooth');
   // Reset running scan flag
   if (Blast.Bluetooth.isLEScanRunning) {
     Blast.Bluetooth.isLEScanRunning = false;
