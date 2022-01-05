@@ -14,6 +14,8 @@
 goog.module('Blast.Ui');
 goog.module.declareLegacyNamespace();
 
+const {link, load} = goog.require('Blast.Storage');
+
 /**
  * List of tab names.
  * @type {Array.<string>}
@@ -383,10 +385,10 @@ const init = function() {
 
   setStatus(Blast.status.READY);
 
-  Blast.bindClick('UriLoadButton', Blast.Storage.load);
-  Blast.bindClick('UriSaveButton', Blast.Storage.link);
+  Blast.bindClick('UriLoadButton', load);
+  Blast.bindClick('UriSaveButton', link);
   Blast.bindClick('saveButton', () => {
-    Blast.Storage.link(true);
+    link(true);
   });
   Blast.bindClick('clearDeviceLogsButton', ClearLog);
   Blast.bindClick('clearOutputButton', ClearOutputContainer);
@@ -394,7 +396,7 @@ const init = function() {
   // load blocks from URI on Enter
   uriInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13) {
-      Blast.Storage.load();
+      load();
     }
   });
 };

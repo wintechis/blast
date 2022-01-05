@@ -74,7 +74,7 @@ exports.intervalEvents = intervalEvents;
  * @return {boolean} true if state condition is now true and was false before,
  * false otherwise.
  */
-eventChecker = function(blockId, curValue) {
+const eventChecker = function(blockId, curValue) {
   const prevValue = eventValues.get(blockId);
   eventValues.set(blockId, curValue);
 

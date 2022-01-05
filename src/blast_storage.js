@@ -12,39 +12,40 @@
  * @namespace
  * @public
  */
-goog.provide('Blast.Storage');
+goog.module('Blast.Storage');
+goog.module.declareLegacyNamespace();
 
 /**
  * Http-request error message.
  */
-Blast.Storage.HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
+const HTTPREQUEST_ERROR = 'There was a problem with the request.\n';
 
 /**
  * Save-success alert.
  */
-Blast.Storage.LINK_ALERT = 'Load your blocks with this link:\n\n%1';
+const LINK_ALERT = 'Load your blocks with this link:\n\n%1';
 
 /**
  * Hash error message.
  */
-Blast.Storage.NOT_FOUND_ERROR = 'Sorry, couldn\'t find "%1".';
+const NOT_FOUND_ERROR = 'Sorry, couldn\'t find "%1".';
 
 /**
  * Faulty xml error message.
  */
-Blast.Storage.XML_ERROR = 'Could not load your saved file.\n' +
+const XML_ERROR = 'Could not load your saved file.\n' +
     'Perhaps it was created with a different version of Blast?';
 
 /**
  * Stores the filename when loading programs for saving, default is 'BLAST.xml'.
  */
-Blast.Storage.filename = 'BLAST.xml';
+let filename = 'BLAST.xml';
 
 /**
   * Save blocks to URI and return a link containing key to XML.
   * @param {boolean=} download optional, if true, save to file.
   */
-Blast.Storage.link = function(download) {
+const link = function(download) {
   const workspace = Blast.workspace;
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
@@ -56,25 +57,26 @@ Blast.Storage.link = function(download) {
     }
   }
   // Remove device id from xml.
-  xml = Blast.Storage.removeDeviceId_(xml);
+  xml = removeDeviceId_(xml);
   // prettify xml.
   xml = Blockly.Xml.domToPrettyText(xml);
 
   // Save XML using filesaver.js.
   if (download === true) {
     const blob = new Blob([xml], {type: 'text/xml'});
-    saveAs(blob, Blast.Storage.filename);
+    saveAs(blob, filename);
     return;
   }
 
   // Save to server.
   let path = document.getElementById('loadWorkspace-input').value;
   if (!path || path.length == 0) {
-    path = 'storage/' + Blast.Storage.generatePath();
+    path = 'storage/' + generatePath();
   }
   const data = Blockly.Xml.domToText(xml);
-  Blast.Storage.saveXML_(path, data);
+  saveXML_(path, data);
 };
+exports.link = link;
 
 /**
  * Replaces device ID with user defined name in all blocks of type
@@ -83,7 +85,7 @@ Blast.Storage.link = function(download) {
  * @return {!Element} XML with device ids removed.
  * @private
  */
-Blast.Storage.removeDeviceId_ = function(xml) {
+const removeDeviceId_ = function(xml) {
   const blocks = xml.querySelectorAll('block');
 
   for (const block of blocks) {
@@ -115,7 +117,7 @@ Blast.Storage.removeDeviceId_ = function(xml) {
  * @param {string} xml the xml to save.
  * @private
  */
-Blast.Storage.saveXML_ = function(path, xml) {
+const saveXML_ = function(path, xml) {
   Blockly.hideChaff();
   
   // Send put request.
@@ -125,14 +127,14 @@ Blast.Storage.saveXML_ = function(path, xml) {
   }).then((response) => {
     if (response.ok) {
       location.hash = path;
-      Blockly.alert(Blast.Storage.LINK_ALERT.replace('%1', window.location.href));
+      Blockly.alert(LINK_ALERT.replace('%1', window.location.href));
     } else {
-      Blast.throwError(Blast.Storage.HTTPREQUEST_ERROR);
+      Blast.throwError(HTTPREQUEST_ERROR);
     }
   });
 };
 
-Blast.Storage.load = function() {
+const load = function() {
   const url = document.getElementById('loadWorkspace-input').value;
     
   // if input is empty show warning and return.
@@ -141,14 +143,15 @@ Blast.Storage.load = function() {
     return;
   }
 
-  // save filename to {@link Blast.Storage.filename}
-  const filename = url.split('/').pop();
-  if (filename.indexOf('.') > -1) {
-    Blast.Storage.filename = filename;
+  // save filename to {@link filename}
+  const fn = url.split('/').pop();
+  if (fn.indexOf('.') > -1) {
+    filename = fn;
   }
 
-  Blast.Storage.retrieveXML_(url);
+  retrieveXML_(url);
 };
+exports.load = load;
 
 /**
    * Load XML from a file.
@@ -156,17 +159,17 @@ Blast.Storage.load = function() {
    * @return {Promise} A promise that will be resolved when the file is loaded.
    * @private
    */
-Blast.Storage.loadXMLFromFile = function(event) {
+const loadXMLFromFile = function(event) {
   return new Promise(function(resolve, reject) {
-    // Save filename to {@link Blast.Storage.filename}
-    const filename = event.target.files[0].name;
-    if (filename.indexOf('.') > -1) {
-      Blast.Storage.filename = filename;
+    // Save filename to {@link filename}
+    const fn = event.target.files[0].name;
+    if (fn.indexOf('.') > -1) {
+      filename = fn;
     }
 
     const fileReader = new FileReader();
     fileReader.onload = function(e) {
-      Blast.Storage.loadXML(e.target.result);
+      loadXML(e.target.result);
       resolve();
     };
     fileReader.onerror = function(evt) {
@@ -175,18 +178,19 @@ Blast.Storage.loadXMLFromFile = function(event) {
     fileReader.readAsText(event.target.files[0]);
   });
 };
+exports.loadXMLFromFile = loadXMLFromFile;
 
 /**
  * Resets the file selector.
  */
-Blast.Storage.resetFileInput = function() {
+const resetFileInput = function() {
   const fileSelector = document.getElementById('file-selector');
   if (fileSelector) {
     fileSelector.value = '';
   }
 
   // reset filename
-  Blast.Storage.filename = 'BLAST.xml';
+  filename = 'BLAST.xml';
 };
 
 /**
@@ -194,7 +198,7 @@ Blast.Storage.resetFileInput = function() {
  * @param {string} path path to the XML to load.
  * @private
  */
-Blast.Storage.retrieveXML_ = async function(path) {
+const retrieveXML_ = async function(path) {
   Blockly.hideChaff();
   // stop execution
   Blast.resetInterpreter();
@@ -205,7 +209,7 @@ Blast.Storage.retrieveXML_ = async function(path) {
   Blast.Things.webHidNames = new Map();
   Blast.Things.webBluetoothDevices = new Map();
 
-  Blast.Storage.resetFileInput();
+  resetFileInput();
   
   // send GET request
   fetch(path)
@@ -213,10 +217,10 @@ Blast.Storage.retrieveXML_ = async function(path) {
         if (response.ok) {
           return response.text();
         } else {
-          Blast.throwError(Blast.Storage.NOT_FOUND_ERROR.replace('%1', path));
+          Blast.throwError(NOT_FOUND_ERROR.replace('%1', path));
         }
       })
-      .then(Blast.Storage.loadXML);
+      .then(loadXML);
 };
 
 /**
@@ -224,20 +228,20 @@ Blast.Storage.retrieveXML_ = async function(path) {
  * @param {string} xmlString the xml to load.
  * @private
  */
-Blast.Storage.loadXML = function(xmlString) {
+const loadXML = function(xmlString) {
   let xml;
   // clear blocks
   Blast.workspace.clear();
   try {
     xml = Blockly.Xml.textToDom(xmlString);
   } catch (e) {
-    Blast.throwError(Blast.Storage.XML_ERROR + '\nXML: ' + xml);
+    Blast.throwError(XML_ERROR + '\nXML: ' + xml);
     return;
   }
 
   // prompt to WebBluetooth/webHID device connection
   if (xml.querySelector('block[type="things_webBluetooth"]') || xml.querySelector('block[type="things_webHID"]')) {
-    Blast.Storage.generatePairButtons(xml);
+    generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
       document.getElementById('rcModal').style.display = 'block';
@@ -247,7 +251,7 @@ Blast.Storage.loadXML = function(xmlString) {
   }
           
   Blockly.Xml.domToWorkspace(xml, Blast.workspace);
-  Blast.Storage.monitorChanges_(Blast.workspace);
+  monitorChanges_(Blast.workspace);
 };
 
 /**
@@ -255,12 +259,12 @@ Blast.Storage.loadXML = function(xmlString) {
  * @param {!Element} xml XML to parse for devices.
  * @private
  */
-Blast.Storage.generatePairButtons = function(xml) {
+const generatePairButtons = function(xml) {
   if (window.location.href.includes('mobile')) {
     window.app.openReconnectDialog();
-    this.generatePairButtonsMobile_(xml);
+    generatePairButtonsMobile_(xml);
   } else {
-    this.generatePairButtonsDesktop_(xml);
+    generatePairButtonsDesktop_(xml);
   }
 };
 
@@ -269,7 +273,7 @@ Blast.Storage.generatePairButtons = function(xml) {
  * @param {!Element} xml XML to parse for devices.
  * @private
  */
-Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
+const generatePairButtonsDesktop_ = function(xml) {
   const blocks = xml.querySelectorAll('block');
   const tbody = document.getElementById('rc-tbody');
   // delete all table rows from tbody
@@ -329,12 +333,12 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
           block.firstElementChild.textContent = device.id;
           
           // if all devices have been paired, enable done button
-          if (Blast.Storage.allConnectedDesktop_()) {
+          if (allConnectedDesktop_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
             if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
               document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-              document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+              document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
             }
           }
         } else if (type == 'things_webHID') {
@@ -356,12 +360,12 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
                 block.firstElementChild.textContent = uid;
                                 
                 // if all devices have been paired, enable done button
-                if (Blast.Storage.allConnectedDesktop_()) {
+                if (allConnectedDesktop_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
                   if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
                     document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-                    document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                    document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
                   }
                 }
               })
@@ -382,7 +386,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
       blocksAdded.push(name);
     }
     // add cancel button click listener
-    document.getElementById('rc-cancel').addEventListener('click', () => Blast.Storage.reconnectCancelHandler_());
+    document.getElementById('rc-cancel').addEventListener('click', () => reconnectCancelHandler_());
   }
 };
 
@@ -390,7 +394,7 @@ Blast.Storage.generatePairButtonsDesktop_ = function(xml) {
  * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
  * @param {!Element} xml XML to parse for devices.
  */
-Blast.Storage.generatePairButtonsMobile_ = function(xml) {
+const generatePairButtonsMobile_ = function(xml) {
   const blocks = xml.querySelectorAll('block');
   // empty list
   const list = document.getElementById('rc-list');
@@ -453,12 +457,12 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
           block.firstElementChild.textContent = device.id;
                   
           // if all devices have been paired, enable done button
-          if (Blast.Storage.allConnectedMobile_()) {
+          if (allConnectedMobile_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
             if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
               document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-              document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+              document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
             }
           }
         } else if (type == 'things_webHID') {
@@ -483,12 +487,12 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
                 block.firstElementChild.textContent = uid;
                                 
                 // if all devices have been paired, enable done button
-                if (Blast.Storage.allConnectedDesktop_()) {
+                if (allConnectedDesktop_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
                   if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
                     document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-                    document.getElementById('rc-done').addEventListener('click', () => Blast.Storage.reconnectDoneHandler_(xml));
+                    document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
                   }
                 }
               })
@@ -512,7 +516,7 @@ Blast.Storage.generatePairButtonsMobile_ = function(xml) {
  * @return {boolean} true if all devices have been paired.
  * @private
  */
-Blast.Storage.allConnectedDesktop_ = function() {
+const allConnectedDesktop_ = function() {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
     const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
@@ -527,7 +531,7 @@ Blast.Storage.allConnectedDesktop_ = function() {
  * Checks if all devices from the reconnect modal have been paired.
  * @returns {boolean} true if all devices have been paired.
  */
-Blast.Storage.allConnectedMobile_ = function() {
+const allConnectedMobile_ = function() {
   const blocks = document.getElementById('rc-list').querySelectorAll('[id=rc-status-]');
   for (const block of blocks) {
     const pairStatus = document.getElementById('rc-status-' + block.textContent);
@@ -543,7 +547,7 @@ Blast.Storage.allConnectedMobile_ = function() {
  * @param {!Element} xml XML to load into the workspace.
  * @private
  */
-Blast.Storage.reconnectDoneHandler_ = function(xml) {
+const reconnectDoneHandler_ = function(xml) {
   if (window.location.href.includes('mobile')) {
     // hide reconnect dialog
     document.getElementById('rc-dialog').style.display = 'none';
@@ -553,13 +557,13 @@ Blast.Storage.reconnectDoneHandler_ = function(xml) {
   }
   // rebuild workspace from xml
   Blockly.Xml.domToWorkspace(xml, Blast.workspace);
-  Blast.Storage.monitorChanges_(Blast.workspace);
+  monitorChanges_(Blast.workspace);
 };
 
 /**
  * Cancels the reconnect modal.
  */
-Blast.Storage.reconnectCancelHandler_ = function() {
+const reconnectCancelHandler_ = function() {
   // hide reconnect modal
   document.getElementById('rcModal').style.display = 'none';
 };
@@ -571,7 +575,7 @@ Blast.Storage.reconnectCancelHandler_ = function() {
   * @param {!Blockly.WorkspaceSvg} workspace Workspace.
   * @private
   */
-Blast.Storage.monitorChanges_ = function(workspace) {
+const monitorChanges_ = function(workspace) {
   const startXmlDom = Blockly.Xml.workspaceToDom(workspace);
   const startXmlText = Blockly.Xml.domToText(startXmlDom);
   /**
@@ -593,7 +597,7 @@ Blast.Storage.monitorChanges_ = function(workspace) {
  * @returns {string} path to the random filename
  * @public
  * */
-Blast.Storage.generatePath = function() {
+const generatePath = function() {
   const result = [];
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
@@ -612,7 +616,7 @@ window.addEventListener('load', function() {
     const path = anchor.substring(1);
     // try loading.
     try {
-      Blast.Storage.retrieveXML_(path);
+      retrieveXML_(path);
     } catch (e) {
       Blast.throwError('Could not load file.');
       console.error(e);
