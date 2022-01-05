@@ -15,6 +15,12 @@
 goog.module('Blast.Storage');
 goog.module.declareLegacyNamespace();
 
+const {resetThings} = goog.require('Blast.Things');
+const {getWebBluetoothDevices} = goog.require('Blast.Things');
+const {getWebHIDDevices} = goog.require('Blast.Things');
+const {addWebBluetoothDevice} = goog.require('Blast.Things');
+const {addWebHidDevice} = goog.require('Blast.Things');
+
 /**
  * Http-request error message.
  */
@@ -95,7 +101,7 @@ const removeDeviceId_ = function(xml) {
       const device = block.firstElementChild;
       if (device) {
         const id = device.textContent;
-        const tuples = type == 'things_webBluetooth' ? Blast.Things.getWebBluetoothDevices() : Blast.Things.getWebHIDDevices();
+        const tuples = type == 'things_webBluetooth' ? getWebBluetoothDevices() : getWebHIDDevices();
         let name;
         // get the key of the device id
         for (const [key, value] of tuples) {
@@ -205,9 +211,7 @@ const retrieveXML_ = async function(path) {
   Blast.resetUi(Blast.status.READY);
 
   // Reset device lists.
-  Blast.Things.webHidDevices = new Map();
-  Blast.Things.webHidNames = new Map();
-  Blast.Things.webBluetoothDevices = new Map();
+  resetThings();
 
   resetFileInput();
   
@@ -350,8 +354,7 @@ const generatePairButtonsDesktop_ = function(xml) {
                 // generate a unique id for the new device
                 const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
                 // add device to the device map with its uid
-                Blast.Things.webHidDevices.set(uid, device[0]);
-                Blast.Things.addWebHidDevice(uid, name);
+                addWebHidDevice(uid, name, device[0]);
                 // change pair status to checkmark
                 document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
                 document.getElementById('pairStatus-' + name).style.color = 'green';
@@ -445,7 +448,7 @@ const generatePairButtonsMobile_ = function(xml) {
           options.optionalServices = Blast.Bluetooth.optionalServices;
                 
           const device = await Blast.Bluetooth.requestDevice();
-          Blast.Things.addWebBluetoothDevice(device.id, name);
+          addWebBluetoothDevice(device.id, name);
           // change pair status to connected
           document.getElementById('rc-status-' + name).innerHTML = 'connected';
           // change icon to bluetooth connected
@@ -474,8 +477,7 @@ const generatePairButtonsMobile_ = function(xml) {
                 // generate a unique id for the new device
                 const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
                 // add device to the device map with its uid
-                Blast.Things.webHidDevices.set(uid, device[0]);
-                Blast.Things.addWebHidDevice(uid, name);
+                addWebHidDevice(uid, name, device[0]);
                 // change pair status to connected
                 document.getElementById('rc-status-' + name).innerHTML = 'connected';
                 // change icon to usb connected

@@ -12,30 +12,42 @@
  * @namespace
  * @public
  */
-goog.provide('Blast.Things');
+goog.module('Blast.Things');
+goog.module.declareLegacyNamespace();
 
 /**
  * Maps device names to BluetoothDevice.id.
  */
-Blast.Things.webBluetoothDevices = new Map();
+const webBluetoothDevices = new Map();
 
 /**
  * Maps user defined names to webHID identifiers.
  */
-Blast.Things.webHidNames = new Map();
+const webHidNames = new Map();
 
 /**
  * Maps webHID identifiers to webHID devices.
  */
-Blast.Things.webHidDevices = new Map();
+const webHidDevices = new Map();
+exports.webHidDevices = webHidDevices;
+
+/**
+ * Resets all device maps.
+ */
+const resetThings = function() {
+  webBluetoothDevices.clear();
+  webHidNames.clear();
+  webHidDevices.clear();
+};
+exports.resetThings = resetThings;
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
- * variable category.
+ * things category.
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML elements.
  */
-Blast.Things.flyoutCategory = function(workspace) {
+const flyoutCategory = function(workspace) {
   let xmlList = [];
 
   // Create WebBluetooth Label
@@ -48,13 +60,13 @@ Blast.Things.flyoutCategory = function(workspace) {
   webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
   workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', function(_button) {
-    Blast.Things.createWebBluetoothButtonHandler();
+    createWebBluetoothButtonHandler();
   });
   xmlList.push(webBluetoothButton);
 
   
   // add webBluetooth blocks to xmlList
-  const wbBlockList = Blast.Things.flyoutCategoryBlocksWB(workspace);
+  const wbBlockList = flyoutCategoryBlocksWB(workspace);
   xmlList = xmlList.concat(wbBlockList);
   
   // Create WebBluetooth Label
@@ -67,12 +79,12 @@ Blast.Things.flyoutCategory = function(workspace) {
   webHidbutton.setAttribute('text', 'connect via webHID');
   webHidbutton.setAttribute('callbackKey', 'CREATE_WEBHID');
   workspace.registerButtonCallback('CREATE_WEBHID', function(_button) {
-    Blast.Things.createWebHidButtonHandler();
+    createWebHidButtonHandler();
   });
   xmlList.push(webHidbutton);
 
   // add webHID blocks to xmlList
-  const wHidBlockList = Blast.Things.flyoutCategoryBlocksWHid(workspace);
+  const wHidBlockList = flyoutCategoryBlocksWHid(workspace);
   xmlList = xmlList.concat(wHidBlockList);
 
   // Create identifiers label
@@ -119,6 +131,7 @@ Blast.Things.flyoutCategory = function(workspace) {
 
   return xmlList;
 };
+exports.thingsFlyoutCategory = flyoutCategory;
 
 
 /**
@@ -126,11 +139,11 @@ Blast.Things.flyoutCategory = function(workspace) {
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-Blast.Things.flyoutCategoryBlocksWHid = function() {
+const flyoutCategoryBlocksWHid = function() {
   const xmlList = [];
 
   // add webHID devices to xmlList
-  if (Blast.Things.webHidDevices.size > 0) {
+  if (webHidDevices.size > 0) {
     if (Blockly.Blocks['things_webHID']) {
       const block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'things_webHID');
@@ -141,16 +154,17 @@ Blast.Things.flyoutCategoryBlocksWHid = function() {
 
   return xmlList;
 };
+
 /**
  * Construct the webHIDh blocks required by the flyout for the things category.
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-Blast.Things.flyoutCategoryBlocksWB = function() {
+const flyoutCategoryBlocksWB = function() {
   const xmlList = [];
 
   // add webBluetooth devices to xmlList
-  if (Blast.Things.webBluetoothDevices.size > 0) {
+  if (webBluetoothDevices.size > 0) {
     if (Blockly.Blocks['things_webBluetooth']) {
       const block = Blockly.utils.xml.createElement('block');
       block.setAttribute('type', 'things_webBluetooth');
@@ -167,8 +181,8 @@ Blast.Things.flyoutCategoryBlocksWB = function() {
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-Blast.Things.getWebBluetoothDevices = function() {
-  const keysArray = [...Blast.Things.webBluetoothDevices.keys()];
+const getWebBluetoothDevices = function() {
+  const keysArray = [...webBluetoothDevices.keys()];
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
@@ -177,20 +191,21 @@ Blast.Things.getWebBluetoothDevices = function() {
   // build options array
   const options = [];
   for (const deviceName of keysSorted) {
-    const deviceId = Blast.Things.webBluetoothDevices.get(deviceName);
+    const deviceId = webBluetoothDevices.get(deviceName);
     options.push([deviceName, deviceId]);
   }
 
   return options;
 };
+exports.getWebBluetoothDevices = getWebBluetoothDevices;
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-Blast.Things.getWebHIDDevices = function() {
-  const keysArray = [...Blast.Things.webHidNames.keys()];
+const getWebHIDDevices = function() {
+  const keysArray = [...webHidNames.keys()];
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
@@ -199,33 +214,34 @@ Blast.Things.getWebHIDDevices = function() {
   // build options array
   const options = [];
   for (const deviceName of keysSorted) {
-    const deviceId = Blast.Things.webHidNames.get(deviceName);
+    const deviceId = webHidNames.get(deviceName);
     options.push([deviceName, deviceId]);
   }
 
   return options;
 };
+exports.getWebHIDDevices = getWebHIDDevices;
 
 /**
  * Handles "pair via webBluetooth" button in the things toolbox category.
  */
-Blast.Things.createWebBluetoothButtonHandler = async function() {
+const createWebBluetoothButtonHandler = async function() {
   await Blast.Bluetooth.requestDevice();
 };
 
 /**
- * Adds a WebBluetooth device to the {@link Blast.Things.webBluetoothDevices} map.
+ * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {string} deviceName User defined name for the device.
  */
-Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
+const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(name, id) {
     Blockly.Variables.promptName('Pair successful! Now give your device a name.', name,
         function(text) {
           if (text) {
             const existing =
-                  Blast.Things.webBluetoothDevices.has(text);
+                  webBluetoothDevices.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
                   '%1', text);
@@ -235,7 +251,7 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
                   });
             } else {
               // No conflict
-              Blast.Things.webBluetoothDevices.set(text, id);
+              webBluetoothDevices.set(text, id);
             }
           } else {
             const msg = 'Name cannot be empty';
@@ -247,12 +263,13 @@ Blast.Things.addWebBluetoothDevice = function(webBluetoothId, deviceName) {
   };
   promptAndCheckWithAlert(deviceName, webBluetoothId);
 };
+exports.addWebBluetoothDevice = addWebBluetoothDevice;
 
 
 /**
  * Handles "connect via webHID" button in the things toolbox category.
  */
-Blast.Things.createWebHidButtonHandler = function() {
+createWebHidButtonHandler = function() {
   Blast.Ui.addToLog('Requesting webHID device...', 'HID');
   navigator.hid.requestDevice({filters: []})
       .then((device) => {
@@ -263,8 +280,7 @@ Blast.Things.createWebHidButtonHandler = function() {
         // generate a unique id for the new device
         const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
         // add device to the device map with its uid
-        Blast.Things.webHidDevices.set(uid, device[0]);
-        Blast.Things.addWebHidDevice(uid, device[0].productName);
+        addWebHidDevice(uid, device[0].productName, device[0]);
         Blast.workspace.refreshToolboxSelection();
         Blast.Ui.addToLog('Connected', 'HID', device[0].productName);
       })
@@ -274,18 +290,19 @@ Blast.Things.createWebHidButtonHandler = function() {
 };
 
 /**
- * Creates user defined identifier to get devices from {@link Blast.Things.webHidDevices}.
- * @param {strubg} id identifier of the device in {@link Blast.Things.webHidDevices}.
+ * Creates user defined identifier to get devices from {@link webHidDevices}.
+ * @param {strubg} id identifier of the device in {@link webHidDevices}.
  * @param {string} deviceName default name for the device.
+ * @param {HIDDevice} device the device to add.
  */
-Blast.Things.addWebHidDevice = function(id, deviceName) {
+const addWebHidDevice = function(id, deviceName, device) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(name, id) {
     Blockly.Variables.promptName('Connection established! Now give your device a name.', name,
         function(text) {
           if (text) {
             const existing =
-                  Blast.Things.webHidNames.has(text);
+                  webHidNames.has(text);
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
                   '%1', text);
@@ -295,7 +312,8 @@ Blast.Things.addWebHidDevice = function(id, deviceName) {
                   });
             } else {
               // No conflict
-              Blast.Things.webHidNames.set(text, id);
+              webHidDevices.set(uid, device);
+              webHidNames.set(text, id);
             }
           } else {
             const msg = 'Name cannot be empty';
@@ -307,3 +325,4 @@ Blast.Things.addWebHidDevice = function(id, deviceName) {
   };
   promptAndCheckWithAlert(deviceName, id);
 };
+exports.addWebHidDevice = addWebHidDevice;
