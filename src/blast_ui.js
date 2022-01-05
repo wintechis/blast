@@ -22,6 +22,7 @@ const {link, load} = goog.require('Blast.Storage');
  * @private
  */
 const TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
+exports.TABS_ = TABS_;
 
 /**
  * Name of currently selected tab.
@@ -345,28 +346,6 @@ const init = function() {
   if (window.location.href.includes('mobile')) {
     return;
   }
-
-  // adjust workspace and toolbox on resize
-  const onresize = function() {
-    for (const tab of TABS_) {
-      const el = document.getElementById('content_' + tab);
-      el.style.top = '35px';
-      el.style.left = '0px';
-      // Height and width need to be set, read back, then set again to
-      // compensate for scrollbars.
-      el.style.height = window.innerHeight - 35 + 'px';
-      el.style.width = window.innerWidth - 450 + 'px';
-    }
-    // Make the 'workspace' tab line up with the toolbox.
-    if (Blast.workspace && Blast.workspace.getToolbox().width) {
-      document.getElementById('tab_workspace').style.minWidth =
-          Blast.workspace.getToolbox().width - 38 + 'px';
-      // Account for the 19 pixel margin and on each side.
-    }
-  };
-  window.addEventListener('resize', onresize, false);
-
-  onresize();
 
   // Bind onClick events to tabs
   tabClick_(selected_);

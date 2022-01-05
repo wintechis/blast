@@ -20,6 +20,7 @@ const {clearIntervalEvents} = goog.require('Blast.States');
 const {initUi} = goog.require('Blast.Ui');
 const {addMessage} = goog.require('Blast.Ui');
 const {setStatus} = goog.require('Blast.Ui');
+const {TABS_} = goog.require('Blast.Ui');
 const {renderContent_} = goog.require('Blast.Ui');
 const {currentToolbox} = goog.require('Blast.Toolbox');
 const {initToolbox} = goog.require('Blast.Toolbox');
@@ -177,6 +178,25 @@ Blast.init = function() {
   if (window.location.href.includes('mobile')) {
     return;
   }
+  // adjust workspace and toolbox on resize
+  const onresize = function() {
+    for (const tab of TABS_) {
+      const el = document.getElementById('content_' + tab);
+      el.style.top = '35px';
+      el.style.left = '0px';
+      // Height and width need to be set, read back, then set again to
+      // compensate for scrollbars.
+      el.style.height = window.innerHeight - 35 + 'px';
+      el.style.width = window.innerWidth - 450 + 'px';
+    }
+    // Make the 'workspace' tab line up with the toolbox.
+    if (Blast.workspace && Blast.workspace.getToolbox().width) {
+      // Account for the 19 pixel margin and on each side.
+      document.getElementById('tab_workspace').style.minWidth =
+            Blast.workspace.getToolbox().width - 38 + 'px';
+    }
+  };
+  window.addEventListener('resize', onresize, false);
 
   Blast.workspace = Blockly.inject('content_workspace', {
     // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
@@ -188,6 +208,7 @@ Blast.init = function() {
   // initialize toolbox
   initToolbox();
 
+  onresize();
   Blockly.svgResize(Blast.workspace);
 
   // Initialize UI
