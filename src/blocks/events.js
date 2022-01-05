@@ -205,6 +205,14 @@ Blockly.Blocks['event'] = {
       }
     }
   },
+  onDispose: function(event) {
+    if (event.type === Blockly.Events.BLOCK_DELETE) {
+      if (event.type === Blockly.Events.BLOCK_DELETE && event.ids.indexOf(this.id) !== -1) {
+        // Block is being deleted
+        Blast.States.removeEventCode(this.event.blockId);
+      }
+    }
+  },
   defType_: 'state_definition',
 };
 

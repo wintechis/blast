@@ -11,95 +11,96 @@
  * @name Blast.Ui
  * @namespace
  */
-goog.provide('Blast.Ui');
+goog.module('Blast.Ui');
+goog.module.declareLegacyNamespace();
 
 /**
  * List of tab names.
  * @type {Array.<string>}
  * @private
  */
-Blast.Ui.TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
+const TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
 
 /**
  * Name of currently selected tab.
  * @type {string}
  * @private
  */
-Blast.Ui.selected_ = 'workspace';
+let selected_ = 'workspace';
 
 /**
  * Play icon used for the start/stop button.
  * @type {HTMLElement}
  * @private
  */
-Blast.Ui.playIcon_ = '<span class="icon material-icons">play_arrow</span>';
+const playIcon_ = '<span class="icon material-icons">play_arrow</span>';
 
 /**
  * Stop icon used for the start/stop button.
  * @type {HTMLElement}
  * @private
  */
-Blast.Ui.stopIcon_ = '<span class="icon material-icons">stop</span>';
+const stopIcon_ = '<span class="icon material-icons">stop</span>';
 
 /**
  * Number of messages in the Message Output Container.
  * @type {number}
  * @private
  */
-Blast.Ui.messageCounter_ = 0;
+let messageCounter_ = 0;
 
 /**
  * Message output Container.
  * @type {?HTMLElement}
  * @public
  */
-Blast.Ui.messageOutputContainer = null;
+let messageOutputContainer = null;
 
 /**
  * Container displaying Blast's current status.
  * @type {?HTMLElement}
  * @public
  */
-Blast.Ui.statusContainer = null;
+let statusContainer = null;
 
 /**
  * Input to defining URIs for safing and loading blocks.
  * @type {?HTMLElement}
  * @public
  */
-Blast.Ui.uriInput = null;
+let uriInput = null;
 
 /**
  * Button to start/stop execution of the user's code.
  * @type {?HTMLElement}
  * @public
  */
-Blast.Ui.runButton = null;
+let runButton = null;
 
 /**
- * Adds a DOM Element to the {@link Blast.Ui.messageOutputContainer}.
+ * Adds a DOM Element to the {@link messageOutputContainer}.
  * @param {HTMLElement} elem the element to be added
  */
-Blast.Ui.addElementToOutputContainer = function(elem) {
+const addElementToOutputContainer = function(elem) {
   // Limit elements to 100
-  if (Blast.Ui.messageCounter_ > 100) {
-    Blast.Ui.messageOutputContainer.firstChild.remove();
+  if (messageCounter_ > 100) {
+    messageOutputContainer.firstChild.remove();
   }
 
   // insert new element
-  Blast.Ui.messageOutputContainer.appendChild(elem, Blast.Ui.messageOutputContainer.firstChild);
+  messageOutputContainer.appendChild(elem, messageOutputContainer.firstChild);
 
   // scroll to bottom of container
-  Blast.Ui.messageOutputContainer.scrollTop = Blast.Ui.messageOutputContainer.scrollHeight;
+  messageOutputContainer.scrollTop = messageOutputContainer.scrollHeight;
 };
 
 /**
- * Creates a message element and adds it to the {@link Blast.Ui.messageOutputContainer}.
+ * Creates a message element and adds it to the {@link messageOutputContainer}.
  * @param {string} message the message to be added
  * @param {string=} type optional, type of the message, can be 'error', 'warning', or 'info'
  * @public
  */
-Blast.Ui.addMessage = function(message, type) {
+const addMessage = function(message, type) {
   // Send notification if window is not focused.
   let icon = 'media/logo-512x512.png';
   if (window.location.href.includes('mobile')) {
@@ -121,7 +122,7 @@ Blast.Ui.addMessage = function(message, type) {
   if (type) {
     msg.classList.add(`${type}-message`);
   }
-  msg.id = 'message-' + Blast.Ui.messageCounter_++;
+  msg.id = 'message-' + messageCounter_++;
 
   const textNode = document.createTextNode(message);
   msg.appendChild(textNode);
@@ -131,53 +132,54 @@ Blast.Ui.addMessage = function(message, type) {
   timeSpan.innerHTML = new Date().toLocaleTimeString();
   msg.appendChild(timeSpan);
 
+  const displaySystemInformation = function() {
+    const debugInfo = document.getElementById('debugModal');
+    debugInfo.style.display = 'block';
+    const debugTbody = document.getElementById('debug-tbody');
+    debugTbody.innerHTML = '';
+    // Get current BLAST revision
+    const revisionRow = document.createElement('tr');
+    revisionRow.innerHTML = `<td>BLAST</td><td>${rev}</td>`;
+    debugTbody.appendChild(revisionRow);
+  
+    // System information
+    for (const key in navigator) {
+      if (typeof(navigator[key]) === 'string') {
+        const tr = document.createElement('tr');
+        const td1 = document.createElement('td');
+        const td2 = document.createElement('td');
+        td1.innerHTML = key;
+        td2.innerHTML = navigator[key];
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        debugTbody.appendChild(tr);
+      }
+    }
+  };
+
   if (type === 'error') {
     const debugInfo = document.createElement('span');
     debugInfo.classList.add('debug-info');
     const openDebugInfo = document.createElement('a');
     openDebugInfo.innerHTML = 'show debug info';
     openDebugInfo.href = '#';
-    openDebugInfo.onclick = Blast.Ui.displaySystemInformation;
+    openDebugInfo.onclick = displaySystemInformation;
     debugInfo.appendChild(openDebugInfo);
     msg.appendChild(debugInfo);
   }
 
-  Blast.Ui.addElementToOutputContainer(msg);
+  addElementToOutputContainer(msg);
 };
-
-Blast.Ui.displaySystemInformation = function() {
-  const debugInfo = document.getElementById('debugModal');
-  debugInfo.style.display = 'block';
-  const debugTbody = document.getElementById('debug-tbody');
-  debugTbody.innerHTML = '';
-  // Get current BLAST revision
-  const revisionRow = document.createElement('tr');
-  revisionRow.innerHTML = `<td>BLAST</td><td>${rev}</td>`;
-  debugTbody.appendChild(revisionRow);
-
-  // System information
-  for (const key in navigator) {
-    if (typeof(navigator[key]) === 'string') {
-      const tr = document.createElement('tr');
-      const td1 = document.createElement('td');
-      const td2 = document.createElement('td');
-      td1.innerHTML = key;
-      td2.innerHTML = navigator[key];
-      tr.appendChild(td1);
-      tr.appendChild(td2);
-      debugTbody.appendChild(tr);
-    }
-  }
-};
+exports.addMessage = addMessage;
 
 /**
  * Switch the visible pane when a tab is clicked.
  * @param {string} clickedName Name of tab clicked.
  * @private
  */
-Blast.Ui.tabClick_ = function(clickedName) {
+const tabClick_ = function(clickedName) {
   // Deselect all tabs and hide all panes.
-  for (const name of Blast.Ui.TABS_) {
+  for (const name of TABS_) {
     const tab = document.getElementById('tab_' + name);
     tab.classList.add('taboff');
     tab.classList.remove('tabon');
@@ -185,7 +187,7 @@ Blast.Ui.tabClick_ = function(clickedName) {
   }
 
   // Select the active tab.
-  Blast.Ui.selected_ = clickedName;
+  selected_ = clickedName;
   const selectedTab = document.getElementById('tab_' + clickedName);
   selectedTab.classList.remove('taboff');
   selectedTab.classList.add('tabon');
@@ -198,7 +200,7 @@ Blast.Ui.tabClick_ = function(clickedName) {
  * Populate the JS pane with pretty printed code generated from the blocks.
  * @private
  */
-Blast.Ui.renderContent_ = function() {
+const renderContent_ = function() {
   // render the xml content.
   const xmlTextarea = document.getElementById('content_xml');
   const xmlDom = Blockly.Xml.workspaceToDom(Blast.workspace);
@@ -217,6 +219,7 @@ Blast.Ui.renderContent_ = function() {
     PR.prettyPrint();
   }
 };
+exports.renderContent_ = renderContent_;
 
 /**
  * Adds a message to the device log tab.
@@ -224,7 +227,7 @@ Blast.Ui.renderContent_ = function() {
  * @param {string=} adapter The name of the adapter that generated the message.
  * @param {string=} device The name of the device that generated the message.
  */
-Blast.Ui.addToLog = function(msg, adapter, device) {
+const addToLog = function(msg, adapter, device) {
   const log = document.getElementById('content_deviceLogs');
   // Create a new log item.
   const logItem = document.createElement('div');
@@ -275,12 +278,13 @@ Blast.Ui.addToLog = function(msg, adapter, device) {
   log.appendChild(logItem);
   log.scrollTop = log.scrollHeight;
 };
+exports.addToLog = addToLog;
 
 /**
- * Removes all children from the {@link Blast.Ui.messageOutputContainer}
+ * Removes all children from the {@link messageOutputContainer}
  */
-Blast.Ui.ClearOutputContainer = function() {
-  const container = Blast.Ui.messageOutputContainer;
+const ClearOutputContainer = function() {
+  const container = messageOutputContainer;
   while (container.lastChild.id !== 'clearOutputButton') {
     console.log(container.lastChild.id);
     container.removeChild(container.lastChild);
@@ -290,7 +294,7 @@ Blast.Ui.ClearOutputContainer = function() {
 /**
  * Removes all children from the device log tab.
  */
-Blast.Ui.ClearLog = function() {
+const ClearLog = function() {
   const log = document.getElementById('content_deviceLogs');
   while (log.lastChild.id !== 'clearDeviceLogsButton') {
     log.removeChild(log.lastChild);
@@ -302,69 +306,96 @@ Blast.Ui.ClearLog = function() {
  * @param {Blast.status} status new Blast status text.
  * @public
  */
-Blast.Ui.setStatus = function(status) {
+const setStatus = function(status) {
   let icon;
   let func;
   let title;
   if (status === Blast.status.RUNNING) {
     func = Blast.stopJS;
-    icon = Blast.Ui.stopIcon_;
+    icon = stopIcon_;
     title = 'Stop the execution';
   } else {
     func = Blast.runJS;
-    icon = Blast.Ui.playIcon_;
+    icon = playIcon_;
     title = 'Run block program';
   }
 
   // Set start/stop button click event and icon
-  Blast.Ui.runButton.onclick = func;
-  Blast.Ui.runButton.title = title;
-  Blast.Ui.runButton.innerHTML = icon;
+  runButton.onclick = func;
+  runButton.title = title;
+  runButton.innerHTML = icon;
   // set status text
-  Blast.Ui.statusContainer.innerHTML = status;
+  statusContainer.innerHTML = status;
 };
+exports.setStatus = setStatus;
 
 /**
  * Initialize the UI by binding onclick events.
  */
-Blast.Ui.init = function() {
+const init = function() {
   // Set remaining properties.
-  Blast.Ui.uriInput = document.getElementById('loadWorkspace-input');
-  Blast.Ui.runButton = document.getElementById('runButton');
-  Blast.Ui.messageOutputContainer = document.getElementById('msgOutputContainer');
-  Blast.Ui.statusContainer = document.getElementById('statusContainer');
+  uriInput = document.getElementById('loadWorkspace-input');
+  runButton = document.getElementById('runButton');
+  messageOutputContainer = document.getElementById('msgOutputContainer');
+  statusContainer = document.getElementById('statusContainer');
 
   // mobile website has its own tab system
   if (window.location.href.includes('mobile')) {
     return;
   }
 
-  // Bind onClick events to tabs
-  Blast.Ui.tabClick_(Blast.Ui.selected_);
+  // adjust workspace and toolbox on resize
+  const onresize = function() {
+    for (const tab of TABS_) {
+      const el = document.getElementById('content_' + tab);
+      el.style.top = '35px';
+      el.style.left = '0px';
+      // Height and width need to be set, read back, then set again to
+      // compensate for scrollbars.
+      el.style.height = window.innerHeight - 35 + 'px';
+      el.style.width = window.innerWidth - 450 + 'px';
+    }
+    // Make the 'workspace' tab line up with the toolbox.
+    if (Blast.workspace && Blast.workspace.getToolbox().width) {
+      document.getElementById('tab_workspace').style.minWidth =
+          Blast.workspace.getToolbox().width - 38 + 'px';
+      // Account for the 19 pixel margin and on each side.
+    }
+  };
+  window.addEventListener('resize', onresize, false);
 
-  for (const name of Blast.Ui.TABS_) {
+  onresize();
+
+  // Bind onClick events to tabs
+  tabClick_(selected_);
+
+  for (const name of TABS_) {
     Blast.bindClick(
         'tab_' + name,
         (function(name_) {
           return function() {
-            Blast.Ui.tabClick_(name_);
+            tabClick_(name_);
           };
         })(name),
     );
   }
+
+
+  setStatus(Blast.status.READY);
 
   Blast.bindClick('UriLoadButton', Blast.Storage.load);
   Blast.bindClick('UriSaveButton', Blast.Storage.link);
   Blast.bindClick('saveButton', () => {
     Blast.Storage.link(true);
   });
-  Blast.bindClick('clearDeviceLogsButton', Blast.Ui.ClearLog);
-  Blast.bindClick('clearOutputButton', Blast.Ui.ClearOutputContainer);
+  Blast.bindClick('clearDeviceLogsButton', ClearLog);
+  Blast.bindClick('clearOutputButton', ClearOutputContainer);
 
   // load blocks from URI on Enter
-  Blast.Ui.uriInput.addEventListener('keyup', (event) => {
+  uriInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13) {
       Blast.Storage.load();
     }
   });
 };
+exports.initUi = init;

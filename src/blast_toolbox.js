@@ -14,6 +14,8 @@
 goog.module('Blast.Toolbox');
 goog.module.declareLegacyNamespace();
 
+const {statesFlyoutCategory} = goog.require('Blast.States');
+
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -192,12 +194,12 @@ exports.currentToolbox = currentToolbox;
  */
 const init = function() {
   // register states category flyout callback
-  Blast.workspace.registerToolboxCategoryCallback('STATES', Blast.States.flyoutCategory);
+  Blast.workspace.registerToolboxCategoryCallback('STATES', statesFlyoutCategory);
 
   // register things category flyout callback
   Blast.workspace.registerToolboxCategoryCallback('THINGS', Blast.Things.flyoutCategory);
 };
-exports.init = init;
+exports.initToolbox = init;
 
 /**
  * Get category by name.

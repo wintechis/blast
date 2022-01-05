@@ -11,11 +11,18 @@
  * @name Blast
  * @namespace
  */
-goog.provide('Blast');
+goog.module('Blast');
+goog.module.declareLegacyNamespace();
 
-goog.require('Blast.States');
-goog.require('Blast.Ui');
-goog.require('Blast.Toolbox');
+const {generateEventCode} = goog.require('Blast.States');
+const {statesInterpreter} = goog.require('Blast.States');
+const {clearIntervalEvents} = goog.require('Blast.States');
+const {initUi} = goog.require('Blast.Ui');
+const {addMessage} = goog.require('Blast.Ui');
+const {setStatus} = goog.require('Blast.Ui');
+const {renderContent_} = goog.require('Blast.Ui');
+const {currentToolbox} = goog.require('Blast.Toolbox');
+const {initToolbox} = goog.require('Blast.Toolbox');
 
 /**
  * Contains configurable parameters of Blast.
@@ -170,56 +177,35 @@ Blast.init = function() {
   if (window.location.href.includes('mobile')) {
     return;
   }
-  // adjust workspace and toolbox on resize
-  const onresize = function() {
-    for (const tab of Blast.Ui.TABS_) {
-      const el = document.getElementById('content_' + tab);
-      el.style.top = '35px';
-      el.style.left = '0px';
-      // Height and width need to be set, read back, then set again to
-      // compensate for scrollbars.
-      el.style.height = window.innerHeight - 35 + 'px';
-      el.style.width = window.innerWidth - 450 + 'px';
-    }
-    // Make the 'workspace' tab line up with the toolbox.
-    if (Blast.workspace && Blast.workspace.getToolbox().width) {
-      document.getElementById('tab_workspace').style.minWidth =
-        Blast.workspace.getToolbox().width - 38 + 'px';
-      // Account for the 19 pixel margin and on each side.
-    }
-  };
-  window.addEventListener('resize', onresize, false);
 
   Blast.workspace = Blockly.inject('content_workspace', {
     // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
     media: 'media/',
-    toolbox: Blast.Toolbox.currentToolbox,
+    toolbox: currentToolbox,
     zoom: {controls: true, wheel: true},
   });
 
   // initialize toolbox
-  Blast.Toolbox.init();
+  initToolbox();
 
-  onresize();
   Blockly.svgResize(Blast.workspace);
 
   // Initialize UI
-  Blast.Ui.init();
-  Blast.Ui.setStatus(Blast.status.READY);
-
+  initUi();
+  setStatus(Blast.status.READY);
   // Load the interpreter now, and upon future changes.
   Blast.generateCode();
   Blast.workspace.addChangeListener(function(event) {
     if (!(event instanceof Blockly.Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
       Blast.generateCode();
-      Blast.States.generateCode();
-      Blast.Ui.renderContent_();
+      generateEventCode();
+      renderContent_();
     }
   });
 
   // Display output hint
-  Blast.Ui.addMessage('Actionblock output will be displayed here', 'info');
+  addMessage('Actionblock output will be displayed here', 'info');
   // Lazy-load the syntax-highlighting.
   window.setTimeout(Blast.importPrettify, 1);
 };
@@ -234,6 +220,7 @@ Blast.highlightBlock = function(id) {
   Blast.highlightPause = true;
 };
 
+// TODO: move to UI module
 /**
  * Reset the UI.
  * @param {Blast.status} status new Blast status text.
@@ -244,7 +231,7 @@ Blast.resetUi = function(status) {
   Blast.workspace.highlightBlock(null);
   Blast.highlightPause = false;
   // set Blast stauts
-  Blast.Ui.setStatus(status);
+  setStatus(status);
 };
 
 /**
@@ -271,7 +258,7 @@ Blast.resetInterpreter = function() {
   }
   Blast.Bluetooth.tearDown();
   Blast.removeDeviceHandlers();
-  Blast.States.clearIntervalEvents();
+  clearIntervalEvents();
   
   for (const func of Blast.cleanUpFunctions) {
     func();
@@ -296,7 +283,7 @@ Blast.removeDeviceHandlers = function() {
 Blast.runJS = function() {
   // Reset Ui
   Blast.resetUi(Blast.status.RUNNING);
-  Blast.Ui.addMessage('execution started', 'info');
+  addMessage('execution started', 'info');
   if (Blast.Interpreter == null) {
     // Begin execution
     Blast.highlightPause = false;
@@ -319,19 +306,18 @@ Blast.runJS = function() {
               // Execution is currently blocked by some async call.
               // Try again later.
               setTimeout(Blast.runner_, 1);
-            } else if (Blast.States.Interpreter || Blast.eventInWorkspace.length > 0) {
+            } else if (statesInterpreter || Blast.eventInWorkspace.length > 0) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.
             } else {
               // Program is complete.
               Blast.resetUi(Blast.status.READY);
-              Blast.Ui.addMessage('execution completed', 'info');
+              addMessage('execution completed', 'info');
               Blast.resetInterpreter();
             }
           }
         } catch (error) {
           Blast.throwError(error);
-          Blast.Ui.setStatus(Blast.status.ERROR);
           Blast.resetInterpreter();
           console.error(error);
         }
@@ -348,9 +334,8 @@ Blast.runJS = function() {
  */
 Blast.stopJS = function() {
   Blast.resetInterpreter();
-  if (Blast.States.Interpreter) {
-    clearTimeout(Blast.States.runner_);
-    Blast.States.runner_ = null;
+  if (statesInterpreter) {
+    Blast.States.resetInterpreter();
   }
   Blast.resetUi(Blast.status.STOPPED);
 };
@@ -366,10 +351,10 @@ Blast.throwError = function(text) {
     text = 'Error executing program - See console for details.';
   }
 
-  Blast.Ui.addMessage(text, 'error');
-  Blast.Ui.setStatus(Blast.status.ERROR);
+  addMessage(text, 'error');
+  setStatus(Blast.status.ERROR);
   Blast.resetInterpreter();
-  Blast.Ui.addMessage('Execution stopped', 'info');
+  addMessage('Execution stopped', 'info');
 };
 
 /**
