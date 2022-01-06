@@ -48,4 +48,4 @@ const mirobotPickUp = async function(box, callback) {
   }
 };
 // add pick-up function to the interpreter's API.
-Blast.asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);
+// Blast.asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);

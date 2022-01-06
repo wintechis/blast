@@ -34,4 +34,4 @@ Blockly.Blocks['mirobot_pickup'] = {
 };
 
 // Add the block to the toolbox.
-Blast.Toolbox.addBlock('mirobot_pickup', 'actions');
+// Blast.Toolbox.addBlock('mirobot_pickup', 'actions');
