@@ -15,7 +15,7 @@ Blockly.Blocks['streamdeck_button_event'] = {
   init: function() {
     this.appendValueInput('id')
         .setCheck('Thing')
-        .appendField('Streamdeck mini');
+        .appendField('Stream Deck Mini');
     this.appendDummyInput()
         .appendField('on button')
         .appendField(new Blockly.FieldDropdown([
@@ -117,7 +117,7 @@ Blockly.Blocks['streamdeck_color_buttons'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
     this.appendValueInput('id')
         .setCheck('Thing')
-        .appendField('of Stream Deck mini');
+        .appendField('of Stream Deck Mini');
     this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -166,7 +166,7 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
     this.appendValueInput('id')
         .setCheck('Thing')
-        .appendField('of Stream Deck mini');
+        .appendField('of Stream Deck Mini');
     this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -192,7 +192,7 @@ Blockly.Blocks['streamdeck_set_brightness'] = {
         .appendField('write brightness property');
     this.appendValueInput('id')
         .setCheck('Thing')
-        .appendField('to Stream Deck');
+        .appendField('to Stream Deck Mini');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

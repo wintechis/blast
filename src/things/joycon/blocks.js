@@ -151,7 +151,7 @@ Blockly.Blocks['joycon_button_events'] = {
         .setCheck('Thing')
         .appendField('Nintendo JoyCon');
     this.appendDummyInput()
-        .appendField('When')
+        .appendField('when')
         .appendField(new Blockly.FieldDropdown(
             [
               ['A', 'a'],

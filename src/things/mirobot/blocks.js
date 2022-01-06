@@ -14,7 +14,7 @@ Blockly.Blocks['mirobot_pickup'] = {
     */
   init: function() {
     this.appendDummyInput()
-        .appendField('Robot-arm, pick up')
+        .appendField('robot-arm, pick up')
         .appendField(
             new Blockly.FieldDropdown([
               ['blue', 'BLUE'],

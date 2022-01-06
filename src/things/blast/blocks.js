@@ -120,7 +120,7 @@ Blockly.Blocks['sparql_query'] = {
         .appendField('run SPARQL Query from URI')
         .setCheck('URI');
     this.appendDummyInput()
-        .appendField('Resource format')
+        .appendField('resource format')
         .appendField(new Blockly.FieldDropdown(
             [
               ['JSON-LD', 'application/ld+json'],
@@ -153,7 +153,7 @@ Blockly.Blocks['sparql_ask'] = {
         .appendField('run SPARQL ASK Query from URI')
         .setCheck('URI');
     this.appendDummyInput()
-        .appendField('Resource format')
+        .appendField('resource format')
         .appendField(new Blockly.FieldDropdown(
             [
               ['JSON-LD', 'application/ld+json'],
@@ -292,10 +292,10 @@ Blockly.Blocks['get_signal_strength_wb'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read signal-strength property of bluetooth device');
+        .appendField('read signal-strength property of Bluetooth device');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
-    this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a ble device, measured at the at the BLAST client.');
+    this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a BLE device, measured at the at the BLAST client.');
     this.setHelpUrl('');
     this.firstTime = true;
     this.deviceId = '';
@@ -346,13 +346,13 @@ Blockly.Blocks['write_eddystone_property'] = {
         .appendField('value')
         .setCheck('Number');
     this.appendValueInput('Thing')
-        .appendField('to eddystone device')
+        .appendField('to Eddystone device')
         .setCheck('Thing');
     this.setPreviousStatement(true, null);
     this.setInputsInline(true);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('Writes a property to an eddystone device.');
+    this.setTooltip('Writes a property to an Eddystone device.');
     this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
   },
   propertyValidator: function(property) {
@@ -410,12 +410,12 @@ Blockly.Blocks['read_eddystone_property'] = {
         .setCheck('Number')
         .appendField('at slot');
     this.appendValueInput('Thing')
-        .appendField('of eddystone device')
+        .appendField('of Eddystone device')
         .setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setInputsInline(true);
-    this.setTooltip('Reads a property from an eddystone device.');
+    this.setTooltip('Reads a property from an Eddystone device.');
     this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
   },
 };
