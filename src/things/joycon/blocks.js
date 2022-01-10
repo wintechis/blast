@@ -181,9 +181,9 @@ Blockly.Blocks['joycon_button_events'] = {
    * Add this block's id to the events array.
    */
   addEvent: async function() {
-    Blast.eventInWorkspace.push(this.id);
+    Blast.Interpreter.eventInWorkspace.push(this.id);
     // remove event if block is deleted
-    Blast.workspace.addChangeListener((event) => this.onDispose(event));
+    Blast.Interpreter.getWorkspace().addChangeListener((event) => this.onDispose(event));
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -204,9 +204,9 @@ Blockly.Blocks['joycon_button_events'] = {
    */
   removeFromEvents: function() {
     // remove this block from the events array.
-    const index = Blast.eventInWorkspace.indexOf(this.id);
+    const index = Blast.Interpreter.eventInWorkspace.indexOf(this.id);
     if (index !== -1) {
-      Blast.eventInWorkspace.splice(index, 1);
+      Blast.Interpreter.eventInWorkspace.splice(index, 1);
     }
   },
 };

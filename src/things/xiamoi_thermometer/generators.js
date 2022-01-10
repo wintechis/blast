@@ -34,7 +34,7 @@ Blast.Bluetooth.optionalServices.push(XiaomiServiceUUID);
 const readMijiaProperty = function async(measurement, webBluetoothId, callback) {
   // make sure a device is connected.
   if (!webBluetoothId) {
-    Blast.throwError('No Thermometer is set.');
+    Blast.Interpreter.throwError('No Thermometer is set.');
     callback();
     return;
   }
@@ -65,4 +65,4 @@ const readMijiaProperty = function async(measurement, webBluetoothId, callback) 
 };
 
 // add readMijiaProperty to the interpreter's API.
-Blast.asyncApiFunctions.push(['readMijiaProperty', readMijiaProperty]);
+Blast.Interpreter.asyncApiFunctions.push(['readMijiaProperty', readMijiaProperty]);

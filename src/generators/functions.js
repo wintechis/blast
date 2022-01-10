@@ -61,4 +61,4 @@ Blockly.JavaScript['procedures_calleval'] = function(block) {
 };
 
 // Add console to JSInterpreter for debugging with the procedures_calleval block.
-Blast.apiFunctions.push(['log', console.log]);
+Blast.Interpreter.apiFunctions.push(['log', console.log]);

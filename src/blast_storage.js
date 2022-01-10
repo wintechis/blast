@@ -15,11 +15,13 @@
 goog.module('Blast.Storage');
 goog.module.declareLegacyNamespace();
 
-const {resetThings} = goog.require('Blast.Things');
-const {getWebBluetoothDevices} = goog.require('Blast.Things');
-const {getWebHIDDevices} = goog.require('Blast.Things');
 const {addWebBluetoothDevice} = goog.require('Blast.Things');
 const {addWebHidDevice} = goog.require('Blast.Things');
+const {getWebBluetoothDevices} = goog.require('Blast.Things');
+const {getWebHIDDevices} = goog.require('Blast.Things');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+const {resetInterpreter} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
 
 /**
  * Http-request error message.
@@ -52,7 +54,6 @@ let filename = 'BLAST.xml';
   * @param {boolean=} download optional, if true, save to file.
   */
 const link = function(download) {
-  const workspace = Blast.workspace;
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
   if (workspace.getTopBlocks(false).length == 1 && xml.querySelector) {
@@ -135,7 +136,7 @@ const saveXML_ = function(path, xml) {
       location.hash = path;
       Blockly.alert(LINK_ALERT.replace('%1', window.location.href));
     } else {
-      Blast.throwError(HTTPREQUEST_ERROR);
+      throwError(HTTPREQUEST_ERROR);
     }
   });
 };
@@ -207,11 +208,7 @@ const resetFileInput = function() {
 const retrieveXML_ = async function(path) {
   Blockly.hideChaff();
   // stop execution
-  Blast.resetInterpreter();
-  Blast.resetUi(Blast.status.READY);
-
-  // Reset device lists.
-  resetThings();
+  resetInterpreter();
 
   resetFileInput();
   
@@ -221,7 +218,7 @@ const retrieveXML_ = async function(path) {
         if (response.ok) {
           return response.text();
         } else {
-          Blast.throwError(NOT_FOUND_ERROR.replace('%1', path));
+          throwError(NOT_FOUND_ERROR.replace('%1', path));
         }
       })
       .then(loadXML);
@@ -234,12 +231,13 @@ const retrieveXML_ = async function(path) {
  */
 const loadXML = function(xmlString) {
   let xml;
+  const workspace = getWorkspace();
   // clear blocks
-  Blast.workspace.clear();
+  workspace.clear();
   try {
     xml = Blockly.Xml.textToDom(xmlString);
   } catch (e) {
-    Blast.throwError(XML_ERROR + '\nXML: ' + xml);
+    throwError(XML_ERROR + '\nXML: ' + xml);
     return;
   }
 
@@ -254,8 +252,8 @@ const loadXML = function(xmlString) {
     return;
   }
           
-  Blockly.Xml.domToWorkspace(xml, Blast.workspace);
-  monitorChanges_(Blast.workspace);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  monitorChanges_(workspace);
 };
 
 /**
@@ -340,17 +338,14 @@ const generatePairButtonsDesktop_ = function(xml) {
           if (allConnectedDesktop_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
-              document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-              document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-            }
+            document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
           }
         } else if (type == 'things_webHID') {
           const filters = [];
       
           navigator.hid.requestDevice({filters})
               .then((device) => {
-                if (device.length === 0) Blast.throwError('Connection failed or cancelled by User.');
+                if (device.length === 0) throwError('Connection failed or cancelled by User.');
                 // generate a unique id for the new device
                 const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
                 // add device to the device map with its uid
@@ -366,14 +361,11 @@ const generatePairButtonsDesktop_ = function(xml) {
                 if (allConnectedDesktop_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
-                  if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
-                    document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-                    document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-                  }
+                  document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
                 }
               })
               .catch((error) => {
-                Blast.throwError('Connection failed or cancelled by User.');
+                throwError('Connection failed or cancelled by User.');
                 console.error(error);
               });
         }
@@ -463,17 +455,14 @@ const generatePairButtonsMobile_ = function(xml) {
           if (allConnectedMobile_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
-              document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-              document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-            }
+            document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
           }
         } else if (type == 'things_webHID') {
           const filters = [];
       
           navigator.hid.requestDevice({filters})
               .then((device) => {
-                if (device.length === 0) Blast.throwError('Connection failed or cancelled by User.');
+                if (device.length === 0) throwError('Connection failed or cancelled by User.');
                 // generate a unique id for the new device
                 const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
                 // add device to the device map with its uid
@@ -487,19 +476,16 @@ const generatePairButtonsMobile_ = function(xml) {
 
                 // set block id to device id
                 block.firstElementChild.textContent = uid;
-                                
+                  
                 // if all devices have been paired, enable done button
-                if (allConnectedDesktop_()) {
+                if (allConnectedMobile_()) {
                   document.getElementById('rc-done').disabled = false;
                   // add done button click listener
-                  if (!document.getElementById('rc-done').getAttribute('data-hasEvent')) {
-                    document.getElementById('rc-done').setAttribute('data-hasEvent', true);
-                    document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-                  }
+                  document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
                 }
               })
               .catch((error) => {
-                Blast.throwError('Connection failed or cancelled by User.');
+                throwError('Connection failed or cancelled by User.');
                 console.error(error);
               });
         }
@@ -550,6 +536,7 @@ const allConnectedMobile_ = function() {
  * @private
  */
 const reconnectDoneHandler_ = function(xml) {
+  const workspace = getWorkspace();
   if (window.location.href.includes('mobile')) {
     // hide reconnect dialog
     document.getElementById('rc-dialog').style.display = 'none';
@@ -557,9 +544,15 @@ const reconnectDoneHandler_ = function(xml) {
     // hide reconnect modal
     document.getElementById('rcModal').style.display = 'none';
   }
+  // Clone rc-done button to remove click listener
+  const doneButton = document.getElementById('rc-done');
+  const doneButtonClone = doneButton.cloneNode(true);
+  doneButtonClone.disabled = true;
+  doneButton.parentNode.replaceChild(doneButtonClone, doneButton);
+
   // rebuild workspace from xml
-  Blockly.Xml.domToWorkspace(xml, Blast.workspace);
-  monitorChanges_(Blast.workspace);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+  monitorChanges_(workspace);
 };
 
 /**
@@ -620,7 +613,7 @@ window.addEventListener('load', function() {
     try {
       retrieveXML_(path);
     } catch (e) {
-      Blast.throwError('Could not load file.');
+      throwError('Could not load file.');
       console.error(e);
     }
   }

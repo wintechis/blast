@@ -30,4 +30,4 @@ const waitForSeconds = function(timeInSeconds, callback) {
   setTimeout(callback, timeInSeconds * 1000);
 };
 // Add waitForSeconds method to the interpreter's API
-Blast.asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);
+Blast.Interpreter.asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);

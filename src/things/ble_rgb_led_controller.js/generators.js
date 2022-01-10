@@ -37,7 +37,7 @@ Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
 const switchLights = async function(mac, colour, callback) {
   // make sure a device is connected.
   if (!mac) {
-    Blast.throwError('No LED Controller is set.');
+    Blast.Interpreter.throwError('No LED Controller is set.');
     callback();
     return;
   }
@@ -49,5 +49,5 @@ const switchLights = async function(mac, colour, callback) {
   callback();
 };
 // Add switchLights function to the interpreter's API.
-Blast.asyncApiFunctions.push(['switchLights', switchLights]);
+Blast.Interpreter.asyncApiFunctions.push(['switchLights', switchLights]);
 

@@ -105,7 +105,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
   const advertisementData = await getAdvertisementData(0);
   // If still no event data, return an error
   if (!advertisementData) {
-    Blast.throwError('Timed out. No BLE advertising data found for ' + webBluetoothId);
+    Blast.Interpreter.throwError('Timed out. No BLE advertising data found for ' + webBluetoothId);
   }
 
   // Parse the event data
@@ -118,4 +118,4 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
 };
 
 // add getRuuviProperty function to the interpreter's API.
-Blast.asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);
+Blast.Interpreter.asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);

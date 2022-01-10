@@ -15,6 +15,11 @@
 goog.module('Blast.Things');
 goog.module.declareLegacyNamespace();
 
+const {addToLog} = goog.require('Blast.Ui');
+const {cleanUpFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+
 /**
  * Maps device names to BluetoothDevice.id.
  */
@@ -39,7 +44,7 @@ const resetThings = function() {
   webHidNames.clear();
   webHidDevices.clear();
 };
-exports.resetThings = resetThings;
+cleanUpFunctions.push(resetThings);
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
@@ -131,12 +136,11 @@ const flyoutCategory = function(workspace) {
 
   return xmlList;
 };
-exports.thingsFlyoutCategory = flyoutCategory;
+exports.flyoutCategory = flyoutCategory;
 
 
 /**
  * Construct the webBluetooth blocks required by the flyout for the things category.
- * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocksWHid = function() {
@@ -157,7 +161,6 @@ const flyoutCategoryBlocksWHid = function() {
 
 /**
  * Construct the webHIDh blocks required by the flyout for the things category.
- * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocksWB = function() {
@@ -270,32 +273,33 @@ exports.addWebBluetoothDevice = addWebBluetoothDevice;
  * Handles "connect via webHID" button in the things toolbox category.
  */
 createWebHidButtonHandler = function() {
-  Blast.Ui.addToLog('Requesting webHID device...', 'HID');
+  const workspace = getWorkspace();
+  addToLog('Requesting webHID device...', 'HID');
   navigator.hid.requestDevice({filters: []})
       .then((device) => {
         if (device.length === 0) {
-          Blast.throwError('Connection failed or cancelled by User.');
+          throwError('Connection failed or cancelled by User.');
           return;
         }
         // generate a unique id for the new device
-        const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
+        const uid = Date.now().toString(36) + Math.random().toString(36).substring(2);
         // add device to the device map with its uid
         addWebHidDevice(uid, device[0].productName, device[0]);
-        Blast.workspace.refreshToolboxSelection();
-        Blast.Ui.addToLog('Connected', 'HID', device[0].productName);
+        workspace.refreshToolboxSelection();
+        addToLog('Connected', 'HID', device[0].productName);
       })
       .catch((error) => {
-        Blast.throwError(error);
+        throwError(error);
       });
 };
 
 /**
  * Creates user defined identifier to get devices from {@link webHidDevices}.
- * @param {strubg} id identifier of the device in {@link webHidDevices}.
+ * @param {strubg} uid identifier of the device in {@link webHidDevices}.
  * @param {string} deviceName default name for the device.
  * @param {HIDDevice} device the device to add.
  */
-const addWebHidDevice = function(id, deviceName, device) {
+const addWebHidDevice = function(uid, deviceName, device) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(name, id) {
     Blockly.Variables.promptName('Connection established! Now give your device a name.', name,
@@ -312,7 +316,7 @@ const addWebHidDevice = function(id, deviceName, device) {
                   });
             } else {
               // No conflict
-              webHidDevices.set(uid, device);
+              webHidDevices.set(id, device);
               webHidNames.set(text, id);
             }
           } else {
@@ -323,6 +327,6 @@ const addWebHidDevice = function(id, deviceName, device) {
           }
         });
   };
-  promptAndCheckWithAlert(deviceName, id);
+  promptAndCheckWithAlert(deviceName, uid);
 };
 exports.addWebHidDevice = addWebHidDevice;

@@ -24,13 +24,13 @@ const convertToUri = function(uri) {
   try {
     new URL(uri);
   } catch (e) {
-    Blast.throwError('The given string is not a valid URI.');
+    Blast.Interpreter.throwError('The given string is not a valid URI.');
   }
   return uri;
 };
 
 // add convertToUri method to the interpreter's API.
-Blast.apiFunctions.push(['convertToUri', convertToUri]);
+Blast.Interpreter.apiFunctions.push(['convertToUri', convertToUri]);
   
 Blockly.JavaScript['mac'] = function(block) {
   const mac = Blockly.JavaScript.quote_(block.getFieldValue('MAC'));

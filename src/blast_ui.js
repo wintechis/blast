@@ -14,7 +14,14 @@
 goog.module('Blast.Ui');
 goog.module.declareLegacyNamespace();
 
-const {link, load} = goog.require('Blast.Storage');
+const {getLatestCode} = goog.require('Blast.Interpreter');
+const {runJS} = goog.require('Blast.Interpreter');
+const {onStatusChange} = goog.require('Blast.Interpreter');
+const {setStdError} = goog.require('Blast.Interpreter');
+const {setStdInfo} = goog.require('Blast.Interpreter');
+const {setStdOut} = goog.require('Blast.Interpreter');
+const {statusValues} = goog.require('Blast.Interpreter');
+const {stopJS} = goog.require('Blast.Interpreter');
 
 /**
  * List of tab names.
@@ -67,18 +74,77 @@ let messageOutputContainer = null;
 let statusContainer = null;
 
 /**
- * Input to defining URIs for safing and loading blocks.
- * @type {?HTMLElement}
- * @public
- */
-let uriInput = null;
-
-/**
  * Button to start/stop execution of the user's code.
  * @type {?HTMLElement}
  * @public
  */
 let runButton = null;
+
+/**
+ * The workspace used to display the user's code.
+ */
+let workspace = null;
+
+/**
+ * Bind a function to a button's click event.
+ * @param {!Element|string} el Button element or ID thereof.
+ * @param {!Function} func func Event handler to bind.
+ * @public
+ */
+const bindClick = function(el, func) {
+  if (typeof el == 'string') {
+    el = document.getElementById(el);
+  }
+  el.addEventListener('click', func, true);
+  el.addEventListener('touchend', func, true);
+};
+exports.bindClick = bindClick;
+
+
+/**
+ * Set the start/stop button and status text.
+ * @param {Blast.Interpreter.statusValues} val new Blast status text.
+ * @public
+ */
+const setStatus = function(val) {
+  let icon;
+  let func;
+  let title;
+  if (val === statusValues.RUNNING) {
+    func = stopJS;
+    icon = stopIcon_;
+    title = 'Stop the execution';
+  } else {
+    func = runJS;
+    icon = playIcon_;
+    title = 'Run block program';
+  }
+
+  // Set start/stop button click event and icon
+  runButton.onclick = func;
+  runButton.title = title;
+  runButton.innerHTML = icon;
+  // set status text
+  statusContainer.innerHTML = val;
+};
+onStatusChange.stopped.push(() => setStatus(statusValues.STOPPED));
+onStatusChange.running.push(() => setStatus(statusValues.RUNNING));
+
+/**
+ * Reset the UI.
+ * @param {Blast.Interpreter.statusValues} val new Blast status text.
+ * @public
+ */
+const resetUi = function(val) {
+  // remove highlighting
+  workspace.highlightBlock(null);
+  // set Blast stauts
+  setStatus(val);
+};
+onStatusChange.stopped.push(() => resetUi(statusValues.STOPPED));
+onStatusChange.running.push(() => resetUi(statusValues.RUNNING));
+onStatusChange.ready.push(() => resetUi(statusValues.READY));
+onStatusChange.error.push(() => resetUi(statusValues.ERROR));
 
 /**
  * Adds a DOM Element to the {@link messageOutputContainer}.
@@ -96,6 +162,7 @@ const addElementToOutputContainer = function(elem) {
   // scroll to bottom of container
   messageOutputContainer.scrollTop = messageOutputContainer.scrollHeight;
 };
+exports.addElementToOutputContainer = addElementToOutputContainer;
 
 /**
  * Creates a message element and adds it to the {@link messageOutputContainer}.
@@ -173,7 +240,9 @@ const addMessage = function(message, type) {
 
   addElementToOutputContainer(msg);
 };
-exports.addMessage = addMessage;
+setStdError((message) => addMessage(message, 'error'));
+setStdInfo((message) => addMessage(message, 'info'));
+setStdOut((message) => addMessage(message));
 
 /**
  * Switch the visible pane when a tab is clicked.
@@ -196,7 +265,7 @@ const tabClick_ = function(clickedName) {
   selectedTab.classList.add('tabon');
   // Show the selected pane.
   document.getElementById('content_' + clickedName).style.visibility = 'visible';
-  Blockly.svgResize(Blast.workspace);
+  Blockly.svgResize(workspace);
 };
 
 /**
@@ -206,7 +275,7 @@ const tabClick_ = function(clickedName) {
 const renderContent_ = function() {
   // render the xml content.
   const xmlTextarea = document.getElementById('content_xml');
-  const xmlDom = Blockly.Xml.workspaceToDom(Blast.workspace);
+  const xmlDom = Blockly.Xml.workspaceToDom(workspace);
   const xmlText = Blockly.Xml.domToPrettyText(xmlDom);
   xmlTextarea.value = xmlText;
   xmlTextarea.focus();
@@ -215,14 +284,13 @@ const renderContent_ = function() {
   const content = document.getElementById('content_javascript');
 
   // remove highlightblock functions from the js code tab
-  content.textContent = Blast.latestCode.replace(/highlightBlock\('.*'\);\n/gm, '');
+  content.textContent = getLatestCode().replace(/highlightBlock\('.*'\);\n/gm, '');
   // Remove the 'prettyprinted' class, so that Prettify will recalculate.
   content.className = content.className.replace('prettyprinted', '');
   if (typeof PR == 'object') {
     PR.prettyPrint();
   }
 };
-exports.renderContent_ = renderContent_;
 
 /**
  * Adds a message to the device log tab.
@@ -305,39 +373,25 @@ const ClearLog = function() {
 };
 
 /**
- * Set the start/stop button and status text.
- * @param {Blast.status} status new Blast status text.
+ * Load the Prettify CSS and JavaScript.
  * @public
  */
-const setStatus = function(status) {
-  let icon;
-  let func;
-  let title;
-  if (status === Blast.status.RUNNING) {
-    func = Blast.stopJS;
-    icon = stopIcon_;
-    title = 'Stop the execution';
-  } else {
-    func = Blast.runJS;
-    icon = playIcon_;
-    title = 'Run block program';
-  }
-
-  // Set start/stop button click event and icon
-  runButton.onclick = func;
-  runButton.title = title;
-  runButton.innerHTML = icon;
-  // set status text
-  statusContainer.innerHTML = status;
+const importPrettify = function() {
+  const script = document.createElement('script');
+  script.setAttribute(
+      'src',
+      'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js',
+  );
+  document.head.appendChild(script);
 };
-exports.setStatus = setStatus;
 
 /**
  * Initialize the UI by binding onclick events.
+ * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
  */
-const init = function() {
+const init = function(ws) {
+  workspace = ws;
   // Set remaining properties.
-  uriInput = document.getElementById('loadWorkspace-input');
   runButton = document.getElementById('runButton');
   messageOutputContainer = document.getElementById('msgOutputContainer');
   statusContainer = document.getElementById('statusContainer');
@@ -351,7 +405,7 @@ const init = function() {
   tabClick_(selected_);
 
   for (const name of TABS_) {
-    Blast.bindClick(
+    bindClick(
         'tab_' + name,
         (function(name_) {
           return function() {
@@ -361,22 +415,46 @@ const init = function() {
     );
   }
 
+  // adjust workspace and toolbox on resize
+  const onresize = function() {
+    for (const tab of TABS_) {
+      const el = document.getElementById('content_' + tab);
+      el.style.top = '35px';
+      el.style.left = '0px';
+      // Height and width need to be set, read back, then set again to
+      // compensate for scrollbars.
+      el.style.height = window.innerHeight - 35 + 'px';
+      el.style.width = window.innerWidth - 450 + 'px';
+    }
+    // Make the 'workspace' tab line up with the toolbox.
+    if (workspace && workspace.getToolbox().width) {
+      // Account for the 19 pixel margin and on each side.
+      document.getElementById('tab_workspace').style.minWidth =
+              workspace.getToolbox().width - 38 + 'px';
+    }
+    Blockly.svgResize(workspace);
+  };
+  window.addEventListener('resize', onresize, false);
 
-  setStatus(Blast.status.READY);
+  onresize();
+  Blockly.svgResize(workspace);
 
-  Blast.bindClick('UriLoadButton', load);
-  Blast.bindClick('UriSaveButton', link);
-  Blast.bindClick('saveButton', () => {
-    link(true);
-  });
-  Blast.bindClick('clearDeviceLogsButton', ClearLog);
-  Blast.bindClick('clearOutputButton', ClearOutputContainer);
-
-  // load blocks from URI on Enter
-  uriInput.addEventListener('keyup', (event) => {
-    if (event.keyCode === 13) {
-      load();
+  // Call renderContent_ on changes to the workspace.
+  workspace.addChangeListener(function(event) {
+    if (!(event instanceof Blockly.Events.Ui)) {
+      renderContent_();
     }
   });
+
+  bindClick('saveButton', () => {
+    link(true);
+  });
+  bindClick('clearDeviceLogsButton', ClearLog);
+  bindClick('clearOutputButton', ClearOutputContainer);
+
+  // Lazy-load the syntax-highlighting.
+  window.setTimeout(importPrettify, 1);
+
+  setStatus(statusValues.READY);
 };
 exports.initUi = init;

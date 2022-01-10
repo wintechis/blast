@@ -111,7 +111,7 @@ Blast.Bluetooth.Eddystone.setActiveSlot = async function(webBluetoothId, slot) {
   // check if slot is valid
   const capabilities = await Blast.Bluetooth.Eddystone.getCapabilities(webBluetoothId);
   if (slot < 0 || slot >= capabilities.maxSlots) {
-    Blast.throwError(
+    Blast.Interpreter.throwError(
         `Eddystone slot is not valid.
          On this device the slot must be between 0 and ${capabilities.maxSlots - 1}.`,
     );
@@ -189,7 +189,7 @@ Blast.Bluetooth.Eddystone.setTxPowerLevel = async function(webBluetoothId, txPow
   // check if txPowerLevel is valid
   const capabilities = await Blast.Bluetooth.Eddystone.getCapabilities(webBluetoothId);
   if (capabilities.supportedTxPowerLevels.indexOf(txPowerLevel) === -1) {
-    Blast.throwError(
+    Blast.Interpreter.throwError(
         `Eddystone TX power level is not valid.
          On this device the TX power level must be one of ${capabilities.supportedTxPowerLevels}.`,
     );
@@ -318,7 +318,7 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
         urlPrefix = 'https://';
         break;
       default:
-        Blast.throwError('Eddystone URL scheme is not valid.');
+        Blast.Interpreter.throwError('Eddystone URL scheme is not valid.');
         return;
     }
      
@@ -406,10 +406,10 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
       data = decodeEddystoneTlm(advertisingData);
       return data.beaconTemperature;
     case '30':
-      Blast.throwError('EID frame type is not supported by blast.');
+      Blast.Interpreter.throwError('EID frame type is not supported by blast.');
       return;
     default:
-      Blast.throwError('Eddystone frame type is not valid.');
+      Blast.Interpreter.throwError('Eddystone frame type is not valid.');
       return;
   }
 };
@@ -475,7 +475,7 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, fr
     }
  
     if (encodedUrl.length > 18) {
-      Blast.throwError('URL is too long.');
+      Blast.Interpreter.throwError('URL is too long.');
       return;
     }
      
@@ -490,7 +490,7 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, fr
   } else if (frameType === 'UID') {
     // Checks if the UID is 32 hex chars.
     if (!/^[0-9A-Fa-f]{32}$/.test(data)) {
-      Blast.throwError('Eddystone UID must be 32 hexadecimal characters.');
+      Blast.Interpreter.throwError('Eddystone UID must be 32 hexadecimal characters.');
       return;
     }
     

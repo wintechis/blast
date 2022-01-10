@@ -126,7 +126,7 @@ const chooseAlgo = async function(thing, value, callback) {
   callback();
 };
 
-Blast.asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
+Blast.Interpreter.asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 
 
 /**
@@ -146,7 +146,7 @@ const learnID = async function(thing, id, callback) {
   callback();
 };
 
-Blast.asyncApiFunctions.push(['learnID', learnID]);
+Blast.Interpreter.asyncApiFunctions.push(['learnID', learnID]);
 
 /**
  * write forget flag to Huskyduino via bluetooth
@@ -166,7 +166,7 @@ const forgetAll = async function(thing, flag, callback) {
   callback();
 };
 
-Blast.asyncApiFunctions.push(['forgetAll', forgetAll]);
+Blast.Interpreter.asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
  * read the face IDs of all known faces currently visible to the camera via bluetooth.
@@ -185,4 +185,4 @@ const readID = async function(thing, callback) {
   callback(id);
 };
 
-Blast.asyncApiFunctions.push(['readID', readID]);
+Blast.Interpreter.asyncApiFunctions.push(['readID', readID]);

@@ -26,14 +26,14 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
 const blinkstickSetColors = async function(id, index, colour, callback) {
   // check if index is between 0 and 7.
   if (index < 0 || index > 7) {
-    Blast.throwError('BlinkStick index must be between 0 and 7.');
+    Blast.Interpreter.throwError('BlinkStick index must be between 0 and 7.');
     callback();
     return;
   }
   
   // If no things block is attached, return.
   if (!id) {
-    Blast.throwError('No BlinkStick block set.');
+    Blast.Interpreter.throwError('No BlinkStick block set.');
     callback();
     return;
   }
@@ -41,7 +41,7 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
   const device = Blast.Things.webHidDevices.get(id);
 
   if (!device) {
-    Blast.throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
+    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
     callback();
     return;
   }
@@ -50,13 +50,13 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
     try {
       await device.open();
     } catch (error) {
-      Blast.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      Blast.Interpreter.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
 
   // check if the device is a BlinkStick
   if (device.vendorId !== 8352 || device.productId !== 16869) {
-    Blast.throwError('The connected device is not a BlinkStick.');
+    Blast.Interpreter.throwError('The connected device is not a BlinkStick.');
     callback();
     return;
   }
@@ -79,7 +79,7 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
         await setColor(--retries);
       } else {
         console.error(error);
-        Blast.throwError('Failed to set BlinkStick colors, please check its connection.');
+        Blast.Interpreter.throwError('Failed to set BlinkStick colors, please check its connection.');
       }
     }
   };
@@ -88,4 +88,4 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 };
 
 // add joycon_read_property function to the interpreter's API.
-Blast.asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);
+Blast.Interpreter.asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);

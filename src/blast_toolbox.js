@@ -7,15 +7,12 @@
 'use strict';
 
 /**
- * The namespace used to access the Blast library.
- * @name Blast.Ui
+ * Defines the toolbox and its helper methods.
+ * @name Blast.Toolbox
  * @namespace
  */
 goog.module('Blast.Toolbox');
 goog.module.declareLegacyNamespace();
-
-const {statesFlyoutCategory} = goog.require('Blast.States');
-const {thingsFlyoutCategory} = goog.require('Blast.Things');
 
 const defaultToolbox = {
   kind: 'categoryToolbox',
@@ -189,18 +186,6 @@ const defaultToolbox = {
  */
 const currentToolbox = defaultToolbox;
 exports.currentToolbox = currentToolbox;
-
-/**
- * Initialize the toolbox
- */
-const init = function() {
-  // register states category flyout callback
-  Blast.workspace.registerToolboxCategoryCallback('STATES', statesFlyoutCategory);
-
-  // register things category flyout callback
-  Blast.workspace.registerToolboxCategoryCallback('THINGS', thingsFlyoutCategory);
-};
-exports.initToolbox = init;
 
 /**
  * Get category by name.

@@ -115,10 +115,10 @@ Blast.Bluetooth.requestDevice = async function(options, deviceName) {
       const name = deviceName || device.name;
            
       Blast.Things.addWebBluetoothDevice(device.id, name);
-      Blast.workspace.refreshToolboxSelection();
+      Blast.Interpreter.getWorkspace().refreshToolboxSelection();
       return (device);
     } catch (error) {
-      Blast.throwError(error);
+      Blast.Interpreter.throwError(error);
     }
   }
 };
@@ -135,7 +135,7 @@ Blast.Bluetooth.getDeviceById = async function(id) {
       return device;
     }
   }
-  Blast.throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
+  Blast.Interpreter.throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
 };
  
 /**
@@ -151,7 +151,7 @@ Blast.Bluetooth.connect = async function(id) {
     Blast.Ui.addToLog('Connected', 'Bluetooth', id);
     return request;
   } catch (error) {
-    Blast.throwError(`Error connecting to Bluetooth device ${id}`);
+    Blast.Interpreter.throwError(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -170,7 +170,7 @@ Blast.Bluetooth.disconnect = async function(id) {
     Blast.Ui.addToLog(`Disconnected from <code>${id}</code>`, 'Bluetooth');
     return request;
   } catch (error) {
-    Blast.throwError(`Error disconnecting from Bluetooth device ${id}`);
+    Blast.Interpreter.throwError(`Error disconnecting from Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -206,7 +206,7 @@ Blast.Bluetooth.gatt_writeWithoutResponse = async function(
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    Blast.throwError(errorMsg);
+    Blast.Interpreter.throwError(errorMsg);
   }
 };
  
@@ -244,7 +244,7 @@ Blast.Bluetooth.gatt_writeWithResponse = async function(
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    Blast.throwError(errorMsg);
+    Blast.Interpreter.throwError(errorMsg);
   }
 };
  
@@ -264,7 +264,7 @@ Blast.Bluetooth.getPrimaryService = async function(id, serviceUUID) {
     Blast.Ui.addToLog(`Got primary service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.throwError('The device is not compatible with the connected block.');
+    Blast.Interpreter.throwError('The device is not compatible with the connected block.');
   }
   return service;
 };
@@ -292,7 +292,7 @@ Blast.Bluetooth.getCharacteristic = async function(id, serviceUUID, characterist
         `Got characteristic <code>${characteristicUUID}</code> from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.throwError('The device is not compatible with the connected block.');
+    Blast.Interpreter.throwError('The device is not compatible with the connected block.');
   }
   return characteristic;
 };
@@ -322,7 +322,7 @@ Blast.Bluetooth.gatt_read = async function(id, serviceUUID, characteristicUUID) 
     return value;
   } catch (error) {
     console.error(error);
-    Blast.throwError(`Error reading from Bluetooth device ${id}`);
+    Blast.Interpreter.throwError(`Error reading from Bluetooth device ${id}`);
   }
 };
  
@@ -404,7 +404,7 @@ Blast.Bluetooth.gatt_subscribe = async function(id, serviceUUID, charUUID, handl
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.throwError(`Error subscribing to Bluetooth device ${id}`);
+    Blast.Interpreter.throwError(`Error subscribing to Bluetooth device ${id}`);
   }
 };
  

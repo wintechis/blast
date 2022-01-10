@@ -38,7 +38,7 @@ Blockly.JavaScript['web_speech'] = function(block) {
  * @public
  */
 const webSpeech = async function(blockId, callback) {
-  const block = Blast.workspace.getBlockById(blockId);
+  const block = Blast.Interpreter.getWorkspace().getBlockById(blockId);
   const recognition = block.recognition;
   recognition.continuous = false;
   recognition.lang = 'en-US';
@@ -59,7 +59,7 @@ const webSpeech = async function(blockId, callback) {
   recognition.start();
 };
 // add block webSpeech to the interpreter's API.
-Blast.asyncApiFunctions.push(['webSpeech', webSpeech]);
+Blast.Interpreter.asyncApiFunctions.push(['webSpeech', webSpeech]);
 
 /**
  * Invokes a SpeechSynthesisUtterance to read out a text.
@@ -83,4 +83,4 @@ const textToSpeech = async function(text, callback) {
   callback();
 };
 // add textToSpeech function to the interpreter's API.
-Blast.asyncApiFunctions.push(['textToSpeech', textToSpeech]);
+Blast.Interpreter.asyncApiFunctions.push(['textToSpeech', textToSpeech]);

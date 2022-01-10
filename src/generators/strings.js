@@ -22,3 +22,6 @@ Blockly.JavaScript['string_count'] = Blockly.JavaScript['text_count'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
 Blockly.JavaScript['string_reverse'] = Blockly.JavaScript['text_reverse'];
 Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
+
+// Add prompt function to the interpreter API.
+Blast.Interpreter.apiFunctions.push(['prompt', prompt]);
