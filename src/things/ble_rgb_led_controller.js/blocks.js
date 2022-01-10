@@ -6,6 +6,10 @@
  */
 
 'use strict';
+
+goog.module('Blast.blocks.ble_rgb_led_controller');
+
+const {addBlock} = goog.require('Blast.Toolbox');
  
 Blockly.Blocks['switch_lights_rgb'] = {
   /**
@@ -51,4 +55,4 @@ const SWITCH_LIGHTS_RGB_XML = `
 </block>`;
 
 // Add switch_lights_rgb block to the toolbox.
-Blast.Toolbox.addBlock('switch_lights_rgb', 'Properties', SWITCH_LIGHTS_RGB_XML);
+addBlock('switch_lights_rgb', 'Properties', SWITCH_LIGHTS_RGB_XML);

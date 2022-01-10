@@ -7,6 +7,11 @@
 
 'use strict';
 
+goog.module('Blast.generators.ruuvi_tag');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 /**
  * Generates JavaScript code for the get_temperature block.
  * @param {Blockly.Block} block the get_temperature block.
@@ -105,7 +110,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
   const advertisementData = await getAdvertisementData(0);
   // If still no event data, return an error
   if (!advertisementData) {
-    Blast.Interpreter.throwError('Timed out. No BLE advertising data found for ' + webBluetoothId);
+    throwError('Timed out. No BLE advertising data found for ' + webBluetoothId);
   }
 
   // Parse the event data
@@ -118,4 +123,4 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
 };
 
 // add getRuuviProperty function to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);
+asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);

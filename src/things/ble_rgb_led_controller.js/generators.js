@@ -6,6 +6,11 @@
  */
 
 'use strict';
+
+goog.module('Blast.generators.ble_rgb_led_controller');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
  
 /**
   * Generates JavaScript code for the switch_lights_RGB block.
@@ -37,7 +42,7 @@ Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
 const switchLights = async function(mac, colour, callback) {
   // make sure a device is connected.
   if (!mac) {
-    Blast.Interpreter.throwError('No LED Controller is set.');
+    throwError('No LED Controller is set.');
     callback();
     return;
   }
@@ -49,5 +54,5 @@ const switchLights = async function(mac, colour, callback) {
   callback();
 };
 // Add switchLights function to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['switchLights', switchLights]);
+asyncApiFunctions.push(['switchLights', switchLights]);
 

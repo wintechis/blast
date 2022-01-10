@@ -7,6 +7,12 @@
 
 'use strict';
 
+goog.module('Blast.blocks.streamdeck');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+const {eventsInWorkspace} = goog.require('Blast.Interpreter');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+
 Blockly.Blocks['streamdeck_button_event'] = {
   /**
    * Block handling streamdeck button pushes.
@@ -60,9 +66,9 @@ Blockly.Blocks['streamdeck_button_event'] = {
    * Add this block's id to the events array.
    */
   addEvent: async function() {
-    Blast.Interpreter.eventsInWorkspace.push(this.id);
+    eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    Blast.Interpreter.getWorkspace().addChangeListener((event) => this.onDispose(event));
+    getWorkspace().addChangeListener((event) => this.onDispose(event));
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -83,15 +89,15 @@ Blockly.Blocks['streamdeck_button_event'] = {
    */
   removeFromEvents: function() {
     // remove this block from the events array.
-    const index = Blast.Interpreter.eventsInWorkspace.indexOf(this.id);
+    const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
-      Blast.Interpreter.eventsInWorkspace.splice(index, 1);
+      eventsInWorkspace.splice(index, 1);
     }
   },
 };
 
 // Add streamdeck_button_event block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_button_event', 'States and Events');
+addBlock('streamdeck_button_event', 'States and Events');
 
 
 Blockly.Blocks['streamdeck_color_buttons'] = {
@@ -140,7 +146,7 @@ const STREAMDECK_COLOR_BUTTONS_XML = `
 `;
 
 // Add streamdeck_color_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_color_buttons', 'Properties', STREAMDECK_COLOR_BUTTONS_XML);
+addBlock('streamdeck_color_buttons', 'Properties', STREAMDECK_COLOR_BUTTONS_XML);
 
 
 Blockly.Blocks['streamdeck_write_on_buttons'] = {
@@ -178,7 +184,7 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
 };
 
 // Add streamdeck_write_on_buttons block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_write_on_buttons', 'Properties');
+addBlock('streamdeck_write_on_buttons', 'Properties');
 
 
 Blockly.Blocks['streamdeck_set_brightness'] = {
@@ -213,4 +219,4 @@ const STREAMDECK_SET_BRIGHTNESS_XML = `
 `;
 
 // Add streamdeck_set_brightness block to the toolbox.
-Blast.Toolbox.addBlock('streamdeck_set_brightness', 'Properties', STREAMDECK_SET_BRIGHTNESS_XML);
+addBlock('streamdeck_set_brightness', 'Properties', STREAMDECK_SET_BRIGHTNESS_XML);

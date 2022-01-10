@@ -16,7 +16,7 @@ goog.module('Blast.Things');
 goog.module.declareLegacyNamespace();
 
 const {addToLog} = goog.require('Blast.Ui');
-const {cleanUpFunctions} = goog.require('Blast.Interpreter');
+const {addCleanUpFunction} = goog.require('Blast.Interpreter');
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWorkspace} = goog.require('Blast.Interpreter');
 
@@ -34,7 +34,6 @@ const webHidNames = new Map();
  * Maps webHID identifiers to webHID devices.
  */
 const webHidDevices = new Map();
-exports.webHidDevices = webHidDevices;
 
 /**
  * Resets all device maps.
@@ -44,7 +43,12 @@ const resetThings = function() {
   webHidNames.clear();
   webHidDevices.clear();
 };
-cleanUpFunctions.push(resetThings);
+addCleanUpFunction(resetThings);
+
+const getWebHidDevice = function(deviceId) {
+  return webHidDevices.get(deviceId);
+};
+exports.getWebHidDevice = getWebHidDevice;
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the

@@ -170,7 +170,10 @@ exports.deviceEventHandlers = deviceEventHandlers;
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
 const cleanUpFunctions = [];
-exports.cleanUpFunctions = cleanUpFunctions;
+const addCleanUpFunction = function(fn) {
+  cleanUpFunctions.push(fn);
+};
+exports.addCleanUpFunction = addCleanUpFunction;
 
 /**
  * Set to true if the States Interpreter is running.

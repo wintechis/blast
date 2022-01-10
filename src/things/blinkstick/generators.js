@@ -6,6 +6,13 @@
  */
 
 'use strict';
+
+goog.module('Blast.generators.blinkstick');
+
+const {addToLog} = goog.require('Blast.Ui');
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+const {getWebHidDevice} = goog.require('Blast.Things');
  
 Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
   const colour = Blockly.JavaScript.valueToCode(block, 'COLOUR', Blockly.JavaScript.ORDER_ATOMIC) || Blockly.JavaScript.quote_('#000000');
@@ -26,22 +33,22 @@ Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
 const blinkstickSetColors = async function(id, index, colour, callback) {
   // check if index is between 0 and 7.
   if (index < 0 || index > 7) {
-    Blast.Interpreter.throwError('BlinkStick index must be between 0 and 7.');
+    throwError('BlinkStick index must be between 0 and 7.');
     callback();
     return;
   }
   
   // If no things block is attached, return.
   if (!id) {
-    Blast.Interpreter.throwError('No BlinkStick block set.');
+    throwError('No BlinkStick block set.');
     callback();
     return;
   }
 
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = getWebHidDevice(id);
 
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.');
     callback();
     return;
   }
@@ -50,13 +57,13 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
     try {
       await device.open();
     } catch (error) {
-      Blast.Interpreter.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
 
   // check if the device is a BlinkStick
   if (device.vendorId !== 8352 || device.productId !== 16869) {
-    Blast.Interpreter.throwError('The connected device is not a BlinkStick.');
+    throwError('The connected device is not a BlinkStick.');
     callback();
     return;
   }
@@ -71,15 +78,15 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 
   const setColor = async function(retries) {
     try {
-      Blast.Ui.addToLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
+      addToLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
       await device.sendFeatureReport(reportId, report);
-      Blast.Ui.addToLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
+      addToLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
     } catch (error) {
       if (retries > 0) {
         await setColor(--retries);
       } else {
         console.error(error);
-        Blast.Interpreter.throwError('Failed to set BlinkStick colors, please check its connection.');
+        throwError('Failed to set BlinkStick colors, please check its connection.');
       }
     }
   };
@@ -88,4 +95,4 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 };
 
 // add joycon_read_property function to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);
+asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);

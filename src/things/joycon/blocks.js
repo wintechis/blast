@@ -6,6 +6,13 @@
 
 'use strict';
 
+goog.module('Blast.blocks.joycon');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+const {eventsInWorkspace} = goog.require('Blast.Interpreter');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+
+
 Blockly.Blocks['joycon_read_property'] = {
   /**
      * Block to read a property of a JoyCon.
@@ -139,7 +146,7 @@ Blockly.Blocks['joycon_read_property'] = {
 };
 
 // Add joycon_read_property block to the toolbox.
-Blast.Toolbox.addBlock('joycon_read_property', 'Properties');
+addBlock('joycon_read_property', 'Properties');
 
 Blockly.Blocks['joycon_button_events'] = {
   /**
@@ -181,9 +188,9 @@ Blockly.Blocks['joycon_button_events'] = {
    * Add this block's id to the events array.
    */
   addEvent: async function() {
-    Blast.Interpreter.eventsInWorkspace.push(this.id);
+    eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    Blast.Interpreter.getWorkspace().addChangeListener((event) => this.onDispose(event));
+    getWorkspace().addChangeListener((event) => this.onDispose(event));
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -204,12 +211,12 @@ Blockly.Blocks['joycon_button_events'] = {
    */
   removeFromEvents: function() {
     // remove this block from the events array.
-    const index = Blast.Interpreter.eventsInWorkspace.indexOf(this.id);
+    const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
-      Blast.Interpreter.eventsInWorkspace.splice(index, 1);
+      eventsInWorkspace.splice(index, 1);
     }
   },
 };
 
 // Add joycon_button_events block to the toolbox.
-Blast.Toolbox.addBlock('joycon_button_events', 'States and Events');
+addBlock('joycon_button_events', 'States and Events');

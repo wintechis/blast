@@ -6,6 +6,15 @@
 
 'use strict';
 
+goog.module('Blast.generators.blast');
+
+const {addElementToOutputContainer} = goog.require('Blast.Ui');
+const {apiFunctions} = goog.require('Blast.Interpreter');
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {getInterpreter} = goog.require('Blast.Interpreter');
+const {getStdOut} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 /*****************
  * Action blocks.*
  *****************/
@@ -55,7 +64,7 @@ Blockly.JavaScript['http_request'] = function(block) {
 const sendHttpRequest = async function(
     uri, method, headersString, body, output, callback) {
   if (uri == null || uri == undefined || uri == '') {
-    Blast.Interpreter.throwError('URI input of HttpRequest blocks must not be empty');
+    throwError('URI input of HttpRequest blocks must not be empty');
   }
 
   const headersJSON = JSON.parse(headersString);
@@ -72,7 +81,7 @@ const sendHttpRequest = async function(
     const res = await fetch(uri, requestOptions);
 
     if (!res.ok) {
-      Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
       return;
     }
 
@@ -84,11 +93,11 @@ const sendHttpRequest = async function(
     const response = await res.text();
     callback(response);
   } catch (error) {
-    Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+    throwError(`Failed to get ${uri}, Error: ${error.message}`);
   }
 };
 // add sendHTTPRequest method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
+asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
 
 /**
  * Generates JavaScript code for the sparql_query block.
@@ -149,7 +158,7 @@ const urdfQueryWrapper = async function(uri, format, query, callback) {
     res = await fetch(uri);
       
     if (!res.ok) {
-      Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
       return;
     }
 
@@ -160,7 +169,7 @@ const urdfQueryWrapper = async function(uri, format, query, callback) {
     await urdf.load(response, opts);
     res = await urdf.query(query);
   } catch (error) {
-    Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${error.message}`);
+    throwError(`Failed to get ${uri}, Error: ${error.message}`);
   }
 
   // if result is a boolean, return it.
@@ -179,12 +188,12 @@ const urdfQueryWrapper = async function(uri, format, query, callback) {
     resultArray.push(resultArrayRow);
   }
 
-  const interpreterObj = Blast.Interpreter.getInterpreter().nativeToPseudo(resultArray);
+  const interpreterObj = getInterpreter().nativeToPseudo(resultArray);
 
   callback(interpreterObj);
 };
 // add urdfQueryWrapper method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
+asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
 
 /**
  * Generates JavaScript code for the display_text block.
@@ -209,11 +218,11 @@ Blockly.JavaScript['display_text'] = function(block) {
  * @public
  */
 const displayText = function(text) {
-  const stdOut = Blast.Interpreter.getStdOut();
+  const stdOut = getStdOut();
   stdOut(text);
 };
 // Add displayText method to the interpreter's API.
-Blast.Interpreter.apiFunctions.push(['displayText', displayText]);
+apiFunctions.push(['displayText', displayText]);
     
 /**
  * Generates JavaScript code for the display_table block.
@@ -238,10 +247,11 @@ Blockly.JavaScript['display_table'] = function(block) {
  * @public
  */
 const displayTable = function(arr) {
-  arr = Blast.Interpreter.getInterpreter().pseudoToNative(arr);
+  arr = getInterpreter().pseudoToNative(arr);
   // display message if table is empty
   if (arr.length == 0) {
-    Blast.Interpreter.stdOut('empty table');
+    const stdOut = getStdOut();
+    stdOut('empty table');
     return;
   }
   
@@ -267,10 +277,10 @@ const displayTable = function(arr) {
   }
 
   // Insert new table
-  Blast.Ui.addElementToOutputContainer(table);
+  addElementToOutputContainer(table);
 };
 // Add displayTable method to the interpreter's API.
-Blast.Interpreter.apiFunctions.push(['displayTable', displayTable]);
+apiFunctions.push(['displayTable', displayTable]);
     
 /**
  * Generates JavaScript code for the play_audio block.
@@ -299,7 +309,7 @@ const playAudio = async function(uri, callback) {
     audio.preload = 'auto';
     audio.autoplay = true;
     audio.onerror = ((error) => {
-      Blast.Interpreter.throwError(
+      throwError(
           `Error trying to play audio from \n${uri}\n See console for details`);
       console.error(error);
       reject(error);
@@ -309,7 +319,7 @@ const playAudio = async function(uri, callback) {
   callback();
 };
 // add playAudio method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['playAudio', playAudio]);
+asyncApiFunctions.push(['playAudio', playAudio]);
 
 /**
  * Generates JavaScript code for the capture_image block.
@@ -352,7 +362,7 @@ const captureImage = async function(callback) {
       resolve();
     };
     video.onerror = ((error) => {
-      Blast.Interpreter.throwError('Error trying to capture image from camera. See console for details');
+      throwError('Error trying to capture image from camera. See console for details');
       console.error(error);
       reject(error);
     });
@@ -368,7 +378,7 @@ const captureImage = async function(callback) {
 };
 
 // add capture_image method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['captureImage', captureImage]);
+asyncApiFunctions.push(['captureImage', captureImage]);
 
 /**
  * Generates JavaScript code for the capture_image block.
@@ -394,11 +404,11 @@ const displayImage = function(image) {
   const img = document.createElement('img');
   img.src = image;
   img.classList.add('output_image');
-  Blast.Ui.addElementToOutputContainer(img);
+  addElementToOutputContainer(img);
 };
 
 // Add displayImage method to the interpreter's API.
-Blast.Interpreter.apiFunctions.push(['displayImage', displayImage]);
+apiFunctions.push(['displayImage', displayImage]);
 
 /*******************
  * Property blocks.*
@@ -436,7 +446,7 @@ const getRSSIWb = async function(webBluetoothId, callback) {
     }
   }
   if (device == null) {
-    Blast.Interpreter.throwError('Error pairing with Bluetooth device.');
+    throwError('Error pairing with Bluetooth device.');
   }
 
   const abortController = new AbortController();
@@ -451,7 +461,7 @@ const getRSSIWb = async function(webBluetoothId, callback) {
   await device.watchAdvertisements({signal: abortController.signal});
 };
 // add getRSSIWb method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
+asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
 
 /**
  * Generates JavaScript code for the write_eddystone_property block.
@@ -494,21 +504,21 @@ const writeEddystoneProperty = async function(
     webBluetoothId, slot, property, frameType, value, callback) {
   // make sure a device block is connected
   if (!webBluetoothId) {
-    Blast.Interpreter.throwError('No bluetooth device set.');
+    throwError('No bluetooth device set.');
     callback();
     return;
   }
 
   // make sure a slot is set
   if (slot === null || slot === undefined) {
-    Blast.Interpreter.throwError('No slot set.');
+    throwError('No slot set.');
     callback();
     return;
   }
 
   // make sure a property is set
   if (!property) {
-    Blast.Interpreter.throwError('No property set.');
+    throwError('No property set.');
     callback();
     return;
   }
@@ -535,7 +545,7 @@ const writeEddystoneProperty = async function(
 };
 
 // add writeEddystoneProperty method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
+asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
 
 /**
  * Generates JavaScript code for the read_eddystone_property block.
@@ -567,21 +577,21 @@ Blockly.JavaScript['read_eddystone_property'] = function(block) {
 const readEddystoneProperty = async function(webBluetoothId, slot, property, callback) {
   // make sure a device block is connected
   if (!webBluetoothId) {
-    Blast.Interpreter.throwError('No bluetooth device set.');
+    throwError('No bluetooth device set.');
     callback();
     return;
   }
 
   // make sure a slot is set
   if (slot === null || slot === undefined) {
-    Blast.Interpreter.throwError('No slot set.');
+    throwError('No slot set.');
     callback();
     return;
   }
 
   // make sure a property is set
   if (!property) {
-    Blast.Interpreter.throwError('No property set.');
+    throwError('No property set.');
     callback();
     return;
   }
@@ -615,4 +625,4 @@ const readEddystoneProperty = async function(webBluetoothId, slot, property, cal
 };
 
 // Add readEddystoneProperty method to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
+asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);

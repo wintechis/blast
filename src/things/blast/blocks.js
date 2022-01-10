@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.blast');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 /*****************
  * Action blocks.*
  *****************/
@@ -108,7 +112,7 @@ const HTTP_REQUEST_XML = `
 </block>`;
 
 // Add http_request block to the toolbox.
-Blast.Toolbox.addBlock('http_request', 'Requests and Queries', HTTP_REQUEST_XML);
+addBlock('http_request', 'Requests and Queries', HTTP_REQUEST_XML);
  
 Blockly.Blocks['sparql_query'] = {
   /**
@@ -141,7 +145,7 @@ Blockly.Blocks['sparql_query'] = {
   },
 };
 // Add sparql_query block to the toolbox.
-Blast.Toolbox.addBlock('sparql_query', 'Requests and Queries');
+addBlock('sparql_query', 'Requests and Queries');
  
 Blockly.Blocks['sparql_ask'] = {
   /**
@@ -176,7 +180,7 @@ Blockly.Blocks['sparql_ask'] = {
   },
 };
 // Add sparql_ask block to the toolbox.
-Blast.Toolbox.addBlock('sparql_ask', 'Requests and Queries');
+addBlock('sparql_ask', 'Requests and Queries');
      
 Blockly.Blocks['display_text'] = {
   /**
@@ -195,7 +199,7 @@ Blockly.Blocks['display_text'] = {
   },
 };
 // Add display_text block to the toolbox.
-Blast.Toolbox.addBlock('display_text', 'Actions');
+addBlock('display_text', 'Actions');
        
 Blockly.Blocks['display_table'] = {
   /**
@@ -214,7 +218,7 @@ Blockly.Blocks['display_table'] = {
   },
 };
 // Add display_table block to the toolbox.
-Blast.Toolbox.addBlock('display_table', 'Actions');
+addBlock('display_table', 'Actions');
    
 Blockly.Blocks['play_audio'] = {
   /**
@@ -233,7 +237,7 @@ Blockly.Blocks['play_audio'] = {
   },
 };
 // Add play_audio block to the toolbox.
-Blast.Toolbox.addBlock('play_audio', 'Actions');
+addBlock('play_audio', 'Actions');
 
 Blockly.Blocks['capture_image'] = {
   /**
@@ -257,7 +261,7 @@ Blockly.Blocks['capture_image'] = {
 };
 
 // Add capture_image block to the toolbox.
-Blast.Toolbox.addBlock('capture_image', 'Actions');
+addBlock('capture_image', 'Actions');
 
 Blockly.Blocks['display_image'] = {
   /**
@@ -277,7 +281,7 @@ Blockly.Blocks['display_image'] = {
 };
 
 // Add display_image block to the toolbox.
-Blast.Toolbox.addBlock('display_image', 'Actions');
+addBlock('display_image', 'Actions');
  
 /*******************
   * Property blocks.*
@@ -313,7 +317,7 @@ Blockly.Blocks['get_signal_strength_wb'] = {
   },
 };
 // Add get_signal_strength_wb block to the toolbox.
-Blast.Toolbox.addBlock('get_signal_strength_wb', 'Properties');
+addBlock('get_signal_strength_wb', 'Properties');
 
 Blockly.Blocks['write_eddystone_property'] = {
   /**
@@ -386,7 +390,7 @@ const WRITE_EDDYSTONE_PROPERTY_XML = `
 </block>`;
 
 // Add write_eddystone_property block to the toolbox.
-Blast.Toolbox.addBlock('write_eddystone_property', 'Properties', WRITE_EDDYSTONE_PROPERTY_XML);
+addBlock('write_eddystone_property', 'Properties', WRITE_EDDYSTONE_PROPERTY_XML);
 
 Blockly.Blocks['read_eddystone_property'] = {
   /**
@@ -431,4 +435,4 @@ const READ_EDDYSTONE_PROPERTY_XML = `
 </block>`;
 
 // Add read_eddystone_property block to the toolbox.
-Blast.Toolbox.addBlock('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
+addBlock('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);

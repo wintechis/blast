@@ -45,7 +45,7 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     return;
   }
 
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = Blast.Things.getWebHidDevice(id);
 
   if (!device) {
     Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
@@ -150,7 +150,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     return;
   }
 
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = Blast.Things.getWebHidDevice(id);
 
   if (!device) {
     Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');

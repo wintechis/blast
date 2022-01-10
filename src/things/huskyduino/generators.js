@@ -7,6 +7,9 @@
 
 'use strict';
 
+goog.module('Blast.generators.huskyduino');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
 
 /**
  * Generate JavaScript code of the huskylens_choose_algo block.
@@ -126,7 +129,7 @@ const chooseAlgo = async function(thing, value, callback) {
   callback();
 };
 
-Blast.Interpreter.asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
+asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 
 
 /**
@@ -146,7 +149,7 @@ const learnID = async function(thing, id, callback) {
   callback();
 };
 
-Blast.Interpreter.asyncApiFunctions.push(['learnID', learnID]);
+asyncApiFunctions.push(['learnID', learnID]);
 
 /**
  * write forget flag to Huskyduino via bluetooth
@@ -166,7 +169,7 @@ const forgetAll = async function(thing, flag, callback) {
   callback();
 };
 
-Blast.Interpreter.asyncApiFunctions.push(['forgetAll', forgetAll]);
+asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
  * read the face IDs of all known faces currently visible to the camera via bluetooth.
@@ -185,4 +188,4 @@ const readID = async function(thing, callback) {
   callback(id);
 };
 
-Blast.Interpreter.asyncApiFunctions.push(['readID', readID]);
+asyncApiFunctions.push(['readID', readID]);

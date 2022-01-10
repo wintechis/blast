@@ -7,6 +7,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.web_speech');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 Blockly.Blocks['text_to_speech'] = {
   /**
    * Block for outputting a string over audio output.
@@ -25,7 +29,7 @@ Blockly.Blocks['text_to_speech'] = {
 };
 
 // Add the block to the toolbox.
-Blast.Toolbox.addBlock('text_to_speech', 'actions');
+addBlock('text_to_speech', 'actions');
 
 Blockly.Blocks['web_speech'] = {
   /**
@@ -60,4 +64,4 @@ Blockly.Blocks['web_speech'] = {
 };
 
 // Add the block to the toolbox.
-Blast.Toolbox.addBlock('web_speech', 'actions');
+addBlock('web_speech', 'actions');

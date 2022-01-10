@@ -7,6 +7,11 @@
 
 'use strict';
 
+goog.module('Blast.generators.mirobot');
+
+// const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 /**
  * Generates JavaScript code for the mirobot_pickup block.
  * @param {Blockly.Block} block the mirobot_pickup block.
@@ -39,14 +44,14 @@ const mirobotPickUp = async function(box, callback) {
     const res = await fetch(uri, requestOptions);
 
     if (!res.ok) {
-      Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
+      throwError(`Failed to get ${uri}, Error: ${res.status} ${res.statusText}`);
       return;
     }
 
     callback(res.status);
   } catch (err) {
-    Blast.Interpreter.throwError(`Failed to get ${uri}, Error: ${err}`);
+    throwError(`Failed to get ${uri}, Error: ${err}`);
   }
 };
 // add pick-up function to the interpreter's API.
-// Blast.Interpreter.asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);
+// asyncApiFunctions.push(['mirobot_pickup', mirobotPickUp]);

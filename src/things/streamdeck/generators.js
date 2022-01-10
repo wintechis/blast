@@ -6,6 +6,17 @@
  */
 
 'use strict';
+
+goog.module('Blast.generators.streamdeck');
+
+const {addCleanUpFunction} = goog.require('Blast.Interpreter');
+const {addToLog} = goog.require('Blast.Ui');
+const {apiFunctions} = goog.require('Blast.Interpreter');
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {getInterpreter} = goog.require('Blast.Interpreter');
+const {getWebHidDevice} = goog.require('Blast.Things');
+const {setInterrupted} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
  
 /**
   * Generates JavaScript code for the streamdeck_button_event block.
@@ -80,16 +91,16 @@ Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
 const handleStreamdeck = async function(id, buttons, upDown, statements) {
   // If no things block is attached, return.
   if (id === null) {
-    Blast.Interpreter.throwError('No streamdeck block set.');
+    throwError('No streamdeck block set.');
     return;
   }
 
 
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = getWebHidDevice(id);
   console.log(device);
 
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
     return;
   }
 
@@ -103,7 +114,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
-      Blast.Interpreter.throwError(e);
+      throwError(e);
       return;
     }
   }
@@ -121,13 +132,13 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
   }
 
   streamdeck.on(upDown, (keyIndex) => {
-    Blast.Ui.addToLog(`Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`, 'hid', device.productName);
+    addToLog(`Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`, 'hid', device.productName);
     if (keyIndex === button) {
       // interrupt BLAST execution.
-      Blast.Interpreter.setInterrupted(true);
+      setInterrupted(true);
         
       const interpreter = new Interpreter('');
-      interpreter.stateStack[0].scope = Blast.Interpreter.getInterpreter().globalScope;
+      interpreter.stateStack[0].scope = getInterpreter().globalScope;
       interpreter.appendCode(statements);
 
       const interruptRunner_ = function() {
@@ -137,10 +148,10 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
             setTimeout(interruptRunner_, 5);
           } else {
             // Continue BLAST execution.
-            Blast.Interpreter.setInterrupted(false);
+            setInterrupted(false);
           }
         } catch (error) {
-          Blast.Interpreter.throwError(`Error executing program:\n ${e}`);
+          throwError(`Error executing program:\n ${e}`);
           console.error(error);
         }
       };
@@ -148,8 +159,8 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
     }
   });
 
-  Blast.Interpreter.cleanUpFunctions.push(() => {
-    Blast.Ui.addToLog('Removing all listeners', 'hid', device.productName);
+  addCleanUpFunction(() => {
+    addToLog('Removing all listeners', 'hid', device.productName);
     streamdeck.close();
     streamdeck.removeAllListeners();
   },
@@ -157,7 +168,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
 };
 
 // Add streamdeck function to the Interpreter's API
-Blast.Interpreter.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
 
 /**
  * Fills the buttons of a Stream Deck with a color.
@@ -169,16 +180,16 @@ Blast.Interpreter.apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
 const streamdeckColorButtons = async function(id, buttons, color, callback) {
   // If no things block is attached, return.
   if (id === null) {
-    Blast.Interpreter.throwError('No streamdeck block set.');
+    throwError('No streamdeck block set.');
     callback();
     return;
   }
   
   
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = getWebHidDevice(id);
   
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
     callback();
     return;
   }
@@ -193,7 +204,7 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
-      Blast.Interpreter.throwError(e);
+      throwError(e);
       callback();
       return;
     }
@@ -207,9 +218,9 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
   // fill selected buttons with color
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      Blast.Ui.addToLog(`Invoke <code>fillKeyColor</code> with value <code>${[i, red, green, blue].toString()}</code>`, 'hid', device.productName);
+      addToLog(`Invoke <code>fillKeyColor</code> with value <code>${[i, red, green, blue].toString()}</code>`, 'hid', device.productName);
       await streamdeck.fillKeyColor(i, red, green, blue);
-      Blast.Ui.addToLog('Finished <code>fillKeyColor</code>', 'hid', device.productName);
+      addToLog('Finished <code>fillKeyColor</code>', 'hid', device.productName);
     }
   }
 
@@ -217,7 +228,7 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
 };
 
 // Add streamdeckColorButtons function to the Interpreter's API
-Blast.Interpreter.asyncApiFunctions.push(['streamdeckColorButtons', streamdeckColorButtons]);
+asyncApiFunctions.push(['streamdeckColorButtons', streamdeckColorButtons]);
 
 
 /**
@@ -261,16 +272,16 @@ Blockly.JavaScript['streamdeck_write_on_buttons'] = function(block) {
 const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
   // If no things block is attached, return.
   if (id === null) {
-    Blast.Interpreter.throwError('No streamdeck block set.');
+    throwError('No streamdeck block set.');
     callback();
     return;
   }
   
   
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = getWebHidDevice(id);
   
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
     callback();
     return;
   }
@@ -285,7 +296,7 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
-      Blast.Interpreter.throwError(e);
+      throwError(e);
       callback();
       return;
     }
@@ -311,9 +322,9 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      Blast.Ui.addToLog(`Invoke <code>fillKeyImageData</code> with value <code>${[i, imageData].toString()}</code>`, 'hid', device.productName);
+      addToLog(`Invoke <code>fillKeyImageData</code> with value <code>${[i, imageData].toString()}</code>`, 'hid', device.productName);
       ps.push(streamdeck.fillKeyBuffer(i, buffer.Buffer.from(imageData.data), {format: 'rgba'}));
-      Blast.Ui.addToLog('Finished <code>fillKeyImageData</code>', 'hid', device.productName);
+      addToLog('Finished <code>fillKeyImageData</code>', 'hid', device.productName);
     }
   }
 
@@ -324,7 +335,7 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 };
 
 // Add streamdeckWriteOnButtons function to the Interpreter's API
-Blast.Interpreter.asyncApiFunctions.push(['streamdeckWriteOnButtons', streamdeckWriteOnButtons]);
+asyncApiFunctions.push(['streamdeckWriteOnButtons', streamdeckWriteOnButtons]);
 
 Blockly.JavaScript['streamdeck_set_brightness'] = function(block) {
   const value = Blockly.JavaScript.valueToCode(
@@ -345,22 +356,22 @@ Blockly.JavaScript['streamdeck_set_brightness'] = function(block) {
 const streamdeckSetBrightness = async function(id, value, callback) {
   // If no things block is attached, return.
   if (id === null) {
-    Blast.Interpreter.throwError('No streamdeck block set.');
+    throwError('No streamdeck block set.');
     callback();
     return;
   }
 
   if (value < 1 || value > 100) {
-    Blast.Interpreter.throwError('Brightness must be between 1 and 100.');
+    throwError('Brightness must be between 1 and 100.');
     callback();
     return;
   }
   
   
-  const device = Blast.Things.webHidDevices.get(id);
+  const device = getWebHidDevice(id);
   
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
     callback();
     return;
   }
@@ -375,17 +386,17 @@ const streamdeckSetBrightness = async function(id, value, callback) {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
-      Blast.Interpreter.throwError(e);
+      throwError(e);
       callback();
       return;
     }
   }
 
-  Blast.Ui.addToLog(`Invoke <code>setBrightness</code> with value <code>${value}</code>`, 'hid', device.productName);
+  addToLog(`Invoke <code>setBrightness</code> with value <code>${value}</code>`, 'hid', device.productName);
   await streamdeck.setBrightness(value);
-  Blast.Ui.addToLog('Finished <code>setBrightness</code>', 'hid', device.productName);
+  addToLog('Finished <code>setBrightness</code>', 'hid', device.productName);
   callback();
 };
 
 // Add streamdeckSetBrightness function to the Interpreter's API
-Blast.Interpreter.asyncApiFunctions.push(['streamdeckSetBrightness', streamdeckSetBrightness]);
+asyncApiFunctions.push(['streamdeckSetBrightness', streamdeckSetBrightness]);

@@ -7,6 +7,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.mirobot');
+
+// const {addBlock} = goog.require('Blast.Toolbox');
+
 Blockly.Blocks['mirobot_pickup'] = {
   /**
     * Block for picking up boxes from pre-defined locations.
@@ -34,4 +38,4 @@ Blockly.Blocks['mirobot_pickup'] = {
 };
 
 // Add the block to the toolbox.
-// Blast.Toolbox.addBlock('mirobot_pickup', 'actions');
+// addBlock('mirobot_pickup', 'actions');

@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.xiamoi_thermometer');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 Blockly.Blocks['read_mijia_property'] = {
   /**
    * Block for reading a property of a Xiaomi Mijia thermometer.
@@ -30,4 +34,4 @@ Blockly.Blocks['read_mijia_property'] = {
 };
 
 // add read_mijia_property block to the toolbox.
-Blast.Toolbox.addBlock('read_mijia_property', 'Properties');
+addBlock('read_mijia_property', 'Properties');

@@ -7,6 +7,11 @@
 
 'use strict';
 
+goog.module('Blast.generators.web_speech');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+
 /**
  * Generates JavaScript code for the play_audio block.
  * @param {Blockly.Block} block the play_audio block.
@@ -38,7 +43,7 @@ Blockly.JavaScript['web_speech'] = function(block) {
  * @public
  */
 const webSpeech = async function(blockId, callback) {
-  const block = Blast.Interpreter.getWorkspace().getBlockById(blockId);
+  const block = getWorkspace().getBlockById(blockId);
   const recognition = block.recognition;
   recognition.continuous = false;
   recognition.lang = 'en-US';
@@ -59,7 +64,7 @@ const webSpeech = async function(blockId, callback) {
   recognition.start();
 };
 // add block webSpeech to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['webSpeech', webSpeech]);
+asyncApiFunctions.push(['webSpeech', webSpeech]);
 
 /**
  * Invokes a SpeechSynthesisUtterance to read out a text.
@@ -83,4 +88,4 @@ const textToSpeech = async function(text, callback) {
   callback();
 };
 // add textToSpeech function to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['textToSpeech', textToSpeech]);
+asyncApiFunctions.push(['textToSpeech', textToSpeech]);

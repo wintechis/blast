@@ -7,6 +7,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.huskyduino');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 Blockly.Blocks['huskylens_choose_algo'] = {
   init: function() {
     this.appendValueInput('Thing')
@@ -43,7 +47,7 @@ Blockly.Blocks['huskylens_choose_algo'] = {
 };
 
 // Add choose the huskylens_choose_algo to the toolbox.
-Blast.Toolbox.addBlock('huskylens_choose_algo', 'Properties');
+addBlock('huskylens_choose_algo', 'Properties');
 
 
 Blockly.Blocks['huskylens_write_id'] = {
@@ -86,7 +90,7 @@ const HUSKYLENS_WRITE_ID_XML = `
 </block>
 `;
 // Add the huskylens_write_face_id block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_write_id', 'Properties', HUSKYLENS_WRITE_ID_XML);
+addBlock('huskylens_write_id', 'Properties', HUSKYLENS_WRITE_ID_XML);
 
 
 Blockly.Blocks['huskylens_write_forget_flag'] = {
@@ -130,7 +134,7 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 `;
 
 // Add the huskylens_write_forget_flag block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
+addBlock('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
 
 
 Blockly.Blocks['huskylens_read_id'] = {
@@ -158,4 +162,4 @@ Blockly.Blocks['huskylens_read_id'] = {
 };
 
 // Add the huskylens_read_id block to the toolbox.
-Blast.Toolbox.addBlock('huskylens_read_id', 'Properties');
+addBlock('huskylens_read_id', 'Properties');

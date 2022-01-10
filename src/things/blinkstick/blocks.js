@@ -7,6 +7,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.blinkstick');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 Blockly.Blocks['blinkstick_set_colors'] = {
   init: function() {
     this.appendValueInput('COLOUR')
@@ -44,4 +48,4 @@ const BLINKSTICK_SET_COLORS_XML = `
 `;
 
 // Add blinkstick_set_colors block to the toolbox.
-Blast.Toolbox.addBlock('blinkstick_set_colors', 'Properties', BLINKSTICK_SET_COLORS_XML);
+addBlock('blinkstick_set_colors', 'Properties', BLINKSTICK_SET_COLORS_XML);

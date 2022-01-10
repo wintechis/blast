@@ -6,6 +6,11 @@
 
 'use strict';
 
+goog.module('Blast.generators.xiamoi_thermometer');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 /**
  * Generates JavaScript code for the get_mijia_property block.
  * @param {Blockly.Block} block the get_temperature block.
@@ -34,7 +39,7 @@ Blast.Bluetooth.optionalServices.push(XiaomiServiceUUID);
 const readMijiaProperty = function async(measurement, webBluetoothId, callback) {
   // make sure a device is connected.
   if (!webBluetoothId) {
-    Blast.Interpreter.throwError('No Thermometer is set.');
+    throwError('No Thermometer is set.');
     callback();
     return;
   }
@@ -65,4 +70,4 @@ const readMijiaProperty = function async(measurement, webBluetoothId, callback) 
 };
 
 // add readMijiaProperty to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['readMijiaProperty', readMijiaProperty]);
+asyncApiFunctions.push(['readMijiaProperty', readMijiaProperty]);
