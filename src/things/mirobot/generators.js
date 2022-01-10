@@ -26,6 +26,7 @@ Blockly.JavaScript['mirobot_pickup'] = function(block) {
  * @param {String} box the box to pick up.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
+// eslint-disable-next-line no-unused-vars
 const mirobotPickUp = async function(box, callback) {
   const uri = 'https://bot.rapidthings.eu/thing/action/grab_' + box.toLowerCase();
   const headers = {'Content-Type': 'application/json', 'Accept': 'application/json'};

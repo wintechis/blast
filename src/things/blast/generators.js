@@ -299,7 +299,8 @@ const playAudio = async function(uri, callback) {
     audio.preload = 'auto';
     audio.autoplay = true;
     audio.onerror = ((error) => {
-      Blast.Interpreter.throwError(`Error trying to play audio from \n${uri}\n See console for details`);
+      Blast.Interpreter.throwError(
+          `Error trying to play audio from \n${uri}\n See console for details`);
       console.error(error);
       reject(error);
     });

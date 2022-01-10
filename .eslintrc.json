@@ -49,7 +49,6 @@
             }
         ],
         "no-undef": ["off"],
-        "no-use-before-define": ["error"],
         // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
         "no-self-assign": ["off"],
         // Blockly uses single quotes except for JSON blobs, which must use double quotes.
