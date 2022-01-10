@@ -60,7 +60,7 @@ Blockly.Blocks['streamdeck_button_event'] = {
    * Add this block's id to the events array.
    */
   addEvent: async function() {
-    Blast.Interpreter.eventInWorkspace.push(this.id);
+    Blast.Interpreter.eventsInWorkspace.push(this.id);
     // remove event if block is deleted
     Blast.Interpreter.getWorkspace().addChangeListener((event) => this.onDispose(event));
   },
@@ -83,9 +83,9 @@ Blockly.Blocks['streamdeck_button_event'] = {
    */
   removeFromEvents: function() {
     // remove this block from the events array.
-    const index = Blast.Interpreter.eventInWorkspace.indexOf(this.id);
+    const index = Blast.Interpreter.eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
-      Blast.Interpreter.eventInWorkspace.splice(index, 1);
+      Blast.Interpreter.eventsInWorkspace.splice(index, 1);
     }
   },
 };

@@ -1,11 +1,14 @@
 /**
- * @fileoverview Generating JavaScript for Blast's functions blocks.
+ * @fileoverview Generating JavaScript for Blast's function blocks.
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 'use strict';
 
+goog.module('Blast.generators.functions');
+
+const {apiFunctions} = goog.require('Blast.Interpreter');
 
 Blockly.JavaScript['procedures_defeval'] = function(block) {
   const funcName = Blockly.JavaScript.variableDB_.getName(
@@ -61,4 +64,4 @@ Blockly.JavaScript['procedures_calleval'] = function(block) {
 };
 
 // Add console to JSInterpreter for debugging with the procedures_calleval block.
-Blast.Interpreter.apiFunctions.push(['log', console.log]);
+apiFunctions.push(['log', console.log]);

@@ -6,11 +6,16 @@
 
 'use strict';
 
+goog.module('Blast.blocks.things');
+
+const {getWebBluetoothDevices} = goog.require('Blast.Things');
+const {getWebHIDDevices} = goog.require('Blast.Things');
+
 Blockly.Blocks['things_webBluetooth'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('webBluetooth device')
-        .appendField(new Blockly.FieldDropdown(Blast.Things.getWebBluetoothDevices), 'id');
+        .appendField(new Blockly.FieldDropdown(getWebBluetoothDevices), 'id');
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('');
@@ -22,7 +27,7 @@ Blockly.Blocks['things_webHID'] = {
   init: function() {
     this.appendDummyInput()
         .appendField('HID device')
-        .appendField(new Blockly.FieldDropdown(Blast.Things.getWebHIDDevices), 'id');
+        .appendField(new Blockly.FieldDropdown(getWebHIDDevices), 'id');
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('');

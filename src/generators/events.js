@@ -7,6 +7,17 @@
 
 'use strict';
 
+goog.module('Blast.generators.events');
+
+const {apiFunctions} = goog.require('Blast.Interpreter');
+const {addEventCode} = goog.require('Blast.States.Interpreter');
+const {getDefinition} = goog.require('Blast.States');
+const {getInterpreter} = goog.require('Blast.Interpreter');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+const {intervalEvents} = goog.require('Blast.Interpreter');
+const {setInterrupted} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 // eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['state_definition'] = function(block) {
   // event code is generated at Blast.States.generateCode(),
@@ -24,7 +35,7 @@ Blockly.JavaScript['event'] = function(block) {
   Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
   
   // get this events' conditions
-  const stateBlock = Blast.States.getDefinition(stateName, Blast.Interpreter.getWorkspace());
+  const stateBlock = getDefinition(stateName, getWorkspace());
   if (stateBlock) {
     const stateConditions = Blockly.JavaScript.valueToCode(
         stateBlock,
@@ -43,7 +54,7 @@ Blockly.JavaScript['event'] = function(block) {
         setInterrupted(false);
       }`;
   
-    Blast.States.Interpreter.addEventCode(block.id, eventCode);
+    addEventCode(block.id, eventCode);
   }
   
   return null;
@@ -84,16 +95,16 @@ Blockly.JavaScript['event_every_minutes'] = function(block) {
  */
 const addIntervalEvent = (seconds, statements) => {
   if (seconds === undefined || typeof seconds !== 'number' || seconds <= 0) {
-    Blast.Interpreter.throwError('Timed event interval must be a number greater than 0.');
+    throwError('Timed event interval must be a number greater than 0.');
     return;
   }
 
   const func = function() {
   // interrupt BLAST execution
-    Blast.Interpreter.setInterrupted(false);
+    setInterrupted(false);
 
     const interpreter = new Interpreter('');
-    interpreter.stateStack[0].scope = Blast.Interpreter.getInterpreter().globalScope;
+    interpreter.stateStack[0].scope = getInterpreter().globalScope;
     interpreter.appendCode(statements);
 
     const interruptRunner_ = function() {
@@ -103,10 +114,10 @@ const addIntervalEvent = (seconds, statements) => {
           setTimeout(interruptRunner_, 5);
         } else {
         // Continue BLAST execution.
-          Blast.Interpreter.setInterrupted(false);
+          setInterrupted(false);
         }
       } catch (error) {
-        Blast.Interpreter.throwError(`Error executing program:\n ${e}`);
+        throwError(`Error executing program:\n ${e}`);
         console.error(error);
       }
     };
@@ -114,7 +125,7 @@ const addIntervalEvent = (seconds, statements) => {
   };
 
   const interval = setInterval(func, seconds * 1000);
-  Blast.Interpreter.intervalEvents.push(interval);
+  intervalEvents.push(interval);
 };
 
-Blast.Interpreter.apiFunctions.push(['addIntervalEvent', addIntervalEvent]);
+apiFunctions.push(['addIntervalEvent', addIntervalEvent]);

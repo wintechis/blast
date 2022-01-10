@@ -6,14 +6,23 @@
 
 'use strict';
 
+goog.module('Blast.blocks.events');
+
+const {eventsInWorkspace} = goog.require('Blast.Interpreter');
+const {findLegalName} = goog.require('Blast.States');
+const {getDefinition} = goog.require('Blast.States');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+const {removeEventCode} = goog.require('Blast.States.Interpreter');
+const {rename} = goog.require('Blast.States');
+
 Blockly.Blocks['state_definition'] = {
   /**
      * Block for defining a state.
      * @this {Blockly.Block}
      */
   init: function() {
-    const initName = Blast.States.findLegalName('', this);
-    const nameField = new Blockly.FieldTextInput(initName, Blast.States.rename);
+    const initName = findLegalName('', this);
+    const nameField = new Blockly.FieldTextInput(initName, rename);
     nameField.setSpellcheck(false);
     this.appendValueInput('state_condition')
         .setCheck('Boolean')
@@ -126,7 +135,7 @@ Blockly.Blocks['event'] = {
       // paste) and there is no matching state.  In this case, create
       // an empty state definition block with the correct name.
       const name = this.getStateName();
-      let def = Blast.States.getDefinition(name, this.workspace);
+      let def = getDefinition(name, this.workspace);
       if (def && def.type != this.defType_) {
         // The signatures don't match.
         def = null;
@@ -156,7 +165,7 @@ Blockly.Blocks['event'] = {
         let stateName = this.getStateName();
         if (!stateName) {
           // Rename if name is empty string.
-          stateName = Blast.States.findLegalName('', this);
+          stateName = findLegalName('', this);
           this.renameState('', stateName);
         }
         field.appendChild(Blockly.utils.xml.createTextNode(stateName));
@@ -170,7 +179,7 @@ Blockly.Blocks['event'] = {
       // leaving this block (an event block) orphaned. In this case, delete
       // the orphan.
       const name = this.getStateName();
-      const def = Blast.States.getDefinition(name, this.workspace);
+      const def = getDefinition(name, this.workspace);
       if (!def) {
         Blockly.Events.setGroup(event.group);
         this.dispose(true);
@@ -181,7 +190,7 @@ Blockly.Blocks['event'] = {
         event.element == 'disabled'
     ) {
       const name = this.getStateName();
-      const def = Blast.States.getDefinition(name, this.workspace);
+      const def = getDefinition(name, this.workspace);
       if (def && def.id == event.blockId) {
         // in most cases the old group should be ''
         const oldGroup = Blockly.Events.getGroup();
@@ -209,7 +218,7 @@ Blockly.Blocks['event'] = {
     if (event.type === Blockly.Events.BLOCK_DELETE) {
       if (event.type === Blockly.Events.BLOCK_DELETE && event.ids.indexOf(this.id) !== -1) {
         // Block is being deleted
-        Blast.States.removeEventCode(this.event.blockId);
+        removeEventCode(this.event.blockId);
       }
     }
   },
@@ -242,9 +251,9 @@ Blockly.Blocks['event_every_minutes'] = {
    * Add this block's id to the events array.
    */
   addEvent: async function() {
-    Blast.Interpreter.eventInWorkspace.push(this.id);
+    eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    Blast.Interpreter.getWorkspace().addChangeListener((event) => this.onDispose(event));
+    getWorkspace().addChangeListener((event) => this.onDispose(event));
   },
   onchange: function() {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -265,9 +274,9 @@ Blockly.Blocks['event_every_minutes'] = {
      */
   removeFromEvents: function() {
     // remove this block from the events array.
-    const index = Blast.Interpreter.eventInWorkspace.indexOf(this.id);
+    const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
-      Blast.Interpreter.eventInWorkspace.splice(index, 1);
+      eventsInWorkspace.splice(index, 1);
     }
   },
 };

@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.generators.control_flow');
+
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+
 // Remap blockly blocks to improve naming in xml.
 Blockly.JavaScript['repeat'] = Blockly.JavaScript['controls_repeat_ext'];
 Blockly.JavaScript['while_until'] = Blockly.JavaScript['controls_whileUntil'];
@@ -30,4 +34,4 @@ const waitForSeconds = function(timeInSeconds, callback) {
   setTimeout(callback, timeInSeconds * 1000);
 };
 // Add waitForSeconds method to the interpreter's API
-Blast.Interpreter.asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);
+asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);

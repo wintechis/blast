@@ -157,8 +157,8 @@ exports.intervalEvents = intervalEvents;
  * Tracks event blocks currently in the workspace,
  * in order to run indefinately if in case there are any.
  */
-const eventInWorkspace = [];
-exports.eventInWorkspace = eventInWorkspace;
+const eventsInWorkspace = [];
+exports.eventsInWorkspace = eventsInWorkspace;
 
 /**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
@@ -407,7 +407,7 @@ const runJS = function() {
               // Execution is currently blocked by some async call.
               // Try again later.
               setTimeout(runner_, 1);
-            } else if (statesInterpreterRunning || eventInWorkspace.length > 0) {
+            } else if (statesInterpreterRunning || eventsInWorkspace.length > 0) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.
             } else {

@@ -6,6 +6,11 @@
 
 'use strict';
 
+goog.module('Blast.generators.identifiers');
+
+const {apiFunctions} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
 Blockly.JavaScript['uri'] = function(block) {
   const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, Blockly.JavaScript.ORDER_NONE];
@@ -24,13 +29,13 @@ const convertToUri = function(uri) {
   try {
     new URL(uri);
   } catch (e) {
-    Blast.Interpreter.throwError('The given string is not a valid URI.');
+    throwError('The given string is not a valid URI.');
   }
   return uri;
 };
 
 // add convertToUri method to the interpreter's API.
-Blast.Interpreter.apiFunctions.push(['convertToUri', convertToUri]);
+apiFunctions.push(['convertToUri', convertToUri]);
   
 Blockly.JavaScript['mac'] = function(block) {
   const mac = Blockly.JavaScript.quote_(block.getFieldValue('MAC'));

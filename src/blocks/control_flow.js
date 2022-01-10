@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.control_flow');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];
 Blockly.Blocks['for'] = Blockly.Blocks['controls_for'];
@@ -30,7 +34,7 @@ const REPEAT_XML = `
 </block>`;
 
 // Add repeat block to the block library.
-Blast.Toolbox.addBlock('repeat', 'Control Flow', REPEAT_XML);
+addBlock('repeat', 'Control Flow', REPEAT_XML);
 
 // Define inner block XML for the for block.
 const FOR_XML = `
@@ -53,7 +57,7 @@ const FOR_XML = `
 </block>`;
 
 // Add for block to the toolbox.
-Blast.Toolbox.addBlock('for', 'Control Flow', FOR_XML);
+addBlock('for', 'Control Flow', FOR_XML);
 
 Blockly.Blocks['conditional_statement'] = {
   /**
@@ -317,7 +321,7 @@ const WAIT_SECONDS_XML = `
 `;
 
 // Add the wait_seconds block to the toolbox
-Blast.Toolbox.addBlock('wait_seconds', 'Control Flow', WAIT_SECONDS_XML);
+addBlock('wait_seconds', 'Control Flow', WAIT_SECONDS_XML);
 
 // Mutator blocks.
 Blockly.Blocks['controls_if_if'] = {

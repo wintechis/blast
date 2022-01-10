@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.blocks.colours');
+
+const {addBlock} = goog.require('Blast.Toolbox');
+
 // Define inner block XML for the colour_rgb block.
 const COLOUR_RGB_XML = `
 <block type="colour_rgb">
@@ -27,7 +31,7 @@ const COLOUR_RGB_XML = `
 </block>`;
 
 // Add the colour_rgb block to the toolbox.
-Blast.Toolbox.addBlock('colour_rgb', 'colours', COLOUR_RGB_XML);
+addBlock('colour_rgb', 'colours', COLOUR_RGB_XML);
 
 // Define inner block XML for the colur_blend block.
 const COLOUR_BLEND_XML = `
@@ -50,4 +54,4 @@ const COLOUR_BLEND_XML = `
 </block>`;
 
 // Add the colour_blend block to the toolbox.
-Blast.Toolbox.addBlock('colour_blend', 'colours', COLOUR_BLEND_XML);
+addBlock('colour_blend', 'colours', COLOUR_BLEND_XML);

@@ -6,5 +6,7 @@
 
 'use strict';
 
+goog.module('Blast.blocks.lists');
+
 // Set List block colour
 Blockly.Themes.Classic.blockStyles.list_blocks.colourPrimary = 310;

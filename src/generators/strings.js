@@ -6,6 +6,10 @@
 
 'use strict';
 
+goog.module('Blast.generators.strings');
+
+const {apiFunctions} = goog.require('Blast.Interpreter');
+
 // Remap blockly blocks to improve naming in xml.
 Blockly.JavaScript['string'] = Blockly.JavaScript['text'];
 Blockly.JavaScript['string_multiline'] = Blockly.JavaScript['text_multiline'];
@@ -24,4 +28,4 @@ Blockly.JavaScript['string_reverse'] = Blockly.JavaScript['text_reverse'];
 Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
 
 // Add prompt function to the interpreter API.
-Blast.Interpreter.apiFunctions.push(['prompt', prompt]);
+apiFunctions.push(['prompt', prompt]);
