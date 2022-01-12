@@ -97,7 +97,6 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
 
 
   const device = getWebHidDevice(id);
-  console.log(device);
 
   if (!device) {
     throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');

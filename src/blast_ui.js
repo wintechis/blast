@@ -357,7 +357,6 @@ exports.addToLog = addToLog;
 const ClearOutputContainer = function() {
   const container = messageOutputContainer;
   while (container.lastChild.id !== 'clearOutputButton') {
-    console.log(container.lastChild.id);
     container.removeChild(container.lastChild);
   }
 };
