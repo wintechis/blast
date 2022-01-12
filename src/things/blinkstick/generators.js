@@ -9,10 +9,12 @@
 
 goog.module('Blast.generators.blinkstick');
 
-const {addToLog} = goog.require('Blast.Ui');
+const {getThingsLog} = goog.require('Blast.Things');
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWebHidDevice} = goog.require('Blast.Things');
+
+const thingsLog = getThingsLog();
  
 Blockly.JavaScript['blinkstick_set_colors'] = function(block) {
   const colour = Blockly.JavaScript.valueToCode(block, 'COLOUR', Blockly.JavaScript.ORDER_ATOMIC) || Blockly.JavaScript.quote_('#000000');
@@ -78,9 +80,9 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 
   const setColor = async function(retries) {
     try {
-      addToLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
+      thingsLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
       await device.sendFeatureReport(reportId, report);
-      addToLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
+      thingsLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', device.productName);
     } catch (error) {
       if (retries > 0) {
         await setColor(--retries);

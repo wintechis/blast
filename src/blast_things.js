@@ -15,7 +15,6 @@
 goog.module('Blast.Things');
 goog.module.declareLegacyNamespace();
 
-const {addToLog} = goog.require('Blast.Ui');
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWorkspace} = goog.require('Blast.Interpreter');
 
@@ -33,6 +32,33 @@ const webHidNames = new Map();
  * Maps webHID identifiers to webHID devices.
  */
 const webHidDevices = new Map();
+
+/**
+ * Default method for logging device interaction.
+ * @param {string} message The message to log.
+ * @param {string=} adapter The name of the adapter that generated the message.
+ * @param {string=} device The name of the device that generated the message.
+ */
+let thingsLog = function(message, adapter, device) {
+  console.log({adapter}, {device}, message);
+};
+/**
+ * Getter for the thingsLog function.
+ * @return {function} The thingsLog function.
+ */
+const getThingsLog = function() {
+  return thingsLog;
+};
+exports.getThingsLog = getThingsLog;
+/**
+ * Setter for the thingsLog function.
+ * @param {function} logFunc The function to use for logging.
+ */
+const setThingsLog = function(logFunc) {
+  thingsLog = logFunc;
+};
+exports.setThingsLog = setThingsLog;
+
 
 /**
  * Resets all device maps.
@@ -277,7 +303,7 @@ exports.addWebBluetoothDevice = addWebBluetoothDevice;
  */
 createWebHidButtonHandler = function() {
   const workspace = getWorkspace();
-  addToLog('Requesting webHID device...', 'HID');
+  thingsLog('Requesting webHID device...', 'HID');
   navigator.hid.requestDevice({filters: []})
       .then((device) => {
         if (device.length === 0) {
@@ -289,7 +315,7 @@ createWebHidButtonHandler = function() {
         // add device to the device map with its uid
         addWebHidDevice(uid, device[0].productName, device[0]);
         workspace.refreshToolboxSelection();
-        addToLog('Connected', 'HID', device[0].productName);
+        thingsLog('Connected', 'HID', device[0].productName);
       })
       .catch((error) => {
         throwError(error);

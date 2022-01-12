@@ -20,6 +20,7 @@ const {onStatusChange} = goog.require('Blast.Interpreter');
 const {setStdError} = goog.require('Blast.Interpreter');
 const {setStdInfo} = goog.require('Blast.Interpreter');
 const {setStdOut} = goog.require('Blast.Interpreter');
+const {setThingsLog} = goog.require('Blast.Things');
 const {statusValues} = goog.require('Blast.Interpreter');
 const {stopJS} = goog.require('Blast.Interpreter');
 
@@ -349,7 +350,7 @@ const addToLog = function(msg, adapter, device) {
   log.appendChild(logItem);
   log.scrollTop = log.scrollHeight;
 };
-exports.addToLog = addToLog;
+setThingsLog((msg, adapter, device) => addToLog(msg, adapter, device));
 
 /**
  * Removes all children from the {@link messageOutputContainer}
