@@ -91,6 +91,17 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
+      contents: [],
+      name: 'Variables',
+      custom: 'VARIABLE',
+      colour: '330',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'lists_create_empty'},
         {kind: 'BLOCK', type: 'lists_create_with'},
@@ -108,17 +119,6 @@ const defaultToolbox = {
       name: 'Lists',
       colour: '310',
 
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
     },
     {
       kind: 'CATEGORY',
