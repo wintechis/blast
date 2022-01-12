@@ -16,7 +16,6 @@ goog.module('Blast.Things');
 goog.module.declareLegacyNamespace();
 
 const {addToLog} = goog.require('Blast.Ui');
-const {addCleanUpFunction} = goog.require('Blast.Interpreter');
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWorkspace} = goog.require('Blast.Interpreter');
 
@@ -43,7 +42,7 @@ const resetThings = function() {
   webHidNames.clear();
   webHidDevices.clear();
 };
-addCleanUpFunction(resetThings);
+exports.resetThings = resetThings;
 
 const getWebHidDevice = function(deviceId) {
   return webHidDevices.get(deviceId);

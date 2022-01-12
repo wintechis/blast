@@ -21,6 +21,7 @@ const {getWebBluetoothDevices} = goog.require('Blast.Things');
 const {getWebHIDDevices} = goog.require('Blast.Things');
 const {getWorkspace} = goog.require('Blast.Interpreter');
 const {resetInterpreter} = goog.require('Blast.Interpreter');
+const {resetThings} = goog.require('Blast.Things');
 const {throwError} = goog.require('Blast.Interpreter');
 
 /**
@@ -209,6 +210,8 @@ const retrieveXML_ = async function(path) {
   Blockly.hideChaff();
   // stop execution
   resetInterpreter();
+
+  resetThings();
 
   resetFileInput();
   
