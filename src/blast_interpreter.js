@@ -252,6 +252,11 @@ const getStdError = function() {
 exports.getStdError = getStdError;
 
 /**
+ * Saves the current clipboard when workspace is disabled to restore it when enabled.
+ */
+const clipboard = {};
+
+/**
  * removes all event handlers of webHID devices from {@link deviceEventHandlers}
  */
 const removeDeviceHandlers = function() {
@@ -383,12 +388,63 @@ const initInterpreter = function() {
 exports.initInterpreter = initInterpreter;
 
 /**
+ * Places a transparent rectangle over the workspace to prevent
+ * the user from interacting with the workspace.
+ */
+const disableWorkspace = function() {
+  const workspaceDiv = document.getElementById('content_workspace');
+  const rect = document.createElement('div');
+  rect.style.position = 'absolute';
+  rect.style.top = '0';
+  rect.style.left = '0';
+  rect.style.width = '100%';
+  rect.style.height = '100%';
+  rect.style.zIndex = '1';
+  rect.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
+  workspaceDiv.appendChild(rect);
+  // de-select current block so that the delete key won't work.
+  Blockly.selected = null;
+  // Clear Blockly.clipboard_ to prevent the paste key from working.
+  // Save current values to restore later.
+  clipboard.clipboard_ = Blockly.clipboard_;
+  clipboard.clipboardSource_ = Blockly.clipboardSource_;
+  clipboard.clipboardXml = Blockly.clipboardXml;
+  clipboard.clipboardTypeCounts_ = Blockly.clipboardTypeCounts_;
+  // Clear the clipboard.
+  Blockly.clipboard_ = null;
+  Blockly.clipboardSource_ = null;
+  Blockly.clipboardXml = null;
+  Blockly.clipboardTypeCounts_ = null;
+};
+
+/**
+ * Removes the transparent rectangle over the workspace.
+ */
+const enableWorkspace = function() {
+  const workspaceDiv = document.getElementById('content_workspace');
+  const rect = workspaceDiv.lastChild;
+  if (rect.tagName === 'DIV') {
+    workspaceDiv.removeChild(rect);
+  }
+  // Restore the clipboard.
+  Blockly.clipboard_ = clipboard.clipboard_;
+  Blockly.clipboardSource_ = clipboard.clipboardSource_;
+  Blockly.clipboardXml = clipboard.clipboardXml;
+  Blockly.clipboardTypeCounts_ = clipboard.clipboardTypeCounts_;
+};
+onStatusChange.ready.push(enableWorkspace);
+onStatusChange.stopped.push(enableWorkspace);
+onStatusChange.error.push(enableWorkspace);
+
+/**
  * Execute the user's code.
  * @public
  */
 const runJS = function() {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
+  disableWorkspace();
+
   if (interpreter == null) {
     // Begin execution
     interpreter = new Interpreter(latestCode, initApi);
