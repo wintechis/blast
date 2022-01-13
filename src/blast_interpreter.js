@@ -394,6 +394,7 @@ exports.initInterpreter = initInterpreter;
 const disableWorkspace = function() {
   const workspaceDiv = document.getElementById('content_workspace');
   const rect = document.createElement('div');
+  rect.id = 'workspace-disabled';
   rect.style.position = 'absolute';
   rect.style.top = '0';
   rect.style.left = '0';
@@ -422,10 +423,8 @@ const disableWorkspace = function() {
  */
 const enableWorkspace = function() {
   const workspaceDiv = document.getElementById('content_workspace');
-  const rect = workspaceDiv.lastChild;
-  if (rect.tagName === 'DIV') {
-    workspaceDiv.removeChild(rect);
-  }
+  const rect = document.getElementById('workspace-disabled');
+  workspaceDiv.removeChild(rect);
   // Restore the clipboard.
   Blockly.clipboard_ = clipboard.clipboard_;
   Blockly.clipboardSource_ = clipboard.clipboardSource_;
