@@ -79,13 +79,14 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
   await joyCon.enableStandardFullMode();
   await joyCon.enableIMUMode();
 
+  const thingsLog = Blast.Things.getThingsLog();
+
   const hidInputHandler = async function(event) {
     const packet = event.detail;
     if (!packet || !packet.actualOrientation) {
       return;
     }
 
-    const thingsLog = Blast.Things.getThingsLog();
     thingsLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productname);
     
     thingsLog('Removing <code>hidinput</code> event listener', 'hid', device.productname);
@@ -185,6 +186,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
   await joyCon.enableIMUMode();
 
   let pushedInLastPacket = false;
+  const thingsLog = Blast.Things.getThingsLog();
 
   const hidInputHandler = async function(event) {
     const packet = event.detail;
@@ -192,7 +194,6 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
       return;
     }
 
-    const thingsLog = Blast.Things.getThingsLog();
     thingsLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productName);
 
     if (packet.buttonStatus[button]) {
