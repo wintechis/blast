@@ -150,7 +150,7 @@ exports.getWorkspace = getWorkspace;
  * Array containing all interval events.
  * @type {!Array<!Number>}
  */
-let intervalEvents = [];
+const intervalEvents = [];
 exports.intervalEvents = intervalEvents;
 
 /**
