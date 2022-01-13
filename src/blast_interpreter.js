@@ -269,7 +269,7 @@ const clearIntervalEvents = function() {
   for (const event of intervalEvents) {
     clearInterval(event);
   }
-  intervalEvents = [];
+  intervalEvents.length = 0;
 };
 
 /**
