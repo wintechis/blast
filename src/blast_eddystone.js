@@ -9,19 +9,26 @@
 
 /**
   * Eddystone API namespace.
-  * @name Blast.Bluetooth.Eddystone
+  * @name Blast.Eddystone
   * @namespace
   * @public
   */
-goog.provide('Blast.Bluetooth.Eddystone');
- 
-goog.require('Blast.Bluetooth');
+goog.module('Blast.Eddystone');
+goog.module.declareLegacyNamespace();
+
+const {gatt_read} = goog.require('Blast.Bluetooth');
+const {gatt_read_hex} = goog.require('Blast.Bluetooth');
+const {gatt_read_number} = goog.require('Blast.Bluetooth');
+const {gatt_writeWithResponse} = goog.require('Blast.Bluetooth');
+const {getThingsLog} = goog.require('Blast.Things');
+const {optionalServices} = goog.require('Blast.Bluetooth');
+const {throwError} = goog.require('Blast.Interpreter');
  
  
 /**
   * Eddystone Configuration Service and Characteristic UUIDs.
   */
-Blast.Bluetooth.Eddystone.UUIDS = {
+const UUIDS = {
   CONFIG_SERVICE: 'a3c87500-8ed3-4bdf-8a39-a01bebede295',
   CAPABILITIES_CHARACTERISTIC: 'a3c87501-8ed3-4bdf-8a39-a01bebede295',
   ACTIVE_SLOT_CHARACTERISTIC: 'a3c87502-8ed3-4bdf-8a39-a01bebede295',
@@ -38,21 +45,21 @@ Blast.Bluetooth.Eddystone.UUIDS = {
 };
  
 // Add Eddystone config service to optionalServices to make it accessible.
-Blast.Bluetooth.optionalServices.push(Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE);
+optionalServices.push(UUIDS.CONFIG_SERVICE);
  
 /**
   * Gets the devices Capabilities.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getCapabilities = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getCapabilities = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone capabilities...', 'Eddystone', webBluetoothId);
   // Get the capabilities.
-  let capabilitiesArray = await Blast.Bluetooth.gatt_read(
+  let capabilitiesArray = await gatt_read(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.CAPABILITIES_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.CAPABILITIES_CHARACTERISTIC,
   );
   capabilitiesArray = new Int8Array(capabilitiesArray.buffer);
  
@@ -90,17 +97,18 @@ Blast.Bluetooth.Eddystone.getCapabilities = async function(webBluetoothId) {
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getActiveSlot = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getActiveSlot = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone active slot...', 'Eddystone', webBluetoothId);
-  const activeSlot = await Blast.Bluetooth.gatt_read_number(
+  const activeSlot = await gatt_read_number(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone active slot: <code>${activeSlot}</code>`, 'Eddystone', webBluetoothId);
   return activeSlot;
 };
+exports.getActiveSlot = getActiveSlot;
  
 /**
   * Sets the active slot of the Eddystone configuration service.
@@ -108,45 +116,47 @@ Blast.Bluetooth.Eddystone.getActiveSlot = async function(webBluetoothId) {
   * @param {number} slot The slot to set.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.setActiveSlot = async function(webBluetoothId, slot) {
-  const thingsLog = Blast.Things.getThingsLog();
+const setActiveSlot = async function(webBluetoothId, slot) {
+  const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone active slot to <code>${slot}</code>...`, 'Eddystone', webBluetoothId);
   // check if slot is valid
-  const capabilities = await Blast.Bluetooth.Eddystone.getCapabilities(webBluetoothId);
+  const capabilities = await getCapabilities(webBluetoothId);
   if (slot < 0 || slot >= capabilities.maxSlots) {
-    Blast.Interpreter.throwError(
+    throwError(
         `Eddystone slot is not valid.
          On this device the slot must be between 0 and ${capabilities.maxSlots - 1}.`,
     );
   }
  
-  await Blast.Bluetooth.gatt_writeWithResponse(
+  await gatt_writeWithResponse(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
       slot.toString(16),
   );
 
   thingsLog(`Eddystone active slot set to <code>${slot}</code>`, 'Eddystone', webBluetoothId);
   return;
 };
+exports.setActiveSlot = setActiveSlot;
  
 /**
   * Gets the advertising interval of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getAdvertisingInterval = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getAdvertisingInterval = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone advertising interval...', 'Eddystone', webBluetoothId);
-  const interval = await Blast.Bluetooth.gatt_read_number(
+  const interval = await gatt_read_number(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone advertising interval: <code>${interval}</code>`, 'Eddystone', webBluetoothId);
   return interval;
 };
+exports.getAdvertisingInterval = getAdvertisingInterval;
  
 /**
   * Sets the advertising interval of currently active slot.
@@ -154,35 +164,37 @@ Blast.Bluetooth.Eddystone.getAdvertisingInterval = async function(webBluetoothId
   * @param {number} interval The advertising interval to set.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.setAdvertisingInterval = async function(webBluetoothId, interval) {
-  const thingsLog = Blast.Things.getThingsLog();
+const setAdvertisingInterval = async function(webBluetoothId, interval) {
+  const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone advertising interval to <code>${interval}</code>...`, 'Eddystone', webBluetoothId);
-  await Blast.Bluetooth.gatt_writeWithResponse(
+  await gatt_writeWithResponse(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
       interval.toString(16),
   );
   thingsLog(`Eddystone advertising interval set to <code>${interval}</code>`, 'Eddystone', webBluetoothId);
   return;
 };
+exports.setAdvertisingInterval = setAdvertisingInterval;
  
 /**
   * Gets the TX power level of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getTxPowerLevel = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getTxPowerLevel = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone TX power level...', 'Eddystone', webBluetoothId);
-  const txPowerLevel = await Blast.Bluetooth.gatt_read_number(
+  const txPowerLevel = await gatt_read_number(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone TX power level: <code>${txPowerLevel}</code>`, 'Eddystone', webBluetoothId);
   return txPowerLevel;
 };
+exports.getTxPowerLevel = getTxPowerLevel;
  
 /**
   * Sets the TX power level of currently active slot.
@@ -190,45 +202,47 @@ Blast.Bluetooth.Eddystone.getTxPowerLevel = async function(webBluetoothId) {
   * @param {number} txPowerLevel The TX power level to set.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.setTxPowerLevel = async function(webBluetoothId, txPowerLevel) {
-  const thingsLog = Blast.Things.getThingsLog();
+const setTxPowerLevel = async function(webBluetoothId, txPowerLevel) {
+  const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone TX power level to <code>${txPowerLevel}</code>...`, 'Eddystone', webBluetoothId);
   // check if txPowerLevel is valid
-  const capabilities = await Blast.Bluetooth.Eddystone.getCapabilities(webBluetoothId);
+  const capabilities = await getCapabilities(webBluetoothId);
   if (capabilities.supportedTxPowerLevels.indexOf(txPowerLevel) === -1) {
-    Blast.Interpreter.throwError(
+    throwError(
         `Eddystone TX power level is not valid.
          On this device the TX power level must be one of ${capabilities.supportedTxPowerLevels}.`,
     );
     return;
   }
  
-  await Blast.Bluetooth.gatt_writeWithResponse(
+  await gatt_writeWithResponse(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
       txPowerLevel.toString(16),
   );
   thingsLog(`Eddystone TX power level set to <code>${txPowerLevel}</code>`, 'Eddystone', webBluetoothId);
   return;
 };
+exports.setTxPowerLevel = setTxPowerLevel;
  
 /**
   * Gets the advertised TX power of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getAdvertisedTxPower = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getAdvertisedTxPower = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone advertised TX power...', 'Eddystone', webBluetoothId);
-  const advertisedTxPower = await Blast.Bluetooth.gatt_read_number(
+  const advertisedTxPower = await gatt_read_number(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone advertised TX power: <code>${advertisedTxPower}</code>`, 'Eddystone', webBluetoothId);
   return advertisedTxPower;
 };
+exports.getAdvertisedTxPower = getAdvertisedTxPower;
  
 /**
   * Sets the advertised TX power level of currently active slot.
@@ -236,60 +250,63 @@ Blast.Bluetooth.Eddystone.getAdvertisedTxPower = async function(webBluetoothId) 
   * @param {number} txPowerLevel The TX power level to set.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.setAdvertisedTxPower = async function(webBluetoothId, txPowerLevel) {
-  const thingsLog = Blast.Things.getThingsLog();
+const setAdvertisedTxPower = async function(webBluetoothId, txPowerLevel) {
+  const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone advertised TX power to <code>${txPowerLevel}</code>...`, 'Eddystone', webBluetoothId);
-  await Blast.Bluetooth.gatt_writeWithResponse(
+  await gatt_writeWithResponse(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
       txPowerLevel.toString(16),
   );
   thingsLog(`Eddystone advertised TX power set to <code>${txPowerLevel}</code>`, 'Eddystone', webBluetoothId);
   return;
 };
+exports.setAdvertisedTxPower = setAdvertisedTxPower;
  
 /**
   * Gets the lock state of the Eddystone configuration service.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getLockState = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getLockState = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone lock state...', 'Eddystone', webBluetoothId);
-  const lockState = await Blast.Bluetooth.gatt_read_number(
+  const lockState = await gatt_read_number(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.LOCK_STATE_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.LOCK_STATE_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone lock state: <code>${lockState}</code>`, 'Eddystone', webBluetoothId);
   return lockState;
 };
+exports.getLockState = getLockState;
  
 /**
   * Gets the public ECDH Key of the Eddystone configuration service.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getPublicECDHKey = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getPublicECDHKey = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone public ECDH key...', 'Eddystone', webBluetoothId);
-  const publicECDHKey = await Blast.Bluetooth.gatt_read_hex(
+  const publicECDHKey = await gatt_read_hex(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.PUBLIC_ECDH_KEY_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.PUBLIC_ECDH_KEY_CHARACTERISTIC,
   );
   thingsLog(`Got Eddystone public ECDH key: <code>${publicECDHKey}</code>`, 'Eddystone', webBluetoothId);
   return publicECDHKey;
 };
+exports.getPublicECDHKey = getPublicECDHKey;
  
 /**
   * Gets the advertising data of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
   * @return {!Promise} A promise that resolves when the operation is complete.
   */
-Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
-  const thingsLog = Blast.Things.getThingsLog();
+const getAdvertisingData = async function(webBluetoothId) {
+  const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone advertising data...', 'Eddystone', webBluetoothId);
   const decodeEddystoneUid = function(advData) {
     // TX Power is the second byte of the advertised data.
@@ -330,7 +347,7 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
         urlPrefix = 'https://';
         break;
       default:
-        Blast.Interpreter.throwError('Eddystone URL scheme is not valid.');
+        throwError('Eddystone URL scheme is not valid.');
         return;
     }
      
@@ -395,10 +412,10 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
     };
   };
  
-  const advertisingData = await Blast.Bluetooth.gatt_read_hex(
+  const advertisingData = await gatt_read_hex(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
   );
 
   thingsLog(`Got Eddystone advertising data: <code>${advertisingData}</code>`, 'Eddystone', webBluetoothId);
@@ -418,13 +435,14 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
       data = decodeEddystoneTlm(advertisingData);
       return data.beaconTemperature;
     case '30':
-      Blast.Interpreter.throwError('EID frame type is not supported by blast.');
+      throwError('EID frame type is not supported by blast.');
       return;
     default:
-      Blast.Interpreter.throwError('Eddystone frame type is not valid.');
+      throwError('Eddystone frame type is not valid.');
       return;
   }
 };
+exports.getAdvertisingData = getAdvertisingData;
  
 /**
   * Sets the advertising data of the currently active slot.
@@ -432,8 +450,8 @@ Blast.Bluetooth.Eddystone.getAdvertisingData = async function(webBluetoothId) {
   * @param {string} frameType The frame type of the data to set.
   * @param {string} data The data to set.
   */
-Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, frameType, data) {
-  const thingsLog = Blast.Things.getThingsLog();
+const setAdvertisingData = async function(webBluetoothId, frameType, data) {
+  const thingsLog = getThingsLog();
   thingsLog('Set Eddystone advertising data...', 'Eddystone', webBluetoothId);
   const encodeEddystoneUrl = function(url) {
     const URL_SCHEMES = [
@@ -488,7 +506,7 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, fr
     }
  
     if (encodedUrl.length > 18) {
-      Blast.Interpreter.throwError('URL is too long.');
+      throwError('URL is too long.');
       return;
     }
      
@@ -503,7 +521,7 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, fr
   } else if (frameType === 'UID') {
     // Checks if the UID is 32 hex chars.
     if (!/^[0-9A-Fa-f]{32}$/.test(data)) {
-      Blast.Interpreter.throwError('Eddystone UID must be 32 hexadecimal characters.');
+      throwError('Eddystone UID must be 32 hexadecimal characters.');
       return;
     }
     
@@ -511,12 +529,13 @@ Blast.Bluetooth.Eddystone.setAdvertisingData = async function(webBluetoothId, fr
     encodedData = '0x00' + data;
   }
      
-  const response = await Blast.Bluetooth.gatt_writeWithResponse(
+  const response = await gatt_writeWithResponse(
       webBluetoothId,
-      Blast.Bluetooth.Eddystone.UUIDS.CONFIG_SERVICE,
-      Blast.Bluetooth.Eddystone.UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
+      UUIDS.CONFIG_SERVICE,
+      UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
       encodedData,
   );
   thingsLog(`Eddystone advertising data set to <code>${data}</code>`, 'Eddystone', webBluetoothId);
   return response;
 };
+exports.setAdvertisingData = setAdvertisingData;

@@ -17,7 +17,6 @@ goog.module.declareLegacyNamespace();
 
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWorkspace} = goog.require('Blast.Interpreter');
-const {requestDevice} = goog.require('Blast.Bluetooth');
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -33,6 +32,12 @@ const webHidNames = new Map();
  * Maps webHID identifiers to webHID devices.
  */
 const webHidDevices = new Map();
+
+let webBluetoothButtonHandler = null;
+const setWebBluetoothButtonHandler = function(handler) {
+  webBluetoothButtonHandler = handler;
+};
+exports.setWebBluetoothButtonHandler = setWebBluetoothButtonHandler;
 
 /**
  * Default method for logging device interaction.
@@ -95,7 +100,7 @@ const flyoutCategory = function(workspace) {
   webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
   workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', function(_button) {
-    createWebBluetoothButtonHandler();
+    webBluetoothButtonHandler();
   });
   xmlList.push(webBluetoothButton);
 
@@ -254,13 +259,6 @@ const getWebHIDDevices = function() {
   return options;
 };
 exports.getWebHIDDevices = getWebHIDDevices;
-
-/**
- * Handles "pair via webBluetooth" button in the things toolbox category.
- */
-const createWebBluetoothButtonHandler = async function() {
-  requestDevice();
-};
 
 /**
  * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.

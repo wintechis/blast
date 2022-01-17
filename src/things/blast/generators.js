@@ -524,21 +524,21 @@ const writeEddystoneProperty = async function(
   }
   
   // Set the active slot.
-  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+  await Blast.Eddystone.setActiveSlot(webBluetoothId, slot);
 
   // write the property
   switch (property) {
     case 'advertisedTxPower':
-      await Blast.Bluetooth.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
+      await Blast.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
       break;
     case 'advertisementData':
-      await Blast.Bluetooth.Eddystone.setAdvertisingData(webBluetoothId, frameType, value);
+      await Blast.Eddystone.setAdvertisingData(webBluetoothId, frameType, value);
       break;
     case 'advertisingInterval':
-      await Blast.Bluetooth.Eddystone.setAdvertisingInterval(webBluetoothId, value);
+      await Blast.Eddystone.setAdvertisingInterval(webBluetoothId, value);
       break;
     case 'radioTxPower':
-      await Blast.Bluetooth.Eddystone.setTxPowerLevel(webBluetoothId, value);
+      await Blast.Eddystone.setTxPowerLevel(webBluetoothId, value);
       break;
   }
   callback();
@@ -597,28 +597,28 @@ const readEddystoneProperty = async function(webBluetoothId, slot, property, cal
   }
 
   // Set the active slot.
-  await Blast.Bluetooth.Eddystone.setActiveSlot(webBluetoothId, slot);
+  await Blast.Eddystone.setActiveSlot(webBluetoothId, slot);
 
   // read the property
   let value = null;
   switch (property) {
     case 'advertisedTxPower':
-      value = await Blast.Bluetooth.Eddystone.getAdvertisedTxPower(webBluetoothId);
+      value = await Blast.Eddystone.getAdvertisedTxPower(webBluetoothId);
       break;
     case 'advertisementData':
-      value = await Blast.Bluetooth.Eddystone.getAdvertisingData(webBluetoothId);
+      value = await Blast.Eddystone.getAdvertisingData(webBluetoothId);
       break;
     case 'advertisingInterval':
-      value = await Blast.Bluetooth.Eddystone.getAdvertisingInterval(webBluetoothId);
+      value = await Blast.Eddystone.getAdvertisingInterval(webBluetoothId);
       break;
     case 'lockState':
-      value = await Blast.Bluetooth.Eddystone.getLockState(webBluetoothId);
+      value = await Blast.Eddystone.getLockState(webBluetoothId);
       break;
     case 'publicECDHKey':
-      value = await Blast.Bluetooth.Eddystone.getPublicECDHKey(webBluetoothId);
+      value = await Blast.Eddystone.getPublicECDHKey(webBluetoothId);
       break;
     case 'radioTxPower':
-      value = await Blast.Bluetooth.Eddystone.getTxPowerLevel(webBluetoothId);
+      value = await Blast.Eddystone.getTxPowerLevel(webBluetoothId);
       break;
   }
   callback(value);

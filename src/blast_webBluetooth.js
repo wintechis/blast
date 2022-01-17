@@ -16,6 +16,11 @@ goog.module('Blast.Bluetooth');
 goog.module.declareLegacyNamespace();
 
 const {addCleanUpFunction} = goog.require('Blast.Interpreter');
+const {addWebBluetoothDevice} = goog.require('Blast.Things');
+const {getThingsLog} = goog.require('Blast.Things');
+const {getWorkspace} = goog.require('Blast.Interpreter');
+const {setWebBluetoothButtonHandler} = goog.require('Blast.Things');
+const {throwError} = goog.require('Blast.Interpreter');
  
 /**
   * Optional serviceUUIDs to scan for.
@@ -105,7 +110,7 @@ const hexStringToArrayBuffer = function(hexString) {
   * @return {Promise<BluetoothDevice>} A Promise to a BluetoothDevice object.
   */
 const requestDevice = async function(options, deviceName) {
-  const thingsLog = Blast.Things.getThingsLog();
+  const thingsLog = getThingsLog();
   thingsLog('Requesting device...', 'Bluetooth');
   if (navigator.bluetooth) {
     // if no options are given, use default ones
@@ -121,16 +126,17 @@ const requestDevice = async function(options, deviceName) {
       // if no device name is given, use default one
       const name = deviceName || device.name;
            
-      Blast.Things.addWebBluetoothDevice(device.id, name);
-      Blast.Interpreter.getWorkspace().refreshToolboxSelection();
+      addWebBluetoothDevice(device.id, name);
+      getWorkspace().refreshToolboxSelection();
       return (device);
     } catch (error) {
-      Blast.Interpreter.throwError(error);
+      throwError(error);
     }
   }
 };
 exports.requestDevice = requestDevice;
- 
+setWebBluetoothButtonHandler(requestDevice);
+
 /**
   * Returns a paired bluetooth device by their id.
   * @param {string} id identifier of the device to get.
@@ -143,7 +149,7 @@ const getDeviceById = async function(id) {
       return device;
     }
   }
-  Blast.Interpreter.throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
+  throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
 };
  
 /**
@@ -154,13 +160,13 @@ const getDeviceById = async function(id) {
 const connect = async function(id) {
   try {
     const device = await getDeviceById(id);
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(`Connecting to <code>${id}</code>`, 'Bluetooth');
     const request = await device.gatt.connect();
     thingsLog('Connected', 'Bluetooth', id);
     return request;
   } catch (error) {
-    Blast.Interpreter.throwError(`Error connecting to Bluetooth device ${id}`);
+    throwError(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -174,13 +180,13 @@ const connect = async function(id) {
 const disconnect = async function(id) {
   try {
     const device = await getDeviceById(id);
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog('Disconnecting...', 'Bluetooth', id);
     const request = await device.gatt.disconnect();
     thingsLog(`Disconnected from <code>${id}</code>`, 'Bluetooth');
     return request;
   } catch (error) {
-    Blast.Interpreter.throwError(`Error disconnecting from Bluetooth device ${id}`);
+    throwError(`Error disconnecting from Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -206,7 +212,7 @@ const gatt_writeWithoutResponse = async function(
   }
 
   try {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(
         'Invoke <code>WriteValueWithoutResponse</code> on characteristic ' +
         `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
@@ -217,7 +223,7 @@ const gatt_writeWithoutResponse = async function(
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    Blast.Interpreter.throwError(errorMsg);
+    throwError(errorMsg);
   }
 };
 exports.gatt_writeWithoutResponse = gatt_writeWithoutResponse;
@@ -246,7 +252,7 @@ const gatt_writeWithResponse = async function(
   }
  
   try {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(
         'Invoke <code>WriteValueWithResponse</code> on characteristic ' +
         `<code>${characteristicUUID}</code> with value <code>${value.toString()}</code>`, 'Bluetooth', id);
@@ -257,7 +263,7 @@ const gatt_writeWithResponse = async function(
   } catch (error) {
     const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    Blast.Interpreter.throwError(errorMsg);
+    throwError(errorMsg);
   }
 };
 exports.gatt_writeWithResponse = gatt_writeWithResponse;
@@ -273,13 +279,13 @@ const getPrimaryService = async function(id, serviceUUID) {
   const server = await connect(id);
   let service;
   try {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(`Getting primary service <code>${serviceUUID}</code>`, 'Bluetooth', id);
     service = await server.getPrimaryService(serviceUUID);
     thingsLog(`Got primary service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.Interpreter.throwError('The device is not compatible with the connected block.');
+    throwError('The device is not compatible with the connected block.');
   }
   return service;
 };
@@ -301,7 +307,7 @@ const getCharacteristic = async function(id, serviceUUID, characteristicUUID) {
   }
   let characteristic;
   try {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(
         `Getting characteristic <code>${characteristicUUID}</code> from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
     characteristic = await service.getCharacteristic(characteristicUUID);
@@ -309,7 +315,7 @@ const getCharacteristic = async function(id, serviceUUID, characteristicUUID) {
         `Got characteristic <code>${characteristicUUID}</code> from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.Interpreter.throwError('The device is not compatible with the connected block.');
+    throwError('The device is not compatible with the connected block.');
   }
   return characteristic;
 };
@@ -330,7 +336,7 @@ const gatt_read = async function(id, serviceUUID, characteristicUUID) {
       characteristicUUID,
   );
   try {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog(
         `Invoke <code>ReadValue</code> on characteristic <code>${characteristicUUID}</code>` +
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
@@ -341,7 +347,7 @@ const gatt_read = async function(id, serviceUUID, characteristicUUID) {
     return value;
   } catch (error) {
     console.error(error);
-    Blast.Interpreter.throwError(`Error reading from Bluetooth device ${id}`);
+    throwError(`Error reading from Bluetooth device ${id}`);
   }
 };
 exports.gatt_read = gatt_read;
@@ -411,7 +417,7 @@ const gatt_subscribe = async function(id, serviceUUID, charUUID, handler) {
   const characteristic = await getCharacteristic(
       id, serviceUUID, charUUID,
   );
-  const thingsLog = Blast.Things.getThingsLog();
+  const thingsLog = getThingsLog();
   thingsLog(
       `Add 'characteristicvaluechanged' listener to characteristic ${charUUID}` +
        ` of service <code>${serviceUUID}</code>`, 'Bluetooth', id);
@@ -428,7 +434,7 @@ const gatt_subscribe = async function(id, serviceUUID, charUUID, handler) {
          ` from service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    Blast.Interpreter.throwError(`Error subscribing to Bluetooth device ${id}`);
+    throwError(`Error subscribing to Bluetooth device ${id}`);
   }
 };
 exports.gatt_subscribe = gatt_subscribe;
@@ -444,7 +450,7 @@ const startLEScan = async function() {
   // If the LE Scan is not running, register the cache handler and start it.
   cacheLEScanResults();
   isLEScanRunning = true;
-  const thingsLog = Blast.Things.getThingsLog();
+  const thingsLog = getThingsLog();
   thingsLog('Requesting LE Scan', 'Bluetooth');
   Blockly.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
       navigator.bluetooth.requestLEScan(
@@ -462,7 +468,7 @@ exports.startLEScan = startLEScan;
   */
 const stopLEScan = function() {
   if (isLEScanRunning) {
-    const thingsLog = Blast.Things.getThingsLog();
+    const thingsLog = getThingsLog();
     thingsLog('Stopping LE Scan', 'Bluetooth');
     navigator.bluetooth.stopLEScan();
     isLEScanRunning = false;
