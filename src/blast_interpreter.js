@@ -287,7 +287,6 @@ const resetInterpreter = function() {
     clearTimeout(runner_);
     runner_ = null;
   }
-  Blast.Bluetooth.tearDown();
   removeDeviceHandlers();
   clearIntervalEvents();
   

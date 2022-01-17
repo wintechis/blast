@@ -20,8 +20,10 @@ const {addWebHidDevice} = goog.require('Blast.Things');
 const {getWebBluetoothDevices} = goog.require('Blast.Things');
 const {getWebHIDDevices} = goog.require('Blast.Things');
 const {getWorkspace} = goog.require('Blast.Interpreter');
+const {optionalServices} = goog.require('Blast.Bluetooth');
 const {resetInterpreter} = goog.require('Blast.Interpreter');
 const {resetThings} = goog.require('Blast.Things');
+const {requestDevice} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
 
 /**
@@ -327,9 +329,9 @@ const generatePairButtonsDesktop_ = function(xml) {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
-          options.optionalServices = Blast.Bluetooth.optionalServices;
+          options.optionalServices = optionalServices;
         
-          const device = await Blast.Bluetooth.requestDevice();
+          const device = await requestDevice();
           // change pair status to checkmark
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
           document.getElementById('pairStatus-' + name).style.color = 'green';
@@ -440,9 +442,9 @@ const generatePairButtonsMobile_ = function(xml) {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
-          options.optionalServices = Blast.Bluetooth.optionalServices;
+          options.optionalServices = optionalServices;
                 
-          const device = await Blast.Bluetooth.requestDevice();
+          const device = await requestDevice();
           addWebBluetoothDevice(device.id, name);
           // change pair status to connected
           document.getElementById('rc-status-' + name).innerHTML = 'connected';

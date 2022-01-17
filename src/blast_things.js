@@ -17,6 +17,7 @@ goog.module.declareLegacyNamespace();
 
 const {throwError} = goog.require('Blast.Interpreter');
 const {getWorkspace} = goog.require('Blast.Interpreter');
+const {requestDevice} = goog.require('Blast.Bluetooth');
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -258,7 +259,7 @@ exports.getWebHIDDevices = getWebHIDDevices;
  * Handles "pair via webBluetooth" button in the things toolbox category.
  */
 const createWebBluetoothButtonHandler = async function() {
-  await Blast.Bluetooth.requestDevice();
+  requestDevice();
 };
 
 /**
