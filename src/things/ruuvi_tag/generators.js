@@ -10,6 +10,8 @@
 goog.module('Blast.generators.ruuvi_tag');
 
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {LEScanResults} = goog.require('Blast.Bluetooth');
+const {startLEScan} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
 
 /**
@@ -84,7 +86,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
   const getAdvertisementData = function(tries) {
     // try to get the measurements from the cache once per second for 10 seconds
     if (tries < 30) {
-      const events = Blast.Bluetooth.LEScanResults[webBluetoothId];
+      const events = LEScanResults[webBluetoothId];
       if (events) {
         for (const event of events) {
           const value = event.manufacturerData.get(0x0499);
@@ -105,7 +107,7 @@ const getRuuviProperty = async function(measurement, webBluetoothId, callback) {
     }
   };
   // Start LE Scan.
-  Blast.Bluetooth.startLEScan(webBluetoothId);
+  startLEScan(webBluetoothId);
 
   const advertisementData = await getAdvertisementData(0);
   // If still no event data, return an error

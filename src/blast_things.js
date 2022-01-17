@@ -50,7 +50,7 @@ let thingsLog = function(message, adapter, device) {
 };
 /**
  * Getter for the thingsLog function.
- * @return {function} The thingsLog function.
+ * @return {Function} The thingsLog function.
  */
 const getThingsLog = function() {
   return thingsLog;
@@ -58,7 +58,7 @@ const getThingsLog = function() {
 exports.getThingsLog = getThingsLog;
 /**
  * Setter for the thingsLog function.
- * @param {function} logFunc The function to use for logging.
+ * @param {Function} logFunc The function to use for logging.
  */
 const setThingsLog = function(logFunc) {
   thingsLog = logFunc;
@@ -300,7 +300,7 @@ exports.addWebBluetoothDevice = addWebBluetoothDevice;
 /**
  * Handles "connect via webHID" button in the things toolbox category.
  */
-createWebHidButtonHandler = function() {
+const createWebHidButtonHandler = function() {
   const workspace = getWorkspace();
   thingsLog('Requesting webHID device...', 'HID');
   navigator.hid.requestDevice({filters: []})

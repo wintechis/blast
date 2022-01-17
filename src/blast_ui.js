@@ -15,8 +15,9 @@ goog.module('Blast.Ui');
 goog.module.declareLegacyNamespace();
 
 const {getLatestCode} = goog.require('Blast.Interpreter');
-const {runJS} = goog.require('Blast.Interpreter');
+const {link} = goog.require('Blast.Storage');
 const {onStatusChange} = goog.require('Blast.Interpreter');
+const {runJS} = goog.require('Blast.Interpreter');
 const {setStdError} = goog.require('Blast.Interpreter');
 const {setStdInfo} = goog.require('Blast.Interpreter');
 const {setStdOut} = goog.require('Blast.Interpreter');

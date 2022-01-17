@@ -31,8 +31,8 @@ exports.getInterpreter = getInterpreter;
 /**
  * Array of tuples, containg names and functions defined in the things folder,
  * in order to add them to the interpreter API in {@link initAPI}.
- * @type {[string, function][]}
  * @public
+ * @type {Array<{name: string, func: Function}>}
  */
 const apiFunctions = [];
 exports.apiFunctions = apiFunctions;
@@ -40,7 +40,7 @@ exports.apiFunctions = apiFunctions;
 /**
   * Array of tuples, containg names and asynchronous functions defined in the
   * things folder, in order to add them to the interpreter API in {@link initAPI}.
-  * @type {[string, function][]}
+  * @type {Array<{name: string, func: Function}>}
   * @public
   */
 const asyncApiFunctions = [];
@@ -125,7 +125,7 @@ exports.getLatestCode = getLatestCode;
 
 /**
  * Instance of runner function.
- * @type {?function}
+ * @type {?Function}
  * @private
  */
 let runner_ = null;

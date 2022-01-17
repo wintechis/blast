@@ -10,6 +10,9 @@
 goog.module('Blast.generators.huskyduino');
 
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {optionalServices} = goog.require('Blast.Bluetooth');
+const {readText} = goog.require('Blast.Bluetooth');
+const {writeWithoutResponse} = goog.require('Blast.Bluetooth');
 
 /**
  * Generate JavaScript code of the huskylens_choose_algo block.
@@ -108,7 +111,7 @@ Blockly.JavaScript['huskylens_read_id'] = function(block) {
 
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
-Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
+optionalServices.push(HuskyServiceUUID);
 
 
 /**
@@ -120,7 +123,7 @@ Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
 const chooseAlgo = async function(thing, value, callback) {
   const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
 
-  await Blast.Bluetooth.writeWithoutResponse(
+  await writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -141,7 +144,7 @@ asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 const learnID = async function(thing, id, callback) {
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
 
-  await Blast.Bluetooth.writeWithoutResponse(
+  await writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -160,7 +163,7 @@ asyncApiFunctions.push(['learnID', learnID]);
 const forgetAll = async function(thing, flag, callback) {
   const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
     
-  await Blast.Bluetooth.writeWithoutResponse(
+  await writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -180,7 +183,7 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  const id = await Blast.Bluetooth.readText(
+  const id = await readText(
       thing,
       HuskyServiceUUID,
       characteristicUUID,

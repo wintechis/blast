@@ -117,7 +117,7 @@ const addIntervalEvent = (seconds, statements) => {
           setInterrupted(false);
         }
       } catch (error) {
-        throwError(`Error executing program:\n ${e}`);
+        throwError(`Error executing program:\n ${error}`);
         console.error(error);
       }
     };

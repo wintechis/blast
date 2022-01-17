@@ -24,6 +24,8 @@ gulp.task('closureCompiler', function() {
       {base: './'})
       .pipe(
           closureCompiler({
+            compilation_level: 'SIMPLE',
+            language_out: 'ES6_STRICT',
             js_output_file: 'blast.min.js',
           }))
       .pipe(rev())

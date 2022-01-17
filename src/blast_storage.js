@@ -26,6 +26,11 @@ const {resetThings} = goog.require('Blast.Things');
 const {requestDevice} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
 
+
+// This variables will be overwritten by imported libraries, but have to be
+// declared here to avoid errors in the closure compiler.
+let saveAs = null;
+
 /**
  * Http-request error message.
  */
@@ -57,6 +62,7 @@ let filename = 'BLAST.xml';
   * @param {boolean=} download optional, if true, save to file.
   */
 const link = function(download) {
+  const workspace = getWorkspace();
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
   if (workspace.getTopBlocks(false).length == 1 && xml.querySelector) {

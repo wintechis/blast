@@ -35,7 +35,7 @@ let workspace = null;
 
 /**
  * Instance of runner function.
- * @type {?function}
+ * @type {?Function}
  * @private
  */
 let runner_ = null;

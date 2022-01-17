@@ -238,7 +238,7 @@ Blockly.Procedures.flyoutCategory = function(workspace) {
   
   /**
    * Creates a function block for each procedure in procedureList.
-   * @param {string[]} procedureList Array containing procedures.
+   * @param {Array<string>} procedureList Array containing procedures.
    * @param {string} templateName Name of block template.
    */
   function populateProcedures(procedureList, templateName) {

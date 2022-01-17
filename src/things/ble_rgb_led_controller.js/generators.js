@@ -10,7 +10,9 @@
 goog.module('Blast.generators.ble_rgb_led_controller');
 
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {optionalServices} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
+const {writeWithoutResponse} = goog.require('Blast.Bluetooth');
  
 /**
   * Generates JavaScript code for the switch_lights_RGB block.
@@ -31,7 +33,7 @@ Blockly.JavaScript['switch_lights_rgb'] = function(block) {
 
 // Add the LED controller's serviceUUID to optionalServices
 const LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
-Blast.Bluetooth.optionalServices.push(LEDServiceUUID);
+optionalServices.push(LEDServiceUUID);
 
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
@@ -50,7 +52,7 @@ const switchLights = async function(mac, colour, callback) {
   const value = '7e000503' + colour.substring(1, 7) + '00ef';
 
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
-  await Blast.Bluetooth.writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
+  await writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
   callback();
 };
 // Add switchLights function to the interpreter's API.

@@ -380,7 +380,7 @@ const readNumber = async function(id, serviceUUID, characteristicUUID) {
   let dataView = await read(id, serviceUUID, characteristicUUID);
   // If value is not a DataView already, convert it.
   if (!(dataView instanceof DataView)) {
-    dataView = new DataView(value);
+    dataView = new DataView(dataView);
   }
   const arr = new Uint8Array(dataView.buffer);
   const length = arr.length;
@@ -497,7 +497,7 @@ const cacheLEScanResults = function() {
 /**
   * Adds a webBluetooth eventListener.
   * @param {string} event the event to add the listener to.
-  * @param {function} listener the listener to add.
+  * @param {Function} listener the listener to add.
   */
 const addEventListener = function(event, listener) {
   eventListeners.push([event, listener]);
@@ -507,7 +507,7 @@ const addEventListener = function(event, listener) {
 /**
   * Removes a webBluetooth eventListener.
   * @param {string} event the event to remove the listener from.
-  * @param {function} listener the listener to remove.
+  * @param {Function} listener the listener to remove.
   * @public
   */
 const removeEventListener = function(event, listener) {

@@ -9,6 +9,8 @@
 goog.module('Blast.generators.xiamoi_thermometer');
 
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {optionalServices} = goog.require('Blast.Bluetooth');
+const {subscribe} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
 
 /**
@@ -27,7 +29,7 @@ Blockly.JavaScript['read_mijia_property'] = function(block) {
 
 // Add the thermometer's serviceUUIUD to optionalServices.
 const XiaomiServiceUUID = 'ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6';
-Blast.Bluetooth.optionalServices.push(XiaomiServiceUUID);
+optionalServices.push(XiaomiServiceUUID);
 
 /**
  * Fetches the selected measurement from a RuuviTag.
@@ -65,7 +67,7 @@ const readMijiaProperty = function async(measurement, webBluetoothId, callback) 
 
   // Subscribe to char
   const characteristicUUID = 'ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6';
-  Blast.Bluetooth.subscribe(
+  subscribe(
       webBluetoothId, XiaomiServiceUUID, characteristicUUID, notificationHandler);
 };
 

@@ -191,7 +191,7 @@ const flyoutCategory = function(workspace) {
 
   /**
    * Creates an event block for each state in stateList.
-   * @param {string[]} stateList Array containing states.
+   * @param {Array<string>} stateList Array containing states.
    */
   function populateEvents(stateList) {
     // if stateList is empty create disabled event block.

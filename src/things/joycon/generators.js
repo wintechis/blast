@@ -5,6 +5,20 @@
  */
 
 'use strict';
+
+goog.module('Blast.generators.joycon');
+
+const {JoyConLeft, JoyConRight} = goog.require('Blast.webhid.joycon');
+
+const {apiFunctions} = goog.require('Blast.Interpreter');
+const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {deviceEventHandlers} = goog.require('Blast.Interpreter');
+const {getInterpreter} = goog.require('Blast.Interpreter');
+const {getThingsLog} = goog.require('Blast.Things');
+const {getWebHidDevice} = goog.require('Blast.Things');
+const {setInterrupted} = goog.require('Blast.Interpreter');
+const {throwError} = goog.require('Blast.Interpreter');
+
  
 /**
   * Generates JavaScript code for the joycon_read_property block.
@@ -40,15 +54,15 @@ Blockly.JavaScript['joycon_read_property'] = function(block) {
 const readJoyConProperty = async function(id, property, subValue, subValue2, subValue3, callback) {
   // If no things block is attached, return.
   if (!id) {
-    Blast.Interpreter.throwError('No Joy-Con block set.');
+    throwError('No Joy-Con block set.');
     callback();
     return;
   }
 
-  const device = Blast.Things.getWebHidDevice(id);
+  const device = getWebHidDevice(id);
 
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
     callback();
     return;
   }
@@ -58,13 +72,13 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     try {
       await device.open();
     } catch (error) {
-      Blast.Interpreter.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
 
   // Check if device is a Joy-Con.
   if (device.vendorId !== 1406 || (device.productId !== 0x2006 && device.productId !== 0x2007)) {
-    Blast.Interpreter.throwError('The connected device is not a Joy-Con.');
+    throwError('The connected device is not a Joy-Con.');
     callback();
     return;
   }
@@ -79,7 +93,7 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
   await joyCon.enableStandardFullMode();
   await joyCon.enableIMUMode();
 
-  const thingsLog = Blast.Things.getThingsLog();
+  const thingsLog = getThingsLog();
 
   const hidInputHandler = async function(event) {
     const packet = event.detail;
@@ -117,7 +131,7 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
 };
 
 // add joycon_read_property function to the interpreter's API.
-Blast.Interpreter.asyncApiFunctions.push(['readJoyConProperty', readJoyConProperty]);
+asyncApiFunctions.push(['readJoyConProperty', readJoyConProperty]);
 
 /**
  * Generates JavaScript code for the joycon_button_events block.
@@ -147,15 +161,15 @@ Blockly.JavaScript['joycon_button_events'] = function(block) {
 const handleJoyConButtons = async function(id, button, statements, callback) {
   // If no things block is attached, return.
   if (!id) {
-    Blast.Interpreter.throwError('No Joy-Con block set.');
+    throwError('No Joy-Con block set.');
     callback();
     return;
   }
 
-  const device = Blast.Things.getWebHidDevice(id);
+  const device = getWebHidDevice(id);
 
   if (!device) {
-    Blast.Interpreter.throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
+    throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
     callback();
     return;
   }
@@ -164,13 +178,13 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     try {
       await device.open();
     } catch (error) {
-      Blast.Interpreter.throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
     }
   }
 
   // Check if device is a Joy-Con.
   if (device.vendorId !== 1406 || (device.productId !== 0x2006 && device.productId !== 0x2007)) {
-    Blast.Interpreter.throwError('The connected device is not a Joy-Con.');
+    throwError('The connected device is not a Joy-Con.');
     callback();
     return;
   }
@@ -186,7 +200,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
   await joyCon.enableIMUMode();
 
   let pushedInLastPacket = false;
-  const thingsLog = Blast.Things.getThingsLog();
+  const thingsLog = getThingsLog();
 
   const hidInputHandler = async function(event) {
     const packet = event.detail;
@@ -200,10 +214,10 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
       if (!pushedInLastPacket) {
         pushedInLastPacket = true;
         // interrupt BLAST execution
-        Blast.Interpreter.setInterrupted(false);
+        setInterrupted(false);
 
         const interpreter = new Interpreter('');
-        interpreter.stateStack[0].scope = Blast.Interpreter.getInterpreter().globalScope;
+        interpreter.stateStack[0].scope = getInterpreter().globalScope;
         interpreter.appendCode(statements);
 
         const interruptRunner_ = function() {
@@ -213,10 +227,10 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
               setTimeout(interruptRunner_, 5);
             } else {
               // Continue BLAST execution.
-              Blast.Interpreter.setInterrupted(false);
+              setInterrupted(false);
             }
           } catch (error) {
-            Blast.Interpreter.throwError(`Error executing program:\n ${e}`);
+            throwError(`Error executing program:\n ${error}`);
             console.error(error);
           }
         };
@@ -227,7 +241,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     }
   };
 
-  Blast.Interpreter.deviceEventHandlers.push({device: joyCon, type: 'hidinput', fn: hidInputHandler});
+  deviceEventHandlers.push({device: joyCon, type: 'hidinput', fn: hidInputHandler});
 
   if (!joyCon.eventListenerAttached) {
     await joyCon.open();
@@ -242,4 +256,4 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
 };
 
 // add joycon_button_events function to the interpreter's API.
-Blast.Interpreter.apiFunctions.push(['handleJoyConButtons', handleJoyConButtons]);
+apiFunctions.push(['handleJoyConButtons', handleJoyConButtons]);

@@ -11,8 +11,20 @@ goog.module('Blast.generators.blast');
 const {addElementToOutputContainer} = goog.require('Blast.Ui');
 const {apiFunctions} = goog.require('Blast.Interpreter');
 const {asyncApiFunctions} = goog.require('Blast.Interpreter');
+const {getAdvertisedTxPower} = goog.require('Blast.Eddystone');
+const {getAdvertisingData} = goog.require('Blast.Eddystone');
+const {getAdvertisingInterval} = goog.require('Blast.Eddystone');
 const {getInterpreter} = goog.require('Blast.Interpreter');
+const {getLockState} = goog.require('Blast.Eddystone');
+const {getPublicECDHKey} = goog.require('Blast.Eddystone');
 const {getStdOut} = goog.require('Blast.Interpreter');
+const {getTxPowerLevel} = goog.require('Blast.Eddystone');
+const {optionalServices} = goog.require('Blast.Bluetooth');
+const {setActiveSlot} = goog.require('Blast.Eddystone');
+const {setAdvertisedTxPower} = goog.require('Blast.Eddystone');
+const {setAdvertisingData} = goog.require('Blast.Eddystone');
+const {setAdvertisingInterval} = goog.require('Blast.Eddystone');
+const {setTxPowerLevel} = goog.require('Blast.Eddystone');
 const {throwError} = goog.require('Blast.Interpreter');
 
 /*****************
@@ -361,7 +373,7 @@ const captureImage = async function(callback) {
       context.drawImage(videoElem, 0, 0, canvas.width, canvas.height);
       resolve();
     };
-    video.onerror = ((error) => {
+    videoElem.onerror = ((error) => {
       throwError('Error trying to capture image from camera. See console for details');
       console.error(error);
       reject(error);
@@ -489,7 +501,7 @@ Blockly.JavaScript['write_eddystone_property'] = function(block) {
 };
 
 const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
-Blast.Bluetooth.optionalServices.push(eddystoneServiceUUID);
+optionalServices.push(eddystoneServiceUUID);
 
 /**
  * Writes an Eddystone property to a bluetooth device.
@@ -524,21 +536,21 @@ const writeEddystoneProperty = async function(
   }
   
   // Set the active slot.
-  await Blast.Eddystone.setActiveSlot(webBluetoothId, slot);
+  await setActiveSlot(webBluetoothId, slot);
 
   // write the property
   switch (property) {
     case 'advertisedTxPower':
-      await Blast.Eddystone.setAdvertisedTxPower(webBluetoothId, value);
+      await setAdvertisedTxPower(webBluetoothId, value);
       break;
     case 'advertisementData':
-      await Blast.Eddystone.setAdvertisingData(webBluetoothId, frameType, value);
+      await setAdvertisingData(webBluetoothId, frameType, value);
       break;
     case 'advertisingInterval':
-      await Blast.Eddystone.setAdvertisingInterval(webBluetoothId, value);
+      await setAdvertisingInterval(webBluetoothId, value);
       break;
     case 'radioTxPower':
-      await Blast.Eddystone.setTxPowerLevel(webBluetoothId, value);
+      await setTxPowerLevel(webBluetoothId, value);
       break;
   }
   callback();
@@ -597,28 +609,28 @@ const readEddystoneProperty = async function(webBluetoothId, slot, property, cal
   }
 
   // Set the active slot.
-  await Blast.Eddystone.setActiveSlot(webBluetoothId, slot);
+  await setActiveSlot(webBluetoothId, slot);
 
   // read the property
   let value = null;
   switch (property) {
     case 'advertisedTxPower':
-      value = await Blast.Eddystone.getAdvertisedTxPower(webBluetoothId);
+      value = await getAdvertisedTxPower(webBluetoothId);
       break;
     case 'advertisementData':
-      value = await Blast.Eddystone.getAdvertisingData(webBluetoothId);
+      value = await getAdvertisingData(webBluetoothId);
       break;
     case 'advertisingInterval':
-      value = await Blast.Eddystone.getAdvertisingInterval(webBluetoothId);
+      value = await getAdvertisingInterval(webBluetoothId);
       break;
     case 'lockState':
-      value = await Blast.Eddystone.getLockState(webBluetoothId);
+      value = await getLockState(webBluetoothId);
       break;
     case 'publicECDHKey':
-      value = await Blast.Eddystone.getPublicECDHKey(webBluetoothId);
+      value = await getPublicECDHKey(webBluetoothId);
       break;
     case 'radioTxPower':
-      value = await Blast.Eddystone.getTxPowerLevel(webBluetoothId);
+      value = await getTxPowerLevel(webBluetoothId);
       break;
   }
   callback(value);

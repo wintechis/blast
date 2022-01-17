@@ -108,12 +108,12 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
   let streamdeck;
   
   try {
-    streamdeck = await StreamDeck.openDevice(device);
+    streamdeck = await openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
     if (e.name == 'InvalidStateError') {
       device.close();
-      streamdeck = await StreamDeck.openDevice(device);
+      streamdeck = await openDevice(device);
     } else {
       throwError(e);
       return;
@@ -198,12 +198,12 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
   let streamdeck;
     
   try {
-    streamdeck = await StreamDeck.openDevice(device);
+    streamdeck = await openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
     if (e.name == 'InvalidStateError') {
       device.close();
-      streamdeck = await StreamDeck.openDevice(device);
+      streamdeck = await openDevice(device);
     } else {
       throwError(e);
       callback();
@@ -290,12 +290,12 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
   let streamdeck;
     
   try {
-    streamdeck = await StreamDeck.openDevice(device);
+    streamdeck = await openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
     if (e.name == 'InvalidStateError') {
       device.close();
-      streamdeck = await StreamDeck.openDevice(device);
+      streamdeck = await openDevice(device);
     } else {
       throwError(e);
       callback();
@@ -380,12 +380,12 @@ const streamdeckSetBrightness = async function(id, value, callback) {
   let streamdeck;
     
   try {
-    streamdeck = await StreamDeck.openDevice(device);
+    streamdeck = await openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
     if (e.name == 'InvalidStateError') {
       device.close();
-      streamdeck = await StreamDeck.openDevice(device);
+      streamdeck = await openDevice(device);
     } else {
       throwError(e);
       callback();

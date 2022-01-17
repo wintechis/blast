@@ -10,6 +10,7 @@
 goog.module('Blast.blocks.ruuvi_tag');
 
 const {addBlock} = goog.require('Blast.Toolbox');
+const {scanBlocks} = goog.require('Blast.Bluetooth');
 
 Blockly.Blocks['read_ruuvi_property'] = {
   /**
@@ -55,4 +56,4 @@ Blockly.Blocks['read_ruuvi_property'] = {
 // Add read_ruuvi_property block to the toolbox.
 addBlock('read_ruuvi_property', 'Properties');
 // Add read_ruuvi_property block to the scanBlocks array.
-Blast.Bluetooth.scanBlocks.push('read_ruuvi_property');
+scanBlocks.push('read_ruuvi_property');
