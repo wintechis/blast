@@ -26,11 +26,6 @@ const {resetThings} = goog.require('Blast.Things');
 const {requestDevice} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
 
-
-// This variables will be overwritten by imported libraries, but have to be
-// declared here to avoid errors in the closure compiler.
-let saveAs = null;
-
 /**
  * Http-request error message.
  */
