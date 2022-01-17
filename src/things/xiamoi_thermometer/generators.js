@@ -65,7 +65,7 @@ const readMijiaProperty = function async(measurement, webBluetoothId, callback) 
 
   // Subscribe to char
   const characteristicUUID = 'ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6';
-  Blast.Bluetooth.gatt_subscribe(
+  Blast.Bluetooth.subscribe(
       webBluetoothId, XiaomiServiceUUID, characteristicUUID, notificationHandler);
 };
 

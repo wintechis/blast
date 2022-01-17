@@ -120,7 +120,7 @@ Blast.Bluetooth.optionalServices.push(HuskyServiceUUID);
 const chooseAlgo = async function(thing, value, callback) {
   const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
 
-  await Blast.Bluetooth.gatt_writeWithoutResponse(
+  await Blast.Bluetooth.writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -141,7 +141,7 @@ asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 const learnID = async function(thing, id, callback) {
   const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
 
-  await Blast.Bluetooth.gatt_writeWithoutResponse(
+  await Blast.Bluetooth.writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -160,7 +160,7 @@ asyncApiFunctions.push(['learnID', learnID]);
 const forgetAll = async function(thing, flag, callback) {
   const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
     
-  await Blast.Bluetooth.gatt_writeWithoutResponse(
+  await Blast.Bluetooth.writeWithoutResponse(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
@@ -180,7 +180,7 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  const id = await Blast.Bluetooth.gatt_read_text(
+  const id = await Blast.Bluetooth.readText(
       thing,
       HuskyServiceUUID,
       characteristicUUID,

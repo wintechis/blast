@@ -16,10 +16,10 @@
 goog.module('Blast.Eddystone');
 goog.module.declareLegacyNamespace();
 
-const {gatt_read} = goog.require('Blast.Bluetooth');
-const {gatt_read_hex} = goog.require('Blast.Bluetooth');
-const {gatt_read_number} = goog.require('Blast.Bluetooth');
-const {gatt_writeWithResponse} = goog.require('Blast.Bluetooth');
+const {read} = goog.require('Blast.Bluetooth');
+const {readHex} = goog.require('Blast.Bluetooth');
+const {readNumber} = goog.require('Blast.Bluetooth');
+const {writeWithResponse} = goog.require('Blast.Bluetooth');
 const {getThingsLog} = goog.require('Blast.Things');
 const {optionalServices} = goog.require('Blast.Bluetooth');
 const {throwError} = goog.require('Blast.Interpreter');
@@ -56,7 +56,7 @@ const getCapabilities = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone capabilities...', 'Eddystone', webBluetoothId);
   // Get the capabilities.
-  let capabilitiesArray = await gatt_read(
+  let capabilitiesArray = await read(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.CAPABILITIES_CHARACTERISTIC,
@@ -100,7 +100,7 @@ const getCapabilities = async function(webBluetoothId) {
 const getActiveSlot = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone active slot...', 'Eddystone', webBluetoothId);
-  const activeSlot = await gatt_read_number(
+  const activeSlot = await readNumber(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
@@ -128,7 +128,7 @@ const setActiveSlot = async function(webBluetoothId, slot) {
     );
   }
  
-  await gatt_writeWithResponse(
+  await writeWithResponse(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ACTIVE_SLOT_CHARACTERISTIC,
@@ -148,7 +148,7 @@ exports.setActiveSlot = setActiveSlot;
 const getAdvertisingInterval = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone advertising interval...', 'Eddystone', webBluetoothId);
-  const interval = await gatt_read_number(
+  const interval = await readNumber(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
@@ -167,7 +167,7 @@ exports.getAdvertisingInterval = getAdvertisingInterval;
 const setAdvertisingInterval = async function(webBluetoothId, interval) {
   const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone advertising interval to <code>${interval}</code>...`, 'Eddystone', webBluetoothId);
-  await gatt_writeWithResponse(
+  await writeWithResponse(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
@@ -186,7 +186,7 @@ exports.setAdvertisingInterval = setAdvertisingInterval;
 const getTxPowerLevel = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone TX power level...', 'Eddystone', webBluetoothId);
-  const txPowerLevel = await gatt_read_number(
+  const txPowerLevel = await readNumber(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
@@ -215,7 +215,7 @@ const setTxPowerLevel = async function(webBluetoothId, txPowerLevel) {
     return;
   }
  
-  await gatt_writeWithResponse(
+  await writeWithResponse(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.RADIO_TX_POWER_CHARACTERISTIC,
@@ -234,7 +234,7 @@ exports.setTxPowerLevel = setTxPowerLevel;
 const getAdvertisedTxPower = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone advertised TX power...', 'Eddystone', webBluetoothId);
-  const advertisedTxPower = await gatt_read_number(
+  const advertisedTxPower = await readNumber(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
@@ -253,7 +253,7 @@ exports.getAdvertisedTxPower = getAdvertisedTxPower;
 const setAdvertisedTxPower = async function(webBluetoothId, txPowerLevel) {
   const thingsLog = getThingsLog();
   thingsLog(`Setting Eddystone advertised TX power to <code>${txPowerLevel}</code>...`, 'Eddystone', webBluetoothId);
-  await gatt_writeWithResponse(
+  await writeWithResponse(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
@@ -272,7 +272,7 @@ exports.setAdvertisedTxPower = setAdvertisedTxPower;
 const getLockState = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone lock state...', 'Eddystone', webBluetoothId);
-  const lockState = await gatt_read_number(
+  const lockState = await readNumber(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.LOCK_STATE_CHARACTERISTIC,
@@ -290,7 +290,7 @@ exports.getLockState = getLockState;
 const getPublicECDHKey = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone public ECDH key...', 'Eddystone', webBluetoothId);
-  const publicECDHKey = await gatt_read_hex(
+  const publicECDHKey = await readHex(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.PUBLIC_ECDH_KEY_CHARACTERISTIC,
@@ -412,7 +412,7 @@ const getAdvertisingData = async function(webBluetoothId) {
     };
   };
  
-  const advertisingData = await gatt_read_hex(
+  const advertisingData = await readHex(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,
@@ -529,7 +529,7 @@ const setAdvertisingData = async function(webBluetoothId, frameType, data) {
     encodedData = '0x00' + data;
   }
      
-  const response = await gatt_writeWithResponse(
+  const response = await writeWithResponse(
       webBluetoothId,
       UUIDS.CONFIG_SERVICE,
       UUIDS.ADV_SLOT_DATA_CHARACTERISTIC,

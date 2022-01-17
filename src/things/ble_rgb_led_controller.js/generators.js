@@ -50,7 +50,7 @@ const switchLights = async function(mac, colour, callback) {
   const value = '7e000503' + colour.substring(1, 7) + '00ef';
 
   const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
-  await Blast.Bluetooth.gatt_writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
+  await Blast.Bluetooth.writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
   callback();
 };
 // Add switchLights function to the interpreter's API.

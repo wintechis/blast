@@ -177,6 +177,7 @@ const connect = async function(id) {
    * @param {number} sleep time in ms to wait after command, defaults to 0.
    * @return {Object} representation of the complete request with response.
    */
+// eslint-disable-next-line no-unused-vars
 const disconnect = async function(id) {
   try {
     const device = await getDeviceById(id);
@@ -198,7 +199,7 @@ const disconnect = async function(id) {
    * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
    * @param {string} value hex value to write.
    */
-const gatt_writeWithoutResponse = async function(
+const writeWithoutResponse = async function(
     id, serviceUUID, characteristicUUID, value) {
   const characteristic = await getCharacteristic(
       id, serviceUUID, characteristicUUID);
@@ -226,7 +227,7 @@ const gatt_writeWithoutResponse = async function(
     throwError(errorMsg);
   }
 };
-exports.gatt_writeWithoutResponse = gatt_writeWithoutResponse;
+exports.writeWithoutResponse = writeWithoutResponse;
  
   
 /**
@@ -237,7 +238,7 @@ exports.gatt_writeWithoutResponse = gatt_writeWithoutResponse;
    * @param {string} value hex value to write.
    * @return {Object} representation of the complete request with response.
    */
-const gatt_writeWithResponse = async function(
+const writeWithResponse = async function(
     id, serviceUUID, characteristicUUID, value) {
   const characteristic = await getCharacteristic(
       id, serviceUUID, characteristicUUID,
@@ -266,7 +267,7 @@ const gatt_writeWithResponse = async function(
     throwError(errorMsg);
   }
 };
-exports.gatt_writeWithResponse = gatt_writeWithResponse;
+exports.writeWithResponse = writeWithResponse;
  
 /**
   * Returns a promise to the primary BluetoothRemoteGATTService offered by
@@ -329,7 +330,7 @@ exports.getCharacteristic = getCharacteristic;
   * @return {Object} representation of the complete request with response.
   * @public
   */
-const gatt_read = async function(id, serviceUUID, characteristicUUID) {
+const read = async function(id, serviceUUID, characteristicUUID) {
   const characteristic = await getCharacteristic(
       id,
       serviceUUID,
@@ -350,7 +351,7 @@ const gatt_read = async function(id, serviceUUID, characteristicUUID) {
     throwError(`Error reading from Bluetooth device ${id}`);
   }
 };
-exports.gatt_read = gatt_read;
+exports.read = read;
  
 /**
   * Reads a text (UTF-8) characteristic value from a Bluetooth device.
@@ -360,12 +361,12 @@ exports.gatt_read = gatt_read;
   * @return {string} the value of the characteristic.
   * @public
   */
-const gatt_read_text = async function(id, serviceUUID, characteristicUUID) {
-  const value = await gatt_read(id, serviceUUID, characteristicUUID);
+const readText = async function(id, serviceUUID, characteristicUUID) {
+  const value = await read(id, serviceUUID, characteristicUUID);
   const stringValue = new TextDecoder().decode(value);
   return stringValue;
 };
-exports.gatt_read_text = gatt_read_text;
+exports.readText = readText;
  
 /**
   * Reads a nummerical characteristic value from a Bluetooth device.
@@ -375,8 +376,8 @@ exports.gatt_read_text = gatt_read_text;
   * @returns {number} the value of the characteristic.
   * @public
   */
-const gatt_read_number = async function(id, serviceUUID, characteristicUUID) {
-  let dataView = await gatt_read(id, serviceUUID, characteristicUUID);
+const readNumber = async function(id, serviceUUID, characteristicUUID) {
+  let dataView = await read(id, serviceUUID, characteristicUUID);
   // If value is not a DataView already, convert it.
   if (!(dataView instanceof DataView)) {
     dataView = new DataView(value);
@@ -388,7 +389,7 @@ const gatt_read_number = async function(id, serviceUUID, characteristicUUID) {
  
   return result;
 };
-exports.gatt_read_number = gatt_read_number;
+exports.readNumber = readNumber;
  
 /** Reads a hexadecimal characteristic value from a Bluetooth device.
   * @param {string} id identifier of the device to read from.
@@ -397,14 +398,14 @@ exports.gatt_read_number = gatt_read_number;
   * @returns {string} the value of the characteristic.
   * @public
   */
-const gatt_read_hex = async function(id, serviceUUID, characteristicUUID) {
-  const value = await gatt_read(id, serviceUUID, characteristicUUID);
+const readHex = async function(id, serviceUUID, characteristicUUID) {
+  const value = await read(id, serviceUUID, characteristicUUID);
   const hexValue = new Uint8Array(value.buffer).reduce((acc, byte) => {
     return acc + ('0' + byte.toString(16)).slice(-2);
   }, '');
   return hexValue;
 };
-exports.gatt_read_hex = gatt_read_hex;
+exports.readHex = readHex;
  
 /**
   * Subscribes to a Bluetooth characteristic and adds an event listener.
@@ -413,7 +414,7 @@ exports.gatt_read_hex = gatt_read_hex;
   * @param {BluetoothCharacteristicUUID} charUUID identifier of the characteristic.
   * @param {Function} handler handler to register for notifications.
   */
-const gatt_subscribe = async function(id, serviceUUID, charUUID, handler) {
+const subscribe = async function(id, serviceUUID, charUUID, handler) {
   const characteristic = await getCharacteristic(
       id, serviceUUID, charUUID,
   );
@@ -437,7 +438,7 @@ const gatt_subscribe = async function(id, serviceUUID, charUUID, handler) {
     throwError(`Error subscribing to Bluetooth device ${id}`);
   }
 };
-exports.gatt_subscribe = gatt_subscribe;
+exports.subscribe = subscribe;
  
 /** Start the LE Scan.
   * public
