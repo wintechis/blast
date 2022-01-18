@@ -6,7 +6,7 @@
 
 'use strict';
 
-import { addBlock } from './../blast_toolbox.js';
+import {addBlock} from './../blast_toolbox.js';
 
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];

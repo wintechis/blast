@@ -7,8 +7,8 @@
 'use strict';
 
 import {eventsInWorkspace} from './../blast_interpreter.js';
-import {findLegalName} from './../blast_states.js'
-import {getDefinition} from './../blast_states.js'
+import {findLegalName} from './../blast_states.js';
+import {getDefinition} from './../blast_states.js';
 import {getWorkspace} from './../blast_interpreter.js';
 import {removeEventCode} from './../blast_states_interpreter.js';
 import {rename} from './../blast_states.js';

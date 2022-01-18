@@ -7,7 +7,7 @@
 'use strict';
 
 import {getLatestCode} from './blast_interpreter.js';
-import { loadXMLFromFile } from './blast_storage.js';
+import {loadXMLFromFile} from './blast_storage.js';
 import {link} from './blast_storage.js';
 import {onStatusChange} from './blast_interpreter.js';
 import {runJS} from './blast_interpreter.js';
