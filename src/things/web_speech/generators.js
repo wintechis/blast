@@ -7,10 +7,9 @@
 
 'use strict';
 
-goog.module('Blast.generators.web_speech');
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {getWorkspace} from './../../blast_interpreter.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
 
 /**
  * Generates JavaScript code for the play_audio block.

@@ -6,9 +6,8 @@
 
 'use strict';
 
-goog.module('Blast.blocks.xiamoi_thermometer');
+import {addBlock} from './../../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
 
 Blockly.Blocks['read_mijia_property'] = {
   /**

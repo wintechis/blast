@@ -6,8 +6,6 @@
 
 'use strict';
 
-goog.module('Blast.blocks.identifiers');
-
 Blockly.Blocks['mac'] = {
   /**
    * Block representing a mac address.

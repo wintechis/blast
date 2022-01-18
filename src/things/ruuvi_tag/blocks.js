@@ -7,10 +7,9 @@
 
 'use strict';
 
-goog.module('Blast.blocks.ruuvi_tag');
+import {addBlock} from './../../blast_toolbox.js';
+import {scanBlocks} from './../../blast_webBluetooth.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
-const {scanBlocks} = goog.require('Blast.Bluetooth');
 
 Blockly.Blocks['read_ruuvi_property'] = {
   /**

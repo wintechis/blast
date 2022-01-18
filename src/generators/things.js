@@ -6,8 +6,6 @@
 
 'use strict';
 
-goog.module('Blast.generators.things');
-
 Blockly.JavaScript['things_webBluetooth'] = function(block) {
   const id = Blockly.JavaScript.quote_(block.getFieldValue('id'));
 

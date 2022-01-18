@@ -6,8 +6,6 @@
 
 'use strict';
 
-goog.module('Blast.blocks.strings');
-
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['string'] = Blockly.Blocks['text'];
 Blockly.Blocks['string_multiline'] = Blockly.Blocks['text_multiline'];

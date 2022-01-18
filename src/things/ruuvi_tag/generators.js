@@ -7,12 +7,11 @@
 
 'use strict';
 
-goog.module('Blast.generators.ruuvi_tag');
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {LEScanResults} from './../../blast_webBluetooth.js';
+import {startLEScan} from './../../blast_webBluetooth.js';
+import {throwError} from './../../blast_interpreter.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {LEScanResults} = goog.require('Blast.Bluetooth');
-const {startLEScan} = goog.require('Blast.Bluetooth');
-const {throwError} = goog.require('Blast.Interpreter');
 
 /**
  * Generates JavaScript code for the get_temperature block.

@@ -6,9 +6,7 @@
 
 'use strict';
 
-goog.module('Blast.blocks.control_flow');
-
-const {addBlock} = goog.require('Blast.Toolbox');
+import { addBlock } from './../blast_toolbox.js';
 
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];

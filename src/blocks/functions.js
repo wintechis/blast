@@ -6,8 +6,6 @@
 
 'use strict';
 
-goog.module('Blast.blocks.functions');
-
 Blockly.Blocks['procedures_defeval'] = {
   /**
    * Block for defining a procedure with a return value.

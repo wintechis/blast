@@ -7,12 +7,11 @@
 
 'use strict';
 
-goog.module('Blast.generators.huskyduino');
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {optionalServices} from './../../blast_webBluetooth.js';
+import {readText} from './../../blast_webBluetooth.js';
+import {writeWithoutResponse} from './../../blast_webBluetooth.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {optionalServices} = goog.require('Blast.Bluetooth');
-const {readText} = goog.require('Blast.Bluetooth');
-const {writeWithoutResponse} = goog.require('Blast.Bluetooth');
 
 /**
  * Generate JavaScript code of the huskylens_choose_algo block.

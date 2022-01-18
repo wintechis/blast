@@ -6,12 +6,11 @@
 
 'use strict';
 
-goog.module('Blast.generators.xiamoi_thermometer');
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {optionalServices} from './../../blast_webBluetooth.js';
+import {subscribe} from './../../blast_webBluetooth.js';
+import {throwError} from './../../blast_interpreter.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {optionalServices} = goog.require('Blast.Bluetooth');
-const {subscribe} = goog.require('Blast.Bluetooth');
-const {throwError} = goog.require('Blast.Interpreter');
 
 /**
  * Generates JavaScript code for the get_mijia_property block.

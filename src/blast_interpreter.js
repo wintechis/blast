@@ -6,27 +6,23 @@
  */
 'use strict';
 
-goog.module('Blast.Interpreter');
-goog.module.declareLegacyNamespace();
+import {currentToolbox} from './blast_toolbox.js';
 
-const {currentToolbox} = goog.require('Blast.Toolbox');
 
 /**
  * Instance of the JS Interpreter.
  * @type {?Interpreter}
  * @public
  */
-let interpreter = null;
-exports.interpreter = interpreter;
+export let interpreter = null;
 
 /**
  * Getter for the interpreter.
  * @return {Interpreter} the interpreter.
  */
-const getInterpreter = function() {
+export const getInterpreter = function() {
   return interpreter;
 };
-exports.getInterpreter = getInterpreter;
 
 /**
  * Array of tuples, containg names and functions defined in the things folder,
@@ -34,18 +30,16 @@ exports.getInterpreter = getInterpreter;
  * @public
  * @type {Array<{name: string, func: Function}>}
  */
-const apiFunctions = [];
-exports.apiFunctions = apiFunctions;
- 
+export const apiFunctions = [];
+
 /**
   * Array of tuples, containg names and asynchronous functions defined in the
   * things folder, in order to add them to the interpreter API in {@link initAPI}.
   * @type {Array<{name: string, func: Function}>}
   * @public
   */
-const asyncApiFunctions = [];
-exports.asyncApiFunctions = asyncApiFunctions;
- 
+export const asyncApiFunctions = [];
+
 /**
   * Indicates wheter BLAST is current interrupted.
   * @type {boolean}
@@ -56,18 +50,16 @@ let interrupted = false;
  * Getter for interrupted.
  * @return {boolean} interrupted
  */
-const getInterrupted = function() {
+export const getInterrupted = function() {
   return interrupted;
 };
-exports.getInterrupted = getInterrupted;
 /**
  * Setter for interrupted.
  * @param {boolean} val value to set.
  */
-const setInterrupted = function(val) {
+export const setInterrupted = function(val) {
   interrupted = val;
 };
-exports.setInterrupted = setInterrupted;
 apiFunctions.push(['setInterrupted', setInterrupted]);
 
 /**
@@ -75,13 +67,12 @@ apiFunctions.push(['setInterrupted', setInterrupted]);
  * @enum {string}
  * @public
  */
-const statusValues = {
+export const statusValues = {
   READY: 'ready',
   RUNNING: 'running',
   STOPPED: 'stopped',
   ERROR: 'error',
 };
-exports.statusValues = statusValues;
 
 /**
  * Stores the current status of the interpreter, set through {@link setStatus}.
@@ -91,8 +82,7 @@ let status = statusValues.READY;
 /**
  * Stores functions to be invoked when status changes.
  */
-const onStatusChange = {ready: [], running: [], stopped: [], error: []};
-exports.onStatusChange = onStatusChange;
+export const onStatusChange = {ready: [], running: [], stopped: [], error: []};
 
 /**
  * Sets the current status of the interpreter.
@@ -118,10 +108,9 @@ let latestCode = '';
  * Getter for latestCode.
  * @return {string} latestCode
  */
-const getLatestCode = function() {
+export const getLatestCode = function() {
   return latestCode;
 };
-exports.getLatestCode = getLatestCode;
 
 /**
  * Instance of runner function.
@@ -141,48 +130,42 @@ let workspace = null;
  * Gets the workspace
  * @return {Blockly.Workspace} the workspace
  */
-const getWorkspace = function() {
+export const getWorkspace = function() {
   return workspace;
 };
-exports.getWorkspace = getWorkspace;
 
 /**
  * Array containing all interval events.
  * @type {!Array<!Number>}
  */
-const intervalEvents = [];
-exports.intervalEvents = intervalEvents;
+export const intervalEvents = [];
 
 /**
  * Tracks event blocks currently in the workspace,
  * in order to run indefinately if in case there are any.
  */
-const eventsInWorkspace = [];
-exports.eventsInWorkspace = eventsInWorkspace;
+export const eventsInWorkspace = [];
 
 /**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
  */
-let deviceEventHandlers = [];
-exports.deviceEventHandlers = deviceEventHandlers;
+export let deviceEventHandlers = [];
 
 /**
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
 const cleanUpFunctions = [];
-const addCleanUpFunction = function(fn) {
+export const addCleanUpFunction = function(fn) {
   cleanUpFunctions.push(fn);
 };
-exports.addCleanUpFunction = addCleanUpFunction;
 
 /**
  * Set to true if the States Interpreter is running.
  */
 let statesInterpreterRunning = false;
-const setStatesInterpreterRunning = function(val) {
+export const setStatesInterpreterRunning = function(val) {
   statesInterpreterRunning = val;
 };
-exports.setStatesInterpreterRunning = setStatesInterpreterRunning;
 
 /**
  * Defines the Interpreters standard output.
@@ -193,19 +176,17 @@ let stdOut = prompt;
  * @param {Function} fn the stdEut function.
  * @public
  */
-const setStdOut = function(fn) {
+export const setStdOut = function(fn) {
   stdOut = fn;
 };
-exports.setStdOut = setStdOut;
 
 /**
  * Getter for the Interpreter's standard output function.
  * @return {Function} the stdOut function.
  */
-const getStdOut = function() {
+export const getStdOut = function() {
   return stdOut;
 };
-exports.getStdOut = getStdOut;
 
 /**
  * Defines the Interpreters standard info output function.
@@ -215,18 +196,16 @@ let stdInfo = prompt;
  * Setter for the Interpreter's standard info output function.
  * @param {Function} fn the stdInfo function.
  */
-const setStdInfo = function(fn) {
+export const setStdInfo = function(fn) {
   stdInfo = fn;
 };
-exports.setStdInfo = setStdInfo;
 /**
  * Getter for the Interpreter's standard info output function.
  * @return {Function} the stdInfo function.
  */
-const getStdInfo = function() {
+export const getStdInfo = function() {
   return stdInfo;
 };
-exports.getStdInfo = getStdInfo;
 
 
 /**
@@ -238,18 +217,16 @@ let stdErr = prompt;
  * @param {Function} fn the stdErr function.
  * @public
  */
-const setStdError = function(fn) {
+export const setStdError = function(fn) {
   stdErr = fn;
 };
-exports.setStdError = setStdError;
 /**
  * Getter for the Interpreter's standard error output function.
  * @return {Function} the stdErr function.
  */
-const getStdError = function() {
+export const getStdError = function() {
   return stdErr;
 };
-exports.getStdError = getStdError;
 
 /**
  * Saves the current clipboard when workspace is disabled to restore it when enabled.
@@ -281,7 +258,7 @@ const clearIntervalEvents = function() {
  * Reset the JS Interpreter.
  * @public
  */
-const resetInterpreter = function() {
+export const resetInterpreter = function() {
   interpreter = null;
   if (runner_) {
     clearTimeout(runner_);
@@ -294,17 +271,15 @@ const resetInterpreter = function() {
     func();
   }
 };
-exports.resetInterpreter = resetInterpreter;
 
 /**
  * Stop the JavaScript execution.
  * @public
  */
-const stopJS = function() {
+export const stopJS = function() {
   resetInterpreter();
   setStatus(statusValues.STOPPED);
 };
-exports.stopJS = stopJS;
 
 /**
  * Stop execution and adds an error message to the
@@ -312,7 +287,7 @@ exports.stopJS = stopJS;
  * @param {string=} text optional, a custom error text
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-const throwError = function(text) {
+export const throwError = function(text) {
   if (!text) {
     text = 'Error executing program - See console for details.';
   }
@@ -322,7 +297,6 @@ const throwError = function(text) {
   resetInterpreter();
   stdInfo('Execution stopped');
 };
-exports.throwError = throwError;
 
 /**
  * Generate JavaScript Code for the user's block-program.
@@ -367,7 +341,7 @@ function initApi(interpreter, globalObject) {
 /**
  *
  */
-const initInterpreter = function() {
+export const initInterpreter = function() {
   workspace = Blockly.inject('content_workspace', {
     // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
     media: 'media/',
@@ -384,7 +358,6 @@ const initInterpreter = function() {
     }
   });
 };
-exports.initInterpreter = initInterpreter;
 
 /**
  * Places a transparent rectangle over the workspace to prevent
@@ -438,7 +411,7 @@ onStatusChange.error.push(enableWorkspace);
  * Execute the user's code.
  * @public
  */
-const runJS = function() {
+export const runJS = function() {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
   disableWorkspace();
@@ -485,4 +458,3 @@ const runJS = function() {
     runner_();
   }
 };
-exports.runJS = runJS;

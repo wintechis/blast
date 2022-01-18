@@ -7,9 +7,8 @@
 
 'use strict';
 
-goog.module('Blast.blocks.web_speech');
+import {addBlock} from './../../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
 
 Blockly.Blocks['text_to_speech'] = {
   /**

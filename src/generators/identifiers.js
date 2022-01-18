@@ -6,10 +6,9 @@
 
 'use strict';
 
-goog.module('Blast.generators.identifiers');
+import {apiFunctions} from './../blast_interpreter.js';
+import {throwError} from './../blast_interpreter.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {throwError} = goog.require('Blast.Interpreter');
 
 Blockly.JavaScript['uri'] = function(block) {
   const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
@@ -41,4 +40,3 @@ Blockly.JavaScript['mac'] = function(block) {
   const mac = Blockly.JavaScript.quote_(block.getFieldValue('MAC'));
   return [mac, Blockly.JavaScript.ORDER_NONE];
 };
-  

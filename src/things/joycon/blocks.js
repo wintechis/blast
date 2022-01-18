@@ -6,11 +6,9 @@
 
 'use strict';
 
-goog.module('Blast.blocks.joycon');
-
-const {addBlock} = goog.require('Blast.Toolbox');
-const {eventsInWorkspace} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
+import {addBlock} from './../../blast_toolbox.js';
+import {eventsInWorkspace} from './../../blast_interpreter.js';
+import {getWorkspace} from './../../blast_interpreter.js';
 
 
 Blockly.Blocks['joycon_read_property'] = {

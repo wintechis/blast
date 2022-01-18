@@ -7,9 +7,8 @@
 
 'use strict';
 
-goog.module('Blast.blocks.blinkstick');
+import {addBlock} from './../../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
 
 Blockly.Blocks['blinkstick_set_colors'] = {
   init: function() {

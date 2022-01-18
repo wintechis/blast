@@ -7,16 +7,15 @@
 
 'use strict';
 
-goog.module('Blast.generators.events');
+import {apiFunctions} from './../blast_interpreter.js';
+import {addEventCode} from './../blast_states_interpreter.js';
+import {getDefinition} from './../blast_states.js';
+import {getInterpreter} from './../blast_interpreter.js';
+import {getWorkspace} from './../blast_interpreter.js';
+import {intervalEvents} from './../blast_interpreter.js';
+import {setInterrupted} from './../blast_interpreter.js';
+import {throwError} from './../blast_interpreter.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {addEventCode} = goog.require('Blast.States.Interpreter');
-const {getDefinition} = goog.require('Blast.States');
-const {getInterpreter} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
-const {intervalEvents} = goog.require('Blast.Interpreter');
-const {setInterrupted} = goog.require('Blast.Interpreter');
-const {throwError} = goog.require('Blast.Interpreter');
 
 // eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['state_definition'] = function(block) {

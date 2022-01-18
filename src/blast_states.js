@@ -5,17 +5,9 @@
  */
 'use strict';
 
-/**
- * Namespace for state Utility functions.
- * @name Blast.States
- * @namespace
- * @public
- */
-goog.module('Blast.States');
-goog.module.declareLegacyNamespace();
+import {apiFunctions} from './blast_interpreter.js';
+import {getCategory}  from './blast_toolbox.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {getCategory} = goog.require('Blast.Toolbox');
 
 /**
  * State block type.
@@ -26,8 +18,7 @@ const {getCategory} = goog.require('Blast.Toolbox');
  * }}
  * @alias StateBlock
  */
-let StateBlock;
-exports.StateBlock = StateBlock;
+export let StateBlock;
 
 /**
  * Map containing previous values for events identified by block IDs.
@@ -75,7 +66,7 @@ const allStates = function(root) {
  * @param {!Blockly.Block} block Block to disambiguate.
  * @return {string} Non-colliding name.
  */
-const findLegalName = function(name, block) {
+export const findLegalName = function(name, block) {
   if (block.isInFlyout) {
     return name;
   }
@@ -91,7 +82,6 @@ const findLegalName = function(name, block) {
   }
   return name;
 };
-exports.findLegalName = findLegalName;
 
 /**
  * Does this state have a legal name?  Illegal names include names of
@@ -139,7 +129,7 @@ const isNameUsed = function(name, workspace, optExclude) {
  * @return {string} The accepted name.
  * @this {Blockly.Field}
  */
-const rename = function(name) {
+export const rename = function(name) {
   // Strip leading and trailing whitespace. Beyond this, all names are legal.
   name = name.trim();
 
@@ -160,14 +150,13 @@ const rename = function(name) {
   }
   return legalName;
 };
-exports.rename = rename;
 
 /**
  * Construct the blocks required by the flyout for the state category.
  * @param {!Blockly.Workspace} workspace The workspace containing states.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-const flyoutCategory = function(workspace) {
+export const eventsFlyoutCategory = function(workspace) {
   const xmlList = [];
   // add event_every_minutes block
   const eventEveryMinutes = Blockly.utils.xml.createElement('block');
@@ -234,7 +223,6 @@ const flyoutCategory = function(workspace) {
 
   return xmlList;
 };
-exports.flyoutCategory = flyoutCategory;
 
 /**
  * Find the definition block for the named event.
@@ -242,7 +230,7 @@ exports.flyoutCategory = flyoutCategory;
  * @param {!Blockly.Workspace} workspace The workspace to search.
  * @return {Blockly.Block} The state definition block, or null if not found.
  */
-const getDefinition = function(name, workspace) {
+export const getDefinition = function(name, workspace) {
   // Assume that a state definition is a top block.
   const blocks = workspace.getTopBlocks(false);
   for (const block of blocks) {
@@ -256,4 +244,3 @@ const getDefinition = function(name, workspace) {
   }
   return null;
 };
-exports.getDefinition = getDefinition;

@@ -6,9 +6,8 @@
 
 'use strict';
 
-goog.module('Blast.generators.control_flow');
+import {asyncApiFunctions} from './../blast_interpreter.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
 
 // Remap blockly blocks to improve naming in xml.
 Blockly.JavaScript['repeat'] = Blockly.JavaScript['controls_repeat_ext'];

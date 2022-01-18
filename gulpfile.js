@@ -25,8 +25,10 @@ gulp.task('closureCompiler', function() {
       .pipe(
           closureCompiler({
             compilation_level: 'SIMPLE',
-            language_out: 'ES6_STRICT',
             js_output_file: 'blast.min.js',
+            language_in: 'ECMASCRIPT_2020',
+            language_out: 'ES6_STRICT',
+            module_resolution: 'BROWSER',
           }))
       .pipe(rev())
       .pipe(gulp.src(['src/index.html']))

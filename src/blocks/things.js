@@ -6,10 +6,9 @@
 
 'use strict';
 
-goog.module('Blast.blocks.things');
+import {getWebBluetoothDevices} from './../blast_things.js';
+import {getWebHIDDevices} from './../blast_things.js';
 
-const {getWebBluetoothDevices} = goog.require('Blast.Things');
-const {getWebHIDDevices} = goog.require('Blast.Things');
 
 Blockly.Blocks['things_webBluetooth'] = {
   init: function() {

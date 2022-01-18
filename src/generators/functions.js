@@ -6,9 +6,8 @@
 
 'use strict';
 
-goog.module('Blast.generators.functions');
+import {apiFunctions} from './../blast_interpreter.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
 
 Blockly.JavaScript['procedures_defeval'] = function(block) {
   const funcName = Blockly.JavaScript.variableDB_.getName(

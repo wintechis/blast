@@ -7,9 +7,8 @@
 
 'use strict';
 
-goog.module('Blast.blocks.huskyduino');
+import {addBlock} from './../../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
 
 Blockly.Blocks['huskylens_choose_algo'] = {
   init: function() {

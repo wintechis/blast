@@ -6,32 +6,25 @@
 
 'use strict';
 
-/**
- * The namespace used to access the Blast library.
- * @name Blast.Ui
- * @namespace
- */
-goog.module('Blast.Ui');
-goog.module.declareLegacyNamespace();
+import {getLatestCode} from './blast_interpreter.js';
+import { loadXMLFromFile } from './blast_storage.js';
+import {link} from './blast_storage.js';
+import {onStatusChange} from './blast_interpreter.js';
+import {runJS} from './blast_interpreter.js';
+import {setStdError} from './blast_interpreter.js';
+import {setStdInfo} from './blast_interpreter.js';
+import {setStdOut} from './blast_interpreter.js';
+import {setThingsLog} from './blast_things.js';
+import {statusValues} from './blast_interpreter.js';
+import {stopJS} from './blast_interpreter.js';
 
-const {getLatestCode} = goog.require('Blast.Interpreter');
-const {link} = goog.require('Blast.Storage');
-const {onStatusChange} = goog.require('Blast.Interpreter');
-const {runJS} = goog.require('Blast.Interpreter');
-const {setStdError} = goog.require('Blast.Interpreter');
-const {setStdInfo} = goog.require('Blast.Interpreter');
-const {setStdOut} = goog.require('Blast.Interpreter');
-const {setThingsLog} = goog.require('Blast.Things');
-const {statusValues} = goog.require('Blast.Interpreter');
-const {stopJS} = goog.require('Blast.Interpreter');
 
 /**
  * List of tab names.
  * @type {Array.<string>}
  * @private
  */
-const TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
-exports.TABS_ = TABS_;
+export const TABS_ = ['workspace', 'javascript', 'xml', 'deviceLogs'];
 
 /**
  * Name of currently selected tab.
@@ -93,14 +86,13 @@ let workspace = null;
  * @param {!Function} func func Event handler to bind.
  * @public
  */
-const bindClick = function(el, func) {
+export const bindClick = function(el, func) {
   if (typeof el == 'string') {
     el = document.getElementById(el);
   }
   el.addEventListener('click', func, true);
   el.addEventListener('touchend', func, true);
 };
-exports.bindClick = bindClick;
 
 
 /**
@@ -152,7 +144,7 @@ onStatusChange.error.push(() => resetUi(statusValues.ERROR));
  * Adds a DOM Element to the {@link messageOutputContainer}.
  * @param {HTMLElement} elem the element to be added
  */
-const addElementToOutputContainer = function(elem) {
+export const addElementToOutputContainer = function(elem) {
   // Limit elements to 100
   if (messageCounter_ > 100) {
     messageOutputContainer.firstChild.remove();
@@ -164,7 +156,6 @@ const addElementToOutputContainer = function(elem) {
   // scroll to bottom of container
   messageOutputContainer.scrollTop = messageOutputContainer.scrollHeight;
 };
-exports.addElementToOutputContainer = addElementToOutputContainer;
 
 /**
  * Creates a message element and adds it to the {@link messageOutputContainer}.
@@ -390,12 +381,14 @@ const importPrettify = function() {
  * Initialize the UI by binding onclick events.
  * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
  */
-const init = function(ws) {
+export const initUi = function(ws) {
   workspace = ws;
   // Set remaining properties.
   runButton = document.getElementById('runButton');
   messageOutputContainer = document.getElementById('msgOutputContainer');
   statusContainer = document.getElementById('statusContainer');
+  const fileSelector = document.getElementById('file-selector');
+  fileSelector.addEventListener('change', loadXMLFromFile);
 
   // mobile website has its own tab system
   if (window.location.href.includes('mobile')) {
@@ -458,4 +451,3 @@ const init = function(ws) {
 
   setStatus(statusValues.READY);
 };
-exports.initUi = init;

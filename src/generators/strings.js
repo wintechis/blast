@@ -6,9 +6,8 @@
 
 'use strict';
 
-goog.module('Blast.generators.strings');
+import {apiFunctions} from './../blast_interpreter.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
 
 // Remap blockly blocks to improve naming in xml.
 Blockly.JavaScript['string'] = Blockly.JavaScript['text'];

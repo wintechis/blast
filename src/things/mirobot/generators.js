@@ -7,10 +7,9 @@
 
 'use strict';
 
-goog.module('Blast.generators.mirobot');
+// import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {throwError} from './../../blast_interpreter.js';
 
-// const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {throwError} = goog.require('Blast.Interpreter');
 
 /**
  * Generates JavaScript code for the mirobot_pickup block.

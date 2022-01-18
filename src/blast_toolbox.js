@@ -6,14 +6,6 @@
  */
 'use strict';
 
-/**
- * Defines the toolbox and its helper methods.
- * @name Blast.Toolbox
- * @namespace
- */
-goog.module('Blast.Toolbox');
-goog.module.declareLegacyNamespace();
-
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -184,15 +176,14 @@ const defaultToolbox = {
  * @type {Blockly.toolbox}
  * @public
  */
-const currentToolbox = defaultToolbox;
-exports.currentToolbox = currentToolbox;
+export const currentToolbox = defaultToolbox;
 
 /**
  * Get category by name.
  * @param {string} name The name of the category.
  * @returns {Object} the category
  * */
-const getCategory = function(name) {
+export const getCategory = function(name) {
   return currentToolbox.contents.find(function(category) {
     if (category.name) {
       return category.name.toLowerCase() === name.toLowerCase();
@@ -200,7 +191,6 @@ const getCategory = function(name) {
     return false;
   });
 };
-exports.getCategory = getCategory;
 
 /**
  * Adds a block to the toolbox.
@@ -208,7 +198,7 @@ exports.getCategory = getCategory;
  * @param {string} blockCategory The category of the block.
  * @param {string=} blockxml optional, the xml of the block.
  */
-const addBlock = function(type, blockCategory, blockxml) {
+export const addBlock = function(type, blockCategory, blockxml) {
   const block = {
     kind: 'BLOCK',
     type: type,
@@ -220,4 +210,3 @@ const addBlock = function(type, blockCategory, blockxml) {
     category.contents.push(block);
   }
 };
-exports.addBlock = addBlock;

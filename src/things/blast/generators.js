@@ -6,26 +6,25 @@
 
 'use strict';
 
-goog.module('Blast.generators.blast');
+import {addElementToOutputContainer} from './../../blast_ui.js';
+import {apiFunctions} from './../../blast_interpreter.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {getAdvertisedTxPower} from './../../blast_eddystone.js';
+import {getAdvertisingData} from './../../blast_eddystone.js';
+import {getAdvertisingInterval} from './../../blast_eddystone.js';
+import {getInterpreter} from './../../blast_interpreter.js';
+import {getLockState} from './../../blast_eddystone.js';
+import {getPublicECDHKey} from './../../blast_eddystone.js';
+import {getStdOut} from './../../blast_interpreter.js';
+import {getTxPowerLevel} from './../../blast_eddystone.js';
+import {optionalServices} from './../../blast_webBluetooth.js';
+import {setActiveSlot} from './../../blast_eddystone.js';
+import {setAdvertisedTxPower} from './../../blast_eddystone.js';
+import {setAdvertisingData} from './../../blast_eddystone.js';
+import {setAdvertisingInterval} from './../../blast_eddystone.js';
+import {setTxPowerLevel} from './../../blast_eddystone.js';
+import {throwError} from './../../blast_interpreter.js';
 
-const {addElementToOutputContainer} = goog.require('Blast.Ui');
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {getAdvertisedTxPower} = goog.require('Blast.Eddystone');
-const {getAdvertisingData} = goog.require('Blast.Eddystone');
-const {getAdvertisingInterval} = goog.require('Blast.Eddystone');
-const {getInterpreter} = goog.require('Blast.Interpreter');
-const {getLockState} = goog.require('Blast.Eddystone');
-const {getPublicECDHKey} = goog.require('Blast.Eddystone');
-const {getStdOut} = goog.require('Blast.Interpreter');
-const {getTxPowerLevel} = goog.require('Blast.Eddystone');
-const {optionalServices} = goog.require('Blast.Bluetooth');
-const {setActiveSlot} = goog.require('Blast.Eddystone');
-const {setAdvertisedTxPower} = goog.require('Blast.Eddystone');
-const {setAdvertisingData} = goog.require('Blast.Eddystone');
-const {setAdvertisingInterval} = goog.require('Blast.Eddystone');
-const {setTxPowerLevel} = goog.require('Blast.Eddystone');
-const {throwError} = goog.require('Blast.Interpreter');
 
 /*****************
  * Action blocks.*

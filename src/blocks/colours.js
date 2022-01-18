@@ -6,9 +6,8 @@
 
 'use strict';
 
-goog.module('Blast.blocks.colours');
+import { addBlock } from './../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
 
 // Define inner block XML for the colour_rgb block.
 const COLOUR_RGB_XML = `

@@ -7,13 +7,12 @@
 
 'use strict';
 
-goog.module('Blast.generators.ble_rgb_led_controller');
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {optionalServices} from './../../blast_webBluetooth.js';
+import {throwError} from './../../blast_interpreter.js';
+import {writeWithoutResponse} from './../../blast_webBluetooth.js';
 
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {optionalServices} = goog.require('Blast.Bluetooth');
-const {throwError} = goog.require('Blast.Interpreter');
-const {writeWithoutResponse} = goog.require('Blast.Bluetooth');
- 
+
 /**
   * Generates JavaScript code for the switch_lights_RGB block.
   * @param {Blockly.Block} block the get_request block.
@@ -57,4 +56,3 @@ const switchLights = async function(mac, colour, callback) {
 };
 // Add switchLights function to the interpreter's API.
 asyncApiFunctions.push(['switchLights', switchLights]);
-

@@ -6,20 +6,17 @@
 
 'use strict';
 
-goog.module('Blast.generators.joycon');
+import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
+import {apiFunctions} from './../../blast_interpreter.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {deviceEventHandlers} from './../../blast_interpreter.js';
+import {getInterpreter} from './../../blast_interpreter.js';
+import {getThingsLog} from './../../blast_things.js';
+import {getWebHidDevice} from './../../blast_things.js';
+import {setInterrupted} from './../../blast_interpreter.js';
+import {throwError} from './../../blast_interpreter.js';
 
-const {JoyConLeft, JoyConRight} = goog.require('Blast.webhid.joycon');
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {deviceEventHandlers} = goog.require('Blast.Interpreter');
-const {getInterpreter} = goog.require('Blast.Interpreter');
-const {getThingsLog} = goog.require('Blast.Things');
-const {getWebHidDevice} = goog.require('Blast.Things');
-const {setInterrupted} = goog.require('Blast.Interpreter');
-const {throwError} = goog.require('Blast.Interpreter');
-
- 
 /**
   * Generates JavaScript code for the joycon_read_property block.
   * @param {Blockly.Block} block the joycon_read_property block.

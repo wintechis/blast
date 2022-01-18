@@ -6,14 +6,13 @@
 
 'use strict';
 
-goog.module('Blast.blocks.events');
+import {eventsInWorkspace} from './../blast_interpreter.js';
+import {findLegalName} from './../blast_states.js'
+import {getDefinition} from './../blast_states.js'
+import {getWorkspace} from './../blast_interpreter.js';
+import {removeEventCode} from './../blast_states_interpreter.js';
+import {rename} from './../blast_states.js';
 
-const {eventsInWorkspace} = goog.require('Blast.Interpreter');
-const {findLegalName} = goog.require('Blast.States');
-const {getDefinition} = goog.require('Blast.States');
-const {getWorkspace} = goog.require('Blast.Interpreter');
-const {removeEventCode} = goog.require('Blast.States.Interpreter');
-const {rename} = goog.require('Blast.States');
 
 Blockly.Blocks['state_definition'] = {
   /**

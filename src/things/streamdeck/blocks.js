@@ -7,11 +7,10 @@
 
 'use strict';
 
-goog.module('Blast.blocks.streamdeck');
+import {addBlock} from './../../blast_toolbox.js';
+import {eventsInWorkspace} from './../../blast_interpreter.js';
+import {getWorkspace} from './../../blast_interpreter.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
-const {eventsInWorkspace} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
 
 Blockly.Blocks['streamdeck_button_event'] = {
   /**

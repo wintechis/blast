@@ -6,25 +6,18 @@
  */
 'use strict';
 
-/**
- * Top level namespace used to access the Blast library.
- * @name Blast
- * @namespace
- */
-goog.module('Blast');
-goog.module.declareLegacyNamespace();
+import {apiFunctions} from './blast_interpreter.js';
+import {eventsFlyoutCategory} from './blast_states.js';
+import {initInterpreter} from './blast_interpreter.js';
+import {initStatesInterpreter} from './blast_states_interpreter.js';
+import {initUi} from './blast_ui.js';
+import {link} from './blast_storage.js';
+import {load} from './blast_storage.js';
+import {bindClick} from './blast_ui.js';
+import {thingsFlyoutCategory} from './blast_things.js';
+import {getStdInfo} from './blast_interpreter.js';
+import {getWorkspace} from './blast_interpreter.js';
 
-const {apiFunctions} = goog.require('Blast.Interpreter');
-const {flyoutCategory: eventsFlyoutCategory} = goog.require('Blast.States');
-const {initInterpreter} = goog.require('Blast.Interpreter');
-const {initStatesInterpreter} = goog.require('Blast.States.Interpreter');
-const {initUi} = goog.require('Blast.Ui');
-const {link} = goog.require('Blast.Storage');
-const {load} = goog.require('Blast.Storage');
-const {bindClick} = goog.require('Blast.Ui');
-const {flyoutCategory: thingsFlyoutCategory} = goog.require('Blast.Things');
-const {getStdInfo} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
 
 /**
  * Initialize Blast. Called on page load.

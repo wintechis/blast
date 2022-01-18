@@ -6,25 +6,17 @@
  */
 'use strict';
 
-/**
- * Namespace for the block storage
- * @name Blast.Storage
- * @namespace
- * @public
- */
-goog.module('Blast.Storage');
-goog.module.declareLegacyNamespace();
+import {addWebBluetoothDevice} from './blast_things.js';
+import {addWebHidDevice} from './blast_things.js';
+import {getWebBluetoothDevices} from './blast_things.js';
+import {getWebHIDDevices} from './blast_things.js';
+import {getWorkspace} from './blast_interpreter.js';
+import {optionalServices} from './blast_webBluetooth.js';
+import {resetInterpreter} from './blast_interpreter.js';
+import {resetThings} from './blast_things.js';
+import {requestDevice} from './blast_webBluetooth.js';
+import {throwError} from './blast_interpreter.js';
 
-const {addWebBluetoothDevice} = goog.require('Blast.Things');
-const {addWebHidDevice} = goog.require('Blast.Things');
-const {getWebBluetoothDevices} = goog.require('Blast.Things');
-const {getWebHIDDevices} = goog.require('Blast.Things');
-const {getWorkspace} = goog.require('Blast.Interpreter');
-const {optionalServices} = goog.require('Blast.Bluetooth');
-const {resetInterpreter} = goog.require('Blast.Interpreter');
-const {resetThings} = goog.require('Blast.Things');
-const {requestDevice} = goog.require('Blast.Bluetooth');
-const {throwError} = goog.require('Blast.Interpreter');
 
 /**
  * Http-request error message.
@@ -56,7 +48,7 @@ let filename = 'BLAST.xml';
   * Save blocks to URI and return a link containing key to XML.
   * @param {boolean=} download optional, if true, save to file.
   */
-const link = function(download) {
+export const link = function(download) {
   const workspace = getWorkspace();
   let xml = Blockly.Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
@@ -87,7 +79,6 @@ const link = function(download) {
   const data = Blockly.Xml.domToText(xml);
   saveXML_(path, data);
 };
-exports.link = link;
 
 /**
  * Replaces device ID with user defined name in all blocks of type
@@ -145,7 +136,7 @@ const saveXML_ = function(path, xml) {
   });
 };
 
-const load = function() {
+export const load = function() {
   const url = document.getElementById('loadWorkspace-input').value;
     
   // if input is empty show warning and return.
@@ -162,7 +153,6 @@ const load = function() {
 
   retrieveXML_(url);
 };
-exports.load = load;
 
 /**
    * Load XML from a file.
@@ -170,7 +160,7 @@ exports.load = load;
    * @return {Promise} A promise that will be resolved when the file is loaded.
    * @private
    */
-const loadXMLFromFile = function(event) {
+export const loadXMLFromFile = function(event) {
   return new Promise(function(resolve, reject) {
     // Save filename to {@link filename}
     const fn = event.target.files[0].name;
@@ -189,7 +179,6 @@ const loadXMLFromFile = function(event) {
     fileReader.readAsText(event.target.files[0]);
   });
 };
-exports.loadXMLFromFile = loadXMLFromFile;
 
 /**
  * Resets the file selector.
@@ -568,7 +557,7 @@ const reconnectCancelHandler_ = function() {
   // hide reconnect modal
   document.getElementById('rcModal').style.display = 'none';
 };
- 
+
 /**
   * Start monitoring the workspace. If a change is made that changes the XML,
   * clear the key from the URL. Stop monitoring the workspace once such a
@@ -608,7 +597,7 @@ const generatePath = function() {
   }
   return result.join('');
 };
- 
+
 window.addEventListener('load', function() {
   // get anchor
   const anchor = window.location.hash;

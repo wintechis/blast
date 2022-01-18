@@ -7,10 +7,9 @@
 
 'use strict';
 
-goog.module('Blast.blocks.ble_rgb_led_controller');
+import {addBlock} from './../../blast_toolbox.js';
 
-const {addBlock} = goog.require('Blast.Toolbox');
- 
+
 Blockly.Blocks['switch_lights_rgb'] = {
   /**
      * Block for switchling rgb lights.

@@ -6,9 +6,7 @@
 
 'use strict';
 
-goog.module('Blast.blocks.blast');
-
-const {addBlock} = goog.require('Blast.Toolbox');
+import {addBlock} from './../../blast_toolbox.js';
 
 /*****************
  * Action blocks.*

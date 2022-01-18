@@ -6,17 +6,9 @@
 
 'use strict';
 
-/**
- * Namespace for things Utility functions.
- * @name Blast.Things
- * @namespace
- * @public
- */
-goog.module('Blast.Things');
-goog.module.declareLegacyNamespace();
+import {throwError} from './blast_interpreter.js';
+import {getWorkspace} from './blast_interpreter.js';
 
-const {throwError} = goog.require('Blast.Interpreter');
-const {getWorkspace} = goog.require('Blast.Interpreter');
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -34,10 +26,9 @@ const webHidNames = new Map();
 const webHidDevices = new Map();
 
 let webBluetoothButtonHandler = null;
-const setWebBluetoothButtonHandler = function(handler) {
+export const setWebBluetoothButtonHandler = function(handler) {
   webBluetoothButtonHandler = handler;
 };
-exports.setWebBluetoothButtonHandler = setWebBluetoothButtonHandler;
 
 /**
  * Default method for logging device interaction.
@@ -52,34 +43,30 @@ let thingsLog = function(message, adapter, device) {
  * Getter for the thingsLog function.
  * @return {Function} The thingsLog function.
  */
-const getThingsLog = function() {
+export const getThingsLog = function() {
   return thingsLog;
 };
-exports.getThingsLog = getThingsLog;
 /**
  * Setter for the thingsLog function.
  * @param {Function} logFunc The function to use for logging.
  */
-const setThingsLog = function(logFunc) {
+export const setThingsLog = function(logFunc) {
   thingsLog = logFunc;
 };
-exports.setThingsLog = setThingsLog;
 
 
 /**
  * Resets all device maps.
  */
-const resetThings = function() {
+export const resetThings = function() {
   webBluetoothDevices.clear();
   webHidNames.clear();
   webHidDevices.clear();
 };
-exports.resetThings = resetThings;
 
-const getWebHidDevice = function(deviceId) {
+export const getWebHidDevice = function(deviceId) {
   return webHidDevices.get(deviceId);
 };
-exports.getWebHidDevice = getWebHidDevice;
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
@@ -87,7 +74,7 @@ exports.getWebHidDevice = getWebHidDevice;
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML elements.
  */
-const flyoutCategory = function(workspace) {
+export const thingsFlyoutCategory = function(workspace) {
   let xmlList = [];
 
   // Create WebBluetooth Label
@@ -171,7 +158,6 @@ const flyoutCategory = function(workspace) {
 
   return xmlList;
 };
-exports.flyoutCategory = flyoutCategory;
 
 
 /**
@@ -219,7 +205,7 @@ const flyoutCategoryBlocksWB = function() {
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-const getWebBluetoothDevices = function() {
+export const getWebBluetoothDevices = function() {
   const keysArray = [...webBluetoothDevices.keys()];
   const keysSorted = keysArray.sort();
 
@@ -235,14 +221,13 @@ const getWebBluetoothDevices = function() {
 
   return options;
 };
-exports.getWebBluetoothDevices = getWebBluetoothDevices;
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-const getWebHIDDevices = function() {
+export const getWebHIDDevices = function() {
   const keysArray = [...webHidNames.keys()];
   const keysSorted = keysArray.sort();
 
@@ -258,14 +243,13 @@ const getWebHIDDevices = function() {
 
   return options;
 };
-exports.getWebHIDDevices = getWebHIDDevices;
 
 /**
  * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {string} deviceName User defined name for the device.
  */
-const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
+export const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(name, id) {
     Blockly.Variables.promptName('Pair successful! Now give your device a name.', name,
@@ -294,7 +278,6 @@ const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
   };
   promptAndCheckWithAlert(deviceName, webBluetoothId);
 };
-exports.addWebBluetoothDevice = addWebBluetoothDevice;
 
 
 /**
@@ -327,7 +310,7 @@ const createWebHidButtonHandler = function() {
  * @param {string} deviceName default name for the device.
  * @param {HIDDevice} device the device to add.
  */
-const addWebHidDevice = function(uid, deviceName, device) {
+export const addWebHidDevice = function(uid, deviceName, device) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function(name, id) {
     Blockly.Variables.promptName('Connection established! Now give your device a name.', name,
@@ -357,4 +340,3 @@ const addWebHidDevice = function(uid, deviceName, device) {
   };
   promptAndCheckWithAlert(deviceName, uid);
 };
-exports.addWebHidDevice = addWebHidDevice;

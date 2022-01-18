@@ -7,12 +7,11 @@
 
 'use strict';
 
-goog.module('Blast.generators.blinkstick');
+import {getThingsLog} from './../../blast_things.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {throwError} from './../../blast_interpreter.js';
+import {getWebHidDevice} from './../../blast_things.js';
 
-const {getThingsLog} = goog.require('Blast.Things');
-const {asyncApiFunctions} = goog.require('Blast.Interpreter');
-const {throwError} = goog.require('Blast.Interpreter');
-const {getWebHidDevice} = goog.require('Blast.Things');
 
 const thingsLog = getThingsLog();
  
