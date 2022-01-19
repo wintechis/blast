@@ -37,9 +37,8 @@ Blockly.Blocks['streamdeck_button_event'] = {
         .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button4')), 'button4')
         .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button5')), 'button5')
         .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button6')), 'button6');
-    this.appendDummyInput()
-        .appendField('do');
     this.appendStatementInput('statements')
+        .appendField('do')
         .setCheck(null);
     this.setColour(180);
     this.setTooltip('');

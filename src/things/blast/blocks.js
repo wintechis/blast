@@ -119,7 +119,7 @@ Blockly.Blocks['sparql_query'] = {
         */
   init: function() {
     this.appendValueInput('uri')
-        .appendField('run SPARQL Query from URI')
+        .appendField('run SPARQL query from URI')
         .setCheck('URI');
     this.appendDummyInput()
         .appendField('resource format')
@@ -152,7 +152,7 @@ Blockly.Blocks['sparql_ask'] = {
       */
   init: function() {
     this.appendValueInput('uri')
-        .appendField('run SPARQL ASK Query from URI')
+        .appendField('run SPARQL ASK query from URI')
         .setCheck('URI');
     this.appendDummyInput()
         .appendField('resource format')
@@ -188,7 +188,7 @@ Blockly.Blocks['display_text'] = {
   init: function() {
     this.appendValueInput('text')
         .setCheck(['String', 'Number', 'Boolean', 'URI', 'Thing', 'Array'])
-        .appendField('display text:');
+        .appendField('display text');
     this.setColour(0);
     this.setTooltip('Add text output to the container on the right.');
     this.setHelpUrl('');
@@ -207,7 +207,7 @@ Blockly.Blocks['display_table'] = {
   init: function() {
     this.appendValueInput('table')
         .setCheck(['Array'])
-        .appendField('display table:');
+        .appendField('display table');
     this.setColour(0);
     this.setTooltip('Add data output to the container on the right.');
     this.setHelpUrl('');

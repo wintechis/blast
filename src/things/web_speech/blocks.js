@@ -17,7 +17,7 @@ Blockly.Blocks['text_to_speech'] = {
    */
   init: function() {
     this.appendValueInput('text')
-        .appendField('Text to Speech')
+        .appendField('text to speech')
         .setCheck('String');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

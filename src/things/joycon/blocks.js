@@ -156,7 +156,7 @@ Blockly.Blocks['joycon_button_events'] = {
         .setCheck('Thing')
         .appendField('Nintendo JoyCon');
     this.appendDummyInput()
-        .appendField('when')
+        .appendField('on')
         .appendField(new Blockly.FieldDropdown(
             [
               ['A', 'a'],
@@ -175,6 +175,7 @@ Blockly.Blocks['joycon_button_events'] = {
         ), 'button')
         .appendField('pressed');
     this.appendStatementInput('statements')
+        .appendField('do')
         .setCheck(null);
     this.setInputsInline(false);
     this.setColour(180);

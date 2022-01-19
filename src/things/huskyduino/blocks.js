@@ -24,7 +24,7 @@ Blockly.Blocks['huskylens_choose_algo'] = {
           ['Tag Recognition', 'tag_recognition'],
           ['Object Classification', 'object_classification'],
         ]), 'Algorithms')
-        .appendField('to Huskyduino');
+        .appendField('to HuskyDuino');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
