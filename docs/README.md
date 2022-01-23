@@ -22,3 +22,7 @@ This wiki aims to describe BLAST in detail. And currently consists of two sectio
 
 - [**syntax.md**](./syntax.md) gives a formal definition of BLAST's syntax, and 
 - [**semantics.md**](./semantics.md) describes its semantics.
+
+## Related
+
+* https://slashdot.org/comments.pl?sid=20649519&cid=62198449
