@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: blast_toolbox.js</title>
+    <title>JSDoc: Source: blast_states_interpreter.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: blast_toolbox.js</h1>
+    <h1 class="page-title">Source: blast_states_interpreter.js</h1>
 
     
 
@@ -27,216 +27,145 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * @fileoverview Defines the toolbox and its helper methods.
- * https://github.com/wintechis/blast
+ * @fileoverview states interpreter and utility functions.
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 'use strict';
 
-const defaultToolbox = {
-  kind: 'categoryToolbox',
-  contents: [
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Things and Resources',
-      custom: 'THINGS',
-      colour: '60',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Properties',
-      colour: '255',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Actions',
-      colour: '0',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'States and Events',
-      custom: 'STATES',
-      colour: '180',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Requests and Queries',
-      colour: '0',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'while_until'},
-        {kind: 'BLOCK', type: 'break_continue'},
-        {kind: 'BLOCK', type: 'conditional_statement'},
-        {kind: 'BLOCK', type: 'controls_forEach'},
-      ],
-      name: 'Control Flow',
-      colour: '120',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'logic_compare'},
-        {kind: 'BLOCK', type: 'logic_operation'},
-        {kind: 'BLOCK', type: 'logic_negate'},
-      ],
-      name: 'Boolean Expressions',
-      colour: '210',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Functions',
-      colour: '290',
-      custom: 'PROCEDURE',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Variables',
-      custom: 'VARIABLE',
-      colour: '330',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'lists_create_empty'},
-        {kind: 'BLOCK', type: 'lists_create_with'},
-        {kind: 'BLOCK', type: 'lists_repeat'},
-        {kind: 'BLOCK', type: 'lists_length'},
-        {kind: 'BLOCK', type: 'lists_isEmpty'},
-        {kind: 'BLOCK', type: 'lists_indexOf'},
-        {kind: 'BLOCK', type: 'lists_getIndex'},
-        {kind: 'BLOCK', type: 'lists_setIndex'},
-        {kind: 'BLOCK', type: 'lists_getSublist'},
-        {kind: 'BLOCK', type: 'lists_sort'},
-        {kind: 'BLOCK', type: 'lists_split'},
-        {kind: 'BLOCK', type: 'lists_reverse'},
-      ],
-      name: 'Lists',
-      colour: '310',
+import {apiFunctions} from './blast_interpreter.js';
+import {getInterpreter} from './blast_interpreter.js';
+import {onStatusChange} from './blast_interpreter.js';
+import {resetInterpreter} from './blast_interpreter.js';
+import {setStatesInterpreterRunning} from './blast_interpreter.js';
+import {throwError} from './blast_interpreter.js';
 
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'string'},
-        {kind: 'BLOCK', type: 'string_multiline'},
-        {kind: 'BLOCK', type: 'string_join'},
-        {kind: 'BLOCK', type: 'string_length'},
-        {kind: 'BLOCK', type: 'string_isEmpty'},
-        {kind: 'BLOCK', type: 'string_indexOf'},
-        {kind: 'BLOCK', type: 'string_charAt'},
-        {kind: 'BLOCK', type: 'string_getSubstring'},
-        {kind: 'BLOCK', type: 'string_changeCase'},
-        {kind: 'BLOCK', type: 'string_trim'},
-        {kind: 'BLOCK', type: 'string_count'},
-        {kind: 'BLOCK', type: 'string_replace'},
-        {kind: 'BLOCK', type: 'string_reverse'},
-        {kind: 'BLOCK', type: 'string_showPrompt'},
-      ],
-      name: 'Strings',
-      colour: '160',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'number_value'},
-        {kind: 'BLOCK', type: 'number_arithmetic'},
-        {kind: 'BLOCK', type: 'number_single'},
-        {kind: 'BLOCK', type: 'number_trig'},
-        {kind: 'BLOCK', type: 'number_constant'},
-        {kind: 'BLOCK', type: 'number_property'},
-        {kind: 'BLOCK', type: 'number_round'},
-        {kind: 'BLOCK', type: 'number_on_list'},
-        {kind: 'BLOCK', type: 'number_modulo'},
-        {kind: 'BLOCK', type: 'number_constrain'},
-        {kind: 'BLOCK', type: 'number_random'},
-        {kind: 'BLOCK', type: 'number_random_float'},
-        {kind: 'BLOCK', type: 'number_atan2'},
-      ],
-      name: 'Numbers',
-      colour: '230',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [{kind: 'BLOCK', type: 'logic_boolean'}],
-      name: 'Booleans',
-      colour: '210',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'colour_picker'},
-        {kind: 'BLOCK', type: 'colour_random'},
-      ],
-      name: 'Colours',
-      colour: '20',
-    },
-  ],
-};
 
 /**
- * The currently used toolbox.
- * @type {Blockly.toolbox}
+ * Instance of the JS Interpreter checking for changing states.
+ * @type {?Interpreter}
  * @public
  */
-export const currentToolbox = defaultToolbox;
+let stateInterpreter = null;
 
 /**
- * Get category by name.
- * @param {string} name The name of the category.
- * @returns {Object} the category
- * */
-export const getCategory = function(name) {
-  return currentToolbox.contents.find(function(category) {
-    if (category.name) {
-      return category.name.toLowerCase() === name.toLowerCase();
-    }
-    return false;
-  });
+ * Stores the workspace.
+ */
+let workspace = null;
+
+/**
+ * Instance of runner function.
+ * @type {?Function}
+ * @private
+ */
+let runner_ = null;
+
+/**
+ * latest JavaScript code generated by Blast's State and event blocks.
+ * @type {string}
+ * @public
+ */
+let latestCode = '';
+
+/**
+ * Map containing code generated by every event block.
+ */
+const eventCode = new Map();
+
+/**
+ * adds an event block's code to {@link eventCode}.
+ * @param {Blockly.Block.id} blockId id of the event block.
+ * @param {string} code code generated by the event block.
+ */
+export const addEventCode = function(blockId, code) {
+  eventCode.set(blockId, code);
 };
 
 /**
- * Adds a block to the toolbox.
- * @param {string} type The type of block to add.
- * @param {string} blockCategory The category of the block.
- * @param {string=} blockxml optional, the xml of the block.
+   * removes an event block's code from {@link eventCode}.
+   * @param {Blockly.Block.id} blockId id of the event block.
+   */
+export const removeEventCode = function(blockId) {
+  eventCode.delete(blockId);
+};
+
+/**
+ * Generates the code for all events a workspace.
+ * @param {!Blockly.Workspace} workspace Root workspace.
  */
-export const addBlock = function(type, blockCategory, blockxml) {
-  const block = {
-    kind: 'BLOCK',
-    type: type,
-    blockxml: blockxml,
-  };
-  // Find the category and add the block to it.
-  const category = getCategory(blockCategory);
-  if (category) {
-    category.contents.push(block);
+export const generateCode = function() {
+  // event blocks are continuously checking for state condditions.
+  let code = 'while (true) {\n \n}';
+  
+  // get all event blocks in the workspace
+  const eventIds = workspace.getBlocksByType('event', false).map(function(block) {
+    return block.id;
+  });
+  
+  for (const [id, newCode] of eventCode) {
+    // only add code for event blocks in the workspace
+    if (eventIds.includes(id)) {
+      // insert event code before the closing '\n}'
+      code = code.slice(0, -2) + newCode + '\n' + code.slice(-1);
+    }
   }
+  // prepend generated code with variable and function definitions
+  latestCode = Blockly.JavaScript.finish(code);
+};
+
+/**
+ * executes {@link latestCode} using {@link Blast.Interpreter.Interpreter}.
+ */
+const startEventChecker = function() {
+  stateInterpreter = null;
+  
+  // Initiate States interpreter.
+  stateInterpreter = new Interpreter('');
+  stateInterpreter.stateStack[0].scope = getInterpreter().globalScope;
+  stateInterpreter.appendCode(latestCode);
+
+  setStatesInterpreterRunning(true);
+  
+  runner_ = function() {
+    if (stateInterpreter) {
+      try {
+        stateInterpreter.step();
+        setTimeout(runner_, 1);
+      } catch (error) {
+        throwError('Error executing program:\n%e'.replace('%e', error));
+        resetInterpreter();
+        console.error(error);
+      }
+    }
+  };
+  runner_();
+};
+// Add startEventChecker to the interpreter api.
+apiFunctions.push(['startEventChecker', startEventChecker]);
+
+/**
+ * Resets the states interpreter
+ */
+const resetStateInterpreter = function() {
+  clearTimeout(runner_);
+  runner_ = null;
+  setStatesInterpreterRunning(false);
+};
+onStatusChange.stopped.push(resetStateInterpreter);
+
+
+/**
+ * Initializes the states interpreter.
+ * @param {!Blockly.Workspace} ws Root workspace.
+ */
+export const initStatesInterpreter = function(ws) {
+  workspace = ws;
+  workspace.addChangeListener(function(event) {
+    if (!(event instanceof Blockly.Events.Ui)) {
+      // Something changed. Parser needs to be reloaded.
+      generateCode();
+    }
+  });
 };
 </code></pre>
         </article>

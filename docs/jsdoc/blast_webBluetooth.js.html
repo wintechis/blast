@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: blast_webBluetooth.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: blast_webBluetooth.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @fileoverview implements Bluetooth-Operations using webBluetooth
+ * (https://webbluetoothcg.github.io/web-bluetooth/).
+ * @author derwehr@gmail.com (Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+'use strict';
+
+import {addCleanUpFunction} from './blast_interpreter.js';
+import {addWebBluetoothDevice} from './blast_things.js';
+import {getThingsLog} from './blast_things.js';
+import {getWorkspace} from './blast_interpreter.js';
+import {setWebBluetoothButtonHandler} from './blast_things.js';
+import {throwError} from './blast_interpreter.js';
+
+
+/**
+  * Optional serviceUUIDs to scan for.
+  * @type {Array&lt;String>}
+  * @public
+  */
+export const optionalServices = [];
+
+/**
+  * Contains block types that require a LE Scan.
+  * On runtine, if any of these blocks is in the workspace,
+  * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
+  * @type {Array&lt;string>}
+  * @public
+  */
+export const scanBlocks = [];
+
+/**
+  * Contains the results of a LE Scan.
+  */
+export let LEScanResults = {};
+
+/**
+  * Indicates whether the LE Scan is running.
+  */
+let isLEScanRunning = false;
+
+/**
+  * Stores all navigator.blueooth event handlers for the LE Scan as tuples of event and handler.
+  * @private
+  */
+const eventListeners = [];
+
+/**
+  * Stores all characteristic event listeners, so they can be removed later.
+  * Events are stores in an object with the characteristic UUID as key,
+  * and a triple of characteristic, event and handler as value.
+  * @private
+  */
+let charEventListeners = {};
+
+
+/**
+ * Convert a hex string to an ArrayBuffer.
+ *
+ * @param {string} hexString - hex representation of bytes
+ * @return {ArrayBuffer} - The bytes in an ArrayBuffer.
+ */
+const hexStringToArrayBuffer = function(hexString) {
+  // remove the leading 0x
+  hexString = hexString.replace(/^0x/, '');
+   
+  // ensure even number of characters
+  if (hexString.length % 2 != 0) {
+    hexString = '0' + hexString;
+  }
+   
+  // check for some non-hex characters
+  const bad = hexString.match(/[G-Z\s]/i);
+  if (bad) {
+    console.log('WARNING: found non-hex characters', bad);
+  }
+   
+  // split the string into pairs of octets
+  const pairs = hexString.match(/[\dA-F]{2}/gi);
+   
+  // convert the octets to integers
+  const integers = pairs.map(function(s) {
+    return parseInt(s, 16);
+  });
+   
+  const array = new Uint8Array(integers);
+   
+  return array.buffer;
+};
+
+/**
+  * Pairs a Bluetooth device.
+  * @param {Object} options An object that sets options for the device request.
+  * @param {Array&lt;BluetoothScanFilters>} options.filters An array of BluetoothScanFilters.
+  * @param {boolean} options.optionalServices An array of BluetoothServiceUUIDs.
+  * @param {boolean} [options.acceptAllDevices=false] whether script accepts all Bluetooth devices.
+  * @param {string=} deviceName optional, name of the device to pair.
+  * @return {Promise&lt;BluetoothDevice>} A Promise to a BluetoothDevice object.
+  */
+export const requestDevice = async function(options, deviceName) {
+  const thingsLog = getThingsLog();
+  thingsLog('Requesting device...', 'Bluetooth');
+  if (navigator.bluetooth) {
+    // if no options are given, use default ones
+    if (!options) {
+      options = {};
+      options.acceptAllDevices = true;
+      options.optionalServices = optionalServices;
+    }
+ 
+    try {
+      const device = await navigator.bluetooth.requestDevice(options);
+      thingsLog('Device paired', 'Bluetooth', device.id);
+      // if no device name is given, use default one
+      const name = deviceName || device.name;
+           
+      addWebBluetoothDevice(device.id, name);
+      getWorkspace().refreshToolboxSelection();
+      return (device);
+    } catch (error) {
+      throwError(error);
+    }
+  }
+};
+setWebBluetoothButtonHandler(requestDevice);
+
+/**
+  * Returns a paired bluetooth device by their id.
+  * @param {string} id identifier of the device to get.
+  * @returns {BluetoothDevice} the bluetooth device with id.
+  */
+const getDeviceById = async function(id) {
+  const devices = await navigator.bluetooth.getDevices();
+  for (const device of devices) {
+    if (device.id == id) {
+      return device;
+    }
+  }
+  throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
+};
+
+/**
+   * Sends a connect command.
+   * @param {string} id identifier of the device to connect to.
+   * @return {Object} representation of the complete request with response.
+   */
+const connect = async function(id) {
+  try {
+    const device = await getDeviceById(id);
+    const thingsLog = getThingsLog();
+    thingsLog(`Connecting to &lt;code>${id}&lt;/code>`, 'Bluetooth');
+    const request = await device.gatt.connect();
+    thingsLog('Connected', 'Bluetooth', id);
+    return request;
+  } catch (error) {
+    throwError(`Error connecting to Bluetooth device ${id}`);
+    console.error(error);
+  }
+};
+
+/**
+   * Sends a disconnect command.
+   * @param {string} id identifier of the device to disconnect from.
+   * @param {number} sleep time in ms to wait after command, defaults to 0.
+   * @return {Object} representation of the complete request with response.
+   */
+// eslint-disable-next-line no-unused-vars
+const disconnect = async function(id) {
+  try {
+    const device = await getDeviceById(id);
+    const thingsLog = getThingsLog();
+    thingsLog('Disconnecting...', 'Bluetooth', id);
+    const request = await device.gatt.disconnect();
+    thingsLog(`Disconnected from &lt;code>${id}&lt;/code>`, 'Bluetooth');
+    return request;
+  } catch (error) {
+    throwError(`Error disconnecting from Bluetooth device ${id}`);
+    console.error(error);
+  }
+};
+
+/**
+   * Writes data to Bluetooth device using the gatt protocol.
+   * @param {string} id identifier of the device to write to.
+   * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+   * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+   * @param {string} value hex value to write.
+   */
+export const writeWithoutResponse = async function(
+    id, serviceUUID, characteristicUUID, value) {
+  const characteristic = await getCharacteristic(
+      id, serviceUUID, characteristicUUID);
+  if (!characteristic) {
+    return;
+  }
+   
+  // If value is a string, convert it to an ArrayBuffer.
+  if (typeof value === 'string') {
+    value = hexStringToArrayBuffer(value);
+  }
+
+  try {
+    const thingsLog = getThingsLog();
+    thingsLog(
+        'Invoke &lt;code>WriteValueWithoutResponse&lt;/code> on characteristic ' +
+        `&lt;code>${characteristicUUID}&lt;/code> with value &lt;code>${value.toString()}&lt;/code>`, 'Bluetooth', id);
+    await characteristic.writeValueWithoutResponse(value);
+    thingsLog(
+        'Finished &lt;code>WriteValueWithoutResponse&lt;/code> on characteristic ' +
+        `&lt;code>${characteristicUUID}&lt;/code> with value &lt;code>${value.toString()}&lt;/code>`, 'Bluetooth', id);
+  } catch (error) {
+    const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+    console.error(error);
+    throwError(errorMsg);
+  }
+};
+
+
+/**
+   * Writes data to Bluetooth device using the gatt protocol.
+   * @param {string} id identifier of the device to write to.
+   * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+   * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+   * @param {string} value hex value to write.
+   * @return {Object} representation of the complete request with response.
+   */
+export const writeWithResponse = async function(
+    id, serviceUUID, characteristicUUID, value) {
+  const characteristic = await getCharacteristic(
+      id, serviceUUID, characteristicUUID,
+  );
+  if (!characteristic) {
+    return;
+  }
+     
+  // If value is a string, convert it to an ArrayBuffer.
+  if (typeof value === 'string') {
+    value = hexStringToArrayBuffer(value);
+  }
+ 
+  try {
+    const thingsLog = getThingsLog();
+    thingsLog(
+        'Invoke &lt;code>WriteValueWithResponse&lt;/code> on characteristic ' +
+        `&lt;code>${characteristicUUID}&lt;/code> with value &lt;code>${value.toString()}&lt;/code>`, 'Bluetooth', id);
+    await characteristic.writeValueWithResponse(value);
+    thingsLog(
+        'Finished &lt;code>WriteValueWithResponse&lt;/code> on characteristic ' +
+        `&lt;code>${characteristicUUID}&lt;/code> with value &lt;code>${value.toString()}&lt;/code>`, 'Bluetooth', id);
+  } catch (error) {
+    const errorMsg = 'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+    console.error(error);
+    throwError(errorMsg);
+  }
+};
+
+/**
+  * Returns a promise to the primary BluetoothRemoteGATTService offered by
+  * the bluetooth device for a specified BluetoothServiceUUID.
+  * @param {string} id identifier of the device to get the service from.
+  * @param {ServiceUUID} serviceUUID identifier of the service.
+  * @returns {Promise&lt;BluetoothRemoteGATT>} A BluetoothRemoteGATTService object.
+  */
+export const getPrimaryService = async function(id, serviceUUID) {
+  const server = await connect(id);
+  let service;
+  try {
+    const thingsLog = getThingsLog();
+    thingsLog(`Getting primary service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+    service = await server.getPrimaryService(serviceUUID);
+    thingsLog(`Got primary service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+  } catch (error) {
+    console.error(error);
+    throwError('The device is not compatible with the connected block.');
+  }
+  return service;
+};
+
+/**
+ * Returns a promise to the BluetoothRemoteGATTCharacteristic offered by
+ * the bluetooth device for a specified BluetoothServiceUUID and
+ * BluetoothCharacteristicUUID.
+ * @param {string} id identifier of the device to get the characteristic from.
+ * @param {ServiceUUID} serviceUUID identifier of the service.
+ * @param {CharacteristicUUID} characteristicUUID identifier of the characteristic.
+ * @returns {Promise&lt;BluetoothRemoteGATTCharacteristic>} A BluetoothRemoteGATTCharacteristic object.
+ */
+export const getCharacteristic = async function(id, serviceUUID, characteristicUUID) {
+  const service = await getPrimaryService(id, serviceUUID);
+  if (!service) {
+    return;
+  }
+  let characteristic;
+  try {
+    const thingsLog = getThingsLog();
+    thingsLog(
+        `Getting characteristic &lt;code>${characteristicUUID}&lt;/code> from service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+    characteristic = await service.getCharacteristic(characteristicUUID);
+    thingsLog(
+        `Got characteristic &lt;code>${characteristicUUID}&lt;/code> from service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+  } catch (error) {
+    console.error(error);
+    throwError('The device is not compatible with the connected block.');
+  }
+  return characteristic;
+};
+
+/**
+  * Reads data from Bluetooth device using the gatt protocol.
+  * @param {string} id identifier of the device to read from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+  * @return {Object} representation of the complete request with response.
+  * @public
+  */
+export const read = async function(id, serviceUUID, characteristicUUID) {
+  const characteristic = await getCharacteristic(
+      id,
+      serviceUUID,
+      characteristicUUID,
+  );
+  try {
+    const thingsLog = getThingsLog();
+    thingsLog(
+        `Invoke &lt;code>ReadValue&lt;/code> on characteristic &lt;code>${characteristicUUID}&lt;/code>` +
+         ` from service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+    const value = await characteristic.readValue();
+    thingsLog(
+        `Finished &lt;code>ReadValue&lt;/code> on characteristic &lt;code>${characteristicUUID}&lt;/code>` +
+         ` from service &lt;code>${serviceUUID}&lt;/code> - value: &lt;code>${value.toString()}&lt;/code>`, 'Bluetooth', id);
+    return value;
+  } catch (error) {
+    console.error(error);
+    throwError(`Error reading from Bluetooth device ${id}`);
+  }
+};
+
+/**
+  * Reads a text (UTF-8) characteristic value from a Bluetooth device.
+  * @param {string} id identifier of the device to read from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+  * @return {string} the value of the characteristic.
+  * @public
+  */
+export const readText = async function(id, serviceUUID, characteristicUUID) {
+  const value = await read(id, serviceUUID, characteristicUUID);
+  const stringValue = new TextDecoder().decode(value);
+  return stringValue;
+};
+
+/**
+  * Reads a nummerical characteristic value from a Bluetooth device.
+  * @param {string} id identifier of the device to read from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+  * @returns {number} the value of the characteristic.
+  * @public
+  */
+export const readNumber = async function(id, serviceUUID, characteristicUUID) {
+  let dataView = await read(id, serviceUUID, characteristicUUID);
+  // If value is not a DataView already, convert it.
+  if (!(dataView instanceof DataView)) {
+    dataView = new DataView(dataView);
+  }
+  const arr = new Uint8Array(dataView.buffer);
+  const length = arr.length;
+  const arrayBuffer = buffer.Buffer.from(arr);
+  const result = arrayBuffer.readUIntBE(0, length);
+ 
+  return result;
+};
+
+/** Reads a hexadecimal characteristic value from a Bluetooth device.
+  * @param {string} id identifier of the device to read from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+  * @returns {string} the value of the characteristic.
+  * @public
+  */
+export const readHex = async function(id, serviceUUID, characteristicUUID) {
+  const value = await read(id, serviceUUID, characteristicUUID);
+  const hexValue = new Uint8Array(value.buffer).reduce((acc, byte) => {
+    return acc + ('0' + byte.toString(16)).slice(-2);
+  }, '');
+  return hexValue;
+};
+
+/**
+  * Subscribes to a Bluetooth characteristic and adds an event listener.
+  * @param {string} id identifier of the device to read from.
+  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+  * @param {BluetoothCharacteristicUUID} charUUID identifier of the characteristic.
+  * @param {Function} handler handler to register for notifications.
+  */
+export const subscribe = async function(id, serviceUUID, charUUID, handler) {
+  const characteristic = await getCharacteristic(
+      id, serviceUUID, charUUID,
+  );
+  const thingsLog = getThingsLog();
+  thingsLog(
+      `Add 'characteristicvaluechanged' listener to characteristic ${charUUID}` +
+       ` of service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+  characteristic.addEventListener('characteristicvaluechanged', handler);
+  // add the event to the list of events.
+  charEventListeners[charUUID] = [characteristic, 'characteristicvaluechanged', handler];
+  try {
+    thingsLog(
+        `Invoke &lt;code>startNotifications&lt;/code> on characteristic ${charUUID}` +
+         ` from service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+    await characteristic.startNotifications();
+    thingsLog(
+        `Finished &lt;code>startNotifications&lt;/code> on characteristic ${charUUID}` +
+         ` from service &lt;code>${serviceUUID}&lt;/code>`, 'Bluetooth', id);
+  } catch (error) {
+    console.error(error);
+    throwError(`Error subscribing to Bluetooth device ${id}`);
+  }
+};
+
+/** Start the LE Scan.
+  * public
+  */
+export const startLEScan = async function() {
+  // If the LE Scan is already running, do nothing.
+  if (isLEScanRunning) {
+    return;
+  }
+  // If the LE Scan is not running, register the cache handler and start it.
+  cacheLEScanResults();
+  isLEScanRunning = true;
+  const thingsLog = getThingsLog();
+  thingsLog('Requesting LE Scan', 'Bluetooth');
+  Blockly.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
+      navigator.bluetooth.requestLEScan(
+          {acceptAllAdvertisements: true, keepRepeatedDevices: true},
+      ),
+  );
+  // Stop scan after 30 seconds.
+  setTimeout(stopLEScan, 30000);
+};
+
+/**
+  * Stops the BLE Scan.
+  * @public
+  */
+export const stopLEScan = function() {
+  if (isLEScanRunning) {
+    const thingsLog = getThingsLog();
+    thingsLog('Stopping LE Scan', 'Bluetooth');
+    navigator.bluetooth.stopLEScan();
+    isLEScanRunning = false;
+  }
+};
+
+/**
+  * Caches the results of a LE Scan.
+  */
+const cacheLEScanResults = function() {
+  // Cache the results of the scan.
+  const handler = function(event) {
+    const device = event.device;
+    const deviceId = device.id;
+    if (!LEScanResults[deviceId]) {
+      LEScanResults[deviceId] = [];
+    }
+    LEScanResults[deviceId].unshift(event);
+  };
+  // Register the event handler.
+  addEventListener('advertisementreceived', handler);
+};
+
+/**
+  * Adds a webBluetooth eventListener.
+  * @param {string} event the event to add the listener to.
+  * @param {Function} listener the listener to add.
+  */
+const addEventListener = function(event, listener) {
+  eventListeners.push([event, listener]);
+  navigator.bluetooth.addEventListener(event, listener);
+};
+
+/**
+  * Removes a webBluetooth eventListener.
+  * @param {string} event the event to remove the listener from.
+  * @param {Function} listener the listener to remove.
+  * @public
+  */
+const removeEventListener = function(event, listener) {
+  const index = eventListeners.findIndex(function(element) {
+    return element[0] === event &amp;&amp; element[1] === listener;
+  });
+  if (index !== -1) {
+    eventListeners.splice(index, 1);
+  }
+  navigator.bluetooth.removeEventListener(event, listener);
+};
+
+/**
+  * Removes webBluetooth eventListeners and deletes cached advertisements.
+  */
+const tearDown = function() {
+  // Reset running scan flag
+  if (isLEScanRunning) {
+    isLEScanRunning = false;
+  }
+  // Remove all event handlers.
+  if (eventListeners) {
+    for (const event of eventListeners) {
+      removeEventListener(event[0], event[1]);
+    }
+    // Reset event listeners.
+    eventListeners.length = 0;
+  }
+  if (charEventListeners) {
+    for (const characteristicUUID of Object.keys(charEventListeners)) {
+      const triple = charEventListeners[characteristicUUID];
+      const characteristic = triple[0];
+      const event = triple[1];
+      const handler = triple[2];
+      characteristic.stopNotifications();
+      characteristic.removeEventListener(event, handler);
+    }
+    // Reset event listeners.
+    charEventListeners = {};
+  }
+  // Clear cached advertisements.
+  LEScanResults = {};
+};
+addCleanUpFunction(tearDown);
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#%255B0%255D">[0]</a></li><li><a href="global.html#addBlock">addBlock</a></li><li><a href="global.html#addElementToOutputContainer">addElementToOutputContainer</a></li><li><a href="global.html#addEventCode">addEventCode</a></li><li><a href="global.html#addEventListener">addEventListener</a></li><li><a href="global.html#addMessage">addMessage</a></li><li><a href="global.html#addToLog">addToLog</a></li><li><a href="global.html#addWebBluetoothDevice">addWebBluetoothDevice</a></li><li><a href="global.html#addWebHidDevice">addWebHidDevice</a></li><li><a href="global.html#allConnectedMobile_">allConnectedMobile_</a></li><li><a href="global.html#allStates">allStates</a></li><li><a href="global.html#apiFunctions">apiFunctions</a></li><li><a href="global.html#asyncApiFunctions">asyncApiFunctions</a></li><li><a href="global.html#bindClick">bindClick</a></li><li><a href="global.html#cacheLEScanResults">cacheLEScanResults</a></li><li><a href="global.html#cleanUpFunctions">cleanUpFunctions</a></li><li><a href="global.html#clearIntervalEvents">clearIntervalEvents</a></li><li><a href="global.html#ClearLog">ClearLog</a></li><li><a href="global.html#ClearOutputContainer">ClearOutputContainer</a></li><li><a href="global.html#clipboard">clipboard</a></li><li><a href="global.html#connect">connect</a></li><li><a href="global.html#createWebHidButtonHandler">createWebHidButtonHandler</a></li><li><a href="global.html#currentToolbox">currentToolbox</a></li><li><a href="global.html#deviceEventHandlers">deviceEventHandlers</a></li><li><a href="global.html#disableWorkspace">disableWorkspace</a></li><li><a href="global.html#disconnect">disconnect</a></li><li><a href="global.html#enableWorkspace">enableWorkspace</a></li><li><a href="global.html#eventChecker">eventChecker</a></li><li><a href="global.html#eventCode">eventCode</a></li><li><a href="global.html#eventsFlyoutCategory">eventsFlyoutCategory</a></li><li><a href="global.html#eventsInWorkspace">eventsInWorkspace</a></li><li><a href="global.html#eventValues">eventValues</a></li><li><a href="global.html#filename">filename</a></li><li><a href="global.html#findLegalName">findLegalName</a></li><li><a href="global.html#flyoutCategoryBlocksWB">flyoutCategoryBlocksWB</a></li><li><a href="global.html#flyoutCategoryBlocksWHid">flyoutCategoryBlocksWHid</a></li><li><a href="global.html#generateCode">generateCode</a></li><li><a href="global.html#generatePairButtonsMobile_">generatePairButtonsMobile_</a></li><li><a href="global.html#generatePath">generatePath</a></li><li><a href="global.html#getActiveSlot">getActiveSlot</a></li><li><a href="global.html#getAdvertisedTxPower">getAdvertisedTxPower</a></li><li><a href="global.html#getAdvertisingData">getAdvertisingData</a></li><li><a href="global.html#getAdvertisingInterval">getAdvertisingInterval</a></li><li><a href="global.html#getCapabilities">getCapabilities</a></li><li><a href="global.html#getCategory">getCategory</a></li><li><a href="global.html#getCharacteristic">getCharacteristic</a></li><li><a href="global.html#getDefinition">getDefinition</a></li><li><a href="global.html#getDeviceById">getDeviceById</a></li><li><a href="global.html#getInterpreter">getInterpreter</a></li><li><a href="global.html#getInterrupted">getInterrupted</a></li><li><a href="global.html#getLatestCode">getLatestCode</a></li><li><a href="global.html#getLockState">getLockState</a></li><li><a href="global.html#getPrimaryService">getPrimaryService</a></li><li><a href="global.html#getPublicECDHKey">getPublicECDHKey</a></li><li><a href="global.html#getStdError">getStdError</a></li><li><a href="global.html#getStdInfo">getStdInfo</a></li><li><a href="global.html#getStdOut">getStdOut</a></li><li><a href="global.html#getThingsLog">getThingsLog</a></li><li><a href="global.html#getTxPowerLevel">getTxPowerLevel</a></li><li><a href="global.html#getWebBluetoothDevices">getWebBluetoothDevices</a></li><li><a href="global.html#getWebHIDDevices">getWebHIDDevices</a></li><li><a href="global.html#getWorkspace">getWorkspace</a></li><li><a href="global.html#hexStringToArrayBuffer">hexStringToArrayBuffer</a></li><li><a href="global.html#highlightBlock">highlightBlock</a></li><li><a href="global.html#HTTPREQUEST_ERROR">HTTPREQUEST_ERROR</a></li><li><a href="global.html#importPrettify">importPrettify</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initApi">initApi</a></li><li><a href="global.html#initInterpreter">initInterpreter</a></li><li><a href="global.html#initStatesInterpreter">initStatesInterpreter</a></li><li><a href="global.html#initUi">initUi</a></li><li><a href="global.html#interpreter">interpreter</a></li><li><a href="global.html#interrupted">interrupted</a></li><li><a href="global.html#intervalEvents">intervalEvents</a></li><li><a href="global.html#isLEScanRunning">isLEScanRunning</a></li><li><a href="global.html#isNameUsed">isNameUsed</a></li><li><a href="global.html#latestCode">latestCode</a></li><li><a href="global.html#LEScanResults">LEScanResults</a></li><li><a href="global.html#link">link</a></li><li><a href="global.html#LINK_ALERT">LINK_ALERT</a></li><li><a href="global.html#messageOutputContainer">messageOutputContainer</a></li><li><a href="global.html#NOT_FOUND_ERROR">NOT_FOUND_ERROR</a></li><li><a href="global.html#onStatusChange">onStatusChange</a></li><li><a href="global.html#optionalServices">optionalServices</a></li><li><a href="global.html#read">read</a></li><li><a href="global.html#readHex">readHex</a></li><li><a href="global.html#readNumber">readNumber</a></li><li><a href="global.html#readText">readText</a></li><li><a href="global.html#reconnectCancelHandler_">reconnectCancelHandler_</a></li><li><a href="global.html#removeDeviceHandlers">removeDeviceHandlers</a></li><li><a href="global.html#removeEventCode">removeEventCode</a></li><li><a href="global.html#removeEventListener">removeEventListener</a></li><li><a href="global.html#rename">rename</a></li><li><a href="global.html#requestDevice">requestDevice</a></li><li><a href="global.html#resetFileInput">resetFileInput</a></li><li><a href="global.html#resetInterpreter">resetInterpreter</a></li><li><a href="global.html#resetStateInterpreter">resetStateInterpreter</a></li><li><a href="global.html#resetThings">resetThings</a></li><li><a href="global.html#resetUi">resetUi</a></li><li><a href="global.html#runButton">runButton</a></li><li><a href="global.html#runJS">runJS</a></li><li><a href="global.html#scanBlocks">scanBlocks</a></li><li><a href="global.html#setActiveSlot">setActiveSlot</a></li><li><a href="global.html#setAdvertisedTxPower">setAdvertisedTxPower</a></li><li><a href="global.html#setAdvertisingData">setAdvertisingData</a></li><li><a href="global.html#setAdvertisingInterval">setAdvertisingInterval</a></li><li><a href="global.html#setInterrupted">setInterrupted</a></li><li><a href="global.html#setStatus">setStatus</a></li><li><a href="global.html#setStdError">setStdError</a></li><li><a href="global.html#setStdInfo">setStdInfo</a></li><li><a href="global.html#setStdOut">setStdOut</a></li><li><a href="global.html#setThingsLog">setThingsLog</a></li><li><a href="global.html#setTxPowerLevel">setTxPowerLevel</a></li><li><a href="global.html#startEventChecker">startEventChecker</a></li><li><a href="global.html#startLEScan">startLEScan</a></li><li><a href="global.html#stateInterpreter">stateInterpreter</a></li><li><a href="global.html#statesInterpreterRunning">statesInterpreterRunning</a></li><li><a href="global.html#status">status</a></li><li><a href="global.html#statusContainer">statusContainer</a></li><li><a href="global.html#statusValues">statusValues</a></li><li><a href="global.html#stdErr">stdErr</a></li><li><a href="global.html#stdInfo">stdInfo</a></li><li><a href="global.html#stdOut">stdOut</a></li><li><a href="global.html#stopJS">stopJS</a></li><li><a href="global.html#stopLEScan">stopLEScan</a></li><li><a href="global.html#subscribe">subscribe</a></li><li><a href="global.html#tearDown">tearDown</a></li><li><a href="global.html#thingsFlyoutCategory">thingsFlyoutCategory</a></li><li><a href="global.html#thingsLog">thingsLog</a></li><li><a href="global.html#throwError">throwError</a></li><li><a href="global.html#UUIDS">UUIDS</a></li><li><a href="global.html#webBluetoothDevices">webBluetoothDevices</a></li><li><a href="global.html#webHidDevices">webHidDevices</a></li><li><a href="global.html#webHidNames">webHidNames</a></li><li><a href="global.html#workspace">workspace</a></li><li><a href="global.html#writeWithoutResponse">writeWithoutResponse</a></li><li><a href="global.html#writeWithResponse">writeWithResponse</a></li><li><a href="global.html#XML_ERROR">XML_ERROR</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Mon Jan 24 2022 10:04:12 GMT+0100 (GMT+01:00)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
