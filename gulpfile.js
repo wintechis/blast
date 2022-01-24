@@ -8,10 +8,13 @@ const rev = require('gulp-rev');
 const revRewrite = require('gulp-rev-rewrite');
 const del = require('del');
 const closureCompiler = require('google-closure-compiler').gulp();
-const shell = require('gulp-shell');
+const jsdoc = require('gulp-jsdoc3');
 const workboxBuild = require('workbox-build');
 
-gulp.task('jsdoc', shell.task(['./node_modules/.bin/jsdoc src -d docs/jsdoc']));
+gulp.task('jsdoc', function(cb) {
+  gulp.src(['README.md', 'src/**/*.js'], {read: false})
+      .pipe(jsdoc(cb));
+});
 
 gulp.task('clean', () => {
   return del([

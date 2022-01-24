@@ -28,6 +28,7 @@
     "eslint-config-google": "^0.14.0",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
+    "gulp-jsdoc3": "^3.0.0",
     "gulp-rev": "^9.0.0",
     "gulp-rev-rewrite": "^5.0.0",
     "gulp-shell": "0.8.0",
