@@ -36,7 +36,11 @@ gulp.task('closureCompiler', function() {
       .pipe(rev())
       .pipe(gulp.src(['src/index.html']))
       .pipe(revRewrite())
-      .pipe(gulp.dest('./'));
+      .pipe(gulp.dest('./'))
+      .pipe(rev())
+      .pipe(gulp.src(['mobile/src/index.html']))
+      .pipe(revRewrite())
+      .pipe(gulp.dest('./mobile/'));
 });
 
 gulp.task('workbox', function() {
