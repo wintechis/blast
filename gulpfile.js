@@ -19,6 +19,7 @@ gulp.task('jsdoc', function(cb) {
 gulp.task('clean', () => {
   return del([
     './blast-*.min.js',
+    'mobile/blast-*.min.js',
   ]);
 });
 
@@ -37,7 +38,6 @@ gulp.task('closureCompiler', function() {
       .pipe(gulp.src(['src/index.html']))
       .pipe(revRewrite())
       .pipe(gulp.dest('./'))
-      .pipe(rev())
       .pipe(gulp.src(['mobile/src/index.html']))
       .pipe(revRewrite())
       .pipe(gulp.dest('./mobile/'));
