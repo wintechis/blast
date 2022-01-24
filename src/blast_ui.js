@@ -121,8 +121,6 @@ const setStatus = function(val) {
   // set status text
   statusContainer.innerHTML = val;
 };
-onStatusChange.stopped.push(() => setStatus(statusValues.STOPPED));
-onStatusChange.running.push(() => setStatus(statusValues.RUNNING));
 
 /**
  * Reset the UI.
@@ -135,10 +133,6 @@ const resetUi = function(val) {
   // set Blast stauts
   setStatus(val);
 };
-onStatusChange.stopped.push(() => resetUi(statusValues.STOPPED));
-onStatusChange.running.push(() => resetUi(statusValues.RUNNING));
-onStatusChange.ready.push(() => resetUi(statusValues.READY));
-onStatusChange.error.push(() => resetUi(statusValues.ERROR));
 
 /**
  * Adds a DOM Element to the {@link messageOutputContainer}.
@@ -445,6 +439,15 @@ export const initUi = function(ws) {
   });
   bindClick('clearDeviceLogsButton', ClearLog);
   bindClick('clearOutputButton', ClearOutputContainer);
+
+  // register setStatus to onStatusChange
+  onStatusChange.stopped.push(() => setStatus(statusValues.STOPPED));
+  onStatusChange.running.push(() => setStatus(statusValues.RUNNING));
+  // resetUi to onStatusChange
+  onStatusChange.stopped.push(() => resetUi(statusValues.STOPPED));
+  onStatusChange.running.push(() => resetUi(statusValues.RUNNING));
+  onStatusChange.ready.push(() => resetUi(statusValues.READY));
+  onStatusChange.error.push(() => resetUi(statusValues.ERROR));
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(importPrettify, 1);
