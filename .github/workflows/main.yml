@@ -57,6 +57,13 @@ jobs:
     if: github.ref == 'refs/heads/master'
     
     steps:
+      - uses: actions/checkout@master
+      # Use cache for node modules
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          
       - name: Run JSDoc
         run: yarn run jsdoc
     
