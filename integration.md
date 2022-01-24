@@ -17,7 +17,7 @@ The steps below describe how to overwrite BLAST's default `STDOUT`, `STDINFO` or
    setStdOut(myOutputMethod);
    ```
 
-### Error handling
+## Error handling
 Errors occuring during execution of a BLAST program should be thrown using `throwError` from `blast_interpreter.js`, like below.
 
 `throwError` Stops execution, resets the interpreter and prints an error message to stdError.
