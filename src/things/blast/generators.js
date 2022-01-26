@@ -246,6 +246,8 @@ Blockly.JavaScript['display_table'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
     
+  // This block only works if you define displayTable in your Environmnet
+  // and add it to the interpreter's API. See examples/web for an example.
   const code = `displayTable(${table});\n`;
   return code;
 };
@@ -360,6 +362,9 @@ Blockly.JavaScript['display_image'] = function(block) {
       Blockly.JavaScript.ORDER_NONE,
   );
 
+      
+  // This block only works if you define displayImage in your Environmnet
+  // and add it to the interpreter's API. See examples/web for an example.
   const code = `displayImage(${image});\n`;
   return code;
 };
