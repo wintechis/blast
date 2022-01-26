@@ -135,6 +135,14 @@ export const getWorkspace = function() {
 };
 
 /**
+ * Sets the workspace
+ * @param {Blockly.Workspace} ws the workspace
+ */
+export const setWorkspace = function(ws) {
+  workspace = ws;
+};
+
+/**
  * Array containing all interval events.
  * @type {!Array<!Number>}
  */
@@ -302,7 +310,7 @@ export const throwError = function(text) {
  * Generate JavaScript Code for the user's block-program.
  * @public
  */
-const generateCode = function() {
+export const generateCode = function() {
   Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
   Blockly.JavaScript.addReservedWords('highlightBlock');
   // Generate JavaScript code and parse it.

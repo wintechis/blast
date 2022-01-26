@@ -63,6 +63,14 @@ let messageCounter_ = 0;
 let messageOutputContainer = null;
 
 /**
+ * Sets the messageOutputContainer.
+ * @param {HTMLElement} container the container to be set
+ */
+export const setMessageOutputContainer = function(container) {
+  messageOutputContainer = container;
+};
+
+/**
  * Container displaying Blast's current status.
  * @type {?HTMLElement}
  * @public
@@ -70,11 +78,40 @@ let messageOutputContainer = null;
 let statusContainer = null;
 
 /**
+ * Sets the statusContainer.
+ * @param {HTMLElement} container the container to be set
+ */
+export const setStatusContainer = function(container) {
+  statusContainer = container;
+};
+
+/**
+ * FileSelector for loading from XML files.
+ */
+let fileSelector = null;
+
+/**
+* Sets the the fileSelector
+* @param {HTMLElement} container the selector to be set
+*/
+export const setFileSelector = function(container) {
+  fileSelector = container;
+};
+
+/**
  * Button to start/stop execution of the user's code.
  * @type {?HTMLElement}
  * @public
  */
 let runButton = null;
+
+/**
+ * Sets the runButton
+ * @param {HTMLElement} button the button to be set
+ */
+export const setRunButton = function(button) {
+  runButton = button;
+};
 
 /**
  * The workspace used to display the user's code.
@@ -101,7 +138,7 @@ export const bindClick = function(el, func) {
  * @param {Blast.Interpreter.statusValues} val new Blast status text.
  * @public
  */
-const setStatus = function(val) {
+export const setStatus = function(val) {
   let icon;
   let func;
   let title;
@@ -382,13 +419,8 @@ export const initUi = function(ws) {
   runButton = document.getElementById('runButton');
   messageOutputContainer = document.getElementById('msgOutputContainer');
   statusContainer = document.getElementById('statusContainer');
-  const fileSelector = document.getElementById('file-selector');
+  fileSelector = document.getElementById('file-selector');
   fileSelector.addEventListener('change', loadXMLFromFile);
-
-  // mobile website has its own tab system
-  if (window.location.href.includes('mobile')) {
-    return;
-  }
 
   // Bind onClick events to tabs
   tabClick_(selected_);

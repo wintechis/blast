@@ -224,7 +224,7 @@ const retrieveXML_ = async function(path) {
  * @param {string} xmlString the xml to load.
  * @private
  */
-const loadXML = function(xmlString) {
+export const loadXML = function(xmlString) {
   let xml;
   const workspace = getWorkspace();
   // clear blocks

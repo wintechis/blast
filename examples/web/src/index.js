@@ -28,11 +28,6 @@ import '../../../src/things/all.js';
  * @public
  */
 const init = function() {
-  // mobile website has its own init
-  if (window.location.href.includes('mobile')) {
-    return;
-  }
-
   initInterpreter();
   const workspace = getWorkspace();
   initStatesInterpreter(workspace);

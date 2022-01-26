@@ -3135,7 +3135,7 @@ body {
   height: calc(100vh - 350px);
   width: 100%; }
 
-#content_javascript, #content_xml {
+#content_javascript, #content_xml, #content_deviceLogs {
   display: none; }
 
 #controls {

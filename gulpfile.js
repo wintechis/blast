@@ -36,7 +36,7 @@ gulp.task('compileBlast', function() {
       .pipe(gulp.dest('dist'));
 });
 
-gulp.task('compileWebExample', function() {
+gulp.task('compileWeb', function() {
   return gulp.src(['src/**/*.js', 'examples/web/src/**/*.js'],
       {base: './'})
       .pipe(
@@ -52,7 +52,23 @@ gulp.task('compileWebExample', function() {
       .pipe(rev())
       .pipe(gulp.src(['examples/web/src/index.html']))
       .pipe(revRewrite())
-      .pipe(gulp.dest('examples/web/'))
+      .pipe(gulp.dest('examples/web/'));
+});
+
+gulp.task('compileMobile', function() {
+  return gulp.src(['src/**/*.js', 'examples/web/mobile/src/**/*.js', 'examples/web/src/web.js'],
+      {base: './'})
+      .pipe(
+          closureCompiler({
+            compilation_level: 'SIMPLE',
+            dependency_mode: 'PRUNE',
+            entry_point: 'examples/web/mobile/src/mobile.js',
+            js_output_file: 'blast-mobile.min.js',
+            language_in: 'ECMASCRIPT_2020',
+            language_out: 'ES6_STRICT',
+            module_resolution: 'BROWSER',
+          }))
+      .pipe(rev())
       .pipe(gulp.src(['examples/web/mobile/src/index.html']))
       .pipe(revRewrite())
       .pipe(gulp.dest('examples/web/mobile/'));

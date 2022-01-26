@@ -19,19 +19,19 @@ const topAppBar = new MDCTopAppBar(document.querySelector('.mdc-top-app-bar'));
 const tabBar = new MDCTabBar(document.querySelector('.mdc-tab-bar'));
 
 Array.from(document.querySelectorAll('.mdc-tab')).forEach(
-  tab => tab.addEventListener('MDCTab:interacted', (e) => {
-    switchToTab(e.detail.tabId);
-  })
+    (tab) => tab.addEventListener('MDCTab:interacted', (e) => {
+      switchToTab(e.detail.tabId);
+    }),
 );
 
 const switchToTab = (activatedTabId) => {
   const activatedTab = document.querySelector(`#${activatedTabId}`);
   const activatedTabIndex = Array.from(document.querySelectorAll('.mdc-tab')).indexOf(activatedTab);
   tabBar.activateTab(activatedTabIndex);
-  Array.from(document.querySelectorAll('.tab-content')).forEach(tabContent => {
+  Array.from(document.querySelectorAll('.tab-content')).forEach((tabContent) => {
     tabContent.style.display = tabContent.id.slice(0, -1 * '-content'.length) == activatedTabId.slice(0, -1 * '-tab'.length) ? 'block' : 'none';
   });
-}
+};
 
 // Card
 const cardPrimaryActionEls = Array.from(mainEl.querySelectorAll('.mdc-card__primary-action'));
@@ -47,11 +47,11 @@ loadButton.addEventListener('click', () => {
   const textFieldInputs = Array.from(mainEl.querySelectorAll('.mdc-text-field__input'));
 
   // if both inputs are empty, show helper text
-  let empty = textFieldInputs.every(el => el.value === '')
+  const empty = textFieldInputs.every((el) => el.value === '');
   if (empty) {
     const textFieldEls = Array.from(mainEl.querySelectorAll('.mdc-text-field'));
     textFieldEls.forEach((el) => {
-      let textField = new MDCTextField(el);
+      const textField = new MDCTextField(el);
       
       // Highlight helper text
       textField.root_.classList.add('mdc-text-field--invalid');
@@ -62,29 +62,29 @@ loadButton.addEventListener('click', () => {
     // switch to execute tab
     switchToTab('execute-tab');
 
-    init();
+    module$examples$web$mobile$src$mobile.init();
   }
 });
 
-function openReconnectDialog(){
-    const dialogEl = mainEl.querySelector('.mdc-dialog');
-    const dialog = new MDCDialog(dialogEl);
-    dialog.open();
+function openReconnectDialog() {
+  const dialogEl = mainEl.querySelector('.mdc-dialog');
+  const dialog = new MDCDialog(dialogEl);
+  dialog.open();
 }
 
 // List
 function initLists() {
   const listEls = Array.from(mainEl.querySelectorAll('.mdc-list'));
   listEls.forEach((el) => {
-    let list = new MDCList(el);
+    const list = new MDCList(el);
     list.listElements.map((listItemEl) => new MDCRipple(listItemEl));
     list.singleSelection = true;
   });
-};
+}
 
 initLists();
 
-export default{
+export default {
   initLists,
   openReconnectDialog,
-}
+};

@@ -15,7 +15,10 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "scripts": {
-    "build": "gulp clean && gulp compileBlast && gulp compileWebExample && gulp workbox",
+    "build": "gulp clean && gulp compileBlast && gulp compileWeb && gulp compileMobile && gulp workbox",
+    "build-blast": "gulp clean && gulp compileBlast",
+    "build-web": "gulp clean && gulp compileWeb && gulp workbox",
+    "build-mobile": "gulp clean && gulp compileMobile && gulp workbox",
     "clean": "gulp clean",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\" --ignore-pattern stream-deck.js"

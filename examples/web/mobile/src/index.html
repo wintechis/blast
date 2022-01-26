@@ -51,7 +51,7 @@
     <script src="../js/lib/urdf/urdf-browser.js"></script>
 
     <!-- blast libraries -->
-    <script src="./blast-web.min.js"></script>
+    <script src="./blast-mobile.min.js"></script>
   </head>
   <body class="mdc-typography">
     <!-- Top app bar -->
@@ -201,6 +201,7 @@
               <div id="content_workspace"></div>
               <pre id="content_javascript" class="content prettyprint lang-js"></pre>
               <textarea id="content_xml" class="content" wrap="off"></textarea>
+              <div id="content_deviceLogs" class="content"></div>
             </div>
             <div class="mdc-card__actions">
               <div class="mdc-card__action-icons">
@@ -233,88 +234,8 @@
             </div>
           </div>
         </section>
-
       </div>
     </main>
-    <script>
-      // Add service worker to the page
-      window.addEventListener('load', function() {
-        if (navigator.serviceWorker) {
-          navigator.serviceWorker.register('../sw.js', { scope: '../' });
-        }
-      });
-      
-      init = function() {
-        // request NOTIFICATION permission
-        if (Notification.permission !== "granted") {
-          Notification.requestPermission();
-        }
-
-        let input = document.querySelector('#load-content .mdc-text-field__input');
-        let fileInput = document.querySelector('#loadWorkspace-file');
-        // early return if both inputs are empty
-        if (input.value === '' && fileInput.value === '') {
-          return;
-        }
-
-        // adjust workspace and toolbox on resize
-        const container = document.getElementById('content_workspace');
-        const onresize = function() {
-            const bBox = Blast.getBBox_(container);
-            for (const tab of Blast.Ui.TABS_) {
-            const el = document.getElementById('content_' + tab);
-            el.style.top = bBox.y + 'px';
-            el.style.left = bBox.x + 'px';
-            // Height and width need to be set, read back, then set again to
-            // compensate for scrollbars.
-            el.style.height = bBox.height + 'px';
-            el.style.height = 2 * bBox.height - el.offsetHeight + 'px';
-            el.style.width = bBox.width + 'px';
-            el.style.width = 2 * bBox.width - el.offsetWidth + 'px';
-            }
-        };
-        window.addEventListener('resize', onresize, false);
-
-        Blast.workspace = Blockly.inject('content_workspace', {
-            // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-            media: 'media/',
-            readOnly: true,
-        });
-
-        onresize();
-        Blockly.svgResize(Blast.workspace);
-
-        // Initialize UI
-        Blast.Ui.init();
-
-        Blast.Ui.setStatus(Blast.status.READY);
-
-        // Load the interpreter now, and upon future changes.
-        Blast.generateCode();
-        Blast.workspace.addChangeListener(function(event) {
-            if (!(event instanceof Blockly.Events.Ui)) {
-            // Something changed. Parser needs to be reloaded.
-            Blast.generateCode();
-            Blast.States.generateCode();
-            Blast.Ui.renderContent_();
-            }
-        });
-        // load the workspace
-        if(input.value.length > 0) {
-          Blast.Storage.load();
-        } else if (fileInput.files.length > 0) {
-          const fileReader = new FileReader();
-          fileReader.onload = function(e) {
-            Blast.Storage.loadXML(e.target.result);
-          };
-          fileReader.onerror = function(evt) {
-            reject(Blast.throwError('Error reading file.'));
-          };
-          fileReader.readAsText(fileInput.files[0]);
-        }
-      };
-      init();
-  </script>
   <script src="dist/bundle.js" async></script>
   </body>
 </html>
