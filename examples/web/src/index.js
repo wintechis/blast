@@ -6,18 +6,22 @@
  */
 'use strict';
 
-import {apiFunctions} from './blast_interpreter.js';
-import {eventsFlyoutCategory} from './blast_states.js';
-import {initInterpreter} from './blast_interpreter.js';
-import {initStatesInterpreter} from './blast_states_interpreter.js';
-import {initUi} from './blast_ui.js';
-import {link} from './blast_storage.js';
-import {load} from './blast_storage.js';
-import {bindClick} from './blast_ui.js';
-import {thingsFlyoutCategory} from './blast_things.js';
-import {getStdInfo} from './blast_interpreter.js';
-import {getWorkspace} from './blast_interpreter.js';
+import {apiFunctions} from '../../../src/blast_interpreter.js';
+import {eventsFlyoutCategory} from '../../../src/blast_states.js';
+import {initInterpreter} from '../../../src/blast_interpreter.js';
+import {initStatesInterpreter} from '../../../src/blast_states_interpreter.js';
+import {initUi} from './web.js';
+import {link} from '../../../src/blast_storage.js';
+import {load} from '../../../src/blast_storage.js';
+import {bindClick} from './web.js';
+import {thingsFlyoutCategory} from '../../../src/blast_things.js';
+import {getStdInfo} from '../../../src/blast_interpreter.js';
+import {getWorkspace} from '../../../src/blast_interpreter.js';
 
+// import block blast files to include them in bundled code.
+import '../../../src/blocks/all.js';
+import '../../../src/generators/all.js';
+import '../../../src/things/all.js';
 
 /**
  * Initialize Blast. Called on page load.

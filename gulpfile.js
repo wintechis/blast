@@ -3,12 +3,12 @@
  * Run this script by calling "npm run build" in this directory.
  */
 
+const closureCompiler = require('google-closure-compiler').gulp();
+const del = require('del');
 const gulp = require('gulp');
+const jsdoc = require('gulp-jsdoc3');
 const rev = require('gulp-rev');
 const revRewrite = require('gulp-rev-rewrite');
-const del = require('del');
-const closureCompiler = require('google-closure-compiler').gulp();
-const jsdoc = require('gulp-jsdoc3');
 const workboxBuild = require('workbox-build');
 
 gulp.task('jsdoc', function(cb) {
@@ -18,12 +18,11 @@ gulp.task('jsdoc', function(cb) {
 
 gulp.task('clean', () => {
   return del([
-    './blast-*.min.js',
-    'mobile/blast-*.min.js',
+    'dist/blast-*.min.js', 'examples/web/blast-*.min.js', 'examples/web/mobile/blast-*.min.js',
   ]);
 });
 
-gulp.task('closureCompiler', function() {
+gulp.task('compileBlast', function() {
   return gulp.src(['src/**/*.js'],
       {base: './'})
       .pipe(
@@ -34,27 +33,38 @@ gulp.task('closureCompiler', function() {
             language_out: 'ES6_STRICT',
             module_resolution: 'BROWSER',
           }))
+      .pipe(gulp.dest('dist'));
+});
+
+gulp.task('compileWebExample', function() {
+  return gulp.src(['src/**/*.js', 'examples/web/src/**/*.js'],
+      {base: './'})
+      .pipe(
+          closureCompiler({
+            compilation_level: 'SIMPLE',
+            dependency_mode: 'PRUNE',
+            entry_point: 'examples/web/src/index.js',
+            js_output_file: 'blast-web.min.js',
+            language_in: 'ECMASCRIPT_2020',
+            language_out: 'ES6_STRICT',
+            module_resolution: 'BROWSER',
+          }))
       .pipe(rev())
-      .pipe(gulp.src(['src/index.html']))
+      .pipe(gulp.src(['examples/web/src/index.html']))
       .pipe(revRewrite())
-      .pipe(gulp.dest('./'))
-      .pipe(gulp.src(['mobile/src/index.html']))
+      .pipe(gulp.dest('examples/web/'))
+      .pipe(gulp.src(['examples/web/mobile/src/index.html']))
       .pipe(revRewrite())
-      .pipe(gulp.dest('./mobile/'));
+      .pipe(gulp.dest('examples/web/mobile/'));
 });
 
 gulp.task('workbox', function() {
   return workboxBuild.injectManifest({
     globDirectory: './',
     globPatterns: [
-      '.',
-      'index.html',
-      'style.css',
-      'js/**/*.js',
-      'media/**',
-      'mobile/**',
+      'examples/web/**',
     ],
-    swSrc: 'sw-pre-workbox.js',
-    swDest: 'sw.js',
+    swSrc: 'examples/web/sw-pre-workbox.js',
+    swDest: 'examples/web/sw.js',
   });
 });

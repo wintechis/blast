@@ -7,7 +7,7 @@
 
 'use strict';
 
-import {addBlock} from './../../blast_toolbox.js';
+import {addBlock} from '../../blast_toolbox.js';
 
 
 Blockly.Blocks['switch_lights_rgb'] = {

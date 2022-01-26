@@ -396,7 +396,9 @@ const disableWorkspace = function() {
 const enableWorkspace = function() {
   const workspaceDiv = document.getElementById('content_workspace');
   const rect = document.getElementById('workspace-disabled');
-  workspaceDiv.removeChild(rect);
+  if (rect) {
+    workspaceDiv.removeChild(rect);
+  }
   // Restore the clipboard.
   Blockly.clipboard_ = clipboard.clipboard_;
   Blockly.clipboardSource_ = clipboard.clipboardSource_;
