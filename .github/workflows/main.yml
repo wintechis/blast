@@ -24,6 +24,7 @@ jobs:
     needs: lint
       
     steps:
+        - uses: actions/checkout@master
         # Use cache for node modules
         - uses: actions/cache@v2
           with:
