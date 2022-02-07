@@ -7,6 +7,12 @@ import gulp from 'gulp';
 import jsdoc from 'gulp-jsdoc3';
 
 gulp.task('jsdoc', function(cb) {
-  gulp.src(['README.md', 'src/**/*.js'], {read: false})
+  gulp.src([
+    'README.md',
+    'src/**/*.js',
+    '!**/joycon-webhid/*.js',
+    '!**/urdf/*.js',
+    '!**/stream-deck-webhid/*.js',
+  ], {read: false})
       .pipe(jsdoc(cb));
 });
