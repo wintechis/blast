@@ -29,7 +29,7 @@ jobs:
             path: '**/node_modules'
             key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
         - name: yarn run build
-          working-directory: ./examples/web/
+          working-directory: examples/web/
           run: yarn run build
   deploy:
     runs-on: ubuntu-latest
