@@ -33,6 +33,7 @@ jobs:
         - name: yarn run build
           run: |
                 cd ./examples/web
+                yarn install
                 yarn run build
   deploy:
     runs-on: ubuntu-latest
