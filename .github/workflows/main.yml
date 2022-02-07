@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint
       
-      steps:
+    steps:
         # Use cache for node modules
         - uses: actions/cache@v2
           with:
