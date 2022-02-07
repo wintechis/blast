@@ -38855,7 +38855,6 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.number_atan2 = blockly__WEBPACK_
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
-/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../blast_interpreter.js */ "../../src/blast_interpreter.js");
 /**
  * @fileoverview Generating JavaScript for strings blocks.
  * @author derwehr@gmail.com (Thomas Wehr)
@@ -38865,7 +38864,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
+// import {apiFunctions} from './../blast_interpreter.js';
 
 
 // Remap blockly blocks to improve naming in xml.

@@ -1,1 +1,3 @@
-src/things/joycon/joycon-webhid/*
+**/joycon-webhid/*.js
+**/urdf/*.js
+**/stream-deck-webhid/*.js

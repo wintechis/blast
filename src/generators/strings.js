@@ -7,7 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {apiFunctions} from './../blast_interpreter.js';
+// import {apiFunctions} from './../blast_interpreter.js';
 
 
 // Remap blockly blocks to improve naming in xml.

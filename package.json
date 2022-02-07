@@ -21,7 +21,7 @@
     "build-mobile": "gulp clean && gulp compileMobile && gulp workbox",
     "clean": "gulp clean",
     "jsdoc": "gulp jsdoc",
-    "lint": "eslint \"src/**/**.js\" --ignore-pattern stream-deck.js"
+    "lint": "eslint \"src/**/**.js\""
   },
   "type": "module",
   "main": "index.html",
@@ -47,6 +47,7 @@
     "raw-loader": "^4.0.2",
     "urdf": "git://github.com/derwehr/uRDF.js.git",
     "vm": "^0.1.0",
+    "webpack-stream": "^7.0.0",
     "workbox-cli": "^6.4.2"
   }
 }

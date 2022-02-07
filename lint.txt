@@ -1,0 +1,4 @@
+
+> blast@0.0.1 lint
+> eslint "src/**/**.js"
+
