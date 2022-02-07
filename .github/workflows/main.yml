@@ -20,7 +20,8 @@ jobs:
       - name: run ESLint
         run: yarn run lint
   build-examples:
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
+    needs: lint
       
       steps:
         # Use cache for node modules
