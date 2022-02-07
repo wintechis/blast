@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
 
@@ -37,7 +38,7 @@ Blockly.Blocks['huskylens_choose_algo'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -70,7 +71,7 @@ Blockly.Blocks['huskylens_write_id'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -113,7 +114,7 @@ Blockly.Blocks['huskylens_write_forget_flag'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -152,7 +153,7 @@ Blockly.Blocks['huskylens_read_id'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }

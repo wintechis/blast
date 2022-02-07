@@ -6,7 +6,9 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from '../../../src/blast_interpreter.js';
+import {getInterpreter} from '../../../src/blast_interpreter.js';
 import {getLatestCode} from '../../../src/blast_interpreter.js';
 import {loadXMLFromFile} from '../../../src/blast_storage.js';
 import {link} from '../../../src/blast_storage.js';

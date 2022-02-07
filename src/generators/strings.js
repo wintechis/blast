@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from './../blast_interpreter.js';
 
 
@@ -24,7 +25,8 @@ Blockly.JavaScript['string_trim'] = Blockly.JavaScript['text_trim'];
 Blockly.JavaScript['string_count'] = Blockly.JavaScript['text_count'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
 Blockly.JavaScript['string_reverse'] = Blockly.JavaScript['text_reverse'];
-Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
+// Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
+// TODO set default stdIn and overwrite in web.js
 
 // Add prompt function to the interpreter API.
-apiFunctions.push(['prompt', prompt]);
+// apiFunctions.push(['prompt', prompt]);

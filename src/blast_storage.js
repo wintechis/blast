@@ -6,6 +6,9 @@
  */
 'use strict';
 
+
+import Blockly from 'blockly';
+import FileSaver from 'file-saver';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
 import {getWebBluetoothDevices} from './blast_things.js';
@@ -67,7 +70,7 @@ export const link = function(download) {
   // Save XML using filesaver.js.
   if (download === true) {
     const blob = new Blob([xml], {type: 'text/xml'});
-    saveAs(blob, filename);
+    FileSaver.saveAs(blob, filename);
     return;
   }
 
@@ -129,7 +132,7 @@ const saveXML_ = function(path, xml) {
   }).then((response) => {
     if (response.ok) {
       location.hash = path;
-      Blockly.alert(LINK_ALERT.replace('%1', window.location.href));
+      Blockly.dialog.alert(LINK_ALERT.replace('%1', window.location.href));
     } else {
       throwError(HTTPREQUEST_ERROR);
     }
@@ -141,7 +144,7 @@ export const load = function() {
     
   // if input is empty show warning and return.
   if (url == '') {
-    Blockly.alert('Enter a URI first.');
+    Blockly.dialog.alert('Enter a URI first.');
     return;
   }
 

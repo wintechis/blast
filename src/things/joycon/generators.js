@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
@@ -214,7 +215,7 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
         setInterrupted(false);
 
         const interpreter = new Interpreter('');
-        interpreter.stateStack[0].scope = getInterpreter().globalScope;
+        interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
         interpreter.appendCode(statements);
 
         const interruptRunner_ = function() {

@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 Blockly.Blocks['mac'] = {
   /**
    * Block representing a mac address.

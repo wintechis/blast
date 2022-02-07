@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+import urdf from 'urdf';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {getAdvertisedTxPower} from './../../blast_eddystone.js';

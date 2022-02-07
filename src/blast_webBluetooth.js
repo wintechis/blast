@@ -6,6 +6,8 @@
  */
 'use strict';
 
+import 'buffer';
+import Blockly from 'blockly';
 import {addCleanUpFunction} from './blast_interpreter.js';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {getThingsLog} from './blast_things.js';
@@ -366,7 +368,7 @@ export const readNumber = async function(id, serviceUUID, characteristicUUID) {
   }
   const arr = new Uint8Array(dataView.buffer);
   const length = arr.length;
-  const arrayBuffer = buffer.Buffer.from(arr);
+  const arrayBuffer = Buffer.from(arr);
   const result = arrayBuffer.readUIntBE(0, length);
  
   return result;
@@ -432,7 +434,7 @@ export const startLEScan = async function() {
   isLEScanRunning = true;
   const thingsLog = getThingsLog();
   thingsLog('Requesting LE Scan', 'Bluetooth');
-  Blockly.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
+  Blockly.dialog.alert('Please click allow on the LE Scan prompt now, then close this dialog.',
       navigator.bluetooth.requestLEScan(
           {acceptAllAdvertisements: true, keepRepeatedDevices: true},
       ),

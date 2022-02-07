@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {optionalServices} from './../../blast_webBluetooth.js';
 import {readText} from './../../blast_webBluetooth.js';

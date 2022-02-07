@@ -23,19 +23,30 @@
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\" --ignore-pattern stream-deck.js"
   },
+  "type": "module",
   "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@elgato-stream-deck/webhid": "^5.2.0",
+    "blockly": "^7.20211209.2",
+    "buffer": "^6.0.3",
     "del": "^6.0.0",
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
+    "events": "^3.3.0",
+    "file-saver": "^2.0.5",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
     "gulp-jsdoc3": "^3.0.0",
     "gulp-rev": "^9.0.0",
     "gulp-rev-rewrite": "^5.0.0",
     "gulp-shell": "0.8.0",
+    "js-interpreter": "^2.3.1",
+    "js-interpreter-npm": "^1.0.6",
     "jsdoc": "^3.6.7",
+    "raw-loader": "^4.0.2",
+    "urdf": "git://github.com/derwehr/uRDF.js.git",
+    "vm": "^0.1.0",
     "workbox-cli": "^6.4.2"
   }
 }

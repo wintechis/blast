@@ -7,6 +7,9 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+import * as Buffer from 'buffer';
+import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
 import {apiFunctions} from './../../blast_interpreter.js';
@@ -137,7 +140,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
       setInterrupted(true);
         
       const interpreter = new Interpreter('');
-      interpreter.stateStack[0].scope = getInterpreter().globalScope;
+      interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
       interpreter.appendCode(statements);
 
       const interruptRunner_ = function() {
@@ -322,7 +325,7 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
       thingsLog(`Invoke <code>fillKeyImageData</code> with value <code>${[i, imageData].toString()}</code>`, 'hid', device.productName);
-      ps.push(streamdeck.fillKeyBuffer(i, buffer.Buffer.from(imageData.data), {format: 'rgba'}));
+      ps.push(streamdeck.fillKeyBuffer(i, Buffer.Buffer.from(imageData.data), {format: 'rgba'}));
       thingsLog('Finished <code>fillKeyImageData</code>', 'hid', device.productName);
     }
   }

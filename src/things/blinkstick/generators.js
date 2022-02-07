@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {getThingsLog} from './../../blast_things.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';

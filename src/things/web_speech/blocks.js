@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
 
@@ -50,7 +51,7 @@ Blockly.Blocks['web_speech'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!('webkitSpeechRecognition' in window)) {
-        Blockly.alert(`Web Speech API is not supported by this browser.
+        Blockly.dialog.alert(`Web Speech API is not supported by this browser.
         Upgrade to <a href="//www.google.com/chrome">Chrome</a>
         version 25 or later.`);
         this.dispose();

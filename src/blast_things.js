@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {throwError} from './blast_interpreter.js';
 import {getWorkspace} from './blast_interpreter.js';
 
@@ -260,7 +261,7 @@ export const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
                   '%1', text);
-              Blockly.alert(msg,
+              Blockly.dialog.alert(msg,
                   function() {
                     promptAndCheckWithAlert(text, id);  // Recurse
                   });
@@ -270,7 +271,7 @@ export const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
             }
           } else {
             const msg = 'Name cannot be empty';
-            Blockly.alert(msg, function() {
+            Blockly.dialog.alert(msg, function() {
               promptAndCheckWithAlert(text, id); // Recuse
             });
           }
@@ -321,7 +322,7 @@ export const addWebHidDevice = function(uid, deviceName, device) {
             if (existing) {
               const msg = 'Name %1 already exists'.replace(
                   '%1', text);
-              Blockly.alert(msg,
+              Blockly.dialog.alert(msg,
                   function() {
                     promptAndCheckWithAlert(text, id);  // Recurse
                   });
@@ -332,7 +333,7 @@ export const addWebHidDevice = function(uid, deviceName, device) {
             }
           } else {
             const msg = 'Name cannot be empty';
-            Blockly.alert(msg, function() {
+            Blockly.dialog.alert(msg, function() {
               promptAndCheckWithAlert(text, id); // Recuse
             });
           }

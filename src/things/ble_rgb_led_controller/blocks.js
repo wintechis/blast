@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {addBlock} from '../../blast_toolbox.js';
 
 
@@ -35,7 +36,7 @@ Blockly.Blocks['switch_lights_rgb'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.alert(`Webbluetooth is not supported by this browser.\n
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
         Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
         this.dispose();
       }

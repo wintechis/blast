@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {eventsInWorkspace} from './../blast_interpreter.js';
 import {findLegalName} from './../blast_states.js';
 import {getDefinition} from './../blast_states.js';

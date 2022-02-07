@@ -6,7 +6,9 @@
  */
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from '../../../src/blast_interpreter.js';
+import {currentToolbox} from '../../../src/blast_toolbox.js';
 import {eventsFlyoutCategory} from '../../../src/blast_states.js';
 import {initInterpreter} from '../../../src/blast_interpreter.js';
 import {initStatesInterpreter} from '../../../src/blast_states_interpreter.js';
@@ -28,8 +30,13 @@ import '../../../src/things/all.js';
  * @public
  */
 const init = function() {
-  initInterpreter();
-  const workspace = getWorkspace();
+  const workspace = Blockly.inject('content_workspace', {
+    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
+    media: 'media/',
+    toolbox: currentToolbox,
+    zoom: {controls: true, wheel: true},
+  });
+  initInterpreter(workspace);
   initStatesInterpreter(workspace);
 
   // Initialize UI

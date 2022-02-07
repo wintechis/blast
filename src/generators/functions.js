@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from './../blast_interpreter.js';
 
 

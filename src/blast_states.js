@@ -5,6 +5,7 @@
  */
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from './blast_interpreter.js';
 import {getCategory} from './blast_toolbox.js';
 

@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 Blockly.Blocks['procedures_defeval'] = {
   /**
    * Block for defining a procedure with a return value.

@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
 Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
 Blockly.JavaScript['number_single'] = Blockly.JavaScript['math_single'];

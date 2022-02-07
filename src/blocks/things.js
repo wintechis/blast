@@ -6,6 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {getWebBluetoothDevices} from './../blast_things.js';
 import {getWebHIDDevices} from './../blast_things.js';
 

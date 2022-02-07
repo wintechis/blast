@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 Blockly.JavaScript['things_webBluetooth'] = function(block) {
   const id = Blockly.JavaScript.quote_(block.getFieldValue('id'));
 

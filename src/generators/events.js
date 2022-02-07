@@ -7,6 +7,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from './../blast_interpreter.js';
 import {addEventCode} from './../blast_states_interpreter.js';
 import {getDefinition} from './../blast_states.js';
@@ -103,7 +104,7 @@ const addIntervalEvent = (seconds, statements) => {
     setInterrupted(false);
 
     const interpreter = new Interpreter('');
-    interpreter.stateStack[0].scope = getInterpreter().globalScope;
+    interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
     interpreter.appendCode(statements);
 
     const interruptRunner_ = function() {

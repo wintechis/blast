@@ -6,8 +6,7 @@
  */
 'use strict';
 
-import {currentToolbox} from './blast_toolbox.js';
-
+import Blockly from 'blockly';
 
 /**
  * Instance of the JS Interpreter.
@@ -178,7 +177,7 @@ export const setStatesInterpreterRunning = function(val) {
 /**
  * Defines the Interpreters standard output.
  */
-let stdOut = prompt;
+let stdOut = console.log;
 /**
  * Setter for the Interpreter's standard output function.
  * @param {Function} fn the stdEut function.
@@ -199,7 +198,7 @@ export const getStdOut = function() {
 /**
  * Defines the Interpreters standard info output function.
  */
-let stdInfo = prompt;
+let stdInfo = console.log;
 /**
  * Setter for the Interpreter's standard info output function.
  * @param {Function} fn the stdInfo function.
@@ -219,7 +218,7 @@ export const getStdInfo = function() {
 /**
  * Defines the Interpreters standard error output.
  */
-let stdErr = prompt;
+let stdErr = console.log;
 /**
  * Setter for the Interpreter's standard error output function.
  * @param {Function} fn the stdErr function.
@@ -235,11 +234,6 @@ export const setStdError = function(fn) {
 export const getStdError = function() {
   return stdErr;
 };
-
-/**
- * Saves the current clipboard when workspace is disabled to restore it when enabled.
- */
-const clipboard = {};
 
 /**
  * removes all event handlers of webHID devices from {@link deviceEventHandlers}
@@ -347,15 +341,11 @@ function initApi(interpreter, globalObject) {
 }
 
 /**
- *
+ * Initializes the JS Interpreter.
+ * @param {Blockly.workspace} ws the workspace
  */
-export const initInterpreter = function() {
-  workspace = Blockly.inject('content_workspace', {
-    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-    media: 'media/',
-    toolbox: currentToolbox,
-    zoom: {controls: true, wheel: true},
-  });
+export const initInterpreter = function(ws) {
+  workspace = ws;
 
   // Load the interpreter now, and upon future changes.
   generateCode();
@@ -384,18 +374,9 @@ const disableWorkspace = function() {
   rect.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
   workspaceDiv.appendChild(rect);
   // de-select current block so that the delete key won't work.
-  Blockly.selected = null;
-  // Clear Blockly.clipboard_ to prevent the paste key from working.
-  // Save current values to restore later.
-  clipboard.clipboard_ = Blockly.clipboard_;
-  clipboard.clipboardSource_ = Blockly.clipboardSource_;
-  clipboard.clipboardXml = Blockly.clipboardXml;
-  clipboard.clipboardTypeCounts_ = Blockly.clipboardTypeCounts_;
-  // Clear the clipboard.
-  Blockly.clipboard_ = null;
-  Blockly.clipboardSource_ = null;
-  Blockly.clipboardXml = null;
-  Blockly.clipboardTypeCounts_ = null;
+  if (Blockly.selected) {
+    Blockly.selected.unselect();
+  }
 };
 
 /**
@@ -407,11 +388,6 @@ const enableWorkspace = function() {
   if (rect) {
     workspaceDiv.removeChild(rect);
   }
-  // Restore the clipboard.
-  Blockly.clipboard_ = clipboard.clipboard_;
-  Blockly.clipboardSource_ = clipboard.clipboardSource_;
-  Blockly.clipboardXml = clipboard.clipboardXml;
-  Blockly.clipboardTypeCounts_ = clipboard.clipboardTypeCounts_;
 };
 onStatusChange.ready.push(enableWorkspace);
 onStatusChange.stopped.push(enableWorkspace);

@@ -7,6 +7,7 @@
 'use strict';
 
 import {addBlock} from './../blast_toolbox.js';
+import Blockly from 'blockly';
 
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];
@@ -15,11 +16,12 @@ Blockly.Blocks['while_until'] = Blockly.Blocks['controls_whileUntil'];
 Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
 
 // add changed names to Loops constant to ensure correct execution.
-Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
-    'repeat',
-    'while_until',
-    'for',
-);
+// Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
+//     'repeat',
+//     'while_until',
+//     'for',
+// );
+// This is blocked by google/blockly#5910 (fixed, included in the next quarterly release).
 
 // Define inner block XML for the repeat block.
 const REPEAT_XML = `

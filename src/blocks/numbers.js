@@ -6,6 +6,8 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 // Remap blockly blocks to improve naming in xml.
 Blockly.Blocks['number_value'] = Blockly.Blocks['math_number'];
 Blockly.Blocks['number_arithmetic'] = Blockly.Blocks['math_arithmetic'];

@@ -5,6 +5,7 @@
  */
 'use strict';
 
+import Blockly from 'blockly';
 import {apiFunctions} from './blast_interpreter.js';
 import {getInterpreter} from './blast_interpreter.js';
 import {onStatusChange} from './blast_interpreter.js';
@@ -82,7 +83,7 @@ export const generateCode = function() {
     }
   }
   // prepend generated code with variable and function definitions
-  latestCode = Blockly.JavaScript.finish(code);
+  latestCode = code;
 };
 
 /**
@@ -93,7 +94,8 @@ const startEventChecker = function() {
   
   // Initiate States interpreter.
   stateInterpreter = new Interpreter('');
-  stateInterpreter.stateStack[0].scope = getInterpreter().globalScope;
+  console.log(stateInterpreter);
+  stateInterpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
   stateInterpreter.appendCode(latestCode);
 
   setStatesInterpreterRunning(true);

@@ -6,5 +6,7 @@
 
 'use strict';
 
+import Blockly from 'blockly';
+
 // Set List block colour
 Blockly.Themes.Classic.blockStyles.list_blocks.colourPrimary = 310;
