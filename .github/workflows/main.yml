@@ -31,7 +31,7 @@ jobs:
             key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
         - name: yarn run build
           run: |
-                cd examples/web
+                cd blast/examples/web
                 yarn run build
   deploy:
     runs-on: ubuntu-latest
