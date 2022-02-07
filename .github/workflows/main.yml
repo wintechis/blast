@@ -30,7 +30,6 @@ jobs:
             path: '**/node_modules'
             key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
         - name: yarn run build
-          working-directory: ../examples/web/
           run: |
                 cd examples/web
                 yarn run build
