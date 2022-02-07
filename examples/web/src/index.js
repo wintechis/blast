@@ -9,6 +9,7 @@
 import Blockly from 'blockly';
 import {apiFunctions} from '../../../src/blast_interpreter.js';
 import {currentToolbox} from '../../../src/blast_toolbox.js';
+import {downloadScreenshot} from './screenshot.js';
 import {eventsFlyoutCategory} from '../../../src/blast_states.js';
 import {initInterpreter} from '../../../src/blast_interpreter.js';
 import {initStatesInterpreter} from '../../../src/blast_states_interpreter.js';
@@ -30,12 +31,55 @@ import '../../../src/things/all.js';
  * @public
  */
 const init = function() {
-  const workspace = Blockly.inject('content_workspace', {
-    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-    media: 'media/',
-    toolbox: currentToolbox,
-    zoom: {controls: true, wheel: true},
-  });
+  const workspace = Blockly.inject('content_workspace',
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+        {
+          spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true,
+        },
+        horizontalLayout: false,
+        maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        maxTrashcanContents: 256,
+        media: 'media/',
+        toolbox: currentToolbox,
+        toolboxPosition: 'start',
+        renderer: 'geras',
+        zoom:
+        {
+          controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 4,
+          minScale: 0.25,
+          scaleSpeed: 1.1,
+        },
+      },
+  );
+  workspace.configureContextMenu = configureContextMenu;
+
+  /**
+   *
+   * @param {*} menuOptions
+   * @param {*} e
+   */
+  function configureContextMenu(menuOptions, e) {
+    const screenshotOption = {
+      text: 'Download Screenshot',
+      enabled: workspace.getTopBlocks().length,
+      callback: function() {
+        downloadScreenshot(workspace);
+      },
+    };
+    menuOptions.push(screenshotOption);
+  }
+
   initInterpreter(workspace);
   initStatesInterpreter(workspace);
 

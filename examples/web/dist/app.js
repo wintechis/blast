@@ -33175,20 +33175,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
 /* harmony import */ var _src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../../src/blast_interpreter.js */ "../../src/blast_interpreter.js");
 /* harmony import */ var _src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/blast_toolbox.js */ "../../src/blast_toolbox.js");
-/* harmony import */ var _src_blast_states_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../src/blast_states.js */ "../../src/blast_states.js");
-/* harmony import */ var _src_blast_states_interpreter_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../src/blast_states_interpreter.js */ "../../src/blast_states_interpreter.js");
-/* harmony import */ var _web_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./web.js */ "./src/web.js");
-/* harmony import */ var _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../src/blast_storage.js */ "../../src/blast_storage.js");
-/* harmony import */ var _src_blast_things_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../src/blast_things.js */ "../../src/blast_things.js");
-/* harmony import */ var _src_blocks_all_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../src/blocks/all.js */ "../../src/blocks/all.js");
-/* harmony import */ var _src_generators_all_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../src/generators/all.js */ "../../src/generators/all.js");
-/* harmony import */ var _src_things_all_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../src/things/all.js */ "../../src/things/all.js");
+/* harmony import */ var _screenshot_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./screenshot.js */ "./src/screenshot.js");
+/* harmony import */ var _src_blast_states_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../src/blast_states.js */ "../../src/blast_states.js");
+/* harmony import */ var _src_blast_states_interpreter_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../src/blast_states_interpreter.js */ "../../src/blast_states_interpreter.js");
+/* harmony import */ var _web_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./web.js */ "./src/web.js");
+/* harmony import */ var _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../src/blast_storage.js */ "../../src/blast_storage.js");
+/* harmony import */ var _src_blast_things_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../../src/blast_things.js */ "../../src/blast_things.js");
+/* harmony import */ var _src_blocks_all_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../src/blocks/all.js */ "../../src/blocks/all.js");
+/* harmony import */ var _src_generators_all_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../src/generators/all.js */ "../../src/generators/all.js");
+/* harmony import */ var _src_things_all_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../src/things/all.js */ "../../src/things/all.js");
 /**
  * @fileoverview Core JavaScript library for Blast.
  * https://github.com/wintechis/blast
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 
 
 
@@ -33215,33 +33217,79 @@ __webpack_require__.r(__webpack_exports__);
  * @public
  */
 const init = function() {
-  const workspace = blockly__WEBPACK_IMPORTED_MODULE_0__.inject('content_workspace', {
-    // grid: {spacing: 25, length: 3, colour: '#ccc', snap: true},
-    media: 'media/',
-    toolbox: _src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_2__.currentToolbox,
-    zoom: {controls: true, wheel: true},
-  });
+  const workspace = blockly__WEBPACK_IMPORTED_MODULE_0__.inject('content_workspace',
+      {
+        comments: true,
+        collapse: true,
+        disable: true,
+        grid:
+        {
+          spacing: 25,
+          length: 3,
+          colour: '#ccc',
+          snap: true,
+        },
+        horizontalLayout: false,
+        maxBlocks: Infinity,
+        maxInstances: {'test_basic_limit_instances': 3},
+        maxTrashcanContents: 256,
+        media: 'media/',
+        toolbox: _src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_2__.currentToolbox,
+        toolboxPosition: 'start',
+        renderer: 'geras',
+        zoom:
+        {
+          controls: true,
+          wheel: true,
+          startScale: 1.0,
+          maxScale: 4,
+          minScale: 0.25,
+          scaleSpeed: 1.1,
+        },
+      },
+  );
+  workspace.configureContextMenu = configureContextMenu;
+
+  /**
+   *
+   * @param {*} menuOptions
+   * @param {*} e
+   */
+  function configureContextMenu(menuOptions, e) {
+    const screenshotOption = {
+      text: 'Download Screenshot',
+      enabled: workspace.getTopBlocks().length,
+      callback: function() {
+        (0,_screenshot_js__WEBPACK_IMPORTED_MODULE_3__.downloadScreenshot)(workspace);
+      },
+    };
+    menuOptions.push(screenshotOption);
+  
+    // Adds a default-sized workspace comment to the workspace.
+    menuOptions.push(blockly__WEBPACK_IMPORTED_MODULE_0__.ContextMenu.workspaceCommentOption(workspace, e));
+  }
+
   (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.initInterpreter)(workspace);
-  (0,_src_blast_states_interpreter_js__WEBPACK_IMPORTED_MODULE_4__.initStatesInterpreter)(workspace);
+  (0,_src_blast_states_interpreter_js__WEBPACK_IMPORTED_MODULE_5__.initStatesInterpreter)(workspace);
 
   // Initialize UI
-  (0,_web_js__WEBPACK_IMPORTED_MODULE_5__.initUi)(workspace);
+  (0,_web_js__WEBPACK_IMPORTED_MODULE_6__.initUi)(workspace);
 
   // Bind load and save buttons
-  (0,_web_js__WEBPACK_IMPORTED_MODULE_5__.bindClick)('UriLoadButton', _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_6__.load);
-  (0,_web_js__WEBPACK_IMPORTED_MODULE_5__.bindClick)('UriSaveButton', _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_6__.link);
+  (0,_web_js__WEBPACK_IMPORTED_MODULE_6__.bindClick)('UriLoadButton', _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_7__.load);
+  (0,_web_js__WEBPACK_IMPORTED_MODULE_6__.bindClick)('UriSaveButton', _src_blast_storage_js__WEBPACK_IMPORTED_MODULE_7__.link);
   // load blocks from URI on Enter
   const uriInput = document.getElementById('loadWorkspace-input');
   uriInput.addEventListener('keyup', (event) => {
     if (event.keyCode === 13) {
-      (0,_src_blast_storage_js__WEBPACK_IMPORTED_MODULE_6__.load)();
+      (0,_src_blast_storage_js__WEBPACK_IMPORTED_MODULE_7__.load)();
     }
   });
 
   // register things category flyout callback
-  workspace.registerToolboxCategoryCallback('THINGS', _src_blast_things_js__WEBPACK_IMPORTED_MODULE_7__.thingsFlyoutCategory);
+  workspace.registerToolboxCategoryCallback('THINGS', _src_blast_things_js__WEBPACK_IMPORTED_MODULE_8__.thingsFlyoutCategory);
   // register event category flyout callback
-  workspace.registerToolboxCategoryCallback('STATES', _src_blast_states_js__WEBPACK_IMPORTED_MODULE_3__.eventsFlyoutCategory);
+  workspace.registerToolboxCategoryCallback('STATES', _src_blast_states_js__WEBPACK_IMPORTED_MODULE_4__.eventsFlyoutCategory);
 
   // Display output hint
   const stdInfo = (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getStdInfo)();
@@ -33262,6 +33310,129 @@ _src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.apiFunctions.push(['highl
 
 // initialize blast when page dom is loaded
 window.addEventListener('load', init);
+
+
+/***/ }),
+
+/***/ "./src/screenshot.js":
+/*!***************************!*\
+  !*** ./src/screenshot.js ***!
+  \***************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "downloadScreenshot": () => (/* binding */ downloadScreenshot)
+/* harmony export */ });
+/**
+ * @license
+ * Copyright 2019 Google LLC
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+/**
+ * @fileoverview Download screenshot.
+ */
+
+
+/**
+  * Convert an SVG datauri into a PNG datauri.
+  * @param {string} data SVG datauri.
+  * @param {number} width Image width.
+  * @param {number} height Image height.
+  * @param {!Function} callback Callback.
+  */
+function svgToPng_(data, width, height, callback) {
+  const canvas = document.createElement('canvas');
+  const context = canvas.getContext('2d');
+  const img = new Image();
+ 
+  const pixelDensity = 10;
+  canvas.width = width * pixelDensity;
+  canvas.height = height * pixelDensity;
+  img.onload = function() {
+    context.drawImage(
+        img, 0, 0, width, height, 0, 0, canvas.width, canvas.height);
+    try {
+      const dataUri = canvas.toDataURL('image/png');
+      callback(dataUri);
+    } catch (err) {
+      console.warn('Error converting the workspace svg to a png');
+      callback('');
+    }
+  };
+  img.src = data;
+}
+ 
+/**
+  * Create an SVG of the blocks on the workspace.
+  * @param {!Blockly.WorkspaceSvg} workspace The workspace.
+  * @param {!Function} callback Callback.
+  * @param {string=} customCss Custom CSS to append to the SVG.
+  */
+function workspaceToSvg_(workspace, callback, customCss) {
+  // Go through all text areas and set their value.
+  const textAreas = document.getElementsByTagName('textarea');
+  for (let i = 0; i < textAreas.length; i++) {
+    textAreas[i].innerHTML = textAreas[i].value;
+  }
+ 
+  const bBox = workspace.getBlocksBoundingBox();
+  const x = bBox.x || bBox.left;
+  const y = bBox.y || bBox.top;
+  const width = bBox.width || bBox.right - x;
+  const height = bBox.height || bBox.bottom - y;
+ 
+  const blockCanvas = workspace.getCanvas();
+  const clone = blockCanvas.cloneNode(true);
+  clone.removeAttribute('transform');
+ 
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  svg.appendChild(clone);
+  svg.setAttribute('viewBox',
+      x + ' ' + y + ' ' + width + ' ' + height);
+ 
+  svg.setAttribute('class', 'blocklySvg ' +
+     (workspace.options.renderer || 'geras') + '-renderer ' +
+     (workspace.getTheme ? workspace.getTheme().name + '-theme' : ''));
+  svg.setAttribute('width', width);
+  svg.setAttribute('height', height);
+  svg.setAttribute('style', 'background-color: transparent');
+ 
+  const css = [].slice.call(document.head.querySelectorAll('style'))
+      .filter(
+          (el) => /\.blocklySvg/.test(el.innerText) ||
+                           (el.id.indexOf('blockly-') === 0))
+      .map((el) => el.innerText)
+      .join('\n');
+  const style = document.createElement('style');
+  style.innerHTML = css + '\n' + customCss;
+  svg.insertBefore(style, svg.firstChild);
+ 
+  let svgAsXML = (new XMLSerializer).serializeToString(svg);
+  svgAsXML = svgAsXML.replace(/&nbsp/g, '&#160');
+  const data = 'data:image/svg+xml,' + encodeURIComponent(svgAsXML);
+ 
+  svgToPng_(data, width, height, callback);
+}
+ 
+/**
+  * Download a screenshot of the blocks on a Blockly workspace.
+  * @param {!Blockly.WorkspaceSvg} workspace The Blockly workspace.
+  */
+const downloadScreenshot = function(workspace) {
+  workspaceToSvg_(workspace, function(datauri) {
+    const a = document.createElement('a');
+    a.download = 'screenshot.png';
+    a.target = '_self';
+    a.href = datauri;
+    document.body.appendChild(a);
+    a.click();
+    a.parentNode.removeChild(a);
+  });
+};
 
 
 /***/ }),
