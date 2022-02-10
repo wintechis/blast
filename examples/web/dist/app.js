@@ -33264,9 +33264,6 @@ const init = function() {
       },
     };
     menuOptions.push(screenshotOption);
-  
-    // Adds a default-sized workspace comment to the workspace.
-    menuOptions.push(blockly__WEBPACK_IMPORTED_MODULE_0__.ContextMenu.workspaceCommentOption(workspace, e));
   }
 
   (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.initInterpreter)(workspace);
@@ -38492,11 +38489,13 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Themes.Classic.blockStyles.list_blocks.colo
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../blast_toolbox.js */ "../../src/blast_toolbox.js");
 /**
  * @fileoverview Number blocks for Blast.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 
 
 
@@ -38516,6 +38515,35 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.number_constrain = blockly__WEBPACK_
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.number_random = blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.math_random_int;
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.number_random_float = blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.math_random_float;
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.number_atan2 = blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.math_atan2;
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.parse_int = {
+  /**
+     * Block parsing a string to an integer.
+     */
+  init: function() {
+    this.appendValueInput('number')
+        .setCheck('String')
+        .appendField('Conver text');
+    this.appendDummyInput()
+        .appendField('to number');
+    this.setOutput(true, 'Number');
+    this.setColour(230);
+    this.setTooltip('Parses a string to an integer.');
+    this.setHelpUrl('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt');
+  },
+};
+
+const PARSE_INT_XML = `
+<block type="parse_int">
+  <value name="number">
+    <block type="text">
+      <field name="TEXT">42</field>
+    </block>
+  </value>
+</block>
+`;
+
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('parse_int', 'Numbers', PARSE_INT_XML);
 
 
 /***/ }),
@@ -39013,6 +39041,12 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.number_constrain = blockly__WEBP
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.number_random = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.math_random_int;
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.number_random_float = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.math_random_float;
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.number_atan2 = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.math_atan2;
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.parse_int = function(block) {
+  const valueNumber = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(block, 'number', blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_ATOMIC);
+  const code = `parseInt(${valueNumber})`;
+  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+};
 
 
 /***/ }),

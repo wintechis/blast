@@ -21,3 +21,9 @@ Blockly.JavaScript['number_constrain'] = Blockly.JavaScript['math_constrain'];
 Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
 Blockly.JavaScript['number_random_float'] = Blockly.JavaScript['math_random_float'];
 Blockly.JavaScript['number_atan2'] = Blockly.JavaScript['math_atan2'];
+
+Blockly.JavaScript['parse_int'] = function(block) {
+  const valueNumber = Blockly.JavaScript.valueToCode(block, 'number', Blockly.JavaScript.ORDER_ATOMIC);
+  const code = `parseInt(${valueNumber})`;
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
