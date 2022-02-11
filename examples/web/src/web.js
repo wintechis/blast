@@ -15,6 +15,7 @@ import {link} from '../../../src/blast_storage.js';
 import {onStatusChange} from '../../../src/blast_interpreter.js';
 import {runJS} from '../../../src/blast_interpreter.js';
 import {setStdError} from '../../../src/blast_interpreter.js';
+import {setStdIn} from '../../../src/blast_interpreter.js';
 import {setStdInfo} from '../../../src/blast_interpreter.js';
 import {setStdOut} from '../../../src/blast_interpreter.js';
 import {setThingsLog} from '../../../src/blast_things.js';
@@ -269,6 +270,7 @@ const addMessage = function(message, type) {
 };
 setStdError((message) => addMessage(message, 'error'));
 setStdInfo((message) => addMessage(message, 'info'));
+setStdIn((message) => prompt(message));
 setStdOut((message) => addMessage(message));
 
 /**

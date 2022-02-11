@@ -7,7 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-// import {apiFunctions} from './../blast_interpreter.js';
+import {asyncApiFunctions, getStdIn} from './../blast_interpreter.js';
 
 
 // Remap blockly blocks to improve naming in xml.
@@ -25,8 +25,35 @@ Blockly.JavaScript['string_trim'] = Blockly.JavaScript['text_trim'];
 Blockly.JavaScript['string_count'] = Blockly.JavaScript['text_count'];
 Blockly.JavaScript['string_replace'] = Blockly.JavaScript['text_replace'];
 Blockly.JavaScript['string_reverse'] = Blockly.JavaScript['text_reverse'];
-// Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
-// TODO set default stdIn and overwrite in web.js
 
-// Add prompt function to the interpreter API.
-// apiFunctions.push(['prompt', prompt]);
+Blockly.JavaScript['string_showPrompt'] = function(block) {
+  let msg;
+  if (block.getField('TEXT')) {
+    // Internal message.
+    msg = Blockly.JavaScript.quote_(block.getFieldValue('TEXT'));
+  } else {
+    // External message.
+    msg = Blockly.JavaScript.valueToCode(block, 'TEXT',
+        Blockly.JavaScript.ORDER_NONE) || '\'\'';
+  }
+  let code = `stdIn(${msg})`;
+  const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
+  if (toNumber) {
+    code = `Number(${code})`;
+  }
+  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+/**
+ * String input function
+ * @param {String} message the message to show
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {String} the input string
+ */
+const stdIn = async function(message, callback) {
+  const input = getStdIn();
+  const inputString = await input(message);
+  callback(inputString);
+};
+
+asyncApiFunctions.push(['stdIn', stdIn]);

@@ -31,6 +31,7 @@
     "eslint-config-google": "^0.14.0",
     "events": "^3.3.0",
     "file-saver": "^2.0.5",
+    "fs": "^0.0.1-security",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
     "gulp-jsdoc3": "^3.0.0",

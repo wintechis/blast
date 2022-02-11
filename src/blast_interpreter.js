@@ -7,6 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import fs from 'fs';
 
 /**
  * Instance of the JS Interpreter.
@@ -172,6 +173,30 @@ export const addCleanUpFunction = function(fn) {
 let statesInterpreterRunning = false;
 export const setStatesInterpreterRunning = function(val) {
   statesInterpreterRunning = val;
+};
+
+/**
+ * Defines the Interpreter's standard input function.
+ */
+let stdIn = null;
+if (fs.readFileSync) {
+  stdIn = fs.readFileSync(0, 'utf8');
+}
+
+/**
+ * Setteer for the Interpreter's standard input function
+ * @param {Function} fn new stdIn function
+ */
+export const setStdIn = function(fn) {
+  stdIn = fn;
+};
+
+/**
+ * Getter for the Interpreter's standard input function.
+ * @return {Function} stdOut
+ */
+export const getStdIn = function() {
+  return stdIn;
 };
 
 /**

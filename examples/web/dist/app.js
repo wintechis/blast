@@ -33164,6 +33164,16 @@ function config (name) {
 
 /***/ }),
 
+/***/ "?8ca4":
+/*!********************!*\
+  !*** fs (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -33481,6 +33491,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
 /**
  * List of tab names.
  * @type {Array.<string>}
@@ -33728,6 +33739,7 @@ const addMessage = function(message, type) {
 };
 (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.setStdError)((message) => addMessage(message, 'error'));
 (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.setStdInfo)((message) => addMessage(message, 'info'));
+(0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.setStdIn)((message) => prompt(message));
 (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.setStdOut)((message) => addMessage(message));
 
 /**
@@ -34582,6 +34594,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "deviceEventHandlers": () => (/* binding */ deviceEventHandlers),
 /* harmony export */   "addCleanUpFunction": () => (/* binding */ addCleanUpFunction),
 /* harmony export */   "setStatesInterpreterRunning": () => (/* binding */ setStatesInterpreterRunning),
+/* harmony export */   "setStdIn": () => (/* binding */ setStdIn),
+/* harmony export */   "getStdIn": () => (/* binding */ getStdIn),
 /* harmony export */   "setStdOut": () => (/* binding */ setStdOut),
 /* harmony export */   "getStdOut": () => (/* binding */ getStdOut),
 /* harmony export */   "setStdInfo": () => (/* binding */ setStdInfo),
@@ -34596,12 +34610,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "runJS": () => (/* binding */ runJS)
 /* harmony export */ });
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var fs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! fs */ "?8ca4");
 /**
  * @fileoverview defines helper functions for the JS Interpreter and its API.
  * (https://github.com/NeilFraser/JS-Interpreter)
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 
 
 
@@ -34770,6 +34786,30 @@ const addCleanUpFunction = function(fn) {
 let statesInterpreterRunning = false;
 const setStatesInterpreterRunning = function(val) {
   statesInterpreterRunning = val;
+};
+
+/**
+ * Defines the Interpreter's standard input function.
+ */
+let stdIn = null;
+if (fs__WEBPACK_IMPORTED_MODULE_1__.readFileSync) {
+  stdIn = fs__WEBPACK_IMPORTED_MODULE_1__.readFileSync(0, 'utf8');
+}
+
+/**
+ * Setteer for the Interpreter's standard input function
+ * @param {Function} fn new stdIn function
+ */
+const setStdIn = function(fn) {
+  stdIn = fn;
+};
+
+/**
+ * Getter for the Interpreter's standard input function.
+ * @return {Function} stdOut
+ */
+const getStdIn = function() {
+  return stdIn;
 };
 
 /**
@@ -39060,6 +39100,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.parse_int = function(block) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../blast_interpreter.js */ "../../src/blast_interpreter.js");
 /**
  * @fileoverview Generating JavaScript for strings blocks.
  * @author derwehr@gmail.com (Thomas Wehr)
@@ -39069,7 +39110,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-// import {apiFunctions} from './../blast_interpreter.js';
+
 
 
 // Remap blockly blocks to improve naming in xml.
@@ -39087,11 +39128,39 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.string_trim = blockly__WEBPACK_I
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.string_count = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.text_count;
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.string_replace = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.text_replace;
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.string_reverse = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.text_reverse;
-// Blockly.JavaScript['string_showPrompt'] = Blockly.JavaScript['text_prompt'];
-// TODO set default stdIn and overwrite in web.js
 
-// Add prompt function to the interpreter API.
-// apiFunctions.push(['prompt', prompt]);
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.string_showPrompt = function(block) {
+  console.log((0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getStdIn)());
+  let msg;
+  if (block.getField('TEXT')) {
+    // Internal message.
+    msg = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('TEXT'));
+  } else {
+    // External message.
+    msg = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(block, 'TEXT',
+        blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || '\'\'';
+  }
+  let code = `stdIn(${msg})`;
+  const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
+  if (toNumber) {
+    code = `Number(${code})`;
+  }
+  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_FUNCTION_CALL];
+};
+
+/**
+ * String input function
+ * @param {String} message the message to show
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {String} the input string
+ */
+const stdIn = async function(message, callback) {
+  const input = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getStdIn)();
+  const inputString = await input(message);
+  callback(inputString);
+};
+
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['stdIn', stdIn]);
 
 
 /***/ }),

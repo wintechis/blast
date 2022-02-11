@@ -27,4 +27,9 @@ module.exports = {
       Buffer: ['buffer', 'Buffer'],
     }),
   ],
+  resolve: {
+    fallback: {
+      'fs': false,
+    },
+  },
 };
