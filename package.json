@@ -24,7 +24,7 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@elgato-stream-deck/webhid": "^5.2.0",
-    "blockly": "^7.20211209.2",
+    "blockly": "^7.20211209.3",
     "buffer": "^6.0.3",
     "del": "^6.0.0",
     "eslint": "^7.15.0",

@@ -16,12 +16,9 @@ Blockly.Blocks['while_until'] = Blockly.Blocks['controls_whileUntil'];
 Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
 
 // add changed names to Loops constant to ensure correct execution.
-// Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.LOOP_TYPES.push(
-//     'repeat',
-//     'while_until',
-//     'for',
-// );
-// This is blocked by google/blockly#5910 (fixed, included in the next quarterly release).
+Blockly.blocks.all.loops.loopTypes.add('repeat');
+Blockly.blocks.all.loops.loopTypes.add('while_until');
+Blockly.blocks.all.loops.loopTypes.add('for');
 
 // Define inner block XML for the repeat block.
 const REPEAT_XML = `
