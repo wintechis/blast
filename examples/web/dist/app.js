@@ -33246,6 +33246,9 @@ const init = function() {
       },
     };
     menuOptions.push(screenshotOption);
+
+    // Adds a default-sized workspace comment to the workspace.
+    menuOptions.push(blockly__WEBPACK_IMPORTED_MODULE_0__.ContextMenu.workspaceCommentOption(workspace, e));
   }
 
   (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.initInterpreter)(workspace);
