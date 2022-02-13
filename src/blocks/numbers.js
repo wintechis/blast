@@ -31,7 +31,7 @@ Blockly.Blocks['parse_int'] = {
   init: function() {
     this.appendValueInput('number')
         .setCheck('String')
-        .appendField('Conver text');
+        .appendField('convert text');
     this.appendDummyInput()
         .appendField('to number');
     this.setOutput(true, 'Number');

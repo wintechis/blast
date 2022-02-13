@@ -33233,10 +33233,10 @@ const init = function() {
   workspace.configureContextMenu = configureContextMenu;
 
   /**
-   *
-   * @param {*} menuOptions
-   * @param {*} e
-   */
+    * Adds 'download screenshot' and 'add comment' to the context menu.
+    * @param {!ContextMenuRegistry.ContextMenuOption} menuOptions the context menu options.
+    * @param {!Event} e The right-click mouse event.
+    */
   function configureContextMenu(menuOptions, e) {
     const screenshotOption = {
       text: 'Download Screenshot',
@@ -33247,8 +33247,8 @@ const init = function() {
     };
     menuOptions.push(screenshotOption);
 
-    // Adds a default-sized workspace comment to the workspace.
-    menuOptions.push(blockly__WEBPACK_IMPORTED_MODULE_0__.ContextMenu.workspaceCommentOption(workspace, e));
+    // // Adds a default-sized workspace comment to the workspace.
+    // menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
   }
 
   (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.initInterpreter)(workspace);
@@ -38535,7 +38535,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.parse_int = {
   init: function() {
     this.appendValueInput('number')
         .setCheck('String')
-        .appendField('Conver text');
+        .appendField('convert text');
     this.appendDummyInput()
         .appendField('to number');
     this.setOutput(true, 'Number');
