@@ -11,7 +11,7 @@ Check [./docs/](docs/) for detailed documentation.
 Most of this application works out of the box. Just open the `index.html` file in your favorite Browser.
 If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
 
-The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/.
+The build pipeline deploys the current version to https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/.
 
 > :warning: **Blocks that perform fetch requests, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 

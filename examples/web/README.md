@@ -1,5 +1,5 @@
 # Web Example
-This example shows how to use BLAST in a web environment and can be previewed at [https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/prerequisites.html](https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/prerequisites.html).
+This example shows how to use BLAST in a web environment and can be previewed at [https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/](https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/).
 
 To use this demo locally just open `index.html` in your favorite Browser.
 
