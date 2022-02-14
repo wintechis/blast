@@ -15,6 +15,9 @@ import './ble_rgb_led_controller/generators.js';
 import './blinkstick/blocks.js';
 import './blinkstick/generators.js';
 
+import './bluetooth/blocks.js';
+import './bluetooth/generators.js';
+
 import './huskyduino/blocks.js';
 import './huskyduino/generators.js';
 
