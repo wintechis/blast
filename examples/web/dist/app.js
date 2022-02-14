@@ -40735,27 +40735,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ble_rgb_led_controller_generators_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ble_rgb_led_controller/generators.js */ "../../src/things/ble_rgb_led_controller/generators.js");
 /* harmony import */ var _blinkstick_blocks_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./blinkstick/blocks.js */ "../../src/things/blinkstick/blocks.js");
 /* harmony import */ var _blinkstick_generators_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./blinkstick/generators.js */ "../../src/things/blinkstick/generators.js");
-/* harmony import */ var _huskyduino_blocks_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./huskyduino/blocks.js */ "../../src/things/huskyduino/blocks.js");
-/* harmony import */ var _huskyduino_generators_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./huskyduino/generators.js */ "../../src/things/huskyduino/generators.js");
-/* harmony import */ var _joycon_blocks_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./joycon/blocks.js */ "../../src/things/joycon/blocks.js");
-/* harmony import */ var _joycon_generators_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./joycon/generators.js */ "../../src/things/joycon/generators.js");
-/* harmony import */ var _mirobot_blocks_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mirobot/blocks.js */ "../../src/things/mirobot/blocks.js");
-/* harmony import */ var _mirobot_generators_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./mirobot/generators.js */ "../../src/things/mirobot/generators.js");
-/* harmony import */ var _ruuvi_tag_blocks_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ruuvi_tag/blocks.js */ "../../src/things/ruuvi_tag/blocks.js");
-/* harmony import */ var _ruuvi_tag_generators_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ruuvi_tag/generators.js */ "../../src/things/ruuvi_tag/generators.js");
-/* harmony import */ var _solid_blocks_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./solid/blocks.js */ "../../src/things/solid/blocks.js");
-/* harmony import */ var _solid_generators_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./solid/generators.js */ "../../src/things/solid/generators.js");
-/* harmony import */ var _streamdeck_blocks_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./streamdeck/blocks.js */ "../../src/things/streamdeck/blocks.js");
-/* harmony import */ var _streamdeck_generators_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./streamdeck/generators.js */ "../../src/things/streamdeck/generators.js");
-/* harmony import */ var _web_speech_blocks_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./web_speech/blocks.js */ "../../src/things/web_speech/blocks.js");
-/* harmony import */ var _web_speech_generators_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./web_speech/generators.js */ "../../src/things/web_speech/generators.js");
-/* harmony import */ var _xiamoi_thermometer_blocks_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./xiamoi_thermometer/blocks.js */ "../../src/things/xiamoi_thermometer/blocks.js");
-/* harmony import */ var _xiamoi_thermometer_generators_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./xiamoi_thermometer/generators.js */ "../../src/things/xiamoi_thermometer/generators.js");
+/* harmony import */ var _bluetooth_blocks_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./bluetooth/blocks.js */ "../../src/things/bluetooth/blocks.js");
+/* harmony import */ var _bluetooth_generators_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./bluetooth/generators.js */ "../../src/things/bluetooth/generators.js");
+/* harmony import */ var _huskyduino_blocks_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./huskyduino/blocks.js */ "../../src/things/huskyduino/blocks.js");
+/* harmony import */ var _huskyduino_generators_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./huskyduino/generators.js */ "../../src/things/huskyduino/generators.js");
+/* harmony import */ var _joycon_blocks_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./joycon/blocks.js */ "../../src/things/joycon/blocks.js");
+/* harmony import */ var _joycon_generators_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./joycon/generators.js */ "../../src/things/joycon/generators.js");
+/* harmony import */ var _mirobot_blocks_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./mirobot/blocks.js */ "../../src/things/mirobot/blocks.js");
+/* harmony import */ var _mirobot_generators_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./mirobot/generators.js */ "../../src/things/mirobot/generators.js");
+/* harmony import */ var _ruuvi_tag_blocks_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ruuvi_tag/blocks.js */ "../../src/things/ruuvi_tag/blocks.js");
+/* harmony import */ var _ruuvi_tag_generators_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./ruuvi_tag/generators.js */ "../../src/things/ruuvi_tag/generators.js");
+/* harmony import */ var _solid_blocks_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./solid/blocks.js */ "../../src/things/solid/blocks.js");
+/* harmony import */ var _solid_generators_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./solid/generators.js */ "../../src/things/solid/generators.js");
+/* harmony import */ var _streamdeck_blocks_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./streamdeck/blocks.js */ "../../src/things/streamdeck/blocks.js");
+/* harmony import */ var _streamdeck_generators_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./streamdeck/generators.js */ "../../src/things/streamdeck/generators.js");
+/* harmony import */ var _web_speech_blocks_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./web_speech/blocks.js */ "../../src/things/web_speech/blocks.js");
+/* harmony import */ var _web_speech_generators_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./web_speech/generators.js */ "../../src/things/web_speech/generators.js");
+/* harmony import */ var _xiamoi_thermometer_blocks_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! ./xiamoi_thermometer/blocks.js */ "../../src/things/xiamoi_thermometer/blocks.js");
+/* harmony import */ var _xiamoi_thermometer_generators_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! ./xiamoi_thermometer/generators.js */ "../../src/things/xiamoi_thermometer/generators.js");
 /**
  * @fileoverview All the things blocks and generators.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
+
+
 
 
 
@@ -41049,160 +41054,6 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.capture_image = {
 
 // Add capture_image block to the toolbox.
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('capture_image', 'Actions');
- 
-/*******************
-  * Property blocks.*
-  *******************/
-  
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.get_signal_strength_wb = {
-  /**
-     * Block for reading the strength of the signal (rssiValue property) sent by a ble device,
-     * measured at the sc-ble-adapter.
-     * @this {Blockly.Block}
-     */
-  init: function() {
-    this.appendValueInput('Thing')
-        .setCheck('Thing')
-        .appendField('read signal-strength property of Bluetooth device');
-    this.setOutput(true, ['String', 'Number']);
-    this.setColour(255);
-    this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a BLE device, measured at the at the BLAST client.');
-    this.setHelpUrl('');
-    this.firstTime = true;
-    this.deviceId = '';
-  },
-  onchange: function() {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        blockly__WEBPACK_IMPORTED_MODULE_0__.dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later.`);
-        this.dispose();
-      }
-    }
-  },
-};
-// Add get_signal_strength_wb block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('get_signal_strength_wb', 'Properties');
-
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.write_eddystone_property = {
-  /**
-   * Block for writing a property to an eddystone device.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendDummyInput('Property')
-        .appendField('write')
-        .appendField(
-            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
-              ['advertised tx power', 'advertisedTxPower'],
-              ['advertisement data', 'advertisementData'],
-              ['advertising interval', 'advertisingInterval'],
-              ['radio tx power', 'radioTxPower'],
-            ], this.propertyValidator,
-            ), 'Property')
-        .appendField('property at slot');
-    this.appendValueInput('Slot')
-        .setCheck('Number');
-    this.appendDummyInput('FrameType')
-        .appendField('frame type')
-        .appendField(
-            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
-              ['UID', 'UID'],
-              ['URL', 'URL'],
-            ], this.frameTypeValidator), 'FrameType')
-        .setVisible(false);
-    this.appendValueInput('Value')
-        .appendField('value')
-        .setCheck('Number');
-    this.appendValueInput('Thing')
-        .appendField('to Eddystone device')
-        .setCheck('Thing');
-    this.setPreviousStatement(true, null);
-    this.setInputsInline(true);
-    this.setNextStatement(true, null);
-    this.setColour(255);
-    this.setTooltip('Writes a property to an Eddystone device.');
-    this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
-  },
-  propertyValidator: function(property) {
-    const block = this.getSourceBlock();
-    const frameType = block.getInput('FrameType');
-    frameType.setVisible(false);
-    if (property == 'advertisementData') {
-      frameType.setVisible(true);
-    } else {
-      block.getInput('Value').setCheck('Number');
-    }
-  },
-  frameTypeValidator: function(frameType) {
-    const block = this.getSourceBlock();
-    if (frameType === 'UID') {
-      block.getInput('Value').setCheck('String');
-    } else if (frameType === 'URL') {
-      block.getInput('Value').setCheck('URI');
-    }
-  },
-};
-
-// Define inner block XML for the write_eddystone_property block.
-const WRITE_EDDYSTONE_PROPERTY_XML = `
-<block type="write_eddystone_property">
-  <value name="Slot">
-    <block type="math_number">
-      <field name="NUM">0</field>
-    </block>
-  </value>
-</block>`;
-
-// Add write_eddystone_property block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('write_eddystone_property', 'Properties', WRITE_EDDYSTONE_PROPERTY_XML);
-
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.read_eddystone_property = {
-  /**
-   * Block for reading a property from an eddystone device.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendDummyInput('Property')
-        .appendField('read')
-        .appendField(
-            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
-              ['advertised tx power', 'advertisedTxPower'],
-              ['advertisement data', 'advertisementData'],
-              ['advertising interval', 'advertisingInterval'],
-              ['lock state', 'lockState'],
-              ['public ECDH key', 'publicECDHKey'],
-              ['radio tx power', 'radioTxPower'],
-            ]), 'Property')
-        .appendField('property');
-    this.appendValueInput('Slot')
-        .setCheck('Number')
-        .appendField('at slot');
-    this.appendValueInput('Thing')
-        .appendField('of Eddystone device')
-        .setCheck('Thing');
-    this.setOutput(true, ['String', 'Number']);
-    this.setColour(255);
-    this.setInputsInline(true);
-    this.setTooltip('Reads a property from an Eddystone device.');
-    this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
-  },
-};
-
-// Define inner block XML for the read_eddystone_property block.
-const READ_EDDYSTONE_PROPERTY_XML = `
-<block type="read_eddystone_property">
-  <value name="Slot">
-    <block type="math_number">
-      <field name="NUM">0</field>
-    </block>
-  </value>
-</block>`;
-
-// Add read_eddystone_property block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
 
 
 /***/ }),
@@ -41556,223 +41407,6 @@ const captureImage = async function(callback) {
 // add capture_image method to the interpreter's API.
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['captureImage', captureImage]);
 
-/*******************
- * Property blocks.*
- *******************/
-
-/**
- * Generates JavaScript code for the get_signal_strength block.
- * @param {Blockly.Block} block the get_signal_strength block.
- * @returns {String} the generated code.
- */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.get_signal_strength_wb = function(block) {
-  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Thing',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE);
-  const code = `getRSSIWb(${thing})`;
-
-  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
-};
-
-/**
- * Get the RSSI of a bluetooth device, using webBluetooth.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-const getRSSIWb = async function(webBluetoothId, callback) {
-  const devices = await navigator.bluetooth.getDevices();
-  let device = null;
-
-  for (const d of devices) {
-    if (d.id === webBluetoothId) {
-      device = d;
-      break;
-    }
-  }
-  if (device == null) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('Error pairing with Bluetooth device.');
-  }
-
-  const abortController = new AbortController();
-
-  device.addEventListener('advertisementreceived', async(evt) => {
-    // Stop watching advertisements
-    abortController.abort();
-    // Advertisement data can be read from |evt|.
-    callback(evt.rssi);
-  });
-
-  await device.watchAdvertisements({signal: abortController.signal});
-};
-// add getRSSIWb method to the interpreter's API.
-_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
-
-/**
- * Generates JavaScript code for the write_eddystone_property block.
- * @param {Blockly.Block} block the get_signal_strength block.
- * @returns {String} the generated code.
- */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.write_eddystone_property = function(block) {
-  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Thing',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
-  const property = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('Property'));
-  const slot = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Slot',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
-  const value = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Value',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
-  const frameType = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('FrameType'));
-  
-  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${frameType}, ${value});\n`;
-  return code;
-};
-
-const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
-_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_4__.optionalServices.push(eddystoneServiceUUID);
-
-/**
- * Writes an Eddystone property to a bluetooth device.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {number} slot The slot to write to.
- * @param {String} property The property to write.
- * @param {String} frameType The eddystone frame type to write.
- * @param {String} value The value to write.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- */
-const writeEddystoneProperty = async function(
-    webBluetoothId, slot, property, frameType, value, callback) {
-  // make sure a device block is connected
-  if (!webBluetoothId) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No bluetooth device set.');
-    callback();
-    return;
-  }
-
-  // make sure a slot is set
-  if (slot === null || slot === undefined) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No slot set.');
-    callback();
-    return;
-  }
-
-  // make sure a property is set
-  if (!property) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No property set.');
-    callback();
-    return;
-  }
-  
-  // Set the active slot.
-  await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setActiveSlot)(webBluetoothId, slot);
-
-  // write the property
-  switch (property) {
-    case 'advertisedTxPower':
-      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setAdvertisedTxPower)(webBluetoothId, value);
-      break;
-    case 'advertisementData':
-      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setAdvertisingData)(webBluetoothId, frameType, value);
-      break;
-    case 'advertisingInterval':
-      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setAdvertisingInterval)(webBluetoothId, value);
-      break;
-    case 'radioTxPower':
-      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setTxPowerLevel)(webBluetoothId, value);
-      break;
-  }
-  callback();
-};
-
-// add writeEddystoneProperty method to the interpreter's API.
-_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
-
-/**
- * Generates JavaScript code for the read_eddystone_property block.
- * @param {Blockly.Block} block the get_signal_strength block.
- * @returns {String} the generated code.
- */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.read_eddystone_property = function(block) {
-  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Thing',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
-  const property = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('Property'));
-  const slot = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'Slot',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
-  const code = `readEddystoneProperty(${thing}, ${slot}, ${property})`;
-
-  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
-};
-
-/**
- * Reads an Eddystone property from a bluetooth device.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {number} slot The slot to read from.
- * @param {String} property The property to read.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- */
-const readEddystoneProperty = async function(webBluetoothId, slot, property, callback) {
-  // make sure a device block is connected
-  if (!webBluetoothId) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No bluetooth device set.');
-    callback();
-    return;
-  }
-
-  // make sure a slot is set
-  if (slot === null || slot === undefined) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No slot set.');
-    callback();
-    return;
-  }
-
-  // make sure a property is set
-  if (!property) {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('No property set.');
-    callback();
-    return;
-  }
-
-  // Set the active slot.
-  await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.setActiveSlot)(webBluetoothId, slot);
-
-  // read the property
-  let value = null;
-  switch (property) {
-    case 'advertisedTxPower':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getAdvertisedTxPower)(webBluetoothId);
-      break;
-    case 'advertisementData':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getAdvertisingData)(webBluetoothId);
-      break;
-    case 'advertisingInterval':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getAdvertisingInterval)(webBluetoothId);
-      break;
-    case 'lockState':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getLockState)(webBluetoothId);
-      break;
-    case 'publicECDHKey':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getPublicECDHKey)(webBluetoothId);
-      break;
-    case 'radioTxPower':
-      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__.getTxPowerLevel)(webBluetoothId);
-      break;
-  }
-  callback(value);
-};
-
-// Add readEddystoneProperty method to the interpreter's API.
-_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
-
 
 /***/ }),
 
@@ -42098,6 +41732,436 @@ const blinkstickSetColors = async function(id, index, colour, callback) {
 
 // add joycon_read_property function to the interpreter's API.
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);
+
+
+/***/ }),
+
+/***/ "../../src/things/bluetooth/blocks.js":
+/*!********************************************!*\
+  !*** ../../src/things/bluetooth/blocks.js ***!
+  \********************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_toolbox.js */ "../../src/blast_toolbox.js");
+/**
+ * @fileoverview Blocks definitions for (generic) Bluetooth blocks.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+
+
+
+
+
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.get_signal_strength_wb = {
+  /**
+       * Block for reading the strength of the signal (rssiValue property) sent by a ble device,
+       * measured at the sc-ble-adapter.
+       * @this {Blockly.Block}
+       */
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('read signal-strength property of Bluetooth device');
+    this.setOutput(true, ['String', 'Number']);
+    this.setColour(255);
+    this.setTooltip('Reads the strength of the signal (rssiValue property) sent by a BLE device, measured at the at the BLAST client.');
+    this.setHelpUrl('');
+    this.firstTime = true;
+    this.deviceId = '';
+  },
+  onchange: function() {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        blockly__WEBPACK_IMPORTED_MODULE_0__.dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+// Add get_signal_strength_wb block to the toolbox.
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('get_signal_strength_wb', 'Properties');
+  
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.write_eddystone_property = {
+  /**
+     * Block for writing a property to an eddystone device.
+     * @this {Blockly.Block}
+     */
+  init: function() {
+    this.appendDummyInput('Property')
+        .appendField('write')
+        .appendField(
+            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
+              ['advertised tx power', 'advertisedTxPower'],
+              ['advertisement data', 'advertisementData'],
+              ['advertising interval', 'advertisingInterval'],
+              ['radio tx power', 'radioTxPower'],
+            ], this.propertyValidator,
+            ), 'Property')
+        .appendField('property at slot');
+    this.appendValueInput('Slot')
+        .setCheck('Number');
+    this.appendDummyInput('FrameType')
+        .appendField('frame type')
+        .appendField(
+            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
+              ['UID', 'UID'],
+              ['URL', 'URL'],
+            ], this.frameTypeValidator), 'FrameType')
+        .setVisible(false);
+    this.appendValueInput('Value')
+        .appendField('value')
+        .setCheck('Number');
+    this.appendValueInput('Thing')
+        .appendField('to Eddystone device')
+        .setCheck('Thing');
+    this.setPreviousStatement(true, null);
+    this.setInputsInline(true);
+    this.setNextStatement(true, null);
+    this.setColour(255);
+    this.setTooltip('Writes a property to an Eddystone device.');
+    this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
+  },
+  propertyValidator: function(property) {
+    const block = this.getSourceBlock();
+    const frameType = block.getInput('FrameType');
+    frameType.setVisible(false);
+    if (property == 'advertisementData') {
+      frameType.setVisible(true);
+    } else {
+      block.getInput('Value').setCheck('Number');
+    }
+  },
+  frameTypeValidator: function(frameType) {
+    const block = this.getSourceBlock();
+    if (frameType === 'UID') {
+      block.getInput('Value').setCheck('String');
+    } else if (frameType === 'URL') {
+      block.getInput('Value').setCheck('URI');
+    }
+  },
+};
+  
+// Define inner block XML for the write_eddystone_property block.
+const WRITE_EDDYSTONE_PROPERTY_XML = `
+  <block type="write_eddystone_property">
+    <value name="Slot">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+  </block>`;
+  
+// Add write_eddystone_property block to the toolbox.
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('write_eddystone_property', 'Properties', WRITE_EDDYSTONE_PROPERTY_XML);
+  
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.read_eddystone_property = {
+  /**
+     * Block for reading a property from an eddystone device.
+     * @this {Blockly.Block}
+     */
+  init: function() {
+    this.appendDummyInput('Property')
+        .appendField('read')
+        .appendField(
+            new blockly__WEBPACK_IMPORTED_MODULE_0__.FieldDropdown([
+              ['advertised tx power', 'advertisedTxPower'],
+              ['advertisement data', 'advertisementData'],
+              ['advertising interval', 'advertisingInterval'],
+              ['lock state', 'lockState'],
+              ['public ECDH key', 'publicECDHKey'],
+              ['radio tx power', 'radioTxPower'],
+            ]), 'Property')
+        .appendField('property');
+    this.appendValueInput('Slot')
+        .setCheck('Number')
+        .appendField('at slot');
+    this.appendValueInput('Thing')
+        .appendField('of Eddystone device')
+        .setCheck('Thing');
+    this.setOutput(true, ['String', 'Number']);
+    this.setColour(255);
+    this.setInputsInline(true);
+    this.setTooltip('Reads a property from an Eddystone device.');
+    this.setHelpUrl('https://github.com/google/eddystone/tree/master/configuration-service');
+  },
+};
+  
+// Define inner block XML for the read_eddystone_property block.
+const READ_EDDYSTONE_PROPERTY_XML = `
+  <block type="read_eddystone_property">
+    <value name="Slot">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+  </block>`;
+  
+// Add read_eddystone_property block to the toolbox.
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
+  
+ 
+
+
+/***/ }),
+
+/***/ "../../src/things/bluetooth/generators.js":
+/*!************************************************!*\
+  !*** ../../src/things/bluetooth/generators.js ***!
+  \************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
+/* harmony import */ var _blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../blast_eddystone.js */ "../../src/blast_eddystone.js");
+/* harmony import */ var _blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../blast_webBluetooth.js */ "../../src/blast_webBluetooth.js");
+/**
+ * @fileoverview Javascript generators for (generic) bluetooth blocks.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ * Generates JavaScript code for the get_signal_strength block.
+ * @param {Blockly.Block} block the get_signal_strength block.
+ * @returns {String} the generated code.
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.get_signal_strength_wb = function(block) {
+  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Thing',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE);
+  const code = `getRSSIWb(${thing})`;
+  
+  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+};
+  
+/**
+   * Get the RSSI of a bluetooth device, using webBluetooth.
+   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+   * @public
+   */
+const getRSSIWb = async function(webBluetoothId, callback) {
+  const devices = await navigator.bluetooth.getDevices();
+  let device = null;
+  
+  for (const d of devices) {
+    if (d.id === webBluetoothId) {
+      device = d;
+      break;
+    }
+  }
+  if (device == null) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('Error pairing with Bluetooth device.');
+  }
+  
+  const abortController = new AbortController();
+  
+  device.addEventListener('advertisementreceived', async(evt) => {
+    // Stop watching advertisements
+    abortController.abort();
+    // Advertisement data can be read from |evt|.
+    callback(evt.rssi);
+  });
+  
+  await device.watchAdvertisements({signal: abortController.signal});
+};
+  // add getRSSIWb method to the interpreter's API.
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
+  
+/**
+   * Generates JavaScript code for the write_eddystone_property block.
+   * @param {Blockly.Block} block the get_signal_strength block.
+   * @returns {String} the generated code.
+   */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.write_eddystone_property = function(block) {
+  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Thing',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
+  const property = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Slot',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
+  const value = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Value',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
+  const frameType = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('FrameType'));
+    
+  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${frameType}, ${value});\n`;
+  return code;
+};
+  
+const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
+_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_3__.optionalServices.push(eddystoneServiceUUID);
+  
+/**
+   * Writes an Eddystone property to a bluetooth device.
+   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+   * @param {number} slot The slot to write to.
+   * @param {String} property The property to write.
+   * @param {String} frameType The eddystone frame type to write.
+   * @param {String} value The value to write.
+   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+   */
+const writeEddystoneProperty = async function(
+    webBluetoothId, slot, property, frameType, value, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No bluetooth device set.');
+    callback();
+    return;
+  }
+  
+  // make sure a slot is set
+  if (slot === null || slot === undefined) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No slot set.');
+    callback();
+    return;
+  }
+  
+  // make sure a property is set
+  if (!property) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No property set.');
+    callback();
+    return;
+  }
+    
+  // Set the active slot.
+  await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setActiveSlot)(webBluetoothId, slot);
+  
+  // write the property
+  switch (property) {
+    case 'advertisedTxPower':
+      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setAdvertisedTxPower)(webBluetoothId, value);
+      break;
+    case 'advertisementData':
+      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setAdvertisingData)(webBluetoothId, frameType, value);
+      break;
+    case 'advertisingInterval':
+      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setAdvertisingInterval)(webBluetoothId, value);
+      break;
+    case 'radioTxPower':
+      await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setTxPowerLevel)(webBluetoothId, value);
+      break;
+  }
+  callback();
+};
+  
+// add writeEddystoneProperty method to the interpreter's API.
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
+  
+/**
+   * Generates JavaScript code for the read_eddystone_property block.
+   * @param {Blockly.Block} block the get_signal_strength block.
+   * @returns {String} the generated code.
+   */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.read_eddystone_property = function(block) {
+  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Thing',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
+  const property = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('Property'));
+  const slot = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Slot',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE) || null;
+  const code = `readEddystoneProperty(${thing}, ${slot}, ${property})`;
+  
+  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+};
+  
+/**
+   * Reads an Eddystone property from a bluetooth device.
+   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+   * @param {number} slot The slot to read from.
+   * @param {String} property The property to read.
+   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+   */
+const readEddystoneProperty = async function(webBluetoothId, slot, property, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No bluetooth device set.');
+    callback();
+    return;
+  }
+  
+  // make sure a slot is set
+  if (slot === null || slot === undefined) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No slot set.');
+    callback();
+    return;
+  }
+  
+  // make sure a property is set
+  if (!property) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No property set.');
+    callback();
+    return;
+  }
+  
+  // Set the active slot.
+  await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.setActiveSlot)(webBluetoothId, slot);
+  
+  // read the property
+  let value = null;
+  switch (property) {
+    case 'advertisedTxPower':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getAdvertisedTxPower)(webBluetoothId);
+      break;
+    case 'advertisementData':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getAdvertisingData)(webBluetoothId);
+      break;
+    case 'advertisingInterval':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getAdvertisingInterval)(webBluetoothId);
+      break;
+    case 'lockState':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getLockState)(webBluetoothId);
+      break;
+    case 'publicECDHKey':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getPublicECDHKey)(webBluetoothId);
+      break;
+    case 'radioTxPower':
+      value = await (0,_blast_eddystone_js__WEBPACK_IMPORTED_MODULE_2__.getTxPowerLevel)(webBluetoothId);
+      break;
+  }
+  callback(value);
+};
+  
+// Add readEddystoneProperty method to the interpreter's API.
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
+  
 
 
 /***/ }),
@@ -43468,14 +43532,12 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.upload_image = {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
 /* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
-/* harmony import */ var _inrupt_solid_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inrupt/solid-client */ "../../node_modules/@inrupt/solid-client/dist/resource/file.mjs");
-Object(function webpackMissingModule() { var e = new Error("Cannot find module '@inrupt/solid-client-authn-browser'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/* harmony import */ var _inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/solid-client */ "../../node_modules/@inrupt/solid-client/dist/resource/file.mjs");
 /**
  * @fileoverview Javascript generators for solid Blocks.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-
 
 
 
@@ -43514,8 +43576,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.upload_image = function(block) {
 const uploadImage = async function(image, url, callback) {
   const file = new File([image], 'image.png', {type: 'image/png'});
   try {
-    await Object(function webpackMissingModule() { var e = new Error("Cannot find module '@inrupt/solid-client-authn-browser'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())();
-    await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_3__.saveFileInContainer)(url, file);
+    await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__.saveFileInContainer)(url, file);
   } catch (e) {
     (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(e);
     console.error(e);
