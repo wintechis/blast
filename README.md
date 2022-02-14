@@ -51,10 +51,9 @@ The BLAST library allows developers to customize its output method to adapt to t
 
 ### Building
 In order to build BLAST yourself, follow these steps:
-1. install [node.js](https://nodejs.org/en/)
-2. run `npm install` from within the root directory
-3. run `npm run build` from within the root directory
-This will parse all js files from `src` analyze them, remove dead code and rewrite and minimize whats left into `js/blast.min.js` which is imported in the `index.html`.
+1. install [yarn](https://yarnpkg.com/)
+2. run `yarn` from within the root directory
+3. run `yarn run build` from within the root directory
 
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
