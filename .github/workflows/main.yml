@@ -48,6 +48,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
+          rm: true
           source: "./examples/web/"
           target: "./public_html/testing/blast/"
   deploy_ren:
