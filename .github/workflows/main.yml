@@ -49,7 +49,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           rm: true
-          source: "./examples/web/"
+          source: "./"
           target: "./public_html/testing/blast/"
   deploy_ren:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
-          source: "./examples/web/"
+          source: "./"
           target: "./public_html/testing/ren/"
   jsdocs:
     runs-on: ubuntu-latest
