@@ -199,25 +199,6 @@ Blockly.Blocks['display_text'] = {
 };
 // Add display_text block to the toolbox.
 addBlock('display_text', 'Actions');
-       
-Blockly.Blocks['display_table'] = {
-  /**
-        * Block for outputting data tables (rdf graphs).
-        * @this {Blockly.Block}
-        */
-  init: function() {
-    this.appendValueInput('table')
-        .setCheck(['Array'])
-        .appendField('display table');
-    this.setColour(0);
-    this.setTooltip('Add data output to the container on the right.');
-    this.setHelpUrl('');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-  },
-};
-// Add display_table block to the toolbox.
-addBlock('display_table', 'Actions');
    
 Blockly.Blocks['play_audio'] = {
   /**
@@ -261,26 +242,6 @@ Blockly.Blocks['capture_image'] = {
 
 // Add capture_image block to the toolbox.
 addBlock('capture_image', 'Actions');
-
-Blockly.Blocks['display_image'] = {
-  /**
-   * Block for displaying an image.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendValueInput('image')
-        .setCheck('Image')
-        .appendField('display image');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(0);
-    this.setTooltip('Displays an image.');
-    this.setHelpUrl('');
-  },
-};
-
-// Add display_image block to the toolbox.
-addBlock('display_image', 'Actions');
  
 /*******************
   * Property blocks.*

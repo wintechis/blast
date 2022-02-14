@@ -33146,6 +33146,190 @@ function config (name) {
 
 /***/ }),
 
+/***/ "./src/blocks.js":
+/*!***********************!*\
+  !*** ./src/blocks.js ***!
+  \***********************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../../src/blast_toolbox.js */ "../../src/blast_toolbox.js");
+/**
+ * @fileoverview Additional Blocks definitions for BLAST web example.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+       
+
+
+
+
+
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.display_table = {
+  /**
+          * Block for outputting data tables (rdf graphs).
+          * @this {Blockly.Block}
+          */
+  init: function() {
+    this.appendValueInput('table')
+        .setCheck(['Array'])
+        .appendField('display table');
+    this.setColour(0);
+    this.setTooltip('Add data output to the container on the right.');
+    this.setHelpUrl('');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+  },
+};
+// Add display_table block to the toolbox.
+(0,_src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('display_table', 'Actions');
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.display_image = {
+  /**
+     * Block for displaying an image.
+     * @this {Blockly.Block}
+     */
+  init: function() {
+    this.appendValueInput('image')
+        .setCheck('Image')
+        .appendField('display image');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('Displays an image.');
+    this.setHelpUrl('');
+  },
+};
+  
+// Add display_image block to the toolbox.
+(0,_src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('display_image', 'Actions');
+
+
+/***/ }),
+
+/***/ "./src/generators.js":
+/*!***************************!*\
+  !*** ./src/generators.js ***!
+  \***************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _web_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./web.js */ "./src/web.js");
+/* harmony import */ var _src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../src/blast_interpreter.js */ "../../src/blast_interpreter.js");
+/**
+ * @fileoverview Javascript generators for additional Blocks of BLAST web example.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+
+
+
+
+
+
+
+/**
+ * Generates JavaScript code for the capture_image block.
+ * @param {Blockly.Block} block the display_image block.
+ * @returns {String} the generated code.
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.display_image = function(block) {
+  const image = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'image',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
+  );
+  
+        
+  // This block only works if you define displayImage in your Environmnet
+  // and add it to the interpreter's API. See examples/web for an example.
+  const code = `displayImage(${image});\n`;
+  return code;
+};
+
+/**
+ * Adds an image to {@link Blast.Ui.messageOutputContainer}.
+ * @param {string} image base64 encoded image.
+ */
+const displayImage = function(image) {
+  const img = document.createElement('img');
+  img.src = image;
+  img.classList.add('output_image');
+  (0,_web_js__WEBPACK_IMPORTED_MODULE_1__.addElementToOutputContainer)(img);
+};
+  
+// Add displayImage method to the interpreter's API.
+_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.apiFunctions.push(['displayImage', displayImage]);
+
+/**
+ * Generates JavaScript code for the display_table block.
+ * @param {Blockly.Block} block the display_table block.
+ * @returns {String} the generated code.
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.display_table = function(block) {
+  const table = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'table',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
+  );
+        
+  // This block only works if you define displayTable in your Environmnet
+  // and add it to the interpreter's API. See examples/web for an example.
+  const code = `displayTable(${table});\n`;
+  return code;
+};
+
+/**
+ * Generates an HTML Table from a sparql query result (array of arrays).
+ * and add it to {@link Blast.Ui.messageOutputContainer}.
+ * @param {graph} arr graph to output.
+ * @public
+ */
+const displayTable = function(arr) {
+  arr = (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.getInterpreter)().pseudoToNative(arr);
+  // display message if table is empty
+  if (arr.length == 0) {
+    const stdOut = getStdOut();
+    stdOut('empty table');
+    return;
+  }
+    
+  // create table
+  const table = document.createElement('table');
+  table.classList.add('output_table');
+  
+  // insert rows
+  for (const row of arr) {
+    const tr = document.createElement('tr');
+    if (row === undefined) {
+      continue;
+    }
+    for (const value of row) {
+      if (value === undefined) {
+        continue;
+      }
+      const td = document.createElement('td');
+      td.innerHTML = value;
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  
+  // Insert new table
+  (0,_web_js__WEBPACK_IMPORTED_MODULE_1__.addElementToOutputContainer)(table);
+};
+  // Add displayTable method to the interpreter's API.
+_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.apiFunctions.push(['displayTable', displayTable]);
+  
+
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -33166,6 +33350,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _src_blocks_all_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../../src/blocks/all.js */ "../../src/blocks/all.js");
 /* harmony import */ var _src_generators_all_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../src/generators/all.js */ "../../src/generators/all.js");
 /* harmony import */ var _src_things_all_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../../src/things/all.js */ "../../src/things/all.js");
+/* harmony import */ var _blocks_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./blocks.js */ "./src/blocks.js");
+/* harmony import */ var _generators_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./generators.js */ "./src/generators.js");
 /**
  * @fileoverview Core JavaScript library for Blast.
  * https://github.com/wintechis/blast
@@ -33191,6 +33377,10 @@ __webpack_require__.r(__webpack_exports__);
 
 // import block blast files to include them in bundled code.
 
+
+
+
+// import additional block definitions for web example
 
 
 
@@ -33447,8 +33637,6 @@ __webpack_require__.r(__webpack_exports__);
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-
-
 
 
 
@@ -33935,62 +34123,6 @@ const initUi = function(ws) {
 
   setStatus(_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.statusValues.READY);
 };
-
-/**
- * Generates an HTML Table from a sparql query result (array of arrays).
- * and add it to {@link Blast.Ui.messageOutputContainer}.
- * @param {graph} arr graph to output.
- * @public
- */
-const displayTable = function(arr) {
-  arr = (0,_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().pseudoToNative(arr);
-  // display message if table is empty
-  if (arr.length == 0) {
-    const stdOut = getStdOut();
-    stdOut('empty table');
-    return;
-  }
-  
-  // create table
-  const table = document.createElement('table');
-  table.classList.add('output_table');
-
-  // insert rows
-  for (const row of arr) {
-    const tr = document.createElement('tr');
-    if (row === undefined) {
-      continue;
-    }
-    for (const value of row) {
-      if (value === undefined) {
-        continue;
-      }
-      const td = document.createElement('td');
-      td.innerHTML = value;
-      tr.appendChild(td);
-    }
-    table.appendChild(tr);
-  }
-
-  // Insert new table
-  addElementToOutputContainer(table);
-};
-// Add displayTable method to the interpreter's API.
-_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.apiFunctions.push(['displayTable', displayTable]);
-
-/**
- * Adds an image to {@link Blast.Ui.messageOutputContainer}.
- * @param {string} image base64 encoded image.
- */
-const displayImage = function(image) {
-  const img = document.createElement('img');
-  img.src = image;
-  img.classList.add('output_image');
-  addElementToOutputContainer(img);
-};
-
-// Add displayImage method to the interpreter's API.
-_src_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.apiFunctions.push(['displayImage', displayImage]);
 
 
 /***/ }),
@@ -39450,25 +39582,6 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.display_text = {
 };
 // Add display_text block to the toolbox.
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('display_text', 'Actions');
-       
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.display_table = {
-  /**
-        * Block for outputting data tables (rdf graphs).
-        * @this {Blockly.Block}
-        */
-  init: function() {
-    this.appendValueInput('table')
-        .setCheck(['Array'])
-        .appendField('display table');
-    this.setColour(0);
-    this.setTooltip('Add data output to the container on the right.');
-    this.setHelpUrl('');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-  },
-};
-// Add display_table block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('display_table', 'Actions');
    
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.play_audio = {
   /**
@@ -39512,26 +39625,6 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.capture_image = {
 
 // Add capture_image block to the toolbox.
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('capture_image', 'Actions');
-
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.display_image = {
-  /**
-   * Block for displaying an image.
-   * @this {Blockly.Block}
-   */
-  init: function() {
-    this.appendValueInput('image')
-        .setCheck('Image')
-        .appendField('display image');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
-    this.setColour(0);
-    this.setTooltip('Displays an image.');
-    this.setHelpUrl('');
-  },
-};
-
-// Add display_image block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('display_image', 'Actions');
  
 /*******************
   * Property blocks.*
@@ -39942,24 +40035,6 @@ const displayText = function(text) {
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.apiFunctions.push(['displayText', displayText]);
     
 /**
- * Generates JavaScript code for the display_table block.
- * @param {Blockly.Block} block the display_table block.
- * @returns {String} the generated code.
- */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.display_table = function(block) {
-  const table = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'table',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
-  );
-    
-  // This block only works if you define displayTable in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
-  const code = `displayTable(${table});\n`;
-  return code;
-};
-    
-/**
  * Generates JavaScript code for the play_audio block.
  * @param {Blockly.Block} block the play_audio block.
  * @returns {String} the generated code.
@@ -40056,25 +40131,6 @@ const captureImage = async function(callback) {
 
 // add capture_image method to the interpreter's API.
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.asyncApiFunctions.push(['captureImage', captureImage]);
-
-/**
- * Generates JavaScript code for the capture_image block.
- * @param {Blockly.Block} block the display_image block.
- * @returns {String} the generated code.
- */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.display_image = function(block) {
-  const image = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
-      block,
-      'image',
-      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
-  );
-
-      
-  // This block only works if you define displayImage in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
-  const code = `displayImage(${image});\n`;
-  return code;
-};
 
 /*******************
  * Property blocks.*

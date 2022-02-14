@@ -237,24 +237,6 @@ const displayText = function(text) {
 apiFunctions.push(['displayText', displayText]);
     
 /**
- * Generates JavaScript code for the display_table block.
- * @param {Blockly.Block} block the display_table block.
- * @returns {String} the generated code.
- */
-Blockly.JavaScript['display_table'] = function(block) {
-  const table = Blockly.JavaScript.valueToCode(
-      block,
-      'table',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-    
-  // This block only works if you define displayTable in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
-  const code = `displayTable(${table});\n`;
-  return code;
-};
-    
-/**
  * Generates JavaScript code for the play_audio block.
  * @param {Blockly.Block} block the play_audio block.
  * @returns {String} the generated code.
@@ -351,25 +333,6 @@ const captureImage = async function(callback) {
 
 // add capture_image method to the interpreter's API.
 asyncApiFunctions.push(['captureImage', captureImage]);
-
-/**
- * Generates JavaScript code for the capture_image block.
- * @param {Blockly.Block} block the display_image block.
- * @returns {String} the generated code.
- */
-Blockly.JavaScript['display_image'] = function(block) {
-  const image = Blockly.JavaScript.valueToCode(
-      block,
-      'image',
-      Blockly.JavaScript.ORDER_NONE,
-  );
-
-      
-  // This block only works if you define displayImage in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
-  const code = `displayImage(${image});\n`;
-  return code;
-};
 
 /*******************
  * Property blocks.*
