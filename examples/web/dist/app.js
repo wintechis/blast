@@ -7450,6 +7450,396 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 /***/ }),
 
+/***/ "../../node_modules/http-link-header/lib/link.js":
+/*!*******************************************************!*\
+  !*** ../../node_modules/http-link-header/lib/link.js ***!
+  \*******************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+/* provided dependency */ var Buffer = __webpack_require__(/*! buffer */ "../../node_modules/buffer/index.js")["Buffer"];
+
+
+var COMPATIBLE_ENCODING_PATTERN = /^utf-?8|ascii|utf-?16-?le|ucs-?2|base-?64|latin-?1$/i
+var WS_TRIM_PATTERN = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g
+var WS_CHAR_PATTERN = /\s|\uFEFF|\xA0/
+var WS_FOLD_PATTERN = /\r?\n[\x20\x09]+/g
+var DELIMITER_PATTERN = /[;,"]/
+var WS_DELIMITER_PATTERN = /[;,"]|\s/
+
+/**
+ * Token character pattern
+ * @type {RegExp}
+ * @see https://tools.ietf.org/html/rfc7230#section-3.2.6
+ */
+var TOKEN_PATTERN = /^[!#$%&'*+\-\.^_`|~\da-zA-Z]+$/
+
+var STATE = {
+  IDLE: 1 << 0,
+  URI: 1 << 1,
+  ATTR: 1 << 2,
+}
+
+function trim( value ) {
+  return value.replace( WS_TRIM_PATTERN, '' )
+}
+
+function hasWhitespace( value ) {
+  return WS_CHAR_PATTERN.test( value )
+}
+
+function skipWhitespace( value, offset ) {
+  while( hasWhitespace( value[offset] ) ) {
+    offset++
+  }
+  return offset
+}
+
+function needsQuotes( value ) {
+  return WS_DELIMITER_PATTERN.test( value ) ||
+    !TOKEN_PATTERN.test( value )
+}
+
+class Link {
+
+  /**
+   * Link
+   * @constructor
+   * @param {String} [value]
+   * @returns {Link}
+   */
+  constructor( value ) {
+
+    /** @type {Array} URI references */
+    this.refs = []
+
+    if( value ) {
+      this.parse( value )
+    }
+
+  }
+
+  /**
+   * Get refs with given relation type
+   * @param {String} value
+   * @returns {Array<Object>}
+   */
+  rel( value ) {
+
+    var links = []
+    var type = value.toLowerCase()
+
+    for( var i = 0; i < this.refs.length; i++ ) {
+      if( this.refs[ i ].rel.toLowerCase() === type ) {
+        links.push( this.refs[ i ] )
+      }
+    }
+
+    return links
+
+  }
+
+  /**
+   * Get refs where given attribute has a given value
+   * @param {String} attr
+   * @param {String} value
+   * @returns {Array<Object>}
+   */
+  get( attr, value ) {
+
+    attr = attr.toLowerCase()
+
+    var links = []
+
+    for( var i = 0; i < this.refs.length; i++ ) {
+      if( this.refs[ i ][ attr ] === value ) {
+        links.push( this.refs[ i ] )
+      }
+    }
+
+    return links
+
+  }
+
+  set( link ) {
+    this.refs.push( link )
+    return this
+  }
+
+  has( attr, value ) {
+
+    attr = attr.toLowerCase()
+
+    for( var i = 0; i < this.refs.length; i++ ) {
+      if( this.refs[ i ][ attr ] === value ) {
+        return true
+      }
+    }
+
+    return false
+
+  }
+
+  parse( value, offset ) {
+
+    offset = offset || 0
+    value = offset ? value.slice( offset ) : value
+
+    // Trim & unfold folded lines
+    value = trim( value ).replace( WS_FOLD_PATTERN, '' )
+
+    var state = STATE.IDLE
+    var length = value.length
+    var offset = 0
+    var ref = null
+
+    while( offset < length ) {
+      if( state === STATE.IDLE ) {
+        if( hasWhitespace( value[offset] ) ) {
+          offset++
+          continue
+        } else if( value[offset] === '<' ) {
+          if( ref != null ) {
+            ref.rel != null ?
+              this.refs.push( ...Link.expandRelations( ref ) ) :
+              this.refs.push( ref )
+          }
+          var end = value.indexOf( '>', offset )
+          if( end === -1 ) throw new Error( 'Expected end of URI delimiter at offset ' + offset )
+          ref = { uri: value.slice( offset + 1, end ) }
+          // this.refs.push( ref )
+          offset = end
+          state = STATE.URI
+        } else {
+          throw new Error( 'Unexpected character "' + value[offset] + '" at offset ' + offset )
+        }
+        offset++
+      } else if( state === STATE.URI ) {
+        if( hasWhitespace( value[offset] ) ) {
+          offset++
+          continue
+        } else if( value[offset] === ';' ) {
+          state = STATE.ATTR
+          offset++
+        } else if( value[offset] === ',' ) {
+          state = STATE.IDLE
+          offset++
+        } else {
+          throw new Error( 'Unexpected character "' + value[offset] + '" at offset ' + offset )
+        }
+      } else if( state === STATE.ATTR ) {
+        if( value[offset] ===';' || hasWhitespace( value[offset] ) ) {
+          offset++
+          continue
+        }
+        var end = value.indexOf( '=', offset )
+        if( end === -1 ) throw new Error( 'Expected attribute delimiter at offset ' + offset )
+        var attr = trim( value.slice( offset, end ) ).toLowerCase()
+        var attrValue = ''
+        offset = end + 1
+        offset = skipWhitespace( value, offset )
+        if( value[offset] === '"' ) {
+          offset++
+          while( offset < length ) {
+            if( value[offset] === '"' ) {
+              offset++; break
+            }
+            if( value[offset] === '\\' ) {
+              offset++
+            }
+            attrValue += value[offset]
+            offset++
+          }
+        } else {
+          var end = offset + 1
+          while( !DELIMITER_PATTERN.test( value[end] ) && end < length ) {
+            end++
+          }
+          attrValue = value.slice( offset, end )
+          offset = end
+        }
+        if( ref[ attr ] && Link.isSingleOccurenceAttr( attr ) ) {
+          // Ignore multiples of attributes which may only appear once
+        } else if( attr[ attr.length - 1 ] === '*' ) {
+          ref[ attr ] = Link.parseExtendedValue( attrValue )
+        } else {
+          attrValue = attr === 'type' ?
+            attrValue.toLowerCase() : attrValue
+          if( ref[ attr ] != null ) {
+            if( Array.isArray( ref[ attr ] ) ) {
+              ref[ attr ].push( attrValue )
+            } else {
+              ref[ attr ] = [ ref[ attr ], attrValue ]
+            }
+          } else {
+            ref[ attr ] = attrValue
+          }
+        }
+        switch( value[offset] ) {
+          case ',': state = STATE.IDLE; break
+          case ';': state = STATE.ATTR; break
+        }
+        offset++
+      } else {
+        throw new Error( 'Unknown parser state "' + state + '"' )
+      }
+    }
+
+    if( ref != null ) {
+      ref.rel != null ?
+        this.refs.push( ...Link.expandRelations( ref ) ) :
+        this.refs.push( ref )
+    }
+
+    ref = null
+
+    return this
+
+  }
+
+  toString() {
+
+    var refs = []
+    var link = ''
+    var ref = null
+
+    for( var i = 0; i < this.refs.length; i++ ) {
+      ref = this.refs[i]
+      link = Object.keys( this.refs[i] ).reduce( function( link, attr ) {
+        if( attr === 'uri' ) return link
+        return link + '; ' + Link.formatAttribute( attr, ref[ attr ] )
+      }, '<' + ref.uri + '>' )
+      refs.push( link )
+    }
+
+    return refs.join( ', ' )
+
+  }
+
+}
+
+/**
+ * Determines whether an encoding can be
+ * natively handled with a `Buffer`
+ * @param {String} value
+ * @returns {Boolean}
+ */
+Link.isCompatibleEncoding = function( value ) {
+  return COMPATIBLE_ENCODING_PATTERN.test( value )
+}
+
+Link.parse = function( value, offset ) {
+  return new Link().parse( value, offset )
+}
+
+Link.isSingleOccurenceAttr = function( attr ) {
+  return attr === 'rel' || attr === 'type' || attr === 'media' ||
+    attr === 'title' || attr === 'title*'
+}
+
+Link.isTokenAttr = function( attr ) {
+  return attr === 'rel' || attr === 'type' || attr === 'anchor'
+}
+
+Link.escapeQuotes = function( value ) {
+  return value.replace( /"/g, '\\"' )
+}
+
+Link.expandRelations = function( ref ) {
+  var rels = ref.rel.split( ' ' )
+  return rels.map( function( rel ) {
+    var value = Object.assign( {}, ref )
+    value.rel = rel
+    return value
+  })
+}
+
+/**
+ * Parses an extended value and attempts to decode it
+ * @internal
+ * @param {String} value
+ * @return {Object}
+ */
+Link.parseExtendedValue = function( value ) {
+  var parts = /([^']+)?(?:'([^']+)')?(.+)/.exec( value )
+  return {
+    language: parts[2].toLowerCase(),
+    encoding: Link.isCompatibleEncoding( parts[1] ) ?
+      null : parts[1].toLowerCase(),
+    value: Link.isCompatibleEncoding( parts[1] ) ?
+      decodeURIComponent( parts[3] ) : parts[3]
+  }
+}
+
+/**
+ * Format a given extended attribute and it's value
+ * @param {String} attr
+ * @param {Object} data
+ * @return {String}
+ */
+Link.formatExtendedAttribute = function( attr, data ) {
+
+  var encoding = ( data.encoding || 'utf-8' ).toUpperCase()
+  var language = data.language || 'en'
+
+  var encodedValue = ''
+
+  if( Buffer.isBuffer( data.value ) && Link.isCompatibleEncoding( encoding ) ) {
+    encodedValue = data.value.toString( encoding )
+  } else if( Buffer.isBuffer( data.value ) ) {
+    encodedValue = data.value.toString( 'hex' )
+      .replace( /[0-9a-f]{2}/gi, '%$1' )
+  } else {
+    encodedValue = encodeURIComponent( data.value )
+  }
+
+  return attr + '=' + encoding + '\'' +
+    language + '\'' + encodedValue
+
+}
+
+/**
+ * Format a given attribute and it's value
+ * @param {String} attr
+ * @param {String|Object} value
+ * @return {String}
+ */
+Link.formatAttribute = function( attr, value ) {
+
+  if( Array.isArray( value ) ) {
+    return value.map(( item ) => {
+      return Link.formatAttribute( attr, item )
+    }).join( '; ' )
+  }
+
+  if( attr[ attr.length - 1 ] === '*' || typeof value !== 'string' ) {
+    return Link.formatExtendedAttribute( attr, value )
+  }
+
+  if( Link.isTokenAttr( attr ) ) {
+    value = needsQuotes( value ) ?
+      '"' + Link.escapeQuotes( value ) + '"' :
+      Link.escapeQuotes( value )
+  } else if( needsQuotes( value ) ) {
+    value = encodeURIComponent( value )
+    // We don't need to escape <SP> <,> <;> within quotes
+    value = value
+      .replace( /%20/g, ' ' )
+      .replace( /%2C/g, ',' )
+      .replace( /%3B/g, ';' )
+
+    value = '"' + value + '"'
+  }
+
+  return attr + '=' + value
+
+}
+
+module.exports = Link
+
+
+/***/ }),
+
 /***/ "../../node_modules/ieee754/index.js":
 /*!*******************************************!*\
   !*** ../../node_modules/ieee754/index.js ***!
@@ -34127,6 +34517,1035 @@ const initUi = function(ws) {
 
 /***/ }),
 
+/***/ "../../node_modules/@inrupt/solid-client/dist/constants.mjs":
+/*!******************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/constants.mjs ***!
+  \******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "acl": () => (/* binding */ acl),
+/* harmony export */   "acp": () => (/* binding */ acp),
+/* harmony export */   "foaf": () => (/* binding */ foaf),
+/* harmony export */   "ldp": () => (/* binding */ ldp),
+/* harmony export */   "pim": () => (/* binding */ pim),
+/* harmony export */   "rdf": () => (/* binding */ rdf),
+/* harmony export */   "security": () => (/* binding */ security),
+/* harmony export */   "solid": () => (/* binding */ solid)
+/* harmony export */ });
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+// TODO: These should be replaced by auto-generated constants,
+//       if we can ensure that unused constants will be excluded from bundles.
+/** @hidden */
+const acl = {
+    Authorization: "http://www.w3.org/ns/auth/acl#Authorization",
+    AuthenticatedAgent: "http://www.w3.org/ns/auth/acl#AuthenticatedAgent",
+    accessTo: "http://www.w3.org/ns/auth/acl#accessTo",
+    agent: "http://www.w3.org/ns/auth/acl#agent",
+    agentGroup: "http://www.w3.org/ns/auth/acl#agentGroup",
+    agentClass: "http://www.w3.org/ns/auth/acl#agentClass",
+    default: "http://www.w3.org/ns/auth/acl#default",
+    defaultForNew: "http://www.w3.org/ns/auth/acl#defaultForNew",
+    mode: "http://www.w3.org/ns/auth/acl#mode",
+    origin: "http://www.w3.org/ns/auth/acl#origin",
+};
+/** @hidden */
+const rdf = {
+    type: "http://www.w3.org/1999/02/22-rdf-syntax-ns#type",
+};
+/** @hidden */
+const ldp = {
+    BasicContainer: "http://www.w3.org/ns/ldp#BasicContainer",
+    Container: "http://www.w3.org/ns/ldp#Container",
+    Resource: "http://www.w3.org/ns/ldp#Resource",
+    contains: "http://www.w3.org/ns/ldp#contains",
+};
+/** @hidden */
+const foaf = {
+    Agent: "http://xmlns.com/foaf/0.1/Agent",
+    primaryTopic: "http://xmlns.com/foaf/0.1/primaryTopic",
+    isPrimaryTopicOf: "http://xmlns.com/foaf/0.1/isPrimaryTopicOf",
+};
+/** @hidden */
+const acp = {
+    AccessControlResource: "http://www.w3.org/ns/solid/acp#AccessControlResource",
+    Policy: "http://www.w3.org/ns/solid/acp#Policy",
+    AccessControl: "http://www.w3.org/ns/solid/acp#AccessControl",
+    Read: "http://www.w3.org/ns/solid/acp#Read",
+    Append: "http://www.w3.org/ns/solid/acp#Append",
+    Write: "http://www.w3.org/ns/solid/acp#Write",
+    /** @deprecated Removed from the ACP proposal, to be replaced by Matchers. */
+    Rule: "http://www.w3.org/ns/solid/acp#Rule",
+    Matcher: "http://www.w3.org/ns/solid/acp#Matcher",
+    accessControl: "http://www.w3.org/ns/solid/acp#accessControl",
+    memberAccessControl: "http://www.w3.org/ns/solid/acp#memberAccessControl",
+    apply: "http://www.w3.org/ns/solid/acp#apply",
+    /** @deprecated Removed from the ACP proposal, to be replaced by memberAccessControls. */
+    applyMembers: "http://www.w3.org/ns/solid/acp#applyMembers",
+    allow: "http://www.w3.org/ns/solid/acp#allow",
+    deny: "http://www.w3.org/ns/solid/acp#deny",
+    allOf: "http://www.w3.org/ns/solid/acp#allOf",
+    anyOf: "http://www.w3.org/ns/solid/acp#anyOf",
+    noneOf: "http://www.w3.org/ns/solid/acp#noneOf",
+    access: "http://www.w3.org/ns/solid/acp#access",
+    /** @deprecated Removed from the ACP proposal, to be replaced by memberAccessControls. */
+    accessMembers: "http://www.w3.org/ns/solid/acp#accessMembers",
+    agent: "http://www.w3.org/ns/solid/acp#agent",
+    group: "http://www.w3.org/ns/solid/acp#group",
+    client: "http://www.w3.org/ns/solid/acp#client",
+    PublicAgent: "http://www.w3.org/ns/solid/acp#PublicAgent",
+    AuthenticatedAgent: "http://www.w3.org/ns/solid/acp#AuthenticatedAgent",
+    CreatorAgent: "http://www.w3.org/ns/solid/acp#CreatorAgent",
+};
+/** @hidden */
+const solid = {
+    PublicOidcClient: "http://www.w3.org/ns/solid/terms#PublicOidcClient",
+};
+/** @hidden */
+const security = {
+    publicKey: "https://w3id.org/security#publicKey",
+};
+/** @hidden */
+const pim = {
+    storage: "http://www.w3.org/ns/pim/space#storage",
+};
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/fetcher.mjs":
+/*!****************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/fetcher.mjs ***!
+  \****************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "fetch": () => (/* binding */ fetch)
+/* harmony export */ });
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+/**
+ * @ignore Internal fallback for when no fetcher is provided; not to be used downstream.
+ */
+const fetch = async (resource, init) => {
+    /* istanbul ignore if: `require` is always defined in the unit test environment */
+    if (typeof window === "object" && typeof require !== "function") {
+        return await window.fetch(resource, init);
+    }
+    /* istanbul ignore if: `require` is always defined in the unit test environment */
+    if (typeof require !== "function") {
+        // When using Node.js with ES Modules, require is not defined:
+        const crossFetchModule = await __webpack_require__.e(/*! import() */ "vendors-node_modules_cross-fetch_dist_browser-ponyfill_js").then(__webpack_require__.t.bind(__webpack_require__, /*! cross-fetch */ "../../node_modules/cross-fetch/dist/browser-ponyfill.js", 19));
+        const fetch = crossFetchModule.default;
+        return fetch(resource, init);
+    }
+    // Implementation note: it's up to the client application to resolve these module names to the
+    // respective npm packages. At least one commonly used tool (Webpack) is only able to do that if
+    // the module names are literal strings.
+    // Additionally, Webpack throws a warning in a way that halts compilation for at least Next.js
+    // when using native Javascript dynamic imports (`import()`), whereas `require()` just logs a
+    // warning. Since the use of package names instead of file names requires a bundles anyway, this
+    // should not have any practical consequences. For more background, see:
+    // https://github.com/webpack/webpack/issues/7713
+    let fetch;
+    // Unfortunately solid-client-authn-browser does not support a default session yet.
+    // Once it does, we can auto-detect if it is available and use it as follows:
+    // try {
+    //   fetch = require("solid-client-authn-browser").fetch;
+    // } catch (e) {
+    // When enabling the above, make sure to add a similar try {...} catch block using `import`
+    // statements in the elseif above.
+    // eslint-disable-next-line prefer-const
+    fetch = require("cross-fetch");
+    // }
+    return await fetch(resource, init);
+};
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/interfaces.internal.mjs":
+/*!****************************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/interfaces.internal.mjs ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "internal_toIriString": () => (/* binding */ internal_toIriString)
+/* harmony export */ });
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+/** @internal */
+function internal_toIriString(iri) {
+    return typeof iri === "string" ? iri : iri.value;
+}
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/interfaces.mjs":
+/*!*******************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/interfaces.mjs ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "SolidClientError": () => (/* binding */ SolidClientError),
+/* harmony export */   "hasChangelog": () => (/* binding */ hasChangelog),
+/* harmony export */   "hasResourceInfo": () => (/* binding */ hasResourceInfo),
+/* harmony export */   "hasServerResourceInfo": () => (/* binding */ hasServerResourceInfo)
+/* harmony export */ });
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+/**
+ * Verify whether a given SolidDataset includes metadata about where it was sent to.
+ *
+ * @param dataset A [[SolidDataset]] that may have metadata attached about the Resource it was retrieved from.
+ * @returns True if `dataset` includes metadata about the Resource it was sent to, false if not.
+ * @since 0.2.0
+ */
+function hasResourceInfo(resource) {
+    const potentialResourceInfo = resource;
+    return (typeof potentialResourceInfo === "object" &&
+        typeof potentialResourceInfo.internal_resourceInfo === "object");
+}
+/**
+ * Verify whether a given SolidDataset includes metadata about where it was retrieved from.
+ *
+ * @param dataset A [[SolidDataset]] that may have metadata attached about the Resource it was retrieved from.
+ * @returns True if `dataset` includes metadata about the Resource it was retrieved from, false if not.
+ * @since 0.6.0
+ */
+function hasServerResourceInfo(resource) {
+    const potentialResourceInfo = resource;
+    return (typeof potentialResourceInfo === "object" &&
+        typeof potentialResourceInfo.internal_resourceInfo === "object" &&
+        typeof potentialResourceInfo.internal_resourceInfo.linkedResources ===
+            "object");
+}
+/** @internal */
+function hasChangelog(dataset) {
+    const potentialChangeLog = dataset;
+    return (typeof potentialChangeLog.internal_changeLog === "object" &&
+        Array.isArray(potentialChangeLog.internal_changeLog.additions) &&
+        Array.isArray(potentialChangeLog.internal_changeLog.deletions));
+}
+/**
+ * Errors thrown by solid-client extend this class, and can thereby be distinguished from errors
+ * thrown in lower-level libraries.
+ * @since 1.2.0
+ */
+class SolidClientError extends Error {
+}
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/resource/file.mjs":
+/*!**********************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/resource/file.mjs ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "deleteFile": () => (/* binding */ deleteFile),
+/* harmony export */   "flattenHeaders": () => (/* binding */ flattenHeaders),
+/* harmony export */   "getFile": () => (/* binding */ getFile),
+/* harmony export */   "overwriteFile": () => (/* binding */ overwriteFile),
+/* harmony export */   "saveFileInContainer": () => (/* binding */ saveFileInContainer)
+/* harmony export */ });
+/* harmony import */ var _fetcher_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../fetcher.mjs */ "../../node_modules/@inrupt/solid-client/dist/fetcher.mjs");
+/* harmony import */ var _interfaces_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../interfaces.mjs */ "../../node_modules/@inrupt/solid-client/dist/interfaces.mjs");
+/* harmony import */ var _interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../interfaces.internal.mjs */ "../../node_modules/@inrupt/solid-client/dist/interfaces.internal.mjs");
+/* harmony import */ var _resource_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./resource.mjs */ "../../node_modules/@inrupt/solid-client/dist/resource/resource.mjs");
+/* harmony import */ var _resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./resource.internal.mjs */ "../../node_modules/@inrupt/solid-client/dist/resource/resource.internal.mjs");
+
+
+
+
+
+
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+const defaultGetFileOptions = {
+    fetch: _fetcher_mjs__WEBPACK_IMPORTED_MODULE_0__.fetch,
+};
+const RESERVED_HEADERS = ["Slug", "If-None-Match", "Content-Type"];
+/**
+ * Some of the headers must be set by the library, rather than directly.
+ */
+function containsReserved(header) {
+    return RESERVED_HEADERS.some((reserved) => header[reserved] !== undefined);
+}
+/**
+ * ```{note} This function is still experimental and subject to change, even in a non-major release.
+ * ```
+ *
+ * Retrieves a file from a URL and returns the file as a blob.
+ *
+ * For example:
+ *
+ * ```
+ * const fileBlob = await getFile("https://pod.example.com/some/file", { fetch: fetch });
+ * ```
+ *
+ * For additional examples, see
+ * [Read/Write Files](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-files/#retrieve-a-file).
+ *
+ * @param url The URL of the file to return
+ * @param options Fetching options: a custom fetcher and/or headers.
+ * @returns The file as a blob.
+ */
+async function getFile(input, options = defaultGetFileOptions) {
+    const config = Object.assign(Object.assign({}, defaultGetFileOptions), options);
+    const url = (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)(input);
+    const response = await config.fetch(url, config.init);
+    if ((0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_isUnsuccessfulResponse)(response)) {
+        throw new _resource_mjs__WEBPACK_IMPORTED_MODULE_3__.FetchError(`Fetching the File failed: [${response.status}] [${response.statusText}].`, response);
+    }
+    const resourceInfo = (0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_parseResourceInfo)(response);
+    const data = await response.blob();
+    const fileWithResourceInfo = Object.assign(data, {
+        internal_resourceInfo: resourceInfo,
+    });
+    return fileWithResourceInfo;
+}
+/**
+ * ```{note} This function is still experimental and subject to change, even in a non-major release.
+ * ```
+ * Deletes a file at a given URL.
+ *
+ * For example:
+ *
+ * ```
+ * await deleteFile( "https://pod.example.com/some/file", { fetch: fetch });
+ * ```
+ *
+ * For additional examples, see
+ * [Read/Write Files](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-files/#delete-a-file).
+ *
+ * @param file The URL of the file to delete
+ */
+async function deleteFile(file, options = defaultGetFileOptions) {
+    const config = Object.assign(Object.assign({}, defaultGetFileOptions), options);
+    const url = (0,_interfaces_mjs__WEBPACK_IMPORTED_MODULE_4__.hasResourceInfo)(file)
+        ? (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)((0,_resource_mjs__WEBPACK_IMPORTED_MODULE_3__.getSourceIri)(file))
+        : (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)(file);
+    const response = await config.fetch(url, Object.assign(Object.assign({}, config.init), { method: "DELETE" }));
+    if ((0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_isUnsuccessfulResponse)(response)) {
+        throw new _resource_mjs__WEBPACK_IMPORTED_MODULE_3__.FetchError(`Deleting the file at [${url}] failed: [${response.status}] [${response.statusText}].`, response);
+    }
+}
+/**
+ * ```{note} This function is still experimental and subject to change, even in a non-major release.
+ * ```
+ *
+ * Saves a file in an existing folder/Container associated with the given URL.
+ *
+ * For example:
+ *
+ * ```
+ * const savedFile = await saveFileInContainer(
+ *   "https://pod.example.com/some/existing/container/",
+ *   new Blob(["This is a plain piece of text"], { type: "plain/text" }),
+ *   { slug: "suggestedFileName.txt", contentType: "text/plain", fetch: fetch }
+ * );
+ * ```
+ *
+ * For additional example, see
+ * [Read/Write Files](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-files/#save-a-file-into-an-existing-container).
+ *
+ * In the `options` parameter,
+ *
+ * - You can suggest a file name in the `slug` field.  However, the Solid
+ *   Server may or may not use the suggested `slug` as the file name.
+ *
+ * - *Recommended:* You can specify the [media type](https://developer.mozilla.org/en-US/docs/Glossary/MIME_type)
+ *   of the file in the `contentType`.  If unspecified, the function uses the default type of
+ *   `application/octet-stream`, indicating a binary data file.
+ *
+ * The function saves a file into an *existing* Container. If the
+ * Container does not exist, either:
+ * - Create the Container first using [[createContainerAt]], and then
+ *   use the function, or
+ * - Use [[overwriteFile]] to save the file. [[overwriteFile]] creates
+ *   the Containers in the saved file path as needed.
+ *
+ * Users who only have `Append` but not `Write` access to a Container
+ * can use [[saveFileInContainer]] to save new files to the Container.
+ * That is, [[saveFileInContainer]] is useful in situations where users
+ * can add new files to a Container but not change existing files in
+ * the Container, such as users given access to send notifications to
+ * another's Pod but not to view or delete existing notifications in that Pod.
+ *
+ * Users with `Write` access to the given folder/Container may prefer to
+ * use [[overwriteFile]].
+ *
+ * @param folderUrl The URL of an existing folder where the new file is saved.
+ * @param file The file to be written.
+ * @param options Additional parameters for file creation (e.g. a slug).
+ * @returns A Promise that resolves to the saved file, if available, or `null` if the current user does not have Read access to the newly-saved file. It rejects if saving fails.
+ */
+async function saveFileInContainer(folderUrl, file, options = defaultGetFileOptions) {
+    const folderUrlString = (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)(folderUrl);
+    const response = await writeFile(folderUrlString, file, "POST", options);
+    if ((0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_isUnsuccessfulResponse)(response)) {
+        throw new _resource_mjs__WEBPACK_IMPORTED_MODULE_3__.FetchError(`Saving the file in [${folderUrl}] failed: [${response.status}] [${response.statusText}].`, response);
+    }
+    const locationHeader = response.headers.get("Location");
+    if (locationHeader === null) {
+        throw new Error("Could not determine the location of the newly saved file.");
+    }
+    const fileIri = new URL(locationHeader, new URL(folderUrlString).origin).href;
+    const blobClone = (0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_cloneResource)(file);
+    const resourceInfo = {
+        internal_resourceInfo: {
+            isRawData: true,
+            sourceIri: fileIri,
+            contentType: getContentType(file, options.contentType),
+        },
+    };
+    return Object.assign(blobClone, resourceInfo);
+}
+/**
+ * ```{note} This function is still experimental and subject to change, even in a non-major release.
+ * ```
+ *
+ * Saves a file at a given URL. If a file already exists at the URL,
+ * the function overwrites the existing file.
+ *
+ * For example:
+ *
+ * ```
+ * const savedFile = await overwriteFile(
+ *   "https://pod.example.com/some/container/myFile.txt",
+ *   new Blob(["This is a plain piece of text"], { type: "plain/text" }),
+ *   { contentType: "text/plain", fetch: fetch }
+ * );
+ * ```
+ *
+ * For additional example, see
+ * [Read/Write Files](https://docs.inrupt.com/developer-tools/javascript/client-libraries/tutorial/read-write-files/#write-a-file-to-a-specific-url).
+ *
+ * *Recommended:* In the `options` parameter, you can specify the
+ * [media type](https://developer.mozilla.org/en-US/docs/Glossary/MIME_type)
+ * of the file in the `contentType`.  If unspecified, the function uses the default type of
+ * `application/octet-stream`, indicating a binary data file.
+ *
+ * When saving a file with [[overwriteFile]], the Solid server creates any
+ * intermediary Containers as needed; i.e., the Containers do not
+ * need to be created in advance. For example, when saving a file to the target URL of
+ * https://example.pod/container/resource, if https://example.pod/container/ does not exist,
+ * the container is created as part of the save.
+ *
+ * @param fileUrl The URL where the file is saved.
+ * @param file The file to be written.
+ * @param options Additional parameters for file creation (e.g., media type).
+ */
+async function overwriteFile(fileUrl, file, options = defaultGetFileOptions) {
+    const fileUrlString = (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)(fileUrl);
+    const response = await writeFile(fileUrlString, file, "PUT", options);
+    if ((0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_isUnsuccessfulResponse)(response)) {
+        throw new _resource_mjs__WEBPACK_IMPORTED_MODULE_3__.FetchError(`Overwriting the file at [${fileUrlString}] failed: [${response.status}] [${response.statusText}].`, response);
+    }
+    const blobClone = (0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_cloneResource)(file);
+    const resourceInfo = (0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_2__.internal_parseResourceInfo)(response);
+    resourceInfo.sourceIri = fileUrlString;
+    resourceInfo.isRawData = true;
+    return Object.assign(blobClone, { internal_resourceInfo: resourceInfo });
+}
+function isHeadersArray(headers) {
+    return Array.isArray(headers);
+}
+/**
+ * The return type of this function is misleading: it should ONLY be used to check
+ * whether an object has a forEach method that returns <key, value> pairs.
+ *
+ * @param headers A headers object that might have a forEach
+ */
+function hasHeadersObjectForEach(headers) {
+    return typeof headers.forEach === "function";
+}
+/**
+ * @hidden
+ * This function feels unnecessarily complicated, but is required in order to
+ * have Headers according to type definitions in both Node and browser environments.
+ * This might require a fix upstream to be cleaned up.
+ *
+ * @param headersToFlatten A structure containing headers potentially in several formats
+ */
+function flattenHeaders(headersToFlatten) {
+    if (typeof headersToFlatten === "undefined") {
+        return {};
+    }
+    let flatHeaders = {};
+    if (isHeadersArray(headersToFlatten)) {
+        headersToFlatten.forEach(([key, value]) => {
+            flatHeaders[key] = value;
+        });
+        // Note that the following line must be a elsif, because string[][] has a forEach,
+        // but it returns string[] instead of <key, value>
+    }
+    else if (hasHeadersObjectForEach(headersToFlatten)) {
+        headersToFlatten.forEach((value, key) => {
+            flatHeaders[key] = value;
+        });
+    }
+    else {
+        // If the headers are already a Record<string, string>,
+        // they can directly be returned.
+        flatHeaders = headersToFlatten;
+    }
+    return flatHeaders;
+}
+/**
+ * Internal function that performs the actual write HTTP query, either POST
+ * or PUT depending on the use case.
+ *
+ * @param fileUrl The URL where the file is saved
+ * @param file The file to be written
+ * @param method The HTTP method
+ * @param options Additional parameters for file creation (e.g. a slug, or media type)
+ */
+async function writeFile(targetUrl, file, method, options) {
+    var _a, _b;
+    const config = Object.assign(Object.assign({}, defaultGetFileOptions), options);
+    const headers = flattenHeaders((_b = (_a = config.init) === null || _a === void 0 ? void 0 : _a.headers) !== null && _b !== void 0 ? _b : {});
+    if (containsReserved(headers)) {
+        throw new Error(`No reserved header (${RESERVED_HEADERS.join(", ")}) should be set in the optional RequestInit.`);
+    }
+    // If a slug is in the parameters, set the request headers accordingly
+    if (config.slug !== undefined) {
+        headers["Slug"] = config.slug;
+    }
+    headers["Content-Type"] = getContentType(file, options.contentType);
+    const targetUrlString = (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_toIriString)(targetUrl);
+    return await config.fetch(targetUrlString, Object.assign(Object.assign({}, config.init), { headers,
+        method, body: file }));
+}
+function getContentType(file, contentTypeOverride) {
+    if (typeof contentTypeOverride === "string") {
+        return contentTypeOverride;
+    }
+    const fileType = typeof file === "object" &&
+        file !== null &&
+        typeof file.type === "string" &&
+        file.type.length > 0
+        ? file.type
+        : undefined;
+    return fileType !== null && fileType !== void 0 ? fileType : "application/octet-stream";
+}
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/resource/resource.internal.mjs":
+/*!***********************************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/resource/resource.internal.mjs ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "internal_cloneResource": () => (/* binding */ internal_cloneResource),
+/* harmony export */   "internal_isAuthenticationFailureResponse": () => (/* binding */ internal_isAuthenticationFailureResponse),
+/* harmony export */   "internal_isUnsuccessfulResponse": () => (/* binding */ internal_isUnsuccessfulResponse),
+/* harmony export */   "internal_parseResourceInfo": () => (/* binding */ internal_parseResourceInfo)
+/* harmony export */ });
+/* harmony import */ var http_link_header__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! http-link-header */ "../../node_modules/http-link-header/lib/link.js");
+
+
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+/**
+ * @internal
+ */
+function internal_parseResourceInfo(response) {
+    var _a, _b, _c;
+    const contentTypeParts = (_b = (_a = response.headers.get("Content-Type")) === null || _a === void 0 ? void 0 : _a.split(";")) !== null && _b !== void 0 ? _b : [];
+    // If the server offers a Turtle or JSON-LD serialisation on its own accord,
+    // that tells us whether it is RDF data that the server can understand
+    // (and hence can be updated with a PATCH request with SPARQL INSERT and DELETE statements),
+    // in which case our SolidDataset-related functions should handle it.
+    // For more context, see https://github.com/inrupt/solid-client-js/pull/214.
+    const isSolidDataset = contentTypeParts.length > 0 &&
+        ["text/turtle", "application/ld+json"].includes(contentTypeParts[0]);
+    const resourceInfo = {
+        sourceIri: response.url,
+        isRawData: !isSolidDataset,
+        contentType: (_c = response.headers.get("Content-Type")) !== null && _c !== void 0 ? _c : undefined,
+        linkedResources: {},
+    };
+    const linkHeader = response.headers.get("Link");
+    if (linkHeader) {
+        const parsedLinks = http_link_header__WEBPACK_IMPORTED_MODULE_0__.parse(linkHeader);
+        // Set ACL link
+        const aclLinks = parsedLinks.get("rel", "acl");
+        if (aclLinks.length === 1) {
+            resourceInfo.aclUrl = new URL(aclLinks[0].uri, resourceInfo.sourceIri).href;
+        }
+        // Parse all link headers and expose them in a standard way
+        // (this can replace the parsing of the ACL link above):
+        resourceInfo.linkedResources = parsedLinks.refs.reduce((rels, ref) => {
+            var _a;
+            var _b;
+            (_a = rels[_b = ref.rel]) !== null && _a !== void 0 ? _a : (rels[_b] = []);
+            rels[ref.rel].push(new URL(ref.uri, resourceInfo.sourceIri).href);
+            return rels;
+        }, resourceInfo.linkedResources);
+    }
+    const wacAllowHeader = response.headers.get("WAC-Allow");
+    if (wacAllowHeader) {
+        resourceInfo.permissions = parseWacAllowHeader(wacAllowHeader);
+    }
+    return resourceInfo;
+}
+/**
+ * Parse a WAC-Allow header into user and public access booleans.
+ *
+ * @param wacAllowHeader A WAC-Allow header in the format `user="read append write control",public="read"`
+ * @see https://github.com/solid/solid-spec/blob/cb1373a369398d561b909009bd0e5a8c3fec953b/api-rest.md#wac-allow-headers
+ */
+function parseWacAllowHeader(wacAllowHeader) {
+    function parsePermissionStatement(permissionStatement) {
+        const permissions = permissionStatement.split(" ");
+        const writePermission = permissions.includes("write");
+        return writePermission
+            ? {
+                read: permissions.includes("read"),
+                append: true,
+                write: true,
+                control: permissions.includes("control"),
+            }
+            : {
+                read: permissions.includes("read"),
+                append: permissions.includes("append"),
+                write: false,
+                control: permissions.includes("control"),
+            };
+    }
+    function getStatementFor(header, scope) {
+        const relevantEntries = header
+            .split(",")
+            .map((rawEntry) => rawEntry.split("="))
+            .filter((parts) => parts.length === 2 && parts[0].trim() === scope);
+        // There should only be one statement with the given scope:
+        if (relevantEntries.length !== 1) {
+            return "";
+        }
+        const relevantStatement = relevantEntries[0][1].trim();
+        // The given statement should be wrapped in double quotes to be valid:
+        if (relevantStatement.charAt(0) !== '"' ||
+            relevantStatement.charAt(relevantStatement.length - 1) !== '"') {
+            return "";
+        }
+        // Return the statment without the wrapping quotes, e.g.: read append write control
+        return relevantStatement.substring(1, relevantStatement.length - 1);
+    }
+    return {
+        user: parsePermissionStatement(getStatementFor(wacAllowHeader, "user")),
+        public: parsePermissionStatement(getStatementFor(wacAllowHeader, "public")),
+    };
+}
+/** @hidden Used to instantiate a separate instance from input parameters */
+function internal_cloneResource(resource) {
+    let clonedResource;
+    if (typeof resource.slice === "function") {
+        // If given Resource is a File:
+        clonedResource = Object.assign(resource.slice(), Object.assign({}, resource));
+    }
+    else {
+        // If it is just a plain object containing metadata:
+        clonedResource = Object.assign({}, resource);
+    }
+    return clonedResource;
+}
+/** @internal */
+function internal_isUnsuccessfulResponse(response) {
+    return !response.ok;
+}
+function internal_isAuthenticationFailureResponse(response) {
+    return response.status === 401 || response.status === 403;
+}
+
+
+
+
+/***/ }),
+
+/***/ "../../node_modules/@inrupt/solid-client/dist/resource/resource.mjs":
+/*!**************************************************************************!*\
+  !*** ../../node_modules/@inrupt/solid-client/dist/resource/resource.mjs ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "FetchError": () => (/* binding */ FetchError),
+/* harmony export */   "getContentType": () => (/* binding */ getContentType),
+/* harmony export */   "getEffectiveAccess": () => (/* binding */ getEffectiveAccess),
+/* harmony export */   "getLinkedResourceUrlAll": () => (/* binding */ getLinkedResourceUrlAll),
+/* harmony export */   "getPodOwner": () => (/* binding */ getPodOwner),
+/* harmony export */   "getResourceInfo": () => (/* binding */ getResourceInfo),
+/* harmony export */   "getSourceIri": () => (/* binding */ getSourceIri),
+/* harmony export */   "getSourceUrl": () => (/* binding */ getSourceUrl),
+/* harmony export */   "internal_defaultFetchOptions": () => (/* binding */ internal_defaultFetchOptions),
+/* harmony export */   "isContainer": () => (/* binding */ isContainer),
+/* harmony export */   "isPodOwner": () => (/* binding */ isPodOwner),
+/* harmony export */   "isRawData": () => (/* binding */ isRawData),
+/* harmony export */   "responseToResourceInfo": () => (/* binding */ responseToResourceInfo)
+/* harmony export */ });
+/* harmony import */ var _interfaces_mjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../interfaces.mjs */ "../../node_modules/@inrupt/solid-client/dist/interfaces.mjs");
+/* harmony import */ var _interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../interfaces.internal.mjs */ "../../node_modules/@inrupt/solid-client/dist/interfaces.internal.mjs");
+/* harmony import */ var _fetcher_mjs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../fetcher.mjs */ "../../node_modules/@inrupt/solid-client/dist/fetcher.mjs");
+/* harmony import */ var _resource_internal_mjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./resource.internal.mjs */ "../../node_modules/@inrupt/solid-client/dist/resource/resource.internal.mjs");
+/* harmony import */ var _constants_mjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../constants.mjs */ "../../node_modules/@inrupt/solid-client/dist/constants.mjs");
+
+
+
+
+
+
+/**
+ * Copyright 2022 Inrupt Inc.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal in
+ * the Software without restriction, including without limitation the rights to use,
+ * copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+ * Software, and to permit persons to whom the Software is furnished to do so,
+ * subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+ * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+ * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+/** @ignore For internal use only. */
+const internal_defaultFetchOptions = {
+    fetch: _fetcher_mjs__WEBPACK_IMPORTED_MODULE_0__.fetch,
+};
+/**
+ * Retrieve the information about a resource (e.g. access permissions) without
+ * fetching the resource itself.
+ *
+ * @param url URL to fetch Resource metadata from.
+ * @param options Optional parameter `options.fetch`: An alternative `fetch` function to make the HTTP request, compatible with the browser-native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/fetch#Parameters).
+ * @returns Promise resolving to the metadata describing the given Resource, or rejecting if fetching it failed.
+ * @since 0.4.0
+ */
+async function getResourceInfo(url, options = Object.assign(Object.assign({}, internal_defaultFetchOptions), { ignoreAuthenticationErrors: false })) {
+    var _a;
+    const config = Object.assign(Object.assign({}, internal_defaultFetchOptions), options);
+    const response = await config.fetch(url, { method: "HEAD" });
+    return responseToResourceInfo(response, {
+        ignoreAuthenticationErrors: (_a = options.ignoreAuthenticationErrors) !== null && _a !== void 0 ? _a : false,
+    });
+}
+/**
+ * Parse Solid metadata from a Response obtained by fetching a Resource from a Solid Pod,
+ *
+ * @param response A Fetch API Response. See {@link https://developer.mozilla.org/en-US/docs/Web/API/Response MDN}.
+ * @returns Resource metadata readable by functions such as [[getSourceUrl]].
+ * @hidden This interface is not exposed yet until we've tried it out in practice.
+ */
+function responseToResourceInfo(response, options = { ignoreAuthenticationErrors: false }) {
+    if ((0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_isUnsuccessfulResponse)(response) &&
+        (!(0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_isAuthenticationFailureResponse)(response) ||
+            !options.ignoreAuthenticationErrors)) {
+        throw new FetchError(`Fetching the metadata of the Resource at [${response.url}] failed: [${response.status}] [${response.statusText}].`, response);
+    }
+    const resourceInfo = (0,_resource_internal_mjs__WEBPACK_IMPORTED_MODULE_1__.internal_parseResourceInfo)(response);
+    return { internal_resourceInfo: resourceInfo };
+}
+/**
+ * @param resource Resource for which to check whether it is a Container.
+ * @returns Whether `resource` is a Container.
+ */
+function isContainer(resource) {
+    const containerUrl = (0,_interfaces_mjs__WEBPACK_IMPORTED_MODULE_2__.hasResourceInfo)(resource)
+        ? getSourceUrl(resource)
+        : (0,_interfaces_internal_mjs__WEBPACK_IMPORTED_MODULE_3__.internal_toIriString)(resource);
+    return containerUrl.endsWith("/");
+}
+/**
+ * This function will tell you whether a given Resource contains raw data, or a SolidDataset.
+ *
+ * @param resource Resource for which to check whether it contains raw data.
+ * @return Whether `resource` contains raw data.
+ */
+function isRawData(resource) {
+    return resource.internal_resourceInfo.isRawData;
+}
+/**
+ * @param resource Resource for which to determine the Content Type.
+ * @returns The Content Type, if known, or null if not known.
+ */
+function getContentType(resource) {
+    var _a;
+    return (_a = resource.internal_resourceInfo.contentType) !== null && _a !== void 0 ? _a : null;
+}
+function getSourceUrl(resource) {
+    if ((0,_interfaces_mjs__WEBPACK_IMPORTED_MODULE_2__.hasResourceInfo)(resource)) {
+        return resource.internal_resourceInfo.sourceIri;
+    }
+    return null;
+}
+/** @hidden Alias of getSourceUrl for those who prefer to use IRI terminology. */
+const getSourceIri = getSourceUrl;
+/**
+ * Given a Resource that exposes information about the owner of the Pod it is in, returns the WebID of that owner.
+ *
+ * Data about the owner of the Pod is exposed when the following conditions hold:
+ * - The Pod server supports exposing the Pod owner
+ * - The current user is allowed to see who the Pod owner is.
+ *
+ * If one or more of those conditions are false, this function will return `null`.
+ *
+ * @param resource A Resource that contains information about the owner of the Pod it is in.
+ * @returns The WebID of the owner of the Pod the Resource is in, if provided, or `null` if not.
+ * @since 0.6.0
+ */
+function getPodOwner(resource) {
+    var _a;
+    if (!(0,_interfaces_mjs__WEBPACK_IMPORTED_MODULE_2__.hasServerResourceInfo)(resource)) {
+        return null;
+    }
+    const podOwners = (_a = getLinkedResourceUrlAll(resource)["http://www.w3.org/ns/solid/terms#podOwner"]) !== null && _a !== void 0 ? _a : [];
+    return podOwners.length === 1 ? podOwners[0] : null;
+}
+/**
+ * Given a WebID and a Resource that exposes information about the owner of the Pod it is in, returns whether the given WebID is the owner of the Pod.
+ *
+ * Data about the owner of the Pod is exposed when the following conditions hold:
+ * - The Pod server supports exposing the Pod owner
+ * - The current user is allowed to see who the Pod owner is.
+ *
+ * If one or more of those conditions are false, this function will return `null`.
+ *
+ * @param webId The WebID of which to check whether it is the Pod Owner's.
+ * @param resource A Resource that contains information about the owner of the Pod it is in.
+ * @returns Whether the given WebID is the Pod Owner's, if the Pod Owner is exposed, or `null` if it is not exposed.
+ * @since 0.6.0
+ */
+function isPodOwner(webId, resource) {
+    const podOwner = getPodOwner(resource);
+    if (typeof podOwner !== "string") {
+        return null;
+    }
+    return podOwner === webId;
+}
+/**
+ * Get the URLs of Resources linked to the given Resource.
+ *
+ * Solid servers can link Resources to each other. For example, in servers
+ * implementing Web Access Control, Resources can have an Access Control List
+ * Resource linked to it via the `acl` relation.
+ *
+ * @param resource A Resource fetched from a Solid Pod.
+ * @returns The URLs of Resources linked to the given Resource, indexed by the key that links them.
+ * @since 1.7.0
+ */
+function getLinkedResourceUrlAll(resource) {
+    return resource.internal_resourceInfo.linkedResources;
+}
+/**
+ * Get what access the current user has to the given Resource.
+ *
+ * This function can tell you what access the current user has for the given
+ * Resource, allowing you to e.g. determine that changes to it will be rejected
+ * before attempting to do so.
+ * Additionally, for servers adhering to the Web Access Control specification,
+ * it will tell you what access unauthenticated users have to the given Resource.
+ *
+ * @param resource A Resource fetched from a Solid Pod.
+ * @returns What access the current user and, if supported by the server, unauthenticated users have to the given Resource.
+ * @since 1.7.0
+ */
+function getEffectiveAccess(resource) {
+    var _a, _b, _c, _d, _e, _f, _g;
+    if (typeof resource.internal_resourceInfo.permissions === "object") {
+        return {
+            user: {
+                read: resource.internal_resourceInfo.permissions.user.read,
+                append: resource.internal_resourceInfo.permissions.user.append,
+                write: resource.internal_resourceInfo.permissions.user.write,
+            },
+            public: {
+                read: resource.internal_resourceInfo.permissions.public.read,
+                append: resource.internal_resourceInfo.permissions.public.append,
+                write: resource.internal_resourceInfo.permissions.public.write,
+            },
+        };
+    }
+    const linkedResourceUrls = getLinkedResourceUrlAll(resource);
+    return {
+        user: {
+            read: (_b = (_a = linkedResourceUrls[_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.allow]) === null || _a === void 0 ? void 0 : _a.includes(_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.Read)) !== null && _b !== void 0 ? _b : false,
+            append: (_e = (((_c = linkedResourceUrls[_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.allow]) === null || _c === void 0 ? void 0 : _c.includes(_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.Append)) ||
+                ((_d = linkedResourceUrls[_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.allow]) === null || _d === void 0 ? void 0 : _d.includes(_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.Write)))) !== null && _e !== void 0 ? _e : false,
+            write: (_g = (_f = linkedResourceUrls[_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.allow]) === null || _f === void 0 ? void 0 : _f.includes(_constants_mjs__WEBPACK_IMPORTED_MODULE_4__.acp.Write)) !== null && _g !== void 0 ? _g : false,
+        },
+    };
+}
+/**
+ * Extends the regular JavaScript error object with access to the status code and status message.
+ * @since 1.2.0
+ */
+class FetchError extends _interfaces_mjs__WEBPACK_IMPORTED_MODULE_2__.SolidClientError {
+    constructor(message, errorResponse) {
+        super(message);
+        this.response = errorResponse;
+    }
+    get statusCode() {
+        return this.response.status;
+    }
+    get statusText() {
+        return this.response.statusText;
+    }
+}
+
+
+
+
+/***/ }),
+
 /***/ "../../src/blast_eddystone.js":
 /*!************************************!*\
   !*** ../../src/blast_eddystone.js ***!
@@ -39324,17 +40743,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _mirobot_generators_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./mirobot/generators.js */ "../../src/things/mirobot/generators.js");
 /* harmony import */ var _ruuvi_tag_blocks_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ruuvi_tag/blocks.js */ "../../src/things/ruuvi_tag/blocks.js");
 /* harmony import */ var _ruuvi_tag_generators_js__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ruuvi_tag/generators.js */ "../../src/things/ruuvi_tag/generators.js");
-/* harmony import */ var _streamdeck_blocks_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./streamdeck/blocks.js */ "../../src/things/streamdeck/blocks.js");
-/* harmony import */ var _streamdeck_generators_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./streamdeck/generators.js */ "../../src/things/streamdeck/generators.js");
-/* harmony import */ var _web_speech_blocks_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./web_speech/blocks.js */ "../../src/things/web_speech/blocks.js");
-/* harmony import */ var _web_speech_generators_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./web_speech/generators.js */ "../../src/things/web_speech/generators.js");
-/* harmony import */ var _xiamoi_thermometer_blocks_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./xiamoi_thermometer/blocks.js */ "../../src/things/xiamoi_thermometer/blocks.js");
-/* harmony import */ var _xiamoi_thermometer_generators_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./xiamoi_thermometer/generators.js */ "../../src/things/xiamoi_thermometer/generators.js");
+/* harmony import */ var _solid_blocks_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./solid/blocks.js */ "../../src/things/solid/blocks.js");
+/* harmony import */ var _solid_generators_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./solid/generators.js */ "../../src/things/solid/generators.js");
+/* harmony import */ var _streamdeck_blocks_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./streamdeck/blocks.js */ "../../src/things/streamdeck/blocks.js");
+/* harmony import */ var _streamdeck_generators_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./streamdeck/generators.js */ "../../src/things/streamdeck/generators.js");
+/* harmony import */ var _web_speech_blocks_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./web_speech/blocks.js */ "../../src/things/web_speech/blocks.js");
+/* harmony import */ var _web_speech_generators_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./web_speech/generators.js */ "../../src/things/web_speech/generators.js");
+/* harmony import */ var _xiamoi_thermometer_blocks_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./xiamoi_thermometer/blocks.js */ "../../src/things/xiamoi_thermometer/blocks.js");
+/* harmony import */ var _xiamoi_thermometer_generators_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./xiamoi_thermometer/generators.js */ "../../src/things/xiamoi_thermometer/generators.js");
 /**
  * @fileoverview All the things blocks and generators.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
+
+
 
 
 
@@ -41987,6 +43411,124 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['getR
 
 /***/ }),
 
+/***/ "../../src/things/solid/blocks.js":
+/*!****************************************!*\
+  !*** ../../src/things/solid/blocks.js ***!
+  \****************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../../src/blast_toolbox.js */ "../../src/blast_toolbox.js");
+/**
+ * @fileoverview Blocks definitions for blocks interacting with solid pods.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+       
+
+
+
+
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.upload_image = {
+  /**
+       * Block for uploading an image to a solid container.
+       * @this {Blockly.Block}
+       */
+  init: function() {
+    this.appendValueInput('image')
+        .setCheck('Image')
+        .appendField('upload image');
+    this.appendValueInput('url')
+        .setCheck('URI')
+        .appendField('to solid container');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(0);
+    this.setTooltip('Uploads an image to a solid pod.');
+    this.setHelpUrl('');
+  },
+};
+    
+// Add display_image block to the toolbox.
+(0,_src_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('upload_image', 'Actions');
+
+
+/***/ }),
+
+/***/ "../../src/things/solid/generators.js":
+/*!********************************************!*\
+  !*** ../../src/things/solid/generators.js ***!
+  \********************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
+/* harmony import */ var _inrupt_solid_client__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @inrupt/solid-client */ "../../node_modules/@inrupt/solid-client/dist/resource/file.mjs");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module '@inrupt/solid-client-authn-browser'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+/**
+ * @fileoverview Javascript generators for solid Blocks.
+ * @author derwehr@gmail.com(Thomas Wehr)
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+
+
+
+
+
+
+
+
+
+/**
+ * Generates Javascript code for the upload_image block.
+ * @param {Blockly.Block} block the upload_image block.
+ * @returns {String} the generated code.
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.upload_image = function(block) {
+  const image = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'image',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
+  );
+  const url = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'url',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE,
+  );
+
+  const code = `uploadImage(${image}, ${url});\n`;
+  return code;
+};
+
+/**
+ * Uploads an image to a solid container.
+ * @param {string} image base64 encoded image.
+ * @param {string} url the url of the solid container.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const uploadImage = async function(image, url, callback) {
+  const file = new File([image], 'image.png', {type: 'image/png'});
+  try {
+    await Object(function webpackMissingModule() { var e = new Error("Cannot find module '@inrupt/solid-client-authn-browser'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())();
+    await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_3__.saveFileInContainer)(url, file);
+  } catch (e) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(e);
+    console.error(e);
+  }
+  callback();
+};
+
+// Add uploadImage method to the interpreter's API.
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['uploadImage', uploadImage]);
+
+
+/***/ }),
+
 /***/ "../../src/things/streamdeck/blocks.js":
 /*!*********************************************!*\
   !*** ../../src/things/streamdeck/blocks.js ***!
@@ -43000,6 +44542,9 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
 /******/ 	// expose the module cache
 /******/ 	__webpack_require__.c = __webpack_module_cache__;
 /******/ 	
@@ -43016,6 +44561,36 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/create fake namespace object */
+/******/ 	(() => {
+/******/ 		var getProto = Object.getPrototypeOf ? (obj) => (Object.getPrototypeOf(obj)) : (obj) => (obj.__proto__);
+/******/ 		var leafPrototypes;
+/******/ 		// create a fake namespace object
+/******/ 		// mode & 1: value is a module id, require it
+/******/ 		// mode & 2: merge all properties of value into the ns
+/******/ 		// mode & 4: return value when already ns object
+/******/ 		// mode & 16: return value when it's Promise-like
+/******/ 		// mode & 8|1: behave like require
+/******/ 		__webpack_require__.t = function(value, mode) {
+/******/ 			if(mode & 1) value = this(value);
+/******/ 			if(mode & 8) return value;
+/******/ 			if(typeof value === 'object' && value) {
+/******/ 				if((mode & 4) && value.__esModule) return value;
+/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
+/******/ 			}
+/******/ 			var ns = Object.create(null);
+/******/ 			__webpack_require__.r(ns);
+/******/ 			var def = {};
+/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
+/******/ 			for(var current = mode & 2 && value; typeof current == 'object' && !~leafPrototypes.indexOf(current); current = getProto(current)) {
+/******/ 				Object.getOwnPropertyNames(current).forEach((key) => (def[key] = () => (value[key])));
+/******/ 			}
+/******/ 			def['default'] = () => (value);
+/******/ 			__webpack_require__.d(ns, def);
+/******/ 			return ns;
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/define property getters */
 /******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
@@ -43025,6 +44600,28 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/ensure chunk */
+/******/ 	(() => {
+/******/ 		__webpack_require__.f = {};
+/******/ 		// This file contains only the entry chunk.
+/******/ 		// The chunk loading function for additional chunks
+/******/ 		__webpack_require__.e = (chunkId) => {
+/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
+/******/ 				__webpack_require__.f[key](chunkId, promises);
+/******/ 				return promises;
+/******/ 			}, []));
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + ".app.js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -43045,6 +44642,52 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/load script */
+/******/ 	(() => {
+/******/ 		var inProgress = {};
+/******/ 		var dataWebpackPrefix = "blast-web-demo:";
+/******/ 		// loadScript function to load a script via script tag
+/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
+/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
+/******/ 			var script, needAttach;
+/******/ 			if(key !== undefined) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				for(var i = 0; i < scripts.length; i++) {
+/******/ 					var s = scripts[i];
+/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
+/******/ 				}
+/******/ 			}
+/******/ 			if(!script) {
+/******/ 				needAttach = true;
+/******/ 				script = document.createElement('script');
+/******/ 		
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 				script.src = url;
+/******/ 			}
+/******/ 			inProgress[url] = [done];
+/******/ 			var onScriptComplete = (prev, event) => {
+/******/ 				// avoid mem leaks in IE.
+/******/ 				script.onerror = script.onload = null;
+/******/ 				clearTimeout(timeout);
+/******/ 				var doneFns = inProgress[url];
+/******/ 				delete inProgress[url];
+/******/ 				script.parentNode && script.parentNode.removeChild(script);
+/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
+/******/ 				if(prev) return prev(event);
+/******/ 			}
+/******/ 			;
+/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
+/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
+/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
+/******/ 			needAttach && document.head.appendChild(script);
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
 /******/ 	(() => {
 /******/ 		// define __esModule on exports
@@ -43063,6 +44706,116 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
 /******/ 			if (!module.children) module.children = [];
 /******/ 			return module;
 /******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	(() => {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	(() => {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"main": 0
+/******/ 		};
+/******/ 		
+/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
+/******/ 				// JSONP chunk loading for javascript
+/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
+/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
+/******/ 		
+/******/ 					// a Promise means "currently loading".
+/******/ 					if(installedChunkData) {
+/******/ 						promises.push(installedChunkData[2]);
+/******/ 					} else {
+/******/ 						if(true) { // all chunks have JS
+/******/ 							// setup Promise in chunk cache
+/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							promises.push(installedChunkData[2] = promise);
+/******/ 		
+/******/ 							// start chunk loading
+/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
+/******/ 							// create error before stack unwound to get useful stacktrace later
+/******/ 							var error = new Error();
+/******/ 							var loadingEnded = (event) => {
+/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
+/******/ 									installedChunkData = installedChunks[chunkId];
+/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
+/******/ 									if(installedChunkData) {
+/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 										var realSrc = event && event.target && event.target.src;
+/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 										error.name = 'ChunkLoadError';
+/******/ 										error.type = errorType;
+/******/ 										error.request = realSrc;
+/******/ 										installedChunkData[1](error);
+/******/ 									}
+/******/ 								}
+/******/ 							};
+/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
+/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 					}
+/******/ 				}
+/******/ 		};
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		// no on chunks loaded
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkId] = 0;
+/******/ 			}
+/******/ 		
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkblast_web_demo"] = self["webpackChunkblast_web_demo"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
 /************************************************************************/

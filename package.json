@@ -24,6 +24,9 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@elgato-stream-deck/webhid": "^5.2.0",
+    "@inrupt/solid-client": "^1.19.0",
+    "@inrupt/solid-client-authn-browser": "^1.11.3",
+    "@inrupt/solid-client-authn-node": "^1.11.3",
     "blockly": "^7.20211209.3",
     "buffer": "^6.0.3",
     "del": "^6.0.0",

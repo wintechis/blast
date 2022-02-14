@@ -27,6 +27,9 @@ import './mirobot/generators.js';
 import './ruuvi_tag/blocks.js';
 import './ruuvi_tag/generators.js';
 
+import './solid/blocks.js';
+import './solid/generators.js';
+
 import './streamdeck/blocks.js';
 import './streamdeck/generators.js';
 
