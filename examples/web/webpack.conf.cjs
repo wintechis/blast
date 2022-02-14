@@ -10,7 +10,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
-    sourceMapFilename: 'app.js.map',
   },
   module: {
     rules: [
