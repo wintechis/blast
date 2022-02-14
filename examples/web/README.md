@@ -7,7 +7,7 @@ To use this demo locally just open `index.html` in your favorite Browser.
 To build this example yourself:
 1. clone this repository
 2. `cd blast`
-3. `npm i`
+3. `yarn`
 4. `cd examples/web/`
-5. `npm i`
-6. `npm run build`
+5. `yarn`
+6. `yarn run build`

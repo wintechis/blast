@@ -1,6 +1,6 @@
 /**
  * @fileoverview Gulp script to compile Blast with the closure compiler.
- * Run this script by calling "npm run build" in this directory.
+ * Run this script by calling "yarn run build" in this directory.
  */
 
 import gulp from 'gulp';
