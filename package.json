@@ -45,6 +45,7 @@
     "js-interpreter-npm": "^1.0.6",
     "jsdoc": "^3.6.7",
     "raw-loader": "^4.0.2",
+    "solid-client": "^0.24.3",
     "urdf": "git://github.com/derwehr/uRDF.js.git",
     "vm": "^0.1.0",
     "webpack-stream": "^7.0.0",
