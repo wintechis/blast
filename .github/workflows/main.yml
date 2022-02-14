@@ -16,7 +16,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn
+        run: yarn --ignore-engines
       - name: run ESLint
         run: yarn run lint
   build-examples:
@@ -80,6 +80,6 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Install dependencies
-        run: yarn
+        run: yarn --ignore-engines
       - name: Run JSDoc
         run: yarn run jsdoc
