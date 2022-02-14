@@ -41069,25 +41069,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
 /* harmony import */ var urdf__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! urdf */ "../../node_modules/urdf/src/urdf-module.js");
 /* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
-/* harmony import */ var _blast_eddystone_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./../../blast_eddystone.js */ "../../src/blast_eddystone.js");
-/* harmony import */ var _blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./../../blast_webBluetooth.js */ "../../src/blast_webBluetooth.js");
 /**
  * @fileoverview Javascript generators for BLAST's properties, actions and events Blocks.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -43531,8 +43517,8 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.upload_image = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
-/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
 /* harmony import */ var _inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/solid-client */ "../../node_modules/@inrupt/solid-client/dist/resource/file.mjs");
+/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./../../blast_interpreter.js */ "../../src/blast_interpreter.js");
 /**
  * @fileoverview Javascript generators for solid Blocks.
  * @author derwehr@gmail.com(Thomas Wehr)
