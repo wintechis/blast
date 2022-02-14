@@ -14,7 +14,7 @@ import {getAdvertisingInterval} from './../../blast_eddystone.js';
 import {getLockState} from './../../blast_eddystone.js';
 import {getPublicECDHKey} from './../../blast_eddystone.js';
 import {getTxPowerLevel} from './../../blast_eddystone.js';
-import {optionalServices} from './../../blast_webBluetooth.js';
+import {optionalServices, readText} from './../../blast_webBluetooth.js';
 import {setActiveSlot} from './../../blast_eddystone.js';
 import {setAdvertisedTxPower} from './../../blast_eddystone.js';
 import {setAdvertisingData} from './../../blast_eddystone.js';
@@ -235,4 +235,133 @@ const readEddystoneProperty = async function(webBluetoothId, slot, property, cal
   
 // Add readEddystoneProperty method to the interpreter's API.
 asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
+
+/**
+ * Generates JavaScript code for the read_bluetooth_service block.
+   * @param {Blockly.Block} block the read_bluetooth_service block.
+   * @returns {String} the generated code.
+ */
+Blockly.JavaScript['read_gatt_characteristic'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_NONE) || null;
+  const characteristic = Blockly.JavaScript.quote_(block.getFieldValue('characteristic'));
+  const code = `readBluetoothService(${thing}, ${characteristic})`;
   
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+const characteristics = {
+  'barometricPressureTrend': {
+    service: '00001802-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
+  },
+  'batteryLevel': {
+    service: '0000180f-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a19-0000-1000-8000-00805f9b34fb',
+  },
+  'deviceName': {
+    service: '00001800-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a00-0000-1000-8000-00805f9b34fb',
+  },
+  'elevation': {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6c-0000-1000-8000-00805f9b34fb',
+  },
+  'firmwareRevision': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a26-0000-1000-8000-00805f9b34fb',
+  },
+  'hardwareRevision': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a27-0000-1000-8000-00805f9b34fb',
+  },
+  'humidity': {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6f-0000-1000-8000-00805f9b34fb',
+  },
+  'irradiance': {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a77-0000-1000-8000-00805f9b34fb',
+  },
+  'intermediateTemperature': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1e-0000-1000-8000-00805f9b34fb',
+  },
+  'manufacturerName': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a29-0000-1000-8000-00805f9b34fb',
+  },
+  'modelNumber': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a24-0000-1000-8000-00805f9b34fb',
+  },
+  'movementCounter': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a56-0000-1000-8000-00805f9b34fb',
+  },
+  'pressure': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6d-0000-1000-8000-00805f9b34fb',
+  },
+  'serialNumber': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a25-0000-1000-8000-00805f9b34fb',
+  },
+  'softwareRevision': {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a28-0000-1000-8000-00805f9b34fb',
+  },
+  'temperature': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6e-0000-1000-8000-00805f9b34fb',
+  },
+  'temperatureMeasurement': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
+  },
+  'temperatureType': {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1d-0000-1000-8000-00805f9b34fb',
+  },
+  'txPowerLevel': {
+    service: '00001804-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a07-0000-1000-8000-00805f9b34fb',
+  },
+  'weight': {
+    service: '00001808-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a9d-0000-1000-8000-00805f9b34fb',
+  },
+};
+
+// Add all services to optionalServices.
+for (const characteristic in characteristics) {
+  if (!optionalServices.includes(characteristics[characteristic].service)) {
+    optionalServices.push(characteristics[characteristic].service);
+  }
+}
+
+/**
+ * Reads a bluetooth characteristic from a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {String} characteristic The characteristic to read.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+const readBluetoothService = async function(webBluetoothId, characteristic, callback) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    throwError('No bluetooth device set.');
+    callback();
+    return;
+  }
+
+  const value = await readText(
+      webBluetoothId,
+      characteristics[characteristic].service,
+      characteristics[characteristic].characteristic,
+  );
+  callback(value);
+};
+
+asyncApiFunctions.push(['readBluetoothService', readBluetoothService]);

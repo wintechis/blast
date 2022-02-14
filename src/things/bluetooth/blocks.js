@@ -159,4 +159,45 @@ const READ_EDDYSTONE_PROPERTY_XML = `
 // Add read_eddystone_property block to the toolbox.
 addBlock('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
   
- 
+Blockly.Blocks['read_gatt_characteristic'] = {
+  /**
+    * Block for reading a characteristic from a bluetooth device.
+    */
+  init: function() {
+    this.appendDummyInput()
+        .appendField('read gatt characteristic')
+        .appendField(
+            new Blockly.FieldDropdown([
+              ['barometric pressure trend', 'barometricPressureTrend'],
+              ['battery level', 'batteryLevel'],
+              ['device name', 'deviceName'],
+              ['elevation', 'elevation'],
+              ['firmware revision', 'firmwareRevision'],
+              ['hardware revision', 'hardwareRevision'],
+              ['humidity', 'humidity'],
+              ['irradiance', 'irradiance'],
+              ['intermediate temperature', 'intermediateTemperature'],
+              ['manufacturer name', 'manufacturerName'],
+              ['model number', 'modelNumber'],
+              ['movement counter', 'movementCounter'],
+              ['pressure', 'pressure'],
+              ['serial number', 'serialNumber'],
+              ['software revision string', 'softwareRevisionString'],
+              ['temperature', 'temperature'],
+              ['temperature measurement', 'temperatureMeasurement'],
+              ['temperature type', 'temperatureType'],
+              ['tx power level', 'txPowerLevel'],
+              ['weight', 'weight'],
+            ]), 'characteristic')
+        .appendField('of Bluetooth device');
+    this.appendValueInput('Thing')
+        .setCheck('Thing');
+    this.setOutput(true, ['String', 'Number']);
+    this.setColour(255);
+    this.setTooltip('Reads a property from a Bluetooth device.');
+    this.setHelpUrl('https://www.bluetooth.com/specifications/assigned-numbers/');
+  },
+};
+
+// Add read_bluetooth_service block to the toolbox.
+addBlock('read_gatt_characteristic', 'Properties');
