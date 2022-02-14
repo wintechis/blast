@@ -38592,7 +38592,7 @@ const getPrimaryService = async function(id, serviceUUID) {
     thingsLog(`Got primary service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)('The device is not compatible with the connected block.');
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.throwError)(`No Services Matching UUID ${serviceUUID} found in Device.`);
   }
   return service;
 };
@@ -41896,7 +41896,7 @@ const READ_EDDYSTONE_PROPERTY_XML = `
 // Add read_eddystone_property block to the toolbox.
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
   
-blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.read_bluetooth_service = {
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.read_gatt_characteristic = {
   /**
     * Block for reading a characteristic from a bluetooth device.
     */
@@ -41937,7 +41937,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.read_bluetooth_service = {
 };
 
 // Add read_bluetooth_service block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('read_bluetooth_service', 'Properties');
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('read_gatt_characteristic', 'Properties');
 
 
 /***/ }),
@@ -42197,7 +42197,7 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['read
    * @param {Blockly.Block} block the read_bluetooth_service block.
    * @returns {String} the generated code.
  */
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.read_bluetooth_service = function(block) {
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.read_gatt_characteristic = function(block) {
   const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
       block,
       'Thing',
@@ -42315,7 +42315,7 @@ const readBluetoothService = async function(webBluetoothId, characteristic, call
   const value = await (0,_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_3__.readText)(
       webBluetoothId,
       characteristics[characteristic].service,
-      characteristics[characteristic].characteristic
+      characteristics[characteristic].characteristic,
   );
   callback(value);
 };

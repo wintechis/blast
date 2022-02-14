@@ -274,7 +274,7 @@ export const getPrimaryService = async function(id, serviceUUID) {
     thingsLog(`Got primary service <code>${serviceUUID}</code>`, 'Bluetooth', id);
   } catch (error) {
     console.error(error);
-    throwError('The device is not compatible with the connected block.');
+    throwError(`No Services Matching UUID ${serviceUUID} found in Device.`);
   }
   return service;
 };
