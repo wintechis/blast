@@ -35,7 +35,7 @@
     "fs": "^0.0.1-security",
     "google-closure-compiler": "^20210302.0.0",
     "gulp": "^4.0.2",
-    "gulp-cli": "^3.0.0",
+    "gulp-cli": "^2.3.0",
     "gulp-jsdoc3": "^3.0.0",
     "gulp-rev": "^9.0.0",
     "gulp-rev-rewrite": "^5.0.0",
