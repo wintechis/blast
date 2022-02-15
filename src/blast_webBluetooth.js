@@ -147,7 +147,7 @@ const getDeviceById = async function(id) {
    * @param {string} id identifier of the device to connect to.
    * @return {Object} representation of the complete request with response.
    */
-const connect = async function(id) {
+export const connect = async function(id) {
   try {
     const device = await getDeviceById(id);
     const thingsLog = getThingsLog();
