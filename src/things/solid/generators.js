@@ -34,14 +34,29 @@ Blockly.JavaScript['upload_image'] = function(block) {
 
 /**
  * Uploads an image to a solid container.
- * @param {string} image base64 encoded image.
+ * @param {string} image the image to upload as data URI.
  * @param {string} url the url of the solid container.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const uploadImage = async function(image, url, callback) {
-  const file = new File([image], 'image.png', {type: 'image/png'});
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  let byteString;
+  if (image.split(',')[0].indexOf('base64') >= 0) {
+    byteString = atob(image.split(',')[1]);
+  } else {
+    byteString = unescape(dataURI.split(',')[1]);
+  }
+  // seperate out the mime component
+  const mimeString = image.split(',')[0].split(':')[1].split(';')[0];
+  // write the bytes of the string to a typed array
+  const ia = new Uint8Array(byteString.length);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  const blob = new Blob([ia], {type: mimeString});
+
   try {
-    await saveFileInContainer(url, file);
+    await saveFileInContainer(url, blob);
   } catch (e) {
     throwError(e);
     console.error(e);

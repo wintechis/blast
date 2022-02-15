@@ -38299,6 +38299,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "scanBlocks": () => (/* binding */ scanBlocks),
 /* harmony export */   "LEScanResults": () => (/* binding */ LEScanResults),
 /* harmony export */   "requestDevice": () => (/* binding */ requestDevice),
+/* harmony export */   "connect": () => (/* binding */ connect),
 /* harmony export */   "writeWithoutResponse": () => (/* binding */ writeWithoutResponse),
 /* harmony export */   "writeWithResponse": () => (/* binding */ writeWithResponse),
 /* harmony export */   "getPrimaryService": () => (/* binding */ getPrimaryService),
@@ -40787,6 +40788,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+
+// import './sphero/blocks.js';
+// import './sphero/generators.js';
 
 
 
@@ -43728,14 +43732,33 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.upload_image = function(block) {
 
 /**
  * Uploads an image to a solid container.
- * @param {string} image base64 encoded image.
+ * @param {string} image the image to upload as data URI.
  * @param {string} url the url of the solid container.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const uploadImage = async function(image, url, callback) {
-  const file = new File([image], 'image.png', {type: 'image/png'});
+  // convert base64/URLEncoded data component to raw binary data held in a string
+  let byteString;
+  if (image.split(',')[0].indexOf('base64') >= 0) {
+    byteString = atob(image.split(',')[1]);
+  } else {
+    byteString = unescape(dataURI.split(',')[1]);
+  }
+  // seperate out the mime component
+  const mimeString = image.split(',')[0].split(':')[1].split(';')[0];
+  // write the bytes of the string to a typed array
+  const ia = new Uint8Array(byteString.length);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  const blob = new Blob([ia], {type: mimeString});
+
+  const file = new File([byteString], 'image.png', {
+    type: 'image/png',
+  });
+
   try {
-    await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__.saveFileInContainer)(url, file);
+    await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__.saveFileInContainer)(url, blob);
   } catch (e) {
     (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(e);
     console.error(e);
