@@ -7,15 +7,48 @@
 'use strict';
 
 import Blockly from 'blockly';
+import {getWebBluetoothDevices} from '../blast_things.js';
+import {getWebHIDDevices} from '../blast_things.js';
+import {getWorkspace} from '../blast_interpreter.js';
 
 Blockly.JavaScript['things_webBluetooth'] = function(block) {
-  const id = Blockly.JavaScript.quote_(block.getFieldValue('id'));
+  const id = block.getFieldValue('id');
+  const webBluetoothDevices = getWebBluetoothDevices();
+  let name;
+  // get the user-defined name of the device
+  for (const [key, value] of webBluetoothDevices) {
+    if (value === id) {
+      name = key;
+      break;
+    }
+  }
+  // convert the name to a valid JavaScript variable name
+  const workspace = getWorkspace();
+  const thingsVar = Blockly.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
+  name = Blockly.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  // Define a variable for the thing.
+  Blockly.JavaScript.definitions_[id] = 'var ' + name + ' = ' + Blockly.JavaScript.quote_(id) + ';';
 
-  return [id, Blockly.JavaScript.ORDER_NONE];
+  return [name, Blockly.JavaScript.ORDER_NONE];
 };
 
 Blockly.JavaScript['things_webHID'] = function(block) {
-  const id = Blockly.JavaScript.quote_(block.getFieldValue('id'));
+  const id = block.getFieldValue('id');
+  const webHidDevices = getWebHIDDevices();
+  let name;
+  // get the user-defined name of the device
+  for (const [key, value] of webHidDevices) {
+    if (value === id) {
+      name = key;
+      break;
+    }
+  }
+  // convert the name to a valid JavaScript variable name
+  const workspace = getWorkspace();
+  const thingsVar = Blockly.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
+  name = Blockly.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  // Define a variable for the thing.
+  Blockly.JavaScript.definitions_[id] = 'var ' + name + ' = ' + Blockly.JavaScript.quote_(id) + ';';
 
-  return [id, Blockly.JavaScript.ORDER_NONE];
+  return [name, Blockly.JavaScript.ORDER_NONE];
 };

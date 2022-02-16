@@ -40700,6 +40700,8 @@ _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['stdI
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var blockly__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! blockly */ "../../node_modules/blockly/index.js");
+/* harmony import */ var _blast_things_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../blast_things.js */ "../../src/blast_things.js");
+/* harmony import */ var _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../blast_interpreter.js */ "../../src/blast_interpreter.js");
 /**
  * @fileoverview Generating JavaScript for blocks in the things category.
  * @author derwehr@gmail.com (Thomas Wehr)
@@ -40710,16 +40712,49 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.things_webBluetooth = function(block) {
-  const id = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('id'));
 
-  return [id, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.things_webBluetooth = function(block) {
+  const id = block.getFieldValue('id');
+  const webBluetoothDevices = (0,_blast_things_js__WEBPACK_IMPORTED_MODULE_1__.getWebBluetoothDevices)();
+  let name;
+  // get the user-defined name of the device
+  for (const [key, value] of webBluetoothDevices) {
+    if (value === id) {
+      name = key;
+      break;
+    }
+  }
+  // convert the name to a valid JavaScript variable name
+  const workspace = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.getWorkspace)();
+  const thingsVar = blockly__WEBPACK_IMPORTED_MODULE_0__.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
+  name = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  // Define a variable for the thing.
+  blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.definitions_[id] = 'var ' + name + ' = ' + blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(id) + ';';
+
+  return [name, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
 };
 
 blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.things_webHID = function(block) {
-  const id = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(block.getFieldValue('id'));
+  const id = block.getFieldValue('id');
+  const webHidDevices = (0,_blast_things_js__WEBPACK_IMPORTED_MODULE_1__.getWebHIDDevices)();
+  let name;
+  // get the user-defined name of the device
+  for (const [key, value] of webHidDevices) {
+    if (value === id) {
+      name = key;
+      break;
+    }
+  }
+  // convert the name to a valid JavaScript variable name
+  const workspace = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_2__.getWorkspace)();
+  const thingsVar = blockly__WEBPACK_IMPORTED_MODULE_0__.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
+  name = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  // Define a variable for the thing.
+  blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.definitions_[id] = 'var ' + name + ' = ' + blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.quote_(id) + ';';
 
-  return [id, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  return [name, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
 };
 
 
@@ -40788,9 +40823,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-// import './sphero/blocks.js';
-// import './sphero/generators.js';
 
 
 
@@ -43752,10 +43784,6 @@ const uploadImage = async function(image, url, callback) {
     ia[i] = byteString.charCodeAt(i);
   }
   const blob = new Blob([ia], {type: mimeString});
-
-  const file = new File([byteString], 'image.png', {
-    type: 'image/png',
-  });
 
   try {
     await (0,_inrupt_solid_client__WEBPACK_IMPORTED_MODULE_2__.saveFileInContainer)(url, blob);
