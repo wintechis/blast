@@ -86,7 +86,7 @@ const getCapabilities = async function(webBluetoothId) {
 /**
   * Gets the active slot of the Eddystone configuration service.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
-  * @return {!Promise} A promise that resolves when the operation is complete.
+  * @return {!Number} A promise that resolves when the operation is complete.
   */
 export const getActiveSlot = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
@@ -425,12 +425,44 @@ export const getAdvertisingData = async function(webBluetoothId) {
 };
 
 /**
+   * Reads an Eddystone property from a bluetooth device.
+   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+   * @param {String} property The property to read.
+   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+   */
+export const readEddystoneProperty = async function(webBluetoothId, property) {
+  // read the property
+  let value = null;
+  switch (property) {
+    case 'advertisedTxPower':
+      value = await getAdvertisedTxPower(webBluetoothId);
+      break;
+    case 'advertisementData':
+      value = await getAdvertisingData(webBluetoothId);
+      break;
+    case 'advertisingInterval':
+      value = await getAdvertisingInterval(webBluetoothId);
+      break;
+    case 'lockState':
+      value = await getLockState(webBluetoothId);
+      break;
+    case 'publicECDHKey':
+      value = await getPublicECDHKey(webBluetoothId);
+      break;
+    case 'radioTxPower':
+      value = await getTxPowerLevel(webBluetoothId);
+      break;
+  }
+  
+  return value;
+};
+
+/**
   * Sets the advertising data of the currently active slot.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
-  * @param {string} frameType The frame type of the data to set.
   * @param {string} data The data to set.
   */
-export const setAdvertisingData = async function(webBluetoothId, frameType, data) {
+export const setAdvertisingData = async function(webBluetoothId, data) {
   const thingsLog = getThingsLog();
   thingsLog('Set Eddystone advertising data...', 'Eddystone', webBluetoothId);
   const encodeEddystoneUrl = function(url) {
@@ -496,6 +528,27 @@ export const setAdvertisingData = async function(webBluetoothId, frameType, data
   };
   
   let encodedData;
+  let frameType = data.substring(0, 2);
+
+  switch (frameType) {
+    case '00':
+      frameType = 'UID';
+      break;
+    case '10':
+      frameType = 'URL';
+      break;
+    case '20':
+      throwError('TLM frame type is not writable.');
+      return;
+    case '30':
+      throwError('EID frame type is not writable.');
+      return;
+    default:
+      throwError('Invalid frame type.');
+      return;
+  }
+
+  
   if (frameType === 'URL') {
     encodedData = encodeEddystoneUrl(data);
   } else if (frameType === 'UID') {
@@ -517,4 +570,29 @@ export const setAdvertisingData = async function(webBluetoothId, frameType, data
   );
   thingsLog(`Eddystone advertising data set to <code>${data}</code>`, 'Eddystone', webBluetoothId);
   return response;
+};
+
+/**
+   * Writes an Eddystone property to a bluetooth device.
+   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+   * @param {String} property The property to write.
+   * @param {String} value The value to write.
+   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+   */
+export const writeEddystoneProperty = async function(
+    webBluetoothId, property, value) {
+  switch (property) {
+    case 'advertisedTxPower':
+      await setAdvertisedTxPower(webBluetoothId, value);
+      break;
+    case 'advertisementData':
+      await setAdvertisingData(webBluetoothId, value);
+      break;
+    case 'advertisingInterval':
+      await setAdvertisingInterval(webBluetoothId, value);
+      break;
+    case 'radioTxPower':
+      await setTxPowerLevel(webBluetoothId, value);
+      break;
+  }
 };

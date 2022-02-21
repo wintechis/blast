@@ -502,7 +502,13 @@ const removeEventListener = function(event, listener) {
 /**
   * Removes webBluetooth eventListeners and deletes cached advertisements.
   */
-const tearDown = function() {
+const tearDown = async function() {
+  // disconnect all bt devices.
+  const devices = await navigator.bluetooth.getDevices();
+  for (const device of devices) {
+    disconnect(device.id);
+  }
+
   // Reset running scan flag
   if (isLEScanRunning) {
     isLEScanRunning = false;

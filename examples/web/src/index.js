@@ -24,7 +24,7 @@ import {getWorkspace} from '../../../src/blast_interpreter.js';
 // import block blast files to include them in bundled code.
 import '../../../src/blocks/all.js';
 import '../../../src/generators/all.js';
-import '../../../src/things/all.js';
+import '../../../src/thingBlocks/all.js';
 
 // import additional block definitions for web example
 import './blocks.js';
