@@ -130,11 +130,7 @@ const writeEddystoneProperty = async function(
   
   const wot = await getWoT();
   const device = new EddystoneThing(wot, webBluetoothId);
-  await device.init();
-  const exposedThing = device.thing;
-
-  await device.setActiveSlot(slot);
-  await exposedThing.writeProperty(property, value);
+  await device.writeProperty(property, value, slot);
 
   callback();
 };

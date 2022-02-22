@@ -1,17 +1,18 @@
+import { ExposedThing } from "@node-wot/core";
 import * as WoT from "wot-typescript-definitions";
-import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty } from "../../../blast_eddystone.js";
+import {getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty} from "../../../blast_eddystone.js";
 
 export class EddystoneThing {
-    public thing: WoT.ExposedThing;
+    public thing: ExposedThing;
     public deviceWoT: typeof WoT; 
     public td: WoT.ThingDescription;
     private webBluetoothId: string;
-    private slot;
+    private slot : number;
 
     public thingModel: WoT.ThingDescription = {
         "@context": ["https://www.w3.org/2019/wot/td/v1"],
         "@type": ["Thing"],
-        id: "blast:bluetooth:iBKS105", // this should normally be an URI, need to figure out a how to properly identify tds here
+        id: "blast:bluetooth:iBKS105", // this should normally be an URI, need to figure out a how to properly identify tds
         title: "iBKS105",
         description: "Accent Systems iBKS105 iBeacon",
         securityDefinitions: {
@@ -66,28 +67,22 @@ export class EddystoneThing {
         },
     };
 
-    private tdDirectory: string;
-
-    constructor(deviceWoT: typeof WoT, webBluetoothId: string, tdDiretory?: string) {
+    constructor(deviceWoT: typeof WoT, webBluetoothId: string) {
         this.deviceWoT = deviceWoT;
         this.webBluetoothId = webBluetoothId;
-        if (tdDiretory) this.tdDirectory = tdDiretory;
     }
 
-    public async init(): Promise<WoT.ExposedThing> {
-        // produce thing
-        this.thing = await this.deviceWoT.produce(this.thingModel);
-        this.td = this.thing.getThingDescription();
+    public async init(): Promise<void> {
+        this.thing = (await this.deviceWoT.produce(this.thingModel) as unknown as ExposedThing);
         this.initializeProperties();
-
-        return this.thing;
-    };
+        this.td = this.thing.getThingDescription();
+    }
 
     private initializeProperties(): void {
-        const properties = this.td.properties
+        const properties = this.thingModel.properties
         const propertyKeys = Object.keys(properties);
         for (const p of propertyKeys) {
-                this.thing.setPropertyReadHandler(p, () => {
+            this.thing.setPropertyReadHandler(p, () => {
                     return readEddystoneProperty(this.webBluetoothId, p);
                 });
             if (!properties[p].readOnly) {
@@ -110,5 +105,21 @@ export class EddystoneThing {
             this.slot = getActiveSlot();
         }
         return this.slot;
+    }
+
+    public async writeProperty(property: string, value: any, slot: number): Promise<void> {
+        if (!this.thing) {
+            await this.init();
+        }
+        this.setActiveSlot(slot);
+        return this.thing.writeProperty(property, value);
+    }
+
+    public async readProperty(property: string, slot: number): Promise<any> {
+        if (!this.thing) {
+            await this.init();
+        }
+        this.setActiveSlot(slot);
+        return this.thing.readProperty(property);
     }
 }

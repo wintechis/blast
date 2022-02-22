@@ -53,5 +53,8 @@
     "webpack-stream": "^7.0.0",
     "workbox-cli": "^6.4.2",
     "wot-typescript-definitions": "^0.8.0-SNAPSHOT.21"
+  },
+  "dependencies": {
+    "@node-wot/binding-http": "^0.7.8"
   }
 }

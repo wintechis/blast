@@ -1,6 +1,6 @@
-import { readEddystoneProperty, setActiveSlot, writeEddystoneProperty } from "../../../blast_eddystone.js";
+import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty } from "../../../blast_eddystone.js";
 export class EddystoneThing {
-    constructor(deviceWoT, webBluetoothId, tdDiretory) {
+    constructor(deviceWoT, webBluetoothId) {
         this.thingModel = {
             "@context": ["https://www.w3.org/2019/wot/td/v1"],
             "@type": ["Thing"],
@@ -60,19 +60,14 @@ export class EddystoneThing {
         };
         this.deviceWoT = deviceWoT;
         this.webBluetoothId = webBluetoothId;
-        if (tdDiretory)
-            this.tdDirectory = tdDiretory;
     }
     async init() {
-        // produce thing
         this.thing = await this.deviceWoT.produce(this.thingModel);
-        this.td = this.thing.getThingDescription();
         this.initializeProperties();
-        return this.thing;
+        this.td = this.thing.getThingDescription();
     }
-    ;
     initializeProperties() {
-        const properties = this.td.properties;
+        const properties = this.thingModel.properties;
         const propertyKeys = Object.keys(properties);
         for (const p of propertyKeys) {
             this.thing.setPropertyReadHandler(p, () => {
@@ -93,9 +88,23 @@ export class EddystoneThing {
     }
     async getActiveSlot() {
         if (!this.slot) {
-            this.slot = this.getActiveSlot();
+            this.slot = getActiveSlot();
         }
         return this.slot;
+    }
+    async writeProperty(property, value, slot) {
+        if (!this.thing) {
+            await this.init();
+        }
+        this.setActiveSlot(slot);
+        return this.thing.writeProperty(property, value);
+    }
+    async readProperty(property, slot) {
+        if (!this.thing) {
+            await this.init();
+        }
+        this.setActiveSlot(slot);
+        return this.thing.readProperty(property);
     }
 }
 //# sourceMappingURL=EddyStoneThing.js.map
