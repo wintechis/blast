@@ -4,7 +4,6 @@ import { Servient } from "@node-wot/core";
 
 let servient: Servient;
 let wot: typeof WoT;
-let thingDescriptions = {};
 
 export const getServient = function(): Servient {
     if (!servient) {
@@ -18,9 +17,4 @@ export const getWoT = async function(): Promise<typeof WoT> {
         wot = await getServient().start();
     }
     return wot;
-};
-
-
-export const addThingDescription = function(thingDescription: WoT.ThingDescription): void {
-    thingDescriptions[thingDescription.id] = thingDescription;
 };
