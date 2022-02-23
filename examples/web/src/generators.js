@@ -7,8 +7,8 @@
 
 import Blockly from 'blockly';
 import {addElementToOutputContainer} from './web.js';
-import {apiFunctions} from '../../../src/blast_interpreter.js';
-import {getInterpreter} from '../../../src/blast_interpreter.js';
+import {apiFunctions} from '../../../dist/blast_interpreter.js';
+import {getInterpreter} from '../../../dist/blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the capture_image block.

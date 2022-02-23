@@ -15,7 +15,7 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "scripts": {
-    "build": "cd examples/web/ && yarn run build",
+    "build": "tsc && cd examples/web/ && yarn run build",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\""
   },

@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "skipLibCheck": true,
+        "module": "esnext",
+        "lib": [
+            "es6",
+            "dom"
+        ],
+        "esModuleInterop": true,
+        "target": "ES2018",
+        "moduleResolution": "node",
+        "sourceMap": true,
+        "outDir": "dist",
+        "paths": {
+            "@node-wot": [
+                "https://cdn.jsdelivr.net/npm/@node-wot/browser-bundle@latest/dist/wot-bundle.min.js"
+            ]
+        }
+    },
+    "include": ["src/**/*.ts", "src/**/*.js"],
+}

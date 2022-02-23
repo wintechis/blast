@@ -7,24 +7,24 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {apiFunctions} from '../../../src/blast_interpreter.js';
-import {currentToolbox} from '../../../src/blast_toolbox.js';
+import {apiFunctions} from '../../../dist/blast_interpreter.js';
+import {currentToolbox} from '../../../dist/blast_toolbox.js';
 import {downloadScreenshot} from './screenshot.js';
-import {eventsFlyoutCategory} from '../../../src/blast_states.js';
-import {initInterpreter} from '../../../src/blast_interpreter.js';
-import {initStatesInterpreter} from '../../../src/blast_states_interpreter.js';
+import {eventsFlyoutCategory} from '../../../dist/blast_states.js';
+import {initInterpreter} from '../../../dist/blast_interpreter.js';
+import {initStatesInterpreter} from '../../../dist/blast_states_interpreter.js';
 import {initUi} from './web.js';
-import {link} from '../../../src/blast_storage.js';
-import {load} from '../../../src/blast_storage.js';
+import {link} from '../../../dist/blast_storage.js';
+import {load} from '../../../dist/blast_storage.js';
 import {bindClick} from './web.js';
-import {thingsFlyoutCategory} from '../../../src/blast_things.js';
-import {getStdInfo} from '../../../src/blast_interpreter.js';
-import {getWorkspace} from '../../../src/blast_interpreter.js';
+import {thingsFlyoutCategory} from '../../../dist/blast_things.js';
+import {getStdInfo} from '../../../dist/blast_interpreter.js';
+import {getWorkspace} from '../../../dist/blast_interpreter.js';
 
 // import block blast files to include them in bundled code.
-import '../../../src/blocks/all.js';
-import '../../../src/generators/all.js';
-import '../../../src/thingBlocks/all.js';
+import '../../../dist/blocks/all.js';
+import '../../../dist/generators/all.js';
+import '../../../dist/thingBlocks/all.js';
 
 // import additional block definitions for web example
 import './blocks.js';

@@ -1,6 +1,7 @@
 const path = require('path');
 const {ProvidePlugin} = require('webpack');
 const {DefinePlugin} = require('webpack');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -47,6 +48,7 @@ module.exports = {
     new DefinePlugin({
       'process.versions.node': JSON.stringify(process.versions.node),
     }),
+    new NodePolyfillPlugin(),
   ],
   resolve: {
     fallback: {

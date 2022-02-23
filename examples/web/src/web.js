@@ -7,18 +7,18 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {getLatestCode} from '../../../src/blast_interpreter.js';
-import {loadXMLFromFile} from '../../../src/blast_storage.js';
-import {link} from '../../../src/blast_storage.js';
-import {onStatusChange} from '../../../src/blast_interpreter.js';
-import {runJS} from '../../../src/blast_interpreter.js';
-import {setStdError} from '../../../src/blast_interpreter.js';
-import {setStdIn} from '../../../src/blast_interpreter.js';
-import {setStdInfo} from '../../../src/blast_interpreter.js';
-import {setStdOut} from '../../../src/blast_interpreter.js';
-import {setThingsLog} from '../../../src/blast_things.js';
-import {statusValues} from '../../../src/blast_interpreter.js';
-import {stopJS} from '../../../src/blast_interpreter.js';
+import {getLatestCode} from '../../../dist/blast_interpreter.js';
+import {loadXMLFromFile} from '../../../dist/blast_storage.js';
+import {link} from '../../../dist/blast_storage.js';
+import {onStatusChange} from '../../../dist/blast_interpreter.js';
+import {runJS} from '../../../dist/blast_interpreter.js';
+import {setStdError} from '../../../dist/blast_interpreter.js';
+import {setStdIn} from '../../../dist/blast_interpreter.js';
+import {setStdInfo} from '../../../dist/blast_interpreter.js';
+import {setStdOut} from '../../../dist/blast_interpreter.js';
+import {setThingsLog} from '../../../dist/blast_things.js';
+import {statusValues} from '../../../dist/blast_interpreter.js';
+import {stopJS} from '../../../dist/blast_interpreter.js';
 
 
 /**

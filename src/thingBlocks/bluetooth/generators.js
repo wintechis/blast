@@ -17,8 +17,8 @@ import {getTxPowerLevel} from './../../blast_eddystone.js';
 import {optionalServices, readText} from './../../blast_webBluetooth.js';
 import {setActiveSlot} from './../../blast_eddystone.js';
 import {throwError} from './../../blast_interpreter.js';
-import {getWoT} from './../../things/dist/index.js';
-import {EddystoneThing} from './../../things/dist/eddystone/EddyStoneThing.js';
+import {getWoT} from './../../things/index.js';
+import {EddystoneDevice} from './../../things/eddystone/EddystoneDevice.js';
 
 
 /**
@@ -129,7 +129,7 @@ const writeEddystoneProperty = async function(
   }
   
   const wot = await getWoT();
-  const device = new EddystoneThing(wot, webBluetoothId);
+  const device = new EddystoneDevice(wot, webBluetoothId);
   await device.writeProperty(property, value, slot);
 
   callback();

@@ -7,7 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {addBlock} from './../../../src/blast_toolbox.js';
+import {addBlock} from './../../../dist/blast_toolbox.js';
 
 
 Blockly.Blocks['display_table'] = {

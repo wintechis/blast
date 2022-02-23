@@ -86,7 +86,7 @@ const getCapabilities = async function(webBluetoothId) {
 /**
   * Gets the active slot of the Eddystone configuration service.
   * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
-  * @return {!Number} A promise that resolves when the operation is complete.
+  * @return {!Promise} A promise that resolves when the operation is complete.
   */
 export const getActiveSlot = async function(webBluetoothId) {
   const thingsLog = getThingsLog();
