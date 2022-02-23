@@ -2,6 +2,8 @@ import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProp
 import { getThing } from "../index.js";
 export class EddystoneDevice {
     constructor(deviceWoT, webBluetoothId) {
+        this.thing = null;
+        this.slot = -1;
         this.thingModel = {
             "@context": ["https://www.w3.org/2019/wot/td/v1"],
             "@type": ["Thing"],
@@ -72,14 +74,16 @@ export class EddystoneDevice {
     addPropertyHandlers() {
         const properties = this.thingModel.properties;
         const propertyKeys = Object.keys(properties);
-        for (const p of propertyKeys) {
-            this.thing.setPropertyReadHandler(p, () => {
-                return readEddystoneProperty(this.webBluetoothId, p);
-            });
-            if (!properties[p].readOnly) {
-                this.thing.setPropertyWriteHandler(p, (value) => {
-                    return writeEddystoneProperty(this.webBluetoothId, p, value);
+        if (this.thing) {
+            for (const p of propertyKeys) {
+                this.thing.setPropertyReadHandler(p, () => {
+                    return readEddystoneProperty(this.webBluetoothId, p);
                 });
+                if (!properties[p].readOnly) {
+                    this.thing.setPropertyWriteHandler(p, (value) => {
+                        return writeEddystoneProperty(this.webBluetoothId, p, value);
+                    });
+                }
             }
         }
     }

@@ -4,28 +4,33 @@
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 'use strict';
+
 import Blockly from 'blockly';
-import { addBlock } from './../../blast_toolbox.js';
+import {addBlock} from './../../blast_toolbox.js';
+
+
 Blockly.Blocks['blinkstick_set_colors'] = {
-    init: function () {
-        this.appendValueInput('COLOUR')
-            .setCheck('Colour')
-            .appendField('write colour property');
-        this.appendValueInput('index')
-            .setCheck('Number')
-            .appendField('of LED #');
-        this.appendValueInput('thing')
-            .setCheck('Thing')
-            .appendField('to BlinkStick');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(255);
-        this.setTooltip('Set the color properties of a tulogic BlinkStick.');
-        this.setHelpUrl('https://www.blinkstick.com/');
-    },
+  init: function() {
+    this.appendValueInput('COLOUR')
+        .setCheck('Colour')
+        .appendField('write colour property');
+    this.appendValueInput('index')
+        .setCheck('Number')
+        .appendField('of LED #');
+    this.appendValueInput('thing')
+        .setCheck('Thing')
+        .appendField('to BlinkStick');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(255);
+    this.setTooltip('Set the color properties of a tulogic BlinkStick.');
+    this.setHelpUrl('https://www.blinkstick.com/');
+  },
 };
+
 // Define inner blocks XML for the blinkstick_set_colors block.
 const BLINKSTICK_SET_COLORS_XML = `
 <block type="blinkstick_set_colors">
@@ -41,6 +46,6 @@ const BLINKSTICK_SET_COLORS_XML = `
   </value>
 </block>
 `;
+
 // Add blinkstick_set_colors block to the toolbox.
 addBlock('blinkstick_set_colors', 'Properties', BLINKSTICK_SET_COLORS_XML);
-//# sourceMappingURL=blocks.js.map

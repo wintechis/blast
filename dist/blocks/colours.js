@@ -3,8 +3,12 @@
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 'use strict';
-import { addBlock } from './../blast_toolbox.js';
+
+import {addBlock} from './../blast_toolbox.js';
+
+
 // Define inner block XML for the colour_rgb block.
 const COLOUR_RGB_XML = `
 <block type="colour_rgb">
@@ -24,8 +28,10 @@ const COLOUR_RGB_XML = `
         </block>
     </value>
 </block>`;
+
 // Add the colour_rgb block to the toolbox.
 addBlock('colour_rgb', 'colours', COLOUR_RGB_XML);
+
 // Define inner block XML for the colur_blend block.
 const COLOUR_BLEND_XML = `
 <block type="colour_blend">
@@ -45,6 +51,6 @@ const COLOUR_BLEND_XML = `
         </block>
     </value>
 </block>`;
+
 // Add the colour_blend block to the toolbox.
 addBlock('colour_blend', 'colours', COLOUR_BLEND_XML);
-//# sourceMappingURL=colours.js.map
