@@ -7,40 +7,76 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {
+  ALIGN_CENTRE,
+  Blocks,
+  Events,
+  FieldCheckbox,
+  FieldDropdown,
+} from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 import {eventsInWorkspace} from './../../blast_interpreter.js';
 import {getWorkspace} from './../../blast_interpreter.js';
 
-
-Blockly.Blocks['streamdeck_button_event'] = {
+Blocks['streamdeck_button_event'] = {
   /**
    * Block handling streamdeck button pushes.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('Stream Deck Mini');
+      .setCheck('Thing')
+      .appendField('Stream Deck Mini');
     this.appendDummyInput()
-        .appendField('on button')
-        .appendField(new Blockly.FieldDropdown([
+      .appendField('on button')
+      .appendField(
+        new FieldDropdown([
           ['up', 'up'],
           ['down', 'down'],
-        ]), 'upDown');
+        ]),
+        'upDown'
+      );
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button1')), 'button1')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button2')), 'button2')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button3')), 'button3');
+      .setAlign(ALIGN_CENTRE)
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button1')
+        ),
+        'button1'
+      )
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button2')
+        ),
+        'button2'
+      )
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button3')
+        ),
+        'button3'
+      );
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button4')), 'button4')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button5')), 'button5')
-        .appendField(new Blockly.FieldCheckbox('FALSE', (value) => this.uncheckAllOtherCheckboxes(value, 'button6')), 'button6');
-    this.appendStatementInput('statements')
-        .appendField('do')
-        .setCheck(null);
+      .setAlign(ALIGN_CENTRE)
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button4')
+        ),
+        'button4'
+      )
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button5')
+        ),
+        'button5'
+      )
+      .appendField(
+        new FieldCheckbox('FALSE', value =>
+          this.uncheckAllOtherCheckboxes(value, 'button6')
+        ),
+        'button6'
+      );
+    this.appendStatementInput('statements').appendField('do').setCheck(null);
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
@@ -52,10 +88,10 @@ Blockly.Blocks['streamdeck_button_event'] = {
    * @param {string} value the new value of the checkbox.
    * @param {string} checkboxName Name of the ceckbox that was clicked.
    */
-  uncheckAllOtherCheckboxes: function(value, checkboxName) {
+  uncheckAllOtherCheckboxes: function (value, checkboxName) {
     if (value === 'TRUE') {
       for (let i = 1; i <= 6; i++) {
-        if ('button' + i != checkboxName) {
+        if ('button' + i !== checkboxName) {
           this.setFieldValue('FALSE', 'button' + i);
         }
       }
@@ -64,20 +100,23 @@ Blockly.Blocks['streamdeck_button_event'] = {
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function() {
+  addEvent: async function () {
     eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    getWorkspace().addChangeListener((event) => this.onDispose(event));
+    getWorkspace().addChangeListener(event => this.onDispose(event));
   },
-  onchange: function() {
+  onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.addEvent();
     }
   },
-  onDispose: function(event) {
-    if (event.type === Blockly.Events.BLOCK_DELETE) {
-      if (event.type === Blockly.Events.BLOCK_DELETE && event.ids.indexOf(this.id) !== -1) {
+  onDispose: function (event) {
+    if (event.type === Events.BLOCK_DELETE) {
+      if (
+        event.type === Events.BLOCK_DELETE &&
+        event.ids.indexOf(this.id) !== -1
+      ) {
         // block is being deleted
         this.removeFromEvents();
       }
@@ -86,7 +125,7 @@ Blockly.Blocks['streamdeck_button_event'] = {
   /**
    * Remove this block's id from the events array.
    */
-  removeFromEvents: function() {
+  removeFromEvents: function () {
     // remove this block from the events array.
     const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
@@ -98,31 +137,29 @@ Blockly.Blocks['streamdeck_button_event'] = {
 // Add streamdeck_button_event block to the toolbox.
 addBlock('streamdeck_button_event', 'States and Events');
 
-
-Blockly.Blocks['streamdeck_color_buttons'] = {
+Blocks['streamdeck_color_buttons'] = {
   /**
    * Block for coloring stream deck buttons.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('color')
-        .setCheck('Colour')
-        .appendField('write color');
+      .setCheck('Colour')
+      .appendField('write color');
+    this.appendDummyInput().appendField('to display property of button(s)');
     this.appendDummyInput()
-        .appendField('to display property of button(s)');
+      .setAlign(ALIGN_CENTRE)
+      .appendField(new FieldCheckbox('FALSE'), 'button1')
+      .appendField(new FieldCheckbox('FALSE'), 'button2')
+      .appendField(new FieldCheckbox('FALSE'), 'button3');
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button2')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button3');
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
+      .setAlign(ALIGN_CENTRE)
+      .appendField(new FieldCheckbox('FALSE'), 'button4')
+      .appendField(new FieldCheckbox('FALSE'), 'button5')
+      .appendField(new FieldCheckbox('FALSE'), 'button6');
     this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('of Stream Deck Mini');
+      .setCheck('Thing')
+      .appendField('of Stream Deck Mini');
     this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -145,33 +182,35 @@ const STREAMDECK_COLOR_BUTTONS_XML = `
 `;
 
 // Add streamdeck_color_buttons block to the toolbox.
-addBlock('streamdeck_color_buttons', 'Properties', STREAMDECK_COLOR_BUTTONS_XML);
+addBlock(
+  'streamdeck_color_buttons',
+  'Properties',
+  STREAMDECK_COLOR_BUTTONS_XML
+);
 
-
-Blockly.Blocks['streamdeck_write_on_buttons'] = {
+Blocks['streamdeck_write_on_buttons'] = {
   /**
    * Block for writing on stream deck buttons.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('value')
-        .setCheck(['String', 'Number', 'Boolean'])
-        .appendField('write Number/String/Boolean');
+      .setCheck(['String', 'Number', 'Boolean'])
+      .appendField('write Number/String/Boolean');
+    this.appendDummyInput().appendField('to display property of button(s)');
     this.appendDummyInput()
-        .appendField('to display property of button(s)');
+      .setAlign(ALIGN_CENTRE)
+      .appendField(new FieldCheckbox('FALSE'), 'button1')
+      .appendField(new FieldCheckbox('FALSE'), 'button2')
+      .appendField(new FieldCheckbox('FALSE'), 'button3');
     this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button1')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button2')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button3');
-    this.appendDummyInput()
-        .setAlign(Blockly.ALIGN_CENTRE)
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button4')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button5')
-        .appendField(new Blockly.FieldCheckbox('FALSE'), 'button6');
+      .setAlign(ALIGN_CENTRE)
+      .appendField(new FieldCheckbox('FALSE'), 'button4')
+      .appendField(new FieldCheckbox('FALSE'), 'button5')
+      .appendField(new FieldCheckbox('FALSE'), 'button6');
     this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('of Stream Deck Mini');
+      .setCheck('Thing')
+      .appendField('of Stream Deck Mini');
     this.setColour(255);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -185,19 +224,18 @@ Blockly.Blocks['streamdeck_write_on_buttons'] = {
 // Add streamdeck_write_on_buttons block to the toolbox.
 addBlock('streamdeck_write_on_buttons', 'Properties');
 
-
-Blockly.Blocks['streamdeck_set_brightness'] = {
+Blocks['streamdeck_set_brightness'] = {
   /**
    * Block for setting the brightness of a stream deck.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('value')
-        .setCheck('Number')
-        .appendField('write brightness property');
+      .setCheck('Number')
+      .appendField('write brightness property');
     this.appendValueInput('id')
-        .setCheck('Thing')
-        .appendField('to Stream Deck Mini');
+      .setCheck('Thing')
+      .appendField('to Stream Deck Mini');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -218,4 +256,8 @@ const STREAMDECK_SET_BRIGHTNESS_XML = `
 `;
 
 // Add streamdeck_set_brightness block to the toolbox.
-addBlock('streamdeck_set_brightness', 'Properties', STREAMDECK_SET_BRIGHTNESS_XML);
+addBlock(
+  'streamdeck_set_brightness',
+  'Properties',
+  STREAMDECK_SET_BRIGHTNESS_XML
+);

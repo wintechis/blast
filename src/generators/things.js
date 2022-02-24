@@ -6,12 +6,11 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {getWebBluetoothDevices} from '../blast_things.js';
-import {getWebHIDDevices} from '../blast_things.js';
+import {JavaScript, Variables} from 'blockly';
+import {getWebBluetoothDevices, getWebHIDDevices} from '../blast_things.js';
 import {getWorkspace} from '../blast_interpreter.js';
 
-Blockly.JavaScript['things_webBluetooth'] = function(block) {
+JavaScript['things_webBluetooth'] = function (block) {
   const id = block.getFieldValue('id');
   const webBluetoothDevices = getWebBluetoothDevices();
   let name;
@@ -24,15 +23,21 @@ Blockly.JavaScript['things_webBluetooth'] = function(block) {
   }
   // convert the name to a valid JavaScript variable name
   const workspace = getWorkspace();
-  const thingsVar = Blockly.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
-  name = Blockly.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  const thingsVar = Variables.getOrCreateVariablePackage(
+    workspace,
+    null,
+    name,
+    'Thing'
+  );
+  name = JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
   // Define a variable for the thing.
-  Blockly.JavaScript.definitions_[id] = 'var ' + name + ' = ' + Blockly.JavaScript.quote_(id) + ';';
+  JavaScript.definitions_[id] =
+    'var ' + name + ' = ' + JavaScript.quote_(id) + ';';
 
-  return [name, Blockly.JavaScript.ORDER_NONE];
+  return [name, JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['things_webHID'] = function(block) {
+JavaScript['things_webHID'] = function (block) {
   const id = block.getFieldValue('id');
   const webHidDevices = getWebHIDDevices();
   let name;
@@ -45,10 +50,16 @@ Blockly.JavaScript['things_webHID'] = function(block) {
   }
   // convert the name to a valid JavaScript variable name
   const workspace = getWorkspace();
-  const thingsVar = Blockly.Variables.getOrCreateVariablePackage(workspace, null, name, 'Thing');
-  name = Blockly.JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
+  const thingsVar = Variables.getOrCreateVariablePackage(
+    workspace,
+    null,
+    name,
+    'Thing'
+  );
+  name = JavaScript.nameDB_.getName(thingsVar.name, 'Thing');
   // Define a variable for the thing.
-  Blockly.JavaScript.definitions_[id] = 'var ' + name + ' = ' + Blockly.JavaScript.quote_(id) + ';';
+  JavaScript.definitions_[id] =
+    'var ' + name + ' = ' + JavaScript.quote_(id) + ';';
 
-  return [name, Blockly.JavaScript.ORDER_NONE];
+  return [name, JavaScript.ORDER_NONE];
 };

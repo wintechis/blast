@@ -7,8 +7,9 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {JavaScript} from 'blockly';
 import * as Buffer from 'buffer';
+// eslint-disable-next-line node/no-unpublished-import
 import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
@@ -20,64 +21,56 @@ import {setInterrupted} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
 const thingsLog = getThingsLog();
- 
+
 /**
-  * Generates JavaScript code for the streamdeck_button_event block.
-  * @param {Blockly.Block} block the streamdeck_button_event block.
-  * @returns {String} the generated code.
-  */
-Blockly.JavaScript['streamdeck_button_event'] = function(block) {
-  const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
-  const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
-  const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
-  const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
-  const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
-  const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
-  const upDown = Blockly.JavaScript.quote_(block.getFieldValue('upDown'));
-  const id = Blockly.JavaScript.valueToCode(
-      block,
-      'id',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || null;
-    
-  const buttons = Blockly.JavaScript.quote_(
-      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+ * Generates JavaScript code for the streamdeck_button_event block.
+ * @param {Blockly.Block} block the streamdeck_button_event block.
+ * @returns {String} the generated code.
+ */
+JavaScript['streamdeck_button_event'] = function (block) {
+  const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
+  const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
+  const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
+  const button4 = block.getFieldValue('button4') === 'TRUE' ? 1 : 0;
+  const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
+  const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
+  const upDown = JavaScript.quote_(block.getFieldValue('upDown'));
+  const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
+
+  const buttons = JavaScript.quote_(
+    `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
-  const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
+  );
 
   const handler = `handleStreamdeck(${id}, ${buttons}, ${upDown}, ${statements});\n`;
-  const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
   return '';
 };
 
 /**
  * Generates JavaScript code for the streamdeck_color_buttons block.
-  * @param {Blockly.Block} block the streamdeck_button_event block.
-  * @returns {String} the generated code.
+ * @param {Blockly.Block} block the streamdeck_button_event block.
+ * @returns {String} the generated code.
  */
-Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
-  const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
-  const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
-  const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
-  const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
-  const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
-  const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
-  const color = Blockly.JavaScript.valueToCode(
-      block,
-      'color',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || Blockly.JavaScript.quote_('#000000');
-  const id = Blockly.JavaScript.valueToCode(
-      block,
-      'id',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || null;
+JavaScript['streamdeck_color_buttons'] = function (block) {
+  const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
+  const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
+  const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
+  const button4 = block.getFieldValue('button4') === 'TRUE' ? 1 : 0;
+  const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
+  const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
+  const color =
+    JavaScript.valueToCode(block, 'color', JavaScript.ORDER_NONE) ||
+    JavaScript.quote_('#000000');
+  const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
 
-  const buttons = Blockly.JavaScript.quote_(
-      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+  const buttons = JavaScript.quote_(
+    `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
 
   const code = `streamdeckColorButtons(${id}, ${buttons}, ${color});\n`;
@@ -91,28 +84,29 @@ Blockly.JavaScript['streamdeck_color_buttons'] = function(block) {
  * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
  */
-const handleStreamdeck = async function(id, buttons, upDown, statements) {
+const handleStreamdeck = async function (id, buttons, upDown, statements) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
     return;
   }
 
-
   const device = getWebHidDevice(id);
 
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
+    );
     return;
   }
 
   let streamdeck;
-  
+
   try {
     streamdeck = await StreamDeck.openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
-    if (e.name == 'InvalidStateError') {
+    if (e.name === 'InvalidStateError') {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
@@ -128,22 +122,26 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
       break;
     }
   }
-  
+
   if (button === undefined) {
     return;
   }
 
-  streamdeck.on(upDown, (keyIndex) => {
-    thingsLog(`Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`, 'hid', device.productName);
+  streamdeck.on(upDown, keyIndex => {
+    thingsLog(
+      `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
+      'hid',
+      device.productName
+    );
     if (keyIndex === button) {
       // interrupt BLAST execution.
       setInterrupted(true);
-        
+
       const interpreter = new Interpreter('');
       interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
       interpreter.appendCode(statements);
 
-      const interruptRunner_ = function() {
+      const interruptRunner_ = function () {
         try {
           const hasMore = interpreter.step();
           if (hasMore) {
@@ -165,8 +163,7 @@ const handleStreamdeck = async function(id, buttons, upDown, statements) {
     thingsLog('Removing all listeners', 'hid', device.productName);
     streamdeck.close();
     streamdeck.removeAllListeners();
-  },
-  );
+  });
 };
 
 // Add streamdeck function to the Interpreter's API
@@ -179,30 +176,31 @@ apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
  * @param {String} color color to fill the buttons with, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const streamdeckColorButtons = async function(id, buttons, color, callback) {
+const streamdeckColorButtons = async function (id, buttons, color, callback) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
     callback();
     return;
   }
-  
-  
+
   const device = getWebHidDevice(id);
-  
+
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
+    );
     callback();
     return;
   }
-  
+
   let streamdeck;
-    
+
   try {
     streamdeck = await StreamDeck.openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
-    if (e.name == 'InvalidStateError') {
+    if (e.name === 'InvalidStateError') {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
@@ -220,9 +218,22 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
   // fill selected buttons with color
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      thingsLog(`Invoke <code>fillKeyColor</code> with value <code>${[i, red, green, blue].toString()}</code>`, 'hid', device.productName);
+      thingsLog(
+        `Invoke <code>fillKeyColor</code> with value <code>${[
+          i,
+          red,
+          green,
+          blue,
+        ].toString()}</code>`,
+        'hid',
+        device.productName
+      );
       await streamdeck.fillKeyColor(i, red, green, blue);
-      thingsLog('Finished <code>fillKeyColor</code>', 'hid', device.productName);
+      thingsLog(
+        'Finished <code>fillKeyColor</code>',
+        'hid',
+        device.productName
+      );
     }
   }
 
@@ -232,32 +243,25 @@ const streamdeckColorButtons = async function(id, buttons, color, callback) {
 // Add streamdeckColorButtons function to the Interpreter's API
 asyncApiFunctions.push(['streamdeckColorButtons', streamdeckColorButtons]);
 
-
 /**
  * Displays a value on a Stream Deck's buttons.
-  * @param {Blockly.Block} block the streamdeck_button_event block.
-  * @returns {String} the generated code.
+ * @param {Blockly.Block} block the streamdeck_button_event block.
+ * @returns {String} the generated code.
  */
-Blockly.JavaScript['streamdeck_write_on_buttons'] = function(block) {
-  const button1 = block.getFieldValue('button1') == 'TRUE' ? 1 : 0;
-  const button2 = block.getFieldValue('button2') == 'TRUE' ? 1 : 0;
-  const button3 = block.getFieldValue('button3') == 'TRUE' ? 1 : 0;
-  const button4 = block.getFieldValue('button4') == 'TRUE' ? 1 : 0;
-  const button5 = block.getFieldValue('button5') == 'TRUE' ? 1 : 0;
-  const button6 = block.getFieldValue('button6') == 'TRUE' ? 1 : 0;
-  const value = Blockly.JavaScript.valueToCode(
-      block,
-      'value',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || Blockly.JavaScript.quote_('');
-  const id = Blockly.JavaScript.valueToCode(
-      block,
-      'id',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || null;
+JavaScript['streamdeck_write_on_buttons'] = function (block) {
+  const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
+  const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
+  const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
+  const button4 = block.getFieldValue('button4') === 'TRUE' ? 1 : 0;
+  const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
+  const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
+  const value =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
+    JavaScript.quote_('');
+  const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
 
-  const buttons = Blockly.JavaScript.quote_(
-      `${button1}${button2}${button3}${button4}${button5}${button6}`,
+  const buttons = JavaScript.quote_(
+    `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
 
   const code = `streamdeckWriteOnButtons(${id}, ${buttons}, ${value});\n`;
@@ -271,30 +275,31 @@ Blockly.JavaScript['streamdeck_write_on_buttons'] = function(block) {
  * @param {String} value value to display on the buttons.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
+const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
     callback();
     return;
   }
-  
-  
+
   const device = getWebHidDevice(id);
-  
+
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
+    );
     callback();
     return;
   }
-  
+
   let streamdeck;
-    
+
   try {
     streamdeck = await StreamDeck.openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
-    if (e.name == 'InvalidStateError') {
+    if (e.name === 'InvalidStateError') {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
@@ -324,9 +329,24 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      thingsLog(`Invoke <code>fillKeyImageData</code> with value <code>${[i, imageData].toString()}</code>`, 'hid', device.productName);
-      ps.push(streamdeck.fillKeyBuffer(i, Buffer.Buffer.from(imageData.data), {format: 'rgba'}));
-      thingsLog('Finished <code>fillKeyImageData</code>', 'hid', device.productName);
+      thingsLog(
+        `Invoke <code>fillKeyImageData</code> with value <code>${[
+          i,
+          imageData,
+        ].toString()}</code>`,
+        'hid',
+        device.productName
+      );
+      ps.push(
+        streamdeck.fillKeyBuffer(i, Buffer.Buffer.from(imageData.data), {
+          format: 'rgba',
+        })
+      );
+      thingsLog(
+        'Finished <code>fillKeyImageData</code>',
+        'hid',
+        device.productName
+      );
     }
   }
 
@@ -339,23 +359,17 @@ const streamdeckWriteOnButtons = async function(id, buttons, value, callback) {
 // Add streamdeckWriteOnButtons function to the Interpreter's API
 asyncApiFunctions.push(['streamdeckWriteOnButtons', streamdeckWriteOnButtons]);
 
-Blockly.JavaScript['streamdeck_set_brightness'] = function(block) {
-  const value = Blockly.JavaScript.valueToCode(
-      block,
-      'value',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || Blockly.JavaScript.quote_('100');
-  const id = Blockly.JavaScript.valueToCode(
-      block,
-      'id',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || null;
-  
+JavaScript['streamdeck_set_brightness'] = function (block) {
+  const value =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
+    JavaScript.quote_('100');
+  const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
+
   const code = `streamdeckSetBrightness(${id}, ${value});\n`;
   return code;
 };
 
-const streamdeckSetBrightness = async function(id, value, callback) {
+const streamdeckSetBrightness = async function (id, value, callback) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
@@ -368,23 +382,24 @@ const streamdeckSetBrightness = async function(id, value, callback) {
     callback();
     return;
   }
-  
-  
+
   const device = getWebHidDevice(id);
-  
+
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
+    );
     callback();
     return;
   }
-  
+
   let streamdeck;
-    
+
   try {
     streamdeck = await StreamDeck.openDevice(device);
   } catch (e) {
     // if InvalidStateError error, device is probably already opened
-    if (e.name == 'InvalidStateError') {
+    if (e.name === 'InvalidStateError') {
       device.close();
       streamdeck = await StreamDeck.openDevice(device);
     } else {
@@ -394,7 +409,11 @@ const streamdeckSetBrightness = async function(id, value, callback) {
     }
   }
 
-  thingsLog(`Invoke <code>setBrightness</code> with value <code>${value}</code>`, 'hid', device.productName);
+  thingsLog(
+    `Invoke <code>setBrightness</code> with value <code>${value}</code>`,
+    'hid',
+    device.productName
+  );
   await streamdeck.setBrightness(value);
   thingsLog('Finished <code>setBrightness</code>', 'hid', device.productName);
   callback();

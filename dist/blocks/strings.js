@@ -6,23 +6,23 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, Msg} from 'blockly';
 
 // Remap blockly blocks to improve naming in xml.
-Blockly.Blocks['string'] = Blockly.Blocks['text'];
-Blockly.Blocks['string_multiline'] = Blockly.Blocks['text_multiline'];
-Blockly.Blocks['string_join'] = Blockly.Blocks['text_join'];
-Blockly.Blocks['string_length'] = Blockly.Blocks['text_length'];
-Blockly.Blocks['string_isEmpty'] = Blockly.Blocks['text_isEmpty'];
-Blockly.Blocks['string_indexOf'] = Blockly.Blocks['text_indexOf'];
-Blockly.Blocks['string_charAt'] = Blockly.Blocks['text_charAt'];
-Blockly.Blocks['string_getSubstring'] = Blockly.Blocks['text_getSubstring'];
-Blockly.Blocks['string_changeCase'] = Blockly.Blocks['text_changeCase'];
-Blockly.Blocks['string_trim'] = Blockly.Blocks['text_trim'];
-Blockly.Blocks['string_count'] = Blockly.Blocks['text_count'];
-Blockly.Blocks['string_replace'] = Blockly.Blocks['text_replace'];
-Blockly.Blocks['string_reverse'] = Blockly.Blocks['text_reverse'];
-Blockly.Blocks['string_showPrompt'] = Blockly.Blocks['text_prompt_ext'];
+Blocks['string'] = Blocks['text'];
+Blocks['string_multiline'] = Blocks['text_multiline'];
+Blocks['string_join'] = Blocks['text_join'];
+Blocks['string_length'] = Blocks['text_length'];
+Blocks['string_isEmpty'] = Blocks['text_isEmpty'];
+Blocks['string_indexOf'] = Blocks['text_indexOf'];
+Blocks['string_charAt'] = Blocks['text_charAt'];
+Blocks['string_getSubstring'] = Blocks['text_getSubstring'];
+Blocks['string_changeCase'] = Blocks['text_changeCase'];
+Blocks['string_trim'] = Blocks['text_trim'];
+Blocks['string_count'] = Blocks['text_count'];
+Blocks['string_replace'] = Blocks['text_replace'];
+Blocks['string_reverse'] = Blocks['text_reverse'];
+Blocks['string_showPrompt'] = Blocks['text_prompt_ext'];
 
 // Overwrite Blockly text for the concatenate block
-Blockly.Msg['TEXT_JOIN_TITLE_CREATEWITH'] = 'concatenate text';
+Msg['TEXT_JOIN_TITLE_CREATEWITH'] = 'concatenate text';

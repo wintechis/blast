@@ -6,20 +6,19 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {JavaScript} from 'blockly';
 import {asyncApiFunctions} from './../blast_interpreter.js';
 
-
 // Remap blockly blocks to improve naming in xml.
-Blockly.JavaScript['repeat'] = Blockly.JavaScript['controls_repeat_ext'];
-Blockly.JavaScript['while_until'] = Blockly.JavaScript['controls_whileUntil'];
-Blockly.JavaScript['for'] = Blockly.JavaScript['controls_for'];
-Blockly.JavaScript['break_continue'] =
-  Blockly.JavaScript['controls_flow_statements'];
-Blockly.JavaScript['conditional_statement'] = Blockly.JavaScript['controls_if'];
+JavaScript['repeat'] = JavaScript['controls_repeat_ext'];
+JavaScript['while_until'] = JavaScript['controls_whileUntil'];
+JavaScript['for'] = JavaScript['controls_for'];
+JavaScript['break_continue'] = JavaScript['controls_flow_statements'];
+JavaScript['conditional_statement'] = JavaScript['controls_if'];
 
-Blockly.JavaScript['wait_seconds'] = function(block) {
-  const seconds = Blockly.JavaScript.valueToCode(block, 'SECONDS', Blockly.JavaScript.ORDER_ATOMIC) || 0;
+JavaScript['wait_seconds'] = function (block) {
+  const seconds =
+    JavaScript.valueToCode(block, 'SECONDS', JavaScript.ORDER_ATOMIC) || 0;
   const code = 'waitForSeconds(' + seconds + ');\n';
   return code;
 };
@@ -30,7 +29,7 @@ Blockly.JavaScript['wait_seconds'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const waitForSeconds = function(timeInSeconds, callback) {
+const waitForSeconds = function (timeInSeconds, callback) {
   setTimeout(callback, timeInSeconds * 1000);
 };
 // Add waitForSeconds method to the interpreter's API

@@ -110,7 +110,6 @@ const defaultToolbox = {
       ],
       name: 'Lists',
       colour: '310',
-
     },
     {
       kind: 'CATEGORY',
@@ -183,8 +182,8 @@ export const currentToolbox = defaultToolbox;
  * @param {string} name The name of the category.
  * @returns {Object} the category
  * */
-export const getCategory = function(name) {
-  return currentToolbox.contents.find(function(category) {
+export const getCategory = function (name) {
+  return currentToolbox.contents.find(category => {
     if (category.name) {
       return category.name.toLowerCase() === name.toLowerCase();
     }
@@ -198,7 +197,7 @@ export const getCategory = function(name) {
  * @param {string} blockCategory The category of the block.
  * @param {string=} blockxml optional, the xml of the block.
  */
-export const addBlock = function(type, blockCategory, blockxml) {
+export const addBlock = function (type, blockCategory, blockxml) {
   const block = {
     kind: 'BLOCK',
     type: type,

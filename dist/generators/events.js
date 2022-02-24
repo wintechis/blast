@@ -7,69 +7,67 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {apiFunctions} from './../blast_interpreter.js';
+import {JavaScript} from 'blockly';
+import {
+  apiFunctions,
+  getInterpreter,
+  getWorkspace,
+  intervalEvents,
+  setInterrupted,
+  throwError,
+} from './../blast_interpreter.js';
 import {addEventCode} from './../blast_states_interpreter.js';
 import {getDefinition} from './../blast_states.js';
-import {getInterpreter} from './../blast_interpreter.js';
-import {getWorkspace} from './../blast_interpreter.js';
-import {intervalEvents} from './../blast_interpreter.js';
-import {setInterrupted} from './../blast_interpreter.js';
-import {throwError} from './../blast_interpreter.js';
-
 
 // eslint-disable-next-line no-unused-vars
-Blockly.JavaScript['state_definition'] = function(block) {
+JavaScript['state_definition'] = function (block) {
   // event code is generated at Blast.States.generateCode(),
   // and the event block generator
   return null;
 };
-  
-Blockly.JavaScript['event'] = function(block) {
+
+JavaScript['event'] = function (block) {
   // read block inputs
   const entersExits = block.getFieldValue('entersExits');
   const stateName = block.getFieldValue('NAME');
-  const statements = Blockly.JavaScript.statementToCode(block, 'statements');
-  
+  const statements = JavaScript.statementToCode(block, 'statements');
+
   // When an event block is in the workspace start the event interpreter
-  Blockly.JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
-  
+  JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
+
   // get this events' conditions
   const stateBlock = getDefinition(stateName, getWorkspace());
   if (stateBlock) {
-    const stateConditions = Blockly.JavaScript.valueToCode(
-        stateBlock,
-        'state_condition',
-        Blockly.JavaScript.ORDER_NONE,
+    const stateConditions = JavaScript.valueToCode(
+      stateBlock,
+      'state_condition',
+      JavaScript.ORDER_NONE
     );
-    
+
     let conditions = stateConditions;
-    if (entersExits != 'ENTERS') {
+    if (entersExits !== 'ENTERS') {
       conditions = `!(${conditions})`;
     }
-  
+
     const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
         setInterrupted(true);
         ${statements} 
         setInterrupted(false);
       }`;
-  
+
     addEventCode(block.id, eventCode);
   }
-  
+
   return null;
 };
 
-Blockly.JavaScript['event_every_minutes'] = function(block) {
+JavaScript['event_every_minutes'] = function (block) {
   // read block inputs
-  const value = Blockly.JavaScript.valueToCode(
-      block,
-      'value',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || 0;
+  const value =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 0;
   const unit = block.getFieldValue('units');
-  const statements = Blockly.JavaScript.quote_(
-      Blockly.JavaScript.statementToCode(block, 'statements'),
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
   );
 
   let seconds;
@@ -82,8 +80,9 @@ Blockly.JavaScript['event_every_minutes'] = function(block) {
   }
 
   // When an event block is in the workspace start the event interpreter
-  Blockly.JavaScript.definitions_[block.id] =
-  `addIntervalEvent(${seconds}, ${statements});\n`;
+  JavaScript.definitions_[
+    block.id
+  ] = `addIntervalEvent(${seconds}, ${statements});\n`;
 
   return null;
 };
@@ -99,21 +98,21 @@ const addIntervalEvent = (seconds, statements) => {
     return;
   }
 
-  const func = function() {
-  // interrupt BLAST execution
+  const func = function () {
+    // interrupt BLAST execution
     setInterrupted(false);
 
     const interpreter = new Interpreter('');
     interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
     interpreter.appendCode(statements);
 
-    const interruptRunner_ = function() {
+    const interruptRunner_ = function () {
       try {
         const hasMore = interpreter.step();
         if (hasMore) {
           setTimeout(interruptRunner_, 5);
         } else {
-        // Continue BLAST execution.
+          // Continue BLAST execution.
           setInterrupted(false);
         }
       } catch (error) {

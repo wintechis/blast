@@ -6,8 +6,8 @@
  */
 'use strict';
 
-
-import Blockly from 'blockly';
+import {dialog, hideChaff, Xml} from 'blockly';
+// eslint-disable-next-line node/no-unpublished-import
 import FileSaver from 'file-saver';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
@@ -19,7 +19,6 @@ import {resetInterpreter} from './blast_interpreter.js';
 import {resetThings} from './blast_things.js';
 import {requestDevice} from './blast_webBluetooth.js';
 import {throwError} from './blast_interpreter.js';
-
 
 /**
  * Http-request error message.
@@ -39,8 +38,9 @@ const NOT_FOUND_ERROR = 'Sorry, couldn\'t find "%1".';
 /**
  * Faulty xml error message.
  */
-const XML_ERROR = 'Could not load your saved file.\n' +
-    'Perhaps it was created with a different version of Blast?';
+const XML_ERROR =
+  'Could not load your saved file.\n' +
+  'Perhaps it was created with a different version of Blast?';
 
 /**
  * Stores the filename when loading programs for saving, default is 'BLAST.xml'.
@@ -48,14 +48,14 @@ const XML_ERROR = 'Could not load your saved file.\n' +
 let filename = 'BLAST.xml';
 
 /**
-  * Save blocks to URI and return a link containing key to XML.
-  * @param {boolean=} download optional, if true, save to file.
-  */
-export const link = function(download) {
+ * Save blocks to URI and return a link containing key to XML.
+ * @param {boolean=} download optional, if true, save to file.
+ */
+export const link = function (download) {
   const workspace = getWorkspace();
-  let xml = Blockly.Xml.workspaceToDom(workspace, true);
+  let xml = Xml.workspaceToDom(workspace, true);
   // Remove x/y coordinates from XML if there's only one block stack.
-  if (workspace.getTopBlocks(false).length == 1 && xml.querySelector) {
+  if (workspace.getTopBlocks(false).length === 1 && xml.querySelector) {
     const block = xml.querySelector('block');
     if (block) {
       block.removeAttribute('x');
@@ -65,7 +65,7 @@ export const link = function(download) {
   // Remove device id from xml.
   xml = removeDeviceId_(xml);
   // prettify xml.
-  xml = Blockly.Xml.domToPrettyText(xml);
+  xml = Xml.domToPrettyText(xml);
 
   // Save XML using filesaver.js.
   if (download === true) {
@@ -76,10 +76,10 @@ export const link = function(download) {
 
   // Save to server.
   let path = document.getElementById('loadWorkspace-input').value;
-  if (!path || path.length == 0) {
+  if (!path || path.length === 0) {
     path = 'storage/' + generatePath();
   }
-  const data = Blockly.Xml.domToText(xml);
+  const data = Xml.domToText(xml);
   saveXML_(path, data);
 };
 
@@ -90,17 +90,20 @@ export const link = function(download) {
  * @return {!Element} XML with device ids removed.
  * @private
  */
-const removeDeviceId_ = function(xml) {
+const removeDeviceId_ = function (xml) {
   const blocks = xml.querySelectorAll('block');
 
   for (const block of blocks) {
     const type = block.getAttribute('type');
-    if (type == 'things_webBluetooth' || type == 'things_webHID') {
+    if (type === 'things_webBluetooth' || type === 'things_webHID') {
       // first child is the device id
       const device = block.firstElementChild;
       if (device) {
         const id = device.textContent;
-        const tuples = type == 'things_webBluetooth' ? getWebBluetoothDevices() : getWebHIDDevices();
+        const tuples =
+          type === 'things_webBluetooth'
+            ? getWebBluetoothDevices()
+            : getWebHIDDevices();
         let name;
         // get the key of the device id
         for (const [key, value] of tuples) {
@@ -122,29 +125,29 @@ const removeDeviceId_ = function(xml) {
  * @param {string} xml the xml to save.
  * @private
  */
-const saveXML_ = function(path, xml) {
-  Blockly.hideChaff();
-  
+const saveXML_ = function (path, xml) {
+  hideChaff();
+
   // Send put request.
   fetch(path, {
     method: 'PUT',
     body: xml,
-  }).then((response) => {
+  }).then(response => {
     if (response.ok) {
       location.hash = path;
-      Blockly.dialog.alert(LINK_ALERT.replace('%1', window.location.href));
+      dialog.alert(LINK_ALERT.replace('%1', window.location.href));
     } else {
       throwError(HTTPREQUEST_ERROR);
     }
   });
 };
 
-export const load = function() {
+export const load = function () {
   const url = document.getElementById('loadWorkspace-input').value;
-    
+
   // if input is empty show warning and return.
-  if (url == '') {
-    Blockly.dialog.alert('Enter a URI first.');
+  if (url === '') {
+    dialog.alert('Enter a URI first.');
     return;
   }
 
@@ -158,13 +161,13 @@ export const load = function() {
 };
 
 /**
-   * Load XML from a file.
-   * @param {Event} event A change event.
-   * @return {Promise} A promise that will be resolved when the file is loaded.
-   * @private
-   */
-export const loadXMLFromFile = function(event) {
-  return new Promise(function(resolve, reject) {
+ * Load XML from a file.
+ * @param {Event} event A change event.
+ * @return {Promise} A promise that will be resolved when the file is loaded.
+ * @private
+ */
+export const loadXMLFromFile = function (event) {
+  return new Promise((resolve, reject) => {
     // Save filename to {@link filename}
     const fn = event.target.files[0].name;
     if (fn.indexOf('.') > -1) {
@@ -172,11 +175,11 @@ export const loadXMLFromFile = function(event) {
     }
 
     const fileReader = new FileReader();
-    fileReader.onload = function(e) {
+    fileReader.onload = function (e) {
       loadXML(e.target.result);
       resolve();
     };
-    fileReader.onerror = function(evt) {
+    fileReader.onerror = function (evt) {
       reject(evt.target.error);
     };
     fileReader.readAsText(event.target.files[0]);
@@ -186,7 +189,7 @@ export const loadXMLFromFile = function(event) {
 /**
  * Resets the file selector.
  */
-const resetFileInput = function() {
+const resetFileInput = function () {
   const fileSelector = document.getElementById('file-selector');
   if (fileSelector) {
     fileSelector.value = '';
@@ -201,25 +204,25 @@ const resetFileInput = function() {
  * @param {string} path path to the XML to load.
  * @private
  */
-const retrieveXML_ = async function(path) {
-  Blockly.hideChaff();
+const retrieveXML_ = async function (path) {
+  hideChaff();
   // stop execution
   resetInterpreter();
 
   resetThings();
 
   resetFileInput();
-  
+
   // send GET request
   fetch(path)
-      .then((response) => {
-        if (response.ok) {
-          return response.text();
-        } else {
-          throwError(NOT_FOUND_ERROR.replace('%1', path));
-        }
-      })
-      .then(loadXML);
+    .then(response => {
+      if (response.ok) {
+        return response.text();
+      } else {
+        throwError(NOT_FOUND_ERROR.replace('%1', path));
+      }
+    })
+    .then(loadXML);
 };
 
 /**
@@ -227,20 +230,23 @@ const retrieveXML_ = async function(path) {
  * @param {string} xmlString the xml to load.
  * @private
  */
-export const loadXML = function(xmlString) {
+export const loadXML = function (xmlString) {
   let xml;
   const workspace = getWorkspace();
   // clear blocks
   workspace.clear();
   try {
-    xml = Blockly.Xml.textToDom(xmlString);
+    xml = Xml.textToDom(xmlString);
   } catch (e) {
     throwError(XML_ERROR + '\nXML: ' + xml);
     return;
   }
 
   // prompt to WebBluetooth/webHID device connection
-  if (xml.querySelector('block[type="things_webBluetooth"]') || xml.querySelector('block[type="things_webHID"]')) {
+  if (
+    xml.querySelector('block[type="things_webBluetooth"]') ||
+    xml.querySelector('block[type="things_webHID"]')
+  ) {
     generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
@@ -249,8 +255,8 @@ export const loadXML = function(xmlString) {
     // return. will continue after reconnecting to devices
     return;
   }
-          
-  Blockly.Xml.domToWorkspace(xml, workspace);
+
+  Xml.domToWorkspace(xml, workspace);
   monitorChanges_(workspace);
 };
 
@@ -259,7 +265,7 @@ export const loadXML = function(xmlString) {
  * @param {!Element} xml XML to parse for devices.
  * @private
  */
-const generatePairButtons = function(xml) {
+const generatePairButtons = function (xml) {
   if (window.location.href.includes('mobile')) {
     window.app.openReconnectDialog();
     generatePairButtonsMobile_(xml);
@@ -273,7 +279,7 @@ const generatePairButtons = function(xml) {
  * @param {!Element} xml XML to parse for devices.
  * @private
  */
-const generatePairButtonsDesktop_ = function(xml) {
+const generatePairButtonsDesktop_ = function (xml) {
   const blocks = xml.querySelectorAll('block');
   const tbody = document.getElementById('rc-tbody');
   // delete all table rows from tbody
@@ -285,7 +291,7 @@ const generatePairButtonsDesktop_ = function(xml) {
   // add pair button for each web bluetooth block
   for (const block of blocks) {
     const type = block.getAttribute('type');
-    if (type == 'things_webBluetooth' || type == 'things_webHID') {
+    if (type === 'things_webBluetooth' || type === 'things_webHID') {
       // get user defined name
       const name = block.firstElementChild.textContent;
       // skip if block was already added
@@ -317,13 +323,13 @@ const generatePairButtonsDesktop_ = function(xml) {
       statusCell.appendChild(pairStatus);
 
       // pair button click listener
-      pairButton.addEventListener('click', async function() {
-        if (type == 'things_webBluetooth') {
+      pairButton.addEventListener('click', async () => {
+        if (type === 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
           options.optionalServices = optionalServices;
-        
+
           const device = await requestDevice();
           // change pair status to checkmark
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
@@ -331,41 +337,50 @@ const generatePairButtonsDesktop_ = function(xml) {
 
           // set block id to device id
           block.firstElementChild.textContent = device.id;
-          
+
           // if all devices have been paired, enable done button
           if (allConnectedDesktop_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
+            document
+              .getElementById('rc-done')
+              .addEventListener('click', () => reconnectDoneHandler_(xml));
           }
-        } else if (type == 'things_webHID') {
+        } else if (type === 'things_webHID') {
           const filters = [];
-      
-          navigator.hid.requestDevice({filters})
-              .then((device) => {
-                if (device.length === 0) throwError('Connection failed or cancelled by User.');
-                // generate a unique id for the new device
-                const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
-                // add device to the device map with its uid
-                addWebHidDevice(uid, name, device[0]);
-                // change pair status to checkmark
-                document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
-                document.getElementById('pairStatus-' + name).style.color = 'green';
 
-                // set block id to device id
-                block.firstElementChild.textContent = uid;
-                                
-                // if all devices have been paired, enable done button
-                if (allConnectedDesktop_()) {
-                  document.getElementById('rc-done').disabled = false;
-                  // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-                }
-              })
-              .catch((error) => {
+          navigator.hid
+            .requestDevice({filters})
+            .then(device => {
+              if (device.length === 0)
                 throwError('Connection failed or cancelled by User.');
-                console.error(error);
-              });
+              // generate a unique id for the new device
+              const uid =
+                Date.now().toString(36) + Math.random().toString(36).substr(2);
+              // add device to the device map with its uid
+              addWebHidDevice(uid, name, device[0]);
+              // change pair status to checkmark
+              document.getElementById('pairStatus-' + name).innerHTML =
+                '&#x2714;';
+              document.getElementById('pairStatus-' + name).style.color =
+                'green';
+
+              // set block id to device id
+              block.firstElementChild.textContent = uid;
+
+              // if all devices have been paired, enable done button
+              if (allConnectedDesktop_()) {
+                document.getElementById('rc-done').disabled = false;
+                // add done button click listener
+                document
+                  .getElementById('rc-done')
+                  .addEventListener('click', () => reconnectDoneHandler_(xml));
+              }
+            })
+            .catch(error => {
+              throwError('Connection failed or cancelled by User.');
+              console.error(error);
+            });
         }
       });
 
@@ -379,7 +394,9 @@ const generatePairButtonsDesktop_ = function(xml) {
       blocksAdded.push(name);
     }
     // add cancel button click listener
-    document.getElementById('rc-cancel').addEventListener('click', () => reconnectCancelHandler_());
+    document
+      .getElementById('rc-cancel')
+      .addEventListener('click', () => reconnectCancelHandler_());
   }
 };
 
@@ -387,7 +404,7 @@ const generatePairButtonsDesktop_ = function(xml) {
  * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
  * @param {!Element} xml XML to parse for devices.
  */
-const generatePairButtonsMobile_ = function(xml) {
+const generatePairButtonsMobile_ = function (xml) {
   const blocks = xml.querySelectorAll('block');
   // empty list
   const list = document.getElementById('rc-list');
@@ -398,7 +415,7 @@ const generatePairButtonsMobile_ = function(xml) {
   // add pair button for each webBluetooth and webHID block
   for (const block of blocks) {
     const type = block.getAttribute('type');
-    if (type == 'things_webBluetooth' || type == 'things_webHID') {
+    if (type === 'things_webBluetooth' || type === 'things_webHID') {
       // get user defined name
       const name = block.firstElementChild.textContent;
       // skip if block was already added
@@ -414,7 +431,8 @@ const generatePairButtonsMobile_ = function(xml) {
       icon.setAttribute('id', 'rc-icon-' + name);
       icon.setAttribute('class', 'mdc-list-item__graphic material-icons');
       icon.setAttribute('aria-hidden', 'true');
-      icon.innerHTML = type == 'things_webBluetooth' ? 'bluetooth_disabled' : 'usb_off';
+      icon.innerHTML =
+        type === 'things_webBluetooth' ? 'bluetooth_disabled' : 'usb_off';
       item.appendChild(icon);
       // add name and status to list item
       const text = document.createElement('span');
@@ -430,13 +448,13 @@ const generatePairButtonsMobile_ = function(xml) {
       text.appendChild(secondaryText);
       item.appendChild(text);
       // add click listener to list item
-      item.addEventListener('click', async function() {
-        if (type == 'things_webBluetooth') {
+      item.addEventListener('click', async () => {
+        if (type === 'things_webBluetooth') {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
           options.optionalServices = optionalServices;
-                
+
           const device = await requestDevice();
           addWebBluetoothDevice(device.id, name);
           // change pair status to connected
@@ -448,44 +466,53 @@ const generatePairButtonsMobile_ = function(xml) {
 
           // set block id to device id
           block.firstElementChild.textContent = device.id;
-                  
+
           // if all devices have been paired, enable done button
           if (allConnectedMobile_()) {
             document.getElementById('rc-done').disabled = false;
             // add done button click listener
-            document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
+            document
+              .getElementById('rc-done')
+              .addEventListener('click', () => reconnectDoneHandler_(xml));
           }
-        } else if (type == 'things_webHID') {
+        } else if (type === 'things_webHID') {
           const filters = [];
-      
-          navigator.hid.requestDevice({filters})
-              .then((device) => {
-                if (device.length === 0) throwError('Connection failed or cancelled by User.');
-                // generate a unique id for the new device
-                const uid = Date.now().toString(36) + Math.random().toString(36).substr(2);
-                // add device to the device map with its uid
-                addWebHidDevice(uid, name, device[0]);
-                // change pair status to connected
-                document.getElementById('rc-status-' + name).innerHTML = 'connected';
-                // change icon to usb connected
-                document.getElementById('rc-icon-' + name).innerHTML = 'usb';
-                // change icon color to blue
-                document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
 
-                // set block id to device id
-                block.firstElementChild.textContent = uid;
-                  
-                // if all devices have been paired, enable done button
-                if (allConnectedMobile_()) {
-                  document.getElementById('rc-done').disabled = false;
-                  // add done button click listener
-                  document.getElementById('rc-done').addEventListener('click', () => reconnectDoneHandler_(xml));
-                }
-              })
-              .catch((error) => {
+          navigator.hid
+            .requestDevice({filters})
+            .then(device => {
+              if (device.length === 0)
                 throwError('Connection failed or cancelled by User.');
-                console.error(error);
-              });
+              // generate a unique id for the new device
+              const uid =
+                Date.now().toString(36) + Math.random().toString(36).substr(2);
+              // add device to the device map with its uid
+              addWebHidDevice(uid, name, device[0]);
+              // change pair status to connected
+              document.getElementById('rc-status-' + name).innerHTML =
+                'connected';
+              // change icon to usb connected
+              document.getElementById('rc-icon-' + name).innerHTML = 'usb';
+              // change icon color to blue
+              document.getElementById('rc-icon-' + name).style.color =
+                '#0d30b1';
+
+              // set block id to device id
+              block.firstElementChild.textContent = uid;
+
+              // if all devices have been paired, enable done button
+              if (allConnectedMobile_()) {
+                document.getElementById('rc-done').disabled = false;
+                // add done button click listener
+                document
+                  .getElementById('rc-done')
+                  .addEventListener('click', () => reconnectDoneHandler_(xml));
+              }
+            })
+            .catch(error => {
+              throwError('Connection failed or cancelled by User.');
+              console.error(error);
+            });
         }
       });
       // add list item to list
@@ -502,11 +529,13 @@ const generatePairButtonsMobile_ = function(xml) {
  * @return {boolean} true if all devices have been paired.
  * @private
  */
-const allConnectedDesktop_ = function() {
+const allConnectedDesktop_ = function () {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
-    const pairStatus = document.getElementById('pairStatus-' + block.firstElementChild.textContent);
-    if (pairStatus.innerHTML == '✘') {
+    const pairStatus = document.getElementById(
+      'pairStatus-' + block.firstElementChild.textContent
+    );
+    if (pairStatus.innerHTML === '✘') {
       return false;
     }
   }
@@ -517,11 +546,15 @@ const allConnectedDesktop_ = function() {
  * Checks if all devices from the reconnect modal have been paired.
  * @returns {boolean} true if all devices have been paired.
  */
-const allConnectedMobile_ = function() {
-  const blocks = document.getElementById('rc-list').querySelectorAll('[id=rc-status-]');
+const allConnectedMobile_ = function () {
+  const blocks = document
+    .getElementById('rc-list')
+    .querySelectorAll('[id=rc-status-]');
   for (const block of blocks) {
-    const pairStatus = document.getElementById('rc-status-' + block.textContent);
-    if (pairStatus.innerHTML == 'disconnected') {
+    const pairStatus = document.getElementById(
+      'rc-status-' + block.textContent
+    );
+    if (pairStatus.innerHTML === 'disconnected') {
       return false;
     }
   }
@@ -533,7 +566,7 @@ const allConnectedMobile_ = function() {
  * @param {!Element} xml XML to load into the workspace.
  * @private
  */
-const reconnectDoneHandler_ = function(xml) {
+const reconnectDoneHandler_ = function (xml) {
   const workspace = getWorkspace();
   if (window.location.href.includes('mobile')) {
     // hide reconnect dialog
@@ -549,35 +582,35 @@ const reconnectDoneHandler_ = function(xml) {
   doneButton.parentNode.replaceChild(doneButtonClone, doneButton);
 
   // rebuild workspace from xml
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  Xml.domToWorkspace(xml, workspace);
   monitorChanges_(workspace);
 };
 
 /**
  * Cancels the reconnect modal.
  */
-const reconnectCancelHandler_ = function() {
+const reconnectCancelHandler_ = function () {
   // hide reconnect modal
   document.getElementById('rcModal').style.display = 'none';
 };
 
 /**
-  * Start monitoring the workspace. If a change is made that changes the XML,
-  * clear the key from the URL. Stop monitoring the workspace once such a
-  * change is detected.
-  * @param {!Blockly.WorkspaceSvg} workspace Workspace.
-  * @private
-  */
-const monitorChanges_ = function(workspace) {
-  const startXmlDom = Blockly.Xml.workspaceToDom(workspace);
-  const startXmlText = Blockly.Xml.domToText(startXmlDom);
+ * Start monitoring the workspace. If a change is made that changes the XML,
+ * clear the key from the URL. Stop monitoring the workspace once such a
+ * change is detected.
+ * @param {!Blockly.WorkspaceSvg} workspace Workspace.
+ * @private
+ */
+const monitorChanges_ = function (workspace) {
+  const startXmlDom = Xml.workspaceToDom(workspace);
+  const startXmlText = Xml.domToText(startXmlDom);
   /**
    * Monitors the workspace for changes to the xml
    */
   function change() {
-    const xmlDom = Blockly.Xml.workspaceToDom(workspace);
-    const xmlText = Blockly.Xml.domToText(xmlDom);
-    if (startXmlText != xmlText) {
+    const xmlDom = Xml.workspaceToDom(workspace);
+    const xmlText = Xml.domToText(xmlDom);
+    if (startXmlText !== xmlText) {
       window.location.hash = '';
       workspace.removeChangeListener(change);
     }
@@ -590,18 +623,20 @@ const monitorChanges_ = function(workspace) {
  * @returns {string} path to the random filename
  * @public
  * */
-const generatePath = function() {
+const generatePath = function () {
   const result = [];
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   const charactersLength = characters.length;
-  for ( let i = 0; i < 12; i++ ) {
-    result.push(characters.charAt(Math.floor(Math.random() *
- charactersLength)));
+  for (let i = 0; i < 12; i++) {
+    result.push(
+      characters.charAt(Math.floor(Math.random() * charactersLength))
+    );
   }
   return result.join('');
 };
 
-window.addEventListener('load', function() {
+window.addEventListener('load', () => {
   // get anchor
   const anchor = window.location.hash;
   if (anchor) {

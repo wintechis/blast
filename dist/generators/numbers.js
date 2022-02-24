@@ -6,24 +6,28 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {JavaScript} from 'blockly';
 
-Blockly.JavaScript['number_value'] = Blockly.JavaScript['math_number'];
-Blockly.JavaScript['number_arithmetic'] = Blockly.JavaScript['math_arithmetic'];
-Blockly.JavaScript['number_single'] = Blockly.JavaScript['math_single'];
-Blockly.JavaScript['number_trig'] = Blockly.JavaScript['math_trig'];
-Blockly.JavaScript['number_constant'] = Blockly.JavaScript['math_constant'];
-Blockly.JavaScript['number_property'] = Blockly.JavaScript['math_number_property'];
-Blockly.JavaScript['number_round'] = Blockly.JavaScript['math_round'];
-Blockly.JavaScript['number_on_list'] = Blockly.JavaScript['math_on_list'];
-Blockly.JavaScript['number_modulo'] = Blockly.JavaScript['math_modulo'];
-Blockly.JavaScript['number_constrain'] = Blockly.JavaScript['math_constrain'];
-Blockly.JavaScript['number_random'] = Blockly.JavaScript['math_random_int'];
-Blockly.JavaScript['number_random_float'] = Blockly.JavaScript['math_random_float'];
-Blockly.JavaScript['number_atan2'] = Blockly.JavaScript['math_atan2'];
+JavaScript['number_value'] = JavaScript['math_number'];
+JavaScript['number_arithmetic'] = JavaScript['math_arithmetic'];
+JavaScript['number_single'] = JavaScript['math_single'];
+JavaScript['number_trig'] = JavaScript['math_trig'];
+JavaScript['number_constant'] = JavaScript['math_constant'];
+JavaScript['number_property'] = JavaScript['math_number_property'];
+JavaScript['number_round'] = JavaScript['math_round'];
+JavaScript['number_on_list'] = JavaScript['math_on_list'];
+JavaScript['number_modulo'] = JavaScript['math_modulo'];
+JavaScript['number_constrain'] = JavaScript['math_constrain'];
+JavaScript['number_random'] = JavaScript['math_random_int'];
+JavaScript['number_random_float'] = JavaScript['math_random_float'];
+JavaScript['number_atan2'] = JavaScript['math_atan2'];
 
-Blockly.JavaScript['parse_int'] = function(block) {
-  const valueNumber = Blockly.JavaScript.valueToCode(block, 'number', Blockly.JavaScript.ORDER_ATOMIC);
+JavaScript['parse_int'] = function (block) {
+  const valueNumber = JavaScript.valueToCode(
+    block,
+    'number',
+    JavaScript.ORDER_ATOMIC
+  );
   const code = `parseInt(${valueNumber})`;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, JavaScript.ORDER_NONE];
 };

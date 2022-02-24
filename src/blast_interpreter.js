@@ -6,7 +6,7 @@
  */
 'use strict';
 
-import Blockly from 'blockly';
+import {Events, JavaScript, selected} from 'blockly';
 import fs from 'fs';
 
 /**
@@ -20,7 +20,7 @@ export let interpreter = null;
  * Getter for the interpreter.
  * @return {Interpreter} the interpreter.
  */
-export const getInterpreter = function() {
+export const getInterpreter = function () {
   return interpreter;
 };
 
@@ -33,31 +33,31 @@ export const getInterpreter = function() {
 export const apiFunctions = [];
 
 /**
-  * Array of tuples, containg names and asynchronous functions defined in the
-  * things folder, in order to add them to the interpreter API in {@link initAPI}.
-  * @type {Array<{name: string, func: Function}>}
-  * @public
-  */
+ * Array of tuples, containg names and asynchronous functions defined in the
+ * things folder, in order to add them to the interpreter API in {@link initAPI}.
+ * @type {Array<{name: string, func: Function}>}
+ * @public
+ */
 export const asyncApiFunctions = [];
 
 /**
-  * Indicates wheter BLAST is current interrupted.
-  * @type {boolean}
-  * @public
-  */
+ * Indicates wheter BLAST is current interrupted.
+ * @type {boolean}
+ * @public
+ */
 let interrupted = false;
 /**
  * Getter for interrupted.
  * @return {boolean} interrupted
  */
-export const getInterrupted = function() {
+export const getInterrupted = function () {
   return interrupted;
 };
 /**
  * Setter for interrupted.
  * @param {boolean} val value to set.
  */
-export const setInterrupted = function(val) {
+export const setInterrupted = function (val) {
   interrupted = val;
 };
 apiFunctions.push(['setInterrupted', setInterrupted]);
@@ -88,7 +88,7 @@ export const onStatusChange = {ready: [], running: [], stopped: [], error: []};
  * Sets the current status of the interpreter.
  * @param {string} newStatus new status.
  */
-const setStatus = function(newStatus) {
+const setStatus = function (newStatus) {
   if (status !== newStatus) {
     status = newStatus;
     for (const func of onStatusChange[status]) {
@@ -108,7 +108,7 @@ let latestCode = '';
  * Getter for latestCode.
  * @return {string} latestCode
  */
-export const getLatestCode = function() {
+export const getLatestCode = function () {
   return latestCode;
 };
 
@@ -130,7 +130,7 @@ let workspace = null;
  * Gets the workspace
  * @return {Blockly.Workspace} the workspace
  */
-export const getWorkspace = function() {
+export const getWorkspace = function () {
   return workspace;
 };
 
@@ -138,7 +138,7 @@ export const getWorkspace = function() {
  * Sets the workspace
  * @param {Blockly.Workspace} ws the workspace
  */
-export const setWorkspace = function(ws) {
+export const setWorkspace = function (ws) {
   workspace = ws;
 };
 
@@ -163,7 +163,7 @@ export let deviceEventHandlers = [];
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
 const cleanUpFunctions = [];
-export const addCleanUpFunction = function(fn) {
+export const addCleanUpFunction = function (fn) {
   cleanUpFunctions.push(fn);
 };
 
@@ -171,7 +171,7 @@ export const addCleanUpFunction = function(fn) {
  * Set to true if the States Interpreter is running.
  */
 let statesInterpreterRunning = false;
-export const setStatesInterpreterRunning = function(val) {
+export const setStatesInterpreterRunning = function (val) {
   statesInterpreterRunning = val;
 };
 
@@ -187,7 +187,7 @@ if (fs.readFileSync) {
  * Setteer for the Interpreter's standard input function
  * @param {Function} fn new stdIn function
  */
-export const setStdIn = function(fn) {
+export const setStdIn = function (fn) {
   stdIn = fn;
 };
 
@@ -195,7 +195,7 @@ export const setStdIn = function(fn) {
  * Getter for the Interpreter's standard input function.
  * @return {Function} stdOut
  */
-export const getStdIn = function() {
+export const getStdIn = function () {
   return stdIn;
 };
 
@@ -208,7 +208,7 @@ let stdOut = console.log;
  * @param {Function} fn the stdEut function.
  * @public
  */
-export const setStdOut = function(fn) {
+export const setStdOut = function (fn) {
   stdOut = fn;
 };
 
@@ -216,7 +216,7 @@ export const setStdOut = function(fn) {
  * Getter for the Interpreter's standard output function.
  * @return {Function} the stdOut function.
  */
-export const getStdOut = function() {
+export const getStdOut = function () {
   return stdOut;
 };
 
@@ -228,17 +228,16 @@ let stdInfo = console.log;
  * Setter for the Interpreter's standard info output function.
  * @param {Function} fn the stdInfo function.
  */
-export const setStdInfo = function(fn) {
+export const setStdInfo = function (fn) {
   stdInfo = fn;
 };
 /**
  * Getter for the Interpreter's standard info output function.
  * @return {Function} the stdInfo function.
  */
-export const getStdInfo = function() {
+export const getStdInfo = function () {
   return stdInfo;
 };
-
 
 /**
  * Defines the Interpreters standard error output.
@@ -249,21 +248,21 @@ let stdErr = console.log;
  * @param {Function} fn the stdErr function.
  * @public
  */
-export const setStdError = function(fn) {
+export const setStdError = function (fn) {
   stdErr = fn;
 };
 /**
  * Getter for the Interpreter's standard error output function.
  * @return {Function} the stdErr function.
  */
-export const getStdError = function() {
+export const getStdError = function () {
   return stdErr;
 };
 
 /**
  * removes all event handlers of webHID devices from {@link deviceEventHandlers}
  */
-const removeDeviceHandlers = function() {
+const removeDeviceHandlers = function () {
   for (const handler of deviceEventHandlers) {
     const device = handler.device;
     device.removeEventListener(handler.type, handler.fn);
@@ -274,7 +273,7 @@ const removeDeviceHandlers = function() {
 /**
  * Clears all interval events.
  */
-const clearIntervalEvents = function() {
+const clearIntervalEvents = function () {
   for (const event of intervalEvents) {
     clearInterval(event);
   }
@@ -285,7 +284,7 @@ const clearIntervalEvents = function() {
  * Reset the JS Interpreter.
  * @public
  */
-export const resetInterpreter = function() {
+export const resetInterpreter = function () {
   interpreter = null;
   if (runner_) {
     clearTimeout(runner_);
@@ -293,7 +292,7 @@ export const resetInterpreter = function() {
   }
   removeDeviceHandlers();
   clearIntervalEvents();
-  
+
   for (const func of cleanUpFunctions) {
     func();
   }
@@ -303,7 +302,7 @@ export const resetInterpreter = function() {
  * Stop the JavaScript execution.
  * @public
  */
-export const stopJS = function() {
+export const stopJS = function () {
   resetInterpreter();
   setStatus(statusValues.STOPPED);
 };
@@ -314,7 +313,7 @@ export const stopJS = function() {
  * @param {string=} text optional, a custom error text
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-export const throwError = function(text) {
+export const throwError = function (text) {
   if (!text) {
     text = 'Error executing program - See console for details.';
   }
@@ -329,12 +328,12 @@ export const throwError = function(text) {
  * Generate JavaScript Code for the user's block-program.
  * @public
  */
-export const generateCode = function() {
-  Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-  Blockly.JavaScript.addReservedWords('highlightBlock');
+export const generateCode = function () {
+  JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+  JavaScript.addReservedWords('highlightBlock');
   // Generate JavaScript code and parse it.
   latestCode = '';
-  latestCode = Blockly.JavaScript.workspaceToCode(workspace);
+  latestCode = JavaScript.workspaceToCode(workspace);
 };
 
 /**
@@ -346,21 +345,21 @@ function initApi(interpreter, globalObject) {
   // Add functions of {@link apiFunctions} to the interpreter.
   for (const f of apiFunctions) {
     // Add function name to reserverd words.
-    Blockly.JavaScript.addReservedWords(f[0]);
+    JavaScript.addReservedWords(f[0]);
     // Add function to global scope.
     interpreter.setProperty(
-        globalObject,
-        f[0], // the function name
-        interpreter.createNativeFunction(f[1]), // the function
+      globalObject,
+      f[0], // the function name
+      interpreter.createNativeFunction(f[1]) // the function
     );
   }
 
   // Add functions of {@link asyncApiFunctions} to the interpreter.
   for (const f of asyncApiFunctions) {
     interpreter.setProperty(
-        globalObject,
-        f[0], // the function name
-        interpreter.createAsyncFunction(f[1]), // the function
+      globalObject,
+      f[0], // the function name
+      interpreter.createAsyncFunction(f[1]) // the function
     );
   }
 }
@@ -369,13 +368,13 @@ function initApi(interpreter, globalObject) {
  * Initializes the JS Interpreter.
  * @param {Blockly.workspace} ws the workspace
  */
-export const initInterpreter = function(ws) {
+export const initInterpreter = function (ws) {
   workspace = ws;
 
   // Load the interpreter now, and upon future changes.
   generateCode();
-  workspace.addChangeListener(function(event) {
-    if (!(event instanceof Blockly.Events.Ui)) {
+  workspace.addChangeListener(event => {
+    if (!(event instanceof Events.Ui)) {
       // Something changed. Parser needs to be reloaded.
       generateCode();
     }
@@ -386,7 +385,7 @@ export const initInterpreter = function(ws) {
  * Places a transparent rectangle over the workspace to prevent
  * the user from interacting with the workspace.
  */
-const disableWorkspace = function() {
+const disableWorkspace = function () {
   const workspaceDiv = document.getElementById('content_workspace');
   const rect = document.createElement('div');
   rect.id = 'workspace-disabled';
@@ -399,15 +398,15 @@ const disableWorkspace = function() {
   rect.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
   workspaceDiv.appendChild(rect);
   // de-select current block so that the delete key won't work.
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
+  if (selected) {
+    selected.unselect();
   }
 };
 
 /**
  * Removes the transparent rectangle over the workspace.
  */
-const enableWorkspace = function() {
+const enableWorkspace = function () {
   const workspaceDiv = document.getElementById('content_workspace');
   const rect = document.getElementById('workspace-disabled');
   if (rect) {
@@ -422,12 +421,12 @@ onStatusChange.error.push(enableWorkspace);
  * Execute the user's code.
  * @public
  */
-export const runJS = function() {
+export const runJS = function () {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
   disableWorkspace();
 
-  if (interpreter == null) {
+  if (interpreter === null) {
     // Begin execution
     interpreter = new Interpreter(latestCode, initApi);
 
@@ -436,7 +435,7 @@ export const runJS = function() {
      * @function runner_
      * @memberof Blast#
      */
-    runner_ = function() {
+    runner_ = function () {
       if (interpreter) {
         try {
           if (interrupted) {
@@ -448,7 +447,10 @@ export const runJS = function() {
               // Execution is currently blocked by some async call.
               // Try again later.
               setTimeout(runner_, 1);
-            } else if (statesInterpreterRunning || eventsInWorkspace.length > 0) {
+            } else if (
+              statesInterpreterRunning ||
+              eventsInWorkspace.length > 0
+            ) {
               // eventChecker is running,
               // dont reset UI until stop button is clicked.
             } else {

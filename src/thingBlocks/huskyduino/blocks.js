@@ -7,16 +7,16 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, dialog, FieldDropdown} from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
-
-Blockly.Blocks['huskylens_choose_algo'] = {
-  init: function() {
+Blocks['huskylens_choose_algo'] = {
+  init: function () {
     this.appendValueInput('Thing')
-        .setCheck('Thing')
-        .appendField('write algorithm property')
-        .appendField(new Blockly.FieldDropdown([
+      .setCheck('Thing')
+      .appendField('write algorithm property')
+      .appendField(
+        new FieldDropdown([
           ['Face Recognition', 'face_recognition'],
           ['Object Tracking', 'object_tracking'],
           ['Object Recognition', 'object_recognition'],
@@ -24,8 +24,10 @@ Blockly.Blocks['huskylens_choose_algo'] = {
           ['Color Recognition', 'color_recognition'],
           ['Tag Recognition', 'tag_recognition'],
           ['Object Classification', 'object_classification'],
-        ]), 'Algorithms')
-        .appendField('to HuskyDuino');
+        ]),
+        'Algorithms'
+      )
+      .appendField('to HuskyDuino');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
@@ -33,12 +35,12 @@ Blockly.Blocks['huskylens_choose_algo'] = {
     this.setHelpUrl('');
   },
 
-  onchange: function() {
+  onchange: function () {
     // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -49,29 +51,30 @@ Blockly.Blocks['huskylens_choose_algo'] = {
 // Add choose the huskylens_choose_algo to the toolbox.
 addBlock('huskylens_choose_algo', 'Properties');
 
-
-Blockly.Blocks['huskylens_write_id'] = {
-  init: function() {
+Blocks['huskylens_write_id'] = {
+  init: function () {
     this.appendValueInput('ID')
-        .setCheck('Number')
-        .appendField('write ID property');
+      .setCheck('Number')
+      .appendField('write ID property');
     this.appendValueInput('Thing')
-        .setCheck('Thing')
-        .appendField('to HuskyDuino');
+      .setCheck('Thing')
+      .appendField('to HuskyDuino');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
-    this.setTooltip('Sets the ID of the object currently on camera. ID shoud be a value between 1 and 255');
+    this.setTooltip(
+      'Sets the ID of the object currently on camera. ID shoud be a value between 1 and 255'
+    );
     this.setHelpUrl('');
   },
 
-  onchange: function() {
+  onchange: function () {
     // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -92,15 +95,14 @@ const HUSKYLENS_WRITE_ID_XML = `
 // Add the huskylens_write_face_id block to the toolbox.
 addBlock('huskylens_write_id', 'Properties', HUSKYLENS_WRITE_ID_XML);
 
-
-Blockly.Blocks['huskylens_write_forget_flag'] = {
-  init: function() {
+Blocks['huskylens_write_forget_flag'] = {
+  init: function () {
     this.appendValueInput('forgetFlag')
-        .setCheck('Boolean')
-        .appendField('write forget flag property');
+      .setCheck('Boolean')
+      .appendField('write forget flag property');
     this.appendValueInput('Thing')
-        .setCheck('Thing')
-        .appendField('to HuskyDuino');
+      .setCheck('Thing')
+      .appendField('to HuskyDuino');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -108,13 +110,13 @@ Blockly.Blocks['huskylens_write_forget_flag'] = {
     this.setTooltip('forget all values of the currently selected algorithm');
     this.setHelpUrl('');
   },
-    
-  onchange: function() {
+
+  onchange: function () {
     // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
@@ -134,26 +136,31 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 `;
 
 // Add the huskylens_write_forget_flag block to the toolbox.
-addBlock('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
+addBlock(
+  'huskylens_write_forget_flag',
+  'Properties',
+  HUSKYLENS_FORGET_FLAG_XML
+);
 
-
-Blockly.Blocks['huskylens_read_id'] = {
-  init: function() {
+Blocks['huskylens_read_id'] = {
+  init: function () {
     this.appendValueInput('Thing')
-        .setCheck('Thing')
-        .appendField('read ID property of HuskyDuino');
+      .setCheck('Thing')
+      .appendField('read ID property of HuskyDuino');
     this.setOutput(true, 'String');
     this.setColour(255);
-    this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
+    this.setTooltip(
+      'returns up to 5 IDs of the objects currently visible to the HuskyLens'
+    );
     this.setHelpUrl('');
   },
 
-  onchange: function() {
+  onchange: function () {
     // on creating this block check webBluetooth availability.
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
                 Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }

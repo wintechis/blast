@@ -10,7 +10,6 @@ import Blockly from 'blockly';
 import {throwError} from './blast_interpreter.js';
 import {getWorkspace} from './blast_interpreter.js';
 
-
 /**
  * Maps device names to BluetoothDevice.id.
  */
@@ -27,7 +26,7 @@ const webHidNames = new Map();
 const webHidDevices = new Map();
 
 let webBluetoothButtonHandler = null;
-export const setWebBluetoothButtonHandler = function(handler) {
+export const setWebBluetoothButtonHandler = function (handler) {
   webBluetoothButtonHandler = handler;
 };
 
@@ -37,35 +36,34 @@ export const setWebBluetoothButtonHandler = function(handler) {
  * @param {string=} adapter The name of the adapter that generated the message.
  * @param {string=} device The name of the device that generated the message.
  */
-let thingsLog = function(message, adapter, device) {
+let thingsLog = function (message, adapter, device) {
   console.log({adapter}, {device}, message);
 };
 /**
  * Getter for the thingsLog function.
  * @return {Function} The thingsLog function.
  */
-export const getThingsLog = function() {
+export const getThingsLog = function () {
   return thingsLog;
 };
 /**
  * Setter for the thingsLog function.
  * @param {Function} logFunc The function to use for logging.
  */
-export const setThingsLog = function(logFunc) {
+export const setThingsLog = function (logFunc) {
   thingsLog = logFunc;
 };
-
 
 /**
  * Resets all device maps.
  */
-export const resetThings = function() {
+export const resetThings = function () {
   webBluetoothDevices.clear();
   webHidNames.clear();
   webHidDevices.clear();
 };
 
-export const getWebHidDevice = function(deviceId) {
+export const getWebHidDevice = function (deviceId) {
   return webHidDevices.get(deviceId);
 };
 
@@ -75,7 +73,7 @@ export const getWebHidDevice = function(deviceId) {
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML elements.
  */
-export const thingsFlyoutCategory = function(workspace) {
+export const thingsFlyoutCategory = function (workspace) {
   let xmlList = [];
 
   // Create WebBluetooth Label
@@ -87,16 +85,16 @@ export const thingsFlyoutCategory = function(workspace) {
   const webBluetoothButton = document.createElement('button');
   webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
-  workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', function(_button) {
+  // eslint-disable-next-line no-unused-vars
+  workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', _button => {
     webBluetoothButtonHandler();
   });
   xmlList.push(webBluetoothButton);
 
-  
   // add webBluetooth blocks to xmlList
   const wbBlockList = flyoutCategoryBlocksWB(workspace);
   xmlList = xmlList.concat(wbBlockList);
-  
+
   // Create WebBluetooth Label
   const webHIDLabel = document.createElement('label');
   webHIDLabel.setAttribute('text', 'WebHID Blocks');
@@ -106,7 +104,8 @@ export const thingsFlyoutCategory = function(workspace) {
   const webHidbutton = document.createElement('button');
   webHidbutton.setAttribute('text', 'connect via webHID');
   webHidbutton.setAttribute('callbackKey', 'CREATE_WEBHID');
-  workspace.registerButtonCallback('CREATE_WEBHID', function(_button) {
+  // eslint-disable-next-line no-unused-vars
+  workspace.registerButtonCallback('CREATE_WEBHID', _button => {
     createWebHidButtonHandler();
   });
   xmlList.push(webHidbutton);
@@ -160,12 +159,11 @@ export const thingsFlyoutCategory = function(workspace) {
   return xmlList;
 };
 
-
 /**
  * Construct the webBluetooth blocks required by the flyout for the things category.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-const flyoutCategoryBlocksWHid = function() {
+const flyoutCategoryBlocksWHid = function () {
   const xmlList = [];
 
   // add webHID devices to xmlList
@@ -185,7 +183,7 @@ const flyoutCategoryBlocksWHid = function() {
  * Construct the webHIDh blocks required by the flyout for the things category.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-const flyoutCategoryBlocksWB = function() {
+const flyoutCategoryBlocksWB = function () {
   const xmlList = [];
 
   // add webBluetooth devices to xmlList
@@ -206,7 +204,7 @@ const flyoutCategoryBlocksWB = function() {
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export const getWebBluetoothDevices = function() {
+export const getWebBluetoothDevices = function () {
   const keysArray = [...webBluetoothDevices.keys()];
   const keysSorted = keysArray.sort();
 
@@ -228,7 +226,7 @@ export const getWebBluetoothDevices = function() {
  * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export const getWebHIDDevices = function() {
+export const getWebHIDDevices = function () {
   const keysArray = [...webHidNames.keys()];
   const keysSorted = keysArray.sort();
 
@@ -250,59 +248,60 @@ export const getWebHIDDevices = function() {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {string} deviceName User defined name for the device.
  */
-export const addWebBluetoothDevice = function(webBluetoothId, deviceName) {
+export const addWebBluetoothDevice = function (webBluetoothId, deviceName) {
   // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function(name, id) {
-    Blockly.Variables.promptName('Pair successful! Now give your device a name.', name,
-        function(text) {
-          if (text) {
-            const existing =
-                  webBluetoothDevices.has(text);
-            if (existing) {
-              const msg = 'Name %1 already exists'.replace(
-                  '%1', text);
-              Blockly.dialog.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(text, id);  // Recurse
-                  });
-            } else {
-              // No conflict
-              webBluetoothDevices.set(text, id);
-            }
-          } else {
-            const msg = 'Name cannot be empty';
-            Blockly.dialog.alert(msg, function() {
-              promptAndCheckWithAlert(text, id); // Recuse
+  const promptAndCheckWithAlert = function (name, id) {
+    Blockly.Variables.promptName(
+      'Pair successful! Now give your device a name.',
+      name,
+      text => {
+        if (text) {
+          const existing = webBluetoothDevices.has(text);
+          if (existing) {
+            const msg = 'Name %1 already exists'.replace('%1', text);
+            Blockly.dialog.alert(msg, () => {
+              promptAndCheckWithAlert(text, id); // Recurse
             });
+          } else {
+            // No conflict
+            webBluetoothDevices.set(text, id);
           }
-        });
+        } else {
+          const msg = 'Name cannot be empty';
+          Blockly.dialog.alert(msg, () => {
+            promptAndCheckWithAlert(text, id); // Recuse
+          });
+        }
+      }
+    );
   };
   promptAndCheckWithAlert(deviceName, webBluetoothId);
 };
 
-
 /**
  * Handles "connect via webHID" button in the things toolbox category.
  */
-const createWebHidButtonHandler = function() {
+const createWebHidButtonHandler = function () {
   const workspace = getWorkspace();
   thingsLog('Requesting webHID device...', 'HID');
-  navigator.hid.requestDevice({filters: []})
-      .then((device) => {
-        if (device.length === 0) {
-          throwError('Connection failed or cancelled by User.');
-          return;
-        }
-        // generate a unique id for the new device
-        const uid = Date.now().toString(36) + Math.random().toString(36).substring(2);
-        // add device to the device map with its uid
-        addWebHidDevice(uid, device[0].productName, device[0]);
-        workspace.refreshToolboxSelection();
-        thingsLog('Connected', 'HID', device[0].productName);
-      })
-      .catch((error) => {
-        throwError(error);
-      });
+  navigator.hid
+    .requestDevice({filters: []})
+    .then(device => {
+      if (device.length === 0) {
+        throwError('Connection failed or cancelled by User.');
+        return;
+      }
+      // generate a unique id for the new device
+      const uid =
+        Date.now().toString(36) + Math.random().toString(36).substring(2);
+      // add device to the device map with its uid
+      addWebHidDevice(uid, device[0].productName, device[0]);
+      workspace.refreshToolboxSelection();
+      thingsLog('Connected', 'HID', device[0].productName);
+    })
+    .catch(error => {
+      throwError(error);
+    });
 };
 
 /**
@@ -311,33 +310,33 @@ const createWebHidButtonHandler = function() {
  * @param {string} deviceName default name for the device.
  * @param {HIDDevice} device the device to add.
  */
-export const addWebHidDevice = function(uid, deviceName, device) {
+export const addWebHidDevice = function (uid, deviceName, device) {
   // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function(name, id) {
-    Blockly.Variables.promptName('Connection established! Now give your device a name.', name,
-        function(text) {
-          if (text) {
-            const existing =
-                  webHidNames.has(text);
-            if (existing) {
-              const msg = 'Name %1 already exists'.replace(
-                  '%1', text);
-              Blockly.dialog.alert(msg,
-                  function() {
-                    promptAndCheckWithAlert(text, id);  // Recurse
-                  });
-            } else {
-              // No conflict
-              webHidDevices.set(id, device);
-              webHidNames.set(text, id);
-            }
-          } else {
-            const msg = 'Name cannot be empty';
-            Blockly.dialog.alert(msg, function() {
-              promptAndCheckWithAlert(text, id); // Recuse
+  const promptAndCheckWithAlert = function (name, id) {
+    Blockly.Variables.promptName(
+      'Connection established! Now give your device a name.',
+      name,
+      text => {
+        if (text) {
+          const existing = webHidNames.has(text);
+          if (existing) {
+            const msg = 'Name %1 already exists'.replace('%1', text);
+            Blockly.dialog.alert(msg, () => {
+              promptAndCheckWithAlert(text, id); // Recurse
             });
+          } else {
+            // No conflict
+            webHidDevices.set(id, device);
+            webHidNames.set(text, id);
           }
-        });
+        } else {
+          const msg = 'Name cannot be empty';
+          Blockly.dialog.alert(msg, () => {
+            promptAndCheckWithAlert(text, id); // Recuse
+          });
+        }
+      }
+    );
   };
   promptAndCheckWithAlert(deviceName, uid);
 };

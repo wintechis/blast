@@ -5,10 +5,9 @@
  */
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, Msg, Names, utils} from 'blockly';
 import {apiFunctions} from './blast_interpreter.js';
 import {getCategory} from './blast_toolbox.js';
-
 
 /**
  * State block type.
@@ -35,11 +34,11 @@ const eventValues = new Map();
  * @return {boolean} true if state condition is now true and was false before,
  * false otherwise.
  */
-const eventChecker = function(blockId, curValue) {
+const eventChecker = function (blockId, curValue) {
   const prevValue = eventValues.get(blockId);
   eventValues.set(blockId, curValue);
 
-  if (prevValue != undefined) {
+  if (prevValue !== undefined) {
     return !prevValue && curValue;
   }
   return false;
@@ -52,8 +51,8 @@ apiFunctions.push(['eventChecker', eventChecker]);
  * @param {!Blockly.Workspace} root Root workspace.
  * @return {!Array} Array containing states.
  */
-const allStates = function(root) {
-  const states = root.getBlocksByType('state_definition', false).map(function(block) {
+const allStates = function (root) {
+  const states = root.getBlocksByType('state_definition', false).map(block => {
     return /** @type {!StateBlock} */ (block).getStateDef()[0];
   });
   return states;
@@ -67,11 +66,11 @@ const allStates = function(root) {
  * @param {!Blockly.Block} block Block to disambiguate.
  * @return {string} Non-colliding name.
  */
-export const findLegalName = function(name, block) {
+export const findLegalName = function (name, block) {
   if (block.isInFlyout) {
     return name;
   }
-  name = name || Blockly.Msg['UNNAMED_KEY'] || 'unnamed';
+  name = name || Msg['UNNAMED_KEY'] || 'unnamed';
   while (!isLegalName_(name, block.workspace, block)) {
     // Collision with another state.
     const r = name.match(/^(.*?)(\d+)$/);
@@ -94,7 +93,7 @@ export const findLegalName = function(name, block) {
  * @return {boolean} True if the name is legal.
  * @private
  */
-const isLegalName_ = function(name, workspace, optExclude) {
+const isLegalName_ = function (name, workspace, optExclude) {
   return !isNameUsed(name, workspace, optExclude);
 };
 
@@ -106,17 +105,17 @@ const isLegalName_ = function(name, workspace, optExclude) {
  *     comparisons (one doesn't want to collide with oneself).
  * @return {boolean} True if the name is used, otherwise return false.
  */
-const isNameUsed = function(name, workspace, optExclude) {
+const isNameUsed = function (name, workspace, optExclude) {
   const blocks = workspace.getAllBlocks(false);
   // Iterate through every block and check the name.
   for (const block of blocks) {
-    if (block == optExclude) {
+    if (block === optExclude) {
       continue;
     }
     if (block.getStateDef) {
       const stateBlock = /** @type {!StateBlock} */ (block);
       const stateName = stateBlock.getStateDef()[0];
-      if (Blockly.Names.equals(stateName, name)) {
+      if (Names.equals(stateName, name)) {
         return true;
       }
     }
@@ -130,16 +129,16 @@ const isNameUsed = function(name, workspace, optExclude) {
  * @return {string} The accepted name.
  * @this {Blockly.Field}
  */
-export const rename = function(name) {
+export const rename = function (name) {
   // Strip leading and trailing whitespace. Beyond this, all names are legal.
   name = name.trim();
 
   const legalName = findLegalName(
-      name,
-      /** @type {!Blockly.Block} */ (this.getSourceBlock()),
+    name,
+    /** @type {!Blockly.Block} */ (this.getSourceBlock())
   );
   const oldName = this.getValue();
-  if (oldName != name && oldName != legalName) {
+  if (oldName !== name && oldName !== legalName) {
     // Rename any events.
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (const block of blocks) {
@@ -157,20 +156,20 @@ export const rename = function(name) {
  * @param {!Blockly.Workspace} workspace The workspace containing states.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-export const eventsFlyoutCategory = function(workspace) {
+export const eventsFlyoutCategory = function (workspace) {
   const xmlList = [];
   // add event_every_minutes block
-  const eventEveryMinutes = Blockly.utils.xml.createElement('block');
+  const eventEveryMinutes = utils.xml.createElement('block');
   eventEveryMinutes.setAttribute('type', 'event_every_minutes');
   xmlList.push(eventEveryMinutes);
 
-  if (Blockly.Blocks['state_definition']) {
-    const block = Blockly.utils.xml.createElement('block');
+  if (Blocks['state_definition']) {
+    const block = utils.xml.createElement('block');
     block.setAttribute('type', 'state_definition');
     block.setAttribute('gap', 16);
-    const nameField = Blockly.utils.xml.createElement('field');
+    const nameField = utils.xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
-    nameField.appendChild(Blockly.utils.xml.createTextNode('state name'));
+    nameField.appendChild(utils.xml.createTextNode('state name'));
     block.appendChild(nameField);
     xmlList.push(block);
   }
@@ -185,22 +184,22 @@ export const eventsFlyoutCategory = function(workspace) {
    */
   function populateEvents(stateList) {
     // if stateList is empty create disabled event block.
-    if (stateList.length == 0) {
-      const block = Blockly.utils.xml.createElement('block');
+    if (stateList.length === 0) {
+      const block = utils.xml.createElement('block');
       block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
       block.setAttribute('disabled', true);
-      const mutation = Blockly.utils.xml.createElement('mutation');
+      const mutation = utils.xml.createElement('mutation');
       mutation.setAttribute('name', 'state name');
       block.appendChild(mutation);
       xmlList.push(block);
     }
 
     for (const stateName of stateList) {
-      const block = Blockly.utils.xml.createElement('block');
+      const block = utils.xml.createElement('block');
       block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
-      const mutation = Blockly.utils.xml.createElement('mutation');
+      const mutation = utils.xml.createElement('mutation');
       mutation.setAttribute('name', stateName);
       block.appendChild(mutation);
       xmlList.push(block);
@@ -215,7 +214,7 @@ export const eventsFlyoutCategory = function(workspace) {
   const category = getCategory('States and Events');
   if (category) {
     for (const content of category.contents) {
-      const block = Blockly.utils.xml.createElement('block');
+      const block = utils.xml.createElement('block');
       block.setAttribute('type', content.type);
       block.setAttribute('gap', 16);
       xmlList.push(block);
@@ -231,14 +230,14 @@ export const eventsFlyoutCategory = function(workspace) {
  * @param {!Blockly.Workspace} workspace The workspace to search.
  * @return {Blockly.Block} The state definition block, or null if not found.
  */
-export const getDefinition = function(name, workspace) {
+export const getDefinition = function (name, workspace) {
   // Assume that a state definition is a top block.
   const blocks = workspace.getTopBlocks(false);
   for (const block of blocks) {
     if (block.getStateDef) {
       const stateBlock = /** @type {!StateBlock} */ (block);
       const stateName = stateBlock.getStateDef()[0];
-      if (stateName && Blockly.Names.equals(stateName, name)) {
+      if (stateName && Names.equals(stateName, name)) {
         return block;
       }
     }

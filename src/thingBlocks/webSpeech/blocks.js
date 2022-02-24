@@ -7,19 +7,18 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, dialog} from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
-
-Blockly.Blocks['text_to_speech'] = {
+Blocks['text_to_speech'] = {
   /**
    * Block for outputting a string over audio output.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('text')
-        .appendField('text to speech')
-        .setCheck('String');
+      .appendField('text to speech')
+      .setCheck('String');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
@@ -31,14 +30,13 @@ Blockly.Blocks['text_to_speech'] = {
 // Add the block to the toolbox.
 addBlock('text_to_speech', 'actions');
 
-Blockly.Blocks['web_speech'] = {
+Blocks['web_speech'] = {
   /**
    * Block converting mic input into a string.
    * @this {Blockly.Block}
    */
-  init: function() {
-    this.appendDummyInput()
-        .appendField('speech to text');
+  init: function () {
+    this.appendDummyInput().appendField('speech to text');
     this.setOutput(true, 'String');
     this.setColour(0);
     this.setTooltip('outputs speech command from microphone as a string');
@@ -46,17 +44,18 @@ Blockly.Blocks['web_speech'] = {
     this.firstTime = true;
     this.recognition = null;
   },
-  onchange: function() {
+  onchange: function () {
     // on creating this block check speech API availability
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!('webkitSpeechRecognition' in window)) {
-        Blockly.dialog.alert(`Web Speech API is not supported by this browser.
+        dialog.alert(`Web Speech API is not supported by this browser.
         Upgrade to <a href="//www.google.com/chrome">Chrome</a>
         version 25 or later.`);
         this.dispose();
       } else {
         // eslint-disable-next-line new-cap
+        // eslint-disable-next-line no-undef
         this.recognition = new webkitSpeechRecognition();
       }
     }

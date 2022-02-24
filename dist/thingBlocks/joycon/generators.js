@@ -6,7 +6,7 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {JavaScript} from 'blockly';
 import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
@@ -17,25 +17,20 @@ import {getWebHidDevice} from './../../blast_things.js';
 import {setInterrupted} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
-
 /**
-  * Generates JavaScript code for the joycon_read_property block.
-  * @param {Blockly.Block} block the joycon_read_property block.
-  * @returns {String} the generated code.
-  */
-Blockly.JavaScript['joycon_read_property'] = function(block) {
+ * Generates JavaScript code for the joycon_read_property block.
+ * @param {Blockly.Block} block the joycon_read_property block.
+ * @returns {String} the generated code.
+ */
+JavaScript['joycon_read_property'] = function (block) {
   const property = block.getFieldValue('property');
   const sub = block.getFieldValue('propertySubValue') || '';
   const sub2 = block.getFieldValue('propertySubValue2') || '';
   const sub3 = block.getFieldValue('propertySubValue3') || '';
-  const id = Blockly.JavaScript.valueToCode(
-      block,
-      'Thing',
-      Blockly.JavaScript.ORDER_NONE,
-  );
+  const id = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE);
 
   const code = `readJoyConProperty(${id}, '${property}', '${sub}', '${sub2}', '${sub3}')`;
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, JavaScript.ORDER_NONE];
 };
 
 /**
@@ -49,7 +44,14 @@ Blockly.JavaScript['joycon_read_property'] = function(block) {
  * @returns {string} the value of the property.
  * @private
  */
-const readJoyConProperty = async function(id, property, subValue, subValue2, subValue3, callback) {
+const readJoyConProperty = async function (
+  id,
+  property,
+  subValue,
+  subValue2,
+  subValue3,
+  callback
+) {
   // If no things block is attached, return.
   if (!id) {
     throwError('No Joy-Con block set.');
@@ -60,22 +62,28 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
   const device = getWebHidDevice(id);
 
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID'
+    );
     callback();
     return;
   }
-
 
   if (!device.opened) {
     try {
       await device.open();
     } catch (error) {
-      throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      throwError(
+        "Failed to open device, your browser or OS probably doesn't support webHID."
+      );
     }
   }
 
   // Check if device is a Joy-Con.
-  if (device.vendorId !== 1406 || (device.productId !== 0x2006 && device.productId !== 0x2007)) {
+  if (
+    device.vendorId !== 1406 ||
+    (device.productId !== 0x2006 && device.productId !== 0x2007)
+  ) {
     throwError('The connected device is not a Joy-Con.');
     callback();
     return;
@@ -93,15 +101,25 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
 
   const thingsLog = getThingsLog();
 
-  const hidInputHandler = async function(event) {
+  const hidInputHandler = async function (event) {
     const packet = event.detail;
     if (!packet || !packet.actualOrientation) {
       return;
     }
 
-    thingsLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productname);
-    
-    thingsLog('Removing <code>hidinput</code> event listener', 'hid', device.productname);
+    thingsLog(
+      `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(
+        packet
+      )}</code>`,
+      'hid',
+      device.productname
+    );
+
+    thingsLog(
+      'Removing <code>hidinput</code> event listener',
+      'hid',
+      device.productname
+    );
     joyCon.removeEventListener('hidinput', hidInputHandler);
     if (subValue2 !== '') {
       if (property === 'accelerometers') {
@@ -121,7 +139,11 @@ const readJoyConProperty = async function(id, property, subValue, subValue2, sub
     await joyCon.enableStandardFullMode();
     await joyCon.enableIMUMode();
     await joyCon.enableVibration();
-    thingsLog('Adding <code>hidinput</code> event listener', 'hid', device.productname);
+    thingsLog(
+      'Adding <code>hidinput</code> event listener',
+      'hid',
+      device.productname
+    );
     joyCon.addEventListener('hidinput', hidInputHandler);
 
     joyCon.eventListenerAttached = true;
@@ -136,16 +158,18 @@ asyncApiFunctions.push(['readJoyConProperty', readJoyConProperty]);
  * @param {Blockly.Block} block the joycon_button_events block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['joycon_button_events'] = function(block) {
-  const thing = Blockly.JavaScript.valueToCode(block, 'Thing', Blockly.JavaScript.ORDER_NONE);
-  const button = Blockly.JavaScript.quote_(block.getFieldValue('button'));
-  const statements = Blockly.JavaScript.quote_(Blockly.JavaScript.statementToCode(block, 'statements'));
-  
+JavaScript['joycon_button_events'] = function (block) {
+  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE);
+  const button = JavaScript.quote_(block.getFieldValue('button'));
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
+  );
+
   const handler = `handleJoyConButtons(${thing}, ${button}, ${statements});\n`;
-  const handlersList = Blockly.JavaScript.definitions_['eventHandlers'] || '';
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  Blockly.JavaScript.definitions_['eventHandlers'] = handlersList + handler;
-  
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
   return '';
 };
 
@@ -156,7 +180,7 @@ Blockly.JavaScript['joycon_button_events'] = function(block) {
  * @param {string} statements the statements to execute when the button is pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const handleJoyConButtons = async function(id, button, statements, callback) {
+const handleJoyConButtons = async function (id, button, statements, callback) {
   // If no things block is attached, return.
   if (!id) {
     throwError('No Joy-Con block set.');
@@ -167,7 +191,9 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
   const device = getWebHidDevice(id);
 
   if (!device) {
-    throwError('Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID');
+    throwError(
+      'Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID'
+    );
     callback();
     return;
   }
@@ -176,12 +202,17 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     try {
       await device.open();
     } catch (error) {
-      throwError('Failed to open device, your browser or OS probably doesn\'t support webHID.');
+      throwError(
+        "Failed to open device, your browser or OS probably doesn't support webHID."
+      );
     }
   }
 
   // Check if device is a Joy-Con.
-  if (device.vendorId !== 1406 || (device.productId !== 0x2006 && device.productId !== 0x2007)) {
+  if (
+    device.vendorId !== 1406 ||
+    (device.productId !== 0x2006 && device.productId !== 0x2007)
+  ) {
     throwError('The connected device is not a Joy-Con.');
     callback();
     return;
@@ -200,13 +231,19 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
   let pushedInLastPacket = false;
   const thingsLog = getThingsLog();
 
-  const hidInputHandler = async function(event) {
+  const hidInputHandler = async function (event) {
     const packet = event.detail;
     if (!packet || !packet.actualOrientation) {
       return;
     }
 
-    thingsLog(`Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(packet)}</code>`, 'hid', device.productName);
+    thingsLog(
+      `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(
+        packet
+      )}</code>`,
+      'hid',
+      device.productName
+    );
 
     if (packet.buttonStatus[button]) {
       if (!pushedInLastPacket) {
@@ -215,10 +252,11 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
         setInterrupted(false);
 
         const interpreter = new Interpreter('');
-        interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
+        interpreter.getStateStack()[0].scope =
+          getInterpreter().getGlobalScope();
         interpreter.appendCode(statements);
 
-        const interruptRunner_ = function() {
+        const interruptRunner_ = function () {
           try {
             const hasMore = interpreter.step();
             if (hasMore) {
@@ -239,14 +277,22 @@ const handleJoyConButtons = async function(id, button, statements, callback) {
     }
   };
 
-  deviceEventHandlers.push({device: joyCon, type: 'hidinput', fn: hidInputHandler});
+  deviceEventHandlers.push({
+    device: joyCon,
+    type: 'hidinput',
+    fn: hidInputHandler,
+  });
 
   if (!joyCon.eventListenerAttached) {
     await joyCon.open();
     await joyCon.enableStandardFullMode();
     await joyCon.enableIMUMode();
     await joyCon.enableVibration();
-    thingsLog('Adding <code>hidinput</code> event listener', 'hid', device.productName);
+    thingsLog(
+      'Adding <code>hidinput</code> event listener',
+      'hid',
+      device.productName
+    );
     joyCon.addEventListener('hidinput', hidInputHandler);
 
     joyCon.eventListenerAttached = true;

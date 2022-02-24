@@ -6,16 +6,14 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {getWebBluetoothDevices} from './../blast_things.js';
-import {getWebHIDDevices} from './../blast_things.js';
+import {Blocks, FieldDropdown} from 'blockly';
+import {getWebBluetoothDevices, getWebHIDDevices} from './../blast_things.js';
 
-
-Blockly.Blocks['things_webBluetooth'] = {
-  init: function() {
+Blocks['things_webBluetooth'] = {
+  init: function () {
     this.appendDummyInput()
-        .appendField('webBluetooth device')
-        .appendField(new Blockly.FieldDropdown(getWebBluetoothDevices), 'id');
+      .appendField('webBluetooth device')
+      .appendField(new FieldDropdown(getWebBluetoothDevices), 'id');
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('');
@@ -23,11 +21,11 @@ Blockly.Blocks['things_webBluetooth'] = {
   },
 };
 
-Blockly.Blocks['things_webHID'] = {
-  init: function() {
+Blocks['things_webHID'] = {
+  init: function () {
     this.appendDummyInput()
-        .appendField('HID device')
-        .appendField(new Blockly.FieldDropdown(getWebHIDDevices), 'id');
+      .appendField('HID device')
+      .appendField(new FieldDropdown(getWebHIDDevices), 'id');
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('');

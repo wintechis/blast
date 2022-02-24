@@ -6,17 +6,17 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, FieldTextInput} from 'blockly';
 
-Blockly.Blocks['mac'] = {
+Blocks['mac'] = {
   /**
    * Block representing a mac address.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField('mac')
-        .appendField(new Blockly.FieldTextInput('deadbeef'), 'MAC');
+      .appendField('mac')
+      .appendField(new FieldTextInput('deadbeef'), 'MAC');
     this.setOutput(true, 'mac');
     this.setColour(60);
     this.setTooltip('');
@@ -24,16 +24,15 @@ Blockly.Blocks['mac'] = {
   },
 };
 
-
-Blockly.Blocks['uri'] = {
+Blocks['uri'] = {
   /**
    * Block representing a URI.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendDummyInput()
-        .appendField('URI')
-        .appendField(new Blockly.FieldTextInput('https://example.com'), 'URI');
+      .appendField('URI')
+      .appendField(new FieldTextInput('https://example.com'), 'URI');
     this.setOutput(true, 'URI');
     this.setColour(60);
     this.setTooltip('');
@@ -41,15 +40,15 @@ Blockly.Blocks['uri'] = {
   },
 };
 
-Blockly.Blocks['uri_from_string'] = {
+Blocks['uri_from_string'] = {
   /**
    * Block parsing an URI from a string.
    * @this {Blockly.Block}
    */
-  init: function() {
+  init: function () {
     this.appendValueInput('URI')
-        .setCheck('String')
-        .appendField('URI from string');
+      .setCheck('String')
+      .appendField('URI from string');
     this.setOutput(true, 'URI');
     this.setColour(60);
     this.setTooltip('');

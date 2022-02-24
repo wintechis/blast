@@ -10,18 +10,15 @@
 import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
-
 Blockly.Blocks['blinkstick_set_colors'] = {
-  init: function() {
+  init: function () {
     this.appendValueInput('COLOUR')
-        .setCheck('Colour')
-        .appendField('write colour property');
-    this.appendValueInput('index')
-        .setCheck('Number')
-        .appendField('of LED #');
+      .setCheck('Colour')
+      .appendField('write colour property');
+    this.appendValueInput('index').setCheck('Number').appendField('of LED #');
     this.appendValueInput('thing')
-        .setCheck('Thing')
-        .appendField('to BlinkStick');
+      .setCheck('Thing')
+      .appendField('to BlinkStick');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

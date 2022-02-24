@@ -6,25 +6,23 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {apiFunctions} from './../blast_interpreter.js';
-import {throwError} from './../blast_interpreter.js';
+import {JavaScript} from 'blockly';
+import {apiFunctions, throwError} from './../blast_interpreter.js';
 
-
-Blockly.JavaScript['uri'] = function(block) {
-  const uri = Blockly.JavaScript.quote_(block.getFieldValue('URI'));
-  return [uri, Blockly.JavaScript.ORDER_NONE];
+JavaScript['uri'] = function (block) {
+  const uri = JavaScript.quote_(block.getFieldValue('URI'));
+  return [uri, JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['uri_from_string'] = function(block) {
-  const uri = Blockly.JavaScript.valueToCode(block, 'URI', Blockly.JavaScript.ORDER_NONE);
+JavaScript['uri_from_string'] = function (block) {
+  const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
 
   const code = `convertToUri(${uri})`;
 
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, JavaScript.ORDER_NONE];
 };
 
-const convertToUri = function(uri) {
+const convertToUri = function (uri) {
   // Check if the string is a valid URI.
   try {
     new URL(uri);
@@ -36,8 +34,8 @@ const convertToUri = function(uri) {
 
 // add convertToUri method to the interpreter's API.
 apiFunctions.push(['convertToUri', convertToUri]);
-  
-Blockly.JavaScript['mac'] = function(block) {
-  const mac = Blockly.JavaScript.quote_(block.getFieldValue('MAC'));
-  return [mac, Blockly.JavaScript.ORDER_NONE];
+
+JavaScript['mac'] = function (block) {
+  const mac = JavaScript.quote_(block.getFieldValue('MAC'));
+  return [mac, JavaScript.ORDER_NONE];
 };

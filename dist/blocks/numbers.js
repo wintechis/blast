@@ -6,38 +6,39 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks} from 'blockly';
 import {addBlock} from './../blast_toolbox.js';
 
 // Remap blockly blocks to improve naming in xml.
-Blockly.Blocks['number_value'] = Blockly.Blocks['math_number'];
-Blockly.Blocks['number_arithmetic'] = Blockly.Blocks['math_arithmetic'];
-Blockly.Blocks['number_single'] = Blockly.Blocks['math_single'];
-Blockly.Blocks['number_trig'] = Blockly.Blocks['math_trig'];
-Blockly.Blocks['number_constant'] = Blockly.Blocks['math_constant'];
-Blockly.Blocks['number_property'] = Blockly.Blocks['math_number_property'];
-Blockly.Blocks['number_round'] = Blockly.Blocks['math_round'];
-Blockly.Blocks['number_on_list'] = Blockly.Blocks['math_on_list'];
-Blockly.Blocks['number_modulo'] = Blockly.Blocks['math_modulo'];
-Blockly.Blocks['number_constrain'] = Blockly.Blocks['math_constrain'];
-Blockly.Blocks['number_random'] = Blockly.Blocks['math_random_int'];
-Blockly.Blocks['number_random_float'] = Blockly.Blocks['math_random_float'];
-Blockly.Blocks['number_atan2'] = Blockly.Blocks['math_atan2'];
+Blocks['number_value'] = Blocks['math_number'];
+Blocks['number_arithmetic'] = Blocks['math_arithmetic'];
+Blocks['number_single'] = Blocks['math_single'];
+Blocks['number_trig'] = Blocks['math_trig'];
+Blocks['number_constant'] = Blocks['math_constant'];
+Blocks['number_property'] = Blocks['math_number_property'];
+Blocks['number_round'] = Blocks['math_round'];
+Blocks['number_on_list'] = Blocks['math_on_list'];
+Blocks['number_modulo'] = Blocks['math_modulo'];
+Blocks['number_constrain'] = Blocks['math_constrain'];
+Blocks['number_random'] = Blocks['math_random_int'];
+Blocks['number_random_float'] = Blocks['math_random_float'];
+Blocks['number_atan2'] = Blocks['math_atan2'];
 
-Blockly.Blocks['parse_int'] = {
+Blocks['parse_int'] = {
   /**
-     * Block parsing a string to an integer.
-     */
-  init: function() {
+   * Block parsing a string to an integer.
+   */
+  init: function () {
     this.appendValueInput('number')
-        .setCheck('String')
-        .appendField('convert text');
-    this.appendDummyInput()
-        .appendField('to number');
+      .setCheck('String')
+      .appendField('convert text');
+    this.appendDummyInput().appendField('to number');
     this.setOutput(true, 'Number');
     this.setColour(230);
     this.setTooltip('Parses a string to an integer.');
-    this.setHelpUrl('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt');
+    this.setHelpUrl(
+      'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/parseInt'
+    );
   },
 };
 

@@ -6,61 +6,72 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {JavaScript, Names} from 'blockly';
 import {apiFunctions} from './../blast_interpreter.js';
 
-
-Blockly.JavaScript['procedures_defeval'] = function(block) {
-  const funcName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
+JavaScript['procedures_defeval'] = function (block) {
+  const funcName = JavaScript.variableDB_.getName(
+    block.getFieldValue('NAME'),
+    Names.NameType.PROCEDURE_CATEGORY_NAME
+  );
   let xfix1 = '';
-  if (Blockly.JavaScript.STATEMENT_PREFIX) {
-    xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_PREFIX,
-        block);
+  if (JavaScript.STATEMENT_PREFIX) {
+    xfix1 += JavaScript.injectId(JavaScript.STATEMENT_PREFIX, block);
   }
-  if (Blockly.JavaScript.STATEMENT_SUFFIX) {
-    xfix1 += Blockly.JavaScript.injectId(Blockly.JavaScript.STATEMENT_SUFFIX,
-        block);
+  if (JavaScript.STATEMENT_SUFFIX) {
+    xfix1 += JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block);
   }
   if (xfix1) {
-    xfix1 = Blockly.JavaScript.prefixLines(xfix1, Blockly.JavaScript.INDENT);
+    xfix1 = JavaScript.prefixLines(xfix1, JavaScript.INDENT);
   }
   let loopTrap = '';
-  if (Blockly.JavaScript.INFINITE_LOOP_TRAP) {
-    loopTrap = Blockly.JavaScript.prefixLines(
-        Blockly.JavaScript.injectId(Blockly.JavaScript.INFINITE_LOOP_TRAP,
-            block), Blockly.JavaScript.INDENT);
+  if (JavaScript.INFINITE_LOOP_TRAP) {
+    loopTrap = JavaScript.prefixLines(
+      JavaScript.injectId(JavaScript.INFINITE_LOOP_TRAP, block),
+      JavaScript.INDENT
+    );
   }
   const branch = block.getFieldValue('STACK') || '';
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Blockly.JavaScript.variableDB_.getName(variables[i],
-        Blockly.VARIABLE_CATEGORY_NAME);
+    args[i] = JavaScript.variableDB_.getName(
+      variables[i],
+      Names.NameType.VARIABLE_CATEGORY_NAME
+    );
   }
-  let code = 'function ' + funcName + '(' + args.join(', ') + ') {\n' +
-        xfix1 + loopTrap + branch + '\n}';
-  code = Blockly.JavaScript.scrub_(block, code);
+  let code =
+    'function ' +
+    funcName +
+    '(' +
+    args.join(', ') +
+    ') {\n' +
+    xfix1 +
+    loopTrap +
+    branch +
+    '\n}';
+  code = JavaScript.scrub_(block, code);
   // Add % so as not to collide with helper functions in definitions list.
-  Blockly.JavaScript.definitions_['%' + funcName] = code;
+  JavaScript.definitions_['%' + funcName] = code;
   return null;
 };
 
-Blockly.JavaScript['procedures_defnoreturn'] =
-    Blockly.JavaScript['procedures_defreturn'];
+JavaScript['procedures_defnoreturn'] = JavaScript['procedures_defreturn'];
 
-Blockly.JavaScript['procedures_calleval'] = function(block) {
+JavaScript['procedures_calleval'] = function (block) {
   // Call a procedure with a return value.
-  const funcName = Blockly.JavaScript.variableDB_.getName(
-      block.getFieldValue('NAME'), Blockly.PROCEDURE_CATEGORY_NAME);
+  const funcName = JavaScript.variableDB_.getName(
+    block.getFieldValue('NAME'),
+    Names.NameType.PROCEDURE_CATEGORY_NAME
+  );
   const args = [];
   const variables = block.getVars();
   for (let i = 0; i < variables.length; i++) {
-    args[i] = Blockly.JavaScript.valueToCode(block, 'ARG' + i,
-        Blockly.JavaScript.ORDER_NONE) || 'null';
+    args[i] =
+      JavaScript.valueToCode(block, 'ARG' + i, JavaScript.ORDER_NONE) || 'null';
   }
   const code = funcName + '(' + args.join(', ') + ')';
-  return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
+  return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
 
 // Add console to JSInterpreter for debugging with the procedures_calleval block.

@@ -8,7 +8,6 @@
 
 import {addBlock} from './../blast_toolbox.js';
 
-
 // Define inner block XML for the colour_rgb block.
 const COLOUR_RGB_XML = `
 <block type="colour_rgb">

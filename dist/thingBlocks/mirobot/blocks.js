@@ -10,25 +10,24 @@
 import Blockly from 'blockly';
 // import {addBlock} from './../../blast_toolbox.js';
 
-
 Blockly.Blocks['mirobot_pickup'] = {
   /**
-    * Block for picking up boxes from pre-defined locations.
-    * @this {Blockly.Block}
-    */
-  init: function() {
+   * Block for picking up boxes from pre-defined locations.
+   * @this {Blockly.Block}
+   */
+  init: function () {
     this.appendDummyInput()
-        .appendField('robot-arm, pick up')
-        .appendField(
-            new Blockly.FieldDropdown([
-              ['blue', 'BLUE'],
-              ['red', 'RED'],
-              ['yellow', 'YELLOW'],
-              ['green', 'GREEN'],
-            ]),
-            'box',
-        )
-        .appendField('box');
+      .appendField('robot-arm, pick up')
+      .appendField(
+        new Blockly.FieldDropdown([
+          ['blue', 'BLUE'],
+          ['red', 'RED'],
+          ['yellow', 'YELLOW'],
+          ['green', 'GREEN'],
+        ]),
+        'box'
+      )
+      .appendField('box');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);

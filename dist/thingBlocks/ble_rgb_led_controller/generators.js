@@ -13,19 +13,24 @@ import {optionalServices} from './../../blast_webBluetooth.js';
 import {throwError} from './../../blast_interpreter.js';
 import {writeWithoutResponse} from './../../blast_webBluetooth.js';
 
-
 /**
-  * Generates JavaScript code for the switch_lights_RGB block.
-  * @param {Blockly.Block} block the get_request block.
-  * @returns {String} the generated code.
-  */
-Blockly.JavaScript['switch_lights_rgb'] = function(block) {
-  const colour = Blockly.JavaScript.valueToCode(block, 'colour', Blockly.JavaScript.ORDER_ATOMIC) || Blockly.JavaScript.quote_('#000000');
-  const thing = Blockly.JavaScript.valueToCode(
+ * Generates JavaScript code for the switch_lights_RGB block.
+ * @param {Blockly.Block} block the get_request block.
+ * @returns {String} the generated code.
+ */
+Blockly.JavaScript['switch_lights_rgb'] = function (block) {
+  const colour =
+    Blockly.JavaScript.valueToCode(
+      block,
+      'colour',
+      Blockly.JavaScript.ORDER_ATOMIC
+    ) || Blockly.JavaScript.quote_('#000000');
+  const thing =
+    Blockly.JavaScript.valueToCode(
       block,
       'thing',
-      Blockly.JavaScript.ORDER_NONE,
-  ) || 'null';
+      Blockly.JavaScript.ORDER_NONE
+    ) || 'null';
 
   const code = `switchLights(${thing}, ${colour});\n`;
   return code;
@@ -41,7 +46,7 @@ optionalServices.push(LEDServiceUUID);
  * @param {String} colour the colour to switch the lights to, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function(mac, colour, callback) {
+const switchLights = async function (mac, colour, callback) {
   // make sure a device is connected.
   if (!mac) {
     throwError('No LED Controller is set.');

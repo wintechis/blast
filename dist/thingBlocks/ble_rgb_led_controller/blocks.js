@@ -7,22 +7,21 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks, dialog} from 'blockly';
 import {addBlock} from '../../blast_toolbox.js';
 
-
-Blockly.Blocks['switch_lights_rgb'] = {
+Blocks['switch_lights_rgb'] = {
   /**
-     * Block for switchling rgb lights.
-     * @this {Blockly.Block}
-     */
-  init: function() {
+   * Block for switchling rgb lights.
+   * @this {Blockly.Block}
+   */
+  init: function () {
     this.appendValueInput('colour')
-        .setCheck('Colour')
-        .appendField('write colour property');
+      .setCheck('Colour')
+      .appendField('write colour property');
     this.appendValueInput('thing')
-        .setCheck('Thing')
-        .appendField('to LED controller');
+      .setCheck('Thing')
+      .appendField('to LED controller');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -31,12 +30,12 @@ Blockly.Blocks['switch_lights_rgb'] = {
     this.setHelpUrl('');
     this.firstTime = true;
   },
-  onchange: function() {
+  onchange: function () {
     // on creating this block check webBluetooth availability
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
-        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
         Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
         this.dispose();
       }

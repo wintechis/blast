@@ -8,31 +8,33 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {getWorkspace} from './../../blast_interpreter.js';
-
+import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the play_audio block.
  * @param {Blockly.Block} block the play_audio block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['text_to_speech'] = function(block) {
-  const text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
+Blockly.JavaScript['text_to_speech'] = function (block) {
+  const text = Blockly.JavaScript.valueToCode(
+    block,
+    'text',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
   const code = `textToSpeech(${text});\n`;
-  
+
   return code;
 };
-  
+
 /**
-   * Generates Javascript code for the web_speech block.
-   * Outputs speech command from microphone as a string.
-   * @param {Blockly.Block} block the web_speech block.
-   * @returns {String} the speech command.
-   */
-Blockly.JavaScript['web_speech'] = function(block) {
+ * Generates Javascript code for the web_speech block.
+ * Outputs speech command from microphone as a string.
+ * @param {Blockly.Block} block the web_speech block.
+ * @returns {String} the speech command.
+ */
+Blockly.JavaScript['web_speech'] = function (block) {
   const code = `webSpeech('${block.id}')`;
-  
+
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -42,14 +44,14 @@ Blockly.JavaScript['web_speech'] = function(block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const webSpeech = async function(blockId, callback) {
+const webSpeech = async function (blockId, callback) {
   const block = getWorkspace().getBlockById(blockId);
   const recognition = block.recognition;
   recognition.continuous = false;
   recognition.lang = 'en-US';
   let finalTranscript = '';
 
-  recognition.onresult = function(event) {
+  recognition.onresult = function (event) {
     for (let i = event.resultIndex; i < event.results.length; ++i) {
       if (event.results[i].isFinal) {
         finalTranscript += event.results[i][0].transcript;
@@ -57,7 +59,7 @@ const webSpeech = async function(blockId, callback) {
     }
   };
 
-  recognition.onend = function() {
+  recognition.onend = function () {
     callback(finalTranscript);
   };
 
@@ -77,12 +79,13 @@ asyncApiFunctions.push(['webSpeech', webSpeech]);
  * @param {Number=} pitch pitch at which the utterance will be spoken at
  * @param {string} lang language of the utterance.
  */
-const textToSpeech = async function(text, callback) {
+const textToSpeech = async function (text, callback) {
+  // eslint-disable-next-line no-undef
   const speech = new SpeechSynthesisUtterance();
   speech.text = text;
   window.speechSynthesis.speak(speech);
   // return after speaking has ended
-  await new Promise((resolve) => {
+  await new Promise(resolve => {
     speech.onend = resolve;
   });
   callback();
