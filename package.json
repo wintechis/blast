@@ -16,7 +16,7 @@
   "author": "Thomas Wehr",
   "scripts": {
     "build": "yarn run clean && tsc && yarn run copy && yarn run build:web",
-    "build:web": "cd examples/web/ && yarn run build",
+    "build:web": "cd examples/web/ && yarn install && yarn run build",
     "copy": "copyfiles -u 1 \"src/**/*.js\" dist/",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\"",
