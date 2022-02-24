@@ -20,9 +20,8 @@
     "copy": "copyfiles -u 1 \"src/**/*.js\" dist/",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\"",
-    "clean": "gts clean",
+    "clean": "rimraf dist",
     "compile": "yarn run clean && tsc && yarn run copy && yarn run build:web",
-    "fix": "gts fix",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
     "posttest": "yarn run lint"
