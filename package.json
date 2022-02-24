@@ -20,8 +20,9 @@
     "copy": "copyfiles -u 1 \"src/**/*.js\" dist/",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\"",
-    "clean": "rimraf dist",
+    "clean": "gts clean",
     "compile": "yarn run clean && tsc && yarn run copy && yarn run build:web",
+    "fix": "gts fix",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
     "posttest": "yarn run lint"
@@ -44,6 +45,7 @@
     "file-saver": "^2.0.5",
     "fs": "^0.0.1-security",
     "google-closure-compiler": "^20210302.0.0",
+    "gts": "^3.1.0",
     "gulp": "^4.0.2",
     "gulp-cli": "^2.3.0",
     "gulp-jsdoc3": "^3.0.0",
