@@ -28,14 +28,14 @@ export const getInterpreter = function () {
  * Array of tuples, containg names and functions defined in the things folder,
  * in order to add them to the interpreter API in {@link initAPI}.
  * @public
- * @type {Array<{name: string, func: Function}>}
+ * @type {Array<{name: string, func: function}>}
  */
 export const apiFunctions = [];
 
 /**
  * Array of tuples, containg names and asynchronous functions defined in the
  * things folder, in order to add them to the interpreter API in {@link initAPI}.
- * @type {Array<{name: string, func: Function}>}
+ * @type {Array<{name: string, func: function}>}
  * @public
  */
 export const asyncApiFunctions = [];
@@ -46,6 +46,7 @@ export const asyncApiFunctions = [];
  * @public
  */
 let interrupted = false;
+
 /**
  * Getter for interrupted.
  * @return {boolean} interrupted
@@ -53,6 +54,7 @@ let interrupted = false;
 export const getInterrupted = function () {
   return interrupted;
 };
+
 /**
  * Setter for interrupted.
  * @param {boolean} val value to set.
@@ -114,7 +116,7 @@ export const getLatestCode = function () {
 
 /**
  * Instance of runner function.
- * @type {?Function}
+ * @type {?function}
  * @private
  */
 let runner_ = null;
@@ -151,11 +153,13 @@ export const intervalEvents = [];
 /**
  * Tracks event blocks currently in the workspace,
  * in order to run indefinately if in case there are any.
+ * @type {!Array<!Blockly.Block.id>}
  */
 export const eventsInWorkspace = [];
 
 /**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
+ * @type {!Array<device: HIDDevice; type: string; fn: function>}
  */
 export let deviceEventHandlers = [];
 
@@ -163,6 +167,11 @@ export let deviceEventHandlers = [];
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
 const cleanUpFunctions = [];
+
+/**
+ * Adds a function to {@link cleanUpFunctions} to be invoked when the interpreter
+ * @param {function} fn function to add.
+ */
 export const addCleanUpFunction = function (fn) {
   cleanUpFunctions.push(fn);
 };
@@ -171,6 +180,11 @@ export const addCleanUpFunction = function (fn) {
  * Set to true if the States Interpreter is running.
  */
 let statesInterpreterRunning = false;
+
+/**
+ * Setter for {@link statesInterpreterRunning}.
+ * @param {boolean} val value to set.
+ */
 export const setStatesInterpreterRunning = function (val) {
   statesInterpreterRunning = val;
 };
@@ -184,8 +198,8 @@ if (fs.readFileSync) {
 }
 
 /**
- * Setteer for the Interpreter's standard input function
- * @param {Function} fn new stdIn function
+ * Setter for the Interpreter's standard input function
+ * @param {function} fn new stdIn function
  */
 export const setStdIn = function (fn) {
   stdIn = fn;
@@ -193,7 +207,7 @@ export const setStdIn = function (fn) {
 
 /**
  * Getter for the Interpreter's standard input function.
- * @return {Function} stdOut
+ * @return {function} stdOut
  */
 export const getStdIn = function () {
   return stdIn;
@@ -203,10 +217,10 @@ export const getStdIn = function () {
  * Defines the Interpreters standard output.
  */
 let stdOut = console.log;
+
 /**
  * Setter for the Interpreter's standard output function.
- * @param {Function} fn the stdEut function.
- * @public
+ * @param {function} fn the stdEut function.
  */
 export const setStdOut = function (fn) {
   stdOut = fn;
@@ -214,7 +228,7 @@ export const setStdOut = function (fn) {
 
 /**
  * Getter for the Interpreter's standard output function.
- * @return {Function} the stdOut function.
+ * @return {function} the stdOut function.
  */
 export const getStdOut = function () {
   return stdOut;
@@ -224,16 +238,18 @@ export const getStdOut = function () {
  * Defines the Interpreters standard info output function.
  */
 let stdInfo = console.log;
+
 /**
  * Setter for the Interpreter's standard info output function.
- * @param {Function} fn the stdInfo function.
+ * @param {function} fn the stdInfo function.
  */
 export const setStdInfo = function (fn) {
   stdInfo = fn;
 };
+
 /**
  * Getter for the Interpreter's standard info output function.
- * @return {Function} the stdInfo function.
+ * @return {function} the stdInfo function.
  */
 export const getStdInfo = function () {
   return stdInfo;
@@ -243,17 +259,19 @@ export const getStdInfo = function () {
  * Defines the Interpreters standard error output.
  */
 let stdErr = console.log;
+
 /**
  * Setter for the Interpreter's standard error output function.
- * @param {Function} fn the stdErr function.
+ * @param {function} fn the stdErr function.
  * @public
  */
 export const setStdError = function (fn) {
   stdErr = fn;
 };
+
 /**
  * Getter for the Interpreter's standard error output function.
- * @return {Function} the stdErr function.
+ * @return {function} the stdErr function.
  */
 export const getStdError = function () {
   return stdErr;
@@ -311,7 +329,6 @@ export const stopJS = function () {
  * Stop execution and adds an error message to the
  * {@link Blast.Ui.messageOutputContainer}.
  * @param {string=} text optional, a custom error text
- * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 export const throwError = function (text) {
   if (!text) {
@@ -419,7 +436,6 @@ onStatusChange.error.push(enableWorkspace);
 
 /**
  * Execute the user's code.
- * @public
  */
 export const runJS = function () {
   setStatus(statusValues.RUNNING);

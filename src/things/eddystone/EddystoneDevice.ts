@@ -10,7 +10,6 @@ import {getThing} from '../index.js';
 
 export class EddystoneDevice {
   public thing: WoT.ExposedThing | null = null;
-  public deviceWoT: typeof WoT;
   public td: WoT.ThingDescription;
   private webBluetoothId: string;
   private slot = -1;
@@ -73,8 +72,7 @@ export class EddystoneDevice {
     },
   };
 
-  constructor(deviceWoT: typeof WoT, webBluetoothId: string) {
-    this.deviceWoT = deviceWoT;
+  constructor(webBluetoothId: string) {
     this.webBluetoothId = webBluetoothId;
     getThing(this.thingModel).then(thing => {
       this.thing = thing;

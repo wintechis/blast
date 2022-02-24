@@ -20,7 +20,6 @@ import {setThingsLog} from '../../../dist/blast_things.js';
 import {statusValues} from '../../../dist/blast_interpreter.js';
 import {stopJS} from '../../../dist/blast_interpreter.js';
 
-
 /**
  * List of tab names.
  * @type {Array.<string>}
@@ -67,7 +66,7 @@ let messageOutputContainer = null;
  * Sets the messageOutputContainer.
  * @param {HTMLElement} container the container to be set
  */
-export const setMessageOutputContainer = function(container) {
+export const setMessageOutputContainer = function (container) {
   messageOutputContainer = container;
 };
 
@@ -82,7 +81,7 @@ let statusContainer = null;
  * Sets the statusContainer.
  * @param {HTMLElement} container the container to be set
  */
-export const setStatusContainer = function(container) {
+export const setStatusContainer = function (container) {
   statusContainer = container;
 };
 
@@ -92,10 +91,10 @@ export const setStatusContainer = function(container) {
 let fileSelector = null;
 
 /**
-* Sets the the fileSelector
-* @param {HTMLElement} container the selector to be set
-*/
-export const setFileSelector = function(container) {
+ * Sets the the fileSelector
+ * @param {HTMLElement} container the selector to be set
+ */
+export const setFileSelector = function (container) {
   fileSelector = container;
 };
 
@@ -110,7 +109,7 @@ let runButton = null;
  * Sets the runButton
  * @param {HTMLElement} button the button to be set
  */
-export const setRunButton = function(button) {
+export const setRunButton = function (button) {
   runButton = button;
 };
 
@@ -125,21 +124,20 @@ let workspace = null;
  * @param {!Function} func func Event handler to bind.
  * @public
  */
-export const bindClick = function(el, func) {
-  if (typeof el == 'string') {
+export const bindClick = function (el, func) {
+  if (typeof el === 'string') {
     el = document.getElementById(el);
   }
   el.addEventListener('click', func, true);
   el.addEventListener('touchend', func, true);
 };
 
-
 /**
  * Set the start/stop button and status text.
  * @param {Blast.Interpreter.statusValues} val new Blast status text.
  * @public
  */
-export const setStatus = function(val) {
+export const setStatus = function (val) {
   let icon;
   let func;
   let title;
@@ -166,7 +164,7 @@ export const setStatus = function(val) {
  * @param {Blast.Interpreter.statusValues} val new Blast status text.
  * @public
  */
-const resetUi = function(val) {
+const resetUi = function (val) {
   // remove highlighting
   workspace.highlightBlock(null);
   // set Blast stauts
@@ -177,7 +175,7 @@ const resetUi = function(val) {
  * Adds a DOM Element to the {@link messageOutputContainer}.
  * @param {HTMLElement} elem the element to be added
  */
-export const addElementToOutputContainer = function(elem) {
+export const addElementToOutputContainer = function (elem) {
   // Limit elements to 100
   if (messageCounter_ > 100) {
     messageOutputContainer.firstChild.remove();
@@ -196,14 +194,14 @@ export const addElementToOutputContainer = function(elem) {
  * @param {string=} type optional, type of the message, can be 'error', 'warning', or 'info'
  * @public
  */
-const addMessage = function(message, type) {
+const addMessage = function (message, type) {
   // Send notification if window is not focused.
   let icon = 'media/logo-512x512.png';
   if (window.location.href.includes('mobile')) {
     icon = '../' + icon;
   }
   if (!document.hasFocus()) {
-    navigator.serviceWorker.ready.then(function(registration) {
+    navigator.serviceWorker.ready.then(registration => {
       registration.showNotification('Blast', {
         body: message,
         icon: icon,
@@ -228,7 +226,7 @@ const addMessage = function(message, type) {
   timeSpan.innerHTML = new Date().toLocaleTimeString();
   msg.appendChild(timeSpan);
 
-  const displaySystemInformation = function() {
+  const displaySystemInformation = function () {
     const debugInfo = document.getElementById('debugModal');
     debugInfo.style.display = 'block';
     const debugTbody = document.getElementById('debug-tbody');
@@ -237,10 +235,10 @@ const addMessage = function(message, type) {
     const revisionRow = document.createElement('tr');
     revisionRow.innerHTML = `<td>BLAST</td><td>${rev}</td>`;
     debugTbody.appendChild(revisionRow);
-  
+
     // System information
     for (const key in navigator) {
-      if (typeof(navigator[key]) === 'string') {
+      if (typeof navigator[key] === 'string') {
         const tr = document.createElement('tr');
         const td1 = document.createElement('td');
         const td2 = document.createElement('td');
@@ -266,17 +264,17 @@ const addMessage = function(message, type) {
 
   addElementToOutputContainer(msg);
 };
-setStdError((message) => addMessage(message, 'error'));
-setStdInfo((message) => addMessage(message, 'info'));
-setStdIn((message) => prompt(message));
-setStdOut((message) => addMessage(message));
+setStdError(message => addMessage(message, 'error'));
+setStdInfo(message => addMessage(message, 'info'));
+setStdIn(message => prompt(message));
+setStdOut(message => addMessage(message));
 
 /**
  * Switch the visible pane when a tab is clicked.
  * @param {string} clickedName Name of tab clicked.
  * @private
  */
-const tabClick_ = function(clickedName) {
+const tabClick_ = function (clickedName) {
   // Deselect all tabs and hide all panes.
   for (const name of TABS_) {
     const tab = document.getElementById('tab_' + name);
@@ -291,7 +289,8 @@ const tabClick_ = function(clickedName) {
   selectedTab.classList.remove('taboff');
   selectedTab.classList.add('tabon');
   // Show the selected pane.
-  document.getElementById('content_' + clickedName).style.visibility = 'visible';
+  document.getElementById('content_' + clickedName).style.visibility =
+    'visible';
   Blockly.svgResize(workspace);
 };
 
@@ -299,7 +298,7 @@ const tabClick_ = function(clickedName) {
  * Populate the JS pane with pretty printed code generated from the blocks.
  * @private
  */
-const renderContent_ = function() {
+const renderContent_ = function () {
   // render the xml content.
   const xmlTextarea = document.getElementById('content_xml');
   const xmlDom = Blockly.Xml.workspaceToDom(workspace);
@@ -311,10 +310,13 @@ const renderContent_ = function() {
   const content = document.getElementById('content_javascript');
 
   // remove highlightblock functions from the js code tab
-  content.textContent = getLatestCode().replace(/highlightBlock\('.*'\);\n/gm, '');
+  content.textContent = getLatestCode().replace(
+    /highlightBlock\('.*'\);\n/gm,
+    ''
+  );
   // Remove the 'prettyprinted' class, so that Prettify will recalculate.
   content.className = content.className.replace('prettyprinted', '');
-  if (typeof PR == 'object') {
+  if (typeof PR === 'object') {
     PR.prettyPrint();
   }
 };
@@ -325,7 +327,7 @@ const renderContent_ = function() {
  * @param {string=} adapter The name of the adapter that generated the message.
  * @param {string=} device The name of the device that generated the message.
  */
-const addToLog = function(msg, adapter, device) {
+const addToLog = function (msg, adapter, device) {
   const log = document.getElementById('content_deviceLogs');
   // Create a new log item.
   const logItem = document.createElement('div');
@@ -358,9 +360,12 @@ const addToLog = function(msg, adapter, device) {
 
   // Generate timestamp.
   const date = new Date();
-  const time = ('0' + date.getHours()).slice(-2) + ':' +
-      ('0' + date.getMinutes()).slice(-2) + ':' +
-      ('0' + date.getSeconds()).slice(-2);
+  const time =
+    ('0' + date.getHours()).slice(-2) +
+    ':' +
+    ('0' + date.getMinutes()).slice(-2) +
+    ':' +
+    ('0' + date.getSeconds()).slice(-2);
   const timestamp = '[' + time + '] ';
   const timestampSpan = document.createElement('span');
   timestampSpan.classList.add('log-timestamp');
@@ -381,7 +386,7 @@ setThingsLog((msg, adapter, device) => addToLog(msg, adapter, device));
 /**
  * Removes all children from the {@link messageOutputContainer}
  */
-const ClearOutputContainer = function() {
+const ClearOutputContainer = function () {
   const container = messageOutputContainer;
   while (container.lastChild.id !== 'clearOutputButton') {
     container.removeChild(container.lastChild);
@@ -391,7 +396,7 @@ const ClearOutputContainer = function() {
 /**
  * Removes all children from the device log tab.
  */
-const ClearLog = function() {
+const ClearLog = function () {
   const log = document.getElementById('content_deviceLogs');
   while (log.lastChild.id !== 'clearDeviceLogsButton') {
     log.removeChild(log.lastChild);
@@ -402,11 +407,11 @@ const ClearLog = function() {
  * Load the Prettify CSS and JavaScript.
  * @public
  */
-const importPrettify = function() {
+const importPrettify = function () {
   const script = document.createElement('script');
   script.setAttribute(
-      'src',
-      'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js',
+    'src',
+    'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js'
   );
   document.head.appendChild(script);
 };
@@ -415,7 +420,7 @@ const importPrettify = function() {
  * Initialize the UI by binding onclick events.
  * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
  */
-export const initUi = function(ws) {
+export const initUi = function (ws) {
   workspace = ws;
   // Set remaining properties.
   runButton = document.getElementById('runButton');
@@ -429,17 +434,17 @@ export const initUi = function(ws) {
 
   for (const name of TABS_) {
     bindClick(
-        'tab_' + name,
-        (function(name_) {
-          return function() {
-            tabClick_(name_);
-          };
-        })(name),
+      'tab_' + name,
+      (function (name_) {
+        return function () {
+          tabClick_(name_);
+        };
+      })(name)
     );
   }
 
   // adjust workspace and toolbox on resize
-  const onresize = function() {
+  const onresize = function () {
     for (const tab of TABS_) {
       const el = document.getElementById('content_' + tab);
       el.style.top = '35px';
@@ -453,7 +458,7 @@ export const initUi = function(ws) {
     if (workspace && workspace.getToolbox().width) {
       // Account for the 19 pixel margin and on each side.
       document.getElementById('tab_workspace').style.minWidth =
-              workspace.getToolbox().width - 38 + 'px';
+        workspace.getToolbox().width - 38 + 'px';
     }
     Blockly.svgResize(workspace);
   };
@@ -463,7 +468,7 @@ export const initUi = function(ws) {
   Blockly.svgResize(workspace);
 
   // Call renderContent_ on changes to the workspace.
-  workspace.addChangeListener(function(event) {
+  workspace.addChangeListener(event => {
     if (!(event instanceof Blockly.Events.Ui)) {
       renderContent_();
     }

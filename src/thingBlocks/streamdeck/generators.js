@@ -9,7 +9,6 @@
 
 import {JavaScript} from 'blockly';
 import * as Buffer from 'buffer';
-// eslint-disable-next-line node/no-unpublished-import
 import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
@@ -18,6 +17,8 @@ import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {getInterpreter} from './../../blast_interpreter.js';
 import {getWebHidDevice} from './../../blast_things.js';
 import {setInterrupted} from './../../blast_interpreter.js';
+// eslint-disable-next-line node/no-missing-import
+import {Streamdeck} from './../../things/streamdeck/Streamdeck.js';
 import {throwError} from './../../blast_interpreter.js';
 
 const thingsLog = getThingsLog();
@@ -184,58 +185,16 @@ const streamdeckColorButtons = async function (id, buttons, color, callback) {
     return;
   }
 
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    callback();
-    return;
-  }
-
-  let streamdeck;
-
-  try {
-    streamdeck = await StreamDeck.openDevice(device);
-  } catch (e) {
-    // if InvalidStateError error, device is probably already opened
-    if (e.name === 'InvalidStateError') {
-      device.close();
-      streamdeck = await StreamDeck.openDevice(device);
-    } else {
-      throwError(e);
-      callback();
-      return;
-    }
-  }
-
-  // convert color to rgb
-  const red = parseInt(color.substring(1, 3), 16);
-  const green = parseInt(color.substring(3, 5), 16);
-  const blue = parseInt(color.substring(5, 7), 16);
-
-  // fill selected buttons with color
+  // generate array of buttons to be filled with color (Array<{id: number, color: string}>)
+  const buttonsToColor = [];
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      thingsLog(
-        `Invoke <code>fillKeyColor</code> with value <code>${[
-          i,
-          red,
-          green,
-          blue,
-        ].toString()}</code>`,
-        'hid',
-        device.productName
-      );
-      await streamdeck.fillKeyColor(i, red, green, blue);
-      thingsLog(
-        'Finished <code>fillKeyColor</code>',
-        'hid',
-        device.productName
-      );
+      buttonsToColor.push({id: i, color: color});
     }
   }
+
+  const thing = new Streamdeck(id);
+  thing.writeProperty('buttonColors', buttonsToColor);
 
   callback();
 };

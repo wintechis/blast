@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "blockly": "^7.20211209.3",
+    "@elgato-stream-deck/webhid": "^5.2.0",
     "@node-wot/binding-http": "^0.7.8"
   }
 }

@@ -26,6 +26,11 @@ const webHidNames = new Map();
 const webHidDevices = new Map();
 
 let webBluetoothButtonHandler = null;
+
+/**
+ * Sets the 'pair via webBluetooth' button handler.
+ * @param {function} handler The handler to set.
+ */
 export const setWebBluetoothButtonHandler = function (handler) {
   webBluetoothButtonHandler = handler;
 };
@@ -39,6 +44,7 @@ export const setWebBluetoothButtonHandler = function (handler) {
 let thingsLog = function (message, adapter, device) {
   console.log({adapter}, {device}, message);
 };
+
 /**
  * Getter for the thingsLog function.
  * @return {Function} The thingsLog function.
@@ -46,6 +52,7 @@ let thingsLog = function (message, adapter, device) {
 export const getThingsLog = function () {
   return thingsLog;
 };
+
 /**
  * Setter for the thingsLog function.
  * @param {Function} logFunc The function to use for logging.
@@ -63,6 +70,11 @@ export const resetThings = function () {
   webHidDevices.clear();
 };
 
+/**
+ * Gets the webHID device with the given uid.
+ * @param {string} deviceId The uid of the webHID device.
+ * @returns {HIDDevice} The webHID device with the given uid.
+ */
 export const getWebHidDevice = function (deviceId) {
   return webHidDevices.get(deviceId);
 };
