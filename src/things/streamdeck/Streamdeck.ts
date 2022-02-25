@@ -196,18 +196,38 @@ export class Streamdeck {
   }
 
   /**
+   * Sets the brightness of the streamdeck.
+   */
+  private async setBrightness(brightness: number) {
+    if (!this.streamdeck) {
+      this.streamdeck = await this.open();
+    }
+    thingsLog(
+      `Invoke <code>setBrightness</code> with value <code>${brightness}</code>`,
+      'hid',
+      this.streamdeck.PRODUCT_NAME
+    );
+    await this.streamdeck.setBrightness(brightness);
+    thingsLog(
+      'Finished <code>setBrightness</code>',
+      'hid',
+      this.streamdeck.PRODUCT_NAME
+    );
+  }
+
+  /**
    * Wrapper method for writing streamdeck properties.
    */
-  writeProperty(property: string, value: any): void {
+  async writeProperty(property: string, value: any): Promise<void> {
     switch (property) {
       case 'buttonColors':
-        this.setButtonColors(value as Array<{id: number; color: string}>);
+        await this.setButtonColors(value as Array<{id: number; color: string}>);
         break;
       case 'buttonText':
-        this.setButtonText(value as Array<{id: number; text: string}>);
+        await this.setButtonText(value as Array<{id: number; text: string}>);
         break;
       case 'brightness':
-        // this.setBrightness(value as number);
+        this.setBrightness(value as number);
         break;
     }
   }

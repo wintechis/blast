@@ -193,7 +193,7 @@ const streamdeckColorButtons = async function (id, buttons, color, callback) {
   }
 
   const thing = new Streamdeck(id);
-  thing.writeProperty('buttonColors', buttonsToColor);
+  await thing.writeProperty('buttonColors', buttonsToColor);
 
   callback();
 };
@@ -241,16 +241,6 @@ const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
     return;
   }
 
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    callback();
-    return;
-  }
-
   // generate array of buttons to write text on (Array<{id: number, text: string}>)
   const buttonsToWrite = [];
   for (let i = 0; i < buttons.length; i++) {
@@ -260,7 +250,7 @@ const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
   }
 
   const thing = new Streamdeck(id);
-  thing.writeProperty('buttonText', buttonsToWrite);
+  await thing.writeProperty('buttonText', buttonsToWrite);
 
   callback();
 };
@@ -292,39 +282,9 @@ const streamdeckSetBrightness = async function (id, value, callback) {
     return;
   }
 
-  const device = getWebHidDevice(id);
+  const thing = new StreamDeck(id);
+  await thing.writeProperty('brightness', value);
 
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    callback();
-    return;
-  }
-
-  let streamdeck;
-
-  try {
-    streamdeck = await StreamDeck.openDevice(device);
-  } catch (e) {
-    // if InvalidStateError error, device is probably already opened
-    if (e.name === 'InvalidStateError') {
-      device.close();
-      streamdeck = await StreamDeck.openDevice(device);
-    } else {
-      throwError(e);
-      callback();
-      return;
-    }
-  }
-
-  thingsLog(
-    `Invoke <code>setBrightness</code> with value <code>${value}</code>`,
-    'hid',
-    device.productName
-  );
-  await streamdeck.setBrightness(value);
-  thingsLog('Finished <code>setBrightness</code>', 'hid', device.productName);
   callback();
 };
 

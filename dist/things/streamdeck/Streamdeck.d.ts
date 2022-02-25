@@ -24,7 +24,11 @@ export declare class Streamdeck {
      */
     private setButtonText;
     /**
+     * Sets the brightness of the streamdeck.
+     */
+    private setBrightness;
+    /**
      * Wrapper method for writing streamdeck properties.
      */
-    writeProperty(property: string, value: any): void;
+    writeProperty(property: string, value: any): Promise<void>;
 }
