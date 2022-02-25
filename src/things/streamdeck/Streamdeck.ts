@@ -65,6 +65,10 @@ export class Streamdeck {
     open();
   }
 
+  /**
+   * Opens the streamdeck.
+   * @returns {Promise<StreamDeckWeb>}
+   */
   private async open(): Promise<StreamDeckWeb> {
     const device = getWebHidDevice(this.webHidId);
     let sd;
@@ -84,6 +88,9 @@ export class Streamdeck {
     }
   }
 
+  /**
+   * Adds property handlers to the thing.
+   */
   private addPropertyHandlers(): void {
     if (this.thing) {
       this.thing.setPropertyWriteHandler('buttonColors', value => {
@@ -93,9 +100,9 @@ export class Streamdeck {
       });
     }
   }
+
   /**
-   * @param {String} buttons string containing pushed buttons.
-   * @param {String} color color to fill the buttons with, as hex value.
+   * Sets the colors of the streamdeck buttons.
    */
   private async setButtonColors(
     buttonColors: Array<{id: number; color: string}>
@@ -132,13 +139,72 @@ export class Streamdeck {
     }
   }
 
+  /**
+   * Sets the text of the streamdeck buttons.
+   */
+  private async setButtonText(buttonText: Array<{id: number; text: string}>) {
+    if (!this.streamdeck) {
+      this.streamdeck = await this.open();
+    }
+
+    const ps = [];
+    // Iterate over the buttons and set the text
+    for (const button of buttonText) {
+      const id = button.id;
+      const value = button.text;
+
+      // Convert value to imageData
+      const canvas = document.createElement('canvas');
+      canvas.width = this.streamdeck.ICON_SIZE;
+      canvas.height = this.streamdeck.ICON_SIZE;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        throw new Error('Could not get context');
+      }
+      ctx.save();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.font = canvas.height * 0.8 + 'px Arial';
+      ctx.strokeStyle = 'blue';
+      ctx.lineWidth = 1;
+      ctx.strokeText(value.toString(), 8, 60, canvas.width * 0.8);
+      ctx.fillStyle = 'white';
+      ctx.fillText(value.toString(), 8, 60, canvas.width * 0.8);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+      // write imageData to button
+      thingsLog(
+        `Invoke <code>fillKeyImageData</code> with value <code>${[
+          id,
+          imageData,
+        ].toString()}</code>`,
+        'hid',
+        this.streamdeck.PRODUCT_NAME
+      );
+      ps.push(
+        this.streamdeck.fillKeyBuffer(id, Buffer.from(imageData.data), {
+          format: 'rgba',
+        })
+      );
+      thingsLog(
+        'Finished <code>fillKeyImageData</code>',
+        'hid',
+        this.streamdeck.PRODUCT_NAME
+      );
+      ctx.restore();
+    }
+    await Promise.all(ps);
+  }
+
+  /**
+   * Wrapper method for writing streamdeck properties.
+   */
   writeProperty(property: string, value: any): void {
     switch (property) {
       case 'buttonColors':
         this.setButtonColors(value as Array<{id: number; color: string}>);
         break;
       case 'buttonText':
-        // this.setButtonText(value as Array<string>);
+        this.setButtonText(value as Array<{id: number; text: string}>);
         break;
       case 'brightness':
         // this.setBrightness(value as number);

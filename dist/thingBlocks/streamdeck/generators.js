@@ -8,7 +8,6 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import * as Buffer from 'buffer';
 import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
@@ -252,66 +251,17 @@ const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
     return;
   }
 
-  let streamdeck;
-
-  try {
-    streamdeck = await StreamDeck.openDevice(device);
-  } catch (e) {
-    // if InvalidStateError error, device is probably already opened
-    if (e.name === 'InvalidStateError') {
-      device.close();
-      streamdeck = await StreamDeck.openDevice(device);
-    } else {
-      throwError(e);
-      callback();
-      return;
-    }
-  }
-
-  const ps = [];
-
-  const canvas = document.createElement('canvas');
-  canvas.width = streamdeck.ICON_SIZE;
-  canvas.height = streamdeck.ICON_SIZE;
-
-  const ctx = canvas.getContext('2d');
-  ctx.save();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = canvas.height * 0.8 + 'px Arial';
-  ctx.strokeStyle = 'blue';
-  ctx.lineWidth = 1;
-  ctx.strokeText(value.toString(), 8, 60, canvas.width * 0.8);
-  ctx.fillStyle = 'white';
-  ctx.fillText(value.toString(), 8, 60, canvas.width * 0.8);
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
+  // generate array of buttons to write text on (Array<{id: number, text: string}>)
+  const buttonsToWrite = [];
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
-      thingsLog(
-        `Invoke <code>fillKeyImageData</code> with value <code>${[
-          i,
-          imageData,
-        ].toString()}</code>`,
-        'hid',
-        device.productName
-      );
-      ps.push(
-        streamdeck.fillKeyBuffer(i, Buffer.Buffer.from(imageData.data), {
-          format: 'rgba',
-        })
-      );
-      thingsLog(
-        'Finished <code>fillKeyImageData</code>',
-        'hid',
-        device.productName
-      );
+      buttonsToWrite.push({id: i, text: value});
     }
   }
 
-  ctx.restore();
+  const thing = new Streamdeck(id);
+  thing.writeProperty('buttonText', buttonsToWrite);
 
-  await Promise.all(ps);
   callback();
 };
 
