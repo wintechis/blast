@@ -105,7 +105,6 @@ export class Streamdeck {
     }
     // Iterate over the buttons and set the color
     for (const button of buttonColors) {
-      console.log(button);
       // convert color to rgb
       const color = button.color;
       const red = parseInt(color.substring(1, 3), 16);
