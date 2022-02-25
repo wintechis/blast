@@ -126,8 +126,7 @@ const writeEddystoneProperty = async function (
     return;
   }
 
-  const wot = await getWoT();
-  const device = new EddystoneDevice(wot, webBluetoothId);
+  const device = new EddystoneDevice(webBluetoothId);
   await device.writeProperty(property, value, slot);
 
   callback();
@@ -186,31 +185,9 @@ const readEddystoneProperty = async function (
     return;
   }
 
-  // Set the active slot.
-  await setActiveSlot(webBluetoothId, slot);
+  const device = new EddystoneDevice(webBluetoothId);
+  const value = await device.readProperty(property, slot);
 
-  // read the property
-  let value = null;
-  switch (property) {
-    case 'advertisedTxPower':
-      value = await getAdvertisedTxPower(webBluetoothId);
-      break;
-    case 'advertisementData':
-      value = await getAdvertisingData(webBluetoothId);
-      break;
-    case 'advertisingInterval':
-      value = await getAdvertisingInterval(webBluetoothId);
-      break;
-    case 'lockState':
-      value = await getLockState(webBluetoothId);
-      break;
-    case 'publicECDHKey':
-      value = await getPublicECDHKey(webBluetoothId);
-      break;
-    case 'radioTxPower':
-      value = await getTxPowerLevel(webBluetoothId);
-      break;
-  }
   callback(value);
 };
 

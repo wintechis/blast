@@ -9,6 +9,6 @@ export declare class EddystoneDevice {
     private addPropertyHandlers;
     private setActiveSlot;
     private getActiveSlot;
-    writeProperty(property: string, value: any, slot: number): Promise<void>;
-    readProperty(property: string, slot: number): Promise<any>;
+    writeProperty(property: string, value: string, slot: number): Promise<void>;
+    readProperty(property: string, slot: number): Promise<string>;
 }

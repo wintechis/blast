@@ -88,8 +88,6 @@ export class Streamdeck {
      * @param {String} color color to fill the buttons with, as hex value.
      */
     async setButtonColors(buttonColors) {
-        console.log(buttonColors);
-        console.log(this.streamdeck);
         if (!this.streamdeck) {
             this.streamdeck = await this.open();
         }

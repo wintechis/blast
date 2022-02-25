@@ -120,14 +120,14 @@ export class EddystoneDevice {
 
   public async writeProperty(
     property: string,
-    value: any,
+    value: string,
     slot: number
   ): Promise<void> {
     this.setActiveSlot(slot);
     return writeEddystoneProperty(this.webBluetoothId, property, value);
   }
 
-  public async readProperty(property: string, slot: number): Promise<any> {
+  public async readProperty(property: string, slot: number): Promise<string> {
     this.setActiveSlot(slot);
     return readEddystoneProperty(this.webBluetoothId, property);
   }
