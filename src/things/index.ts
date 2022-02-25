@@ -30,7 +30,7 @@ export const getThing = async function (
   return things[td.id];
 };
 
-export const removeThing = function(id: string): void {
+export const removeThing = function (id: string): void {
   if (things[id]) {
     things[id].destroy();
     delete things[id];
