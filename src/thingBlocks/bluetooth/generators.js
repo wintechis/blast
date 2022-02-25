@@ -8,17 +8,8 @@
 
 import {JavaScript} from 'blockly';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {getAdvertisedTxPower} from './../../blast_eddystone.js';
-import {getAdvertisingData} from './../../blast_eddystone.js';
-import {getAdvertisingInterval} from './../../blast_eddystone.js';
-import {getLockState} from './../../blast_eddystone.js';
-import {getPublicECDHKey} from './../../blast_eddystone.js';
-import {getTxPowerLevel} from './../../blast_eddystone.js';
 import {optionalServices, readText} from './../../blast_webBluetooth.js';
-import {setActiveSlot} from './../../blast_eddystone.js';
 import {throwError} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import {getWoT} from './../../things/index.js';
 // eslint-disable-next-line node/no-missing-import
 import {EddystoneDevice} from './../../things/eddystone/EddystoneDevice.js';
 
