@@ -1,11 +1,12 @@
 import { getThingsLog, getWebHidDevice } from '../../blast_things.js';
 import { throwError } from '../../blast_interpreter.js';
 import { openDevice } from '@elgato-stream-deck/webhid';
-import { getThing } from '../index.js';
+import { getThing, removeThing } from '../index.js';
 const thingsLog = getThingsLog();
 export class Streamdeck {
     constructor(webHidId) {
         this.thing = null;
+        this.exposedThing = null;
         this.streamdeck = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -46,15 +47,34 @@ export class Streamdeck {
                     readOnly: false,
                 },
             },
+            events: {
+                buttonUp: {
+                    title: 'Button up event',
+                    description: 'Triggered when a button is released',
+                    data: {
+                        type: 'integer',
+                    },
+                },
+                buttonDown: {
+                    title: 'Button down event',
+                    description: 'Triggered when a button is pressed',
+                    data: {
+                        type: 'integer',
+                    },
+                },
+            },
         };
         this.webHidId = webHidId;
         getThing(this.thingModel).then(thing => {
             this.thing = thing;
+            this.exposedThing = this.thing;
             this.td = thing.getThingDescription();
-            this.addPropertyHandlers();
+            this.open().then(sd => {
+                this.streamdeck = sd;
+                this.registerButtonUpDownEvenEmitters();
+            });
             this.thing.expose();
         });
-        open();
     }
     /**
      * Opens the streamdeck.
@@ -81,21 +101,12 @@ export class Streamdeck {
         }
     }
     /**
-     * Adds property handlers to the thing.
-     */
-    addPropertyHandlers() {
-        if (this.thing) {
-            this.thing.setPropertyWriteHandler('buttonColors', value => {
-                return this.setButtonColors(value);
-            });
-        }
-    }
-    /**
      * Sets the colors of the streamdeck buttons.
      */
     async setButtonColors(buttonColors) {
-        if (!this.streamdeck) {
-            this.streamdeck = await this.open();
+        while (!this.streamdeck) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
         }
         // Iterate over the buttons and set the color
         for (const button of buttonColors) {
@@ -120,8 +131,9 @@ export class Streamdeck {
      * Sets the text of the streamdeck buttons.
      */
     async setButtonText(buttonText) {
-        if (!this.streamdeck) {
-            this.streamdeck = await this.open();
+        while (!this.streamdeck) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
         }
         const ps = [];
         // Iterate over the buttons and set the text
@@ -162,8 +174,9 @@ export class Streamdeck {
      * Sets the brightness of the streamdeck.
      */
     async setBrightness(brightness) {
-        if (!this.streamdeck) {
-            this.streamdeck = await this.open();
+        while (!this.streamdeck) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
         }
         thingsLog(`Invoke <code>setBrightness</code> with value <code>${brightness}</code>`, 'hid', this.streamdeck.PRODUCT_NAME);
         await this.streamdeck.setBrightness(brightness);
@@ -184,6 +197,72 @@ export class Streamdeck {
                 this.setBrightness(value);
                 break;
         }
+    }
+    /**
+     * Wrapper method for reading streamdeck properties.
+     */
+    async readProperty(property) {
+        // NOT IMPLEMENTED
+        return null;
+    }
+    /**
+     * Registers buttonUp and buttonDown event emitters.
+     */
+    async registerButtonUpDownEvenEmitters() {
+        while (!this.streamdeck) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.streamdeck.on('down', (id) => {
+            console.log(`Button ${id} down`);
+            this.emitEvent('buttonDown', { id, pressed: 'down' });
+        });
+        this.streamdeck.on('up', (id) => {
+            console.log(`Button ${id} up`);
+            this.emitEvent('buttonUp', { id, pressed: 'up' });
+        });
+    }
+    /**
+     * Wrapper method for emitting streamdeck events.
+     */
+    async emitEvent(eventName, eventData) {
+        while (!this.thing) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.thing.emitEvent(eventName, eventData);
+    }
+    /**
+     * Wrapper method for subscribing to streamdeck events.
+     */
+    async subscribeEvent(eventName, fn) {
+        while (!this.exposedThing) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.exposedThing.subscribeEvent(eventName, fn);
+    }
+    /**
+     * Wrapper method for unsubscribing from all streamdeck events.
+     */
+    async unsubscribeAll() {
+        console.log(this.streamdeck);
+        while (!this.exposedThing || !this.streamdeck) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        // for (const eventName of Object.keys(this.exposedThing.events)) {
+        //   this.exposedThing.unsubscribeEvent(eventName);
+        // }
+        // unsubscribeEvent is not implemented, so instead we destroy the thing
+        this.destroy();
+        this.streamdeck.removeAllListeners();
+        console.log(this.streamdeck);
+    }
+    destroy() {
+        var _a, _b;
+        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+        (_b = this.streamdeck) === null || _b === void 0 ? void 0 : _b.close();
     }
 }
 //# sourceMappingURL=Streamdeck.js.map

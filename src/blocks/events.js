@@ -28,7 +28,7 @@ Blocks['state_definition'] = {
    */
   init: function () {
     const initName = findLegalName('', this);
-    const nameField = FieldTextInput(initName, rename);
+    const nameField = new FieldTextInput(initName, rename);
     nameField.setSpellcheck(false);
     this.appendValueInput('state_condition')
       .setCheck('Boolean')

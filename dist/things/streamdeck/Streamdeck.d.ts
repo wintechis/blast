@@ -1,6 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 export declare class Streamdeck {
-    thing: WoT.ExposedThing | null;
+    private thing;
+    private exposedThing;
     td: WoT.ThingDescription;
     private streamdeck;
     private webHidId;
@@ -11,10 +12,6 @@ export declare class Streamdeck {
      * @returns {Promise<StreamDeckWeb>}
      */
     private open;
-    /**
-     * Adds property handlers to the thing.
-     */
-    private addPropertyHandlers;
     /**
      * Sets the colors of the streamdeck buttons.
      */
@@ -31,4 +28,25 @@ export declare class Streamdeck {
      * Wrapper method for writing streamdeck properties.
      */
     writeProperty(property: string, value: any): Promise<void>;
+    /**
+     * Wrapper method for reading streamdeck properties.
+     */
+    readProperty(property: string): Promise<any>;
+    /**
+     * Registers buttonUp and buttonDown event emitters.
+     */
+    private registerButtonUpDownEvenEmitters;
+    /**
+     * Wrapper method for emitting streamdeck events.
+     */
+    private emitEvent;
+    /**
+     * Wrapper method for subscribing to streamdeck events.
+     */
+    subscribeEvent(eventName: string, fn: (...args: any[]) => void): Promise<void>;
+    /**
+     * Wrapper method for unsubscribing from all streamdeck events.
+     */
+    unsubscribeAll(): Promise<void>;
+    private destroy;
 }

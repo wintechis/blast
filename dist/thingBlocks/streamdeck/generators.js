@@ -44,9 +44,9 @@ JavaScript['streamdeck_button_event'] = function (block) {
     JavaScript.statementToCode(block, 'statements')
   );
 
-  const handler = `handleStreamdeck(${id}, ${buttons}, ${upDown}, ${statements});\n`;
+  const handler = `registerStreamdeckHandler(${id}, ${buttons}, ${upDown}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
+  // Registering event handlers needs to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
   return '';
@@ -84,35 +84,11 @@ JavaScript['streamdeck_color_buttons'] = function (block) {
  * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
  */
-const handleStreamdeck = async function (id, buttons, upDown, statements) {
+const registerStreamdeckHandler = function (id, buttons, upDown, statements) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
     return;
-  }
-
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    return;
-  }
-
-  let streamdeck;
-
-  try {
-    streamdeck = await StreamDeck.openDevice(device);
-  } catch (e) {
-    // if InvalidStateError error, device is probably already opened
-    if (e.name === 'InvalidStateError') {
-      device.close();
-      streamdeck = await StreamDeck.openDevice(device);
-    } else {
-      throwError(e);
-      return;
-    }
   }
 
   let button;
@@ -127,11 +103,12 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
     return;
   }
 
-  streamdeck.on(upDown, keyIndex => {
+  const handler = function (data) {
+    const keyIndex = data.id;
     thingsLog(
-      `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
+      `Received <code>${data.pressed}</code> event on button <code>${keyIndex}</code>`,
       'hid',
-      device.productName
+      'Elgato Systems Stream Deck Mini'
     );
     if (keyIndex === button) {
       // interrupt BLAST execution.
@@ -157,17 +134,23 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
       };
       interruptRunner_();
     }
-  });
+  };
+
+  const thing = new Streamdeck(id);
+  thing.subscribeEvent('button' + upDown, handler);
 
   addCleanUpFunction(() => {
-    thingsLog('Removing all listeners', 'hid', device.productName);
-    streamdeck.close();
-    streamdeck.removeAllListeners();
+    thingsLog(
+      'Removing all streamdeck listeners',
+      'hid',
+      'Elgato Systems Stream Deck Mini'
+    );
+    thing.unsubscribeAll();
   });
 };
 
 // Add streamdeck function to the Interpreter's API
-apiFunctions.push(['handleStreamdeck', handleStreamdeck]);
+apiFunctions.push(['registerStreamdeckHandler', registerStreamdeckHandler]);
 
 /**
  * Fills the buttons of a Stream Deck with a color.

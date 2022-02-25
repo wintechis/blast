@@ -314,6 +314,7 @@ export const resetInterpreter = function () {
   for (const func of cleanUpFunctions) {
     func();
   }
+  cleanUpFunctions.length = 0;
 };
 
 /**

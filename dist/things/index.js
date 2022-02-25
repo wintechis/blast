@@ -21,4 +21,10 @@ export const getThing = async function (td) {
     }
     return things[td.id];
 };
+export const removeThing = function (id) {
+    if (things[id]) {
+        things[id].destroy();
+        delete things[id];
+    }
+};
 //# sourceMappingURL=index.js.map
