@@ -296,7 +296,6 @@ export class Streamdeck {
    * Wrapper method for unsubscribing from all streamdeck events.
    */
   public async unsubscribeAll() {
-    console.log(this.streamdeck);
     while (!this.exposedThing || !this.streamdeck) {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));

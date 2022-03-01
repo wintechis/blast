@@ -214,11 +214,9 @@ export class Streamdeck {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
         this.streamdeck.on('down', (id) => {
-            console.log(`Button ${id} down`);
             this.emitEvent('buttonDown', { id, pressed: 'down' });
         });
         this.streamdeck.on('up', (id) => {
-            console.log(`Button ${id} up`);
             this.emitEvent('buttonUp', { id, pressed: 'up' });
         });
     }
@@ -246,7 +244,6 @@ export class Streamdeck {
      * Wrapper method for unsubscribing from all streamdeck events.
      */
     async unsubscribeAll() {
-        console.log(this.streamdeck);
         while (!this.exposedThing || !this.streamdeck) {
             // Wait for the thing to be initialized
             await new Promise(resolve => setTimeout(resolve, 100));
@@ -257,7 +254,6 @@ export class Streamdeck {
         // unsubscribeEvent is not implemented, so instead we destroy the thing
         this.destroy();
         this.streamdeck.removeAllListeners();
-        console.log(this.streamdeck);
     }
     destroy() {
         var _a, _b;
