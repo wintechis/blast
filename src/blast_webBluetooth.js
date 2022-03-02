@@ -145,7 +145,7 @@ const getDeviceById = async function (id) {
  * @param {string} id identifier of the device to connect to.
  * @return {Object} representation of the complete request with response.
  */
-export const connect = async function (id) {
+const connect = async function (id) {
   try {
     const device = await getDeviceById(id);
     const thingsLog = getThingsLog();
@@ -288,7 +288,7 @@ export const writeWithResponse = async function (
  * @param {ServiceUUID} serviceUUID identifier of the service.
  * @returns {Promise<BluetoothRemoteGATT>} A BluetoothRemoteGATTService object.
  */
-export const getPrimaryService = async function (id, serviceUUID) {
+const getPrimaryService = async function (id, serviceUUID) {
   const server = await connect(id);
   let service;
   try {
@@ -320,11 +320,7 @@ export const getPrimaryService = async function (id, serviceUUID) {
  * @param {CharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @returns {Promise<BluetoothRemoteGATTCharacteristic>} A BluetoothRemoteGATTCharacteristic object.
  */
-export const getCharacteristic = async function (
-  id,
-  serviceUUID,
-  characteristicUUID
-) {
+const getCharacteristic = async function (id, serviceUUID, characteristicUUID) {
   const service = await getPrimaryService(id, serviceUUID);
   if (!service) {
     return;
