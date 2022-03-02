@@ -7,8 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {throwError} from './blast_interpreter.js';
-import {getWorkspace} from './blast_interpreter.js';
+import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -47,7 +46,7 @@ let thingsLog = function (message, adapter, device) {
 
 /**
  * Getter for the thingsLog function.
- * @return {Function} The thingsLog function.
+ * @return {function} The thingsLog function.
  */
 export const getThingsLog = function () {
   return thingsLog;
