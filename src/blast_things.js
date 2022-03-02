@@ -7,8 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {throwError} from './blast_interpreter.js';
-import {getWorkspace} from './blast_interpreter.js';
+import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
  * Maps device names to BluetoothDevice.id.
