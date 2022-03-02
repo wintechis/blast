@@ -151,7 +151,7 @@ export const setActiveSlot = async function (webBluetoothId, slot) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getAdvertisingInterval = async function (webBluetoothId) {
+const getAdvertisingInterval = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog(
     'Reading Eddystone advertising interval...',
@@ -177,10 +177,7 @@ export const getAdvertisingInterval = async function (webBluetoothId) {
  * @param {number} interval The advertising interval to set.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const setAdvertisingInterval = async function (
-  webBluetoothId,
-  interval
-) {
+const setAdvertisingInterval = async function (webBluetoothId, interval) {
   const thingsLog = getThingsLog();
   thingsLog(
     `Setting Eddystone advertising interval to <code>${interval}</code>...`,
@@ -206,7 +203,7 @@ export const setAdvertisingInterval = async function (
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getTxPowerLevel = async function (webBluetoothId) {
+const getTxPowerLevel = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone TX power level...', 'Eddystone', webBluetoothId);
   const txPowerLevel = await readNumber(
@@ -228,7 +225,7 @@ export const getTxPowerLevel = async function (webBluetoothId) {
  * @param {number} txPowerLevel The TX power level to set.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const setTxPowerLevel = async function (webBluetoothId, txPowerLevel) {
+const setTxPowerLevel = async function (webBluetoothId, txPowerLevel) {
   const thingsLog = getThingsLog();
   thingsLog(
     `Setting Eddystone TX power level to <code>${txPowerLevel}</code>...`,
@@ -264,7 +261,7 @@ export const setTxPowerLevel = async function (webBluetoothId, txPowerLevel) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getAdvertisedTxPower = async function (webBluetoothId) {
+const getAdvertisedTxPower = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog(
     'Reading Eddystone advertised TX power...',
@@ -290,10 +287,7 @@ export const getAdvertisedTxPower = async function (webBluetoothId) {
  * @param {number} txPowerLevel The TX power level to set.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const setAdvertisedTxPower = async function (
-  webBluetoothId,
-  txPowerLevel
-) {
+const setAdvertisedTxPower = async function (webBluetoothId, txPowerLevel) {
   const thingsLog = getThingsLog();
   thingsLog(
     `Setting Eddystone advertised TX power to <code>${txPowerLevel}</code>...`,
@@ -319,7 +313,7 @@ export const setAdvertisedTxPower = async function (
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getLockState = async function (webBluetoothId) {
+const getLockState = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone lock state...', 'Eddystone', webBluetoothId);
   const lockState = await readNumber(
@@ -340,7 +334,7 @@ export const getLockState = async function (webBluetoothId) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getPublicECDHKey = async function (webBluetoothId) {
+const getPublicECDHKey = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog(
     'Reading Eddystone public ECDH key...',
@@ -365,7 +359,7 @@ export const getPublicECDHKey = async function (webBluetoothId) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export const getAdvertisingData = async function (webBluetoothId) {
+const getAdvertisingData = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog(
     'Reading Eddystone advertising data...',
@@ -512,44 +506,11 @@ export const getAdvertisingData = async function (webBluetoothId) {
 };
 
 /**
- * Reads an Eddystone property from a bluetooth device.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {String} property The property to read.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- */
-export const readEddystoneProperty = async function (webBluetoothId, property) {
-  // read the property
-  let value = null;
-  switch (property) {
-    case 'advertisedTxPower':
-      value = await getAdvertisedTxPower(webBluetoothId);
-      break;
-    case 'advertisementData':
-      value = await getAdvertisingData(webBluetoothId);
-      break;
-    case 'advertisingInterval':
-      value = await getAdvertisingInterval(webBluetoothId);
-      break;
-    case 'lockState':
-      value = await getLockState(webBluetoothId);
-      break;
-    case 'publicECDHKey':
-      value = await getPublicECDHKey(webBluetoothId);
-      break;
-    case 'radioTxPower':
-      value = await getTxPowerLevel(webBluetoothId);
-      break;
-  }
-
-  return value;
-};
-
-/**
  * Sets the advertising data of the currently active slot.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {string} data The data to set.
  */
-export const setAdvertisingData = async function (webBluetoothId, data) {
+const setAdvertisingData = async function (webBluetoothId, data) {
   const thingsLog = getThingsLog();
   thingsLog('Set Eddystone advertising data...', 'Eddystone', webBluetoothId);
   const encodeEddystoneUrl = function (url) {
@@ -655,6 +616,39 @@ export const setAdvertisingData = async function (webBluetoothId, data) {
     webBluetoothId
   );
   return response;
+};
+
+/**
+ * Reads an Eddystone property from a bluetooth device.
+ * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
+ * @param {String} property The property to read.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+export const readEddystoneProperty = async function (webBluetoothId, property) {
+  // read the property
+  let value = null;
+  switch (property) {
+    case 'advertisedTxPower':
+      value = await getAdvertisedTxPower(webBluetoothId);
+      break;
+    case 'advertisementData':
+      value = await getAdvertisingData(webBluetoothId);
+      break;
+    case 'advertisingInterval':
+      value = await getAdvertisingInterval(webBluetoothId);
+      break;
+    case 'lockState':
+      value = await getLockState(webBluetoothId);
+      break;
+    case 'publicECDHKey':
+      value = await getPublicECDHKey(webBluetoothId);
+      break;
+    case 'radioTxPower':
+      value = await getTxPowerLevel(webBluetoothId);
+      break;
+  }
+
+  return value;
 };
 
 /**
