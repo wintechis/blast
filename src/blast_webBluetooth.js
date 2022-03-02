@@ -143,7 +143,7 @@ const getDeviceById = async function (id) {
 /**
  * Sends a connect command.
  * @param {string} id identifier of the device to connect to.
- * @return {Object} representation of the complete request with response.
+ * @return {Promise<Object>} representation of the complete request with response.
  */
 const connect = async function (id) {
   try {
@@ -163,7 +163,7 @@ const connect = async function (id) {
  * Sends a disconnect command.
  * @param {string} id identifier of the device to disconnect from.
  * @param {number} sleep time in ms to wait after command, defaults to 0.
- * @return {Object} representation of the complete request with response.
+ * @return {Promise<Object>} representation of the complete request with response.
  */
 // eslint-disable-next-line no-unused-vars
 const disconnect = async function (id) {
@@ -186,6 +186,7 @@ const disconnect = async function (id) {
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @param {string} value hex value to write.
+ * @returns {Promise<void>} A Promise to void.
  */
 export const writeWithoutResponse = async function (
   id,
@@ -236,7 +237,7 @@ export const writeWithoutResponse = async function (
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @param {string} value hex value to write.
- * @return {Object} representation of the complete request with response.
+ * @return {Promise} representation of the complete request with response.
  */
 export const writeWithResponse = async function (
   id,
@@ -351,7 +352,7 @@ const getCharacteristic = async function (id, serviceUUID, characteristicUUID) {
  * @param {string} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
- * @return {Object} representation of the complete request with response.
+ * @return {Promise} representation of the complete request with response.
  * @public
  */
 export const read = async function (id, serviceUUID, characteristicUUID) {
