@@ -11,11 +11,11 @@
     "target": "ES2018",
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist/things/"
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.js"
+    "src/things/**/*.ts",
+    "src/things/**/*.js"
   ],
   "exclude": [],
   "target": "ES2018",
