@@ -113,7 +113,7 @@ This block makes almost everything that is possible in JavaScript also possible 
 
 \section{Supported Devices and Services}
 
-To demonstrate how BLAST can interact with WoT devices, we provide a Web of Things abstraction over devices communicating with Bluetooth Low Energy and USB HID.
+To demonstrate how BLAST can interact with WoT devices, we provide a Web of Things abstraction over devices communicating with Bluetooth Low Energy and USB Human Interface Device (HID) Class.
 We also provide access to online APIs related to speech input and output.
 
 \begin{center}
@@ -140,6 +140,8 @@ Based on the accessibility and usability benefits, the approach of using block l
 We are currently working on a way to execute the created BLAST program independently of browsers.
 To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
 In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
+
+@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
 
 %
 % ---- Bibliography ----
