@@ -159,7 +159,7 @@ export const eventsInWorkspace = [];
 
 /**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
- * @type {!Array<device: HIDDevice; type: string; fn: function>}
+ * @type {!Array<{device: HIDDevice, type: string, fn: function}>}
  */
 export let deviceEventHandlers = [];
 
