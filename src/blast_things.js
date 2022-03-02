@@ -46,7 +46,7 @@ let thingsLog = function (message, adapter, device) {
 
 /**
  * Getter for the thingsLog function.
- * @return {Function} The thingsLog function.
+ * @return {function} The thingsLog function.
  */
 export const getThingsLog = function () {
   return thingsLog;
