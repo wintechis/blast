@@ -94,7 +94,6 @@ const startEventChecker = function() {
   
   // Initiate States interpreter.
   stateInterpreter = new Interpreter('');
-  console.log(stateInterpreter);
   stateInterpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
   stateInterpreter.appendCode(latestCode);
 

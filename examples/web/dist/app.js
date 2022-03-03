@@ -36996,7 +36996,6 @@ const startEventChecker = function() {
   
   // Initiate States interpreter.
   stateInterpreter = new Interpreter('');
-  console.log(stateInterpreter);
   stateInterpreter.getStateStack()[0].scope = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().getGlobalScope();
   stateInterpreter.appendCode(latestCode);
 
