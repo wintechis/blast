@@ -36448,6 +36448,7 @@ const resetInterpreter = function() {
 const stopJS = function() {
   resetInterpreter();
   setStatus(statusValues.STOPPED);
+  stdInfo('execution stopped');
 };
 
 /**
