@@ -102,13 +102,13 @@ To interact with the IoT devices, BLAST requires custom drivers for each device,
  and contain the metadata and interaction affordances as well as the JavaScript code needed for communication.
 
 \begin{figure}
-\includegraphics[width=\textwidth]{Blast Screenshot.png}%im Ordner sind noch 2 alternative Screenshots
-\caption{Graphical user interface of the BLAST programming environment.} \label{fig1}
+\includegraphics[width=\textwidth]{screenshot.png}%im Ordner sind noch 2 alternative Screenshots
+\caption{Example BLAST program} \label{fig1}
 \end{figure}
 
 When choosing the vocabulary for our block-based language BLAST, we resorted to a mixture of natural language and computer language \cite{8120404}.
 This means that in BLAST, the blocks are arranged into readable sentences, as in a natural language, but the blocks also contain a few technical programming terms, such as ''repeat while true'' instead of ''forever''.
-This makes the BLAST vocabulary both understandable for beginners, but still flexible.
+This makes the BLAST vocabulary both understandable for beginners, but still flexible. Take the program in Figure \ref{fig1} as an example. One should easily figure out that it is used to toggle a Bluetooth LED light. Every time the user pushes the top-left button on their StreamDeck down, the LED light is toggled between red and off.
 
 BLAST includes standards from other programming languages such as loops, functions, and variables, but also WoT and IoT related blocks that can be grouped under the three interaction affordances Properties, Actions, and Events.
 Properties of connected IoT devices can be read and written, actions refer to long-running processes that can be initiated and events are asynchronous and based on the ''Event Conditon Action'' (ECA) rule.
