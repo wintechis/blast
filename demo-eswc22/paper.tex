@@ -12,6 +12,7 @@
 % Used for displaying a sample figure. If possible, figure files should
 % be included in EPS format.
 \usepackage{makecell}
+\renewcommand\theadfont{\bfseries}
 %
 % If you use the hyperref package, please uncomment the following line
 % to display URLs in blue roman font according to Springer's eBook style:
@@ -126,31 +127,43 @@ We also provide access to online APIs related to speech input and output and ser
 \begin{center}
   \begin{tabular}{|c|c|c|}
   \hline
-  Device & Communication & WoT interactions \\
+  \thead{Device} & \thead{Communication} & \thead{WoT interactions} \\
   \hline
   Eddystone Devices & BLE GATT & read/write Eddystone properties \\
+  \hline
   HuskyLens\footnote{https://wiki.dfrobot.com/HUSKYLENS\_V1.0\_SKU\_SEN0305\_SEN0336} & BLE GATT & read sensor properties, invoke forget action \\
+  \hline
   RGB LED Controller\footnote{https://aliexpress.com/item/4000208329326.html} & BLE GATT & write color properties \\
-  RuuviTag\footnote{https://ruuvi.com/ruuvitag/} & BLE GATT & \makecell{read sensor properties, read battery property, \\
+  \hline
+  RuuviTag\footnote{https://ruuvi.com/ruuvitag/} & BLE GAP & \makecell{read sensor properties, read battery property, \\
   read/write txPower property, \\
   read movement counter propert,y \\
   read measurement sequence counter property} \\
+  \hline
   StreamDeck\footnote{https://www.streamdeck.com/} & USB HID & \makecell{write display properties, \\ subscribe to button push events} \\
+  \hline
   Tulogic BlinkStick\footnote{https://www.blinkstick.com/} & USB HID & write color properties \\ 
+  \hline
   Nintendo JoyCon\footnote{https://www.nintendo.com/switch/tech-specs/\#joycon-section} & USB HID \& BLE GATT & \makecell{read sensor properties,\\ subscribe to button push events} \\
-  Xiaomi Thermometer\footnote{https://xiaomipedia.com/en/p/xiaomi-electronic-thermometer-and-hygrometer/} & BLE GATT & read sensor properties \\
+  \hline
+  Xiaomi Thermometer\footnote{https://xiaomipedia.com/en/p/xiaomi-electronic-thermometer-and-hygrometer/} & BLE GAP & read sensor properties \\
   \hline
   \end{tabular}
 
   \begin{tabular}{|c|c|}
   \hline
-  Service & WoT interactions \\
+  \thead{Service} & \thead{WoT interactions} \\
   \hline
   Camera & invoke capture image action \\
-  Audio & invoke play audio action \\ % TODO
+  \hline
+  Audio & invoke play audio action \\
+  \hline
   WebSpeech API & invoke text to speech action, invoke speech to text action \\
+  \hline
   HTTP Requests & invoke send HTTP request action \\
+  \hline
   SPARQL Query & invoke execute SPARQL query action \\
+  \hline
   SOLID & invoke upload to solid container action \\
   \hline
   \end{tabular}
