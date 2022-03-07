@@ -70,18 +70,17 @@ export class EddystoneDevice {
         });
     }
     addPropertyHandlers() {
+        var _a, _b;
         const properties = this.thingModel.properties;
         const propertyKeys = Object.keys(properties);
-        if (this.thing) {
-            for (const p of propertyKeys) {
-                this.thing.setPropertyReadHandler(p, () => {
-                    return readEddystoneProperty(this.webBluetoothId, p);
+        for (const p of propertyKeys) {
+            (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setPropertyReadHandler(p, () => {
+                return readEddystoneProperty(this.webBluetoothId, p);
+            });
+            if (!properties[p].readOnly) {
+                (_b = this.thing) === null || _b === void 0 ? void 0 : _b.setPropertyWriteHandler(p, value => {
+                    return writeEddystoneProperty(this.webBluetoothId, p, value);
                 });
-                if (!properties[p].readOnly) {
-                    this.thing.setPropertyWriteHandler(p, value => {
-                        return writeEddystoneProperty(this.webBluetoothId, p, value);
-                    });
-                }
             }
         }
     }

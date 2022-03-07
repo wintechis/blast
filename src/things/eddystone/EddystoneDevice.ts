@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import * as WoT from 'wot-typescript-definitions';
 import {
   getActiveSlot,
@@ -85,21 +84,19 @@ export class EddystoneDevice {
   private addPropertyHandlers(): void {
     const properties = this.thingModel.properties;
     const propertyKeys = Object.keys(properties);
-    if (this.thing) {
-      for (const p of propertyKeys) {
-        this.thing.setPropertyReadHandler(p, () => {
-          return readEddystoneProperty(this.webBluetoothId, p);
-        });
+    for (const p of propertyKeys) {
+      this.thing?.setPropertyReadHandler(p, () => {
+        return readEddystoneProperty(this.webBluetoothId, p);
+      });
 
-        if (!properties[p].readOnly) {
-          this.thing.setPropertyWriteHandler(p, value => {
-            return writeEddystoneProperty(
-              this.webBluetoothId,
-              p,
-              value as unknown as string
-            );
-          });
-        }
+      if (!properties[p].readOnly) {
+        this.thing?.setPropertyWriteHandler(p, value => {
+          return writeEddystoneProperty(
+            this.webBluetoothId,
+            p,
+            value as unknown as string
+          );
+        });
       }
     }
   }
