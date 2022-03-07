@@ -55,13 +55,13 @@ Friedrich–Alexander University Erlangen-Nürnberg, Nürnberg, Germany}
 \section{Introduction}
 Connected devices form the basis for a wide variety of applications in industry settings, such as condition monitoring, energy consumption analysis, simulation and optimisation~\cite{CIMINO2019103130}.
 %Given the multitude of protocols for interacting with such devices, application development is difficult.
-The Web of Things (WoT)\footnote{\url{https://www.w3.org/WoT/}} aims at providing a set of standardised technologies to help simplify the creating of applications involving connected devices.
+The Web of Things (WoT)\footnote{\url{https://www.w3.org/WoT/}} aims at providing a set of standardised technologies to help simplify creating applications involving connected devices.
 At the same time, casual users should be able to quickly program applications involving connected devices.
 The programming languages currently in use for accessing devices are primarily text-based and are difficult to access for casual users.
-One possible approach to improve accessibility and simplify the creation of computer programs is the visual programming paradigm.
+One possible approach to improve accessibility and ease the creation of computer programs is the visual programming paradigm.
 
 Visual programming does not require the user to enter any text; instead, programs are based on graphical elements like blocks, graphs, tables or diagrams.
-Programs are created by arranging predefined blocks with images or text are arranged into programs via a drag-and-drop interface.
+Programs are created by arranging predefined blocks with images or text via a drag-and-drop interface.
 Blocks can be geometrically aligned with other compatible blocks, like in a jigsaw puzzle, to form complex programs.
 Since blocks can only be arranged in the correct way, no syntax errors can occur~\cite{10.11453341221}~\cite{maloney2010scratch}~\cite{10.1145/1089733.1089734}.
 
@@ -71,11 +71,11 @@ For example, block languages have been successfully used in constructing SPARQL 
 
 We present BLAST, a visual programming environment that works with devices following the Web of Things interface.
 BLAST programs can be created in a web browser, based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}, a JavaScript library for creating block-based languages and editors.
-BLAST programs can be translated to JavaScript and executed in the web browser.
+BLAST programs can be translated into JavaScript and executed in the web browser.
 BLAST implements the Web of Things abstraction to devices with Bluetooth Low Energy (BLE) and USB Human Interface Devices (HID) interface via APIs of modern web browsers.
 
 The currently best known tool for programming IoT devices using visual programming is Node-RED\footnote{\url{https://nodered.org/}}.
-Node-RED's programming paradigm is based on dataflows; in contrast, BLAST focuses on control flow constructs,
+Node-RED's programming paradigm is based on dataflows; in contrast, BLAST focuses on control flow constructs.
 The use cases in industrial settings we envision for BLAST involve mostly control flow, and in such scenarios a dataflow abstraction can lead to programs that are difficult to understand and maintain.
 %The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user.
 %The block-based approach utilised by BLAST provides more flexibility as its blocks are a lot more fine grained.
@@ -101,7 +101,7 @@ Further, the BLAST language includes blocks to send HTTP requests with arbitrary
 The BLAST language also includes blocks to load RDF graphs from a URI and execute SPARQL queries, which allows for the interaction with Read-Write Linked Data APIs or other REST APIs.
 Finally, if the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered, and thus almost everything that is possible in JavaScript is also possible in BLAST.
 
-For an example for a BLAST program see figure \ref{fig1}.
+For an example of a BLAST program see figure \ref{fig1}.
 The program involves a LED light with a BLE interface and a small battery-powered BLE beacon.
 The BLE controller (the ``BLE central'') is implicitly used when reading the signal-strength property.
 The functionality of these devices (``Things'') can be accessed via reading and writing properties.
@@ -116,16 +116,16 @@ On entering or exiting the defined state, the event blocks, which can contain ar
 
 \section{BLAST Editor and Execution Environment}
 
-We have implemented an editor and an execution environment for BLAST programs that runs in modern web browsers.
+We have implemented an editor and an execution environment for BLAST programs that run in modern web browsers.
 
 The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language.
-For execution, the editor generates JavaScript code that can be executed in the browser.
+Based on the user's arrangement of these blocks, the editor generates JavaScript code that can then be executed in the browser.
 The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
-The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices the use the BLE GAP and GATT profiles as well as the USB Human Interface Devices (HID) interface.
+The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB Human Interface Devices (HID) interface.
 The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
 In addition, the system includes access to the camera and sound output via browser APIs using the WoT interface.
 Further, the system includes access to the Web Speech API\footnote{\url{https://wicg.github.io/speech-api/}}.
-The functionality to issue HTTP requests is implemented using the @@@ API/library, Social Linked Data (Solid) authentication is implemented using the @@@ library, and SPARQL query support is implemented using µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
+The functionality to issue HTTP requests is implemented using the fetch API~\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch\_API/Using\_Fetch}}, Social Linked Data (Solid) authentication is implemented using the inrupt solid library~\footnote{\url{https://docs.inrupt.com/developer-tools/javascript/client-libraries/}}, and SPARQL query support is implemented using µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
 Next to the presented small scenario around geofences, we have also developed BLAST programs to control and monitor an automated picking line to prepare orders in a more complex logistics scenario.
 
 \section{Conclusion}
