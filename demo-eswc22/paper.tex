@@ -42,10 +42,10 @@ Friedrich–Alexander University Erlangen-Nürnberg, Nürnberg, Germany}
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-  An open research challenge in the deployment of digital twins is the interaction with humans.
-  To facilitate this, we have created a digital twin based on Web of Things technology and a block-based visual programming language and execution environment called BLAST.
-  We show that BLAST can be used to create programs that interact with a digital twin and IoT devices to control and monitor a process.
-
+  An open research challenge in the deployment of IoT devices is the interaction with humans.
+  We introduce a block-based visual programming language and execution environment called BLAST.
+  BLAST allows for visually creating programs involving devices with a Web of Things interface.
+  We demonstrate that BLAST can be used to create programs that interact with a variety of devices in different scenarios.
 \keywords{Block-based Programming \and Web of Things.}
 \end{abstract}
 %
@@ -53,26 +53,21 @@ Friedrich–Alexander University Erlangen-Nürnberg, Nürnberg, Germany}
 %
 \setcounter{footnote}{0}
 \section{Introduction}
-IoT devices can be used for state monitoring, energy consumption analysis, simulation and intelligent optimization \cite{CIMINO2019103130}.
+IoT devices form the basis for a variety of applications, such as condition monitoring, energy consumption analysis, simulation and optimisation~\cite{CIMINO2019103130}.
 However, there are still some research challenges that need to be overcome.
-According to Semeraro et al. \cite{SEMERARO2021103469}, the main research challenges in implementing a DT are in the areas of architecture, interoperability, and  interaction capabilities.
+Interaction capabilities refer to the fact that devices will not be involved in any important decisions without humans.
+In this paper, we focus on the challenge of humans interacting with devices, a challenge that needs to be resolved to achieve a widespread deployment of IoT devices in industry~\cite{KUEHNER20211227}.
+Thus, humans should find it easy to interact with devices and the devices should be able to interact smoothly with humans.
 
-Architecture refers to the fact that no design standard currently exists, so different DTs use varying technologies, interfaces, and communication protocols.
-A reference architecture could contribute to the flexibility and reusability of DTs.
-Interoperability includes a DT's ability to capture a multi-stage product lifecycle, which requires collecting data from external sources and from other companies.
-However, to achieve this, data exchange between multiple DTs must be enabled.
-The area of interaction capabilities refers to the fact that Digital Twins will not be involved in any important decisions without humans. Therefore, humans should find it easy to interact with DTs. 
-Some other authors have also suggested that human-computer interaction is an open research question that needs to be resolved before widespread deployment of DTs in industry \cite{KUEHNER20211227}.
+We assume that the interoperability challenge, that is, a devices' ability to capture a multi-stage product lifecycle, which requires collecting and integrating data from multiple devices and sources~\cite{SEMERARO2021103469}, has been addressed by the use of the Web of Things abstraction.
 
-In this paper, we want to address the problem of human-digital twin interaction.
-Semeraro et al. \cite{SEMERARO2021103469} propose in this context to focus on the development of the Digital Twin so that it is able to interact smoothly with humans.
-Our proposed solution follows this approach.
-We have described a digital twin using RDF and ontologies in human and machine-readable form.
-However, our solution includes another perspective to improve human-DT interaction.
-We developed an easy-to-use interaction interface for humans with digital twins based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}.
-To show the feasibility of this approach, we developed and implemented a demonstrator for a commissioning process as a proof of concept.
+We present BLAST (Block Applications for Things), an easy-to-use interaction interface for humans with devices following the Web of Things interface based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}.
+BLAST is a programming language with a focus on control flow constructs.
+
+We first overview block-based visual programming approaches, next introduce BLAST with a scenario involving multiple devices, list the currently supported devices and services and conclude with a summary and outlook.
 
 \section{Block-based Visual Programming}
+
 The programming languages currently in use are primarily text-based and are difficult to access for laypersons without prior knowledge.
 One possible approach to improve accessibility and simplify the creation of computer programs is so-called Visual Programming (VP).
 % Falls Platz dafür ist, die Definition für VP fand ich besser:
@@ -90,10 +85,22 @@ Blocks can be geometrically aligned with other compatible blocks, like in a jigs
 Since blocks can only be arranged in the correct way, no syntax errors can occur \cite{10.11453341221} \cite{maloney2010scratch} \cite{10.1145/1089733.1089734} \cite{lye2014review}.
 The created block programs can be translated into any predefined programming language, resulting in a normal source code. 
 The block-based approach can be used not only for learning programming concepts, but also for more complex problems.
-For example, it has been shown that block languages can be successfully used in programming industrial robots \cite{8120406} \cite{ghazal2016framework} \cite{tomlein2017visual} or executing SPARQL queries \cite{7369012}. Both areas, which normally require advanced programming skills. Furthermore, Ray examined the use of block-based programming languages for IoT devices in \cite{ray2017survey} and concluded that IoT seems to be suitably getting empowered by smooth entanglement and promotion with promising reduction in physical-digital interface. %Das ist ein direktes Zitat, muss man das anders schreiben?
+For example, block languages have been successfully used in programming industrial robots \cite{8120406} \cite{ghazal2016framework} \cite{tomlein2017visual} or executing SPARQL queries \cite{7369012}, both areas which normally require advanced programming skills.
+
+Furthermore, Ray examined the use of block-based programming languages for IoT devices in \cite{ray2017survey} and concluded that IoT seems to be suitably getting empowered by smooth entanglement and promotion with promising reduction in physical-digital interface. %Das ist ein direktes Zitat, muss man das anders schreiben?
+
+The currently best known tool for programming IoT devices using visual programming is Node-RED\footnote{\url{https://nodered.org/}}.
+Other than BLAST, Node-RED employs a flow-based programming paradigm, and therefore displays applications as graphs.
+The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user.
+The block-based approach utilized by BLAST provides more flexibility as its blocks are a lot more fine grained.
+
+Another application similiar to BLAST is Punya\cite{patton2021punya}, an Android App development Application based on the MIT App Inventor\footnote{\url{https://appinventor.mit.edu/}}.
+Like BLAST, Punya offers a block-based programming environment able to run SPARQL queries and utilizes services like sending a tweet.
+But Punya focuses on creating applications for Android devices only and solely communicates with the device's internal hardware.
+Other than BLAST, which supports devices with a Web of Things interface, Punya apps are capable of working as a LDP-CoAP client to publish and access data on CoAP servers.
 
 \section{BLAST - Block Applications For Things}
-Due to the success of block-based languages in different challenging areas, we have developed our own block language based on Google's Blockly\footnote{https://developers.google.com/blockly/} library. %Momentan zweimal die gleiche Fußnote auf einer Seite.
+Due to the success of block-based languages in different challenging areas, we have developed our own block language based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}} library. %Momentan zweimal die gleiche Fußnote auf einer Seite.
 Blockly is a pure JavaScript library for creating block-based languages and editors.
 Our block-based language simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols such as Bluetooth or HTTP.
 We have named our block language ''Block Applications For Things'', or BLAST for short (See figure \ref{fig1}).
@@ -116,8 +123,6 @@ If an event occurs, the condition is checked and if necessary the corresponding 
 Furthermore, it is possible to send HTTP requests with arbitrary header and body or load knowledge graphs from a URI and execute SPARQL queries on the records, which allows interaction with read-write linked data APIs or other REST APIs.
 If the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered.
 This block makes almost everything that is possible in JavaScript also possible in BLAST.
-
-The currently best known tool for programming IoT devices using VP is Node-Red\footnote{https://nodered.org/}. Other than BLAST, Node-Red employs a flow-based programming paradigm, and therefore displays applications as graphs. The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user. The block-based approach utilized by BLAST provides more flexibility as its blocks are a lot more fine grained. Also, Node-Red does not implement the WoT standard, which hinders re-usability of code with applications other than Node-Red. Another application similiar to BLAST is Punya\cite{patton2021punya} an Android App development Application based on the MIT App Inventor\footnote{https://appinventor.mit.edu/}. Like Blast, Punya offers a block-based programming environment able to run SPARQL queries and utilizes services like sending a tweet. But Punya focuses on creating applications for Android devices only and solely communicates with the device's internal hardware. Other than BLAST, Punya apps are capable of working as a LDP-CoAP client to publish and access data on CoAP servers.
 
 \section{Supported Devices and Services}
 
