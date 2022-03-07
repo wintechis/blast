@@ -101,18 +101,18 @@ Further, the BLAST language includes blocks to send HTTP requests with arbitrary
 The BLAST language also includes blocks to load RDF graphs from a URI and execute SPARQL queries, which allows for the interaction with Read-Write Linked Data APIs or other REST APIs.
 Finally, if the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered, and thus almost everything that is possible in JavaScript is also possible in BLAST.
 
+\begin{figure}
+\includegraphics[width=.97\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
+\caption{Example BLAST program that implements a geofencing scenario: when the beacon gets close, the light is turned off; when the beacon leaves the close range, a sound is played and the light is turned red.} \label{fig1}
+\end{figure}
+
 For an example of a BLAST program see figure \ref{fig1}.
 The program involves a LED light with a BLE interface and a small battery-powered BLE beacon.
 The BLE controller (the ``BLE central'') is implicitly used when reading the signal-strength property.
 The functionality of these devices (``Things'') can be accessed via reading and writing properties.
 The LED light, for example, has a property ``colour'' that can be written.
 To enable an event abstraction, the program includes a block that defines a state with a condition on the signal strength of the BLE beacon.
-On entering or exiting the defined state, the event blocks, which can contain arbitrary blocks, are triggered.
-
-\begin{figure}
-\includegraphics[width=\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
-\caption{Example BLAST program that implements a geofencing scenario: when the beacon gets close, the light is turned off; when the beacon leaves the close range, a sound is played and the light is turned red.} \label{fig1}
-\end{figure}
+On entering or exiting the defined state, the event blocks, which itself can contain arbitrary blocks, are triggered.
 
 \section{BLAST Editor and Execution Environment}
 
@@ -125,13 +125,14 @@ The system uses the Web of Things abstraction as interface; we have implemented 
 The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
 In addition, the system includes access to the camera and sound output via browser APIs using the WoT interface.
 Further, the system includes access to the Web Speech API\footnote{\url{https://wicg.github.io/speech-api/}}.
-The functionality to issue HTTP requests is implemented using the fetch API~\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Fetch\_API/Using\_Fetch}}, Social Linked Data (Solid) authentication is implemented using the inrupt solid library~\footnote{\url{https://docs.inrupt.com/developer-tools/javascript/client-libraries/}}, and SPARQL query support is implemented using µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
+The functionality to issue HTTP requests is based on the Fetch API\footnote{\url{https://fetch.spec.whatwg.org/}}, Social Linked Data (Solid) authentication is based on the Inrupt client libraries\footnote{\url{https://docs.inrupt.com/developer-tools/javascript/client-libraries/}}, and SPARQL query support is based on µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
 Next to the presented small scenario around geofences, we have also developed BLAST programs to control and monitor an automated picking line to prepare orders in a more complex logistics scenario.
 
 \section{Conclusion}
 
 We have presented BLAST, a block-based language that simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols.
-We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers. This will allow BLAST to use the full Bluetooth specification and not only features exposed by the Web Bluetooth API, which restricts the set of accessible GATT attributes in a blocklist~\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/\#the-gatt-blocklist}} to provide security and privacy protection.
+We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers, which impose restrictions on accessing devices to provide security and privacy protection.
+%This will allow BLAST to use the full Bluetooth specification and not only features exposed by the Web Bluetooth API, which restricts the set of accessible GATT attributes in a blocklist\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/\#the-gatt-blocklist}} to provide security and privacy protection.
 %To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
 %In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
 %@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
