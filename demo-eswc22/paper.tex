@@ -62,72 +62,78 @@ Thus, humans should find it easy to interact with devices and the devices should
 We assume that the interoperability challenge, that is, a devices' ability to capture a multi-stage product lifecycle, which requires collecting and integrating data from multiple devices and sources~\cite{SEMERARO2021103469}, has been addressed by the use of the Web of Things abstraction.
 
 We present BLAST (Block Applications for Things), an easy-to-use interaction interface for humans with devices following the Web of Things interface based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}.
-BLAST is a programming language with a focus on control flow constructs.
+Blockly is a pure JavaScript library for creating block-based languages and editors.
 BLAST implements the Web of Things abstraction to devices with Bluetooth Low Energy (BLE) and USB Human Interface Devices (HID) interface and to various browser APIs that allow for accessing HTTP APIs.
 These devices and APIs are supported by modern web browsers.
+The Web of Thing abstraction involves Things and their Properties that can be read and written, their Actions that can be invoked and their Events that can be observed.
+
+The currently best known tool for programming IoT devices using visual programming is Node-RED\footnote{\url{https://nodered.org/}}.
+In contrast to BLAST, which focuses on control flow constructs, Node-RED's programming paradigm is based on dataflows.
+The use cases we envision for BLAST involve mostly control flow, and in such scenarios a dataflow abstraction can lead to programs that are difficult to understand and maintain.
+%The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user.
+%The block-based approach utilized by BLAST provides more flexibility as its blocks are a lot more fine grained.
+%BLAST is a programming language with a
+
+Another system similiar to BLAST is Punya~\cite{patton2021punya}, an Android app development system based on the MIT App Inventor\footnote{\url{https://appinventor.mit.edu/}}.
+Like BLAST, Punya offers a block-based programming environment able to run SPARQL queries and include online services.
+Punya focuses on creating applications for Android devices only and communicates with the device's internal hardware, in addition to working as a LDP-CoAP client to publish and access data on CoAP servers.
+BLAST, on the other hand, runs in modern web browsers and supports devices based on a Web of Things abstraction.
 
 We first overview block-based visual programming approaches, next introduce BLAST with a scenario involving multiple devices, list the currently supported devices and services and conclude with a summary and outlook.
 
 \section{Block-based Visual Programming}
 
-The programming languages currently in use are primarily text-based and are difficult to access for laypersons without prior knowledge.
-One possible approach to improve accessibility and simplify the creation of computer programs is so-called Visual Programming (VP).
+%The programming languages currently in use for accessing devices are primarily text-based and are difficult to access for casual users.
+%One possible approach to improve accessibility and simplify the creation of computer programs is so-called Visual Programming (VP).
 % Falls Platz dafür ist, die Definition für VP fand ich besser:
-VP as defined by Myers \cite{myers1990taxonomies} refers to any system that allows the user to specify a program in a two (or more) dimensional fashion. Conventional textual languages are not considered two dimensional since the compiler or interpreter processes it as a long, one-dimensional stream. For a more in-depth definition of VP, the reader is referred to \cite{burnett1995visual}. 
-VP does not require the user to enter any text, it is instead based on graphical elements like blocks, graphs, tables or diagrams.
-Programs are created by arranging the available graphical elements in the correct order.
-The block-based approach of VP has become established in recent years, especially as an entry point for novice programmers 
-% Vorschläge für Referenzen
-\cite{moors2018transitioning} \cite{weintrop2017blocks} \cite{chao2016exploring} \cite{HUNDHAUSEN200722} \cite{10.1145/2787622.2787712}.
-
-Bau et al. \cite{1011453015455} pointed out that block-based programming languages teach programming concepts in a simple way due to an intuitive and friendly user interface and that after using block-based languages it is much easier for users to switch to traditional text-based languages.
-
-The basic idea of the block-based approach is that predefined blocks with images or text are arranged into programs by using the drag-and-drop principle.
+Visual programming refers to any system that allows the user to specify a program in a two (or more) dimensional fashion~\cite{myers1990taxonomies}.
+Conventional textual languages are not considered two dimensional since the compiler or interpreter processes it as a long, one-dimensional stream.
+%For a more in-depth definition of VP, the reader is referred to \cite{burnett1995visual}. 
+Visual programming does not require the user to enter any text; instead, programs are based on graphical elements like blocks, graphs, tables or diagrams.
+Programs are created by arranging predefined blocks with images or text are arranged into programs via a drag-and-drop interface.
 Blocks can be geometrically aligned with other compatible blocks, like in a jigsaw puzzle, to form complex programs.
-Since blocks can only be arranged in the correct way, no syntax errors can occur \cite{10.11453341221} \cite{maloney2010scratch} \cite{10.1145/1089733.1089734} \cite{lye2014review}.
+Since blocks can only be arranged in the correct way, no syntax errors can occur~\cite{10.11453341221}~\cite{maloney2010scratch}~\cite{10.1145/1089733.1089734}~\cite{lye2014review}.
+
+% Vorschläge für Referenzen
+%\cite{moors2018transitioning} \cite{weintrop2017blocks} \cite{chao2016exploring} \cite{HUNDHAUSEN200722} \cite{10.1145/2787622.2787712}.
+
+%Bau et al. \cite{1011453015455} pointed out that block-based programming languages teach programming concepts in a simple way due to an intuitive and friendly user interface and that after using block-based languages it is much easier for users to switch to traditional text-based languages.
+
+
 The created block programs can be translated into any predefined programming language, resulting in a normal source code. 
 The block-based approach can be used not only for learning programming concepts, but also for more complex problems.
-For example, block languages have been successfully used in programming industrial robots \cite{8120406} \cite{ghazal2016framework} \cite{tomlein2017visual} or executing SPARQL queries \cite{7369012}, both areas which normally require advanced programming skills.
+For example, block languages have been successfully used in programming industrial robots~\cite{8120406}~\cite{ghazal2016framework}~\cite{tomlein2017visual} or executing SPARQL queries~\cite{7369012}, both areas which normally require advanced programming skills.
 
-Furthermore, Ray examined the use of block-based programming languages for IoT devices in \cite{ray2017survey} and concluded that IoT seems to be suitably getting empowered by smooth entanglement and promotion with promising reduction in physical-digital interface. %Das ist ein direktes Zitat, muss man das anders schreiben?
+%Furthermore, Ray examined the use of block-based programming languages for IoT devices in \cite{ray2017survey} and concluded that IoT seems to be suitably getting empowered by smooth entanglement and promotion with promising reduction in physical-digital interface. %Das ist ein direktes Zitat, muss man das anders schreiben?
 
-The currently best known tool for programming IoT devices using visual programming is Node-RED\footnote{\url{https://nodered.org/}}.
-Other than BLAST, Node-RED employs a flow-based programming paradigm, and therefore displays applications as graphs.
-The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user.
-The block-based approach utilized by BLAST provides more flexibility as its blocks are a lot more fine grained.
+\section{BLAST Language and Editor}
 
-Another application similiar to BLAST is Punya\cite{patton2021punya}, an Android App development Application based on the MIT App Inventor\footnote{\url{https://appinventor.mit.edu/}}.
-Like BLAST, Punya offers a block-based programming environment able to run SPARQL queries and utilizes services like sending a tweet.
-But Punya focuses on creating applications for Android devices only and solely communicates with the device's internal hardware.
-Other than BLAST, which supports devices with a Web of Things interface, Punya apps are capable of working as a LDP-CoAP client to publish and access data on CoAP servers.
-
-\section{BLAST - Block Applications For Things}
-
-Due to the success of block-based languages in different challenging areas, we have developed our own block language based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}} library. %Momentan zweimal die gleiche Fußnote auf einer Seite.
-Blockly is a pure JavaScript library for creating block-based languages and editors.
+Due to the success of block-based languages in different challenging areas, we have developed our own block language.
 Our block-based language simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols such as Bluetooth or HTTP.
-We have named our block language ''Block Applications For Things'', or BLAST for short (See figure \ref{fig1}).
-The browser-based BLAST uses web Bluetooth to communicate with IoT devices, custom control and command blocks, and generates JavaScript code that can be used by any JavaScript interpreter.
+The browser-based BLAST uses Web Bluetooth to communicate with IoT devices, custom control and command blocks, and generates JavaScript code that can be used by any JavaScript interpreter.
 To interact with the IoT devices, BLAST requires custom drivers for each device, which represent an extended form of the WoT TD % Beides noch nicht definiert
- and contain the metadata and interaction affordances as well as the JavaScript code needed for communication.
-
-\begin{figure}
-\includegraphics[width=\textwidth]{screenshot.png}%im Ordner sind noch 2 alternative Screenshots
-\caption{Example BLAST program} \label{fig1}
-\end{figure}
+and contain the metadata and interaction affordances as well as the JavaScript code needed for communication.
 
 When choosing the vocabulary for our block-based language BLAST, we resorted to a mixture of natural language and computer language \cite{8120404}.
 This means that in BLAST, the blocks are arranged into readable sentences, as in a natural language, but the blocks also contain a few technical programming terms, such as ''repeat while true'' instead of ''forever''.
-This makes the BLAST vocabulary both understandable for beginners, but still flexible. Take the program in Figure \ref{fig1} as an example. One should easily figure out that it is used to toggle a Bluetooth LED light. Every time the user pushes the top-left button on their StreamDeck down, the LED light is toggled between red and off.
+For an example for a BLAST program see figure \ref{fig1}.
+We have also implemented a more complex logistics scenario involving an automated picking line to prepare orders.
+
+\begin{figure}
+\includegraphics[width=\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
+\caption{Example BLAST program that implements a geofencing scenario: when the BLE beacon gets close, the LED light is turned off; when the BLE beacon leaves the close range, the LED light is turned red.} \label{fig1}
+\end{figure}
 
 BLAST includes standards from other programming languages such as loops, functions, and variables, but also WoT and IoT related blocks that can be grouped under the three interaction affordances Properties, Actions, and Events.
 Properties of connected IoT devices can be read and written, actions refer to long-running processes that can be initiated and events are asynchronous and based on the ''Event Conditon Action'' (ECA) rule.
 If an event occurs, the condition is checked and if necessary the corresponding action is executed.
-Furthermore, it is possible to send HTTP requests with arbitrary header and body or load knowledge graphs from a URI and execute SPARQL queries on the records, which allows interaction with read-write linked data APIs or other REST APIs.
+Furthermore, it is possible to send HTTP requests with arbitrary header and body or load knowledge graphs from a URI and execute SPARQL queries on the records, which allows interaction with Read-Write Linked Data APIs or other REST APIs.
 If the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered.
 This block makes almost everything that is possible in JavaScript also possible in BLAST.
 
-\section{Supported Devices and Services}
+\section{BLAST Execution Environment}
+
+Supported Devices and Services
 
 To demonstrate how BLAST can interact with WoT devices, we provide a Web of Things abstraction for devices communicating with Bluetooth Low Energy and USB Human Interface Devices (HID).
 We also provide access to online APIs related to speech input and output and services like playing audio from a URI or invoking SPARQL queries on an online ressource.
@@ -178,21 +184,13 @@ We also provide access to online APIs related to speech input and output and ser
 \end{center}
 
 \section{Conclusion}
+
 As IoT devices become more and more relevant in the industrial environment, it is essential to investigate how the interaction between humans and the IoT devices can be seamlessly implemented.
-So far, papers have tended to take the approach of simplifying the programming of devices.
-
-In contrast, the solution proposed in this paper incorporates another perspective, the user perspective.
-In addition to creating a digital twin in human- and machine-readable form based on Semantic Web technologies, we explored the use of an easy-to-use block-based programming environment to interact with devices.
-For this purpose, we built a demonstrator based on Lego. Using the picking process depicted by the demonstrator, we were able to use BLAST control and simultaneously monitor the running process.
-With the help of the experimental setup, we were able to demonstrate that block-based languages are fundamentally suitable for interacting with DTs and IoT devices.
-In testing the performance of BLAST, we also found that the execution speed is slower, but only by 51,04 percent.
-Based on the accessibility and usability benefits, the approach of using block languages to interact with DTs should be pursued.
-
+We have explored the use of an easy-to-use block-based programming environment to interact with devices.
 We are currently working on a way to execute the created BLAST program independently of browsers.
 To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
-In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
-
-@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
+%In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
+%@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
 
 %
 % ---- Bibliography ----
