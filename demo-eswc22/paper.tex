@@ -42,7 +42,7 @@ Friedrich–Alexander University Erlangen-Nürnberg, Nürnberg, Germany}
 \maketitle              % typeset the header of the contribution
 %
 \begin{abstract}
-  We introduce a block-based visual programming language called BLAST to write programs involving connected devices with a Web of Things abstraction.
+  We introduce a block-based visual programming language called BLAST for programs involving connected devices with a Web of Things abstraction.
   We developed an editor and an execution environment for BLAST programs that runs in a web browser.
   We demonstrate that BLAST can be used to create programs that interact with a variety of devices.
   In particular we show the use of connected devices in a geofencing scenario.
@@ -67,7 +67,7 @@ Since blocks can only be arranged in the correct way, no syntax errors can occur
 
 The created block programs can be translated into any predefined programming language, resulting in a normal source code. 
 The block-based approach can be used not only for learning programming concepts, but also for more complex problems.
-For example, block languages have been successfully used in programming industrial robots~\cite{8120406}~\cite{ghazal2016framework}~\cite{tomlein2017visual} or executing SPARQL queries~\cite{7369012}, both areas which normally require advanced programming skills.
+For example, block languages have been successfully used in constructing SPARQL queries~\cite{7369012} or programming industrial robots~\cite{8120406}~\cite{tomlein2017visual}, both areas which normally require advanced programming skills.
 
 We present BLAST, a visual programming environment that works with devices following the Web of Things interface.
 BLAST programs can be created in a web browser, based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}, a JavaScript library for creating block-based languages and editors.
@@ -75,16 +75,17 @@ BLAST programs can be translated to JavaScript and executed in the web browser.
 BLAST implements the Web of Things abstraction to devices with Bluetooth Low Energy (BLE) and USB Human Interface Devices (HID) interface via APIs of modern web browsers.
 
 The currently best known tool for programming IoT devices using visual programming is Node-RED\footnote{\url{https://nodered.org/}}.
-In contrast to BLAST, which focuses on control flow constructs, Node-RED's programming paradigm is based on dataflows.
+Node-RED's programming paradigm is based on dataflows; in contrast, BLAST focuses on control flow constructs,
 The use cases in industrial settings we envision for BLAST involve mostly control flow, and in such scenarios a dataflow abstraction can lead to programs that are difficult to understand and maintain.
 %The nodes in these graphs are black box processes, created by the developers, that can be connected to each other by the end user.
-%The block-based approach utilized by BLAST provides more flexibility as its blocks are a lot more fine grained.
+%The block-based approach utilised by BLAST provides more flexibility as its blocks are a lot more fine grained.
 %BLAST is a programming language with a
 
-Another system similiar to BLAST is Punya~\cite{patton2021punya}, an Android app development system based on the MIT App Inventor\footnote{\url{https://appinventor.mit.edu/}}.
-Like BLAST, Punya offers a block-based programming environment able to run SPARQL queries and include online services.
-Punya focuses on creating applications for Android devices and communicates with the mobile phones's internal hardware, in addition to working as a LDP-CoAP client to publish and access data on CoAP servers.
-BLAST programs, on the other hand, run in modern web browsers and support devices based on a Web of Things abstraction.
+Another system similar to BLAST is Punya~\cite{patton2021punya}, an Android app development system based on the MIT App Inventor\footnote{\url{https://appinventor.mit.edu/}}.
+Like BLAST, Punya offers a block-based programming environment for writing programs that can include SPARQL queries and access online services.
+Punya focuses on creating applications for Android devices that can access the mobile phone's internal hardware.
+Punya also acts as a client to publish and access data on servers supporting the Constrained Application Protocol (CoAP).
+BLAST programs, on the other hand, run in modern web browsers and support devices based on a WoT abstraction.
 
 In the following we first introduce the BLAST language using a geofencing scenario, next describe the browser-based editor and execution environment for BLAST programs and then conclude.
 
@@ -97,7 +98,7 @@ The BLAST language includes standard elements from other programming languages s
 In addition, the BLAST language provides blocks related to interacting with WoT devices.
 These WoT-related blocks can be grouped under the three interaction affordances Properties (that can be read and written), Actions (that can be invoked), and Events (that can be observed).
 Further, the BLAST language includes blocks to send HTTP requests with arbitrary headers, request method and request body.
-Using HTTP requests, one can load RDF graphs from a URI and execute SPARQL queries, which allows for the interaction with Read-Write Linked Data APIs or other REST APIs.
+The BLAST language also includes blocks to load RDF graphs from a URI and execute SPARQL queries, which allows for the interaction with Read-Write Linked Data APIs or other REST APIs.
 Finally, if the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered, and thus almost everything that is possible in JavaScript is also possible in BLAST.
 
 For an example for a BLAST program see figure \ref{fig1}.
@@ -110,77 +111,28 @@ On entering or exiting the defined state, the event blocks, which can contain ar
 
 \begin{figure}
 \includegraphics[width=\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
-\caption{Example BLAST program that implements a geofencing scenario: when the beacon gets close, the light is turned off; when the beacon leaves the close range, the light is turned red.} \label{fig1}
+\caption{Example BLAST program that implements a geofencing scenario: when the beacon gets close, the light is turned off; when the beacon leaves the close range, a sound is played and the light is turned red.} \label{fig1}
 \end{figure}
 
 \section{BLAST Editor and Execution Environment}
 
-We have implemented an editor and an execution environment for BLAST programs that runs in a modern web browser.
+We have implemented an editor and an execution environment for BLAST programs that runs in modern web browsers.
 
-
-uses Web Bluetooth to communicate with IoT devices, custom control and command blocks, and generates JavaScript code that can be used by any JavaScript interpreter.
-To interact with the IoT devices, BLAST requires custom drivers for each device, which represent an extended form of the WoT TD % Beides noch nicht definiert
-and contain the metadata and interaction affordances as well as the JavaScript code needed for communication.
-
-Supported Devices and Services
-
-To demonstrate how BLAST can interact with WoT devices, we provide a Web of Things abstraction for devices communicating with Bluetooth Low Energy and USB Human Interface Devices (HID).
-We also provide access to online APIs related to speech input and output and services like playing audio from a URI or invoking SPARQL queries on an online ressource.
-
-\begin{center}
-  \begin{tabular}{|c|c|c|}
-  \hline
-  \thead{Device} & \thead{Communication} & \thead{WoT interactions} \\
-  \hline
-  Eddystone Devices & BLE GATT & read/write Eddystone properties \\
-  \hline
-  HuskyLens\footnote{https://wiki.dfrobot.com/HUSKYLENS\_V1.0\_SKU\_SEN0305\_SEN0336} & BLE GATT & read sensor properties, invoke forget action \\
-  \hline
-  RGB LED Controller\footnote{https://aliexpress.com/item/4000208329326.html} & BLE GATT & write color properties \\
-  \hline
-  RuuviTag\footnote{https://ruuvi.com/ruuvitag/} & BLE GAP & \makecell{read sensor properties, read battery property, \\
-  read/write txPower property, \\
-  read movement counter propert,y \\
-  read measurement sequence counter property} \\
-  \hline
-  StreamDeck\footnote{https://www.streamdeck.com/} & USB HID & \makecell{write display properties, \\ subscribe to button push events} \\
-  \hline
-  Tulogic BlinkStick\footnote{https://www.blinkstick.com/} & USB HID & write color properties \\ 
-  \hline
-  Nintendo JoyCon\footnote{https://www.nintendo.com/switch/tech-specs/\#joycon-section} & USB HID \& BLE GATT & \makecell{read sensor properties,\\ subscribe to button push events} \\
-  \hline
-  Xiaomi Thermometer\footnote{https://xiaomipedia.com/en/p/xiaomi-electronic-thermometer-and-hygrometer/} & BLE GAP & read sensor properties \\
-  \hline
-  \end{tabular}
-
-  \begin{tabular}{|c|c|}
-  \hline
-  \thead{Service} & \thead{WoT interactions} \\
-  \hline
-  Camera & invoke capture image action \\
-  \hline
-  Audio & invoke play audio action \\
-  \hline
-  WebSpeech API & invoke text to speech action, invoke speech to text action \\
-  \hline
-  HTTP Requests & invoke send HTTP request action \\
-  \hline
-  SPARQL Query & invoke execute SPARQL query action \\
-  \hline
-  SOLID & invoke upload to solid container action \\
-  \hline
-  \end{tabular}
-\end{center}
+The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language.
+For execution, the editor generates JavaScript code that can be executed in the browser.
+The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
+The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices the use the BLE GAP and GATT profiles as well as the USB Human Interface Devices (HID) interface.
+The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
+In addition, the system includes access to the camera and sound output via browser APIs using the WoT interface.
+Further, the system includes access to the Web Speech API\footnote{\url{https://wicg.github.io/speech-api/}}.
+The ability to issue HTTP requests is implemented using the @@@ API, Social Linked Data (Solid) authentication is implemented using the @@@ API, and SPARQL query support is implemented using µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
+Next the the presented scenario around geofences, we have also implemented a BLAST program to control and monitor an automated picking line to prepare orders in a more complex logistics scenario.
 
 \section{Conclusion}
 
-Our block-based language simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols such as Bluetooth or HTTP.
-As IoT devices become increasingly relevant in the industrial environment, investigating how the interaction between humans and the IoT devices can be seamlessly implemented.
-We have explored the use of block-based programming environment to interact with devices.
-We have also implemented a more complex logistics scenario involving an automated picking line to prepare orders.
-
-We are currently working on a way to execute the created BLAST program independently of browsers.
-To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
+We have presented BLAST, a block-based language that simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols.
+We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers.
+%To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
 %In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
 %@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
 
