@@ -8,6 +8,8 @@
 
 import {JavaScript} from 'blockly';
 import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
+// eslint-disable-next-line node/no-missing-import
+import {JoyCon} from './../../things/joycon/JoyCon.js';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {deviceEventHandlers} from './../../blast_interpreter.js';
@@ -59,94 +61,18 @@ const readJoyConProperty = async function (
     return;
   }
 
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID'
-    );
-    callback();
-    return;
-  }
-
-  if (!device.opened) {
-    try {
-      await device.open();
-    } catch (error) {
-      throwError(
-        "Failed to open device, your browser or OS probably doesn't support webHID."
-      );
-    }
-  }
-
-  // Check if device is a Joy-Con.
-  if (
-    device.vendorId !== 1406 ||
-    (device.productId !== 0x2006 && device.productId !== 0x2007)
-  ) {
-    throwError('The connected device is not a Joy-Con.');
-    callback();
-    return;
-  }
-
-  let joyCon;
-  if (device.productId === 0x2006) {
-    joyCon = new JoyConLeft(device);
-  } else if (device.productId === 0x2007) {
-    joyCon = new JoyConRight(device);
-  }
-  await joyCon.open();
-  await joyCon.enableStandardFullMode();
-  await joyCon.enableIMUMode();
-
-  const thingsLog = getThingsLog();
-
-  const hidInputHandler = async function (event) {
-    const packet = event.detail;
-    if (!packet || !packet.actualOrientation) {
-      return;
-    }
-
-    thingsLog(
-      `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(
-        packet
-      )}</code>`,
-      'hid',
-      device.productname
-    );
-
-    thingsLog(
-      'Removing <code>hidinput</code> event listener',
-      'hid',
-      device.productname
-    );
-    joyCon.removeEventListener('hidinput', hidInputHandler);
-    if (subValue2 !== '') {
-      if (property === 'accelerometers') {
-        callback(packet[property][subValue][subValue2].acc);
-      } else if (property === 'gyroscopes') {
-        callback(packet[property][subValue][subValue2][subValue3]);
-      } else {
-        callback(packet[property][subValue][subValue2]);
-      }
+  const thing = new JoyCon(id);
+  const packet = await thing.readProperty(property);
+  if (subValue2 !== '') {
+    if (property === 'accelerometers') {
+      callback(packet[subValue][subValue2]);
+    } else if (property === 'gyroscopes') {
+      callback(packet[subValue][subValue2][subValue3]);
     } else {
-      callback(packet[property][subValue]);
+      callback(packet[subValue][subValue2]);
     }
-  };
-
-  if (!joyCon.eventListenerAttached) {
-    await joyCon.open();
-    await joyCon.enableStandardFullMode();
-    await joyCon.enableIMUMode();
-    await joyCon.enableVibration();
-    thingsLog(
-      'Adding <code>hidinput</code> event listener',
-      'hid',
-      device.productname
-    );
-    joyCon.addEventListener('hidinput', hidInputHandler);
-
-    joyCon.eventListenerAttached = true;
+  } else {
+    callback(packet[subValue]);
   }
 };
 

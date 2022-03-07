@@ -134,7 +134,7 @@ const registerStreamdeckHandler = function (id, buttons, upDown, statements) {
     }
   };
 
-  const thing = new Streamdeck(id);
+  const thing = new StreamDeck(id);
   thing.subscribeEvent('button' + upDown, handler);
 
   addCleanUpFunction(() => {
@@ -173,7 +173,7 @@ const streamdeckColorButtons = async function (id, buttons, color, callback) {
     }
   }
 
-  const thing = new Streamdeck(id);
+  const thing = new StreamDeck(id);
   await thing.writeProperty('buttonColors', buttonsToColor);
 
   callback();
@@ -230,7 +230,7 @@ const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
     }
   }
 
-  const thing = new Streamdeck(id);
+  const thing = new StreamDeck(id);
   await thing.writeProperty('buttonText', buttonsToWrite);
 
   callback();

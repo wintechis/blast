@@ -1376,6 +1376,11 @@ aggregate-error@^3.0.0:
     clean-stack "^2.0.0"
     indent-string "^4.0.0"
 
+ahrs@^1.2.3:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/ahrs/-/ahrs-1.3.0.tgz#2f2ec82ac02399eb2191e177ec4b35fa72613b87"
+  integrity sha512-KldPi7ZzXXwCUVL+SikyvuJWBxfs6hxg8lNugO4lpeXTVem7dMdfow8VppQ0Y7cCqhGEgSqJ0pJruha/cCGjig==
+
 ajv-keywords@^3.5.2:
   version "3.5.2"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.5.2.tgz#31f29da5ab6e00d1c2d329acf7b5929614d5014d"
@@ -4396,6 +4401,13 @@ jest-worker@^26.2.1:
     "@types/node" "*"
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
+
+joy-con-webhid@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/joy-con-webhid/-/joy-con-webhid-0.2.0.tgz#420b1cb41c2bd437dcec208efe364238853e1a93"
+  integrity sha512-YIcwn7Qz/PmbjcRDymP5399sgFV2/US/atLZcTq+cdoVmAQc7jvg+3hozqLyIjd9FWg6eNurA+482WorlZNxzA==
+  dependencies:
+    ahrs "^1.2.3"
 
 js-interpreter-npm@^1.0.6:
   version "1.0.6"
