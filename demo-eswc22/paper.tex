@@ -65,9 +65,9 @@ Programs are created by arranging predefined blocks with images or text via a dr
 Blocks can be geometrically aligned with other compatible blocks, like in a jigsaw puzzle, to form complex programs.
 Since blocks can only be arranged in the correct way, no syntax errors can occur~\cite{10.11453341221}~\cite{maloney2010scratch}~\cite{10.1145/1089733.1089734}.
 
-The created block programs can be translated into source code of any predefined programming language.
+%The created block programs can be translated into source code of any predefined programming language and then executed.
 The block-based approach can be used not only for learning programming concepts, but also for more complex problems.
-For example, block languages have been successfully used in constructing SPARQL queries~\cite{7369012} or programming industrial robots~\cite{8120406}~\cite{tomlein2017visual}, both areas which normally require advanced programming skills.
+Block languages have been successfully used in constructing SPARQL queries~\cite{7369012} or programming industrial robots~\cite{8120406}~\cite{tomlein2017visual}, both areas which normally require advanced programming skills.
 
 We present BLAST, a visual programming environment that works with devices following the Web of Things interface.
 BLAST programs can be created in a web browser, based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}, a JavaScript library for creating block-based languages and editors.
@@ -102,7 +102,7 @@ The BLAST language also includes blocks to load RDF graphs from a URI and execut
 Finally, if the available blocks are not sufficient to implement a desired functionality, there is a block in which native JavaScript code can be entered, and thus almost everything that is possible in JavaScript is also possible in BLAST.
 
 \begin{figure}
-\includegraphics[width=.97\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
+\includegraphics[width=\textwidth]{screenshot 3.png}%im Ordner sind noch 2 alternative Screenshots
 \caption{Example BLAST program that implements a geofencing scenario: when the beacon gets close, the light is turned off; when the beacon leaves the close range, a sound is played and the light is turned red.} \label{fig1}
 \end{figure}
 
