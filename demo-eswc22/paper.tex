@@ -131,7 +131,7 @@ Next to the presented small scenario around geofences, we have also developed BL
 \section{Conclusion}
 
 We have presented BLAST, a block-based language that simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols.
-We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers.
+We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers. This will allow BLAST to use the full Bluetooth specification and not only features exposed by the Web Bluetooth API, which restricts the set of accessible GATT attributes in a blocklist~\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/\#the-gatt-blocklist}} to provide security and privacy protection.
 %To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.
 %In the future, it would enrich BLAST if there was a way to consume WoT TDs and derive interaction possibilities, which would allow BLAST to interact with any WoT device.
 %@@@Web Bluetooth has certain restrictions (security, reading RSSI), server should not have these restrictions.
