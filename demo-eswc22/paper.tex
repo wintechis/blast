@@ -121,7 +121,7 @@ We have implemented an editor and an execution environment for BLAST programs th
 The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language.
 Based on the user's arrangement of these blocks, the editor generates JavaScript code that can then be executed in the browser.
 The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
-The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB Human Interface Devices (HID) interface.
+The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB and Bluetooth HID interface.
 The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
 In addition, the system includes access to the camera and sound output via browser APIs using the WoT interface.
 Further, the system includes access to the Web Speech API\footnote{\url{https://wicg.github.io/speech-api/}}.
