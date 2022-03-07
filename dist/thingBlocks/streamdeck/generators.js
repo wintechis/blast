@@ -8,7 +8,6 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
 import {apiFunctions} from './../../blast_interpreter.js';
@@ -16,7 +15,7 @@ import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {getInterpreter} from './../../blast_interpreter.js';
 import {setInterrupted} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {Streamdeck} from './../../things/streamdeck/Streamdeck.js';
+import {StreamDeck} from './../../things/streamdeck/StreamDeck.js';
 import {throwError} from './../../blast_interpreter.js';
 
 const thingsLog = getThingsLog();

@@ -1,10 +1,11 @@
 import * as WoT from 'wot-typescript-definitions';
-export declare class Streamdeck {
+export declare class StreamDeck {
     private thing;
     private exposedThing;
-    td: WoT.ThingDescription;
     private streamdeck;
     private webHidId;
+    private opened;
+    td: WoT.ThingDescription;
     thingModel: WoT.ThingDescription;
     constructor(webHidId: string);
     /**
