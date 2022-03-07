@@ -45,7 +45,7 @@ Friedrich–Alexander University Erlangen-Nürnberg, Nürnberg, Germany}
   An open research challenge in the deployment of IoT devices is the interaction with humans.
   We introduce a block-based visual programming language and execution environment called BLAST.
   BLAST allows for visually creating programs involving devices with a Web of Things interface.
-  We demonstrate that BLAST can be used to create programs that interact with a variety of devices in different scenarios.
+  We demonstrate that BLAST can be used to create programs that interact with a variety of devices in a geofencing scenario.
 \keywords{Block-based Programming \and Web of Things.}
 \end{abstract}
 %
@@ -63,6 +63,8 @@ We assume that the interoperability challenge, that is, a devices' ability to ca
 
 We present BLAST (Block Applications for Things), an easy-to-use interaction interface for humans with devices following the Web of Things interface based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}.
 BLAST is a programming language with a focus on control flow constructs.
+BLAST implements the Web of Things abstraction to devices with Bluetooth Low Energy (BLE) and USB Human Interface Devices (HID) interface and to various browser APIs that allow for accessing HTTP APIs.
+These devices and APIs are supported by modern web browsers.
 
 We first overview block-based visual programming approaches, next introduce BLAST with a scenario involving multiple devices, list the currently supported devices and services and conclude with a summary and outlook.
 
@@ -100,6 +102,7 @@ But Punya focuses on creating applications for Android devices only and solely c
 Other than BLAST, which supports devices with a Web of Things interface, Punya apps are capable of working as a LDP-CoAP client to publish and access data on CoAP servers.
 
 \section{BLAST - Block Applications For Things}
+
 Due to the success of block-based languages in different challenging areas, we have developed our own block language based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}} library. %Momentan zweimal die gleiche Fußnote auf einer Seite.
 Blockly is a pure JavaScript library for creating block-based languages and editors.
 Our block-based language simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols such as Bluetooth or HTTP.
