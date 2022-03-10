@@ -9,12 +9,12 @@
 import {JavaScript} from 'blockly';
 // eslint-disable-next-line node/no-missing-import
 import {addCleanUpFunction} from './../../blast_interpreter.js';
+// eslint-disable-next-line node/no-missing-import
 import {JoyCon} from './../../things/joycon/JoyCon.js';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {getInterpreter} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
-import {getWebHidDevice} from './../../blast_things.js';
 import {setInterrupted} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
