@@ -1,18 +1,21 @@
 import * as WoT from 'wot-typescript-definitions';
-import {getThing} from '../index.js';
+import {getThing, removeThing} from '../index.js';
 import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
-import {getThingsLog, getWebHidDevice} from '../../blast_things.js';
+import {getWebHidDevice, thingsFlyoutCategory} from '../../blast_things.js';
 import {throwError} from '../../blast_interpreter.js';
+import type {Packet} from './types';
+import { ExposedThing } from '@node-wot/core';
 
 export class JoyCon {
   private thing: WoT.ExposedThing | null = null;
-  private device: HIDDevice | null = null;
+  private exposedThing: ExposedThing | null = null;
   private joyCon: JoyConLeft | JoyConRight | null = null;
-  private log: Function;
   private opened = false;
   private eventListenerAttached = false;
   public td: WoT.ThingDescription;
   private webHidId: string;
+  private packet: Packet | null = null;
+  private inputHandler: Function | undefined;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -32,23 +35,65 @@ export class JoyCon {
         description: 'The accelerometer of the joy-con',
         type: 'object',
         properties: {
-          x: {
-            title: 'X',
-            description: 'The X-axis of the accelerometer',
-            type: 'number',
-            readOnly: true,
+          1: {
+            x: {
+              title: 'X',
+              description: 'The X-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            y: {
+              title: 'Y',
+              description: 'The Y-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            z: {
+              title: 'Z',
+              description: 'The Z-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
           },
-          y: {
-            title: 'Y',
-            description: 'The Y-axis of the accelerometer',
-            type: 'number',
-            readOnly: true,
+          2: {
+            x: {
+              title: 'X',
+              description: 'The X-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            y: {
+              title: 'Y',
+              description: 'The Y-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            z: {
+              title: 'Z',
+              description: 'The Z-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
           },
-          z: {
-            title: 'Z',
-            description: 'The Z-axis of the accelerometer',
-            type: 'number',
-            readOnly: true,
+          3: {
+            x: {
+              title: 'X',
+              description: 'The X-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            y: {
+              title: 'Y',
+              description: 'The Y-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
+            z: {
+              title: 'Z',
+              description: 'The Z-axis of the accelerometer',
+              type: 'number',
+              readOnly: true,
+            },
           },
         },
       },
@@ -370,14 +415,14 @@ export class JoyCon {
         title: 'Button up event',
         description: 'Triggered when a button is released',
         data: {
-          type: 'integer',
+          type: 'string',
         },
       },
       buttonDown: {
         title: 'Button down event',
         description: 'Triggered when a button is pressed',
         data: {
-          type: 'integer',
+          type: 'string',
         },
       },
     },
@@ -385,12 +430,13 @@ export class JoyCon {
 
   constructor(webHidId: string) {
     this.webHidId = webHidId;
-    this.log = getThingsLog();
     this.open().then(() => {
       getThing(this.thingModel).then(thing => {
         this.thing = thing;
+        this.exposedThing = this.thing as unknown as ExposedThing;
         this.td = thing.getThingDescription();
         this.thing.expose();
+        this.registerButtonEventEmitter();
       });
     });
   }
@@ -426,7 +472,6 @@ export class JoyCon {
     } else if (device.productId === 0x2007) {
       this.joyCon = new JoyConRight(device);
     }
-    this.device = device;
     await this.joyCon?.open();
     await this.joyCon?.enableStandardFullMode();
     await this.joyCon?.enableIMUMode();
@@ -435,65 +480,87 @@ export class JoyCon {
     this.opened = true;
   }
 
-  async readProperty(property: string): Promise<any> {
+  async readProperty(property: keyof Packet): Promise<any> {
     while (!this.opened) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    return new Promise((resolve, reject) => {
-      // Event handler listening for the property value, will remove itself after the first event.
-      const getPropertiesHandler = async (event: any) => {
-        const packet = event.detail;
-        if (!packet || !packet.actualOrientation) {
-          return;
-        }
+    // wait until first data is received
+    while (!this.packet) {
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+    // return last received data
+    return this.packet[property];
+  }
 
-        this.log(
-          `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(
-            packet
-          )}</code>`,
-          'hid',
-          this.device?.productName
-        );
-
-        this.log(
-          'Removing <code>hidinput</code> event listener',
-          'hid',
-          this.device?.productName
-        );
-        this.joyCon?.removeEventListener('hidinput', getPropertiesHandler);
-
-        if (property === 'accelerometers') {
-          // convert object with _raw, _hex and acc properties only return the acc property
-          // iterate over the 3 accelerometer results
-          for (const key in packet.accelerometers) {
-            // directly return acc property
-            packet.accelerometers[key]['x'] =
-              packet.accelerometers[key]['x'].acc;
-            packet.accelerometers[key]['y'] =
-              packet.accelerometers[key]['y'].acc;
-            packet.accelerometers[key]['z'] =
-              packet.accelerometers[key]['z'].acc;
+  private async registerButtonEventEmitter() {
+    this.inputHandler = (event: any) => {
+      const packet = event.detail;
+      if (!packet || !packet.actualOrientation) {
+        return;
+      }
+  
+      // if we have a previous packet, check if a button status has changed
+      if (this.packet) {
+        for (let i in packet.buttonStatus) {
+          // omit _raw and _hex
+          if (i === '_raw' || i === '_hex') {
+            continue;
+          }
+          const newButtonStatus = this.packet.buttonStatus || {};
+          const key = i as keyof typeof newButtonStatus;
+          // Check if button status changed
+          if (packet.buttonStatus[key] !== newButtonStatus[key]) {
+            if (packet.buttonStatus[i]) {
+              this.thing?.emitEvent('buttonDown', i);
+            } else {
+              this.thing?.emitEvent('buttonUp', i);
+            } 
           }
         }
-        resolve(packet[property]);
-      };
-      // add event listener
-      this.log(
-        'Adding <code>hidinput</code> event listener',
-        'hid',
-        this.device?.productName
-      );
-      // Joy-Cons may sleep until touched, so attach the listener dynamically.
-      setInterval(async () => {
-        if (!this.eventListenerAttached) {
-          await this.joyCon?.open();
-          await this.joyCon?.enableStandardFullMode();
-          await this.joyCon?.enableIMUMode();
-          await this.joyCon?.enableVibration();
-          this.joyCon?.addEventListener('hidinput', getPropertiesHandler);
-          this.eventListenerAttached = true;
-        }
-      }, 2000);
-    });
+      }
+      this.packet = packet;
+    }
+    while (!this.opened || !this.thing) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    if (!this.eventListenerAttached) {
+      await this.joyCon?.open();
+      await this.joyCon?.enableStandardFullMode();
+      await this.joyCon?.enableIMUMode();
+      await this.joyCon?.enableVibration();
+      this.joyCon?.addEventListener('hidinput', this.inputHandler);
+      this.eventListenerAttached = true;
+    }
+  }
+
+  /**
+   * Wrapper method for subscribing to JoyCon events.
+   */
+    public async subscribeEvent(eventName: string, fn: (...args: any[]) => void) {
+    while (!this.opened) {
+      // Wait for the thing to be initialized
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    this.exposedThing?.subscribeEvent(eventName, fn);
+  }
+
+  /**
+   * Wrapper method for unsubscribing from all JoyCon events.
+   */
+    public async unsubscribeAll() {
+    while (!this.opened) {
+      // Wait for the thing to be initialized
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    // for (const eventName of Object.keys(this.exposedThing.events)) {
+    //   this.exposedThing.unsubscribeEvent(eventName);
+    // }
+    // unsubscribeEvent is not implemented, so instead we destroy the thing
+    this.destroy();
+    this.joyCon.removeEventListener('hidInput', this.inputHandler);
+  }
+
+  private destroy() {
+    removeThing(this.td?.id);
   }
 }

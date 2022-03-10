@@ -72,7 +72,7 @@ export class StreamDeck {
             this.td = thing.getThingDescription();
             this.open().then(sd => {
                 this.streamdeck = sd;
-                this.registerButtonUpDownEvenEmitters();
+                this.registerButtonUpDownEventEmitters();
             });
             this.thing.expose();
         });
@@ -213,7 +213,7 @@ export class StreamDeck {
     /**
      * Registers buttonUp and buttonDown event emitters.
      */
-    async registerButtonUpDownEvenEmitters() {
+    async registerButtonUpDownEventEmitters() {
         var _a, _b;
         while (!this.opened) {
             // Wait for the thing to be initialized

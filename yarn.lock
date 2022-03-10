@@ -1059,9 +1059,9 @@
     fastq "^1.6.0"
 
 "@petamoriken/float16@^3.1.1":
-  version "3.6.2"
-  resolved "https://registry.yarnpkg.com/@petamoriken/float16/-/float16-3.6.2.tgz#a4c986305718d22d0f92f0b89722f6ef6b3fc18e"
-  integrity sha512-zZnksXtFBqvONcXWuAtSWrl3YXaDbU2ArRCCuzM42mP0GBJclD6e0GC3zEemmrjiMSOHcLPyRC4vOnAsnomJIw==
+  version "3.6.3"
+  resolved "https://registry.yarnpkg.com/@petamoriken/float16/-/float16-3.6.3.tgz#7ed8f2ae05ea4096f0ccdf2c2655d04aca545d33"
+  integrity sha512-Yx6Z93kmz3JVPYoPPRFJXnt2/G4kfaxRROcZVVHsE4zOClJXvkOVidv/JfvP6hWn16lykbKYKVzUsId6mqXdGg==
 
 "@rdfjs/data-model@^1.2.0":
   version "1.3.4"
@@ -5658,9 +5658,9 @@ popsicle-cookie-jar@^1.0.0:
     tough-cookie "^3.0.1"
 
 popsicle-redirects@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/popsicle-redirects/-/popsicle-redirects-1.1.0.tgz#2a5abb49a7ad49c02e90b24d4608dc0b8b23176a"
-  integrity sha512-XCpzVjVk7tty+IJnSdqWevmOr1n8HNDhL86v7mZ6T1JIIf2KGybxUk9mm7ZFOhWMkGB0e8XkacHip7BV8AQWQA==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/popsicle-redirects/-/popsicle-redirects-1.1.1.tgz#da0936ed97f0ea22b16daa028bc624cb5b6ce05d"
+  integrity sha512-mC2HrKjdTAWDalOjGxlXw9j6Qxrz/Yd2ui6bPxpi2IQDYWpF4gUAMxbA8EpSWJhLi0PuWKDwTHHPrUPGutAoIA==
 
 popsicle-transport-http@^1.0.8:
   version "1.2.1"
@@ -7151,9 +7151,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typescript@^4.0.3:
-  version "4.5.5"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
-  integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.6.2.tgz#fe12d2727b708f4eef40f51598b3398baa9611d4"
+  integrity sha512-HM/hFigTBHZhLXshn9sN37H085+hQGeJHJ/X7LpBWLID/fbc2acUMfU+lGD98X81sKP+pFa9f0DZmCwB9GnbAg==
 
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
@@ -7346,9 +7346,9 @@ url-parse-lax@^3.0.0:
     prepend-http "^2.0.0"
 
 url-parse@^1.4.3:
-  version "1.5.9"
-  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.9.tgz#05ff26484a0b5e4040ac64dcee4177223d74675e"
-  integrity sha512-HpOvhKBvre8wYez+QhHcYiVvVmeF6DVnuSOOPhe3cTum3BnqHhvKaZm8FU5yTiOu/Jut2ZpB2rA/SbBA1JIGlQ==
+  version "1.5.10"
+  resolved "https://registry.yarnpkg.com/url-parse/-/url-parse-1.5.10.tgz#9d3c2f736c1d75dd3bd2be507dcc111f1e2ea9c1"
+  integrity sha512-WypcfiRhfeUP9vvF0j6rw0J3hrWrw6iZv3+22h6iRMJ/8z1Tj6XfLP4DsUix5MhMPnXpiHDoKyoZ/bdCkwBCiQ==
   dependencies:
     querystringify "^2.1.1"
     requires-port "^1.0.0"
@@ -7482,9 +7482,9 @@ vinyl@2.x, vinyl@^2.0.0, vinyl@^2.0.1, vinyl@^2.1.0, vinyl@^2.2.1:
     replace-ext "^1.0.0"
 
 vm2@^3.9.2:
-  version "3.9.8"
-  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.8.tgz#e99c000db042735cd2f94d8db6c42163a17be04e"
-  integrity sha512-/1PYg/BwdKzMPo8maOZ0heT7DLI0DAFTm7YQaz/Lim9oIaFZsJs3EdtalvXuBfZwczNwsYhju75NW4d6E+4q+w==
+  version "3.9.9"
+  resolved "https://registry.yarnpkg.com/vm2/-/vm2-3.9.9.tgz#c0507bc5fbb99388fad837d228badaaeb499ddc5"
+  integrity sha512-xwTm7NLh/uOjARRBs8/95H0e8fT3Ukw5D/JJWhxMbhKzNh1Nu981jQKvkep9iKYNxzlVrdzD0mlBGkDKZWprlw==
   dependencies:
     acorn "^8.7.0"
     acorn-walk "^8.2.0"

@@ -36,7 +36,7 @@ export declare class StreamDeck {
     /**
      * Registers buttonUp and buttonDown event emitters.
      */
-    private registerButtonUpDownEvenEmitters;
+    private registerButtonUpDownEventEmitters;
     /**
      * Wrapper method for emitting streamdeck events.
      */
