@@ -44,6 +44,7 @@
     "js-interpreter-npm": "^1.0.6",
     "jsdoc": "^3.6.7",
     "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
     "sphero": "^0.9.2",
     "urdf": "git://github.com/derwehr/uRDF.js.git",
     "vm": "^0.1.0",
