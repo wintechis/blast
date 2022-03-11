@@ -12,9 +12,9 @@ jobs:
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
-        
+
       - name: Restore yarn cache
-      - uses: actions/cache@v2
+        uses: actions/cache@v2
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
           key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
@@ -30,19 +30,21 @@ jobs:
     needs: lint
       
     steps:
-        - uses: actions/checkout@master
-        # Get the yarn cache path
+        - name: checkout master
+          uses: actions/checkout@master
+
         - name: Get yarn cache directory path
           id: yarn-cache-dir-path
           run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
         - name: Restore yarn cache
-        - uses: actions/cache@v2
+          uses: actions/cache@v2
           with:
             path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
             key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
             restore-keys: |
               yarn-cache-folder-
+
         - name: Build web example
           run: |
                 cd ./examples/web
