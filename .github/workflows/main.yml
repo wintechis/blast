@@ -9,7 +9,6 @@ jobs:
 
     steps:
       - name: checkout master
-        uses: actions/checkout@master
         
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -24,7 +23,7 @@ jobs:
             yarn-cache-folder-
 
       - name: Run yarn install
-        run: yarn install --ignore-engines
+        run: yarn install --immutable --ignore-engines
       - name: run linter
         run: yarn run lint
   build-examples:
@@ -50,7 +49,7 @@ jobs:
         - name: Build web example
           run: |
                 cd ./examples/web
-                yarn install
+                yarn install --immutable
                 yarn run build
   deploy:
     runs-on: ubuntu-latest
@@ -109,6 +108,6 @@ jobs:
             yarn-cache-folder-
 
       - name: Install dependencies
-        run: yarn --ignore-engines
+        run: yarn install --immutable --ignore-engines
       - name: Run JSDoc
         run: yarn run jsdoc
