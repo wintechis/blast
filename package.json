@@ -20,9 +20,9 @@
     "copy": "copyfiles -u 1 \"src/**/*.js\" dist/",
     "jsdoc": "gulp jsdoc",
     "lint": "eslint \"src/**/**.js\"",
-    "clean": "gts clean",
+    "clean": "yarn rimraf dist",
     "compile": "yarn run clean && tsc && yarn run copy && yarn run build:web",
-    "fix": "gts fix",
+    "fix": "eslint --fix \"src/**/**.js\"",
     "prepare": "yarn run compile",
     "pretest": "yarn run compile",
     "posttest": "yarn run lint"
@@ -32,12 +32,17 @@
   "license": "AGPL-3.0",
   "devDependencies": {
     "@types/node": "^14.11.2",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
     "copyfiles": "^2.4.1",
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
     "gts": "^3.1.0",
     "jsdoc": "^3.6.7",
+    "prettier": "^2.5.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.0.3"
   },
   "dependencies": {

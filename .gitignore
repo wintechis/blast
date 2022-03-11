@@ -5,4 +5,5 @@
 !.yarn/plugins
 !.yarn/sdks
 !.yarn/versions
+node_modules
 js/blast.min.js
