@@ -42507,15 +42507,15 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 `;
 
 // Add the huskylens_write_forget_flag block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_write_forget_flag', 'Actions', HUSKYLENS_FORGET_FLAG_XML);
 
 
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_id = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read ID property of HuskyDuino');
-    this.setOutput(true, 'String');
+        .appendField('read ID property of object(s) in HuskyDuino');
+    this.setOutput(true, 'list');
     this.setColour(255);
     this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
     this.setHelpUrl('');
@@ -42536,6 +42536,34 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_id = {
 
 // Add the huskylens_read_id block to the toolbox.
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_read_id', 'Properties');
+
+
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_location = {
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('read location property of one object in HuskyDuino');
+    this.setOutput(true, 'list');
+    this.setColour(255);
+    this.setTooltip('returns ID and location of one object visible to the HuskyLens');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    // on creating this block check webBluetooth availability.
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        blockly__WEBPACK_IMPORTED_MODULE_0__.dialog.alert(`Webbluetooth is not supported by this browser.\n
+                Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+
+// Add the huskylens_read_location block to the toolbox.
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_read_location', 'Properties');
 
 
 /***/ }),
@@ -42656,12 +42684,63 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.huskylens_read_id = function(blo
       blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_ATOMIC);
   
   // Assemble JavaScript into code variable.
-  const code = `readID(${thing})`;
-  // Return code.
-  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  const str = `readID(${thing})`;
+  if (str[0] == '[') {
+    const substr = str.slice(1, -1);
+    console.log(substr);
+    const arr = substr.split(',');
+    // output is all non 0 element in the array
+    const outArr = [];
+    arr.forEach((item) => {
+      if (item != 0) {
+        outArr.push(item);
+      }
+    });
+    return [outArr, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc = str.indexOf('(');
+    const id = str.slice(0, loc);
+    console.log(id);
+    const outArr = [id];
+    return [outArr, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  } else {
+    return [str, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  }
 };
 
 
+/**
+ * Generate JavaScript code for the huskylens_read_id block.
+ * @param {Blockly.Block} block the huskylens_read_id block
+ * @returns {String} the generated JavaScript code
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.huskylens_read_location = function(block) {
+  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Thing',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_ATOMIC);
+  
+  // Assemble JavaScript into code variable.
+  const str = `readID(${thing})`;
+  if (str[0] == '[') {
+    const errStr = 'Multi Objs Recognized';
+    return [errStr, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc1 = str.indexOf('(');
+    const loc2 = str.indexOf(',');
+    const loc3 = str.indexOf(')');
+    const id = parseInt(str.slice(0, loc1));
+    const x = parseInt(str.slice(loc1 + 1, loc2));
+    const y = parseInt(str.slice(loc2 + 1, loc3));
+    console.log(id);
+    console.log(x);
+    console.log(y);
+    const outArr = [id, x, y];
+    return [outArr, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  } else {
+    return [str, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  }
+};
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
 _blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_2__.optionalServices.push(HuskyServiceUUID);

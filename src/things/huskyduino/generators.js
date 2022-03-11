@@ -103,12 +103,63 @@ Blockly.JavaScript['huskylens_read_id'] = function(block) {
       Blockly.JavaScript.ORDER_ATOMIC);
   
   // Assemble JavaScript into code variable.
-  const code = `readID(${thing})`;
-  // Return code.
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  const str = `readID(${thing})`;
+  if (str[0] == '[') {
+    const substr = str.slice(1, -1);
+    console.log(substr);
+    const arr = substr.split(',');
+    // output is all non 0 element in the array
+    const outArr = [];
+    arr.forEach((item) => {
+      if (item != 0) {
+        outArr.push(item);
+      }
+    });
+    return [outArr, Blockly.JavaScript.ORDER_NONE];
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc = str.indexOf('(');
+    const id = str.slice(0, loc);
+    console.log(id);
+    const outArr = [id];
+    return [outArr, Blockly.JavaScript.ORDER_NONE];
+  } else {
+    return [str, Blockly.JavaScript.ORDER_NONE];
+  }
 };
 
 
+/**
+ * Generate JavaScript code for the huskylens_read_id block.
+ * @param {Blockly.Block} block the huskylens_read_id block
+ * @returns {String} the generated JavaScript code
+ */
+Blockly.JavaScript['huskylens_read_location'] = function(block) {
+  const thing = Blockly.JavaScript.valueToCode(
+      block,
+      'Thing',
+      Blockly.JavaScript.ORDER_ATOMIC);
+  
+  // Assemble JavaScript into code variable.
+  const str = `readID(${thing})`;
+  if (str[0] == '[') {
+    const errStr = 'Multi Objs Recognized';
+    return [errStr, Blockly.JavaScript.ORDER_NONE];
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc1 = str.indexOf('(');
+    const loc2 = str.indexOf(',');
+    const loc3 = str.indexOf(')');
+    const id = parseInt(str.slice(0, loc1));
+    const x = parseInt(str.slice(loc1 + 1, loc2));
+    const y = parseInt(str.slice(loc2 + 1, loc3));
+    console.log(id);
+    console.log(x);
+    console.log(y);
+    const outArr = [id, x, y];
+    return [outArr, Blockly.JavaScript.ORDER_NONE];
+  } else {
+    return [str, Blockly.JavaScript.ORDER_NONE];
+  }
+};
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
 optionalServices.push(HuskyServiceUUID);

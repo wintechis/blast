@@ -134,15 +134,15 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 `;
 
 // Add the huskylens_write_forget_flag block to the toolbox.
-addBlock('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
+addBlock('huskylens_write_forget_flag', 'Actions', HUSKYLENS_FORGET_FLAG_XML);
 
 
 Blockly.Blocks['huskylens_read_id'] = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read ID property of HuskyDuino');
-    this.setOutput(true, 'String');
+        .appendField('read ID property of object(s) in HuskyDuino');
+    this.setOutput(true, 'list');
     this.setColour(255);
     this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
     this.setHelpUrl('');
@@ -163,3 +163,31 @@ Blockly.Blocks['huskylens_read_id'] = {
 
 // Add the huskylens_read_id block to the toolbox.
 addBlock('huskylens_read_id', 'Properties');
+
+
+Blockly.Blocks['huskylens_read_location'] = {
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('read location property of one object in HuskyDuino');
+    this.setOutput(true, 'list');
+    this.setColour(255);
+    this.setTooltip('returns ID and location of one object visible to the HuskyLens');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    // on creating this block check webBluetooth availability.
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        Blockly.dialog.alert(`Webbluetooth is not supported by this browser.\n
+                Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+
+// Add the huskylens_read_location block to the toolbox.
+addBlock('huskylens_read_location', 'Properties');
