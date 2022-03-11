@@ -49,5 +49,6 @@
     "joy-con-webhid": "^0.2.0",
     "urdf": "git://github.com/derwehr/uRDF.js.git",
     "wot-typescript-definitions": "^0.8.0-SNAPSHOT.21"
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

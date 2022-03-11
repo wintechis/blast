@@ -1,22 +1,32 @@
 {
-  "extends": "./node_modules/gts/tsconfig-google.json",
   "compilerOptions": {
-    "skipLibCheck": true,
-    "module": "esnext",
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "declaration": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": [
         "es6",
         "dom"
     ],
-    "esModuleInterop": true,
-    "target": "ES2018",
+    "module": "esnext",
     "moduleResolution": "node",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "pretty": true,
+    "skipLibCheck": true,
     "sourceMap": true,
+    "strict": true,
+    "target": "es2018",
     "outDir": "dist/things/"
   },
   "include": [
     "src/things/**/*.ts",
     "src/things/**/*.js"
   ],
-  "exclude": [],
+  "exclude": [
+    ".yarn"
+  ],
   "target": "ES2018",
 }
