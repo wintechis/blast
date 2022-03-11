@@ -7,7 +7,6 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-// eslint-disable-next-line node/no-unpublished-import
 import urdf from 'urdf';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';

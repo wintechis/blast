@@ -7,7 +7,6 @@
 'use strict';
 
 import {dialog, hideChaff, Xml} from 'blockly';
-// eslint-disable-next-line node/no-unpublished-import
 import FileSaver from 'file-saver';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';

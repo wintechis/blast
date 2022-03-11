@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import { Servient } from '@node-wot/core';
 let servient;
 let wot;

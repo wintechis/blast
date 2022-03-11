@@ -468,7 +468,7 @@ export class JoyCon {
             }
             // if we have a previous packet, check if a button status has changed
             if (this.packet) {
-                for (let i in packet.buttonStatus) {
+                for (const i in packet.buttonStatus) {
                     // omit _raw and _hex
                     if (i === '_raw' || i === '_hex') {
                         continue;

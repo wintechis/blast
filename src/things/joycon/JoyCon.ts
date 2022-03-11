@@ -1,10 +1,10 @@
 import * as WoT from 'wot-typescript-definitions';
 import {getThing, removeThing} from '../index.js';
 import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
-import {getWebHidDevice, thingsFlyoutCategory} from '../../blast_things.js';
+import {getWebHidDevice} from '../../blast_things.js';
 import {throwError} from '../../blast_interpreter.js';
 import type {Packet} from './types';
-import { ExposedThing } from '@node-wot/core';
+import {ExposedThing} from '@node-wot/core';
 
 export class JoyCon {
   private thing: WoT.ExposedThing | null = null;
@@ -498,10 +498,10 @@ export class JoyCon {
       if (!packet || !packet.actualOrientation) {
         return;
       }
-  
+
       // if we have a previous packet, check if a button status has changed
       if (this.packet) {
-        for (let i in packet.buttonStatus) {
+        for (const i in packet.buttonStatus) {
           // omit _raw and _hex
           if (i === '_raw' || i === '_hex') {
             continue;
@@ -514,12 +514,12 @@ export class JoyCon {
               this.thing?.emitEvent('buttonDown', i);
             } else {
               this.thing?.emitEvent('buttonUp', i);
-            } 
+            }
           }
         }
       }
       this.packet = packet;
-    }
+    };
     while (!this.opened || !this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -536,7 +536,7 @@ export class JoyCon {
   /**
    * Wrapper method for subscribing to JoyCon events.
    */
-    public async subscribeEvent(eventName: string, fn: (...args: any[]) => void) {
+  public async subscribeEvent(eventName: string, fn: (...args: any[]) => void) {
     while (!this.opened) {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -547,7 +547,7 @@ export class JoyCon {
   /**
    * Wrapper method for unsubscribing from all JoyCon events.
    */
-    public async unsubscribeAll() {
+  public async unsubscribeAll() {
     while (!this.opened) {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));

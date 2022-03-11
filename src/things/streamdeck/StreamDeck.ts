@@ -3,7 +3,6 @@ import {getThingsLog, getWebHidDevice} from '../../blast_things.js';
 import {throwError} from '../../blast_interpreter.js';
 import {openDevice, StreamDeckWeb} from '@elgato-stream-deck/webhid';
 import {getThing, removeThing} from '../index.js';
-// eslint-disable-next-line node/no-unpublished-import
 import {ExposedThing} from '@node-wot/core';
 
 const thingsLog = getThingsLog();
