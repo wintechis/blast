@@ -8,16 +8,22 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
-      # Use cache for node modules
+      # Get the yarn cache path
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+        
+      - name: Restore yarn cache
       - uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
 
-      - name: Install dependencies
-        run: yarn --ignore-engines
-      - name: run ESLint
+      - name: Run yarn install
+        run: yarn install --ignore-engines
+      - name: run linter
         run: yarn run lint
   build-examples:
     runs-on: ubuntu-latest
@@ -25,12 +31,19 @@ jobs:
       
     steps:
         - uses: actions/checkout@master
-        # Use cache for node modules
+        # Get the yarn cache path
+        - name: Get yarn cache directory path
+          id: yarn-cache-dir-path
+          run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+        - name: Restore yarn cache
         - uses: actions/cache@v2
           with:
-            path: '**/node_modules'
-            key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-        - name: yarn run build
+            path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+            key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+            restore-keys: |
+              yarn-cache-folder-
+        - name: Build web example
           run: |
                 cd ./examples/web
                 yarn install
@@ -73,11 +86,18 @@ jobs:
     
     steps:
       - uses: actions/checkout@master
-      # Use cache for node modules
+      # Get the yarn cache path
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Restore yarn cache
       - uses: actions/cache@v2
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
 
       - name: Install dependencies
         run: yarn --ignore-engines
