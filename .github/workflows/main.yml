@@ -51,10 +51,7 @@ jobs:
             yarn-cache-folder-
 
       - name: Build web example
-        run: |
-              cd ./examples/web
-              yarn install --immutable
-              yarn run build
+        run: yarn run build
   deploy:
     runs-on: ubuntu-latest
     needs: build-examples
