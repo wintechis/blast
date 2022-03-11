@@ -25,7 +25,7 @@ jobs:
             yarn-cache-folder-
 
       - name: Run yarn install
-        run: yarn install --immutable --ignore-engines
+        run: yarn install --immutable
       - name: run linter
         run: yarn run lint
   build-examples:
@@ -118,6 +118,6 @@ jobs:
             yarn-cache-folder-
 
       - name: Install dependencies
-        run: yarn install --immutable --ignore-engines
+        run: yarn install --immutable
       - name: Run JSDoc
         run: yarn run jsdoc
