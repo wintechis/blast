@@ -18,7 +18,7 @@ export class StreamDeck {
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
     '@type': ['Thing'],
-    id: 'blast:webhid:streamdeck', // this should normally be an URI, need to figure out a how to properly identify tds
+    id: 'blast:webhid:streamdeck',
     title: 'Streamdeck',
     description: 'elGato Streamdeck',
     securityDefinitions: {

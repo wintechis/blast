@@ -16,7 +16,7 @@ export class EddystoneDevice {
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
     '@type': ['Thing'],
-    id: 'blast:bluetooth:iBKS105', // this should normally be an URI, need to figure out a how to properly identify tds
+    id: 'blast:bluetooth:iBKS105',
     title: 'iBKS105',
     description: 'Accent Systems iBKS105 iBeacon',
     securityDefinitions: {

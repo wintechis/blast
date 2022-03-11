@@ -20,7 +20,7 @@ export class JoyCon {
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
     '@type': ['Thing'],
-    id: 'blast:webhid:joycon', // this should normally be an URI, need to figure out a how to properly identify tds
+    id: 'blast:webhid:joycon',
     title: 'Joy-Con',
     description: 'Nintendo Joy-Con',
     securityDefinitions: {
