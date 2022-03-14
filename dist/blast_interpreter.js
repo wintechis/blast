@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 
-const {Events} = Blockly;
+const {Events, JavaScript, selected} = Blockly;
 
 /**
  * Instance of the JS Interpreter.
