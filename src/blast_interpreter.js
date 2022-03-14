@@ -6,8 +6,9 @@
  */
 'use strict';
 
-import {Events, JavaScript, selected} from 'blockly';
-import fs from 'fs';
+import Blockly from 'blockly';
+
+const {Events} = Blockly;
 
 /**
  * Instance of the JS Interpreter.
@@ -193,9 +194,6 @@ export const setStatesInterpreterRunning = function (val) {
  * Defines the Interpreter's standard input function.
  */
 let stdIn = null;
-if (fs.readFileSync) {
-  stdIn = fs.readFileSync(0, 'utf8');
-}
 
 /**
  * Setter for the Interpreter's standard input function

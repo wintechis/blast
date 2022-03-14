@@ -6,8 +6,11 @@
 
 'use strict';
 
-import {Blocks, FieldDropdown, FieldMultilineInput} from 'blockly';
+import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
+
+const {Blocks} = Blockly;
+const {FieldDropdown, FieldMultilineInput} = Blocks;
 
 /*****************
  * Action blocks.*

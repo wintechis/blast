@@ -6,13 +6,17 @@
 
 'use strict';
 
-import {JavaScript} from 'blockly';
+import Blockly from 'blockly';
 import urdf from 'urdf';
-import {apiFunctions} from './../../blast_interpreter.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {getInterpreter} from './../../blast_interpreter.js';
-import {getStdOut} from './../../blast_interpreter.js';
-import {throwError} from './../../blast_interpreter.js';
+import {
+  apiFunctions,
+  asyncApiFunctions,
+  getInterpreter,
+  getStdOut,
+  throwError,
+} from './../../blast_interpreter.js';
+
+const {JavaScript} = Blockly;
 
 /*****************
  * Action blocks.*

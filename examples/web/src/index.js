@@ -34,50 +34,46 @@ import './generators.js';
  * Initialize Blast. Called on page load.
  * @public
  */
-const init = function() {
-  const workspace = Blockly.inject('content_workspace',
-      {
-        comments: true,
-        collapse: true,
-        disable: true,
-        grid:
-        {
-          spacing: 25,
-          length: 3,
-          colour: '#ccc',
-          snap: true,
-        },
-        horizontalLayout: false,
-        maxBlocks: Infinity,
-        maxInstances: {'test_basic_limit_instances': 3},
-        maxTrashcanContents: 256,
-        media: 'media/',
-        toolbox: currentToolbox,
-        toolboxPosition: 'start',
-        renderer: 'geras',
-        zoom:
-        {
-          controls: true,
-          wheel: true,
-          startScale: 1.0,
-          maxScale: 4,
-          minScale: 0.25,
-          scaleSpeed: 1.1,
-        },
-      },
-  );
+const init = function () {
+  const workspace = Blockly.inject('content_workspace', {
+    comments: true,
+    collapse: true,
+    disable: true,
+    grid: {
+      spacing: 25,
+      length: 3,
+      colour: '#ccc',
+      snap: true,
+    },
+    horizontalLayout: false,
+    maxBlocks: Infinity,
+    maxInstances: {test_basic_limit_instances: 3},
+    maxTrashcanContents: 256,
+    media: 'media/',
+    toolbox: currentToolbox,
+    toolboxPosition: 'start',
+    renderer: 'geras',
+    zoom: {
+      controls: true,
+      wheel: true,
+      startScale: 1.0,
+      maxScale: 4,
+      minScale: 0.25,
+      scaleSpeed: 1.1,
+    },
+  });
   workspace.configureContextMenu = configureContextMenu;
 
   /**
-    * Adds 'download screenshot' and 'add comment' to the context menu.
-    * @param {!ContextMenuRegistry.ContextMenuOption} menuOptions the context menu options.
-    * @param {!Event} e The right-click mouse event.
-    */
+   * Adds 'download screenshot' and 'add comment' to the context menu.
+   * @param {!ContextMenuRegistry.ContextMenuOption} menuOptions the context menu options.
+   * @param {!Event} e The right-click mouse event.
+   */
   function configureContextMenu(menuOptions, e) {
     const screenshotOption = {
       text: 'Download Screenshot',
       enabled: workspace.getTopBlocks().length,
-      callback: function() {
+      callback: function () {
         downloadScreenshot(workspace);
       },
     };
@@ -98,7 +94,7 @@ const init = function() {
   bindClick('UriSaveButton', link);
   // load blocks from URI on Enter
   const uriInput = document.getElementById('loadWorkspace-input');
-  uriInput.addEventListener('keyup', (event) => {
+  uriInput.addEventListener('keyup', event => {
     if (event.keyCode === 13) {
       load();
     }
@@ -119,7 +115,7 @@ const init = function() {
  * @param {!Blockly.Block.id} id identifier of the block to be highlighted.
  * @public
  */
-const highlightBlock = function(id) {
+const highlightBlock = function (id) {
   const workspace = getWorkspace();
   workspace.highlightBlock(id);
 };
