@@ -1,7 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 export declare class EddystoneDevice {
     thing: WoT.ExposedThing | null;
-    td: WoT.ThingDescription;
+    private td;
     private webBluetoothId;
     private slot;
     thingModel: WoT.ThingDescription;
@@ -11,4 +11,6 @@ export declare class EddystoneDevice {
     private getActiveSlot;
     writeProperty(property: string, value: string, slot: number): Promise<void>;
     readProperty(property: string, slot: number): Promise<string>;
+    getThingDescription(): Promise<WoT.ThingDescription>;
+    destroy(): void;
 }

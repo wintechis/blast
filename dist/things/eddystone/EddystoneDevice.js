@@ -1,5 +1,5 @@
 import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty, } from '../../blast_eddystone.js';
-import { getThing } from '../index.js';
+import { getThing, removeThing } from '../index.js';
 export class EddystoneDevice {
     constructor(webBluetoothId) {
         this.thing = null;
@@ -7,9 +7,9 @@ export class EddystoneDevice {
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
-            id: 'blast:bluetooth:iBKS105',
-            title: 'iBKS105',
-            description: 'Accent Systems iBKS105 iBeacon',
+            id: 'blast:bluetooth:EddystoneDevice',
+            title: 'Eddystone Device',
+            description: 'A Bluetooth device implementing the Eddystone protocol',
             securityDefinitions: {
                 nosec_sc: {
                     scheme: 'nosec',
@@ -103,6 +103,16 @@ export class EddystoneDevice {
     async readProperty(property, slot) {
         this.setActiveSlot(slot);
         return readEddystoneProperty(this.webBluetoothId, property);
+    }
+    async getThingDescription() {
+        while (!this.thing) {
+            // Wait for the thing to be created
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        return this.td;
+    }
+    destroy() {
+        removeThing(this.td.id);
     }
 }
 //# sourceMappingURL=EddystoneDevice.js.map

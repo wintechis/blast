@@ -7,13 +7,15 @@
 'use strict';
 
 import 'buffer';
-import {dialog} from 'blockly';
+import Blockly from 'blockly';
 import {addCleanUpFunction} from './blast_interpreter.js';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {getThingsLog} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
 import {setWebBluetoothButtonHandler} from './blast_things.js';
 import {throwError} from './blast_interpreter.js';
+
+const {dialog} = Blockly;
 
 /**
  * Optional serviceUUIDs to scan for.

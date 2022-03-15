@@ -5,20 +5,20 @@ import {
   setActiveSlot,
   writeEddystoneProperty,
 } from '../../blast_eddystone.js';
-import {getThing} from '../index.js';
+import {getThing, removeThing} from '../index.js';
 
 export class EddystoneDevice {
   public thing: WoT.ExposedThing | null = null;
-  public td: WoT.ThingDescription;
+  private td: WoT.ThingDescription;
   private webBluetoothId: string;
   private slot = -1;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
     '@type': ['Thing'],
-    id: 'blast:bluetooth:iBKS105',
-    title: 'iBKS105',
-    description: 'Accent Systems iBKS105 iBeacon',
+    id: 'blast:bluetooth:EddystoneDevice',
+    title: 'Eddystone Device',
+    description: 'A Bluetooth device implementing the Eddystone protocol',
     securityDefinitions: {
       nosec_sc: {
         scheme: 'nosec',
@@ -127,5 +127,17 @@ export class EddystoneDevice {
   public async readProperty(property: string, slot: number): Promise<string> {
     this.setActiveSlot(slot);
     return readEddystoneProperty(this.webBluetoothId, property);
+  }
+
+  public async getThingDescription(): Promise<WoT.ThingDescription> {
+    while (!this.thing) {
+      // Wait for the thing to be created
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return this.td;
+  }
+
+  public destroy(): void {
+    removeThing(this.td.id);
   }
 }
