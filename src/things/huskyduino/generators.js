@@ -104,27 +104,7 @@ Blockly.JavaScript['huskylens_read_id'] = function(block) {
   
   // Assemble JavaScript into code variable.
   const str = `readID(${thing})`;
-  if (str[0] == '[') {
-    const substr = str.slice(1, -1);
-    console.log(substr);
-    const arr = substr.split(',');
-    // output is all non 0 element in the array
-    const outArr = [];
-    arr.forEach((item) => {
-      if (item != 0) {
-        outArr.push(item);
-      }
-    });
-    return [outArr, Blockly.JavaScript.ORDER_NONE];
-  } else if (str[0] >= 0 && str[0] <= 9) {
-    const loc = str.indexOf('(');
-    const id = str.slice(0, loc);
-    console.log(id);
-    const outArr = [id];
-    return [outArr, Blockly.JavaScript.ORDER_NONE];
-  } else {
-    return [str, Blockly.JavaScript.ORDER_NONE];
-  }
+  return [str, Blockly.JavaScript.ORDER_NONE];
 };
 
 
@@ -140,25 +120,8 @@ Blockly.JavaScript['huskylens_read_location'] = function(block) {
       Blockly.JavaScript.ORDER_ATOMIC);
   
   // Assemble JavaScript into code variable.
-  const str = `readID(${thing})`;
-  if (str[0] == '[') {
-    const errStr = 'Multi Objs Recognized';
-    return [errStr, Blockly.JavaScript.ORDER_NONE];
-  } else if (str[0] >= 0 && str[0] <= 9) {
-    const loc1 = str.indexOf('(');
-    const loc2 = str.indexOf(',');
-    const loc3 = str.indexOf(')');
-    const id = parseInt(str.slice(0, loc1));
-    const x = parseInt(str.slice(loc1 + 1, loc2));
-    const y = parseInt(str.slice(loc2 + 1, loc3));
-    console.log(id);
-    console.log(x);
-    console.log(y);
-    const outArr = [id, x, y];
-    return [outArr, Blockly.JavaScript.ORDER_NONE];
-  } else {
-    return [str, Blockly.JavaScript.ORDER_NONE];
-  }
+  const str = `readLoc(${thing})`;
+  return [str, Blockly.JavaScript.ORDER_NONE];
 };
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
@@ -234,12 +197,69 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  const id = await readText(
+  const str = await readText(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
   );
-  callback(id);
+  if (str[0] == '[') {
+    const substr = str.slice(1, -1);
+    const arr = substr.split(',');
+    // output is all non 0 element in the array
+    const outArr = [];
+    arr.forEach((item) => {
+      if (item != 0) {
+        outArr.push(parseInt(item));
+      }
+    });
+    console.log(outArr);
+    callback(outArr);
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc = str.indexOf('(');
+    const id = parseInt(str.slice(0, loc));
+    const outArr = [id];
+    console.log(outArr);
+    callback(outArr);
+  } else {
+    callback(str);
+  }
 };
 
 asyncApiFunctions.push(['readID', readID]);
+
+/**
+ * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * @param {String} thing identifier of the Huskyduino.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {String} contains all known faceIDs currently visible to the camera.
+ */
+const readLoc = async function(thing, callback) {
+  const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
+
+  const str = await readText(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+  );
+  if (str[0] == '[') {
+    const errStr = 'Multi Objs Recognized';
+    callback(errStr);
+  } else if (str[0] >= 0 && str[0] <= 9) {
+    const loc1 = str.indexOf('(');
+    const loc2 = str.indexOf(',');
+    const loc3 = str.indexOf(')');
+    const id = parseInt(str.slice(0, loc1));
+    const x = parseInt(str.slice(loc1 + 1, loc2));
+    const y = parseInt(str.slice(loc2 + 1, loc3));
+    console.log(id);
+    console.log(x);
+    console.log(y);
+    const outArr = [id, x, y];
+    console.log(outArr);
+    callback(outArr);
+  } else {
+    callback(str);
+  }
+};
+
+asyncApiFunctions.push(['readLoc', readLoc]);
