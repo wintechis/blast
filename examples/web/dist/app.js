@@ -42477,7 +42477,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_write_forget_flag = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(255);
+    this.setColour(0);
     this.setTooltip('forget all values of the currently selected algorithm');
     this.setHelpUrl('');
   },
