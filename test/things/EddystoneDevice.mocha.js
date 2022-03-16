@@ -6,16 +6,22 @@ import esmock from 'esmock';
 const {expect} = chai;
 
 suite('Eddystone device', function () {
-  this.thing;
-  this.spy;
   this.class;
-  // suppress WoT console logs
-  sinon.stub(console);
+  this.spy;
+  this.thing;
+
+  suiteSetup(async () => {
+    sinon.stub(console);
+  });
+
+  suiteTeardown(() => {
+    sinon.restore();
+  });
 
   setup(async function () {
     // Sets up a mock for the EddystoneDevice class with stubs for the bluetooth operations
     this.spy = sinon.spy();
-    this.class = await esmock(
+    this.EddystoneDevice = await esmock(
       '../../dist/things/eddystone/EddystoneDevice.js',
       {
         '../../dist/blast_eddystone.js': {
@@ -25,7 +31,7 @@ suite('Eddystone device', function () {
         },
       }
     );
-    this.thing = new this.class.EddystoneDevice('deadbeef');
+    this.thing = new this.EddystoneDevice('deadbeef');
   });
 
   teardown(function () {
@@ -35,7 +41,7 @@ suite('Eddystone device', function () {
   });
 
   test('Creation', function () {
-    expect(this.thing).to.be.an.instanceof(this.class.EddystoneDevice);
+    expect(this.thing).to.be.an.instanceof(this.EddystoneDevice);
   });
 
   test('Thing description', async function () {
@@ -108,7 +114,7 @@ suite('Eddystone device', function () {
     expect(actualTd).to.deep.equal(expectedTd);
   });
 
-  suite('Bluetooth operations', () => {
+  suite('Thing affordances', () => {
     test('reading a property', async function () {
       await this.thing.readProperty('advertisedTxPower', 0);
       // Method sets the slot and then reads the property, so we expect 2 calls

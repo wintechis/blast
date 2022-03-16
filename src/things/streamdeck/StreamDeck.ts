@@ -13,7 +13,7 @@ export default class StreamDeck {
   private streamdeck: StreamDeckWeb | null = null;
   private webHidId: string;
   private opened = false;
-  public td: WoT.ThingDescription;
+  private td: WoT.ThingDescription;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -304,6 +304,13 @@ export default class StreamDeck {
     // unsubscribeEvent is not implemented, so instead we destroy the thing
     this.destroy();
     this.streamdeck?.removeAllListeners();
+  }
+
+  public async getThingDescription() {
+    while (!this.thing) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return this.td;
   }
 
   private destroy() {

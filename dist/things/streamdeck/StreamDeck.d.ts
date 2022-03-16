@@ -5,7 +5,7 @@ export default class StreamDeck {
     private streamdeck;
     private webHidId;
     private opened;
-    td: WoT.ThingDescription;
+    private td;
     thingModel: WoT.ThingDescription;
     constructor(webHidId: string);
     /**
@@ -49,5 +49,6 @@ export default class StreamDeck {
      * Wrapper method for unsubscribing from all streamdeck events.
      */
     unsubscribeAll(): Promise<void>;
+    getThingDescription(): Promise<any>;
     private destroy;
 }

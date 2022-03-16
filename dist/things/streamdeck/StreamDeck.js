@@ -264,6 +264,12 @@ export default class StreamDeck {
         this.destroy();
         (_a = this.streamdeck) === null || _a === void 0 ? void 0 : _a.removeAllListeners();
     }
+    async getThingDescription() {
+        while (!this.thing) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        return this.td;
+    }
     destroy() {
         var _a, _b;
         removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
