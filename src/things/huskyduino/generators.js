@@ -12,6 +12,7 @@ import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {optionalServices} from './../../blast_webBluetooth.js';
 import {readText} from './../../blast_webBluetooth.js';
 import {writeWithoutResponse} from './../../blast_webBluetooth.js';
+import {throwError} from './../../blast_interpreter.js';
 
 
 /**
@@ -189,10 +190,10 @@ const forgetAll = async function(thing, flag, callback) {
 asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
- * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * read the IDs of all known objects currently visible to the camera via bluetooth.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array} contains all known IDs currently visible to the camera.
  */
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
@@ -203,8 +204,7 @@ const readID = async function(thing, callback) {
       characteristicUUID,
   );
   if (str[0] == '[') {
-    const substr = str.slice(1, -1);
-    const arr = substr.split(',');
+    const arr = JSON.parse(str);
     // output is all non 0 element in the array
     const outArr = [];
     arr.forEach((item) => {
@@ -212,26 +212,24 @@ const readID = async function(thing, callback) {
         outArr.push(parseInt(item));
       }
     });
-    console.log(outArr);
     callback(outArr);
   } else if (str[0] >= 0 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
     const outArr = [id];
-    console.log(outArr);
     callback(outArr);
   } else {
-    callback(str);
+    throwError(str);
   }
 };
 
 asyncApiFunctions.push(['readID', readID]);
 
 /**
- * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * read the ID and its x y location on display of the object currently visible to the camera.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array} contains ID and location of the object currently visible to the camera.
  */
 const readLoc = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
@@ -242,8 +240,7 @@ const readLoc = async function(thing, callback) {
       characteristicUUID,
   );
   if (str[0] == '[') {
-    const errStr = 'Multi Objs Recognized';
-    callback(errStr);
+    throwError('Multi Objs Recognized');
   } else if (str[0] >= 0 && str[0] <= 9) {
     const loc1 = str.indexOf('(');
     const loc2 = str.indexOf(',');
@@ -251,14 +248,10 @@ const readLoc = async function(thing, callback) {
     const id = parseInt(str.slice(0, loc1));
     const x = parseInt(str.slice(loc1 + 1, loc2));
     const y = parseInt(str.slice(loc2 + 1, loc3));
-    console.log(id);
-    console.log(x);
-    console.log(y);
     const outArr = [id, x, y];
-    console.log(outArr);
     callback(outArr);
   } else {
-    callback(str);
+    throwError(str);
   }
 };
 

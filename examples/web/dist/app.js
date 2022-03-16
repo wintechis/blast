@@ -42515,7 +42515,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_id = {
     this.appendValueInput('Thing')
         .setCheck('Thing')
         .appendField('read ID property of object(s) in HuskyDuino');
-    this.setOutput(true, ['String']);
+    this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
     this.setHelpUrl('');
@@ -42543,7 +42543,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_location = {
     this.appendValueInput('Thing')
         .setCheck('Thing')
         .appendField('read location property of one object in HuskyDuino');
-    this.setOutput(true, ['String']);
+    this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip('returns ID and location of one object visible to the HuskyLens');
     this.setHelpUrl('');
@@ -42585,6 +42585,7 @@ __webpack_require__.r(__webpack_exports__);
  * @author yongxu.ren1996@gmail.com
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 
 
 
@@ -42770,10 +42771,10 @@ const forgetAll = async function(thing, flag, callback) {
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
- * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * read the IDs of all known objects currently visible to the camera via bluetooth.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array} contains all known IDs currently visible to the camera.
  */
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
@@ -42784,8 +42785,7 @@ const readID = async function(thing, callback) {
       characteristicUUID,
   );
   if (str[0] == '[') {
-    const substr = str.slice(1, -1);
-    const arr = substr.split(',');
+    const arr = JSON.parse(str);
     // output is all non 0 element in the array
     const outArr = [];
     arr.forEach((item) => {
@@ -42793,26 +42793,24 @@ const readID = async function(thing, callback) {
         outArr.push(parseInt(item));
       }
     });
-    console.log(outArr);
     callback(outArr);
   } else if (str[0] >= 0 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
     const outArr = [id];
-    console.log(outArr);
     callback(outArr);
   } else {
-    callback(str);
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
   }
 };
 
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['readID', readID]);
 
 /**
- * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * read the ID and its x y location on display of the object currently visible to the camera.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array} contains ID and location of the object currently visible to the camera.
  */
 const readLoc = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
@@ -42823,8 +42821,7 @@ const readLoc = async function(thing, callback) {
       characteristicUUID,
   );
   if (str[0] == '[') {
-    const errStr = 'Multi Objs Recognized';
-    callback(errStr);
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('Multi Objs Recognized');
   } else if (str[0] >= 0 && str[0] <= 9) {
     const loc1 = str.indexOf('(');
     const loc2 = str.indexOf(',');
@@ -42832,14 +42829,10 @@ const readLoc = async function(thing, callback) {
     const id = parseInt(str.slice(0, loc1));
     const x = parseInt(str.slice(loc1 + 1, loc2));
     const y = parseInt(str.slice(loc2 + 1, loc3));
-    console.log(id);
-    console.log(x);
-    console.log(y);
     const outArr = [id, x, y];
-    console.log(outArr);
     callback(outArr);
   } else {
-    callback(str);
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
   }
 };
 
