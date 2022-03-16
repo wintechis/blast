@@ -313,7 +313,6 @@ export const stopJS = function() {
  * Stop execution and adds an error message to the
  * {@link Blast.Ui.messageOutputContainer}.
  * @param {string=} text optional, a custom error text
- * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 export const throwError = function(text) {
   if (!text) {
