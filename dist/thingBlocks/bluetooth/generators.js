@@ -11,7 +11,7 @@ import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {optionalServices, readText} from './../../blast_webBluetooth.js';
 import {throwError} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {EddystoneDevice} from './../../things/eddystone/EddystoneDevice.js';
+import EddystoneDevice from './../../things/eddystone/EddystoneDevice.js';
 
 /**
  * Generates JavaScript code for the get_signal_strength block.

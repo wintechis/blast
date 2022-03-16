@@ -1,5 +1,5 @@
 import * as WoT from 'wot-typescript-definitions';
-export declare class StreamDeck {
+export default class StreamDeck {
     private thing;
     private exposedThing;
     private streamdeck;

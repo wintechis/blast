@@ -6,7 +6,7 @@ import {throwError} from '../../blast_interpreter.js';
 import type {Packet} from './types';
 import {ExposedThing} from '@node-wot/core';
 
-export class JoyCon {
+export default class JoyCon {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private joyCon: JoyConLeft | JoyConRight | null = null;

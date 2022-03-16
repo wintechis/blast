@@ -7,7 +7,7 @@ import {ExposedThing} from '@node-wot/core';
 
 const thingsLog = getThingsLog();
 
-export class StreamDeck {
+export default class StreamDeck {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private streamdeck: StreamDeckWeb | null = null;

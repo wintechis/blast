@@ -7,7 +7,7 @@ import {
 } from '../../blast_eddystone.js';
 import {getThing, removeThing} from '../index.js';
 
-export class EddystoneDevice {
+export default class EddystoneDevice {
   public thing: WoT.ExposedThing | null = null;
   private td: WoT.ThingDescription;
   private webBluetoothId: string;

@@ -1,6 +1,6 @@
 import * as WoT from 'wot-typescript-definitions';
 import type { Packet } from './types';
-export declare class JoyCon {
+export default class JoyCon {
     private thing;
     private exposedThing;
     private joyCon;

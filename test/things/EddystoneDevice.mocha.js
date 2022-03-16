@@ -109,11 +109,6 @@ suite('Eddystone device', function () {
   });
 
   suite('Bluetooth operations', () => {
-    test('setting active slot', async function () {
-      await this.thing.setActiveSlot(0);
-      expect(this.spy.calledOnce).to.be.true;
-    });
-
     test('reading a property', async function () {
       await this.thing.readProperty('advertisedTxPower', 0);
       // Method sets the slot and then reads the property, so we expect 2 calls

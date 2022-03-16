@@ -1,5 +1,5 @@
 import * as WoT from 'wot-typescript-definitions';
-export declare class EddystoneDevice {
+export default class EddystoneDevice {
     thing: WoT.ExposedThing | null;
     private td;
     private webBluetoothId;

@@ -2,7 +2,7 @@ import { getThing, removeThing } from '../index.js';
 import { JoyConLeft, JoyConRight } from 'joy-con-webhid';
 import { getWebHidDevice } from '../../blast_things.js';
 import { throwError } from '../../blast_interpreter.js';
-export class JoyCon {
+export default class JoyCon {
     constructor(webHidId) {
         this.thing = null;
         this.exposedThing = null;

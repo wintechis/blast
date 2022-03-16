@@ -15,7 +15,7 @@ import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {getInterpreter} from './../../blast_interpreter.js';
 import {setInterrupted} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {StreamDeck} from './../../things/streamdeck/StreamDeck.js';
+import StreamDeck from './../../things/streamdeck/StreamDeck.js';
 import {throwError} from './../../blast_interpreter.js';
 
 const thingsLog = getThingsLog();

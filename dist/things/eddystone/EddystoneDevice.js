@@ -1,6 +1,6 @@
 import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty, } from '../../blast_eddystone.js';
 import { getThing, removeThing } from '../index.js';
-export class EddystoneDevice {
+export default class EddystoneDevice {
     constructor(webBluetoothId) {
         this.thing = null;
         this.slot = -1;

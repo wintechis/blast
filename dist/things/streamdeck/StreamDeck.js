@@ -3,7 +3,7 @@ import { throwError } from '../../blast_interpreter.js';
 import { openDevice } from '@elgato-stream-deck/webhid';
 import { getThing, removeThing } from '../index.js';
 const thingsLog = getThingsLog();
-export class StreamDeck {
+export default class StreamDeck {
     constructor(webHidId) {
         this.thing = null;
         this.exposedThing = null;
