@@ -69,7 +69,7 @@ suite('BLE RGB Controller', function () {
   });
 
   suite('Thing affordances', () => {
-    test('reading a property', async function () {
+    test('writing the colour property', async function () {
       await this.thing.writeProperty('colour', '#ff0000');
       expect(this.spy.calledOnce).to.be.true;
     });
