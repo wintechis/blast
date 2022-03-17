@@ -3,7 +3,9 @@
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getActiveSlot(webBluetoothId: string): Promise<number>;
+export function getActiveSlot(
+  webBluetoothId: BluetoothDevice.id
+): Promise<number>;
 
 /**
  * Sets the active slot of the Eddystone configuration service.
@@ -12,7 +14,7 @@ export function getActiveSlot(webBluetoothId: string): Promise<number>;
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
 export function setActiveSlot(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   slot: number
 ): Promise<void>;
 
@@ -21,7 +23,9 @@ export function setActiveSlot(
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getAdvertisingInterval(webBluetoothId: string): Promise<number>;
+export function getAdvertisingInterval(
+  webBluetoothId: BluetoothDevice.id
+): Promise<number>;
 
 /**
  * Sets the advertising interval of currently active slot.
@@ -30,7 +34,7 @@ export function getAdvertisingInterval(webBluetoothId: string): Promise<number>;
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
 export function setAdvertisingInterval(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   interval: number
 ): Promise<void>;
 
@@ -39,7 +43,9 @@ export function setAdvertisingInterval(
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getTxPowerLevel(webBluetoothId: string): Promise<number>;
+export function getTxPowerLevel(
+  webBluetoothId: BluetoothDevice.id
+): Promise<number>;
 
 /**
  * Sets the TX power level of currently active slot.
@@ -48,7 +54,7 @@ export function getTxPowerLevel(webBluetoothId: string): Promise<number>;
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
 export function setTxPowerLevel(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   txPowerLevel: number
 ): Promise<void>;
 
@@ -57,7 +63,9 @@ export function setTxPowerLevel(
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getAdvertisedTxPower(webBluetoothId: string): Promise<number>;
+export function getAdvertisedTxPower(
+  webBluetoothId: BluetoothDevice.id
+): Promise<number>;
 
 /**
  * Sets the advertised TX power level of currently active slot.
@@ -66,7 +74,7 @@ export function getAdvertisedTxPower(webBluetoothId: string): Promise<number>;
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
 export function setAdvertisedTxPower(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   advertisedTxPower: number
 ): Promise<void>;
 
@@ -75,21 +83,27 @@ export function setAdvertisedTxPower(
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getLockState(webBluetoothId: string): Promise<string>;
+export function getLockState(
+  webBluetoothId: BluetoothDevice.id
+): Promise<string>;
 
 /**
  * Gets the public ECDH Key of the Eddystone configuration service.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getPublicECDHKey(webBluetoothId: string): Promise<string>;
+export function getPublicECDHKey(
+  webBluetoothId: BluetoothDevice.id
+): Promise<string>;
 
 /**
  * Gets the advertising data of the currently active slot.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-export function getAdvertisingData(webBluetoothId: string): Promise<string>;
+export function getAdvertisingData(
+  webBluetoothId: BluetoothDevice.id
+): Promise<string>;
 
 /**
  * Sets the advertising data of the currently active slot.
@@ -97,7 +111,7 @@ export function getAdvertisingData(webBluetoothId: string): Promise<string>;
  * @param {string} data The data to set.
  */
 export function setAdvertisingData(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   data: string
 ): Promise<void>;
 
@@ -108,8 +122,8 @@ export function setAdvertisingData(
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 export function readEddystoneProperty(
-  webBluetoothId: string,
-  properly: string
+  webBluetoothId: BluetoothDevice.id,
+  property: string
 ): Promise<string>;
 
 /**
@@ -120,7 +134,7 @@ export function readEddystoneProperty(
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 export function writeEddystoneProperty(
-  webBluetoothId: string,
+  webBluetoothId: BluetoothDevice.id,
   property: string,
   value: string
 ): Promise<void>;

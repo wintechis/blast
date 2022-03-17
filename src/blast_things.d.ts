@@ -32,7 +32,7 @@ export function resetThings(): void;
  * @param {string} deviceId The uid of the webHID device.
  * @returns {HIDDevice} The webHID device with the given uid.
  */
-export function getWebHidDevice(deviceId: string): HIDDevice;
+export function getWebHidDevice(deviceId: HIDDevice.id): HIDDevice;
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
@@ -75,7 +75,7 @@ export function addWebBluetoothDevice(
  * @param {HIDDevice} device the device to add.
  */
 export function addWebHidDevice(
-  uid: string,
+  uid: HIDDevice.id,
   deviceName: string,
   device: HIDDevice
 ): void;
