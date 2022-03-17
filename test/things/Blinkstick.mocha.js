@@ -66,7 +66,7 @@ suite('Blinkstick', function () {
       security: 'nosec_sc',
       properties: {
         colours: {
-          title: 'Colours',
+          title: 'colours',
           description: 'The colour of the LED at the given index',
           observable: false,
           unit: '',
