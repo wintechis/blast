@@ -1,17 +1,17 @@
 import {ExposedThing} from '@node-wot/core';
 import * as WoT from 'wot-typescript-definitions';
-import { throwError } from '../../blast_interpreter.js';
-import { getThingsLog } from '../../blast_things.js';
+import {throwError} from '../../blast_interpreter.js';
+import {getThingsLog} from '../../blast_things.js';
 import {getWebHidDevice} from '../../blast_things.js';
 import {getThing, removeThing} from '../index.js';
 
 const thingsLog = getThingsLog();
 
 interface LEDColour {
-    index: number;
-    red: number;
-    green: number;
-    blue: number;
+  index: number;
+  red: number;
+  green: number;
+  blue: number;
 }
 
 export default class Blinkstick {
@@ -37,7 +37,7 @@ export default class Blinkstick {
     security: 'nosec_sc',
     properties: {
       colours: {
-        title: 'Colours',
+        title: 'colours',
         description: 'The colour of the LED at the given index',
         unit: '',
         type: 'object',
@@ -123,16 +123,16 @@ export default class Blinkstick {
     const device = getWebHidDevice(this.webHidId);
 
     if (!device) {
-        throwError(
+      throwError(
         'Connected device is not a HID device.\nMake sure you are connecting the Blinkstick via webHID.'
-        );
-        return;
+      );
+      return;
     }
 
     // check if the device is a BlinkStick
     if (device.vendorId !== 8352 || device.productId !== 16869) {
-        throwError('The connected device is not a BlinkStick.');
-        return;
+      throwError('The connected device is not a BlinkStick.');
+      return;
     }
     await device.open();
     this.opened = true;
@@ -141,43 +141,43 @@ export default class Blinkstick {
 
   private addPropertyHandlers() {
     this.thing?.setPropertyWriteHandler('colours', value => {
-        return this.setColour(value as unknown as LEDColour);
-    })
+      return this.setColour(value as unknown as LEDColour);
+    });
   }
 
   private async setColour(value: LEDColour): Promise<void> {
     while (!this.opened) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     const {index, red, green, blue} = value;
     const reportId = 5;
     const report = Int8Array.from([reportId, index, red, green, blue]);
 
     const trySetColor = async (retries: number) => {
-        try {
-          thingsLog(
-            `Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`,
-            'hid',
-            this.blinkstick.productName
+      try {
+        thingsLog(
+          `Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`,
+          'hid',
+          this.blinkstick.productName
+        );
+        await this.blinkstick.sendFeatureReport(reportId, report);
+        thingsLog(
+          `Finished <code>sendFeatureReport</code> with value <code>${report}</code>`,
+          'hid',
+          this.blinkstick.productName
+        );
+      } catch (error) {
+        if (retries > 0) {
+          await trySetColor(--retries);
+        } else {
+          console.error(error);
+          throwError(
+            'Failed to set BlinkStick colors, please check its connection.'
           );
-          await this.blinkstick.sendFeatureReport(reportId, report);
-          thingsLog(
-            `Finished <code>sendFeatureReport</code> with value <code>${report}</code>`,
-            'hid',
-            this.blinkstick.productName
-          );
-        } catch (error) {
-          if (retries > 0) {
-            await trySetColor(--retries);
-          } else {
-            console.error(error);
-            throwError(
-              'Failed to set BlinkStick colors, please check its connection.'
-            );
-          }
         }
-      };
-      await trySetColor(5);
+      }
+    };
+    await trySetColor(5);
   }
 
   public destroy() {
@@ -187,14 +187,14 @@ export default class Blinkstick {
 
   public async writeProperty(property: string, value: any) {
     while (!this.opened) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     this.exposedThing?.writeProperty(property, value);
   }
 
   public async getThingDescription(): Promise<WoT.ThingDescription> {
     while (!this.thing) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
     return this.td;
   }

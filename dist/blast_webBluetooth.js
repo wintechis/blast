@@ -19,7 +19,7 @@ const {dialog} = Blockly;
 
 /**
  * Optional serviceUUIDs to scan for.
- * @type {Array<String>}
+ * @type {Array<BluetoothServiceUUID>}
  * @public
  */
 export const optionalServices = [];
@@ -28,7 +28,7 @@ export const optionalServices = [];
  * Contains block types that require a LE Scan.
  * On runtine, if any of these blocks is in the workspace,
  * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
- * @type {Array<string>}
+ * @type {Array<Blockly.Blocky.type>}
  * @public
  */
 export const scanBlocks = [];
@@ -93,11 +93,8 @@ const hexStringToArrayBuffer = function (hexString) {
 
 /**
  * Pairs a Bluetooth device.
- * @param {Object} options An object that sets options for the device request.
- * @param {Array<BluetoothScanFilters>} options.filters An array of BluetoothScanFilters.
- * @param {boolean} options.optionalServices An array of BluetoothServiceUUIDs.
- * @param {boolean} [options.acceptAllDevices=false] whether script accepts all Bluetooth devices.
- * @param {string=} deviceName optional, name of the device to pair.
+ * @param {RequestDeviceOptions} options An object that sets options for the device request.
+ * @param {string=} deviceName optional, optional, user-defined name for the device to pair..
  * @return {Promise<BluetoothDevice>} A Promise to a BluetoothDevice object.
  */
 export const requestDevice = async function (options, deviceName) {
@@ -129,7 +126,7 @@ setWebBluetoothButtonHandler(requestDevice);
 
 /**
  * Returns a paired bluetooth device by their id.
- * @param {string} id identifier of the device to get.
+ * @param {BluetoothDevice.id} id identifier of the device to get.
  * @returns {BluetoothDevice} the bluetooth device with id.
  */
 const getDeviceById = async function (id) {
@@ -144,7 +141,7 @@ const getDeviceById = async function (id) {
 
 /**
  * Sends a connect command.
- * @param {string} id identifier of the device to connect to.
+ * @param {BluetoothDevice.id} id identifier of the device to connect to.
  * @return {Promise<Object>} representation of the complete request with response.
  */
 const connect = async function (id) {
@@ -163,7 +160,7 @@ const connect = async function (id) {
 
 /**
  * Sends a disconnect command.
- * @param {string} id identifier of the device to disconnect from.
+ * @param {BluetoothDevice.id} id identifier of the device to disconnect from.
  * @param {number} sleep time in ms to wait after command, defaults to 0.
  * @return {Promise<Object>} representation of the complete request with response.
  */
@@ -184,7 +181,7 @@ const disconnect = async function (id) {
 
 /**
  * Writes data to Bluetooth device using the gatt protocol.
- * @param {string} id identifier of the device to write to.
+ * @param {BluetoothDevice.id} id identifier of the device to write to.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @param {string} value hex value to write.
@@ -235,11 +232,11 @@ export const writeWithoutResponse = async function (
 
 /**
  * Writes data to Bluetooth device using the gatt protocol.
- * @param {string} id identifier of the device to write to.
+ * @param {BluetoothDevice.id} id identifier of the device to write to.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @param {string} value hex value to write.
- * @return {Promise} representation of the complete request with response.
+ * @returns {Promise} representation of the complete request with response.
  */
 export const writeWithResponse = async function (
   id,
@@ -287,8 +284,8 @@ export const writeWithResponse = async function (
 /**
  * Returns a promise to the primary BluetoothRemoteGATTService offered by
  * the bluetooth device for a specified BluetoothServiceUUID.
- * @param {string} id identifier of the device to get the service from.
- * @param {ServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothDevice.id} id identifier of the device to get the service from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @returns {Promise<BluetoothRemoteGATT>} A BluetoothRemoteGATTService object.
  */
 const getPrimaryService = async function (id, serviceUUID) {
@@ -318,9 +315,9 @@ const getPrimaryService = async function (id, serviceUUID) {
  * Returns a promise to the BluetoothRemoteGATTCharacteristic offered by
  * the bluetooth device for a specified BluetoothServiceUUID and
  * BluetoothCharacteristicUUID.
- * @param {string} id identifier of the device to get the characteristic from.
- * @param {ServiceUUID} serviceUUID identifier of the service.
- * @param {CharacteristicUUID} characteristicUUID identifier of the characteristic.
+ * @param {BluetoothDevice.id} id identifier of the device to get the characteristic from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @returns {Promise<BluetoothRemoteGATTCharacteristic>} A BluetoothRemoteGATTCharacteristic object.
  */
 const getCharacteristic = async function (id, serviceUUID, characteristicUUID) {
@@ -351,7 +348,7 @@ const getCharacteristic = async function (id, serviceUUID, characteristicUUID) {
 
 /**
  * Reads data from Bluetooth device using the gatt protocol.
- * @param {string} id identifier of the device to read from.
+ * @param {BluetoothDevice.id} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @return {Promise} representation of the complete request with response.
@@ -387,7 +384,7 @@ export const read = async function (id, serviceUUID, characteristicUUID) {
 
 /**
  * Reads a text (UTF-8) characteristic value from a Bluetooth device.
- * @param {string} id identifier of the device to read from.
+ * @param {BluetoothDevice.id} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @return {string} the value of the characteristic.
@@ -401,7 +398,7 @@ export const readText = async function (id, serviceUUID, characteristicUUID) {
 
 /**
  * Reads a nummerical characteristic value from a Bluetooth device.
- * @param {string} id identifier of the device to read from.
+ * @param {BluetoothDevice.id} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @returns {number} the value of the characteristic.
@@ -421,8 +418,9 @@ export const readNumber = async function (id, serviceUUID, characteristicUUID) {
   return result;
 };
 
-/** Reads a hexadecimal characteristic value from a Bluetooth device.
- * @param {string} id identifier of the device to read from.
+/**
+ * Reads a hexadecimal characteristic value from a Bluetooth device.
+ * @param {BluetoothDevice.id} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @returns {string} the value of the characteristic.
@@ -438,7 +436,7 @@ export const readHex = async function (id, serviceUUID, characteristicUUID) {
 
 /**
  * Subscribes to a Bluetooth characteristic and adds an event listener.
- * @param {string} id identifier of the device to read from.
+ * @param {BluetoothDevice.id} id identifier of the device to read from.
  * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
  * @param {BluetoothCharacteristicUUID} charUUID identifier of the characteristic.
  * @param {Function} handler handler to register for notifications.
@@ -479,8 +477,8 @@ export const subscribe = async function (id, serviceUUID, charUUID, handler) {
   }
 };
 
-/** Start the LE Scan.
- * public
+/**
+ * Starts an LE Scan for 30 seconds.
  */
 export const startLEScan = async function () {
   // If the LE Scan is already running, do nothing.
@@ -507,7 +505,7 @@ export const startLEScan = async function () {
  * Stops the BLE Scan.
  * @public
  */
-export const stopLEScan = function () {
+const stopLEScan = function () {
   if (isLEScanRunning) {
     const thingsLog = getThingsLog();
     thingsLog('Stopping LE Scan', 'Bluetooth');

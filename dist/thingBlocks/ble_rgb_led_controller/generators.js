@@ -8,10 +8,11 @@
 'use strict';
 
 import Blockly from 'blockly';
+// eslint-disable-next-line node/no-missing-import
+import BleRgbController from './../../things/BleRgbController/BleRgbController.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {optionalServices} from './../../blast_webBluetooth.js';
 import {throwError} from './../../blast_interpreter.js';
-import {writeWithoutResponse} from './../../blast_webBluetooth.js';
 
 /**
  * Generates JavaScript code for the switch_lights_RGB block.
@@ -54,10 +55,8 @@ const switchLights = async function (mac, colour, callback) {
     return;
   }
 
-  const value = '7e000503' + colour.substring(1, 7) + '00ef';
-
-  const characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
-  await writeWithoutResponse(mac, LEDServiceUUID, characteristicUUID, value);
+  const thing = new BleRgbController(mac);
+  await thing.writeProperty('colour', colour);
   callback();
 };
 // Add switchLights function to the interpreter's API.

@@ -57,6 +57,7 @@
     "@elgato-stream-deck/webhid": "^5.2.0",
     "@inrupt/solid-client": "^1.19.0",
     "@node-wot/core": "^0.7.8",
+    "@types/web-bluetooth": "^0.0.13",
     "blockly": "7.20211209.3",
     "file-saver": "^2.0.5",
     "joy-con-webhid": "^0.2.0",

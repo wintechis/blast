@@ -10,11 +10,8 @@
 import Blockly from 'blockly';
 // eslint-disable-next-line node/no-missing-import
 import Blinkstick from './../../things/blinkstick/Blinkstick.js';
-import {getThingsLog} from './../../blast_things.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
-
-const thingsLog = getThingsLog();
 
 Blockly.JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
