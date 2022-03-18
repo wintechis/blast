@@ -322,6 +322,7 @@ export const resetInterpreter = function () {
 export const stopJS = function () {
   resetInterpreter();
   setStatus(statusValues.STOPPED);
+  stdInfo('execution stopped');
 };
 
 /**
