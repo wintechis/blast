@@ -42477,7 +42477,7 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_write_forget_flag = {
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(255);
+    this.setColour(0);
     this.setTooltip('forget all values of the currently selected algorithm');
     this.setHelpUrl('');
   },
@@ -42507,15 +42507,15 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 `;
 
 // Add the huskylens_write_forget_flag block to the toolbox.
-(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_write_forget_flag', 'Properties', HUSKYLENS_FORGET_FLAG_XML);
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_write_forget_flag', 'Actions', HUSKYLENS_FORGET_FLAG_XML);
 
 
 blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_id = {
   init: function() {
     this.appendValueInput('Thing')
         .setCheck('Thing')
-        .appendField('read ID property of HuskyDuino');
-    this.setOutput(true, 'String');
+        .appendField('read ID property of object(s) in HuskyDuino');
+    this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip('returns up to 5 IDs of the objects currently visible to the HuskyLens');
     this.setHelpUrl('');
@@ -42538,6 +42538,34 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_id = {
 (0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_read_id', 'Properties');
 
 
+blockly__WEBPACK_IMPORTED_MODULE_0__.Blocks.huskylens_read_location = {
+  init: function() {
+    this.appendValueInput('Thing')
+        .setCheck('Thing')
+        .appendField('read location property of one object in HuskyDuino');
+    this.setOutput(true, 'Array');
+    this.setColour(255);
+    this.setTooltip('returns ID and location of one object visible to the HuskyLens');
+    this.setHelpUrl('');
+  },
+
+  onchange: function() {
+    // on creating this block check webBluetooth availability.
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        blockly__WEBPACK_IMPORTED_MODULE_0__.dialog.alert(`Webbluetooth is not supported by this browser.\n
+                Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+
+// Add the huskylens_read_location block to the toolbox.
+(0,_blast_toolbox_js__WEBPACK_IMPORTED_MODULE_1__.addBlock)('huskylens_read_location', 'Properties');
+
+
 /***/ }),
 
 /***/ "../../src/things/huskyduino/generators.js":
@@ -42557,6 +42585,7 @@ __webpack_require__.r(__webpack_exports__);
  * @author yongxu.ren1996@gmail.com
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
+
 
 
 
@@ -42656,12 +42685,26 @@ blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.huskylens_read_id = function(blo
       blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_ATOMIC);
   
   // Assemble JavaScript into code variable.
-  const code = `readID(${thing})`;
-  // Return code.
-  return [code, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+  const str = `readID(${thing})`;
+  return [str, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
 };
 
 
+/**
+ * Generate JavaScript code for the huskylens_read_id block.
+ * @param {Blockly.Block} block the huskylens_read_id block
+ * @returns {String} the generated JavaScript code
+ */
+blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.huskylens_read_location = function(block) {
+  const thing = blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.valueToCode(
+      block,
+      'Thing',
+      blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_ATOMIC);
+  
+  // Assemble JavaScript into code variable.
+  const str = `readLoc(${thing})`;
+  return [str, blockly__WEBPACK_IMPORTED_MODULE_0__.JavaScript.ORDER_NONE];
+};
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
 _blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_2__.optionalServices.push(HuskyServiceUUID);
@@ -42728,23 +42771,82 @@ const forgetAll = async function(thing, flag, callback) {
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
- * read the face IDs of all known faces currently visible to the camera via bluetooth.
+ * read the IDs of all known objects currently visible to the camera via bluetooth.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array} contains all known IDs currently visible to the camera.
  */
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
 
-  const id = await (0,_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_2__.readText)(
+  const str = await (0,_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_2__.readText)(
       thing,
       HuskyServiceUUID,
       characteristicUUID,
   );
-  callback(id);
+  if (str[0] == '[') {
+    const arr = JSON.parse(str);
+    // output is all non 0 element in the array
+    const outArr = [];
+    arr.forEach((item) => {
+      if (item != 0) {
+        outArr.push(parseInt(item));
+      }
+    });
+    if (outArr.length == 0) {
+      (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+    }
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else if (str[0] == 0) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
+    const loc = str.indexOf('(');
+    const id = parseInt(str.slice(0, loc));
+    const outArr = [id];
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
+  }
 };
 
 _blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['readID', readID]);
+
+/**
+ * read the ID and its x y location on display of the object currently visible to the camera.
+ * @param {String} thing identifier of the Huskyduino.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {Array} contains ID and location of the object currently visible to the camera.
+ */
+const readLoc = async function(thing, callback) {
+  const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
+
+  const str = await (0,_blast_webBluetooth_js__WEBPACK_IMPORTED_MODULE_2__.readText)(
+      thing,
+      HuskyServiceUUID,
+      characteristicUUID,
+  );
+  if (str[0] == '[') {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('Recognized Multi Objs');
+  } else if (str[0] == 0) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
+    const loc1 = str.indexOf('(');
+    const loc2 = str.indexOf(',');
+    const loc3 = str.indexOf(')');
+    const id = parseInt(str.slice(0, loc1));
+    const x = parseInt(str.slice(loc1 + 1, loc2));
+    const y = parseInt(str.slice(loc2 + 1, loc3));
+    const outArr = [id, x, y];
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
+  }
+};
+
+_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.asyncApiFunctions.push(['readLoc', readLoc]);
 
 
 /***/ }),
