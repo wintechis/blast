@@ -195,7 +195,7 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
  * read the IDs of all known objects currently visible to the camera via bluetooth.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {Array} contains all known IDs currently visible to the camera.
+ * @returns {Array<Number>} contains all known IDs currently visible to the camera.
  */
 const readID = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
@@ -238,7 +238,7 @@ asyncApiFunctions.push(['readID', readID]);
  * read the ID and its x y location on display of the object currently visible to the camera.
  * @param {String} thing identifier of the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {Array} contains ID and location of the object currently visible to the camera.
+ * @returns {Array<Number>} contains ID and location of the object currently visible to the camera.
  */
 const readLoc = async function(thing, callback) {
   const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
