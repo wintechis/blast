@@ -13,7 +13,7 @@ import {optionalServices} from './../../blast_webBluetooth.js';
 import {readText} from './../../blast_webBluetooth.js';
 import {writeWithoutResponse} from './../../blast_webBluetooth.js';
 import {throwError} from './../../blast_interpreter.js';
-
+import {getInterpreter} from './../../blast_interpreter.js';
 
 /**
  * Generate JavaScript code of the huskylens_choose_algo block.
@@ -110,8 +110,8 @@ Blockly.JavaScript['huskylens_read_id'] = function(block) {
 
 
 /**
- * Generate JavaScript code for the huskylens_read_id block.
- * @param {Blockly.Block} block the huskylens_read_id block
+ * Generate JavaScript code for the huskylens_read_location block.
+ * @param {Blockly.Block} block the huskylens_read_location block
  * @returns {String} the generated JavaScript code
  */
 Blockly.JavaScript['huskylens_read_location'] = function(block) {
@@ -124,6 +124,8 @@ Blockly.JavaScript['huskylens_read_location'] = function(block) {
   const str = `readLoc(${thing})`;
   return [str, Blockly.JavaScript.ORDER_NONE];
 };
+
+
 // set the service UUID here， for all characteristics
 const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
 optionalServices.push(HuskyServiceUUID);
@@ -215,14 +217,16 @@ const readID = async function(thing, callback) {
     if (outArr.length == 0) {
       throwError('No Recognized Obj');
     }
-    callback(outArr);
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else if (str[0] == 0) {
     throwError('No Recognized Obj');
   } else if (str[0] >= 1 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
     const outArr = [id];
-    callback(outArr);
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else {
     throwError(str);
   }
@@ -256,7 +260,8 @@ const readLoc = async function(thing, callback) {
     const x = parseInt(str.slice(loc1 + 1, loc2));
     const y = parseInt(str.slice(loc2 + 1, loc3));
     const outArr = [id, x, y];
-    callback(outArr);
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else {
     throwError(str);
   }

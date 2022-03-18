@@ -42793,18 +42793,19 @@ const readID = async function(thing, callback) {
         outArr.push(parseInt(item));
       }
     });
-    console.log(outArr.length);
     if (outArr.length == 0) {
       (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
     }
-    callback(outArr);
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else if (str[0] == 0) {
     (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
   } else if (str[0] >= 1 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
     const outArr = [id];
-    callback(outArr);
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else {
     (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
   }
@@ -42838,7 +42839,8 @@ const readLoc = async function(thing, callback) {
     const x = parseInt(str.slice(loc1 + 1, loc2));
     const y = parseInt(str.slice(loc2 + 1, loc3));
     const outArr = [id, x, y];
-    callback(outArr);
+    const pseudoArr = (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.getInterpreter)().nativeToPseudo(outArr);
+    callback(pseudoArr);
   } else {
     (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)(str);
   }
