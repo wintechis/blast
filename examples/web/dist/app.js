@@ -42793,8 +42793,14 @@ const readID = async function(thing, callback) {
         outArr.push(parseInt(item));
       }
     });
+    console.log(outArr.length);
+    if (outArr.length == 0) {
+      (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+    }
     callback(outArr);
-  } else if (str[0] >= 0 && str[0] <= 9) {
+  } else if (str[0] == 0) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
     const outArr = [id];
@@ -42821,8 +42827,10 @@ const readLoc = async function(thing, callback) {
       characteristicUUID,
   );
   if (str[0] == '[') {
-    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('Multi Objs Recognized');
-  } else if (str[0] >= 0 && str[0] <= 9) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('Recognized Multi Objs');
+  } else if (str[0] == 0) {
+    (0,_blast_interpreter_js__WEBPACK_IMPORTED_MODULE_1__.throwError)('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
     const loc1 = str.indexOf('(');
     const loc2 = str.indexOf(',');
     const loc3 = str.indexOf(')');
