@@ -7,6 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+// eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 
 const {Events, JavaScript, selected} = Blockly;

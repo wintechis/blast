@@ -6,6 +6,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+// eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {apiFunctions} from './blast_interpreter.js';
 import {getInterpreter} from './blast_interpreter.js';

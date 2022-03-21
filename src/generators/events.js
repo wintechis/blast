@@ -16,6 +16,7 @@ import {
   setInterrupted,
   throwError,
 } from './../blast_interpreter.js';
+// eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {addEventCode} from './../blast_states_interpreter.js';
 import {getDefinition} from './../blast_states.js';
