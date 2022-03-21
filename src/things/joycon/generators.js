@@ -7,6 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import Interpreter from 'js-interpreter';
 import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
 import {apiFunctions} from './../../blast_interpreter.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';

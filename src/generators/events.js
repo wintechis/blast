@@ -8,6 +8,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import Interpreter from 'js-interpreter';
 import {apiFunctions} from './../blast_interpreter.js';
 import {addEventCode} from './../blast_states_interpreter.js';
 import {getDefinition} from './../blast_states.js';

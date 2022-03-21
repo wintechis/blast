@@ -8,6 +8,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import Interpreter from 'js-interpreter';
 import * as Buffer from 'buffer';
 import StreamDeck from '@elgato-stream-deck/webhid';
 import {addCleanUpFunction} from './../../blast_interpreter.js';

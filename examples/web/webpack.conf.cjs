@@ -11,15 +11,6 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
   },
-  module: {
-    rules: [
-      {
-        test: require.resolve('../../lib/js-interpreter/acorn_interpreter.js'),
-        use:
-            'exports-loader?type=commonjs&exports=Interpreter',
-      },
-    ],
-  },
   mode: 'development',
   plugins: [
     new ProvidePlugin({

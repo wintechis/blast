@@ -1214,6 +1214,11 @@ acorn@^7.1.0, acorn@^7.4.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.1.tgz#feaed255973d2e77555b83dbc08851a6c63520fa"
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
+acorn@^8.7.0:
+  version "8.7.0"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.7.0.tgz#90951fde0f8f09df93549481e5fc141445b791cf"
+  integrity sha512-V/LGr1APy+PXIwKebEWrkZPwoeoF+w1jiOBUmuxuiUIaOHtob8Qc9BTrYo7VuI5fR8tqsy+buA2WFooR5olqvQ==
+
 aggregate-error@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/aggregate-error/-/aggregate-error-3.1.0.tgz#92670ff50f5359bdb7a3e0d40d0ec30c5737687a"
@@ -4030,17 +4035,11 @@ jest-worker@^26.2.1:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-js-interpreter-npm@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/js-interpreter-npm/-/js-interpreter-npm-1.0.6.tgz#913bd9ea1128bee5ad3c5cde9ae5cee31d372c42"
-  integrity sha512-u7Cpj4Yuwrn4DgjCubD9rVdBRVjK6scY2jp8kCwilazxpPB9cTIDkPybIkYJzQ9JEbUtsdxjQGL1w91cabDWYg==
-
-js-interpreter@^2.3.1:
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/js-interpreter/-/js-interpreter-2.3.1.tgz#6e7137a2e9f2f9d19ddb303d596219d432c52b93"
-  integrity sha512-zqs0+W/9MqJGchXTkKLcsiNxF5i7dxH3r5aNlYCgt17WjBbRZu+x0WBG5yUAnewVq3tKnWUkibsQXuJGWt9bUw==
+"js-interpreter@https://github.com/derwehr/js-interpreter.git":
+  version "0.0.1"
+  resolved "https://github.com/derwehr/js-interpreter.git#b5d8b2fe2b928b8ed77466c2bec5e85659a6d67b"
   dependencies:
-    minimist "^1.2.0"
+    acorn "^8.7.0"
 
 js-tokens@^4.0.0:
   version "4.0.0"
@@ -6662,9 +6661,9 @@ update-notifier@^4.1.0:
     semver-diff "^3.1.1"
     xdg-basedir "^4.0.0"
 
-"urdf@git://github.com/derwehr/uRDF.js.git":
+"urdf@https://github.com/derwehr/uRDF.js.git":
   version "0.1.0"
-  resolved "git://github.com/derwehr/uRDF.js.git#b51057441beedf48fbffb821adeaa2906fa448e7"
+  resolved "https://github.com/derwehr/uRDF.js.git#b51057441beedf48fbffb821adeaa2906fa448e7"
   dependencies:
     arg "4.1.x"
     jsonld "1.5.x"

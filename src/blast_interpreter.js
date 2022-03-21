@@ -8,6 +8,7 @@
 
 import Blockly from 'blockly';
 import fs from 'fs';
+import Interpreter from 'js-interpreter';
 
 /**
  * Instance of the JS Interpreter.
