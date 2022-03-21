@@ -1360,6 +1360,7 @@ __metadata:
     file-saver: ^2.0.5
     gts: ^3.1.0
     joy-con-webhid: ^0.2.0
+    js-interpreter: "https://github.com/derwehr/js-interpreter.git"
     jsdoc: ^3.6.7
     mocha: ^9.2.2
     prettier: ^2.5.1
@@ -3506,6 +3507,15 @@ __metadata:
   dependencies:
     ahrs: ^1.2.3
   checksum: e5b4938156f5d513c15fd446fc4680fb0f98063078dc45398172740caad28bd61c1c7a346d14d67a8a60541c79fc74893516a2d9ace84aed9d8e30e54cd05d7f
+  languageName: node
+  linkType: hard
+
+"js-interpreter@https://github.com/derwehr/js-interpreter.git":
+  version: 0.0.1
+  resolution: "js-interpreter@https://github.com/derwehr/js-interpreter.git#commit=b5d8b2fe2b928b8ed77466c2bec5e85659a6d67b"
+  dependencies:
+    acorn: ^8.7.0
+  checksum: b8b986b01de217038d1b3eed710cd0f9071746e231d8b0eb30475bb84d63ac5c247be1b0781675a05cf0c1a5cb63429702d72db9cd256a8bd94f649ee2dbf243
   languageName: node
   linkType: hard
 

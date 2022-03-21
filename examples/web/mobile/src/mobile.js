@@ -1,6 +1,6 @@
 'use strict';
 
-import {apiFunctions, generateCode, getStdInfo, getWorkspace, initInterpreter, setWorkspace, statusValues, throwError} from '../../../../src/blast_interpreter.js';
+import {apiFunctions, generateCode, getStdInfo, getWorkspace, setWorkspace, statusValues, throwError} from '../../../../src/blast_interpreter.js';
 import {initStatesInterpreter} from '../../../../src/blast_states_interpreter.js';
 import {load, loadXML} from '../../../../src/blast_storage.js';
 import {setFileSelector, setMessageOutputContainer, setRunButton, setStatus, setStatusContainer} from '../../src/web.js';

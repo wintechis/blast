@@ -7,6 +7,7 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
+import Interpreter from 'js-interpreter';
 // eslint-disable-next-line node/no-missing-import
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import

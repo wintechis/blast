@@ -16,6 +16,7 @@ import {
   setInterrupted,
   throwError,
 } from './../blast_interpreter.js';
+import Interpreter from 'js-interpreter';
 import {addEventCode} from './../blast_states_interpreter.js';
 import {getDefinition} from './../blast_states.js';
 

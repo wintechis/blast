@@ -17,29 +17,6 @@ module.exports = {
     },
     globalObject: 'this',
   },
-  module: {
-    parser: {
-      javascript: {
-        commonjsMagicComments: true,
-      },
-    },
-    rules: [
-      {
-        test: require.resolve('../../lib/js-interpreter/acorn_interpreter.js'),
-        use:
-            'exports-loader?type=commonjs&exports=Interpreter',
-      },
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.jsontd?$/,
-        type: 'asset/source',
-      },
-    ],
-  },
   mode: 'development',
   plugins: [
     new ProvidePlugin({

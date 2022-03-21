@@ -8,6 +8,8 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
+// eslint-disable-next-line node/no-unpublished-import
+import Interpreter from 'js-interpreter';
 import {addCleanUpFunction} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
 import {apiFunctions} from './../../blast_interpreter.js';

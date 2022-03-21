@@ -6,6 +6,8 @@
 'use strict';
 
 import Blockly from 'blockly';
+// eslint-disable-next-line node/no-unpublished-import
+import Interpreter from 'js-interpreter';
 import {apiFunctions} from './blast_interpreter.js';
 import {getInterpreter} from './blast_interpreter.js';
 import {onStatusChange} from './blast_interpreter.js';
@@ -93,7 +95,6 @@ const startEventChecker = function () {
 
   // Initiate States interpreter.
   stateInterpreter = new Interpreter('');
-  console.log(stateInterpreter);
   stateInterpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
   stateInterpreter.appendCode(latestCode);
 
