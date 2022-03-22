@@ -7,7 +7,8 @@
 'use strict';
 
 import Blockly from 'blockly';
-import urdf from 'urdf';
+// eslint-disable-next-line node/no-missing-import
+import URdfService from '../../things/urdf/URdfService.js';
 import {
   apiFunctions,
   asyncApiFunctions,
@@ -141,34 +142,16 @@ JavaScript['sparql_ask'] = function (block) {
 
 /**
  * Wrapper for urdf's query function.
- * @param {String} uri URI to query.
+ * @param {String} ressource URI to query.
  * @param {String} format format of the resource to query
  * @param {String} query Query to execute.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const urdfQueryWrapper = async function (uri, format, query, callback) {
-  let res;
-
-  try {
-    res = await fetch(uri);
-
-    if (!res.ok) {
-      throwError(
-        `Failed to get ${uri}, Error: ${res.status} ${res.statusText}`
-      );
-      return;
-    }
-
-    const response = await res.text();
-
-    urdf.clear();
-    const opts = {format: format};
-    await urdf.load(response, opts);
-    res = await urdf.query(query);
-  } catch (error) {
-    throwError(`Failed to get ${uri}, Error: ${error.message}`);
-  }
+const urdfQueryWrapper = async function (ressource, format, query, callback) {
+  const service = new URdfService();
+  const parameters = {query, format, ressource};
+  const res = await service.invokeAction('runSparqlQuery', parameters);
 
   // if result is a boolean, return it.
   if (typeof res === 'boolean') {
