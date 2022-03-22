@@ -9,7 +9,7 @@
 
 import Blockly from 'blockly';
 // eslint-disable-next-line node/no-missing-import
-import BleRgbController from './../../things/BleRgbController/BleRgbController.js';
+import BleRgbController from './../../things/bleRgbController/BleRgbController.js';
 import {asyncApiFunctions} from './../../blast_interpreter.js';
 import {optionalServices} from './../../blast_webBluetooth.js';
 import {throwError} from './../../blast_interpreter.js';
