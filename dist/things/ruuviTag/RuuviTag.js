@@ -340,8 +340,10 @@ export default class RuuviTag {
         this.exposedThing.subscribeEvent(eventName, fn);
     }
     async registerEventListeners() {
-        var _a, _b;
-        (_a = this.device) === null || _a === void 0 ? void 0 : _a.addEventListener('advertisementreceived', (event) => {
+        while (!this.device) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.device.addEventListener('advertisementreceived', (event) => {
             const data = event.manufacturerData.get(0x0499);
             if (data) {
                 const buffer = Buffer.from(data.buffer);
@@ -356,7 +358,7 @@ export default class RuuviTag {
                 }
             }
         });
-        await ((_b = this.device) === null || _b === void 0 ? void 0 : _b.watchAdvertisements());
+        await this.device.watchAdvertisements();
     }
     destroy() {
         var _a;

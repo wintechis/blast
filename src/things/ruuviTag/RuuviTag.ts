@@ -419,7 +419,10 @@ export default class RuuviTag {
   }
 
   private async registerEventListeners() {
-    this.device?.addEventListener(
+    while (!this.device) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    this.device.addEventListener(
       'advertisementreceived',
       (event: BluetoothAdvertisingEvent) => {
         const data = event.manufacturerData.get(0x0499);
@@ -437,7 +440,7 @@ export default class RuuviTag {
         }
       }
     );
-    await this.device?.watchAdvertisements();
+    await this.device.watchAdvertisements();
   }
 
   public destroy() {
