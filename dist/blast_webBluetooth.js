@@ -129,7 +129,7 @@ setWebBluetoothButtonHandler(requestDevice);
  * @param {BluetoothDevice.id} id identifier of the device to get.
  * @returns {BluetoothDevice} the bluetooth device with id.
  */
-const getDeviceById = async function (id) {
+export const getDeviceById = async function (id) {
   const devices = await navigator.bluetooth.getDevices();
   for (const device of devices) {
     if (device.id === id) {

@@ -550,10 +550,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web-bluetooth@npm:^0.0.13":
-  version: 0.0.13
-  resolution: "@types/web-bluetooth@npm:0.0.13"
-  checksum: b1cbd7f5caeb836753ad0043bc2dab6aa307d0f9b41990cb2a434c7adc76348cd104f1ebcecead410e8190072ee4b819f010e2033d1dfb996a48b10559c71c54
+"@types/web-bluetooth@npm:^0.0.14":
+  version: 0.0.14
+  resolution: "@types/web-bluetooth@npm:0.0.14"
+  checksum: 1eb694ff2ba6ef239e10024bfb205c087fb1a43aa8b4a31f3a3b7c90eccf2f55c7fb4c1057e382e1c2f4d6d8a137e68bf1255790b980c5ac95026419a623c6b5
   languageName: node
   linkType: hard
 
@@ -1345,7 +1345,7 @@ __metadata:
     "@inrupt/solid-client": ^1.19.0
     "@node-wot/core": ^0.7.8
     "@types/node": ^14.11.2
-    "@types/web-bluetooth": ^0.0.13
+    "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
     blockly: 7.20211209.3

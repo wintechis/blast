@@ -2,7 +2,7 @@ import {ExposedThing} from '@node-wot/core';
 import {values} from 'utils/object';
 import * as WoT from 'wot-typescript-definitions';
 import {throwError} from '../../blast_interpreter.js';
-import {LEScanResults, startLEScan} from '../../blast_webBluetooth.js';
+import {getDeviceById} from '../../blast_webBluetooth.js';
 import {getThing, removeThing} from '../index.js';
 
 interface RuuviDataV3 {
@@ -33,6 +33,7 @@ export default class RuuviTag {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private webBluetoothId: string;
+  private device: BluetoothDevice | null = null;
   private td: WoT.ThingDescription;
 
   public thingModel: WoT.ThingDescription = {
@@ -48,163 +49,165 @@ export default class RuuviTag {
       },
     },
     security: 'nosec_sc',
-    properties: {
+    events: {
       ruuviDataV3: {
         title: 'Ruuvi Data V3',
         description: 'The RuuviTag data in version 3 format',
-        type: 'object',
-        properties: {
-          accelerationX: {
-            description: 'Acceleration in X axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
-          },
-          accelerationY: {
-            description: 'Acceleration in Y axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
-          },
-          accelerationZ: {
-            description: 'Acceleration in Z axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
-          },
-          battery: {
-            description: 'Battery level in %',
-            type: 'number',
-            readOnly: true,
-            unit: '%',
-            minimum: 0,
-            maximum: 100,
-            multipleOf: 0.1,
-          },
-          humidity: {
-            description: 'Relative humidity in %',
-            type: 'number',
-            readOnly: true,
-            unit: '%',
-            minimum: 0,
-            maximum: 100,
-            multipleOf: 0.1,
-          },
-          pressure: {
-            description: 'Air pressure in hPa',
-            type: 'number',
-            readOnly: true,
-            unit: 'hPa',
-            minimum: 300,
-            maximum: 1100,
-            multipleOf: 0.1,
-          },
-          temperature: {
-            description: 'Temperature in Celsius',
-            type: 'number',
-            readOnly: true,
-            unit: '°C',
-            minimum: -40,
-            maximum: 80,
-            multipleOf: 0.1,
+        data: {
+          type: 'object',
+          properties: {
+            accelerationX: {
+              description: 'Acceleration in X axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            accelerationY: {
+              description: 'Acceleration in Y axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            accelerationZ: {
+              description: 'Acceleration in Z axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            battery: {
+              description: 'Battery level in %',
+              type: 'number',
+              readOnly: true,
+              unit: '%',
+              minimum: 0,
+              maximum: 100,
+              multipleOf: 0.1,
+            },
+            humidity: {
+              description: 'Relative humidity in %',
+              type: 'number',
+              readOnly: true,
+              unit: '%',
+              minimum: 0,
+              maximum: 100,
+              multipleOf: 0.1,
+            },
+            pressure: {
+              description: 'Air pressure in hPa',
+              type: 'number',
+              readOnly: true,
+              unit: 'hPa',
+              minimum: 300,
+              maximum: 1100,
+              multipleOf: 0.1,
+            },
+            temperature: {
+              description: 'Temperature in Celsius',
+              type: 'number',
+              readOnly: true,
+              unit: '°C',
+              minimum: -40,
+              maximum: 80,
+              multipleOf: 0.1,
+            },
           },
         },
-        readonly: true,
       },
       ruuviDataV5: {
         title: 'Ruuvi Data V5',
         description: 'The RuuviTag data in version 5 format',
-        type: 'object',
-        properties: {
-          accelerationX: {
-            description: 'Acceleration in X axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
+        data: {
+          type: 'object',
+          properties: {
+            accelerationX: {
+              description: 'Acceleration in X axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            accelerationY: {
+              description: 'Acceleration in Y axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            accelerationZ: {
+              description: 'Acceleration in Z axis',
+              type: 'number',
+              readOnly: true,
+              unit: 'g',
+              multipleOf: 0.1,
+            },
+            battery: {
+              description: 'Battery level in %',
+              type: 'number',
+              readOnly: true,
+              unit: '%',
+              minimum: 0,
+              maximum: 100,
+              multipleOf: 0.1,
+            },
+            humidity: {
+              description: 'Relative humidity in %',
+              type: 'number',
+              readOnly: true,
+              unit: '%',
+              minimum: 0,
+              maximum: 100,
+              multipleOf: 0.1,
+            },
+            pressure: {
+              description: 'Air pressure in hPa',
+              type: 'number',
+              readOnly: true,
+              unit: 'hPa',
+              minimum: 300,
+              maximum: 1100,
+              multipleOf: 0.1,
+            },
+            temperature: {
+              description: 'Temperature in Celsius',
+              type: 'number',
+              readOnly: true,
+              unit: '°C',
+              minimum: -40,
+              maximum: 80,
+              multipleOf: 0.1,
+            },
+            txPower: {
+              description: 'Transmission power in dBm',
+              type: 'number',
+              readOnly: true,
+              unit: 'dBm',
+              minimum: -100,
+              maximum: 20,
+              multipleOf: 0.1,
+            },
+            movementCounter: {
+              description: 'Movement counter',
+              type: 'number',
+              readOnly: true,
+              minimum: 0,
+              multipleOf: 1,
+            },
+            measurementSequenceNumber: {
+              description: 'Measurement sequence number',
+              type: 'number',
+              readOnly: true,
+              minimum: 0,
+              multipleOf: 1,
+            },
+            mac: {
+              description: 'MAC address',
+              type: 'string',
+              readOnly: true,
+            },
           },
-          accelerationY: {
-            description: 'Acceleration in Y axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
-          },
-          accelerationZ: {
-            description: 'Acceleration in Z axis',
-            type: 'number',
-            readOnly: true,
-            unit: 'g',
-            multipleOf: 0.1,
-          },
-          battery: {
-            description: 'Battery level in %',
-            type: 'number',
-            readOnly: true,
-            unit: '%',
-            minimum: 0,
-            maximum: 100,
-            multipleOf: 0.1,
-          },
-          humidity: {
-            description: 'Relative humidity in %',
-            type: 'number',
-            readOnly: true,
-            unit: '%',
-            minimum: 0,
-            maximum: 100,
-            multipleOf: 0.1,
-          },
-          pressure: {
-            description: 'Air pressure in hPa',
-            type: 'number',
-            readOnly: true,
-            unit: 'hPa',
-            minimum: 300,
-            maximum: 1100,
-            multipleOf: 0.1,
-          },
-          temperature: {
-            description: 'Temperature in Celsius',
-            type: 'number',
-            readOnly: true,
-            unit: '°C',
-            minimum: -40,
-            maximum: 80,
-            multipleOf: 0.1,
-          },
-          txPower: {
-            description: 'Transmission power in dBm',
-            type: 'number',
-            readOnly: true,
-            unit: 'dBm',
-            minimum: -100,
-            maximum: 20,
-            multipleOf: 0.1,
-          },
-          movementCounter: {
-            description: 'Movement counter',
-            type: 'number',
-            readOnly: true,
-            minimum: 0,
-            multipleOf: 1,
-          },
-          measurementSequenceNumber: {
-            description: 'Measurement sequence number',
-            type: 'number',
-            readOnly: true,
-            minimum: 0,
-            multipleOf: 1,
-          },
-          mac: {
-            description: 'MAC address',
-            type: 'string',
-            readOnly: true,
-          },
-          readOnly: true,
         },
       },
     },
@@ -215,20 +218,10 @@ export default class RuuviTag {
     getThing(this.thingModel).then(thing => {
       this.thing = thing;
       this.td = thing.getThingDescription();
-      this.addPropertyHandlers();
       this.thing.expose();
+      this.device = getDeviceById(this.webBluetoothId);
       this.exposedThing = this.thing as unknown as ExposedThing;
     });
-  }
-
-  private addPropertyHandlers() {
-    const properties = this.thingModel.properties;
-    const propertyKeys = Object.keys(properties);
-    for (const p of propertyKeys) {
-      this.thing?.setPropertyReadHandler(p, () => {
-        return this.getProperty(p as keyof RuuviDataV5);
-      });
-    }
   }
 
   private hexToBytes(hex: string): number[] {
@@ -239,27 +232,7 @@ export default class RuuviTag {
     return bytes;
   }
 
-  private parseData(data: string | Buffer): RuuviDataV3 | RuuviDataV5 {
-    const manufacturerIndex = data.indexOf('FF9904');
-    const rData =
-      typeof data === 'string'
-        ? Buffer.from(
-            this.hexToBytes(data.slice(manufacturerIndex + 2, data.length))
-          )
-        : data;
-    const dataFormat = rData[2];
-
-    switch (dataFormat) {
-      case 3:
-        return this.parseV3(rData);
-      case 5:
-        return this.parseV5(rData);
-      default:
-        throw new Error(`Data format ${dataFormat} not supported.\n ${rData}`);
-    }
-  }
-
-  private parseV3(data: Buffer): RuuviDataV3 {
+  private parseAndEmitV3Event(data: Buffer): void {
     const dataString = data.toString('hex');
 
     const humidityStart = 6;
@@ -330,7 +303,7 @@ export default class RuuviTag {
       16
     ); // milli-g
 
-    return {
+    const parsedData = {
       accelerationX,
       accelerationY,
       accelerationZ,
@@ -339,9 +312,10 @@ export default class RuuviTag {
       pressure,
       temperature,
     };
+    this.exposedThing?.emitEvent('ruuviDataV3', parsedData);
   }
 
-  private parseV5(data: Buffer): RuuviDataV5 {
+  private parseAndEmitV5Event(data: Buffer): void {
     const int2Hex = (str: number) =>
       ('0' + str.toString(16).toUpperCase()).slice(-2);
 
@@ -420,7 +394,7 @@ export default class RuuviTag {
       int2Hex(data[25]),
     ].join(':');
 
-    return {
+    const parsedData = {
       accelerationX,
       accelerationY,
       accelerationZ,
@@ -433,70 +407,37 @@ export default class RuuviTag {
       temperature,
       txPower,
     };
+    this.exposedThing?.emitEvent('ruuviDataV5', parsedData);
   }
 
-  private async getProperty(
-    property: keyof RuuviDataV5 | keyof RuuviDataV3
-  ): Promise<number | string> {
-    const getAdvertisementData = async (
-      tries: number
-    ): Promise<Buffer | undefined> => {
-      const v5OnlyKeys = [
-        'txPower',
-        'movementCounter',
-        'measurementSequenceNumber',
-        'mac',
-      ];
-      if (tries < 30) {
-        const events = LEScanResults[this.webBluetoothId];
-        if (events) {
-          for (const event of events) {
-            const rawData = event.manufacturerData.get(0x0499);
-            if (rawData) {
-              const formatVersion = rawData.getUint8(0);
-              if (
-                formatVersion === 5 ||
-                (formatVersion === 3 && !v5OnlyKeys.includes(property))
-              ) {
-                return rawData.buffer as Buffer;
-              }
-            }
-          }
-        }
-        // no data yet, try again in 500ms
-        return new Promise(resolve => {
-          setTimeout(() => {
-            resolve(getAdvertisementData(tries + 1));
-          }, 500);
-        });
-      }
-      return undefined;
-    };
-    startLEScan();
-    const advertisementData = await getAdvertisementData(0);
-    // if still no event data, return an error
-    if (!advertisementData) {
-      throwError('No BLE advertising data received for ' + this.webBluetoothId);
-      throw new Error('No BLE advertising data received for ' + this.webBluetoothId);
-    }
-    // parse the data
-    const data = await this.parseData(advertisementData);
-    // return the requested property
-    if (typeof data === 'object' && this.hasOwnProperty(data, property) && (typeof data[property] === 'number' || typeof data[property] === 'string')) {
-      return data[property] as number | string;
-    }
-    throw new Error('No BLE advertising data received for ' + this.webBluetoothId);
-  }
-
-  private hasOwnProperty<X extends {}, Y extends PropertyKey>(obj: X, prop: Y): obj is X & Record<Y, unknown> {
-    return Object.prototype.hasOwnProperty(prop);
-  }
-
-  public async readProperty(property: keyof RuuviDataV5 | keyof RuuviDataV3): Promise<number | string | unknown> {
+  public async subscribeEvent(eventName: string, fn: (...args: any[]) => void) {
     while (!this.exposedThing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    return this.exposedThing.readProperty(property);
+    await this.registerEventListeners();
+    this.exposedThing.subscribeEvent(eventName, fn);
+  }
+
+  private async registerEventListeners() {
+    this.device?.addEventListener(
+      'advertisementreceived',
+      (event: BluetoothAdvertisingEvent) => {
+        const data = event.manufacturerData.get(0x0499);
+        if (data) {
+          const buffer = Buffer.from(data.buffer);
+          const formatVersion = data.getUint8(0);
+          switch (formatVersion) {
+            case 3:
+              this.parseAndEmitV3Event(buffer);
+              break;
+            case 5:
+              this.parseAndEmitV5Event(buffer);
+              break;
+          }
+        }
+      }
+    );
+    await this.device?.watchAdvertisements();
   }
 
   public destroy() {
