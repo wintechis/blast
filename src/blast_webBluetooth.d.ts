@@ -33,7 +33,7 @@ export async function requestDevice(
 /**
  * Returns a paired bluetooth device by their id.
  */
-export function getDeviceById(id: string): BluetoothDevice;
+export async function getDeviceById(id: string): Promise<BluetoothDevice>;
 
 /**
  * Writes data to Bluetooth device using the gatt protocol.
