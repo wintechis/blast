@@ -7,7 +7,6 @@ export default class RuuviTag {
     private td;
     thingModel: WoT.ThingDescription;
     constructor(webBluetoothId: string);
-    private hexToBytes;
     private parseAndEmitV3Event;
     private parseAndEmitV5Event;
     subscribeEvent(eventName: string, fn: (...args: any[]) => void): Promise<void>;

@@ -185,16 +185,11 @@ export default class RuuviTag {
             this.thing = thing;
             this.td = thing.getThingDescription();
             this.thing.expose();
-            this.device = getDeviceById(this.webBluetoothId);
             this.exposedThing = this.thing;
         });
-    }
-    hexToBytes(hex) {
-        const bytes = [];
-        for (let c = 0; c < hex.length; c += 2) {
-            bytes.push(parseInt(hex.slice(c, c + 2), 16));
-        }
-        return bytes;
+        getDeviceById(webBluetoothId).then(device => {
+            this.device = device;
+        });
     }
     parseAndEmitV3Event(data) {
         var _a;
@@ -340,10 +335,8 @@ export default class RuuviTag {
         this.exposedThing.subscribeEvent(eventName, fn);
     }
     async registerEventListeners() {
-        while (!this.device) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        this.device.addEventListener('advertisementreceived', (event) => {
+        var _a, _b;
+        (_a = this.device) === null || _a === void 0 ? void 0 : _a.addEventListener('advertisementreceived', (event) => {
             const data = event.manufacturerData.get(0x0499);
             if (data) {
                 const buffer = Buffer.from(data.buffer);
@@ -358,7 +351,7 @@ export default class RuuviTag {
                 }
             }
         });
-        await this.device.watchAdvertisements();
+        await ((_b = this.device) === null || _b === void 0 ? void 0 : _b.watchAdvertisements());
     }
     destroy() {
         var _a;
