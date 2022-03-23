@@ -16,7 +16,7 @@ export const scanBlocks: string[];
  * Contains the results of a LE Scan.
  */
 export let LEScanResults: {
-  [key: BluetoothDevice.id]: BluetoothAdvertisingEvent;
+  [key: string]: Array<BluetoothAdvertisingEvent>;
 };
 
 /**

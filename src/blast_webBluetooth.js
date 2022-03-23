@@ -520,6 +520,7 @@ const stopLEScan = function () {
 const cacheLEScanResults = function () {
   // Cache the results of the scan.
   const handler = function (event) {
+    console.log(event);
     const device = event.device;
     const deviceId = device.id;
     if (!LEScanResults[deviceId]) {
