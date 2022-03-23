@@ -37,8 +37,8 @@ const getRuuviProperty = async function (
   callback
 ) {
   const thing = new RuuviTag(webBluetoothId);
-  const value = await thing.readProperty(measurement);
-  callback(value);
+  const value = await thing.subscribeEvent('ruuviDataV5');
+  callback(value[measurement]);
 };
 
 // add getRuuviProperty function to the interpreter's API.
