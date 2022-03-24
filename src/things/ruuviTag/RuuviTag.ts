@@ -5,7 +5,7 @@ import {throwError} from '../../blast_interpreter.js';
 import {getDeviceById} from '../../blast_webBluetooth.js';
 import {getThing, removeThing} from '../index.js';
 
-interface RuuviDataV3 {
+interface RAWv1 {
   accelerationX?: number;
   accelerationY?: number;
   accelerationZ?: number;
@@ -15,7 +15,7 @@ interface RuuviDataV3 {
   temperature?: number;
 }
 
-interface RuuviDataV5 {
+interface RAWv2 {
   accelerationX?: number;
   accelerationY?: number;
   accelerationZ?: number;
@@ -50,7 +50,7 @@ export default class RuuviTag {
     },
     security: 'nosec_sc',
     events: {
-      ruuviDataV3: {
+      rawv1: {
         title: 'Ruuvi Data V3',
         description: 'The RuuviTag data in version 3 format',
         data: {
@@ -116,7 +116,7 @@ export default class RuuviTag {
           },
         },
       },
-      ruuviDataV5: {
+      rawv2: {
         title: 'Ruuvi Data V5',
         description: 'The RuuviTag data in version 5 format',
         data: {
@@ -226,7 +226,7 @@ export default class RuuviTag {
     });
   }
 
-  private parseAndEmitV3Event(data: Buffer): void {
+  private parseRawV1AndEmitEvent(data: Buffer): void {
     const dataString = data.toString('hex');
 
     const humidityStart = 6;
@@ -306,10 +306,10 @@ export default class RuuviTag {
       pressure,
       temperature,
     };
-    this.exposedThing?.emitEvent('ruuviDataV3', parsedData);
+    this.exposedThing?.emitEvent('rawv1', parsedData);
   }
 
-  private parseAndEmitV5Event(data: Buffer): void {
+  private parseRawV2AndEmitEvent(data: Buffer): void {
     const int2Hex = (str: number) =>
       ('0' + str.toString(16).toUpperCase()).slice(-2);
 
@@ -401,7 +401,7 @@ export default class RuuviTag {
       temperature,
       txPower,
     };
-    this.exposedThing?.emitEvent('ruuviDataV5', parsedData);
+    this.exposedThing?.emitEvent('rawv2', parsedData);
   }
 
   public async subscribeEvent(eventName: string, fn: (...args: any[]) => void) {
@@ -422,10 +422,10 @@ export default class RuuviTag {
           const formatVersion = data.getUint8(0);
           switch (formatVersion) {
             case 3:
-              this.parseAndEmitV3Event(buffer);
+              this.parseRawV1AndEmitEvent(buffer);
               break;
             case 5:
-              this.parseAndEmitV5Event(buffer);
+              this.parseRawV2AndEmitEvent(buffer);
               break;
           }
         }
