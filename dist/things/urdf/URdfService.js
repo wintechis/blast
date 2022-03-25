@@ -60,8 +60,7 @@ export default class URdfService {
         var _a;
         (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setActionHandler('runSparqlQuery', async (parameters) => {
             const { query, format, ressource } = parameters;
-            console.log({ query, format, ressource });
-            return await this.runSparqlQuery(query, format, ressource);
+            return this.runSparqlQuery(query, format, ressource);
         });
     }
     async invokeAction(action, parameters) {

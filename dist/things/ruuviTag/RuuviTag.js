@@ -18,7 +18,7 @@ export default class RuuviTag {
             },
             security: 'nosec_sc',
             events: {
-                ruuviDataV3: {
+                rawv1: {
                     title: 'Ruuvi Data V3',
                     description: 'The RuuviTag data in version 3 format',
                     data: {
@@ -84,7 +84,7 @@ export default class RuuviTag {
                         },
                     },
                 },
-                ruuviDataV5: {
+                rawv2: {
                     title: 'Ruuvi Data V5',
                     description: 'The RuuviTag data in version 5 format',
                     data: {
@@ -191,7 +191,7 @@ export default class RuuviTag {
             this.device = device;
         });
     }
-    parseAndEmitV3Event(data) {
+    parseRawV1AndEmitEvent(data) {
         var _a;
         const dataString = data.toString('hex');
         const humidityStart = 6;
@@ -242,9 +242,9 @@ export default class RuuviTag {
             pressure,
             temperature,
         };
-        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.emitEvent('ruuviDataV3', parsedData);
+        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.emitEvent('rawv1', parsedData);
     }
-    parseAndEmitV5Event(data) {
+    parseRawV2AndEmitEvent(data) {
         var _a;
         const int2Hex = (str) => ('0' + str.toString(16).toUpperCase()).slice(-2);
         let temperature = (data[3] << 8) | (data[4] & 0xff);
@@ -325,7 +325,7 @@ export default class RuuviTag {
             temperature,
             txPower,
         };
-        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.emitEvent('ruuviDataV5', parsedData);
+        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.emitEvent('rawv2', parsedData);
     }
     async subscribeEvent(eventName, fn) {
         while (!this.exposedThing) {
@@ -343,10 +343,10 @@ export default class RuuviTag {
                 const formatVersion = data.getUint8(0);
                 switch (formatVersion) {
                     case 3:
-                        this.parseAndEmitV3Event(buffer);
+                        this.parseRawV1AndEmitEvent(buffer);
                         break;
                     case 5:
-                        this.parseAndEmitV5Event(buffer);
+                        this.parseRawV2AndEmitEvent(buffer);
                         break;
                 }
             }
