@@ -53,9 +53,10 @@ export default class BleRgbController {
         removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
     }
     async writeProperty(property, value) {
-        var _a;
-        await new Promise(resolve => setTimeout(resolve, 100));
-        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.writeProperty(property, value);
+        while (!this.exposedThing) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        this.exposedThing.writeProperty(property, value);
     }
     async getThingDescription() {
         while (!this.thing) {

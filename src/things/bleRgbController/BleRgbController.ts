@@ -70,8 +70,10 @@ export default class BleRgbController {
   }
 
   public async writeProperty(property: string, value: any) {
-    await new Promise(resolve => setTimeout(resolve, 100));
-    this.exposedThing?.writeProperty(property, value);
+    while (!this.exposedThing) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    this.exposedThing.writeProperty(property, value);
   }
 
   public async getThingDescription(): Promise<WoT.ThingDescription> {

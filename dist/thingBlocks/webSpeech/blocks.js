@@ -42,7 +42,6 @@ Blocks['web_speech'] = {
     this.setTooltip('outputs speech command from microphone as a string');
     this.setHelpUrl('');
     this.firstTime = true;
-    this.recognition = null;
   },
   onchange: function () {
     // on creating this block check speech API availability
