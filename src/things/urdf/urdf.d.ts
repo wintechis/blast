@@ -10,7 +10,7 @@ declare module 'urdf' {
    * or some RDF triples serialialized as a string
    * @param {object} opts options as an object (passed to N3.js)
    */
-  export async function load(data: any, opts: any): void;
+  export async function load(data: any, opts: any): Promise<void>;
 
   /**
    * Loads the remote JSON-LD or RDF definition in the µRDF store, in its own
@@ -18,7 +18,7 @@ declare module 'urdf' {
    *
    * @param {string} uri a dereferenceable URI
    */
-  export async function loadFrom(uri: string): void;
+  export async function loadFrom(uri: string): Promise<void>;
 
   /**
    * Provides a Promise-based wrapper for core clear function.

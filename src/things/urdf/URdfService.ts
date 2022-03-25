@@ -2,7 +2,7 @@ import {ExposedThing} from '@node-wot/core';
 import * as WoT from 'wot-typescript-definitions';
 import {getThing, removeThing} from '../index.js';
 import urdf from 'urdf';
-import {getInterpreter, throwError} from '../../blast_interpreter.js';
+import {throwError} from '../../blast_interpreter.js';
 
 export default class URdfService {
   private thing: WoT.ExposedThing | null = null;
@@ -72,8 +72,7 @@ export default class URdfService {
         format: string;
         ressource: string;
       };
-      console.log({query, format, ressource});
-      return await this.runSparqlQuery(query, format, ressource);
+      return this.runSparqlQuery(query, format, ressource);
     });
   }
 
