@@ -6,9 +6,10 @@
 
 'use strict';
 
+// eslint-disable-next-line node/no-missing-import
+import SolidService from '../../things/solid/SolidService.js';
 import {JavaScript} from 'blockly';
-import {saveFileInContainer} from '@inrupt/solid-client';
-import {asyncApiFunctions, throwError} from './../../blast_interpreter.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
 
 /**
  * Generates Javascript code for the upload_image block.
@@ -30,26 +31,8 @@ JavaScript['upload_image'] = function (block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const uploadImage = async function (image, url, callback) {
-  // convert base64/URLEncoded data component to raw binary data held in a string
-  // eslint-disable-next-line no-undef
-  const byteString = atob(image.split(',')[1]);
-
-  // seperate out the mime component
-  const mimeString = image.split(',')[0].split(':')[1].split(';')[0];
-  // write the bytes of the string to a typed array
-  const ia = new Uint8Array(byteString.length);
-  for (let i = 0; i < byteString.length; i++) {
-    ia[i] = byteString.charCodeAt(i);
-  }
-  // eslint-disable-next-line no-undef
-  const blob = new Blob([ia], {type: mimeString});
-
-  try {
-    await saveFileInContainer(url, blob);
-  } catch (e) {
-    throwError(e);
-    console.error(e);
-  }
+  const service = new SolidService();
+  await service.invokeAction('uploadImage', {image, url});
   callback();
 };
 
