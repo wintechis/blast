@@ -1,24 +1,3 @@
-import {writeWithResponse} from './blast_webBluetooth';
-
-/**
- * Optional serviceUUIDs to scan for.
- */
-export const optionalServices: BluetoothServiceUUID[];
-
-/**
- * Contains block types that require a LE Scan.
- * On runtine, if any of these blocks is in the workspace,
- * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
- */
-export const scanBlocks: string[];
-
-/**
- * Contains the results of a LE Scan.
- */
-export let LEScanResults: {
-  [key: string]: Array<BluetoothAdvertisingEvent>;
-};
-
 /**
  * Pairs a Bluetooth device.
  * @param options An object that sets options for the device request.
