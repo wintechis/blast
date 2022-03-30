@@ -12,6 +12,7 @@ import {addCleanUpFunction} from './blast_interpreter.js';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {getThingsLog} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
+import {onStatusChange} from './blast_interpreter.js';
 import {setWebBluetoothButtonHandler} from './blast_things.js';
 import {throwError} from './blast_interpreter.js';
 
@@ -564,7 +565,7 @@ const tearDown = async function () {
   // disconnect all bt devices.
   const devices = await navigator.bluetooth.getDevices();
   for (const device of devices) {
-    disconnect(device.id);
+    await disconnect(device.id);
   }
 
   // Reset running scan flag
@@ -595,3 +596,4 @@ const tearDown = async function () {
   LEScanResults = {};
 };
 addCleanUpFunction(tearDown);
+onStatusChange.error.push(tearDown);
