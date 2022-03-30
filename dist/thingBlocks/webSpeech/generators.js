@@ -10,7 +10,7 @@
 import Blockly from 'blockly';
 // eslint-disable-next-line node/no-missing-import
 import SpeechApiService from '../../things/speechApi/SpeechApiService.js';
-import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the play_audio block.
@@ -18,12 +18,19 @@ import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
  * @returns {String} the generated code.
  */
 Blockly.JavaScript['text_to_speech'] = function (block) {
-  const text = Blockly.JavaScript.valueToCode(
-    block,
-    'text',
-    Blockly.JavaScript.ORDER_ATOMIC
-  );
-  const code = `textToSpeech(${text});\n`;
+  const text =
+    Blockly.JavaScript.valueToCode(
+      block,
+      'text',
+      Blockly.JavaScript.ORDER_ATOMIC
+    ) || Blockly.JavaScript.quote_('');
+  let lang = block.getFieldValue('language');
+  if (lang.length < 4) {
+    lang = block.getFieldValue(lang);
+  }
+  lang = Blockly.JavaScript.quote_(lang);
+
+  const code = `textToSpeech(${text}, ${lang});\n`;
 
   return code;
 };
@@ -34,6 +41,7 @@ Blockly.JavaScript['text_to_speech'] = function (block) {
  * @param {Blockly.Block} block the web_speech block.
  * @returns {String} the speech command.
  */
+// eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['web_speech'] = function (block) {
   const code = 'speechToText()';
 
@@ -64,11 +72,11 @@ asyncApiFunctions.push(['speechToText', speechToText]);
  * @param {Number=} pitch pitch at which the utterance will be spoken at
  * @param {string} lang language of the utterance.
  */
-const textToSpeech = async function (text, callback) {
+const textToSpeech = async function (text, lang, callback) {
   // eslint-disable-next-line no-undef
   const options = {
     text: text,
-    lang: 'en-US',
+    lang: lang,
     pitch: 1,
     rate: 1,
     volume: 1,
