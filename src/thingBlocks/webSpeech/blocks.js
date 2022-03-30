@@ -52,10 +52,6 @@ Blocks['web_speech'] = {
         Upgrade to <a href="//www.google.com/chrome">Chrome</a>
         version 25 or later.`);
         this.dispose();
-      } else {
-        // eslint-disable-next-line new-cap
-        // eslint-disable-next-line no-undef
-        this.recognition = new webkitSpeechRecognition();
       }
     }
   },
