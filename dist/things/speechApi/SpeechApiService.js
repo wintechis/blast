@@ -88,8 +88,9 @@ export default class SpeechApiService {
             Object.assign(utterance, parameters);
             return this.synthesizeText(utterance);
         });
-        (_b = this.thing) === null || _b === void 0 ? void 0 : _b.setActionHandler('recognizeSpeech', async () => {
-            return this.recognizeSpeech();
+        (_b = this.thing) === null || _b === void 0 ? void 0 : _b.setActionHandler('recognizeSpeech', async (parameters) => {
+            const { lang } = parameters;
+            return this.recognizeSpeech(lang);
         });
     }
     async synthesizeText(utterance) {
@@ -103,11 +104,11 @@ export default class SpeechApiService {
      * Recognizes speech (speech to text).
      * @returns {Promise<string>} The recognized speech
      */
-    async recognizeSpeech() {
+    async recognizeSpeech(lang) {
         return new Promise((resolve, reject) => {
             if ('SpeechRecognition' in window) {
                 const recognition = new window.SpeechRecognition();
-                recognition.lang = 'en-US';
+                recognition.lang = lang;
                 recognition.continuous = false;
                 let transcript = '';
                 recognition.onresult = (event) => {

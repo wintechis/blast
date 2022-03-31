@@ -11,7 +11,7 @@ export default class SpeechApiService {
      * Recognizes speech (speech to text).
      * @returns {Promise<string>} The recognized speech
      */
-    recognizeSpeech(): Promise<string>;
+    recognizeSpeech(lang: string): Promise<string>;
     invokeAction(action: string, parameters: any): Promise<any>;
     getThingDescription(): Promise<WoT.ThingDescription>;
     destroy(): Promise<void>;

@@ -43,19 +43,25 @@ Blockly.JavaScript['text_to_speech'] = function (block) {
  */
 // eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['web_speech'] = function (block) {
-  const code = 'speechToText()';
+  let lang = block.getFieldValue('language');
+  if (lang.length < 4) {
+    lang = block.getFieldValue(lang);
+  }
+  lang = Blockly.JavaScript.quote_(lang);
+  const code = `speechToText(${lang})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
 /**
  * Outputs speech input as string.
+ * @param {string} lang language of the utterance.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const speechToText = async function (callback) {
+const speechToText = async function (lang, callback) {
   const thing = new SpeechApiService();
-  const result = await thing.invokeAction('recognizeSpeech', {});
+  const result = await thing.invokeAction('recognizeSpeech', {lang: lang});
   callback(result);
 };
 // add block webSpeech to the interpreter's API.
