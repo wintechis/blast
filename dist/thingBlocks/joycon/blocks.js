@@ -6,12 +6,72 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
-import {eventsInWorkspace} from './../../blast_interpreter.js';
-import {getWorkspace} from './../../blast_interpreter.js';
+import {Blocks, Events, FieldDropdown, FieldTextInput} from 'blockly';
+import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
+import {implementedThings} from './../../blast_things.js';
+// eslint-disable-next-line node/no-missing-import
+import JoyCon from '../../things/joycon/JoyCon.js';
 
-Blockly.Blocks['joycon_read_property'] = {
+Blocks['things_joycon'] = {
+  /**
+   * Block representing a Nintendo Joy-Con.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Joy-Con')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Nintendo Joy-Con.');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/Nintendo-JoyCon');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webHidId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BlinkStick
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webHidId = this.getFieldValue('id');
+      this.thing = new JoyCon(this.webHidId);
+      this.firstTime = false;
+    }
+  },
+};
+
+// Add Joy-Con block to list of implemented things.
+implementedThings.push({
+  id: 'joycon',
+  name: 'Nintendo Joy-Con',
+  type: 'hid',
+  blocks: [
+    {
+      type: 'joycon_read_property',
+      category: 'Properties',
+    },
+    {
+      type: 'joycon_button_events',
+      category: 'States and Events',
+    },
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
+  filters: [
+    {
+      vendorId: 0x057e, // Nintendo Co., Ltd
+      productId: 0x2006, // Joy-Con Left
+    },
+    {
+      vendorId: 0x057e, // Nintendo Co., Ltd
+      productId: 0x2007, // Joy-Con Right
+    },
+  ],
+});
+
+Blocks['joycon_read_property'] = {
   /**
    * Block to read a property of a JoyCon.
    * @this Blockly.Block
@@ -21,7 +81,7 @@ Blockly.Blocks['joycon_read_property'] = {
       .setCheck('Thing')
       .appendField('read')
       .appendField(
-        new Blockly.FieldDropdown(
+        new FieldDropdown(
           [
             ['accelerometers', 'accelerometers'],
             ['actual accelerometer', 'actualAccelerometer'],
@@ -60,7 +120,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('accelerometer')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['0', '0'],
             ['1', '1'],
             ['2', '2'],
@@ -70,7 +130,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue2')
         .appendField('axis')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['x', 'x'],
             ['y', 'y'],
             ['z', 'z'],
@@ -82,7 +142,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('axis')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['x', 'x'],
             ['y', 'y'],
             ['z', 'z'],
@@ -94,7 +154,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('unit')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['rps', 'rps'],
             ['dps', 'dps'],
           ]),
@@ -103,7 +163,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue2')
         .appendField('axis')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['x', 'x'],
             ['y', 'y'],
             ['z', 'z'],
@@ -115,7 +175,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('degrees')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['alpa', 'alpha'],
             ['beta', 'beta'],
             ['gamma', 'gamma'],
@@ -127,7 +187,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('degrees')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['alpa', 'alpha'],
             ['beta', 'beta'],
             ['gamma', 'gamma'],
@@ -139,7 +199,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('gyroscope')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['0', '0'],
             ['1', '1'],
             ['2', '2'],
@@ -149,7 +209,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue2')
         .appendField('axis')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['x', '0'],
             ['y', '1'],
             ['z', '2'],
@@ -159,7 +219,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue3')
         .appendField('unit')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['dps', 'dps'],
             ['rps', 'rps'],
           ]),
@@ -170,7 +230,7 @@ Blockly.Blocks['joycon_read_property'] = {
       this.appendDummyInput('propertySubValue')
         .appendField('axis')
         .appendField(
-          new Blockly.FieldDropdown([
+          new FieldDropdown([
             ['w', 'w'],
             ['x', 'x'],
             ['y', 'y'],
@@ -182,10 +242,7 @@ Blockly.Blocks['joycon_read_property'] = {
   },
 };
 
-// Add joycon_read_property block to the toolbox.
-addBlock('joycon_read_property', 'Properties');
-
-Blockly.Blocks['joycon_button_events'] = {
+Blocks['joycon_button_events'] = {
   /**
    * Block to read a property of a JoyCon.
    * @this Blockly.Block
@@ -197,7 +254,7 @@ Blockly.Blocks['joycon_button_events'] = {
     this.appendDummyInput()
       .appendField('on')
       .appendField(
-        new Blockly.FieldDropdown([
+        new FieldDropdown([
           ['A', 'a'],
           ['B', 'b'],
           ['X', 'x'],
@@ -236,9 +293,9 @@ Blockly.Blocks['joycon_button_events'] = {
     }
   },
   onDispose: function (event) {
-    if (event.type === Blockly.Events.BLOCK_DELETE) {
+    if (event.type === Events.BLOCK_DELETE) {
       if (
-        event.type === Blockly.Events.BLOCK_DELETE &&
+        event.type === Events.BLOCK_DELETE &&
         event.ids.indexOf(this.id) !== -1
       ) {
         // Block is being deleted
@@ -257,6 +314,3 @@ Blockly.Blocks['joycon_button_events'] = {
     }
   },
 };
-
-// Add joycon_button_events block to the toolbox.
-addBlock('joycon_button_events', 'States and Events');

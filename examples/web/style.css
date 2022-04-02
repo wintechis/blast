@@ -440,48 +440,48 @@ button {
   clear: both;
 }
 
-/* rc table styles */
-#rc-table {
+/* rc table and connect bluetooth table styles */
+#rc-table, #connect-table {
   display: table;
   border-spacing: 0;
   text-align: left;
   width: 100%;
 }
 
-#rc-table tr {
+#rc-table tr, #connect-table tr  {
   display: table-row;
   vertical-align: inherit;
   border-color: inherit;
 }
 
-#rc-table tbody {
+#rc-table tbody, #connect-table tbody {
   display: table-row-group;
   vertical-align: middle;
   border-color: inherit;
 }
 
-#rc-table td, #rc-table th {
+#rc-table td, #rc-table th, #connect-table td #connect-table th {
   border-bottom: 0.1rem solid #e1e1e1;
   padding: 1.2rem 1.5rem;
 }
 
-#rc-table td:first-child, #rc-table th:first-child {
+#rc-table td:first-child, #rc-table th:first-child, #connect-table td:first-child, #connect-table th:first-child {
   border-left: 0;
   padding-left: 0;
 }
 
-#rc-table td:last-child, #rc-table th:last-child {
+#rc-table td:last-child, #rc-table th:last-child, #connect-table td:last-child, #connect-table th:last-child {
   padding-right: 0;
   border-right: none;
 }
 
-#rc-table thead {
+#rc-table thead, #connect-table thead {
   display: table-header-group;
   vertical-align: middle;
   border-color: inherit;
 }
 
-#rc-table thead th {
+#rc-table thead th, #connect-table thead th {
   font-weight: bold;
   color: #333333;
 }
@@ -490,7 +490,7 @@ button {
   background-color: #f44336;
 }
 
-#rc-done {
+#rc-done, #connect-done {
   background-color: #4CAF50;
   float: right;
 }

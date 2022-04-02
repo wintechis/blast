@@ -1,14 +1,9 @@
 import {ExposedThing} from '@node-wot/core';
 import * as WoT from 'wot-typescript-definitions';
 import {getThing, removeThing} from '../index.js';
-import {subscribe, writeWithoutResponse} from '../../blast_webBluetooth.js';
+import {subscribe} from '../../blast_webBluetooth.js';
 
-interface SensorData {
-  temp: number;
-  hum: number;
-}
-
-export default class BleRgbController {
+export default class XiamoiThermometer {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private webBluetoothId: string;
@@ -131,7 +126,7 @@ export default class BleRgbController {
     while (!this.exposedThing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    this.exposedThing.readProperty(property);
+    return this.exposedThing.readProperty(property);
   }
 
   public async getThingDescription(): Promise<WoT.ThingDescription> {

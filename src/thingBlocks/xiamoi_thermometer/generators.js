@@ -6,45 +6,47 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import XiaomiThermometer from '../../things/xiaomiThermometer/XiaomiThermometer.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {optionalServices} from './../../blast_webBluetooth.js';
+import {JavaScript} from 'blockly';
+import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
+
+/**
+ * Generates JavaScript code for the things_bleLedController block.
+ * @param {Blockly.Block} block the things_bleLedController block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_xiaomiThermometer'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the get_mijia_property block.
  * @param {Blockly.Block} block the get_temperature block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['read_mijia_property'] = function (block) {
-  const measurement = Blockly.JavaScript.quote_(
-    block.getFieldValue('measurement')
-  );
-  const thing = Blockly.JavaScript.valueToCode(
-    block,
-    'Thing',
-    Blockly.JavaScript.ORDER_ATOMIC
-  );
+JavaScript['read_mijia_property'] = function (block) {
+  const measurement = JavaScript.quote_(block.getFieldValue('measurement'));
+  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
+  const code = `readMijiaProperty(${blockId}, ${measurement}, ${thing})`;
 
-  const code = `readMijiaProperty(${measurement}, ${thing})`;
-
-  return [code, Blockly.JavaScript.ORDER_NONE];
+  return [code, JavaScript.ORDER_NONE];
 };
-
-// Add the thermometer's serviceUUIUD to optionalServices.
-const XiaomiServiceUUID = 'ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6';
-optionalServices.push(XiaomiServiceUUID);
 
 /**
  * Fetches the selected measurement from a RuuviTag.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} measurement the measurement to fetch.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a RuuviTag.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
 const readMijiaProperty = async function (
+  blockId,
   measurement,
   webBluetoothId,
   callback
@@ -55,7 +57,8 @@ const readMijiaProperty = async function (
     callback();
     return;
   }
-  const thing = new XiaomiThermometer(webBluetoothId);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   const value = await thing.readProperty(measurement);
   callback(value);
 };

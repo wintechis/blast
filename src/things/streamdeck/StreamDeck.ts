@@ -81,6 +81,7 @@ export default class StreamDeck {
       this.open().then(sd => {
         this.streamdeck = sd;
         this.registerButtonUpDownEventEmitters();
+        this.addPropertyHandlers();
       });
       this.thing.expose();
     });
@@ -102,12 +103,29 @@ export default class StreamDeck {
       if (e.name === 'InvalidStateError') {
         device.close();
         sd = await openDevice(device);
+        this.opened = true;
         return sd;
       } else {
         throwError(e);
         throw new Error(e);
       }
     }
+  }
+
+  private addPropertyHandlers() {
+    this.thing?.setPropertyWriteHandler('buttonColors', parameters => {
+      return this.setButtonColors(
+        parameters as unknown as Array<{id: number; color: string}>
+      );
+    });
+    this.thing?.setPropertyWriteHandler('brightness', parameters => {
+      return this.setBrightness(parameters as unknown as number);
+    });
+    this.thing?.setPropertyWriteHandler('buttonText', parameters => {
+      return this.setButtonText(
+        parameters as unknown as Array<{id: number; text: string}>
+      );
+    });
   }
 
   /**
@@ -231,17 +249,11 @@ export default class StreamDeck {
    * Wrapper method for writing streamdeck properties.
    */
   async writeProperty(property: string, value: any): Promise<void> {
-    switch (property) {
-      case 'buttonColors':
-        await this.setButtonColors(value as Array<{id: number; color: string}>);
-        break;
-      case 'buttonText':
-        await this.setButtonText(value as Array<{id: number; text: string}>);
-        break;
-      case 'brightness':
-        this.setBrightness(value as number);
-        break;
+    while (!this.opened) {
+      // Wait for the thing to be initialized
+      await new Promise(resolve => setTimeout(resolve, 100));
     }
+    this.exposedThing?.writeProperty(property, value);
   }
 
   /**

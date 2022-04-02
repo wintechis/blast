@@ -6,10 +6,45 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
+import {Blocks, FieldDropdown, FieldTextInput} from 'blockly';
+import {implementedThings} from '../../blast_things.js';
+// eslint-disable-next-line node/no-missing-import
+import XiaomiThermometer from './../../things/xiaomiThermometer/XiaomiThermometer.js';
 
-Blockly.Blocks['read_mijia_property'] = {
+Blocks['things_xiaomiThermometer'] = {
+  /**
+   * Block representing a BLE RGB LED controller.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Xiamoi Thermometer')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Xiamoi Thermometer.');
+    this.setHelpUrl(
+      'https://github.com/wintechis/blast/wiki/Xiaomi-Thermometer'
+    );
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.thing = new XiaomiThermometer(this.webBluetoothId);
+      this.firstTime = false;
+    }
+  },
+};
+
+Blocks['read_mijia_property'] = {
   /**
    * Block for reading a property of a Xiaomi Mijia thermometer.
    * @this {Blockly.Block}
@@ -19,7 +54,7 @@ Blockly.Blocks['read_mijia_property'] = {
       .setCheck('Thing')
       .appendField('read')
       .appendField(
-        new Blockly.FieldDropdown([
+        new FieldDropdown([
           ['temperature', 'temperature'],
           ['humidity', 'humidity'],
         ]),
@@ -35,5 +70,22 @@ Blockly.Blocks['read_mijia_property'] = {
   },
 };
 
-// add read_mijia_property block to the toolbox.
-addBlock('read_mijia_property', 'Properties');
+// Add Xiamoi Thermometer to the list of implemented things.
+implementedThings.push({
+  id: 'xiaomiThermometer',
+  name: 'Xiaomi Thermometer',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'read_mijia_property',
+      category: 'Properties',
+    },
+  ],
+  filters: [
+    {
+      namePrefix: 'lywsd03mmc',
+    },
+  ],
+  optionalServices: ['ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6'],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Xiaomi-Thermometer',
+});

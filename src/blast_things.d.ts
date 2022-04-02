@@ -1,4 +1,26 @@
-import {Workspace} from 'blockly';
+export interface implementedThing {
+  id: string;
+  name: string;
+  type: string;
+  blocks: {type: string; category: string; XML?: string}[];
+  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[];
+  infoUrl?: string;
+}
+
+interface connectedThing {
+  id: string;
+  thing: implementedThing;
+}
+
+/**
+ * Lists all things implemented by BLAST.
+ */
+export const implementedThings: implementedThing[];
+
+/**
+ * Lists all things connected to BLAST identified by their user defined name.
+ */
+export const connectedThings: Record<string, connectedThing>;
 
 /**
  * Sets the 'pair via webBluetooth' button handler.
@@ -73,9 +95,18 @@ export function addWebBluetoothDevice(
  * @param {strubg} uid identifier of the device in {@link webHidDevices}.
  * @param {string} deviceName default name for the device.
  * @param {HIDDevice} device the device to add.
+ * @param {implementedThing} thing the thing to add.
  */
 export function addWebHidDevice(
   uid: HIDDevice.id,
   deviceName: string,
-  device: HIDDevice
+  device: HIDDevice,
+  thing: implementedThing
 ): void;
+
+/**
+ * Connects a WebHidDevice.
+ * @param {HIDDeviceFilter} filters The options for the WebHidDevice.
+ * @returns {Promise<HIDDevice>} A promise that resolves to the connected WebHidDevice.
+ */
+export function connectWebHidDevice(filters: HIDDeviceFilter): HIDDevice;

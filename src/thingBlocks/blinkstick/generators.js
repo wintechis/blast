@@ -7,44 +7,55 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import Blinkstick from './../../things/blinkstick/Blinkstick.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {throwError} from './../../blast_interpreter.js';
+import {JavaScript} from 'blockly';
+import {
+  asyncApiFunctions,
+  getWorkspace,
+  throwError,
+} from './../../blast_interpreter.js';
 
-Blockly.JavaScript['blinkstick_set_colors'] = function (block) {
+JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
-    Blockly.JavaScript.valueToCode(
-      block,
-      'COLOUR',
-      Blockly.JavaScript.ORDER_ATOMIC
-    ) || Blockly.JavaScript.quote_('#000000');
+    JavaScript.valueToCode(block, 'COLOUR', JavaScript.ORDER_NONE) ||
+    JavaScript.quote_('#000000');
   const index =
-    Blockly.JavaScript.valueToCode(
-      block,
-      'index',
-      Blockly.JavaScript.ORDER_ATOMIC
-    ) || '0';
+    JavaScript.valueToCode(block, 'index', JavaScript.ORDER_NONE) || '0';
   const thing =
-    Blockly.JavaScript.valueToCode(
-      block,
-      'thing',
-      Blockly.JavaScript.ORDER_ATOMIC
-    ) || "''";
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || "''";
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
 
-  const code = `blinkstickSetColors(${thing}, ${index}, ${colour})\n;`;
+  const code = `blinkstickSetColors(${blockId}, ${thing}, ${index}, ${colour});\n`;
   return code;
 };
 
 /**
+ * Generates JavaScript code for the things_blinkstick block.
+ * @param {Blockly.Block} block the things_blinkstick block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_blinkstick'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
+
+/**
  * Set the color of the BlinkStick.
+ * @param {Blockly.Block.id} blockId the things_blinkstick block's id.
  * @param {string} id the id identifier of the BlinkStick.
  * @param {number} index index of the LED.
  * @param {string} colour the color to set, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const blinkstickSetColors = async function (id, index, colour, callback) {
+const blinkstickSetColors = async function (
+  blockId,
+  id,
+  index,
+  colour,
+  callback
+) {
   // check if index is between 0 and 7.
   if (index < 0 || index > 7) {
     throwError('BlinkStick index must be between 0 and 7.');
@@ -66,7 +77,8 @@ const blinkstickSetColors = async function (id, index, colour, callback) {
 
   const ledColour = {index, red, green, blue};
 
-  const thing = new Blinkstick(id);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.writeProperty('colours', ledColour);
   callback();
 };

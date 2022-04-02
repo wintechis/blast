@@ -10,17 +10,27 @@
 import {JavaScript} from 'blockly';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
-import {addCleanUpFunction} from './../../blast_interpreter.js';
+import {addCleanUpFunction, getWorkspace} from './../../blast_interpreter.js';
 import {getThingsLog} from './../../blast_things.js';
-import {apiFunctions} from './../../blast_interpreter.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {getInterpreter} from './../../blast_interpreter.js';
-import {setInterrupted} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import StreamDeck from './../../things/streamdeck/StreamDeck.js';
-import {throwError} from './../../blast_interpreter.js';
+import {
+  apiFunctions,
+  asyncApiFunctions,
+  getInterpreter,
+  setInterrupted,
+  throwError,
+} from './../../blast_interpreter.js';
 
 const thingsLog = getThingsLog();
+
+/**
+ * Generates JavaScript code for the things_streamdeck block.
+ * @param {Blockly.Block} block the things_streamdeck block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_streamdeck'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the streamdeck_button_event block.
@@ -36,7 +46,10 @@ JavaScript['streamdeck_button_event'] = function (block) {
   const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
   const upDown = JavaScript.quote_(block.getFieldValue('upDown'));
   const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
-
+  let blockId = "''";
+  if (block.getInputTargetBlock('id')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('id').id);
+  }
   const buttons = JavaScript.quote_(
     `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
@@ -44,7 +57,7 @@ JavaScript['streamdeck_button_event'] = function (block) {
     JavaScript.statementToCode(block, 'statements')
   );
 
-  const handler = `registerStreamdeckHandler(${id}, ${buttons}, ${upDown}, ${statements});\n`;
+  const handler = `registerStreamdeckHandler(${blockId}, ${id}, ${buttons}, ${upDown}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Registering event handlers needs to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -68,23 +81,33 @@ JavaScript['streamdeck_color_buttons'] = function (block) {
     JavaScript.valueToCode(block, 'color', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
   const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
-
+  let blockId = "''";
+  if (block.getInputTargetBlock('id')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('id').id);
+  }
   const buttons = JavaScript.quote_(
     `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
 
-  const code = `streamdeckColorButtons(${id}, ${buttons}, ${color});\n`;
+  const code = `streamdeckColorButtons(${blockId}, ${id}, ${buttons}, ${color});\n`;
   return code;
 };
 
 /**
  * Handles button pushes on an elGato Stream Deck
+ * @param {Blockly.Block.id} blockId the things_streamdeck block's id.
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {String} buttons string containing pushed buttons.
  * @param {String} upDown string containing the direction of the button push.
  * @param {String} statements code to be executed when the buttons are pushed.
  */
-const registerStreamdeckHandler = function (id, buttons, upDown, statements) {
+const registerStreamdeckHandler = function (
+  blockId,
+  id,
+  buttons,
+  upDown,
+  statements
+) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
@@ -136,7 +159,8 @@ const registerStreamdeckHandler = function (id, buttons, upDown, statements) {
     }
   };
 
-  const thing = new StreamDeck(id);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   thing.subscribeEvent('button' + upDown, handler);
 
   addCleanUpFunction(() => {
@@ -154,12 +178,19 @@ apiFunctions.push(['registerStreamdeckHandler', registerStreamdeckHandler]);
 
 /**
  * Fills the buttons of a Stream Deck with a color.
+ * @param {Blockly.Block.id} blockId the things_streamdeck block's id.
  * @param {String} id identifier of the streamdeck device in {@link Blast.Things.webHidDevices}.
  * @param {String} buttons string containing pushed buttons.
  * @param {String} color color to fill the buttons with, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const streamdeckColorButtons = async function (id, buttons, color, callback) {
+const streamdeckColorButtons = async function (
+  blockId,
+  id,
+  buttons,
+  color,
+  callback
+) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
@@ -175,7 +206,8 @@ const streamdeckColorButtons = async function (id, buttons, color, callback) {
     }
   }
 
-  const thing = new StreamDeck(id);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.writeProperty('buttonColors', buttonsToColor);
 
   callback();
@@ -200,12 +232,15 @@ JavaScript['streamdeck_write_on_buttons'] = function (block) {
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('');
   const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
-
+  let blockId = "''";
+  if (block.getInputTargetBlock('id')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('id').id);
+  }
   const buttons = JavaScript.quote_(
     `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
 
-  const code = `streamdeckWriteOnButtons(${id}, ${buttons}, ${value});\n`;
+  const code = `streamdeckWriteOnButtons(${blockId}, ${id}, ${buttons}, ${value});\n`;
   return code;
 };
 
@@ -216,7 +251,13 @@ JavaScript['streamdeck_write_on_buttons'] = function (block) {
  * @param {String} value value to display on the buttons.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
+const streamdeckWriteOnButtons = async function (
+  blockId,
+  id,
+  buttons,
+  value,
+  callback
+) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
@@ -232,7 +273,8 @@ const streamdeckWriteOnButtons = async function (id, buttons, value, callback) {
     }
   }
 
-  const thing = new StreamDeck(id);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.writeProperty('buttonText', buttonsToWrite);
 
   callback();
@@ -246,12 +288,15 @@ JavaScript['streamdeck_set_brightness'] = function (block) {
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('100');
   const id = JavaScript.valueToCode(block, 'id', JavaScript.ORDER_NONE) || null;
-
-  const code = `streamdeckSetBrightness(${id}, ${value});\n`;
+  let blockId = "''";
+  if (block.getInputTargetBlock('id')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('id').id);
+  }
+  const code = `streamdeckSetBrightness(${blockId}, ${id}, ${value});\n`;
   return code;
 };
 
-const streamdeckSetBrightness = async function (id, value, callback) {
+const streamdeckSetBrightness = async function (blockId, id, value, callback) {
   // If no things block is attached, return.
   if (id === null) {
     throwError('No streamdeck block set.');
@@ -265,7 +310,8 @@ const streamdeckSetBrightness = async function (id, value, callback) {
     return;
   }
 
-  const thing = new StreamDeck(id);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.writeProperty('brightness', value);
 
   callback();

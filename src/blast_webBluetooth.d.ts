@@ -1,12 +1,33 @@
+import {implementedThing} from './blast_things';
+
+/**
+ * Optional serviceUUIDs to scan for.
+ */
+export const optionalServices: BluetoothServiceUUID[];
+
+/**
+ * Contains block types that require a LE Scan.
+ * On runtine, if any of these blocks is in the workspace,
+ * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
+ */
+export const scanBlocks: string[];
+
+/**
+ * Contains the results of a LE Scan.
+ */
+export let LEScanResults: {
+  [key: string]: Array<BluetoothAdvertisingEvent>;
+};
+
 /**
  * Pairs a Bluetooth device.
+ * @param thing information about the device to pair.
  * @param options An object that sets options for the device request.
- * @param deviceName optional, user-defined name for the device to pair.
  * @return A Promise to a BluetoothDevice object.
  */
 export async function requestDevice(
-  options: RequestDeviceOptions,
-  deviceName?: string
+  thing: implementedThing,
+  options?: RequestDeviceOptions
 ): Promise<BluetoothDevice>;
 
 /**

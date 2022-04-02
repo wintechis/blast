@@ -6,10 +6,10 @@
 
 'use strict';
 
-import Blockly from 'blockly';
+import {Blocks} from 'blockly';
 import {addBlock} from './../../../src/blast_toolbox.js';
 
-Blockly.Blocks['upload_image'] = {
+Blocks['upload_image'] = {
   /**
    * Block for uploading an image to a solid container.
    * @this {Blockly.Block}

@@ -7,6 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import {addBlock, reloadToolbox} from './blast_toolbox.js';
 import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
@@ -27,11 +28,33 @@ const webHidDevices = new Map();
 let webBluetoothButtonHandler = null;
 
 /**
+ * Lists all things implemented by BLAST.
+ */
+export const implementedThings = [];
+
+/**
+ * Lists all things connected to BLAST identified by their user defined name.
+ */
+export const connectedThings = new Map();
+
+/**
  * Sets the 'pair via webBluetooth' button handler.
  * @param {function} handler The handler to set.
  */
 export const setWebBluetoothButtonHandler = function (handler) {
   webBluetoothButtonHandler = handler;
+};
+
+let webHidButtonHandler = null;
+
+let getRssiBlockadded = false;
+
+/**
+ * Sets the 'connect via webHid' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setWebHidButtonHandler = function (handler) {
+  webHidButtonHandler = handler;
 };
 
 /**
@@ -86,6 +109,8 @@ export const getWebHidDevice = function (deviceId) {
  */
 export const thingsFlyoutCategory = function (workspace) {
   let xmlList = [];
+  // get connected things
+  const connectedThingBlocks = flyoutCategoryBlocks();
 
   // Create WebBluetooth Label
   const webBluetoothLabel = document.createElement('label');
@@ -101,29 +126,29 @@ export const thingsFlyoutCategory = function (workspace) {
     webBluetoothButtonHandler();
   });
   xmlList.push(webBluetoothButton);
-
-  // add webBluetooth blocks to xmlList
-  const wbBlockList = flyoutCategoryBlocksWB(workspace);
-  xmlList = xmlList.concat(wbBlockList);
+  // Add connected blocks for connected blueooth devices
+  if (connectedThingBlocks.bluetooth.length > 0) {
+    xmlList = xmlList.concat(connectedThingBlocks.bluetooth);
+  }
 
   // Create WebBluetooth Label
   const webHIDLabel = document.createElement('label');
   webHIDLabel.setAttribute('text', 'WebHID Blocks');
   xmlList.push(webHIDLabel);
 
-  // Create WebBluetooth add device button
+  // Create WebHID add device button
   const webHidbutton = document.createElement('button');
   webHidbutton.setAttribute('text', 'connect via webHID');
   webHidbutton.setAttribute('callbackKey', 'CREATE_WEBHID');
   // eslint-disable-next-line no-unused-vars
   workspace.registerButtonCallback('CREATE_WEBHID', _button => {
-    createWebHidButtonHandler();
+    webHidButtonHandler();
   });
   xmlList.push(webHidbutton);
-
-  // add webHID blocks to xmlList
-  const wHidBlockList = flyoutCategoryBlocksWHid(workspace);
-  xmlList = xmlList.concat(wHidBlockList);
+  // Add connected blocks for connected webHID devices
+  if (connectedThingBlocks.hid.length > 0) {
+    xmlList = xmlList.concat(connectedThingBlocks.hid);
+  }
 
   // Create identifiers label
   const identifiersLabel = document.createElement('label');
@@ -139,11 +164,6 @@ export const thingsFlyoutCategory = function (workspace) {
   block = Blockly.utils.xml.createElement('block');
   block.setAttribute('type', 'uri_from_string');
   xmlList.push(block);
-
-  // temporarily comment out unused mac block, see #69
-  // block = Blockly.utils.xml.createElement('block');
-  // block.setAttribute('type', 'mac');
-  // xmlList.push(block);
 
   // create audio uris label
   const audioLabel = document.createElement('label');
@@ -174,39 +194,35 @@ export const thingsFlyoutCategory = function (workspace) {
  * Construct the webBluetooth blocks required by the flyout for the things category.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-const flyoutCategoryBlocksWHid = function () {
-  const xmlList = [];
+const flyoutCategoryBlocks = function () {
+  const xmlList = {bluetooth: [], hid: []};
 
   // add webHID devices to xmlList
-  if (webHidDevices.size > 0) {
-    if (Blockly.Blocks['things_webHID']) {
+  if (connectedThings.size > 0) {
+    for (const [key, thing] of connectedThings) {
+      if (thing.type === 'bluetooth' && !getRssiBlockadded) {
+        addBlock('get_signal_strength_wb', 'Properties');
+        getRssiBlockadded = true;
+      }
+      const id = thing.id;
       const block = Blockly.utils.xml.createElement('block');
-      block.setAttribute('type', 'things_webHID');
+      block.setAttribute('type', 'things_' + id);
+      const fieldName = Blockly.utils.xml.createElement('field');
+      fieldName.setAttribute('name', 'name');
+      fieldName.textContent = key;
+      block.appendChild(fieldName);
+      const idField = Blockly.utils.xml.createElement('field');
+      idField.setAttribute('name', 'id');
+      if (thing.type === 'bluetooth') {
+        idField.textContent = webBluetoothDevices.get(key);
+      } else if (thing.type === 'hid') {
+        idField.textContent = webHidNames.get(key);
+      }
+      block.appendChild(idField);
       block.setAttribute('gap', 8);
-      xmlList.push(block);
+      xmlList[thing.type].push(block);
     }
   }
-
-  return xmlList;
-};
-
-/**
- * Construct the webHIDh blocks required by the flyout for the things category.
- * @return {!Array.<!Element>} Array of XML block elements.
- */
-const flyoutCategoryBlocksWB = function () {
-  const xmlList = [];
-
-  // add webBluetooth devices to xmlList
-  if (webBluetoothDevices.size > 0) {
-    if (Blockly.Blocks['things_webBluetooth']) {
-      const block = Blockly.utils.xml.createElement('block');
-      block.setAttribute('type', 'things_webBluetooth');
-      block.setAttribute('gap', 8);
-      xmlList.push(block);
-    }
-  }
-
   return xmlList;
 };
 
@@ -258,8 +274,14 @@ export const getWebHIDDevices = function () {
  * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {string} deviceName User defined name for the device.
+ * @param thing information about the device to pair.
+ * @return {string} The device name.
  */
-export const addWebBluetoothDevice = function (webBluetoothId, deviceName) {
+export const addWebBluetoothDevice = function (
+  webBluetoothId,
+  deviceName,
+  thing
+) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function (name, id) {
     Blockly.Variables.promptName(
@@ -276,6 +298,16 @@ export const addWebBluetoothDevice = function (webBluetoothId, deviceName) {
           } else {
             // No conflict
             webBluetoothDevices.set(text, id);
+            connectedThings.set(text, thing);
+            // add the devices blocks to the toolbox
+            for (const block of thing.blocks) {
+              if (block.XML) {
+                addBlock(block.type, block.category, block.XML);
+              } else {
+                addBlock(block.type, block.category);
+              }
+            }
+            reloadToolbox();
           }
         } else {
           const msg = 'Name cannot be empty';
@@ -286,42 +318,43 @@ export const addWebBluetoothDevice = function (webBluetoothId, deviceName) {
       }
     );
   };
-  promptAndCheckWithAlert(deviceName, webBluetoothId);
+  return promptAndCheckWithAlert(deviceName, webBluetoothId);
 };
 
 /**
- * Handles "connect via webHID" button in the things toolbox category.
+ * Connects a WebHidDevice.
+ * @param thing information about the device to pair.
+ * @returns {Promise<HIDDevice>} A promise that resolves to the connected WebHidDevice.
  */
-const createWebHidButtonHandler = function () {
+export const connectWebHidDevice = async function (thing) {
   const workspace = getWorkspace();
   thingsLog('Requesting webHID device...', 'HID');
-  navigator.hid
-    .requestDevice({filters: []})
-    .then(device => {
-      if (device.length === 0) {
-        throwError('Connection failed or cancelled by User.');
-        return;
-      }
-      // generate a unique id for the new device
-      const uid =
-        Date.now().toString(36) + Math.random().toString(36).substring(2);
-      // add device to the device map with its uid
-      addWebHidDevice(uid, device[0].productName, device[0]);
-      workspace.refreshToolboxSelection();
-      thingsLog('Connected', 'HID', device[0].productName);
-    })
-    .catch(error => {
-      throwError(error);
-    });
+  let filters = [];
+  if (thing.filters) {
+    filters = thing.filters;
+  }
+  const device = await navigator.hid.requestDevice({filters: filters});
+  if (device.length === 0) {
+    throwError('Connection failed or cancelled by User.');
+    return;
+  }
+  // generate a unique id for the new device
+  const uid = Date.now().toString(36) + Math.random().toString(36).substring(2);
+  // add device to the device map with its uid
+  addWebHidDevice(uid, device[0].productName, device[0], thing);
+  workspace.refreshToolboxSelection();
+  thingsLog('Connected', 'HID', device[0].productName);
+  return device;
 };
 
 /**
  * Creates user defined identifier to get devices from {@link webHidDevices}.
- * @param {strubg} uid identifier of the device in {@link webHidDevices}.
+ * @param {string} uid identifier of the device in {@link webHidDevices}.
  * @param {string} deviceName default name for the device.
  * @param {HIDDevice} device the device to add.
+ * @param thing information about the device to pair.
  */
-export const addWebHidDevice = function (uid, deviceName, device) {
+export const addWebHidDevice = function (uid, deviceName, device, thing) {
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function (name, id) {
     Blockly.Variables.promptName(
@@ -339,6 +372,16 @@ export const addWebHidDevice = function (uid, deviceName, device) {
             // No conflict
             webHidDevices.set(id, device);
             webHidNames.set(text, id);
+            connectedThings.set(text, thing);
+            // add the devices blocks to the toolbox
+            for (const block of thing.blocks) {
+              if (block.XML) {
+                addBlock(block.type, block.category, block.XML);
+              } else {
+                addBlock(block.type, block.category);
+              }
+            }
+            reloadToolbox();
           }
         } else {
           const msg = 'Name cannot be empty';

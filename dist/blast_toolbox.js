@@ -6,6 +6,8 @@
  */
 'use strict';
 
+import {getWorkspace} from './blast_interpreter.js';
+
 const defaultToolbox = {
   kind: 'categoryToolbox',
   contents: [
@@ -208,4 +210,11 @@ export const addBlock = function (type, blockCategory, blockxml) {
   if (category) {
     category.contents.push(block);
   }
+};
+
+/**
+ * Reloads the toolbox
+ */
+export const reloadToolbox = function () {
+  getWorkspace().updateToolbox(currentToolbox);
 };

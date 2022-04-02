@@ -7,10 +7,16 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
+import {Blocks, FieldTextInput} from 'blockly';
+// eslint-disable-next-line node/no-missing-import
+import Blinkstick from './../../things/blinkstick/Blinkstick.js';
+import {implementedThings} from '../../blast_things.js';
 
-Blockly.Blocks['blinkstick_set_colors'] = {
+Blocks['blinkstick_set_colors'] = {
+  /**
+   * Block for setting the colors of a BlinkStick.
+   * @this Blockly.Block
+   */
   init: function () {
     this.appendValueInput('COLOUR')
       .setCheck('Colour')
@@ -44,5 +50,59 @@ const BLINKSTICK_SET_COLORS_XML = `
 </block>
 `;
 
-// Add blinkstick_set_colors block to the toolbox.
-addBlock('blinkstick_set_colors', 'Properties', BLINKSTICK_SET_COLORS_XML);
+/**
+ * Generates JavaScript code for the things_blinkstick block.
+ * @param {Blockly.Block} block the things_blinkstick block.
+ * @returns {String} the generated code.
+ */
+Blocks['things_blinkstick'] = {
+  /**
+   * Block representing a BlinkStick.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('BlinkStick')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Tulogic BlinkStick.');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/BlinkStick');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webHidId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BlinkStick
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webHidId = this.getFieldValue('id');
+      this.thing = new Blinkstick(this.webHidId);
+      this.firstTime = false;
+    }
+  },
+};
+
+// Add blinkstick block to the list of implemented things.
+implementedThings.push({
+  id: 'blinkstick',
+  name: 'BlinkStick',
+  type: 'hid',
+  blocks: [
+    {
+      type: 'blinkstick_set_colors',
+      category: 'Properties',
+      xml: BLINKSTICK_SET_COLORS_XML,
+    },
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/BlinkStick',
+  filters: [
+    {
+      vendorId: 0x20a0,
+      productId: 0x41e5,
+    },
+  ],
+});

@@ -355,7 +355,8 @@ const generatePairButtonsDesktop_ = function (xml) {
                 throwError('Connection failed or cancelled by User.');
               // generate a unique id for the new device
               const uid =
-                Date.now().toString(36) + Math.random().toString(36).substr(2);
+                Date.now().toString(36) +
+                Math.random().toString(36).substring(2);
               // add device to the device map with its uid
               addWebHidDevice(uid, name, device[0]);
               // change pair status to checkmark

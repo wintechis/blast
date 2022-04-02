@@ -7,47 +7,51 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import BleRgbController from './../../things/bleRgbController/BleRgbController.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {optionalServices} from './../../blast_webBluetooth.js';
-import {throwError} from './../../blast_interpreter.js';
+import {JavaScript} from 'blockly';
+import {
+  asyncApiFunctions,
+  getWorkspace,
+  throwError,
+} from './../../blast_interpreter.js';
+
+/**
+ * Generates JavaScript code for the things_bleLedController block.
+ * @param {Blockly.Block} block the things_bleLedController block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_bleLedController'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the switch_lights_RGB block.
  * @param {Blockly.Block} block the get_request block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['switch_lights_rgb'] = function (block) {
+JavaScript['switch_lights_rgb'] = function (block) {
   const colour =
-    Blockly.JavaScript.valueToCode(
-      block,
-      'colour',
-      Blockly.JavaScript.ORDER_ATOMIC
-    ) || Blockly.JavaScript.quote_('#000000');
+    JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
+    JavaScript.quote_('#000000');
   const thing =
-    Blockly.JavaScript.valueToCode(
-      block,
-      'thing',
-      Blockly.JavaScript.ORDER_NONE
-    ) || 'null';
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || 'null';
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
 
-  const code = `switchLights(${thing}, ${colour});\n`;
+  const code = `switchLights(${blockId}, ${thing}, ${colour});\n`;
   return code;
 };
 
-// Add the LED controller's serviceUUID to optionalServices
-const LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
-optionalServices.push(LEDServiceUUID);
-
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} mac identifier of the LED controller.
  * @param {String} colour the colour to switch the lights to, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function (mac, colour, callback) {
+const switchLights = async function (blockId, mac, colour, callback) {
   // make sure a device is connected.
   if (!mac) {
     throwError('No LED Controller is set.');
@@ -55,7 +59,8 @@ const switchLights = async function (mac, colour, callback) {
     return;
   }
 
-  const thing = new BleRgbController(mac);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.writeProperty('colour', colour);
   callback();
 };

@@ -13,10 +13,43 @@ import {
   Events,
   FieldCheckbox,
   FieldDropdown,
+  FieldTextInput,
 } from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
-import {eventsInWorkspace} from './../../blast_interpreter.js';
-import {getWorkspace} from './../../blast_interpreter.js';
+import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
+import {implementedThings} from '../../blast_things.js';
+// eslint-disable-next-line node/no-missing-import
+import StreamDeck from './../../things/streamdeck/StreamDeck.js';
+
+Blocks['things_streamdeck'] = {
+  /**
+   * Block representing a StreamDeck.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('StreamDeck')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('An Elgato StreamDeck');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/Stream-Deck');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webHidId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BlinkStick
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webHidId = this.getFieldValue('id');
+      this.thing = new StreamDeck(this.webHidId);
+      this.firstTime = false;
+    }
+  },
+};
 
 Blocks['streamdeck_button_event'] = {
   /**
@@ -134,9 +167,6 @@ Blocks['streamdeck_button_event'] = {
   },
 };
 
-// Add streamdeck_button_event block to the toolbox.
-addBlock('streamdeck_button_event', 'States and Events');
-
 Blocks['streamdeck_color_buttons'] = {
   /**
    * Block for coloring stream deck buttons.
@@ -181,13 +211,6 @@ const STREAMDECK_COLOR_BUTTONS_XML = `
 </block>
 `;
 
-// Add streamdeck_color_buttons block to the toolbox.
-addBlock(
-  'streamdeck_color_buttons',
-  'Properties',
-  STREAMDECK_COLOR_BUTTONS_XML
-);
-
 Blocks['streamdeck_write_on_buttons'] = {
   /**
    * Block for writing on stream deck buttons.
@@ -221,9 +244,6 @@ Blocks['streamdeck_write_on_buttons'] = {
   },
 };
 
-// Add streamdeck_write_on_buttons block to the toolbox.
-addBlock('streamdeck_write_on_buttons', 'Properties');
-
 Blocks['streamdeck_set_brightness'] = {
   /**
    * Block for setting the brightness of a stream deck.
@@ -255,9 +275,36 @@ const STREAMDECK_SET_BRIGHTNESS_XML = `
 </block>
 `;
 
-// Add streamdeck_set_brightness block to the toolbox.
-addBlock(
-  'streamdeck_set_brightness',
-  'Properties',
-  STREAMDECK_SET_BRIGHTNESS_XML
-);
+// Add StreamDeck to list of implemented devices.
+implementedThings.push({
+  id: 'streamdeck',
+  name: 'StreamDeck',
+  type: 'hid',
+  blocks: [
+    {
+      type: 'streamdeck_button_event',
+      category: 'States and Events',
+    },
+    {
+      type: 'streamdeck_color_buttons',
+      category: 'Properties',
+      XML: STREAMDECK_COLOR_BUTTONS_XML,
+    },
+    {
+      type: 'streamdeck_write_on_buttons',
+      category: 'Properties',
+    },
+    {
+      type: 'streamdeck_set_brightness',
+      category: 'Properties',
+      XML: STREAMDECK_SET_BRIGHTNESS_XML,
+    },
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Stream-Deck',
+  filters: [
+    {
+      vendorId: 0x0fd9,
+      productId: 0x0063,
+    },
+  ],
+});

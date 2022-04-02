@@ -73,6 +73,7 @@ export default class StreamDeck {
             this.open().then(sd => {
                 this.streamdeck = sd;
                 this.registerButtonUpDownEventEmitters();
+                this.addPropertyHandlers();
             });
             this.thing.expose();
         });
@@ -94,6 +95,7 @@ export default class StreamDeck {
             if (e.name === 'InvalidStateError') {
                 device.close();
                 sd = await openDevice(device);
+                this.opened = true;
                 return sd;
             }
             else {
@@ -101,6 +103,18 @@ export default class StreamDeck {
                 throw new Error(e);
             }
         }
+    }
+    addPropertyHandlers() {
+        var _a, _b, _c;
+        (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setPropertyWriteHandler('buttonColors', parameters => {
+            return this.setButtonColors(parameters);
+        });
+        (_b = this.thing) === null || _b === void 0 ? void 0 : _b.setPropertyWriteHandler('brightness', parameters => {
+            return this.setBrightness(parameters);
+        });
+        (_c = this.thing) === null || _c === void 0 ? void 0 : _c.setPropertyWriteHandler('buttonText', parameters => {
+            return this.setButtonText(parameters);
+        });
     }
     /**
      * Sets the colors of the streamdeck buttons.
@@ -191,17 +205,12 @@ export default class StreamDeck {
      * Wrapper method for writing streamdeck properties.
      */
     async writeProperty(property, value) {
-        switch (property) {
-            case 'buttonColors':
-                await this.setButtonColors(value);
-                break;
-            case 'buttonText':
-                await this.setButtonText(value);
-                break;
-            case 'brightness':
-                this.setBrightness(value);
-                break;
+        var _a;
+        while (!this.opened) {
+            // Wait for the thing to be initialized
+            await new Promise(resolve => setTimeout(resolve, 100));
         }
+        (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.writeProperty(property, value);
     }
     /**
      * Wrapper method for reading streamdeck properties.

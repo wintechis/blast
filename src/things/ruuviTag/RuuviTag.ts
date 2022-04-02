@@ -1,7 +1,5 @@
 import {ExposedThing} from '@node-wot/core';
-import {values} from 'utils/object';
 import * as WoT from 'wot-typescript-definitions';
-import {throwError} from '../../blast_interpreter.js';
 import {getDeviceById} from '../../blast_webBluetooth.js';
 import {getThing, removeThing} from '../index.js';
 

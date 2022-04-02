@@ -7,9 +7,42 @@
 
 'use strict';
 
-import {Blocks, dialog, FieldDropdown} from 'blockly';
-import {addBlock} from '../../blast_toolbox.js';
+import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
+import {implementedThings} from '../../blast_things.js';
 import {scanBlocks} from '../../blast_webBluetooth.js';
+// eslint-disable-next-line node/no-missing-import
+import RuuviTag from '../../things/ruuviTag/RuuviTag.js';
+
+Blocks['things_ruuviTag'] = {
+  /**
+   * Block representing a RuuviTag.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Ruuvi Tag')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Ruuvi Tag');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/RuuviTag');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.thing = new RuuviTag(this.webBluetoothId);
+      this.firstTime = false;
+    }
+  },
+};
 
 Blocks['read_ruuvi_property'] = {
   /**
@@ -55,7 +88,24 @@ Blocks['read_ruuvi_property'] = {
   },
 };
 
-// Add read_ruuvi_property block to the toolbox.
-addBlock('read_ruuvi_property', 'Properties');
 // Add read_ruuvi_property block to the scanBlocks array.
 scanBlocks.push('read_ruuvi_property');
+
+// Add Ruuvi Tag to the list implemented things.
+implementedThings.push({
+  id: 'ruuviTag',
+  name: 'Ruuvi Tag',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'read_ruuvi_property',
+      category: 'Properties',
+    },
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/RuuviTag',
+  filters: [
+    {
+      namePrefix: 'Ruuvi',
+    },
+  ],
+});

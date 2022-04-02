@@ -187,6 +187,32 @@
       </div>
     </div>
 
+    <!-- connect device chooser -->
+    <div id="connect-modal" class="modal">
+      <div class="modal-content">
+        <span id ="connect-close" class="close">&times;</span>
+        <h1>Please select a device type from the list of implemented devices below</h1>
+        <hr>     
+        <div class="row" id="connect-row">
+          <div class="col">
+            <table id="connect-table">
+              <thead>
+                <tr>
+                  <th>Device Type</th>
+                  <th>Action</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="connect-tbody">
+              </tbody>
+            </table>
+            <br>
+            <input type="button" id="connect-done" value="done">
+          </div>
+        </div>
+      </div>
+    </div>    
+
     <!-- Debug info modal -->
     <div id="debugModal" class="modal">
       <div class="modal-content">
@@ -228,6 +254,28 @@
   const rev = 'blast-fd533f4ca8.min.js';
 
   /**
+   * Bluetooth device chooser
+   */
+  const connectModal = document.getElementById('connect-modal');
+  const connectModalClose = document.getElementById('connect-close');
+
+  connectModalClose.onclick = function () {
+    connectModal.style.display = 'none';
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.addEventListener('click', (event) => {
+    if (event.target == connectModal) {
+      connectModal.style.display = 'none';
+    }
+  });
+
+  const connectModalDone = document.getElementById('connect-done');
+  connectModalDone.onclick = function () {
+    connectModal.style.display = 'none';
+  }
+
+  /**
    * Reconnect modal methods
    */
   const rcClose = document.getElementById("rcClose");
@@ -238,11 +286,11 @@
   }
 
   // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
+  window.addEventListener('click', (event) => {
     if (event.target == rcModal) {
       rcModal.style.display = "none";
     }
-  }
+  });
 
   /**
    * Debug info modal methods
@@ -255,11 +303,11 @@
   }
 
   // When the user clicks anywhere outside of the modal, close it
-  window.onclick = function (event) {
+  window.addEventListener('click', (event) => {
     if (event.target == debugModal) {
       debugModal.style.display = "none";
     }
-  }
+  });
 
 </script>
 </html>

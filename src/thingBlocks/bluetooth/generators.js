@@ -7,11 +7,12 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
-import {optionalServices, readText} from './../../blast_webBluetooth.js';
-import {throwError} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import EddystoneDevice from './../../things/eddystone/EddystoneDevice.js';
+import {
+  asyncApiFunctions,
+  getWorkspace,
+  throwError,
+} from './../../blast_interpreter.js';
+import {readText} from './../../blast_webBluetooth.js';
 
 /**
  * Generates JavaScript code for the get_signal_strength block.
@@ -73,16 +74,18 @@ JavaScript['write_eddystone_property'] = function (block) {
     JavaScript.valueToCode(block, 'Slot', JavaScript.ORDER_NONE) || null;
   const value =
     JavaScript.valueToCode(block, 'Value', JavaScript.ORDER_NONE) || null;
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
 
-  const code = `writeEddystoneProperty(${thing}, ${slot}, ${property}, ${value});\n`;
+  const code = `writeEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property}, ${value});\n`;
   return code;
 };
 
-const eddystoneServiceUUID = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
-optionalServices.push(eddystoneServiceUUID);
-
 /**
  * Writes an Eddystone property to a bluetooth device.
+ * @param {Blockly.Block.id} blockId the things_eddyStoneDevice block's id.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {number} slot The slot to write to.
  * @param {String} property The property to write.
@@ -90,6 +93,7 @@ optionalServices.push(eddystoneServiceUUID);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const writeEddystoneProperty = async function (
+  blockId,
   webBluetoothId,
   slot,
   property,
@@ -117,8 +121,9 @@ const writeEddystoneProperty = async function (
     return;
   }
 
-  const device = new EddystoneDevice(webBluetoothId);
-  await device.writeProperty(property, value, slot);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  await thing.writeProperty(property, value, slot);
 
   callback();
 };
@@ -137,19 +142,26 @@ JavaScript['read_eddystone_property'] = function (block) {
   const property = JavaScript.quote_(block.getFieldValue('Property'));
   const slot =
     JavaScript.valueToCode(block, 'Slot', JavaScript.ORDER_NONE) || null;
-  const code = `readEddystoneProperty(${thing}, ${slot}, ${property})`;
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
+
+  const code = `readEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property})`;
 
   return [code, JavaScript.ORDER_NONE];
 };
 
 /**
  * Reads an Eddystone property from a bluetooth device.
+ * @param {Blockly.Block.id} blockId the things_eddyStoneDevice block's id.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {number} slot The slot to read from.
  * @param {String} property The property to read.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const readEddystoneProperty = async function (
+  blockId,
   webBluetoothId,
   slot,
   property,
@@ -176,14 +188,20 @@ const readEddystoneProperty = async function (
     return;
   }
 
-  const device = new EddystoneDevice(webBluetoothId);
-  const value = await device.readProperty(property, slot);
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  const value = await thing.readProperty(property, slot);
 
   callback(value);
 };
 
 // Add readEddystoneProperty method to the interpreter's API.
 asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
+
+JavaScript['things_eddyStoneDevice'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the read_bluetooth_service block.
@@ -283,13 +301,6 @@ const characteristics = {
     characteristic: '00002a9d-0000-1000-8000-00805f9b34fb',
   },
 };
-
-// Add all services to optionalServices.
-for (const characteristic in characteristics) {
-  if (!optionalServices.includes(characteristics[characteristic].service)) {
-    optionalServices.push(characteristics[characteristic].service);
-  }
-}
 
 /**
  * Reads a bluetooth characteristic from a bluetooth device.

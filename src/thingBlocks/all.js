@@ -24,9 +24,6 @@ import './huskyduino/generators.js';
 import './joycon/blocks.js';
 import './joycon/generators.js';
 
-import './mirobot/blocks.js';
-import './mirobot/generators.js';
-
 import './ruuviTag/blocks.js';
 import './ruuviTag/generators.js';
 

@@ -7,18 +7,30 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {getLatestCode} from '../../../dist/blast_interpreter.js';
-import {loadXMLFromFile} from '../../../dist/blast_storage.js';
-import {link} from '../../../dist/blast_storage.js';
-import {onStatusChange} from '../../../dist/blast_interpreter.js';
-import {runJS} from '../../../dist/blast_interpreter.js';
-import {setStdError} from '../../../dist/blast_interpreter.js';
-import {setStdIn} from '../../../dist/blast_interpreter.js';
-import {setStdInfo} from '../../../dist/blast_interpreter.js';
-import {setStdOut} from '../../../dist/blast_interpreter.js';
-import {setThingsLog} from '../../../dist/blast_things.js';
-import {statusValues} from '../../../dist/blast_interpreter.js';
-import {stopJS} from '../../../dist/blast_interpreter.js';
+import {
+  getLatestCode,
+  onStatusChange,
+  runJS,
+  setStdIn,
+  setStdError,
+  setStdInfo,
+  setStdOut,
+  statusValues,
+  stopJS,
+  throwError,
+} from '../../../dist/blast_interpreter.js';
+import {link, loadXMLFromFile} from '../../../dist/blast_storage.js';
+import {
+  addWebHidDevice,
+  connectWebHidDevice,
+  connectedThings,
+  implementedThings,
+  setThingsLog,
+  setWebBluetoothButtonHandler,
+  setWebHidButtonHandler,
+} from '../../../dist/blast_things.js';
+import {requestDevice} from '../../../dist/blast_webBluetooth.js';
+import {addBlock, reloadToolbox} from '../../../dist/blast_toolbox.js';
 
 /**
  * List of tab names.
@@ -416,6 +428,91 @@ const importPrettify = function () {
   document.head.appendChild(script);
 };
 
+const openConnectModal = function (type) {
+  // Clear the table
+  const tbody = document.getElementById('connect-tbody');
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+  // Add row for each device
+  for (const thing of implementedThings) {
+    // Skip Hid devices
+    if (thing.type !== type) {
+      continue;
+    }
+    // Add new row
+    const row = document.createElement('tr');
+    // Generate name cell html
+    const nameCell = document.createElement('td');
+    const name = document.createElement('span');
+    name.textContent = thing.name;
+    nameCell.appendChild(name);
+    if (thing.infoUrl) {
+      const infoUrl = document.createElement('a');
+      infoUrl.setAttribute('href', thing.infoUrl);
+      infoUrl.setAttribute('target', '_blank');
+      infoUrl.innerHTML = '<span class="icon material-icons">info_icon</span>';
+      nameCell.appendChild(infoUrl);
+    }
+    row.appendChild(nameCell);
+    // Pair cell html
+    row.appendChild(nameCell);
+    const pairCell = document.createElement('td');
+    const pairButton = document.createElement('input');
+    pairButton.setAttribute('type', 'button');
+    pairButton.setAttribute('id', 'pairButton-' + thing.id);
+    if (type === 'bluetooth') {
+      pairButton.setAttribute('value', 'Pair');
+      pairButton.addEventListener('click', async () => {
+        await requestDevice(thing);
+        // change pair status to checkmark
+        document.getElementById('pairStatus-' + thing.id).innerHTML =
+          '&#x2714;';
+        document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+      });
+    } else if (type === 'hid') {
+      pairButton.setAttribute('value', 'Connect');
+      pairButton.addEventListener('click', async () => {
+        await connectWebHidDevice(thing);
+        // change pair status to checkmark
+        document.getElementById('pairStatus-' + thing.id).innerHTML =
+          '&#x2714;';
+        document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+      });
+    }
+    pairCell.appendChild(pairButton);
+    row.appendChild(pairCell);
+    // pair status html
+    const statusCell = document.createElement('td');
+    const pairStatus = document.createElement('span');
+    pairStatus.setAttribute('id', 'pairStatus-' + thing.id);
+    // check if thing was already connected before
+    let alreadyConnected = false;
+    for (const [, t] of connectedThings) {
+      if (t.id === thing.id) {
+        alreadyConnected = true;
+        break;
+      }
+    }
+    if (alreadyConnected) {
+      pairStatus.innerHTML = '&#x2714;';
+      pairStatus.style.color = 'green';
+    } else {
+      pairStatus.innerHTML = '&#x2718;';
+      pairStatus.style.color = 'red';
+    }
+    pairStatus.style.fontSize = '20px';
+    pairStatus.style.fontWeight = 'bold';
+    pairStatus.style.marginRight = '10px';
+    statusCell.appendChild(pairStatus);
+    row.appendChild(statusCell);
+    // add row to table
+    tbody.appendChild(row);
+  }
+  // Show the modal
+  document.getElementById('connect-modal').style.display = 'block';
+};
+
 /**
  * Initialize the UI by binding onclick events.
  * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
@@ -488,6 +585,9 @@ export const initUi = function (ws) {
   onStatusChange.running.push(() => resetUi(statusValues.RUNNING));
   onStatusChange.ready.push(() => resetUi(statusValues.READY));
   onStatusChange.error.push(() => resetUi(statusValues.ERROR));
+
+  setWebBluetoothButtonHandler(() => openConnectModal('bluetooth'));
+  setWebHidButtonHandler(() => openConnectModal('hid'));
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(importPrettify, 1);

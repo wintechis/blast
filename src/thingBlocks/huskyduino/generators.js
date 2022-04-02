@@ -8,12 +8,22 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
 import {
   optionalServices,
   readText,
   writeWithoutResponse,
 } from './../../blast_webBluetooth.js';
+
+/**
+ * Generates JavaScript code for the things_huskylens block.
+ * @param {Blockly.Block} block the things_huskylens block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_huskylens'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generate JavaScript code of the huskylens_choose_algo block.
@@ -22,8 +32,6 @@ import {
  */
 JavaScript['huskylens_choose_algo'] = function (block) {
   const algorithm = block.getFieldValue('Algorithms');
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
-
   const dict = {
     face_recognition: '0x01',
     object_tracking: '0x02',
@@ -34,8 +42,12 @@ JavaScript['huskylens_choose_algo'] = function (block) {
     object_classification: '0x07',
   };
   const value = dict[algorithm];
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
 
-  const code = `chooseAlgo(${thing}, '${value}');\n`;
+  const code = `chooseAlgo(${blockId}, '${value}');\n`;
   return code;
 };
 
@@ -47,9 +59,12 @@ JavaScript['huskylens_choose_algo'] = function (block) {
 JavaScript['huskylens_write_id'] = function (block) {
   const input = JavaScript.valueToCode(block, 'ID', JavaScript.ORDER_ATOMIC);
   const id = '0x' + parseInt(input).toString(16);
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
 
-  const code = `learnID(${thing}, '${id}');\n`;
+  const code = `learnID(${blockId}, '${id}');\n`;
   return code;
 };
 
@@ -59,18 +74,12 @@ JavaScript['huskylens_write_id'] = function (block) {
  * @returns {String} the generated JavaScript code
  */
 JavaScript['huskylens_write_forget_flag'] = function (block) {
-  const flag = JavaScript.valueToCode(
-    block,
-    'forgetFlag',
-    JavaScript.ORDER_ATOMIC
-  );
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
 
-  // convert the flag to a byte string.
-  const flagByte = flag ? '01' : '00';
-  const value = '0x' + flagByte;
-
-  const code = `forgetAll(${thing}, '${value}');\n`;
+  const code = `forgetAll(${blockId});\n`;
   return code;
 };
 
@@ -81,9 +90,12 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
  */
 JavaScript['huskylens_read_id'] = function (block) {
   const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
-
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
   // Assemble JavaScript into code variable.
-  const code = `readID(${thing})`;
+  const code = `readID(${blockId}, ${thing})`;
   // Return code.
   return [code, JavaScript.ORDER_NONE];
 };
@@ -94,19 +106,14 @@ optionalServices.push(HuskyServiceUUID);
 
 /**
  * Write the choosen algorithm value to Huskyduino via bluetooth
- * @param {String} thing identifier of the Huskyduino.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} value represents the algorithm, ranges from 1 to 7.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const chooseAlgo = async function (thing, value, callback) {
-  const characteristicUUID = '5be35d26-f9b0-11eb-9a03-0242ac130003';
-
-  await writeWithoutResponse(
-    thing,
-    HuskyServiceUUID,
-    characteristicUUID,
-    value
-  );
+const chooseAlgo = async function (blockId, value, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  await thing.writeProperty('algorithm', value);
   callback();
 };
 
@@ -114,14 +121,14 @@ asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 
 /**
  * write face id value to Huskyduino via bluetooth
- * @param {String} thing identifier of the Huskyduino.
- * @param {String} id faceID to write to the Huskyduino.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
+ * @param {String} value faceID to write to the Huskyduino.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const learnID = async function (thing, id, callback) {
-  const characteristicUUID = '5be35eca-f9b0-11eb-9a03-0242ac130003';
-
-  await writeWithoutResponse(thing, HuskyServiceUUID, characteristicUUID, id);
+const learnID = async function (blockId, value, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  await thing.writeProperty('id', value);
   callback();
 };
 
@@ -129,14 +136,14 @@ asyncApiFunctions.push(['learnID', learnID]);
 
 /**
  * write forget flag to Huskyduino via bluetooth
- * @param {String} thing identifier of the Huskyduino.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} flag whether to forget all saved values or not.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const forgetAll = async function (thing, flag, callback) {
-  const characteristicUUID = '5be361b8-f9b0-11eb-9a03-0242ac130003';
-
-  await writeWithoutResponse(thing, HuskyServiceUUID, characteristicUUID, flag);
+const forgetAll = async function (blockId, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  await thing.invokeAction('forgetAll');
   callback();
 };
 
@@ -144,15 +151,15 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
  * read the face IDs of all known faces currently visible to the camera via bluetooth.
- * @param {String} thing identifier of the Huskyduino.
+ * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {String} contains all known faceIDs currently visible to the camera.
  */
-const readID = async function (thing, callback) {
-  const characteristicUUID = '5be3628a-f9b0-11eb-9a03-0242ac130003';
-
-  const id = await readText(thing, HuskyServiceUUID, characteristicUUID);
-  callback(id);
+const readID = async function (blockId, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  await thing.readProperty('id');
+  callback();
 };
 
 asyncApiFunctions.push(['readID', readID]);

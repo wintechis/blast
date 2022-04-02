@@ -7,8 +7,41 @@
 
 'use strict';
 
-import {Blocks, dialog, FieldDropdown} from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
+import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
+import {implementedThings} from '../../blast_things.js';
+// eslint-disable-next-line node/no-missing-import
+import HuskyDuino from './../../things/huskyDuino/HuskyDuino.js';
+
+Blocks['things_huskylens'] = {
+  /**
+   * Block representing a BLE RGB LED controller.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('HuskyDuino')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A HuskyDuino.');
+    this.setHelpUrl('');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.thing = new HuskyDuino(this.webBluetoothId);
+      this.firstTime = false;
+    }
+  },
+};
 
 Blocks['huskylens_choose_algo'] = {
   init: function () {
@@ -47,9 +80,6 @@ Blocks['huskylens_choose_algo'] = {
     }
   },
 };
-
-// Add choose the huskylens_choose_algo to the toolbox.
-addBlock('huskylens_choose_algo', 'Properties');
 
 Blocks['huskylens_write_id'] = {
   init: function () {
@@ -92,8 +122,6 @@ const HUSKYLENS_WRITE_ID_XML = `
   </value>
 </block>
 `;
-// Add the huskylens_write_face_id block to the toolbox.
-addBlock('huskylens_write_id', 'Properties', HUSKYLENS_WRITE_ID_XML);
 
 Blocks['huskylens_write_forget_flag'] = {
   init: function () {
@@ -135,13 +163,6 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 </block>
 `;
 
-// Add the huskylens_write_forget_flag block to the toolbox.
-addBlock(
-  'huskylens_write_forget_flag',
-  'Properties',
-  HUSKYLENS_FORGET_FLAG_XML
-);
-
 Blocks['huskylens_read_id'] = {
   init: function () {
     this.appendValueInput('Thing')
@@ -168,5 +189,30 @@ Blocks['huskylens_read_id'] = {
   },
 };
 
-// Add the huskylens_read_id block to the toolbox.
-addBlock('huskylens_read_id', 'Properties');
+// Add HuskyDuino to the list of implemented things.
+implementedThings.push({
+  id: 'HuskyDuino',
+  name: 'HuskyDuino',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'huskylens_choose_algo',
+      category: 'Properties',
+    },
+    {
+      type: 'huskylens_write_id',
+      category: 'Properties',
+      XML: HUSKYLENS_WRITE_ID_XML,
+    },
+    {
+      type: 'huskylens_write_forget_flag',
+      category: 'Properties',
+      XML: HUSKYLENS_FORGET_FLAG_XML,
+    },
+    {
+      type: 'huskylens_read_id',
+      category: 'Properties',
+    },
+  ],
+  optionalServices: ['5be35d20-f9b0-11eb-9a03-0242ac130003'],
+});

@@ -6,8 +6,10 @@
 
 'use strict';
 
-import {Blocks, dialog, FieldDropdown} from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
+import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
+import {implementedThings} from '../../blast_things.js';
+// eslint-disable-next-line node/no-missing-import
+import EddystoneDevice from '../../things/eddystone/EddystoneDevice.js';
 
 Blocks['get_signal_strength_wb'] = {
   /**
@@ -40,8 +42,6 @@ Blocks['get_signal_strength_wb'] = {
     }
   },
 };
-// Add get_signal_strength_wb block to the toolbox.
-addBlock('get_signal_strength_wb', 'Properties');
 
 Blocks['write_eddystone_property'] = {
   /**
@@ -121,13 +121,6 @@ const WRITE_EDDYSTONE_PROPERTY_XML = `
     </value>
   </block>`;
 
-// Add write_eddystone_property block to the toolbox.
-addBlock(
-  'write_eddystone_property',
-  'Properties',
-  WRITE_EDDYSTONE_PROPERTY_XML
-);
-
 Blocks['read_eddystone_property'] = {
   /**
    * Block for reading a property from an eddystone device.
@@ -172,9 +165,6 @@ const READ_EDDYSTONE_PROPERTY_XML = `
     </value>
   </block>`;
 
-// Add read_eddystone_property block to the toolbox.
-addBlock('read_eddystone_property', 'Properties', READ_EDDYSTONE_PROPERTY_XML);
-
 Blocks['read_gatt_characteristic'] = {
   /**
    * Block for reading a characteristic from a bluetooth device.
@@ -218,5 +208,180 @@ Blocks['read_gatt_characteristic'] = {
   },
 };
 
-// Add read_bluetooth_service block to the toolbox.
-addBlock('read_gatt_characteristic', 'Properties');
+Blocks['things_eddyStoneDevice'] = {
+  /**
+   * Block representing an Eddystone device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Eddystone device')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('An Eddystone device.');
+    this.setHelpUrl(
+      'https://github.com/wintechis/blast/wiki/Eddystone-Devices'
+    );
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.thing = new EddystoneDevice(this.webBluetoothId);
+      this.firstTime = false;
+    }
+  },
+};
+
+Blocks['things_bluetoothGeneric'] = {
+  /**
+   * Block representing a generic Bluetooth device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('generic Bluetooth device')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Generic Bluetooth device.');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+  },
+};
+
+// Add Eddystone device to the list of implemented things
+implementedThings.push({
+  id: 'eddyStoneDevice',
+  name: 'Eddystone device',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'write_eddystone_property',
+      category: 'Properties',
+      XML: WRITE_EDDYSTONE_PROPERTY_XML,
+    },
+    {
+      type: 'read_eddystone_property',
+      category: 'Properties',
+      XML: READ_EDDYSTONE_PROPERTY_XML,
+    },
+  ],
+  optionalServices: ['a3c87500-8ed3-4bdf-8a39-a01bebede295'],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Eddystone-Devices',
+});
+
+const characteristics = {
+  barometricPressureTrend: {
+    service: '00001802-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
+  },
+  batteryLevel: {
+    service: '0000180f-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a19-0000-1000-8000-00805f9b34fb',
+  },
+  deviceName: {
+    service: '00001800-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a00-0000-1000-8000-00805f9b34fb',
+  },
+  elevation: {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6c-0000-1000-8000-00805f9b34fb',
+  },
+  firmwareRevision: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a26-0000-1000-8000-00805f9b34fb',
+  },
+  hardwareRevision: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a27-0000-1000-8000-00805f9b34fb',
+  },
+  humidity: {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6f-0000-1000-8000-00805f9b34fb',
+  },
+  irradiance: {
+    service: '00001803-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a77-0000-1000-8000-00805f9b34fb',
+  },
+  intermediateTemperature: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1e-0000-1000-8000-00805f9b34fb',
+  },
+  manufacturerName: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a29-0000-1000-8000-00805f9b34fb',
+  },
+  modelNumber: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a24-0000-1000-8000-00805f9b34fb',
+  },
+  movementCounter: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a56-0000-1000-8000-00805f9b34fb',
+  },
+  pressure: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6d-0000-1000-8000-00805f9b34fb',
+  },
+  serialNumber: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a25-0000-1000-8000-00805f9b34fb',
+  },
+  softwareRevision: {
+    service: '0000180a-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a28-0000-1000-8000-00805f9b34fb',
+  },
+  temperature: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a6e-0000-1000-8000-00805f9b34fb',
+  },
+  temperatureMeasurement: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
+  },
+  temperatureType: {
+    service: '00001809-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a1d-0000-1000-8000-00805f9b34fb',
+  },
+  txPowerLevel: {
+    service: '00001804-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a07-0000-1000-8000-00805f9b34fb',
+  },
+  weight: {
+    service: '00001808-0000-1000-8000-00805f9b34fb',
+    characteristic: '00002a9d-0000-1000-8000-00805f9b34fb',
+  },
+};
+
+const optionalServices = [];
+// Add all services to optionalServices.
+for (const characteristic in characteristics) {
+  if (!optionalServices.includes(characteristics[characteristic].service)) {
+    optionalServices.push(characteristics[characteristic].service);
+  }
+}
+
+implementedThings.push({
+  id: 'bluetoothGeneric',
+  name: 'Generic Bluetooth device',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'read_gatt_characteristic',
+      category: 'Properties',
+    },
+  ],
+  optionalServices: optionalServices,
+});

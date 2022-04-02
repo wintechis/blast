@@ -1,6 +1,6 @@
 import { getThing, removeThing } from '../index.js';
 import { subscribe } from '../../blast_webBluetooth.js';
-export default class BleRgbController {
+export default class XiamoiThermometer {
     constructor(webBluetoothId) {
         this.thing = null;
         this.exposedThing = null;
@@ -107,7 +107,7 @@ export default class BleRgbController {
         while (!this.exposedThing) {
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        this.exposedThing.readProperty(property);
+        return this.exposedThing.readProperty(property);
     }
     async getThingDescription() {
         while (!this.thing) {

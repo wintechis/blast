@@ -13,7 +13,6 @@ import {addWebBluetoothDevice} from './blast_things.js';
 import {getThingsLog} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
 import {onStatusChange} from './blast_interpreter.js';
-import {setWebBluetoothButtonHandler} from './blast_things.js';
 import {throwError} from './blast_interpreter.js';
 
 const {dialog} = Blockly;
@@ -94,36 +93,39 @@ const hexStringToArrayBuffer = function (hexString) {
 
 /**
  * Pairs a Bluetooth device.
- * @param {RequestDeviceOptions} options An object that sets options for the device request.
- * @param {string=} deviceName optional, optional, user-defined name for the device to pair..
+ * @param thing information about the device to pair.
  * @return {Promise<BluetoothDevice>} A Promise to a BluetoothDevice object.
  */
-export const requestDevice = async function (options, deviceName) {
+export const requestDevice = async function (thing) {
   const thingsLog = getThingsLog();
   thingsLog('Requesting device...', 'Bluetooth');
   if (navigator.bluetooth) {
-    // if no options are given, use default ones
-    if (!options) {
+    let options = {};
+    // if no filters are given, accept all devices
+    if (!thing.filters) {
       options = {};
       options.acceptAllDevices = true;
-      options.optionalServices = optionalServices;
+    } else {
+      options.filters = thing.filters;
+    }
+    if (thing.optionalServices) {
+      options.optionalServices = thing.optionalServices;
     }
 
     try {
       const device = await navigator.bluetooth.requestDevice(options);
       thingsLog('Device paired', 'Bluetooth', device.id);
-      // if no device name is given, use default one
-      const name = deviceName || device.name;
+      const name = device.name;
 
-      addWebBluetoothDevice(device.id, name);
+      addWebBluetoothDevice(device.id, name, thing);
       getWorkspace().refreshToolboxSelection();
+      console.log(device);
       return device;
     } catch (error) {
       throwError(error);
     }
   }
 };
-setWebBluetoothButtonHandler(requestDevice);
 
 /**
  * Returns a paired bluetooth device by their id.

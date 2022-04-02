@@ -7,8 +7,43 @@
 
 'use strict';
 
-import {Blocks, dialog} from 'blockly';
-import {addBlock} from '../../blast_toolbox.js';
+import {Blocks, dialog, FieldTextInput} from 'blockly';
+// eslint-disable-next-line node/no-missing-import
+import BleRgbController from './../../things/bleRgbController/BleRgbController.js';
+import {implementedThings} from '../../blast_things.js';
+
+Blocks['things_bleLedController'] = {
+  /**
+   * Block representing a BLE RGB LED controller.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('BLE LED controller')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A BLE LED controller.');
+    this.setHelpUrl(
+      'https://github.com/wintechis/blast/wiki/Bluetooth-LED-controller'
+    );
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.thing = new BleRgbController(this.webBluetoothId);
+      this.firstTime = false;
+    }
+  },
+};
 
 Blocks['switch_lights_rgb'] = {
   /**
@@ -53,5 +88,27 @@ const SWITCH_LIGHTS_RGB_XML = `
   </value>
 </block>`;
 
-// Add switch_lights_rgb block to the toolbox.
-addBlock('switch_lights_rgb', 'Properties', SWITCH_LIGHTS_RGB_XML);
+// Add LED Controller block to the list of implemented things.
+implementedThings.push({
+  id: 'bleLedController',
+  name: 'LED Controller',
+  type: 'bluetooth',
+  blocks: [
+    {
+      type: 'switch_lights_rgb',
+      category: 'Properties',
+      XML: SWITCH_LIGHTS_RGB_XML,
+    },
+  ],
+  filters: [
+    {
+      namePrefix: 'ELK-',
+    },
+    // Service is not advertised so we can not filter for it.
+    //{
+    //     services: ['0000fff0-0000-1000-8000-00805f9b34fb'],
+    //},
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Bluetooth-LED-controller',
+  optionalServices: ['0000fff0-0000-1000-8000-00805f9b34fb'],
+});

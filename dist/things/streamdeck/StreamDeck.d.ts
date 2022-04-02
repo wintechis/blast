@@ -13,6 +13,7 @@ export default class StreamDeck {
      * @returns {Promise<StreamDeckWeb>}
      */
     private open;
+    private addPropertyHandlers;
     /**
      * Sets the colors of the streamdeck buttons.
      */

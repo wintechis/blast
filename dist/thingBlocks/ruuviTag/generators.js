@@ -8,9 +8,17 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import RuuviTag from './../../things/ruuviTag/RuuviTag.js';
-import {asyncApiFunctions} from '../../blast_interpreter.js';
+import {asyncApiFunctions, getWorkspace} from '../../blast_interpreter.js';
+
+/**
+ * Generates JavaScript code for the things_ruuviTag block.
+ * @param {Blockly.Block} block the things_ruuviTag block.
+ * @returns {String} the generated code.
+ */
+JavaScript['things_ruuviTag'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the get_temperature block.
@@ -19,24 +27,27 @@ import {asyncApiFunctions} from '../../blast_interpreter.js';
  */
 JavaScript['read_ruuvi_property'] = function (block) {
   const measurement = JavaScript.quote_(block.getFieldValue('measurement'));
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
-  const code = `getRuuviProperty(${measurement}, ${thing})`;
+  const thing =
+    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
+
+  const code = `getRuuviProperty(${blockId}, ${measurement}, ${thing})`;
   return [code, JavaScript.ORDER_NONE];
 };
 
 /**
  * Fetches the selected measurement from a RuuviTag.
+ * @param {Blockly.Block.id} blockId the read_ruuvi_property block's id.
  * @param {String} measurement the measurement to fetch.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a RuuviTag.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const getRuuviProperty = async function (
-  measurement,
-  webBluetoothId,
-  callback
-) {
-  const thing = new RuuviTag(webBluetoothId);
+const getRuuviProperty = async function (blockId, measurement, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
   await thing.subscribeEvent('rawv2', value => {
     callback(value[measurement]);
   });

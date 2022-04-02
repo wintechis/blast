@@ -1,5 +1,5 @@
 import * as WoT from 'wot-typescript-definitions';
-export default class BleRgbController {
+export default class XiamoiThermometer {
     private thing;
     private exposedThing;
     private webBluetoothId;
