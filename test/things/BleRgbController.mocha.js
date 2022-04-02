@@ -22,7 +22,7 @@ suite('BLE RGB Controller', function () {
     // Sets up a mock for the BleRgbController class with stubs for the bluetooth operations
     this.spy = sinon.spy();
     this.BleRgbController = await esmock(
-      '../../dist/things/BleRgbController/BleRgbController.js',
+      '../../dist/things/bleRgbController/BleRgbController.js',
       {
         '../../dist/blast_webBluetooth.js': {
           writeWithoutResponse: this.spy,

@@ -4,7 +4,7 @@ name: Lint and Deploy
 on: [push, pull_request]
 
 jobs:
-  lint:
+  lint and test:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,8 @@ jobs:
         run: yarn install --immutable
       - name: run linter
         run: yarn run lint
+      - name: run unit tests
+        run: yarn run test
   build-examples:
     runs-on: ubuntu-latest
     needs: lint
