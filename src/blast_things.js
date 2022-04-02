@@ -128,7 +128,7 @@ export const thingsFlyoutCategory = function (workspace) {
   xmlList.push(webBluetoothButton);
   // Add connected blocks for connected blueooth devices
   if (connectedThingBlocks.bluetooth.length > 0) {
-    xmlList = xmlList.concat(connectedThingBlocks.bluetooth);
+    xmlList.push(...connectedThingBlocks.bluetooth);
   }
 
   // Create WebBluetooth Label
@@ -147,7 +147,7 @@ export const thingsFlyoutCategory = function (workspace) {
   xmlList.push(webHidbutton);
   // Add connected blocks for connected webHID devices
   if (connectedThingBlocks.hid.length > 0) {
-    xmlList = xmlList.concat(connectedThingBlocks.hid);
+    xmlList.push(...connectedThingBlocks.hid);
   }
 
   // Create identifiers label
