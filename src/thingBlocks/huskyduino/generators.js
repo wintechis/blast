@@ -9,11 +9,7 @@
 
 import {JavaScript} from 'blockly';
 import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
-import {
-  optionalServices,
-  readText,
-  writeWithoutResponse,
-} from './../../blast_webBluetooth.js';
+import {optionalServices} from './../../blast_webBluetooth.js';
 
 /**
  * Generates JavaScript code for the things_huskylens block.
