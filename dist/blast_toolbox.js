@@ -24,13 +24,23 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
+      contents: [
+        {
+          kind: 'label',
+          text: '(Connect things to device dependent blocks)',
+        },
+      ],
       name: 'Properties',
       colour: '255',
     },
     {
       kind: 'CATEGORY',
-      contents: [],
+      contents: [
+        {
+          kind: 'label',
+          text: '(Connect things to device dependent blocks)',
+        },
+      ],
       name: 'Actions',
       colour: '0',
     },

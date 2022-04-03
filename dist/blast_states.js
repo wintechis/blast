@@ -158,6 +158,11 @@ export const rename = function (name) {
  */
 export const eventsFlyoutCategory = function (workspace) {
   const xmlList = [];
+  // Add label with connect things hint
+  const label = document.createElement('label');
+  label.setAttribute('text', '(Connect things to device dependent blocks)');
+  xmlList.push(label);
+
   // add event_every_minutes block
   const eventEveryMinutes = utils.xml.createElement('block');
   eventEveryMinutes.setAttribute('type', 'event_every_minutes');
