@@ -108,7 +108,7 @@ export const getWebHidDevice = function (deviceId) {
  * @return {!Array.<!Element>} Array of XML elements.
  */
 export const thingsFlyoutCategory = function (workspace) {
-  let xmlList = [];
+  const xmlList = [];
   // get connected things
   const connectedThingBlocks = flyoutCategoryBlocks();
 
