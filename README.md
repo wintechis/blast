@@ -1,4 +1,4 @@
-<img src="media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
+<img src="examples/web/media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
 # BLAST - Block Applications For Things 
 A visual programming environment (VPE) for creating and executing applications, that communicate and interact with devices from the Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)).
