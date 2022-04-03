@@ -4,44 +4,67 @@ name: Lint and Deploy
 on: [push, pull_request]
 
 jobs:
-  lint:
+  lint-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@master
-      # Use cache for node modules
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
 
-      - name: Install dependencies
-        run: yarn --ignore-engines
-      - name: run ESLint
+      - name: Restore yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
+
+      - name: Run yarn install
+        run: yarn install --immutable
+      - name: run linter
         run: yarn run lint
+      - name: run unit tests
+        run: yarn run test
   build-examples:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: lint-and-test
       
     steps:
-        - uses: actions/checkout@master
-        # Use cache for node modules
-        - uses: actions/cache@v2
-          with:
-            path: '**/node_modules'
-            key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
-        - name: yarn run build
-          run: |
-                cd ./examples/web
-                yarn install
-                yarn run build
+      - uses: actions/checkout@v3
+        with:
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Restore yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
+
+      - name: Build web example
+        run: yarn install --immutable && yarn run build
   deploy:
     runs-on: ubuntu-latest
     needs: build-examples
     if: github.ref == 'refs/heads/master'
   
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
+        with:
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
@@ -57,7 +80,11 @@ jobs:
     if: github.ref == 'refs/heads/ren'
   
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
+        with:
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+        
       - name: copy file via ssh password
         uses: appleboy/scp-action@master
         with:
@@ -68,18 +95,28 @@ jobs:
           target: "./public_html/testing/ren/"
   jsdocs:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: lint-and-test
     if: github.ref == 'refs/heads/master'
     
     steps:
-      - uses: actions/checkout@master
-      # Use cache for node modules
-      - uses: actions/cache@v2
+      - uses: actions/checkout@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn config get cacheFolder)"
+
+      - name: Restore yarn cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
+          restore-keys: |
+            yarn-cache-folder-
 
       - name: Install dependencies
-        run: yarn --ignore-engines
+        run: yarn install --immutable
       - name: Run JSDoc
         run: yarn run jsdoc

@@ -1,89 +1,79 @@
 {
-    "rules": {
-        "curly": ["error"],
-        "eol-last": ["error"],
-        // Blockly/Google use 2-space indents.
-        // Blockly/Google uses +4 space indents for line continuations.
-        // Ignore default rules for ternary expressions.
-        "indent": [
-            "error", 2,
-            {
-                "SwitchCase": 1,
-                "MemberExpression": 2,
-                "ObjectExpression": 1,
-                "FunctionDeclaration": {
-                    "body": 1,
-                    "parameters": 2
-                },
-                "FunctionExpression": {
-                    "body": 1,
-                    "parameters": 2
-                },
-                "CallExpression": {
-                    "arguments": 2
-                },
-                "ignoredNodes": ["ConditionalExpression"]
-            }
-        ],
-        "keyword-spacing": ["error"],
-        "linebreak-style": ["error", "unix"],
-        "max-len": [
-            "error",
-            {
-                "code": 100,
-                "tabWidth": 4,
-                "ignoreStrings": true,
-                "ignoreRegExpLiterals": true,
-                "ignoreUrls": true
-            }
-        ],
-        "no-trailing-spaces": ["error", { "skipBlankLines": true }],
-        "no-unused-vars": [
-            "error",
-            {
-                "args": "after-used",
-                // Ignore vars starting with an underscore.
-                "varsIgnorePattern": "^_",
-                // Ignore arguments starting with an underscore.
-                "argsIgnorePattern": "^_"
-            }
-        ],
-        "no-undef": ["off"],
-        // Blockly uses for exporting symbols. no-self-assign added in eslint 5.
-        "no-self-assign": ["off"],
-        // Blockly uses single quotes except for JSON blobs, which must use double quotes.
-        "quotes": ["error", "single"],
-        "semi": ["error", "always"],
-        // Blockly doesn't have space before function paren when defining functions.
-        "space-before-function-paren": ["error", "never"],
-        // Blockly doesn't have space before function paren when calling functions.
-        "func-call-spacing": ["error", "never"],
-        "space-infix-ops": ["error"],
-        // Blockly uses 'use strict' in files.
-        "strict": ["off"],
-        // Closure style allows redeclarations.
-        "no-redeclare": ["off"],
-        "valid-jsdoc": ["error", {"requireReturn": false}],
-        "no-console": ["off"],
-        "no-multi-spaces": ["error", { "ignoreEOLComments": true }],
-        "operator-linebreak": ["error", "after"],
-        "spaced-comment": ["error", "always", {
-            "block": {
-                "balanced": true
-            },
-            "exceptions": ["*"]
-        }]
-    },
-    "parserOptions": {
-        "ecmaVersion": 2020,
+  "extends": [
+    "eslint:recommended",
+    "plugin:node/recommended",
+    "prettier"
+  ],
+  "plugins": [
+    "node",
+    "prettier"
+  ],
+  "globals": {
+    // TODO find node alternatives for these
+    "Audio": "readonly",
+    "Blob": "readonly",
+    "document": "readonly",
+    "FileReader": "readonly",
+    "fetch": "readonly",
+    "Headers": "readonly",
+    "Interpreter":"readonly",
+    "location": "readonly",
+    "navigator": "readonly",
+    "window": "readonly"
+  },
+  "rules": {
+    "prettier/prettier": "error",
+    "block-scoped-var": "error",
+    "eqeqeq": "error",
+    "no-var": "error",
+    "prefer-const": "error",
+    "eol-last": "error",
+    "prefer-arrow-callback": "error",
+    "no-trailing-spaces": "error",
+    "quotes": ["warn", "single", { "avoidEscape": true }],
+    "no-restricted-properties": [
+      "error",
+      {
+        "object": "describe",
+        "property": "only"
+      },
+      {
+        "object": "it",
+        "property": "only"
+      }],
+    "node/no-unsupported-features/node-builtins": ["error", {
+      "version": ">=11.0.0"
+    }]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.ts", "**/*.tsx"],
+      "parser": "@typescript-eslint/parser",
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-use-before-define": "off",
+        "@typescript-eslint/no-warning-comments": "off",
+        "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-var-requires": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/explicit-module-boundary-types": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/camelcase": "off",
+        "node/no-missing-import": "off",
+        "node/no-empty-function": "off",
+        "node/no-unsupported-features/es-syntax": "off",
+        "node/no-missing-require": "off",
+        "node/shebang": "off",
+        "no-dupe-class-members": "off",
+        "require-atomic-updates": "off"
+      },
+      "parserOptions": {
+        "ecmaVersion": 2018,
         "sourceType": "module"
-    },
-    "env": {
-        "es6": true
-    },
-    "globals": {
-        "Blockly": true,
-        "goog": true
-    },
-    "extends": ["eslint:recommended", "google"]
+      }
+    }
+  ]
 }
