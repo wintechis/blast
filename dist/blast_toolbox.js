@@ -27,7 +27,7 @@ const defaultToolbox = {
       contents: [
         {
           kind: 'label',
-          text: '(Connect things to device dependent blocks)',
+          text: '(Connect things to see device dependent blocks)',
         },
       ],
       name: 'Properties',
@@ -38,7 +38,7 @@ const defaultToolbox = {
       contents: [
         {
           kind: 'label',
-          text: '(Connect things to device dependent blocks)',
+          text: '(Connect things to see device dependent blocks)',
         },
       ],
       name: 'Actions',

@@ -160,7 +160,7 @@ export const eventsFlyoutCategory = function (workspace) {
   const xmlList = [];
   // Add label with connect things hint
   const label = document.createElement('label');
-  label.setAttribute('text', '(Connect things to device dependent blocks)');
+  label.setAttribute('text', '(Connect things to see device dependent blocks)');
   xmlList.push(label);
 
   // add event_every_minutes block
