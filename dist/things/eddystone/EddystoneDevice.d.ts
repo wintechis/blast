@@ -11,6 +11,6 @@ export default class EddystoneDevice {
     private getActiveSlot;
     writeProperty(property: string, value: string, slot: number): Promise<void>;
     readProperty(property: string, slot: number): Promise<string>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
-    destroy(): void;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
+    destroy(): Promise<void>;
 }

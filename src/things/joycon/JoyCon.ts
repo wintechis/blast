@@ -1,10 +1,11 @@
 import * as WoT from 'wot-typescript-definitions';
 import {getThing, removeThing} from '../index.js';
-import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
-import {getWebHidDevice} from '../../blast_things.js';
+import {Packet, JoyConLeft, JoyConRight} from 'joy-con-webhid';
+import {getThingsLog, getWebHidDevice} from '../../blast_things.js';
 import {throwError} from '../../blast_interpreter.js';
-import type {Packet} from './types';
 import {ExposedThing} from '@node-wot/core';
+
+const thingsLog = getThingsLog();
 
 export default class JoyCon {
   private thing: WoT.ExposedThing | null = null;
@@ -12,10 +13,10 @@ export default class JoyCon {
   private joyCon: JoyConLeft | JoyConRight | null = null;
   private opened = false;
   private eventListenerAttached = false;
-  public td: WoT.ThingDescription;
+  public td: WoT.ThingDescription | null = null;
   private webHidId: string;
   private packet: Packet | null = null;
-  private inputHandler: Function | undefined;
+  private inputHandler: (event: Event) => void = () => undefined;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -96,6 +97,11 @@ export default class JoyCon {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       actualAccelerometer: {
         title: 'Actual accelerometer',
@@ -121,6 +127,11 @@ export default class JoyCon {
             readOnly: true,
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       actualGyroscope: {
         title: 'Actual gyroscope',
@@ -187,6 +198,11 @@ export default class JoyCon {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       actualOrientation: {
         title: 'Actual orientation',
@@ -215,6 +231,11 @@ export default class JoyCon {
             readOnly: true,
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       actualOrientationQuaternion: {
         title: 'Actual orientation quaternion',
@@ -243,6 +264,11 @@ export default class JoyCon {
             readOnly: true,
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       gyroscopes: {
         title: 'Gyroscopes',
@@ -377,6 +403,11 @@ export default class JoyCon {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       quaternion: {
         title: 'Quaternion',
@@ -408,6 +439,11 @@ export default class JoyCon {
             readOnly: true,
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
     events: {
@@ -417,6 +453,11 @@ export default class JoyCon {
         data: {
           type: 'string',
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       buttonDown: {
         title: 'Button down event',
@@ -424,6 +465,11 @@ export default class JoyCon {
         data: {
           type: 'string',
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -541,6 +587,9 @@ export default class JoyCon {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
     }
+    if (!this.eventListenerAttached) {
+      await this.registerButtonEventEmitter();
+    }
     this.exposedThing?.subscribeEvent(eventName, fn);
   }
 
@@ -552,15 +601,17 @@ export default class JoyCon {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    // for (const eventName of Object.keys(this.exposedThing.events)) {
-    //   this.exposedThing.unsubscribeEvent(eventName);
-    // }
-    // unsubscribeEvent is not implemented, so instead we destroy the thing
-    this.destroy();
-    this.joyCon.removeEventListener('hidInput', this.inputHandler);
+    thingsLog('Removing all Joy-Con listeners', 'hid', 'Joy-Con');
+    // unsubcribeEvent is not yet implemented in node-wot, so we have to use this own implementation
+    for (const eventName in this.exposedThing?.events) {
+      const es = this.exposedThing?.events[eventName].getState();
+      es.legacyListeners.length = 0;
+    }
   }
 
-  private destroy() {
-    removeThing(this.td?.id);
+  public async destroy() {
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 }

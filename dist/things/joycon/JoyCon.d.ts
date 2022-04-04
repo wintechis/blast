@@ -1,12 +1,12 @@
 import * as WoT from 'wot-typescript-definitions';
-import type { Packet } from './types';
+import { Packet } from 'joy-con-webhid';
 export default class JoyCon {
     private thing;
     private exposedThing;
     private joyCon;
     private opened;
     private eventListenerAttached;
-    td: WoT.ThingDescription;
+    td: WoT.ThingDescription | null;
     private webHidId;
     private packet;
     private inputHandler;
@@ -23,5 +23,5 @@ export default class JoyCon {
      * Wrapper method for unsubscribing from all JoyCon events.
      */
     unsubscribeAll(): Promise<void>;
-    private destroy;
+    destroy(): Promise<void>;
 }

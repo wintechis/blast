@@ -8,6 +8,6 @@ export default class SolidService {
     private setActionHandlers;
     private uploadImage;
     invokeAction(action: string, parameters: any): Promise<any>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
     destroy(): Promise<void>;
 }

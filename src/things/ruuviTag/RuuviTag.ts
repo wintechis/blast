@@ -32,7 +32,7 @@ export default class RuuviTag {
   private exposedThing: ExposedThing | null = null;
   private webBluetoothId: string;
   private device: BluetoothDevice | null = null;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -113,6 +113,11 @@ export default class RuuviTag {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       rawv2: {
         title: 'Ruuvi Data V5',
@@ -207,6 +212,11 @@ export default class RuuviTag {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -432,11 +442,13 @@ export default class RuuviTag {
     await this.device?.watchAdvertisements();
   }
 
-  public destroy() {
-    removeThing(this.td?.id);
+  public async destroy() {
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }

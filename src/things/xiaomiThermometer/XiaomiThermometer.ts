@@ -7,7 +7,7 @@ export default class XiamoiThermometer {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private webBluetoothId: string;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
   private temperature = -1000;
   private humidity = -1000;
   private subscribed = false;
@@ -36,6 +36,11 @@ export default class XiamoiThermometer {
         unit: '°C',
         type: 'number',
         readOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       humidity: {
         title: 'humidity',
@@ -43,12 +48,22 @@ export default class XiamoiThermometer {
         unit: '%',
         type: 'number',
         readOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
     actions: {
       subscribeToSensorData: {
         title: 'subscribeToSensorData',
         description: 'Subscribes to sensor data.',
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -118,8 +133,10 @@ export default class XiamoiThermometer {
     );
   }
 
-  public destroy() {
-    removeThing(this.td?.id);
+  public async destroy() {
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 
   public async readProperty(property: string): Promise<any> {
@@ -129,7 +146,7 @@ export default class XiamoiThermometer {
     return this.exposedThing.readProperty(property);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }

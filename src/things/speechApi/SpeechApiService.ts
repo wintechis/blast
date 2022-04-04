@@ -9,7 +9,7 @@ import {getThing, removeThing} from '../index.js';
 export default class SpeechApiService {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -53,7 +53,6 @@ export default class SpeechApiService {
               type: 'string',
               description: 'The audio encoding to use',
             },
-            required: ['text', 'voice', 'audioEncoding'],
           },
         },
         output: {
@@ -65,6 +64,11 @@ export default class SpeechApiService {
             },
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       recognizeSpeech: {
         title: 'Recognize speech',
@@ -77,6 +81,11 @@ export default class SpeechApiService {
           type: 'string',
           description: 'The recognized speech',
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -155,7 +164,7 @@ export default class SpeechApiService {
     return this.exposedThing.invokeAction(action, parameters);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -163,6 +172,8 @@ export default class SpeechApiService {
   }
 
   public async destroy() {
-    removeThing(this.td?.id);
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 }

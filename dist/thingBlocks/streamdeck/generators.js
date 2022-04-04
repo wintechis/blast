@@ -164,11 +164,6 @@ const registerStreamdeckHandler = function (
   thing.subscribeEvent('button' + upDown, handler);
 
   addCleanUpFunction(() => {
-    thingsLog(
-      'Removing all streamdeck listeners',
-      'hid',
-      'Elgato Systems Stream Deck Mini'
-    );
     thing.unsubscribeAll();
   });
 };

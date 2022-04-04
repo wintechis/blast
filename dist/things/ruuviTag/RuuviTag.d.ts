@@ -11,6 +11,6 @@ export default class RuuviTag {
     private parseRawV2AndEmitEvent;
     subscribeEvent(eventName: string, fn: (...args: any[]) => void): Promise<void>;
     private registerEventListeners;
-    destroy(): void;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    destroy(): Promise<void>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
 }

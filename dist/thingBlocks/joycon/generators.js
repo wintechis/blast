@@ -180,7 +180,6 @@ const handleJoyConButtons = async function (
   thing.subscribeEvent('buttonDown', handler);
 
   addCleanUpFunction(() => {
-    thingsLog('Removing all Joy-Con listeners', 'hid', 'Joy-Con');
     thing.unsubscribeAll();
   });
 };

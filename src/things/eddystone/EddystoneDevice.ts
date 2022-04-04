@@ -9,7 +9,7 @@ import {getThing, removeThing} from '../index.js';
 
 export default class EddystoneDevice {
   public thing: WoT.ExposedThing | null = null;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
   private webBluetoothId: string;
   private slot = -1;
 
@@ -32,6 +32,11 @@ export default class EddystoneDevice {
         unit: 'dBm',
         type: 'integer',
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       advertisedData: {
         title: 'Advertised Data',
@@ -39,6 +44,11 @@ export default class EddystoneDevice {
         unit: '',
         type: 'string',
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       advertisingInterval: {
         title: 'Advertising Interval',
@@ -46,6 +56,11 @@ export default class EddystoneDevice {
         unit: 'ms',
         type: 'integer',
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       lockState: {
         title: 'Lock State',
@@ -53,6 +68,11 @@ export default class EddystoneDevice {
         unit: '',
         type: 'string',
         readOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       publicEcdhKey: {
         title: 'Public ECDH Key',
@@ -60,6 +80,11 @@ export default class EddystoneDevice {
         unit: '',
         type: 'string',
         readOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       radioTxPower: {
         title: 'Radio Tx Power',
@@ -67,6 +92,11 @@ export default class EddystoneDevice {
         unit: 'dBm',
         type: 'integer',
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -83,8 +113,7 @@ export default class EddystoneDevice {
 
   private addPropertyHandlers(): void {
     const properties = this.thingModel.properties;
-    const propertyKeys = Object.keys(properties);
-    for (const p of propertyKeys) {
+    for (const p in properties) {
       this.thing?.setPropertyReadHandler(p, () => {
         return readEddystoneProperty(this.webBluetoothId, p);
       });
@@ -129,7 +158,7 @@ export default class EddystoneDevice {
     return readEddystoneProperty(this.webBluetoothId, property);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       // Wait for the thing to be created
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -137,7 +166,9 @@ export default class EddystoneDevice {
     return this.td;
   }
 
-  public destroy(): void {
-    removeThing(this.td.id);
+  public async destroy(): Promise<void> {
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 }

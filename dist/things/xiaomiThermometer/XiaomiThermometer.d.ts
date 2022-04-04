@@ -15,7 +15,7 @@ export default class XiamoiThermometer {
     private getTemperature;
     private getHumidity;
     private subscribeToSensorData;
-    destroy(): void;
+    destroy(): Promise<void>;
     readProperty(property: string): Promise<any>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
 }

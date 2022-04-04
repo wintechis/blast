@@ -5,6 +5,7 @@ export default class URdfService {
     constructor() {
         this.thing = null;
         this.exposedThing = null;
+        this.td = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -36,15 +37,19 @@ export default class URdfService {
                                 type: 'string',
                                 description: 'The URI of the Ressource to query.',
                             },
-                            required: ['query', 'format', 'ressource'],
-                        },
-                        output: {
-                            type: 'object',
-                            properties: {
-                            // TODO
-                            },
                         },
                     },
+                    output: {
+                        type: 'object',
+                        properties: {
+                        // TODO
+                        },
+                    },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -95,8 +100,9 @@ export default class URdfService {
         return this.td;
     }
     async destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+        if (this.td) {
+            await removeThing(this.td);
+        }
         await urdf.clear();
     }
 }

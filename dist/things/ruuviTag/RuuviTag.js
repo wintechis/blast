@@ -5,6 +5,7 @@ export default class RuuviTag {
         this.thing = null;
         this.exposedThing = null;
         this.device = null;
+        this.td = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -83,6 +84,11 @@ export default class RuuviTag {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 rawv2: {
                     title: 'Ruuvi Data V5',
@@ -177,6 +183,11 @@ export default class RuuviTag {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -353,9 +364,10 @@ export default class RuuviTag {
         });
         await ((_b = this.device) === null || _b === void 0 ? void 0 : _b.watchAdvertisements());
     }
-    destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
     async getThingDescription() {
         while (!this.thing) {

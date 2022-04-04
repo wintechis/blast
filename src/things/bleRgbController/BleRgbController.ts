@@ -7,7 +7,7 @@ export default class BleRgbController {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
   private webBluetoothId: string;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
   private LEDServiceUUID: BluetoothServiceUUID =
     '0000fff0-0000-1000-8000-00805f9b34fb';
   private characteristicUUID: BluetoothCharacteristicUUID =
@@ -34,6 +34,11 @@ export default class BleRgbController {
         type: 'string',
         readOnly: false,
         writeOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -65,8 +70,10 @@ export default class BleRgbController {
     );
   }
 
-  public destroy() {
-    removeThing(this.td?.id);
+  public async destroy() {
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 
   public async writeProperty(property: string, value: any) {
@@ -76,7 +83,7 @@ export default class BleRgbController {
     this.exposedThing.writeProperty(property, value);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }

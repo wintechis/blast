@@ -13,7 +13,8 @@ export default class StreamDeck {
   private streamdeck: StreamDeckWeb | null = null;
   private webHidId: string;
   private opened = false;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
+  private eventListenerAttached = false;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -36,6 +37,11 @@ export default class StreamDeck {
           type: 'object',
         },
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       buttonText: {
         title: 'Button text',
@@ -45,6 +51,11 @@ export default class StreamDeck {
           type: 'string',
         },
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       brightness: {
         title: 'Brightness',
@@ -52,6 +63,11 @@ export default class StreamDeck {
         unit: '%',
         type: 'integer',
         readOnly: false,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
     events: {
@@ -61,6 +77,11 @@ export default class StreamDeck {
         data: {
           type: 'integer',
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
       buttonDown: {
         title: 'Button down event',
@@ -68,6 +89,11 @@ export default class StreamDeck {
         data: {
           type: 'integer',
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -80,7 +106,7 @@ export default class StreamDeck {
       this.td = thing.getThingDescription();
       this.open().then(sd => {
         this.streamdeck = sd;
-        this.registerButtonUpDownEventEmitters();
+        this.registerButtonEventEmitter();
         this.addPropertyHandlers();
       });
       this.thing.expose();
@@ -267,7 +293,7 @@ export default class StreamDeck {
   /**
    * Registers buttonUp and buttonDown event emitters.
    */
-  private async registerButtonUpDownEventEmitters() {
+  private async registerButtonEventEmitter() {
     while (!this.opened) {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
@@ -278,6 +304,7 @@ export default class StreamDeck {
     this.streamdeck?.on('up', (id: number) => {
       this.emitEvent('buttonUp', {id, pressed: 'up'});
     });
+    this.eventListenerAttached = true;
   }
 
   /**
@@ -299,6 +326,9 @@ export default class StreamDeck {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
     }
+    if (!this.eventListenerAttached) {
+      await this.registerButtonEventEmitter();
+    }
     this.exposedThing?.subscribeEvent(eventName, fn);
   }
 
@@ -310,23 +340,31 @@ export default class StreamDeck {
       // Wait for the thing to be initialized
       await new Promise(resolve => setTimeout(resolve, 100));
     }
-    // for (const eventName of Object.keys(this.exposedThing.events)) {
-    //   this.exposedThing.unsubscribeEvent(eventName);
-    // }
-    // unsubscribeEvent is not implemented, so instead we destroy the thing
-    this.destroy();
+    thingsLog(
+      'Removing all streamdeck listeners',
+      'hid',
+      this.streamdeck?.PRODUCT_NAME
+    );
+    // unsubcribeEvent is not yet implemented in node-wot, so we have to use this own implementation
+    for (const eventName in this.exposedThing?.events) {
+      const es = this.exposedThing?.events[eventName].getState();
+      es.legacyListeners.length = 0;
+    }
     this.streamdeck?.removeAllListeners();
+    this.eventListenerAttached = false;
   }
 
-  public async getThingDescription() {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
     return this.td;
   }
 
-  private destroy() {
-    removeThing(this.td?.id);
+  private async destroy() {
+    if (this.td) {
+      await removeThing(this.td);
+    }
     this.streamdeck?.close();
   }
 }

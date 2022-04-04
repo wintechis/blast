@@ -6,6 +6,7 @@ export default class SpeechApiService {
     constructor() {
         this.thing = null;
         this.exposedThing = null;
+        this.td = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -46,7 +47,6 @@ export default class SpeechApiService {
                                 type: 'string',
                                 description: 'The audio encoding to use',
                             },
-                            required: ['text', 'voice', 'audioEncoding'],
                         },
                     },
                     output: {
@@ -58,6 +58,11 @@ export default class SpeechApiService {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 recognizeSpeech: {
                     title: 'Recognize speech',
@@ -70,6 +75,11 @@ export default class SpeechApiService {
                         type: 'string',
                         description: 'The recognized speech',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -143,8 +153,9 @@ export default class SpeechApiService {
         return this.td;
     }
     async destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
 }
 //# sourceMappingURL=SpeechApiService.js.map

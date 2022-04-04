@@ -7,7 +7,7 @@ import {saveFileInContainer} from '@inrupt/solid-client';
 export default class SolidService {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -36,9 +36,13 @@ export default class SolidService {
               type: 'string',
               description: 'URI of the solid container',
             },
-            required: ['image', 'uri'],
           },
         },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -93,7 +97,7 @@ export default class SolidService {
     return this.exposedThing.invokeAction(action, parameters);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -101,6 +105,8 @@ export default class SolidService {
   }
 
   public async destroy() {
-    removeThing(this.td?.id);
+    if (this.td) {
+      await removeThing(this.td);
+    }
   }
 }

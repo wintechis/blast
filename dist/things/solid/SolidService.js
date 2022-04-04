@@ -5,6 +5,7 @@ export default class SolidService {
     constructor() {
         this.thing = null;
         this.exposedThing = null;
+        this.td = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -32,9 +33,13 @@ export default class SolidService {
                                 type: 'string',
                                 description: 'URI of the solid container',
                             },
-                            required: ['image', 'uri'],
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -87,8 +92,9 @@ export default class SolidService {
         return this.td;
     }
     async destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
 }
 //# sourceMappingURL=SolidService.js.map

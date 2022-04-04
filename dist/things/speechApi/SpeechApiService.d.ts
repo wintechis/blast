@@ -13,6 +13,6 @@ export default class SpeechApiService {
      */
     recognizeSpeech(lang: string): Promise<string>;
     invokeAction(action: string, parameters: any): Promise<any>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
     destroy(): Promise<void>;
 }

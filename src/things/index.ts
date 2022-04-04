@@ -22,15 +22,23 @@ export const getWoT = async function (): Promise<typeof WoT> {
 export const getThing = async function (
   td: WoT.ThingDescription
 ): Promise<WoT.ExposedThing> {
+  if (!td.id) {
+    throw new Error('Missing id in ThingDescription');
+  }
   if (!things[td.id]) {
     things[td.id] = await (await getWoT()).produce(td);
   }
   return things[td.id];
 };
 
-export const removeThing = function (id: string): void {
-  if (things[id]) {
-    things[id].destroy();
-    delete things[id];
+export const removeThing = async function (
+  td: WoT.ThingDescription
+): Promise<void> {
+  if (!td.id) {
+    throw new Error('Missing id in ThingDescription');
+  }
+  if (things[td.id]) {
+    await things[td.id].destroy();
+    delete things[td.id];
   }
 };

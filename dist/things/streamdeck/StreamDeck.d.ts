@@ -6,6 +6,7 @@ export default class StreamDeck {
     private webHidId;
     private opened;
     private td;
+    private eventListenerAttached;
     thingModel: WoT.ThingDescription;
     constructor(webHidId: string);
     /**
@@ -37,7 +38,7 @@ export default class StreamDeck {
     /**
      * Registers buttonUp and buttonDown event emitters.
      */
-    private registerButtonUpDownEventEmitters;
+    private registerButtonEventEmitter;
     /**
      * Wrapper method for emitting streamdeck events.
      */
@@ -50,6 +51,6 @@ export default class StreamDeck {
      * Wrapper method for unsubscribing from all streamdeck events.
      */
     unsubscribeAll(): Promise<void>;
-    getThingDescription(): Promise<any>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
     private destroy;
 }

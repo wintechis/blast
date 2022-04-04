@@ -4,6 +4,7 @@ export default class XiamoiThermometer {
     constructor(webBluetoothId) {
         this.thing = null;
         this.exposedThing = null;
+        this.td = null;
         this.temperature = -1000;
         this.humidity = -1000;
         this.subscribed = false;
@@ -28,6 +29,11 @@ export default class XiamoiThermometer {
                     unit: '°C',
                     type: 'number',
                     readOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 humidity: {
                     title: 'humidity',
@@ -35,12 +41,22 @@ export default class XiamoiThermometer {
                     unit: '%',
                     type: 'number',
                     readOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
             actions: {
                 subscribeToSensorData: {
                     title: 'subscribeToSensorData',
                     description: 'Subscribes to sensor data.',
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -99,9 +115,10 @@ export default class XiamoiThermometer {
         };
         subscribe(this.webBluetoothId, this.xiaomiServiceUUID, this.dataCharacteristicUUID, notificationHandler);
     }
-    destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
     async readProperty(property) {
         while (!this.exposedThing) {

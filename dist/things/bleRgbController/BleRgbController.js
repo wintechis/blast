@@ -4,6 +4,7 @@ export default class BleRgbController {
     constructor(webBluetoothId) {
         this.thing = null;
         this.exposedThing = null;
+        this.td = null;
         this.LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
         this.characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
         this.thingModel = {
@@ -26,6 +27,11 @@ export default class BleRgbController {
                     type: 'string',
                     readOnly: false,
                     writeOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -48,9 +54,10 @@ export default class BleRgbController {
         const value = '7e000503' + colour.substring(1, 7) + '00ef';
         await writeWithoutResponse(this.webBluetoothId, this.LEDServiceUUID, this.characteristicUUID, value);
     }
-    destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
     async writeProperty(property, value) {
         while (!this.exposedThing) {

@@ -3,6 +3,7 @@ import { getThing, removeThing } from '../index.js';
 export default class EddystoneDevice {
     constructor(webBluetoothId) {
         this.thing = null;
+        this.td = null;
         this.slot = -1;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -23,6 +24,11 @@ export default class EddystoneDevice {
                     unit: 'dBm',
                     type: 'integer',
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 advertisedData: {
                     title: 'Advertised Data',
@@ -30,6 +36,11 @@ export default class EddystoneDevice {
                     unit: '',
                     type: 'string',
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 advertisingInterval: {
                     title: 'Advertising Interval',
@@ -37,6 +48,11 @@ export default class EddystoneDevice {
                     unit: 'ms',
                     type: 'integer',
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 lockState: {
                     title: 'Lock State',
@@ -44,6 +60,11 @@ export default class EddystoneDevice {
                     unit: '',
                     type: 'string',
                     readOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 publicEcdhKey: {
                     title: 'Public ECDH Key',
@@ -51,6 +72,11 @@ export default class EddystoneDevice {
                     unit: '',
                     type: 'string',
                     readOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 radioTxPower: {
                     title: 'Radio Tx Power',
@@ -58,6 +84,11 @@ export default class EddystoneDevice {
                     unit: 'dBm',
                     type: 'integer',
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -72,8 +103,7 @@ export default class EddystoneDevice {
     addPropertyHandlers() {
         var _a, _b;
         const properties = this.thingModel.properties;
-        const propertyKeys = Object.keys(properties);
-        for (const p of propertyKeys) {
+        for (const p in properties) {
             (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setPropertyReadHandler(p, () => {
                 return readEddystoneProperty(this.webBluetoothId, p);
             });
@@ -111,8 +141,10 @@ export default class EddystoneDevice {
         }
         return this.td;
     }
-    destroy() {
-        removeThing(this.td.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
 }
 //# sourceMappingURL=EddystoneDevice.js.map

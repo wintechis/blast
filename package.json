@@ -57,13 +57,13 @@
   "dependencies": {
     "@elgato-stream-deck/webhid": "^5.2.0",
     "@inrupt/solid-client": "^1.19.0",
-    "@node-wot/core": "^0.7.8",
+    "@node-wot/core": "latest",
     "blockly": "7.20211209.3",
     "file-saver": "^2.0.5",
-    "joy-con-webhid": "^0.2.0",
+    "joy-con-webhid": "latest",
     "urdf": "https://github.com/derwehr/uRDF.js.git",
     "webpack": "^5.70.0",
-    "wot-typescript-definitions": "^0.8.0-SNAPSHOT.21"
+    "wot-typescript-definitions": "latest"
   },
   "packageManager": "yarn@3.2.0"
 }

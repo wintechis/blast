@@ -9,6 +9,8 @@ export default class StreamDeck {
         this.exposedThing = null;
         this.streamdeck = null;
         this.opened = false;
+        this.td = null;
+        this.eventListenerAttached = false;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -30,6 +32,11 @@ export default class StreamDeck {
                         type: 'object',
                     },
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 buttonText: {
                     title: 'Button text',
@@ -39,6 +46,11 @@ export default class StreamDeck {
                         type: 'string',
                     },
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 brightness: {
                     title: 'Brightness',
@@ -46,6 +58,11 @@ export default class StreamDeck {
                     unit: '%',
                     type: 'integer',
                     readOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
             events: {
@@ -55,6 +72,11 @@ export default class StreamDeck {
                     data: {
                         type: 'integer',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 buttonDown: {
                     title: 'Button down event',
@@ -62,6 +84,11 @@ export default class StreamDeck {
                     data: {
                         type: 'integer',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -72,7 +99,7 @@ export default class StreamDeck {
             this.td = thing.getThingDescription();
             this.open().then(sd => {
                 this.streamdeck = sd;
-                this.registerButtonUpDownEventEmitters();
+                this.registerButtonEventEmitter();
                 this.addPropertyHandlers();
             });
             this.thing.expose();
@@ -222,7 +249,7 @@ export default class StreamDeck {
     /**
      * Registers buttonUp and buttonDown event emitters.
      */
-    async registerButtonUpDownEventEmitters() {
+    async registerButtonEventEmitter() {
         var _a, _b;
         while (!this.opened) {
             // Wait for the thing to be initialized
@@ -234,6 +261,7 @@ export default class StreamDeck {
         (_b = this.streamdeck) === null || _b === void 0 ? void 0 : _b.on('up', (id) => {
             this.emitEvent('buttonUp', { id, pressed: 'up' });
         });
+        this.eventListenerAttached = true;
     }
     /**
      * Wrapper method for emitting streamdeck events.
@@ -255,23 +283,28 @@ export default class StreamDeck {
             // Wait for the thing to be initialized
             await new Promise(resolve => setTimeout(resolve, 100));
         }
+        if (!this.eventListenerAttached) {
+            await this.registerButtonEventEmitter();
+        }
         (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.subscribeEvent(eventName, fn);
     }
     /**
      * Wrapper method for unsubscribing from all streamdeck events.
      */
     async unsubscribeAll() {
-        var _a;
+        var _a, _b, _c, _d;
         while (!this.opened) {
             // Wait for the thing to be initialized
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        // for (const eventName of Object.keys(this.exposedThing.events)) {
-        //   this.exposedThing.unsubscribeEvent(eventName);
-        // }
-        // unsubscribeEvent is not implemented, so instead we destroy the thing
-        this.destroy();
-        (_a = this.streamdeck) === null || _a === void 0 ? void 0 : _a.removeAllListeners();
+        thingsLog('Removing all streamdeck listeners', 'hid', (_a = this.streamdeck) === null || _a === void 0 ? void 0 : _a.PRODUCT_NAME);
+        // unsubcribeEvent is not yet implemented in node-wot, so we have to use this own implementation
+        for (const eventName in (_b = this.exposedThing) === null || _b === void 0 ? void 0 : _b.events) {
+            const es = (_c = this.exposedThing) === null || _c === void 0 ? void 0 : _c.events[eventName].getState();
+            es.legacyListeners.length = 0;
+        }
+        (_d = this.streamdeck) === null || _d === void 0 ? void 0 : _d.removeAllListeners();
+        this.eventListenerAttached = false;
     }
     async getThingDescription() {
         while (!this.thing) {
@@ -279,10 +312,12 @@ export default class StreamDeck {
         }
         return this.td;
     }
-    destroy() {
-        var _a, _b;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
-        (_b = this.streamdeck) === null || _b === void 0 ? void 0 : _b.close();
+    async destroy() {
+        var _a;
+        if (this.td) {
+            await removeThing(this.td);
+        }
+        (_a = this.streamdeck) === null || _a === void 0 ? void 0 : _a.close();
     }
 }
 //# sourceMappingURL=StreamDeck.js.map

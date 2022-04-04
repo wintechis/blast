@@ -19,8 +19,8 @@ export default class Blinkstick {
   private exposedThing: ExposedThing | null = null;
   private webHidId: string;
   private opened = false;
-  private td: WoT.ThingDescription;
-  private blinkstick: any;
+  private td: WoT.ThingDescription | null = null;
+  private blinkstick: HIDDevice | null = null;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -101,6 +101,11 @@ export default class Blinkstick {
         },
         readOnly: false,
         writeOnly: true,
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -158,13 +163,13 @@ export default class Blinkstick {
         thingsLog(
           `Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`,
           'hid',
-          this.blinkstick.productName
+          this.blinkstick?.productName
         );
-        await this.blinkstick.sendFeatureReport(reportId, report);
+        await this.blinkstick?.sendFeatureReport(reportId, report);
         thingsLog(
           `Finished <code>sendFeatureReport</code> with value <code>${report}</code>`,
           'hid',
-          this.blinkstick.productName
+          this.blinkstick?.productName
         );
       } catch (error) {
         if (retries > 0) {
@@ -180,9 +185,11 @@ export default class Blinkstick {
     await trySetColor(5);
   }
 
-  public destroy() {
-    removeThing(this.td?.id);
-    this.blinkstick?.close();
+  public async destroy(): Promise<void> {
+    if (this.td) {
+      await removeThing(this.td);
+    }
+    await this.blinkstick?.close();
   }
 
   public async writeProperty(property: string, value: any) {
@@ -192,7 +199,7 @@ export default class Blinkstick {
     this.exposedThing?.writeProperty(property, value);
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }

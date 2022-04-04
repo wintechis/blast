@@ -8,6 +8,6 @@ export default class URdfService {
     private setActionHandlers;
     invokeAction(action: string, parameters: any): Promise<any>;
     private runSparqlQuery;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
     destroy(): Promise<void>;
 }

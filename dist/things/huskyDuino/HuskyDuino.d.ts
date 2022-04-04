@@ -30,6 +30,6 @@ export default class HuskyDuino {
     writeProperty(property: string, value: any): Promise<void>;
     readProperty(property: string): Promise<any>;
     invokeAction(action: string, parameters: any): Promise<any>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
-    destroy(): void;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
+    destroy(): Promise<void>;
 }

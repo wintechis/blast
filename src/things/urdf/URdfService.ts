@@ -7,7 +7,7 @@ import {throwError} from '../../blast_interpreter.js';
 export default class URdfService {
   private thing: WoT.ExposedThing | null = null;
   private exposedThing: ExposedThing | null = null;
-  private td: WoT.ThingDescription;
+  private td: WoT.ThingDescription | null = null;
 
   public thingModel: WoT.ThingDescription = {
     '@context': ['https://www.w3.org/2019/wot/td/v1'],
@@ -42,15 +42,19 @@ export default class URdfService {
               type: 'string',
               description: 'The URI of the Ressource to query.',
             },
-            required: ['query', 'format', 'ressource'],
-          },
-          output: {
-            type: 'object',
-            properties: {
-              // TODO
-            },
           },
         },
+        output: {
+          type: 'object',
+          properties: {
+            // TODO
+          },
+        },
+        forms: [
+          {
+            href: '',
+          },
+        ],
       },
     },
   };
@@ -110,7 +114,7 @@ export default class URdfService {
     return res;
   }
 
-  public async getThingDescription(): Promise<WoT.ThingDescription> {
+  public async getThingDescription(): Promise<WoT.ThingDescription | null> {
     while (!this.thing) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -118,7 +122,9 @@ export default class URdfService {
   }
 
   public async destroy() {
-    removeThing(this.td?.id);
+    if (this.td) {
+      await removeThing(this.td);
+    }
     await urdf.clear();
   }
 }

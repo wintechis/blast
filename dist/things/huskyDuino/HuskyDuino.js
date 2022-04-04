@@ -3,6 +3,7 @@ import { getThing, removeThing } from '../index.js';
 export default class HuskyDuino {
     constructor(webBluetoothId) {
         this.thing = null;
+        this.td = null;
         this.exposedThing = null;
         this.HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
         this.thingModel = {
@@ -23,12 +24,22 @@ export default class HuskyDuino {
                     type: 'number',
                     readOnly: false,
                     writeOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 id: {
                     description: 'The ID of the face or object',
                     type: 'number',
                     readOnly: false,
                     writeOnly: false,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
             actions: {
@@ -38,6 +49,11 @@ export default class HuskyDuino {
                     input: {
                         type: 'null',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -127,8 +143,10 @@ export default class HuskyDuino {
         }
         return this.td;
     }
-    destroy() {
-        removeThing(this.td.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
 }
 //# sourceMappingURL=HuskyDuino.js.map

@@ -1,7 +1,8 @@
 import { getThing, removeThing } from '../index.js';
 import { JoyConLeft, JoyConRight } from 'joy-con-webhid';
-import { getWebHidDevice } from '../../blast_things.js';
+import { getThingsLog, getWebHidDevice } from '../../blast_things.js';
 import { throwError } from '../../blast_interpreter.js';
+const thingsLog = getThingsLog();
 export default class JoyCon {
     constructor(webHidId) {
         this.thing = null;
@@ -9,7 +10,9 @@ export default class JoyCon {
         this.joyCon = null;
         this.opened = false;
         this.eventListenerAttached = false;
+        this.td = null;
         this.packet = null;
+        this.inputHandler = () => undefined;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -89,6 +92,11 @@ export default class JoyCon {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 actualAccelerometer: {
                     title: 'Actual accelerometer',
@@ -114,6 +122,11 @@ export default class JoyCon {
                             readOnly: true,
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 actualGyroscope: {
                     title: 'Actual gyroscope',
@@ -179,6 +192,11 @@ export default class JoyCon {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 actualOrientation: {
                     title: 'Actual orientation',
@@ -207,6 +225,11 @@ export default class JoyCon {
                             readOnly: true,
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 actualOrientationQuaternion: {
                     title: 'Actual orientation quaternion',
@@ -235,6 +258,11 @@ export default class JoyCon {
                             readOnly: true,
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 gyroscopes: {
                     title: 'Gyroscopes',
@@ -353,6 +381,11 @@ export default class JoyCon {
                             },
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 quaternion: {
                     title: 'Quaternion',
@@ -384,6 +417,11 @@ export default class JoyCon {
                             readOnly: true,
                         },
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
             events: {
@@ -393,6 +431,11 @@ export default class JoyCon {
                     data: {
                         type: 'string',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
                 buttonDown: {
                     title: 'Button down event',
@@ -400,6 +443,11 @@ export default class JoyCon {
                     data: {
                         type: 'string',
                     },
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -509,26 +557,31 @@ export default class JoyCon {
             // Wait for the thing to be initialized
             await new Promise(resolve => setTimeout(resolve, 100));
         }
+        if (!this.eventListenerAttached) {
+            await this.registerButtonEventEmitter();
+        }
         (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.subscribeEvent(eventName, fn);
     }
     /**
      * Wrapper method for unsubscribing from all JoyCon events.
      */
     async unsubscribeAll() {
+        var _a, _b;
         while (!this.opened) {
             // Wait for the thing to be initialized
             await new Promise(resolve => setTimeout(resolve, 100));
         }
-        // for (const eventName of Object.keys(this.exposedThing.events)) {
-        //   this.exposedThing.unsubscribeEvent(eventName);
-        // }
-        // unsubscribeEvent is not implemented, so instead we destroy the thing
-        this.destroy();
-        this.joyCon.removeEventListener('hidInput', this.inputHandler);
+        thingsLog('Removing all Joy-Con listeners', 'hid', 'Joy-Con');
+        // unsubcribeEvent is not yet implemented in node-wot, so we have to use this own implementation
+        for (const eventName in (_a = this.exposedThing) === null || _a === void 0 ? void 0 : _a.events) {
+            const es = (_b = this.exposedThing) === null || _b === void 0 ? void 0 : _b.events[eventName].getState();
+            es.legacyListeners.length = 0;
+        }
     }
-    destroy() {
-        var _a;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
+    async destroy() {
+        if (this.td) {
+            await removeThing(this.td);
+        }
     }
 }
 //# sourceMappingURL=JoyCon.js.map

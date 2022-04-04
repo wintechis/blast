@@ -8,6 +8,8 @@ export default class Blinkstick {
         this.thing = null;
         this.exposedThing = null;
         this.opened = false;
+        this.td = null;
+        this.blinkstick = null;
         this.thingModel = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -86,6 +88,11 @@ export default class Blinkstick {
                     },
                     readOnly: false,
                     writeOnly: true,
+                    forms: [
+                        {
+                            href: '',
+                        },
+                    ],
                 },
             },
         };
@@ -130,10 +137,11 @@ export default class Blinkstick {
         const reportId = 5;
         const report = Int8Array.from([reportId, index, red, green, blue]);
         const trySetColor = async (retries) => {
+            var _a, _b, _c;
             try {
-                thingsLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', this.blinkstick.productName);
-                await this.blinkstick.sendFeatureReport(reportId, report);
-                thingsLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', this.blinkstick.productName);
+                thingsLog(`Invoke <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', (_a = this.blinkstick) === null || _a === void 0 ? void 0 : _a.productName);
+                await ((_b = this.blinkstick) === null || _b === void 0 ? void 0 : _b.sendFeatureReport(reportId, report));
+                thingsLog(`Finished <code>sendFeatureReport</code> with value <code>${report}</code>`, 'hid', (_c = this.blinkstick) === null || _c === void 0 ? void 0 : _c.productName);
             }
             catch (error) {
                 if (retries > 0) {
@@ -147,10 +155,12 @@ export default class Blinkstick {
         };
         await trySetColor(5);
     }
-    destroy() {
-        var _a, _b;
-        removeThing((_a = this.td) === null || _a === void 0 ? void 0 : _a.id);
-        (_b = this.blinkstick) === null || _b === void 0 ? void 0 : _b.close();
+    async destroy() {
+        var _a;
+        if (this.td) {
+            await removeThing(this.td);
+        }
+        await ((_a = this.blinkstick) === null || _a === void 0 ? void 0 : _a.close());
     }
     async writeProperty(property, value) {
         var _a;

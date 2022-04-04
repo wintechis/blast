@@ -11,7 +11,7 @@ export default class Blinkstick {
     private open;
     private addPropertyHandlers;
     private setColour;
-    destroy(): void;
+    destroy(): Promise<void>;
     writeProperty(property: string, value: any): Promise<void>;
-    getThingDescription(): Promise<WoT.ThingDescription>;
+    getThingDescription(): Promise<WoT.ThingDescription | null>;
 }
