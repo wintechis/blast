@@ -1,13 +1,12 @@
-import { getThing, removeThing } from '../index.js';
-import { writeWithoutResponse } from '../../blast_webBluetooth.js';
+import { getWot } from '../index.js';
 export default class BleRgbController {
-    constructor(webBluetoothId) {
+    constructor() {
+        this.webBluetoothId = null;
         this.thing = null;
-        this.exposedThing = null;
-        this.td = null;
-        this.LEDServiceUUID = '0000fff0-0000-1000-8000-00805f9b34fb';
-        this.characteristicUUID = '0000fff3-0000-1000-8000-00805f9b34fb';
-        this.thingModel = {
+    }
+    async init(webBluetoothId) {
+        this.webBluetoothId = webBluetoothId;
+        const td = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
             id: 'blast:Bluetooth:ledController',
@@ -29,47 +28,19 @@ export default class BleRgbController {
                     writeOnly: true,
                     forms: [
                         {
-                            href: '',
+                            href: 'bluetooth://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
+                            'wbt:id': this.webBluetoothId,
+                            operation: 'writeWithResponse',
+                            contentType: 'text/plain',
                         },
                     ],
                 },
             },
         };
-        this.webBluetoothId = webBluetoothId;
-        getThing(this.thingModel).then(thing => {
-            this.thing = thing;
-            this.exposedThing = this.thing;
-            this.td = thing.getThingDescription();
-            this.addPropertyHandlers();
-            this.thing.expose();
-        });
-    }
-    addPropertyHandlers() {
-        var _a;
-        (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setPropertyWriteHandler('colour', value => {
-            return this.setColour(value);
-        });
-    }
-    async setColour(colour) {
-        const value = '7e000503' + colour.substring(1, 7) + '00ef';
-        await writeWithoutResponse(this.webBluetoothId, this.LEDServiceUUID, this.characteristicUUID, value);
-    }
-    async destroy() {
-        if (this.td) {
-            await removeThing(this.td);
-        }
-    }
-    async writeProperty(property, value) {
-        while (!this.exposedThing) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        this.exposedThing.writeProperty(property, value);
-    }
-    async getThingDescription() {
-        while (!this.thing) {
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        return this.td;
+        const wot = await getWot();
+        const thing = await wot.consume(td);
+        this.thing = thing;
+        return thing;
     }
 }
 //# sourceMappingURL=BleRgbController.js.map

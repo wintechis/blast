@@ -58,9 +58,11 @@
     "@elgato-stream-deck/webhid": "^5.2.0",
     "@inrupt/solid-client": "^1.19.0",
     "@node-wot/core": "latest",
+    "@node-wot/td-tools": "^0.8.0",
     "blockly": "7.20211209.3",
     "file-saver": "^2.0.5",
     "joy-con-webhid": "latest",
+    "rxjs": "5.5.11",
     "urdf": "https://github.com/derwehr/uRDF.js.git",
     "webpack": "^5.70.0",
     "wot-typescript-definitions": "latest"

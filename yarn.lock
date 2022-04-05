@@ -238,7 +238,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-wot/td-tools@npm:0.8.0":
+"@node-wot/td-tools@npm:0.8.0, @node-wot/td-tools@npm:^0.8.0":
   version: 0.8.0
   resolution: "@node-wot/td-tools@npm:0.8.0"
   dependencies:
@@ -1351,6 +1351,7 @@ __metadata:
     "@elgato-stream-deck/webhid": ^5.2.0
     "@inrupt/solid-client": ^1.19.0
     "@node-wot/core": latest
+    "@node-wot/td-tools": ^0.8.0
     "@types/node": ^14.11.2
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
@@ -1372,6 +1373,7 @@ __metadata:
     mocha: ^9.2.2
     prettier: ^2.5.1
     rimraf: ^3.0.2
+    rxjs: 5.5.11
     sinon: ^13.0.1
     typescript: ^4.0.3
     urdf: "https://github.com/derwehr/uRDF.js.git"

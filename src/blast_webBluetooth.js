@@ -119,7 +119,6 @@ export const requestDevice = async function (thing) {
 
       addWebBluetoothDevice(device.id, name, thing);
       getWorkspace().refreshToolboxSelection();
-      console.log(device);
       return device;
     } catch (error) {
       throwError(error);
@@ -196,6 +195,13 @@ export const writeWithoutResponse = async function (
   characteristicUUID,
   value
 ) {
+  console.log(
+    'writeWithoutResponse',
+    id,
+    serviceUUID,
+    characteristicUUID,
+    value
+  );
   const characteristic = await getCharacteristic(
     id,
     serviceUUID,

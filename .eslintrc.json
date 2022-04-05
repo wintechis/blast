@@ -42,7 +42,7 @@
         "property": "only"
       }],
     "node/no-unsupported-features/node-builtins": ["error", {
-      "version": ">=11.0.0"
+      "version": ">=12.3.0"
     }]
   },
   "overrides": [

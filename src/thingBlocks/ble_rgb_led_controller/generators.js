@@ -13,6 +13,8 @@ import {
   getWorkspace,
   throwError,
 } from './../../blast_interpreter.js';
+// eslint-disable-next-line node/no-missing-import
+import {encodeJson} from './../../things/index.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -47,21 +49,33 @@ JavaScript['switch_lights_rgb'] = function (block) {
 /**
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
- * @param {String} mac identifier of the LED controller.
+ * @param {String} webBluetoothId identifier of the LED controller.
  * @param {String} colour the colour to switch the lights to, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function (blockId, mac, colour, callback) {
+const switchLights = async function (
+  blockId,
+  webBluetoothId,
+  colour,
+  callback
+) {
   // make sure a device is connected.
-  if (!mac) {
+  if (!webBluetoothId) {
     throwError('No LED Controller is set.');
     callback();
     return;
   }
 
+  const data = {
+    device: webBluetoothId,
+    value: '7e000503' + colour.substring(1, 7) + '00ef',
+  };
+
+  const stream = encodeJson(data);
+
   const block = getWorkspace().getBlockById(blockId);
-  const thing = block.thing;
-  await thing.writeProperty('colour', colour);
+  const thing = await block.thing.init(webBluetoothId);
+  await thing.writeProperty('colour', stream);
   callback();
 };
 // Add switchLights function to the interpreter's API.
