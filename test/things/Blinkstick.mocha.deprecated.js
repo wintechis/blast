@@ -131,6 +131,11 @@ suite('Blinkstick', function () {
           },
           readOnly: false,
           writeOnly: true,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
       },
     };

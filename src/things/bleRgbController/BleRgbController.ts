@@ -30,7 +30,7 @@ export default class BleRgbController {
           writeOnly: true,
           forms: [
             {
-              href: 'bluetooth://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
+              href: 'gatt://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
               'wbt:id': this.webBluetoothId,
               operation: 'writeWithResponse',
               contentType: 'text/plain',

@@ -63,6 +63,11 @@ suite('Eddystone device', function () {
           readOnly: false,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
         advertisedData: {
           title: 'Advertised Data',
@@ -72,6 +77,11 @@ suite('Eddystone device', function () {
           readOnly: false,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
         advertisingInterval: {
           title: 'Advertising Interval',
@@ -81,6 +91,11 @@ suite('Eddystone device', function () {
           readOnly: false,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
         lockState: {
           title: 'Lock State',
@@ -90,6 +105,11 @@ suite('Eddystone device', function () {
           readOnly: true,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
         publicEcdhKey: {
           title: 'Public ECDH Key',
@@ -99,6 +119,11 @@ suite('Eddystone device', function () {
           readOnly: true,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
         radioTxPower: {
           title: 'Radio Tx Power',
@@ -108,6 +133,11 @@ suite('Eddystone device', function () {
           readOnly: false,
           writeOnly: false,
           observable: false,
+          forms: [
+            {
+              href: '',
+            },
+          ],
         },
       },
     };

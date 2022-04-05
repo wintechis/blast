@@ -7,7 +7,7 @@ import WebBluetoothClient from './webBluetooth-client.js';
 export default class WebBluetoothClientFactory
   implements ProtocolClientFactory
 {
-  public readonly scheme: string = 'bluetooth';
+  public readonly scheme: string = 'gatt';
 
   public getClient(): ProtocolClient {
     console.debug(

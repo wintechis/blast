@@ -51,14 +51,12 @@ export const removeThing = async function (
  */
 export const encodeJson = function (data: JSON): ReadableStream {
   const encoder = new TextEncoder();
-  const jsonStr = encoder.encode(JSON.stringify(data));
+  const jsonArr = encoder.encode(JSON.stringify(data));
 
-  const stream = new ReadableStream({
+  return new ReadableStream({
     start(controller) {
-      controller.enqueue(jsonStr);
+      controller.enqueue(jsonArr);
       controller.close();
     },
   });
-
-  return stream;
 };
