@@ -39,8 +39,10 @@ Blocks['things_bleLedController'] = {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
-      this.thing = new BleRgbController(this.webBluetoothId);
       this.firstTime = false;
+      new BleRgbController().init(this.webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };

@@ -12,6 +12,44 @@ import {Blocks, FieldTextInput} from 'blockly';
 import Blinkstick from './../../things/blinkstick/Blinkstick.js';
 import {implementedThings} from '../../blast_things.js';
 
+/**
+ * Generates JavaScript code for the things_blinkstick block.
+ * @param {Blockly.Block} block the things_blinkstick block.
+ * @returns {String} the generated code.
+ */
+Blocks['things_blinkstick'] = {
+  /**
+   * Block representing a BlinkStick.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('BlinkStick')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Tulogic BlinkStick.');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/BlinkStick');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webHidId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BlinkStick
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webHidId = this.getFieldValue('id');
+      this.firstTime = false;
+      new Blinkstick().init(this.webHidId).then(thing => {
+        this.thing = thing;
+      });
+    }
+  },
+};
+
 Blocks['blinkstick_set_colors'] = {
   /**
    * Block for setting the colors of a BlinkStick.
@@ -49,42 +87,6 @@ const BLINKSTICK_SET_COLORS_XML = `
   </value>
 </block>
 `;
-
-/**
- * Generates JavaScript code for the things_blinkstick block.
- * @param {Blockly.Block} block the things_blinkstick block.
- * @returns {String} the generated code.
- */
-Blocks['things_blinkstick'] = {
-  /**
-   * Block representing a BlinkStick.
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.appendDummyInput()
-      .appendField('BlinkStick')
-      .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
-      .appendField(new FieldTextInput('Error getting id'), 'id')
-      .setVisible(false);
-    this.setOutput(true, 'Thing');
-    this.setColour(60);
-    this.setTooltip('A Tulogic BlinkStick.');
-    this.setHelpUrl('https://github.com/wintechis/blast/wiki/BlinkStick');
-    this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.webHidId = '';
-    this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BlinkStick
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webHidId = this.getFieldValue('id');
-      this.thing = new Blinkstick(this.webHidId);
-      this.firstTime = false;
-    }
-  },
-};
 
 // Add blinkstick block to the list of implemented things.
 implementedThings.push({

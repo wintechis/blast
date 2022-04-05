@@ -2,11 +2,9 @@ import * as WoT from 'wot-typescript-definitions';
 import {getWot} from '../index.js';
 
 export default class BleRgbController {
-  private webBluetoothId: string | null = null;
   public thing: WoT.ConsumedThing | null = null;
 
   async init(webBluetoothId: string): Promise<WoT.ConsumedThing> {
-    this.webBluetoothId = webBluetoothId;
     const td: WoT.ThingDescription = {
       '@context': ['https://www.w3.org/2019/wot/td/v1'],
       '@type': ['Thing'],
@@ -31,8 +29,7 @@ export default class BleRgbController {
           forms: [
             {
               href: 'gatt://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
-              'wbt:id': this.webBluetoothId,
-              operation: 'writeWithResponse',
+              'wbt:id': webBluetoothId,
               contentType: 'text/plain',
             },
           ],

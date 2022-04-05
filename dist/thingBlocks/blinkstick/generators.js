@@ -13,6 +13,8 @@ import {
   getWorkspace,
   throwError,
 } from './../../blast_interpreter.js';
+// eslint-disable-next-line node/no-missing-import
+import {encodeJson} from './../../things/bindings/binding-helpers.js';
 
 JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
@@ -75,11 +77,14 @@ const blinkstickSetColors = async function (
   const green = parseInt(colour.substring(3, 5), 16);
   const blue = parseInt(colour.substring(5, 7), 16);
 
-  const ledColour = {index, red, green, blue};
+  // create report
+  const reportId = 5;
+  const report = [reportId, index, red, green, blue];
+  const stream = encodeJson({reportId, report});
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('colours', ledColour);
+  await thing.writeProperty('colours', stream);
   callback();
 };
 

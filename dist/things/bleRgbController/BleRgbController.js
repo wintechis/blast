@@ -1,11 +1,9 @@
 import { getWot } from '../index.js';
 export default class BleRgbController {
     constructor() {
-        this.webBluetoothId = null;
         this.thing = null;
     }
     async init(webBluetoothId) {
-        this.webBluetoothId = webBluetoothId;
         const td = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
@@ -28,9 +26,8 @@ export default class BleRgbController {
                     writeOnly: true,
                     forms: [
                         {
-                            href: 'bluetooth://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
-                            'wbt:id': this.webBluetoothId,
-                            operation: 'writeWithResponse',
+                            href: 'gatt://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
+                            'wbt:id': webBluetoothId,
                             contentType: 'text/plain',
                         },
                     ],

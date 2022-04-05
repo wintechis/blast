@@ -1,6 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
-import {WebBluetoothClientFactory} from './binding-webBluetooth/webBluetooth.js';
+import {WebBluetoothClientFactory} from './bindings/binding-webBluetooth/webBluetooth.js';
+import {WebHidClientFactory} from './bindings/binding-webHid/webHid.js';
 
 let servient: Servient;
 let wot: typeof WoT;
@@ -10,6 +11,7 @@ export const getServient = function (): Servient {
   if (!servient) {
     servient = new Servient();
     servient.addClientFactory(new WebBluetoothClientFactory());
+    servient.addClientFactory(new WebHidClientFactory());
   }
   return servient;
 };
@@ -43,20 +45,4 @@ export const removeThing = async function (
     await things[td.id].destroy();
     delete things[td.id];
   }
-};
-
-/**
- * Endocdes json data to use it as parameter in a Thing affordance.
- * @param {JSON} data the data to encode
- */
-export const encodeJson = function (data: JSON): ReadableStream {
-  const encoder = new TextEncoder();
-  const jsonArr = encoder.encode(JSON.stringify(data));
-
-  return new ReadableStream({
-    start(controller) {
-      controller.enqueue(jsonArr);
-      controller.close();
-    },
-  });
 };
