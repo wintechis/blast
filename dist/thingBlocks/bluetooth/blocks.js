@@ -11,6 +11,61 @@ import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import EddystoneDevice from '../../things/eddystone/EddystoneDevice.js';
 
+Blocks['things_eddyStoneDevice'] = {
+  /**
+   * Block representing an Eddystone device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Eddystone device')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('An Eddystone device.');
+    this.setHelpUrl(
+      'https://github.com/wintechis/blast/wiki/Eddystone-Devices'
+    );
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.firstTime = false;
+      new EddystoneDevice().init(this.webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
+    }
+  },
+};
+
+Blocks['things_bluetoothGeneric'] = {
+  /**
+   * Block representing a generic Bluetooth device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('generic Bluetooth device')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Generic Bluetooth device.');
+    this.getField('name').setEnabled(false);
+    this.firstTime = true;
+  },
+};
+
 Blocks['get_signal_strength_wb'] = {
   /**
    * Block for reading the strength of the signal (rssiValue property) sent by a ble device,
@@ -132,7 +187,7 @@ Blocks['read_eddystone_property'] = {
       .appendField(
         new FieldDropdown([
           ['advertised tx power', 'advertisedTxPower'],
-          ['advertisement data', 'advertisementData'],
+          ['advertised data', 'advertisedData'],
           ['advertising interval', 'advertisingInterval'],
           ['lock state', 'lockState'],
           ['public ECDH key', 'publicECDHKey'],
@@ -205,59 +260,6 @@ Blocks['read_gatt_characteristic'] = {
     this.setHelpUrl(
       'https://www.bluetooth.com/specifications/assigned-numbers/'
     );
-  },
-};
-
-Blocks['things_eddyStoneDevice'] = {
-  /**
-   * Block representing an Eddystone device.
-   * @this {Blockly.Block}
-   */
-  init: function () {
-    this.appendDummyInput()
-      .appendField('Eddystone device')
-      .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
-      .appendField(new FieldTextInput('Error getting id'), 'id')
-      .setVisible(false);
-    this.setOutput(true, 'Thing');
-    this.setColour(60);
-    this.setTooltip('An Eddystone device.');
-    this.setHelpUrl(
-      'https://github.com/wintechis/blast/wiki/Eddystone-Devices'
-    );
-    this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.webBluetoothId = '';
-    this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
-      this.thing = new EddystoneDevice(this.webBluetoothId);
-      this.firstTime = false;
-    }
-  },
-};
-
-Blocks['things_bluetoothGeneric'] = {
-  /**
-   * Block representing a generic Bluetooth device.
-   * @this {Blockly.Block}
-   */
-  init: function () {
-    this.appendDummyInput()
-      .appendField('generic Bluetooth device')
-      .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
-      .appendField(new FieldTextInput('Error getting id'), 'id')
-      .setVisible(false);
-    this.setOutput(true, 'Thing');
-    this.setColour(60);
-    this.setTooltip('A Generic Bluetooth device.');
-    this.getField('name').setEnabled(false);
-    this.firstTime = true;
   },
 };
 

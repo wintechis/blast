@@ -3,7 +3,6 @@
  */
 
 import {Content, ProtocolClient} from '@node-wot/core';
-import {Readable} from 'stream';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {
   readHex,
@@ -12,9 +11,17 @@ import {
   writeWithoutResponse,
   writeWithResponse,
 } from '../../../blast_webBluetooth.js';
+import {
+  eddystoneProperties,
+  readEddystoneProperty,
+  writeEddystoneProperty,
+} from './../../../blast_eddystone.js';
 import {Subscription} from 'rxjs/Subscription';
 import {WebBluetoothForm} from './webBluetooth.js';
-import {decodeReadableStream} from '../binding-helpers.js';
+import {
+  readableStreamToString,
+  stringToNodeReadable,
+} from '../binding-helpers.js';
 
 export default class WebBluetoothClient implements ProtocolClient {
   public toString(): string {
@@ -106,16 +113,41 @@ export default class WebBluetoothClient implements ProtocolClient {
     characteristicId: BluetoothCharacteristicUUID,
     operation = 'readText'
   ) {
-    const readable = new Readable();
+    let property: string;
+    let value = '';
     switch (operation) {
       case 'readText':
-        readable.push(await readText(deviceId, serviceId, characteristicId));
+        console.debug(
+          '[binding-webBluetooth]',
+          `invoking readText with serviceId ${serviceId} characteristicId ${characteristicId}`
+        );
+        value = await readText(deviceId, serviceId, characteristicId);
         break;
       case 'readNumber':
-        readable.push(await readNumber(deviceId, serviceId, characteristicId));
+        console.debug(
+          '[binding-webBluetooth]',
+          `invoking readNumber with serviceId ${serviceId} characteristicId ${characteristicId}`
+        );
+        value = (
+          await readNumber(deviceId, serviceId, characteristicId)
+        ).toString();
         break;
       case 'readHex':
-        readable.push(await readHex(deviceId, serviceId, characteristicId));
+        console.debug(
+          '[binding-webBluetooth]',
+          `invoking readHex with serviceId ${serviceId} characteristicId ${characteristicId}`
+        );
+        value = await readHex(deviceId, serviceId, characteristicId);
+        break;
+      case 'readEddystoneProperty':
+        property = eddystoneProperties.get(characteristicId) || '';
+        if (property) {
+          console.debug(
+            '[binding-webBluetooth]',
+            `invoking readEddystoneProperty with property ${property}`
+          );
+          value = (await readEddystoneProperty(deviceId, property)).toString();
+        }
         break;
       default: {
         throw new Error(
@@ -123,6 +155,7 @@ export default class WebBluetoothClient implements ProtocolClient {
         );
       }
     }
+    const readable = stringToNodeReadable(value);
     return {
       type: 'text/plain',
       body: readable,
@@ -136,7 +169,8 @@ export default class WebBluetoothClient implements ProtocolClient {
     operation: string,
     content: Content
   ) {
-    const {value} = await decodeReadableStream(content.body);
+    const value = await readableStreamToString(content.body);
+    let property = '';
 
     switch (operation) {
       case 'writeWithResponse':
@@ -157,6 +191,16 @@ export default class WebBluetoothClient implements ProtocolClient {
           characteristicId,
           value
         );
+        break;
+      case 'writeEddystoneProperty':
+        property = eddystoneProperties.get(characteristicId) || '';
+        if (property) {
+          console.debug(
+            '[binding-webBluetooth]',
+            `invoking writeEddystoneProperty on property ${property} with value ${value}`
+          );
+          await writeEddystoneProperty(deviceId, property, value);
+        }
         break;
       default: {
         throw new Error(

@@ -1,9 +1,10 @@
+import { Readable } from 'stream';
 /**
- * Decodes a ReadableStream into JSON
+ * Decodes a ReadableStream into JSON.
  * @param data The ReadableStream to decode
  * @returns The decoded JSON
  */
-export const decodeReadableStream = async function (data) {
+export const readableStreamToJson = async function (data) {
     const chunks = [];
     for await (const chunk of data) {
         chunks.push(chunk);
@@ -13,10 +14,23 @@ export const decodeReadableStream = async function (data) {
     return JSON.parse(str);
 };
 /**
+ * Converts a ReadableStream into a string.
+ * @param data The ReadableStream to convert
+ * @returns The converted string
+ */
+export const readableStreamToString = async function (data) {
+    const chunks = [];
+    for await (const chunk of data) {
+        chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+    return new TextDecoder().decode(buffer);
+};
+/**
  * Endocdes json data into a ReadableStream.
  * @param {JSON} data the data to encode
  */
-export const encodeJson = function (data) {
+export const jsonToReadble = function (data) {
     const encoder = new TextEncoder();
     const jsonArr = encoder.encode(JSON.stringify(data));
     return new ReadableStream({
@@ -25,5 +39,32 @@ export const encodeJson = function (data) {
             controller.close();
         },
     });
+};
+/**
+ * Converts a string into a ReadableStream.
+ * @param str The string to convert
+ * @returns The converted ReadableStream
+ */
+export const stringToReadble = function (str) {
+    const encoder = new TextEncoder();
+    const strArr = encoder.encode(str);
+    return new ReadableStream({
+        start(controller) {
+            controller.enqueue(strArr);
+            controller.close();
+        },
+    });
+};
+/**
+ * Converts a string into a NodeJS.ReadableStream.
+ * @param data The string to convert
+ * @returns The converted string as a ReadableStream
+ */
+export const stringToNodeReadable = function (data) {
+    // create a new NodeJS.ReadableStream and push the data into it
+    const readable = new Readable();
+    readable.push(data);
+    readable.push(null);
+    return readable;
 };
 //# sourceMappingURL=binding-helpers.js.map

@@ -8,6 +8,11 @@
 
 import {JavaScript} from 'blockly';
 import {
+  stringToReadble,
+  readableStreamToString,
+  // eslint-disable-next-line node/no-missing-import
+} from '../../things/bindings/binding-helpers.js';
+import {
   asyncApiFunctions,
   getWorkspace,
   throwError,
@@ -123,7 +128,12 @@ const writeEddystoneProperty = async function (
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty(property, value, slot);
+  // Set the active slot
+  const slotReadable = stringToReadble(slot);
+  await thing.writeProperty('activeSlot', slotReadable);
+  // Write the property
+  const valueReadable = stringToReadble(value);
+  await thing.writeProperty(property, valueReadable);
 
   callback();
 };
@@ -190,8 +200,12 @@ const readEddystoneProperty = async function (
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  const value = await thing.readProperty(property, slot);
-
+  // Set the active slot
+  const slotReadable = stringToReadble(slot);
+  await thing.writeProperty('activeSlot', slotReadable);
+  // Read property data
+  const interActionInput = await thing.readProperty(property);
+  const value = await readableStreamToString(interActionInput.content.body);
   callback(value);
 };
 

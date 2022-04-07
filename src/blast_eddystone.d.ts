@@ -1,4 +1,9 @@
 /**
+ * Maps BluetoothCharacteristicUUIDs to the corresponding property name.
+ */
+export const eddystoneProperties: Map<BluetoothCharacteristicUUID, string>;
+
+/**
  * Gets the active slot of the Eddystone configuration service.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.

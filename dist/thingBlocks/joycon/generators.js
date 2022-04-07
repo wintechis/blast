@@ -141,7 +141,6 @@ const handleJoyConButtons = async function (
   const thingsLog = getThingsLog();
 
   const handler = async function (data) {
-    console.log(data);
     if (data === button) {
       thingsLog(
         `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(

@@ -76,7 +76,7 @@ export async function read(
   id: BluetoothDevice.id,
   serviceUUID: BluetoothServiceUUID,
   characteristicUUID: BluetoothCharacteristicUUID
-): Promise<string>;
+): Promise<DataView>;
 
 /**
  * Reads a text (UTF-8) characteristic value from a Bluetooth device.

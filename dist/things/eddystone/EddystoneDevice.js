@@ -1,11 +1,10 @@
-import { getActiveSlot, readEddystoneProperty, setActiveSlot, writeEddystoneProperty, } from '../../blast_eddystone.js';
-import { getThing, removeThing } from '../index.js';
+import { getWot } from '../index.js';
 export default class EddystoneDevice {
-    constructor(webBluetoothId) {
+    constructor() {
         this.thing = null;
-        this.td = null;
-        this.slot = -1;
-        this.thingModel = {
+    }
+    async init(webBluetoothId) {
+        const td = {
             '@context': ['https://www.w3.org/2019/wot/td/v1'],
             '@type': ['Thing'],
             id: 'blast:bluetooth:EddystoneDevice',
@@ -18,6 +17,24 @@ export default class EddystoneDevice {
             },
             security: 'nosec_sc',
             properties: {
+                activeSlot: {
+                    title: 'Active Slot',
+                    description: 'The active slot of the Eddystone device',
+                    type: 'integer',
+                    readOnly: false,
+                    forms: [
+                        {
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                        {
+                            op: 'writeproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                    ],
+                },
                 advertisedTxPower: {
                     title: 'Advertised Tx Power',
                     description: 'The advertised TX power of the iBeacon',
@@ -26,7 +43,14 @@ export default class EddystoneDevice {
                     readOnly: false,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                        {
+                            op: 'writeproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
@@ -38,7 +62,14 @@ export default class EddystoneDevice {
                     readOnly: false,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                        {
+                            op: 'writeproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
@@ -50,7 +81,27 @@ export default class EddystoneDevice {
                     readOnly: false,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                        {
+                            op: 'writeproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                    ],
+                },
+                capabilities: {
+                    title: 'Capabilities',
+                    description: 'The capabilities of the eddystone device',
+                    type: 'array',
+                    readOnly: false,
+                    forms: [
+                        {
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
@@ -62,7 +113,9 @@ export default class EddystoneDevice {
                     readOnly: true,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
@@ -74,7 +127,9 @@ export default class EddystoneDevice {
                     readOnly: true,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
@@ -86,65 +141,23 @@ export default class EddystoneDevice {
                     readOnly: false,
                     forms: [
                         {
-                            href: '',
+                            op: 'readproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty',
+                            'wbt:id': webBluetoothId,
+                        },
+                        {
+                            op: 'writeproperty',
+                            href: 'gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty',
+                            'wbt:id': webBluetoothId,
                         },
                     ],
                 },
             },
         };
-        this.webBluetoothId = webBluetoothId;
-        getThing(this.thingModel).then(thing => {
-            this.thing = thing;
-            this.td = thing.getThingDescription();
-            this.addPropertyHandlers();
-            this.thing.expose();
-        });
-    }
-    addPropertyHandlers() {
-        var _a, _b;
-        const properties = this.thingModel.properties;
-        for (const p in properties) {
-            (_a = this.thing) === null || _a === void 0 ? void 0 : _a.setPropertyReadHandler(p, () => {
-                return readEddystoneProperty(this.webBluetoothId, p);
-            });
-            if (!properties[p].readOnly) {
-                (_b = this.thing) === null || _b === void 0 ? void 0 : _b.setPropertyWriteHandler(p, value => {
-                    return writeEddystoneProperty(this.webBluetoothId, p, value);
-                });
-            }
-        }
-    }
-    async setActiveSlot(slot) {
-        if ((await this.getActiveSlot()) !== slot) {
-            await setActiveSlot(this.webBluetoothId, slot);
-            this.slot = slot;
-        }
-    }
-    async getActiveSlot() {
-        if (!this.slot) {
-            this.slot = await getActiveSlot(this.webBluetoothId);
-        }
-        return this.slot;
-    }
-    async writeProperty(property, value, slot) {
-        this.setActiveSlot(slot);
-        return writeEddystoneProperty(this.webBluetoothId, property, value);
-    }
-    async readProperty(property, slot) {
-        this.setActiveSlot(slot);
-        return readEddystoneProperty(this.webBluetoothId, property);
-    }
-    async getThingDescription() {
-        while (!this.thing) {
-            // Wait for the thing to be created
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        return this.td;
-    }
-    async destroy() {
-        if (this.td) {
-            await removeThing(this.td);
-        }
+        const wot = await getWot();
+        const thing = await wot.consume(td);
+        this.thing = thing;
+        return thing;
     }
 }
 //# sourceMappingURL=EddystoneDevice.js.map

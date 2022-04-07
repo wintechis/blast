@@ -14,7 +14,7 @@ import {
   throwError,
 } from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {encodeJson} from './../../things/bindings/binding-helpers.js';
+import {stringToReadble} from './../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -66,12 +66,9 @@ const switchLights = async function (
     return;
   }
   // convert data to json
-  const data = {
-    device: webBluetoothId,
-    value: '7e000503' + colour.substring(1, 7) + '00ef',
-  };
+  const data = '7e000503' + colour.substring(1, 7) + '00ef';
   // convert json to stream
-  const stream = encodeJson(data);
+  const stream = stringToReadble(data);
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const thing = await block.thing;

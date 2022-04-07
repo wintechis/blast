@@ -14,7 +14,7 @@ import {
   throwError,
 } from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {encodeJson} from './../../things/bindings/binding-helpers.js';
+import {jsonToReadble} from './../../things/bindings/binding-helpers.js';
 
 JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
@@ -80,7 +80,7 @@ const blinkstickSetColors = async function (
   // create report
   const reportId = 5;
   const report = [reportId, index, red, green, blue];
-  const stream = encodeJson({reportId, report});
+  const stream = jsonToReadble({reportId, report});
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;

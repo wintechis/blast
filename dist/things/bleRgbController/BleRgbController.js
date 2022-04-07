@@ -28,7 +28,6 @@ export default class BleRgbController {
                         {
                             href: 'gatt://0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb/writeWithoutResponse',
                             'wbt:id': webBluetoothId,
-                            contentType: 'text/plain',
                         },
                     ],
                 },

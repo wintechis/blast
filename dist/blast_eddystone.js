@@ -34,6 +34,22 @@ const UUIDS = {
   REMAIN_CONNECTABLE_CHARACTERISTIC: 'a3c8750c-8ed3-4bdf-8a39-a01bebede295',
 };
 
+export const eddystoneProperties = new Map();
+eddystoneProperties.set(UUIDS.ACTIVE_SLOT_CHARACTERISTIC, 'activeSlot');
+eddystoneProperties.set(
+  UUIDS.ADVERTISED_TX_POWER_CHARACTERISTIC,
+  'advertisedTxPower'
+);
+eddystoneProperties.set(UUIDS.ADV_SLOT_DATA_CHARACTERISTIC, 'advertisedData');
+eddystoneProperties.set(
+  UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
+  'advertisingInterval'
+);
+eddystoneProperties.set(UUIDS.CAPABILITIES_CHARACTERISTIC, 'capabilities');
+eddystoneProperties.set(UUIDS.LOCK_STATE_CHARACTERISTIC, 'lockState');
+eddystoneProperties.set(UUIDS.PUBLIC_ECDH_KEY_CHARACTERISTIC, 'publicEcdhKey');
+eddystoneProperties.set(UUIDS.RADIO_TX_POWER_CHARACTERISTIC, 'radioTxPower');
+
 // Add Eddystone config service to optionalServices to make it accessible.
 optionalServices.push(UUIDS.CONFIG_SERVICE);
 
@@ -42,16 +58,33 @@ optionalServices.push(UUIDS.CONFIG_SERVICE);
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @return {!Promise} A promise that resolves when the operation is complete.
  */
-const getCapabilities = async function (webBluetoothId) {
+export const getCapabilities = async function (webBluetoothId) {
   const thingsLog = getThingsLog();
   thingsLog('Reading Eddystone capabilities...', 'Eddystone', webBluetoothId);
   // Get the capabilities.
-  let capabilitiesArray = await read(
+  const capabilitiesArray = await read(
     webBluetoothId,
     UUIDS.CONFIG_SERVICE,
     UUIDS.CAPABILITIES_CHARACTERISTIC
   );
-  capabilitiesArray = new Int8Array(capabilitiesArray.buffer);
+  const capabilities = parseCapabilities(capabilitiesArray);
+
+  thingsLog(
+    `Eddystone capabilities: <code>${JSON.stringify(capabilities)}</code>`,
+    'Eddystone',
+    webBluetoothId
+  );
+
+  return capabilities;
+};
+
+/**
+ * Parses dataView for the Eddystone Capabilities.
+ * @param {DataView} dataView A DataView of the data received from the device.
+ * @returns {Array<boolean | number>} An array of the parsed data.
+ */
+export const parseCapabilities = function (dataView) {
+  const capabilitiesArray = new Int8Array(dataView.buffer);
 
   // Parse the capabilities.
   const supportedTxPowerLevels = [];
@@ -64,7 +97,7 @@ const getCapabilities = async function (webBluetoothId) {
     supportedTxPowerLevels.push(capabilitiesArray[i]);
   }
 
-  const capabilities = {
+  return {
     specVersion: capabilitiesArray[0],
     maxSlots: capabilitiesArray[1],
     maxEidPerSlot: capabilitiesArray[2],
@@ -76,14 +109,6 @@ const getCapabilities = async function (webBluetoothId) {
     isEIDSupported: (capabilitiesArray[5] & 8) !== 0,
     supportedTxPowerLevels: supportedTxPowerLevels,
   };
-
-  thingsLog(
-    `Eddystone capabilities: <code>${JSON.stringify(capabilities)}</code>`,
-    'Eddystone',
-    webBluetoothId
-  );
-
-  return capabilities;
 };
 
 /**
@@ -631,7 +656,7 @@ export const readEddystoneProperty = async function (webBluetoothId, property) {
     case 'advertisedTxPower':
       value = await getAdvertisedTxPower(webBluetoothId);
       break;
-    case 'advertisementData':
+    case 'advertisedData':
       value = await getAdvertisingData(webBluetoothId);
       break;
     case 'advertisingInterval':
@@ -646,6 +671,8 @@ export const readEddystoneProperty = async function (webBluetoothId, property) {
     case 'radioTxPower':
       value = await getTxPowerLevel(webBluetoothId);
       break;
+    default:
+      throwError(`Eddystone property ${property} is not impleneted.`);
   }
 
   return value;
@@ -664,6 +691,9 @@ export const writeEddystoneProperty = async function (
   value
 ) {
   switch (property) {
+    case 'activeSlot':
+      await setActiveSlot(webBluetoothId, value);
+      break;
     case 'advertisedTxPower':
       await setAdvertisedTxPower(webBluetoothId, value);
       break;

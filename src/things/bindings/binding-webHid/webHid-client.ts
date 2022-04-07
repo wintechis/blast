@@ -7,7 +7,7 @@ import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs/Subscription';
 import {webHidForm} from './webHid.js';
 import {getWebHidDevice} from './../../../blast_things.js';
-import {decodeReadableStream} from './../binding-helpers.js';
+import {readableStreamToJson} from './../binding-helpers.js';
 
 export default class WebHidClient implements ProtocolClient {
   public toString(): string {
@@ -67,7 +67,7 @@ export default class WebHidClient implements ProtocolClient {
     if (!device.opened) {
       await device.open();
     }
-    const {reportId, report} = await decodeReadableStream(content.body);
+    const {reportId, report} = await readableStreamToJson(content.body);
     console.debug(
       `[binding-webHid] invoking sendReport, with reportId: ${reportId} and report: ${report}`
     );
@@ -82,7 +82,7 @@ export default class WebHidClient implements ProtocolClient {
     if (!device.opened) {
       await device.open();
     }
-    const {reportId, report} = await decodeReadableStream(content.body);
+    const {reportId, report} = await readableStreamToJson(content.body);
     const data = Int8Array.from(report);
     console.debug(
       `[binding-webHid] invoking sendFeatureReport, with reportId: ${reportId} and report: ${report}`

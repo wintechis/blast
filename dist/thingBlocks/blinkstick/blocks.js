@@ -76,7 +76,7 @@ Blocks['blinkstick_set_colors'] = {
 const BLINKSTICK_SET_COLORS_XML = `
 <block type="blinkstick_set_colors">
   <value name="index">
-    <block type="math_number">
+    <block type="number_value">
       <field name="NUM">0</field>
     </block>
   </value>
@@ -97,7 +97,7 @@ implementedThings.push({
     {
       type: 'blinkstick_set_colors',
       category: 'Properties',
-      xml: BLINKSTICK_SET_COLORS_XML,
+      XML: BLINKSTICK_SET_COLORS_XML,
     },
   ],
   infoUrl: 'https://github.com/wintechis/blast/wiki/BlinkStick',

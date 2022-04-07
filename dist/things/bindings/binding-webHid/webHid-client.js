@@ -2,7 +2,7 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 import { getWebHidDevice } from './../../../blast_things.js';
-import { decodeReadableStream } from './../binding-helpers.js';
+import { readableStreamToJson } from './../binding-helpers.js';
 export default class WebHidClient {
     toString() {
         return '[WebHidClient]';
@@ -45,7 +45,7 @@ export default class WebHidClient {
         if (!device.opened) {
             await device.open();
         }
-        const { reportId, report } = await decodeReadableStream(content.body);
+        const { reportId, report } = await readableStreamToJson(content.body);
         console.debug(`[binding-webHid] invoking sendReport, with reportId: ${reportId} and report: ${report}`);
         await device.sendReport(reportId, report);
     }
@@ -54,9 +54,8 @@ export default class WebHidClient {
         if (!device.opened) {
             await device.open();
         }
-        const { reportId, report } = await decodeReadableStream(content.body);
+        const { reportId, report } = await readableStreamToJson(content.body);
         const data = Int8Array.from(report);
-        console.log(data);
         console.debug(`[binding-webHid] invoking sendFeatureReport, with reportId: ${reportId} and report: ${report}`);
         await device.sendFeatureReport(reportId, Int8Array.from(data));
     }

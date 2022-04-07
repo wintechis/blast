@@ -1,9 +1,9 @@
 /**
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
-import { Readable } from 'stream';
 import { readHex, readNumber, readText, writeWithoutResponse, writeWithResponse, } from '../../../blast_webBluetooth.js';
-import { decodeReadableStream } from '../binding-helpers.js';
+import { eddystoneProperties, readEddystoneProperty, writeEddystoneProperty, } from './../../../blast_eddystone.js';
+import { readableStreamToString, stringToNodeReadable, } from '../binding-helpers.js';
 export default class WebBluetoothClient {
     toString() {
         return '[WebBluetoothClient]';
@@ -60,28 +60,41 @@ export default class WebBluetoothClient {
         }
     }
     async read(deviceId, serviceId, characteristicId, operation = 'readText') {
-        const readable = new Readable();
+        let property;
+        let value = '';
         switch (operation) {
             case 'readText':
-                readable.push(await readText(deviceId, serviceId, characteristicId));
+                console.debug('[binding-webBluetooth]', `invoking readText with serviceId ${serviceId} characteristicId ${characteristicId}`);
+                value = await readText(deviceId, serviceId, characteristicId);
                 break;
             case 'readNumber':
-                readable.push(await readNumber(deviceId, serviceId, characteristicId));
+                console.debug('[binding-webBluetooth]', `invoking readNumber with serviceId ${serviceId} characteristicId ${characteristicId}`);
+                value = (await readNumber(deviceId, serviceId, characteristicId)).toString();
                 break;
             case 'readHex':
-                readable.push(await readHex(deviceId, serviceId, characteristicId));
+                console.debug('[binding-webBluetooth]', `invoking readHex with serviceId ${serviceId} characteristicId ${characteristicId}`);
+                value = await readHex(deviceId, serviceId, characteristicId);
+                break;
+            case 'readEddystoneProperty':
+                property = eddystoneProperties.get(characteristicId) || '';
+                if (property) {
+                    console.debug('[binding-webBluetooth]', `invoking readEddystoneProperty with property ${property}`);
+                    value = (await readEddystoneProperty(deviceId, property)).toString();
+                }
                 break;
             default: {
                 throw new Error(`[binding-webBluetooth] unknown return format ${operation}`);
             }
         }
+        const readable = stringToNodeReadable(value);
         return {
             type: 'text/plain',
             body: readable,
         };
     }
     async write(deviceId, serviceId, characteristicId, operation, content) {
-        const { value } = await decodeReadableStream(content.body);
+        const value = await readableStreamToString(content.body);
+        let property = '';
         switch (operation) {
             case 'writeWithResponse':
                 console.debug('[binding-webBluetooth]', `invoking writeWithResponse with value ${value}`);
@@ -90,6 +103,13 @@ export default class WebBluetoothClient {
             case 'writeWithoutResponse':
                 console.debug('[binding-webBluetooth]', `invoking writeWithoutResponse with value ${value}`);
                 await writeWithoutResponse(deviceId, serviceId, characteristicId, value);
+                break;
+            case 'writeEddystoneProperty':
+                property = eddystoneProperties.get(characteristicId) || '';
+                if (property) {
+                    console.debug('[binding-webBluetooth]', `invoking writeEddystoneProperty on property ${property} with value ${value}`);
+                    await writeEddystoneProperty(deviceId, property, value);
+                }
                 break;
             default: {
                 throw new Error(`[binding-webBluetooth] unknown operation ${operation}`);
