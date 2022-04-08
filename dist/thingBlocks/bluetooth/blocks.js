@@ -9,7 +9,9 @@
 import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
 import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
-import EddystoneDevice from '../../things/eddystone/EddystoneDevice.js';
+import EddystoneDevice from '../../things/EddystoneDevice.js';
+// eslint-disable-next-line node/no-missing-import
+import BluetoothGeneric from '../../things/BluetoothGeneric.js';
 
 Blocks['things_eddyStoneDevice'] = {
   /**
@@ -63,6 +65,19 @@ Blocks['things_bluetoothGeneric'] = {
     this.setTooltip('A Generic Bluetooth device.');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
+    this.firstTime = true;
+    this.webBluetoothId = '';
+    this.thing = null;
+  },
+  onchange: function () {
+    // on creating this block initialize new instance of BleRgbController
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webBluetoothId = this.getFieldValue('id');
+      this.firstTime = false;
+      new BluetoothGeneric().init(this.webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
+    }
   },
 };
 

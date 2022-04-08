@@ -9,7 +9,7 @@
 
 import {Blocks, FieldTextInput} from 'blockly';
 // eslint-disable-next-line node/no-missing-import
-import Blinkstick from './../../things/blinkstick/Blinkstick.js';
+import Blinkstick from './../../things/Blinkstick.js';
 import {implementedThings} from '../../blast_things.js';
 
 /**

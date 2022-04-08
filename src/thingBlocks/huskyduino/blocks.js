@@ -10,7 +10,7 @@
 import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
 import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
-import HuskyDuino from './../../things/huskyDuino/HuskyDuino.js';
+import HuskyDuino from './../../things/HuskyDuino.js';
 
 Blocks['things_huskylens'] = {
   /**

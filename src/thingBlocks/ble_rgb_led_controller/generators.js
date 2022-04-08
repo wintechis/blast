@@ -14,7 +14,7 @@ import {
   throwError,
 } from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {stringToReadble} from './../../things/bindings/binding-helpers.js';
+import {stringToReadable} from './../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -68,7 +68,7 @@ const switchLights = async function (
   // convert data to json
   const data = '7e000503' + colour.substring(1, 7) + '00ef';
   // convert json to stream
-  const stream = stringToReadble(data);
+  const stream = stringToReadable(data);
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const thing = await block.thing;

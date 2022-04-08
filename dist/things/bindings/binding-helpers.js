@@ -45,7 +45,7 @@ export const jsonToReadble = function (data) {
  * @param str The string to convert
  * @returns The converted ReadableStream
  */
-export const stringToReadble = function (str) {
+export const stringToReadable = function (str) {
     const encoder = new TextEncoder();
     const strArr = encoder.encode(str);
     return new ReadableStream({

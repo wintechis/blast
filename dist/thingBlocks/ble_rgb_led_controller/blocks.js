@@ -9,7 +9,7 @@
 
 import {Blocks, dialog, FieldTextInput} from 'blockly';
 // eslint-disable-next-line node/no-missing-import
-import BleRgbController from './../../things/bleRgbController/BleRgbController.js';
+import BleRgbController from './../../things/BleRgbController.js';
 import {implementedThings} from '../../blast_things.js';
 
 Blocks['things_bleLedController'] = {

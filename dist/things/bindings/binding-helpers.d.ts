@@ -20,7 +20,7 @@ export declare const jsonToReadble: (data: JSON) => ReadableStream;
  * @param str The string to convert
  * @returns The converted ReadableStream
  */
-export declare const stringToReadble: (str: string) => ReadableStream;
+export declare const stringToReadable: (str: string) => ReadableStream;
 /**
  * Converts a string into a NodeJS.ReadableStream.
  * @param data The string to convert

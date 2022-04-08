@@ -17,7 +17,6 @@ import {
   getWorkspace,
   throwError,
 } from './../../blast_interpreter.js';
-import {readText} from './../../blast_webBluetooth.js';
 
 /**
  * Generates JavaScript code for the get_signal_strength block.
@@ -228,103 +227,26 @@ JavaScript['read_gatt_characteristic'] = function (block) {
   const characteristic = JavaScript.quote_(
     block.getFieldValue('characteristic')
   );
-  const code = `readBluetoothService(${thing}, ${characteristic})`;
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
+  const code = `readBluetoothService(${blockId}, ${thing}, ${characteristic})`;
 
   return [code, JavaScript.ORDER_NONE];
 };
 
-const characteristics = {
-  barometricPressureTrend: {
-    service: '00001802-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
-  },
-  batteryLevel: {
-    service: '0000180f-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a19-0000-1000-8000-00805f9b34fb',
-  },
-  deviceName: {
-    service: '00001800-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a00-0000-1000-8000-00805f9b34fb',
-  },
-  elevation: {
-    service: '00001803-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a6c-0000-1000-8000-00805f9b34fb',
-  },
-  firmwareRevision: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a26-0000-1000-8000-00805f9b34fb',
-  },
-  hardwareRevision: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a27-0000-1000-8000-00805f9b34fb',
-  },
-  humidity: {
-    service: '00001803-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a6f-0000-1000-8000-00805f9b34fb',
-  },
-  irradiance: {
-    service: '00001803-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a77-0000-1000-8000-00805f9b34fb',
-  },
-  intermediateTemperature: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a1e-0000-1000-8000-00805f9b34fb',
-  },
-  manufacturerName: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a29-0000-1000-8000-00805f9b34fb',
-  },
-  modelNumber: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a24-0000-1000-8000-00805f9b34fb',
-  },
-  movementCounter: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a56-0000-1000-8000-00805f9b34fb',
-  },
-  pressure: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a6d-0000-1000-8000-00805f9b34fb',
-  },
-  serialNumber: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a25-0000-1000-8000-00805f9b34fb',
-  },
-  softwareRevision: {
-    service: '0000180a-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a28-0000-1000-8000-00805f9b34fb',
-  },
-  temperature: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a6e-0000-1000-8000-00805f9b34fb',
-  },
-  temperatureMeasurement: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a1c-0000-1000-8000-00805f9b34fb',
-  },
-  temperatureType: {
-    service: '00001809-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a1d-0000-1000-8000-00805f9b34fb',
-  },
-  txPowerLevel: {
-    service: '00001804-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a07-0000-1000-8000-00805f9b34fb',
-  },
-  weight: {
-    service: '00001808-0000-1000-8000-00805f9b34fb',
-    characteristic: '00002a9d-0000-1000-8000-00805f9b34fb',
-  },
-};
-
 /**
  * Reads a bluetooth characteristic from a bluetooth device.
+ * @param {Blockly.Block.id} blockId the things_eddyStoneDevice block's id.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {String} characteristic The characteristic to read.
+ * @param {String} property The characteristic to read.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const readBluetoothService = async function (
+  blockId,
   webBluetoothId,
-  characteristic,
+  property,
   callback
 ) {
   // make sure a device block is connected
@@ -334,11 +256,12 @@ const readBluetoothService = async function (
     return;
   }
 
-  const value = await readText(
-    webBluetoothId,
-    characteristics[characteristic].service,
-    characteristics[characteristic].characteristic
-  );
+  // get thing instance of block
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = await block.thing;
+  // Read property data
+  const interActionInput = await thing.readProperty(property);
+  const value = await readableStreamToString(interActionInput.content.body);
   callback(value);
 };
 
