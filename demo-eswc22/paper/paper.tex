@@ -118,8 +118,9 @@ On entering or exiting the defined state, the event blocks, which itself can con
 
 We have implemented an editor and an execution environment for BLAST programs that run in modern web browsers.
 
-The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language. The custom blocks and the BLAST environment follow all the important design principles introduced by Fraser \cite{fraser}, such as a clear border style or the avoidance of transitive connections.
-Based on the user's arrangement of these blocks, the editor generates JavaScript code that can then be executed in the browser.
+The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language. The custom blocks and the BLAST environment follow almost all of the design principles introduced by Fraser \cite{fraser}, such as a clear border style or the avoidance of transitive connections. Not implemented, however, are the varying color choices for different loops.
+
+Based on the user's arrangement of the blocks, the editor generates JavaScript code that can then be executed in the browser.
 The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
 BLAST uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB and Bluetooth HID interface.
 The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
