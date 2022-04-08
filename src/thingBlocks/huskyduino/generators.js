@@ -9,7 +9,8 @@
 
 import {JavaScript} from 'blockly';
 import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
-import {optionalServices} from './../../blast_webBluetooth.js';
+// eslint-disable-next-line node/no-missing-import
+import {readableStreamToString, stringToReadable} from '../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_huskylens block.
@@ -96,10 +97,6 @@ JavaScript['huskylens_read_id'] = function (block) {
   return [code, JavaScript.ORDER_NONE];
 };
 
-// set the service UUID here， for all characteristics
-const HuskyServiceUUID = '5be35d20-f9b0-11eb-9a03-0242ac130003';
-optionalServices.push(HuskyServiceUUID);
-
 /**
  * Write the choosen algorithm value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
@@ -107,9 +104,12 @@ optionalServices.push(HuskyServiceUUID);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const chooseAlgo = async function (blockId, value, callback) {
+  // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('algorithm', value);
+  // Write face id to thing.
+  const valueReadable = stringToReadable(value);
+  await thing.writeProperty('algorithm', valueReadable);
   callback();
 };
 
@@ -122,9 +122,12 @@ asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const learnID = async function (blockId, value, callback) {
+  // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('id', value);
+  // Write face id to thing.
+  const valueReadable = stringToReadable(value);
+  await thing.writeProperty('id', valueReadable);
   callback();
 };
 
@@ -137,8 +140,10 @@ asyncApiFunctions.push(['learnID', learnID]);
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const forgetAll = async function (blockId, callback) {
+  // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
+  // invoke action.
   await thing.invokeAction('forgetAll');
   callback();
 };
@@ -152,10 +157,13 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
  * @returns {String} contains all known faceIDs currently visible to the camera.
  */
 const readID = async function (blockId, callback) {
+  // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.readProperty('id');
-  callback();
+  // Read property data
+  const interActionInput = await thing.readProperty('id');
+  const value = await readableStreamToString(interActionInput.content.body);
+  callback(value);
 };
 
 asyncApiFunctions.push(['readID', readID]);

@@ -37,8 +37,10 @@ Blocks['things_huskylens'] = {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
-      this.thing = new HuskyDuino(this.webBluetoothId);
       this.firstTime = false;
+      new HuskyDuino().init(this.webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };
