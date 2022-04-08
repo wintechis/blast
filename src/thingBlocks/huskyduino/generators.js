@@ -9,8 +9,11 @@
 
 import {JavaScript} from 'blockly';
 import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import {readableStreamToString, stringToReadable} from '../../things/bindings/binding-helpers.js';
+import {
+  readableStreamToString,
+  stringToReadable,
+  // eslint-disable-next-line node/no-missing-import
+} from '../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_huskylens block.
