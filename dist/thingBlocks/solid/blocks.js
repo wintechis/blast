@@ -7,7 +7,7 @@
 'use strict';
 
 import {Blocks} from 'blockly';
-import {addBlock} from './../../../src/blast_toolbox.js';
+import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['upload_image'] = {
   /**
