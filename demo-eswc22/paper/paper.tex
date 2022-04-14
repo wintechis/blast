@@ -87,7 +87,7 @@ Punya focuses on creating applications for Android devices that can access the m
 Punya also acts as a client to publish and access data on servers supporting the Constrained Application Protocol (CoAP).
 BLAST programs, on the other hand, run in modern web browsers and support devices based on a WoT abstraction.
 
-In the following we first introduce the BLAST language using a geofencing scenario, next describe the browser-based editor and execution environment for BLAST programs and then conclude.
+In the following we first introduce the BLAST language using a geofencing scenario, next describe the browser-based editor and execution environment for BLAST programs, followed by a short usability evaluation, and then conclude.
 
 \section{BLAST Language}
 
@@ -118,7 +118,7 @@ On entering or exiting the defined state, the event blocks, which itself can con
 
 We have implemented an editor and an execution environment for BLAST programs that run in modern web browsers.
 
-The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language. The custom blocks and the BLAST environment follow almost all of the design principles introduced by Fraser \cite{fraser}, such as a clear border style or the avoidance of transitive connections. Not implemented, however, are the varying color choices for different loops.
+The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language. The custom blocks and the BLAST environment follow almost all of the design principles introduced by Fraser \cite{fraser}, such as a clear border style or the avoidance of transitive connections. Not implemented, however, are the varying color choices for different loop types.
 
 Based on the user's arrangement of the blocks, the editor generates JavaScript code that can then be executed in the browser.
 The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
@@ -130,11 +130,11 @@ The functionality to issue HTTP requests is based on the Fetch API\footnote{\url
 Next to the presented small scenario around geofences, we have developed BLAST programs to accomplish five use cases with varying complexity. These use cases include switching on a light, temperature monitoring, and movement detection. Each use case introduces a different challenge that requires the use of programming patterns in combination with the built-in blocks for properties, actions, events, requests, and queries.
 
 \section{Usability Evaluation }
-For evaluating the usability of BLAST, we employ the System Usability Scale (SUS) questionnaire. According to Assila et al. \cite{assila2016standardized}, SUS provides reliable results over different sample sizes and converges fast to the correct conclusion. 
+For evaluating the usability of BLAST, we employ the System Usability Scale (SUS) questionnaire. According to Assila et al. \cite{assila2016standardized}, SUS provides reliable results for  different sample sizes and converges quickly to the correct conclusion. 
 
-We conducted an evaluation with nine participants. None of the participants had background knowledge regarding the Web of Things, RDF, or SPARQL. Participants were first asked to solve four tasks using BLAST, these included a simple ``Hello World!'' program, periodic polling of RSSI data by using a loop, reading data from a connected IoT device, and as a final task, reading data and processing it using logical operators. After the successful completion of these tasks, the participants filled out the SUS questionnaires. The achieved SUS score across all questionnaires is 81.4 out of 100 possible points, which corresponds to good usability.
+We conducted an evaluation with nine participants. None of the participants had background knowledge regarding the Web of Things, RDF, or SPARQL. Participants were asked to solve four tasks using BLAST, these included a simple ``Hello World!'' program, periodic polling of RSSI data by using a loop, reading data from a connected IoT device, and as a final task, reading data and processing it using logical operators. After the completion of these tasks, the participants filled out the SUS questionnaire. The achieved SUS score across all questionnaires is 81.4 out of 100  points, which corresponds to good usability.
 
-It should be noted that the survey was conducted with an older version of BLAST. However, the user interface has changed only minimally since then, which is why the results are still relevant.
+It must be noted that the survey was conducted with an older version of BLAST. This is due to the fact that BLAST is under constant development. Since the user interface has undergone only minor changes since the evaluation, the results are still relevant.
 
 \section{Conclusion}
 
