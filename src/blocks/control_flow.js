@@ -7,19 +7,19 @@
 'use strict';
 
 import {addBlock} from './../blast_toolbox.js';
-import Blockly from 'blockly';
+import {Blocks, libraryBlocks} from 'blockly';
 
 // Remap blockly blocks to improve naming in xml.
-Blockly.Blocks['repeat'] = Blockly.Blocks['controls_repeat_ext'];
-Blockly.Blocks['for'] = Blockly.Blocks['controls_for'];
-Blockly.Blocks['while_until'] = Blockly.Blocks['controls_whileUntil'];
-Blockly.Blocks['break_continue'] = Blockly.Blocks['controls_flow_statements'];
-Blockly.Blocks['conditional_statement'] = Blockly.Blocks['controls_if'];
+Blocks['repeat'] = Blocks['controls_repeat_ext'];
+Blocks['for'] = Blocks['controls_for'];
+Blocks['while_until'] = Blocks['controls_whileUntil'];
+Blocks['break_continue'] = Blocks['controls_flow_statements'];
+Blocks['conditional_statement'] = Blocks['controls_if'];
 
 // add changed names to Loops constant to ensure correct execution.
-Blockly.blocks.all.loops.loopTypes.add('repeat');
-Blockly.blocks.all.loops.loopTypes.add('while_until');
-Blockly.blocks.all.loops.loopTypes.add('for');
+libraryBlocks.loops.loopTypes.add('repeat');
+libraryBlocks.loops.loopTypes.add('while_until');
+libraryBlocks.loops.loopTypes.add('for');
 
 // Define inner block XML for the repeat block.
 const REPEAT_XML = `
@@ -57,7 +57,7 @@ const FOR_XML = `
 // Add for block to the toolbox.
 addBlock('for', 'Control Flow', FOR_XML);
 
-Blockly.Blocks['wait_seconds'] = {
+Blocks['wait_seconds'] = {
   /**
    * Block for executing a sleep/timeout command.
    * @this {Blockly.Block}

@@ -60,20 +60,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blockly/block-test@npm:^2.0.4":
-  version: 2.0.4
-  resolution: "@blockly/block-test@npm:2.0.4"
+"@blockly/block-test@npm:^2.0.6":
+  version: 2.0.6
+  resolution: "@blockly/block-test@npm:2.0.6"
   peerDependencies:
-    blockly: ^7.20211209.0
-  checksum: 16c7da1bbb7002e3b3c3657d905e7c9e19cb780bfde73d030bfc9e882e0eb2caaceba93605418dd164f7a16349636e150c112d555d3f09a5b6d0d2319bfcc45b
+    blockly: 7 - 8
+  checksum: e56efef70fcb74e8b8725b2b2d08f4539704fa072b64e20407c13c5033637d28a3f5dd6a1dc51655d03be2c7ffbbe259ca680d8f56de63700328cb27664c700b
   languageName: node
   linkType: hard
 
-"@blockly/dev-tools@npm:^3.0.7":
-  version: 3.0.7
-  resolution: "@blockly/dev-tools@npm:3.0.7"
+"@blockly/dev-tools@npm:3.1.0":
+  version: 3.1.0
+  resolution: "@blockly/dev-tools@npm:3.1.0"
   dependencies:
-    "@blockly/block-test": ^2.0.4
+    "@blockly/block-test": ^2.0.6
     "@blockly/theme-dark": ^2.0.7
     "@blockly/theme-deuteranopia": ^1.0.8
     "@blockly/theme-highcontrast": ^1.0.8
@@ -85,8 +85,8 @@ __metadata:
     monaco-editor: ^0.20.0
     sinon: ^9.0.2
   peerDependencies:
-    blockly: ^7.20211209.0
-  checksum: b5bd14000ee5e491eaa98b683319809c8c851dcf578dbd359165fcb7183efa578f1650b0fa30e9e6278395f59eb90b5aa447595552a5a2d862d376fb0473970f
+    blockly: 7 - 8
+  checksum: 3247703e738572dc59dc643f373028cc5deeefbe6615cbba447237165d5b9c48ebaaf4ad2458f7aa1933976c65cef4a43bb3929749271e850ae30358a4dcbab9
   languageName: node
   linkType: hard
 
@@ -1347,7 +1347,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "blast@workspace:."
   dependencies:
-    "@blockly/dev-tools": ^3.0.7
+    "@blockly/dev-tools": 3.1.0
     "@elgato-stream-deck/webhid": ^5.2.0
     "@inrupt/solid-client": ^1.19.0
     "@node-wot/core": latest
@@ -1356,7 +1356,7 @@ __metadata:
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
-    blockly: 7.20211209.3
+    blockly: 8.0.0
     chai: ^4.3.6
     copyfiles: ^2.4.1
     eslint: ^7.15.0
@@ -1383,12 +1383,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"blockly@npm:7.20211209.3":
-  version: 7.20211209.3
-  resolution: "blockly@npm:7.20211209.3"
+"blockly@npm:8.0.0":
+  version: 8.0.0
+  resolution: "blockly@npm:8.0.0"
   dependencies:
     jsdom: 15.2.1
-  checksum: 5517abfafbda70f73228bcc5d0fdb09fec2e75eff8a683397e3ec1afdd4823b41de9832e2374107aecd13a5551677300e3ce1bb13aab9b0901ff0212f762ea43
+  checksum: 0905fd9c4420cbbdbaf4059492108243895039514fd9307dcd20d956de47a02a62f6bfa8cf2107d72bc48a675c6e6b7b9df30725c6443bc62762e3566733dbe5
   languageName: node
   linkType: hard
 

@@ -79,8 +79,10 @@ const init = function () {
     };
     menuOptions.push(screenshotOption);
 
+    console.log(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
+
     // // Adds a default-sized workspace comment to the workspace.
-    // menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
+    menuOptions.push(Blockly.ContextMenu.workspaceCommentOption(workspace, e));
   }
 
   initInterpreter(workspace);

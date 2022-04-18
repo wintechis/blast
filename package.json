@@ -31,7 +31,7 @@
   "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@blockly/dev-tools": "^3.0.7",
+    "@blockly/dev-tools": "3.1.0",
     "@types/node": "^14.11.2",
     "@types/web-bluetooth": "^0.0.14",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
@@ -59,7 +59,7 @@
     "@inrupt/solid-client": "^1.19.0",
     "@node-wot/core": "latest",
     "@node-wot/td-tools": "^0.8.0",
-    "blockly": "7.20211209.3",
+    "blockly": "8.0.0",
     "file-saver": "^2.0.5",
     "joy-con-webhid": "latest",
     "rxjs": "5.5.11",
