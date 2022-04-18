@@ -63,11 +63,11 @@ One possible approach to improve accessibility and ease the creation of computer
 Visual programming does not require the user to enter any text; instead, programs are based on graphical elements like blocks, graphs, tables or diagrams.
 Programs are created by arranging predefined blocks with images or text via a drag-and-drop interface.
 Blocks can be geometrically aligned with other compatible blocks, like in a jigsaw puzzle, to form complex programs.
-Since blocks can only be arranged in the correct way, no syntax errors can occur~\cite{10.11453341221}~\cite{maloney2010scratch}~\cite{10.1145/1089733.1089734}.
+Since blocks can only be arranged in the correct way, no syntax errors can occur~\cite{10.1145/1089733.1089734}~\cite{maloney2010scratch}~\cite{10.11453341221}.
 
 %The created block programs can be translated into source code of any predefined programming language and then executed.
 The block-based approach can be used not only for learning programming concepts, but also for more complex problems.
-Block languages have been successfully used in constructing SPARQL queries~\cite{7369012} or programming industrial robots~\cite{8120406}~\cite{tomlein2017visual}, both areas which normally require advanced programming skills.
+Block languages have been successfully used in constructing SPARQL queries~\cite{7369012} or programming industrial robots~\cite{tomlein2017visual}~\cite{8120406}, both areas which normally require advanced programming skills.
 
 We present BLAST, a visual programming environment that works with devices following the Web of Things interface.
 BLAST programs can be created in a web browser, based on Google's Blockly\footnote{\url{https://developers.google.com/blockly/}}, a JavaScript library for creating block-based languages and editors.
@@ -87,7 +87,7 @@ Punya focuses on creating applications for Android devices that can access the m
 Punya also acts as a client to publish and access data on servers supporting the Constrained Application Protocol (CoAP).
 BLAST programs, on the other hand, run in modern web browsers and support devices based on a WoT abstraction.
 
-In the following we first introduce the BLAST language using a geofencing scenario, next describe the browser-based editor and execution environment for BLAST programs and then conclude.
+In the following we first introduce the BLAST language using a geofencing scenario, next describe the browser-based editor and execution environment for BLAST programs, followed by a short usability evaluation, and then conclude.
 
 \section{BLAST Language}
 
@@ -118,19 +118,27 @@ On entering or exiting the defined state, the event blocks, which itself can con
 
 We have implemented an editor and an execution environment for BLAST programs that run in modern web browsers.
 
-The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language.
-Based on the user's arrangement of these blocks, the editor generates JavaScript code that can then be executed in the browser.
+The editor uses the Blockly library and provides custom control and command blocks that make up the BLAST language. The custom blocks and the BLAST environment follow almost all of the design principles introduced by Fraser \cite{fraser}, such as a clear border style or the avoidance of transitive connections. Not implemented, however, are the varying color choices for different loop types.
+
+Based on the user's arrangement of the blocks, the editor generates JavaScript code that can then be executed in the browser.
 The system builds on the Web Bluetooth API\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/}} and the WebHID API\footnote{\url{https://wicg.github.io/webhid/}} to interact with devices.
-The system uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB and Bluetooth HID interface.
+BLAST uses the Web of Things abstraction as interface; we have implemented the WoT interface for eight devices that use the BLE GAP and GATT profiles as well as the USB and Bluetooth HID interface.
 The WoT interface contains the metadata and interaction affordances as well as the JavaScript code needed for communication.
 In addition, the system includes access to the camera and sound output via browser APIs using the WoT interface.
 Further, the system includes access to the Web Speech API\footnote{\url{https://wicg.github.io/speech-api/}}.
 The functionality to issue HTTP requests is based on the Fetch API\footnote{\url{https://fetch.spec.whatwg.org/}}, Social Linked Data (Solid) authentication is based on the Inrupt client libraries\footnote{\url{https://docs.inrupt.com/developer-tools/javascript/client-libraries/}}, and SPARQL query support is based on µRDF.js\footnote{\url{https://github.com/vcharpenay/uRDF.js/}}.
-Next to the presented small scenario around geofences, we have also developed BLAST programs to control and monitor an automated picking line to prepare orders in a more complex logistics scenario.
+Next to the presented small scenario around geofences, we have developed BLAST programs to accomplish five use cases with varying complexity. These use cases include switching on a light, temperature monitoring, and movement detection. Each use case introduces a different challenge that requires the use of programming patterns in combination with the built-in blocks for properties, actions, events, requests, and queries.
+
+\section{Usability Evaluation }
+For evaluating the usability of BLAST, we employ the System Usability Scale (SUS) questionnaire. According to Assila et al. \cite{assila2016standardized}, SUS provides reliable results for  different sample sizes and converges quickly to the correct conclusion. 
+
+We conducted an evaluation with nine participants. None of the participants had background knowledge regarding the Web of Things, RDF, or SPARQL. Participants were asked to solve four tasks using BLAST, these included a simple ``Hello World!'' program, periodic polling of RSSI data by using a loop, reading data from a connected IoT device, and as a final task, reading data and processing it using logical operators. After the completion of these tasks, the participants filled out the SUS questionnaire. The achieved SUS score across all questionnaires is 81.4 out of 100  points, which corresponds to good usability.
+
+It must be noted that the survey was conducted with an older version of BLAST. This is due to the fact that BLAST is under constant development. Since the user interface has undergone only minor changes since the evaluation, the results are still relevant.
 
 \section{Conclusion}
 
-We have presented BLAST, a block-based language that simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols.
+We have introduced BLAST, a block-based language that simplifies the interaction with IoT devices, digital twins or other web resources without the need for a deeper understanding of different programming languages or network protocols.
 We are currently working on an execution environment that runs on Node.js as a way to execute BLAST programs independently of browsers, which impose restrictions on accessing devices to provide security and privacy protection.
 %This will allow BLAST to use the full Bluetooth specification and not only features exposed by the Web Bluetooth API, which restricts the set of accessible GATT attributes in a blocklist\footnote{\url{https://webbluetoothcg.github.io/web-bluetooth/\#the-gatt-blocklist}} to provide security and privacy protection.
 %To this end, we are developing an execution environment that can load BLAST programs, convert them to JavaScript, and execute them as a server.

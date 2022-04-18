@@ -1,0 +1,89 @@
+.heading {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    width: 65%;
+    color: white;
+    padding-top: 1%;
+    padding-left: 50px;
+}
+
+@font-face {
+    font-family: 'frutiger';
+    src: url('frutiger_LT_Com45.ttf');
+}
+
+* {
+    font-family: frutiger;
+    font-size: 1.7vw;
+}
+
+h1 {
+    font-weight: bold;
+    font-size: 4vw
+}
+
+h2 {
+    font-weight: bold;
+    font-size: 2vw;
+}
+
+/* Fraunhofer Headline */
+h3 {
+    color: #179c7d;
+    font-size: 3vw;
+}
+
+.column {
+    float: left;
+    width: 50%;
+}
+
+.column-layout {
+    padding-left: 35px;
+    margin-right: 35px;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+ul {
+    list-style: none;
+    /* Remove default bullets */
+}
+
+ul li::before {
+    content: "\2022";
+    color: #179c7d;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
+
+.blast-logo {
+    width: 40%;
+    height: auto;
+    float: right;
+    margin-left: 10px;
+}
+
+.example-img {
+    width: 100%;
+    height: auto;
+    margin-left: -40px;
+
+}
+
+.contact {
+    width: 50%;
+    float: right;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+hr.line {
+    border-top: 2px solid gray;
+}
