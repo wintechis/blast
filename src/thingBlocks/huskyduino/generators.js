@@ -8,7 +8,12 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
+import {
+  asyncApiFunctions,
+  getInterpreter,
+  getWorkspace,
+  throwError,
+} from './../../blast_interpreter.js';
 import {
   readableStreamToString,
   stringToReadable,
@@ -101,6 +106,22 @@ JavaScript['huskylens_read_id'] = function (block) {
 };
 
 /**
+ * Generate JavaScript code for the huskylens_read_location block.
+ * @param {Blockly.Block} block the huskylens_read_location block
+ * @returns {String} the generated JavaScript code
+ */
+JavaScript['huskylens_read_location'] = function (block) {
+  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
+  let blockId = "''";
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  }
+  // Assemble JavaScript into code variable.
+  const str = `readLoc(${blockId}, ${thing})`;
+  return [str, JavaScript.ORDER_NONE];
+};
+
+/**
  * Write the choosen algorithm value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} value represents the algorithm, ranges from 1 to 7.
@@ -157,7 +178,7 @@ asyncApiFunctions.push(['forgetAll', forgetAll]);
  * read the face IDs of all known faces currently visible to the camera via bluetooth.
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @returns {String} contains all known faceIDs currently visible to the camera.
+ * @returns {Array<Number>} contains all known IDs currently visible to the camera.
  */
 const readID = async function (blockId, callback) {
   // Get thing instance of block.
@@ -165,8 +186,68 @@ const readID = async function (blockId, callback) {
   const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty('id');
-  const value = await readableStreamToString(interActionInput.content.body);
-  callback(value);
+  const str = await readableStreamToString(interActionInput.content.body);
+  if (str[0] === '[') {
+    const arr = JSON.parse(str);
+    // output is all non 0 element in the array
+    const outArr = [];
+    arr.forEach(item => {
+      if (item !== 0) {
+        outArr.push(parseInt(item));
+      }
+    });
+    if (outArr.length === 0) {
+      throwError('No Recognized Obj');
+    }
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else if (str[0] === 0) {
+    throwError('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
+    const loc = str.indexOf('(');
+    const id = parseInt(str.slice(0, loc));
+    const outArr = [id];
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else {
+    throwError(str);
+  }
+  callback(str);
 };
 
 asyncApiFunctions.push(['readID', readID]);
+
+/**
+ * read the ID and its x y location on display of the object currently visible to the camera.
+ * @param {String} thing identifier of the Huskyduino.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {Array<Number>} contains ID and location of the object currently visible to the camera.
+ */
+const readLoc = async function (blockId, callback) {
+  // Get thing instance of block.
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  // Read property data
+  const interActionInput = await thing.readProperty('id');
+  const str = await readableStreamToString(interActionInput.content.body);
+
+  if (str[0] === '[') {
+    throwError('Recognized Multi Objs');
+  } else if (str[0] === 0) {
+    throwError('No Recognized Obj');
+  } else if (str[0] >= 1 && str[0] <= 9) {
+    const loc1 = str.indexOf('(');
+    const loc2 = str.indexOf(',');
+    const loc3 = str.indexOf(')');
+    const id = parseInt(str.slice(0, loc1));
+    const x = parseInt(str.slice(loc1 + 1, loc2));
+    const y = parseInt(str.slice(loc2 + 1, loc3));
+    const outArr = [id, x, y];
+    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
+    callback(pseudoArr);
+  } else {
+    throwError(str);
+  }
+};
+
+asyncApiFunctions.push(['readLoc', readLoc]);

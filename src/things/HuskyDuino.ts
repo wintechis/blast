@@ -54,6 +54,19 @@ export default class HuskyDuino {
             },
           ],
         },
+        location: {
+          description: 'The location of the face or object',
+          type: 'string',
+          readOnly: true,
+          writeOnly: false,
+          forms: [
+            {
+              op: 'readproperty',
+              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003/readText',
+              'wbt:id': webBluetoothId,
+            },
+          ],
+        },
       },
       actions: {
         forgetAll: {

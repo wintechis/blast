@@ -43,7 +43,8 @@ Blocks['things_streamdeck'] = {
   },
   onchange: function () {
     // on creating this block initialize new instance of BlinkStick
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
+    if (this.firstTime && this.rendered) {
+      console.log('new streamdeck');
       this.webHidId = this.getFieldValue('id');
       this.thing = new StreamDeck(this.webHidId);
       this.firstTime = false;

@@ -168,11 +168,37 @@ Blocks['huskylens_read_id'] = {
   init: function () {
     this.appendValueInput('Thing')
       .setCheck('Thing')
-      .appendField('read ID property of HuskyDuino');
-    this.setOutput(true, 'String');
+      .appendField('read ID property of object(s) in HuskyDuino');
+    this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip(
       'returns up to 5 IDs of the objects currently visible to the HuskyLens'
+    );
+    this.setHelpUrl('');
+  },
+
+  onchange: function () {
+    // on creating this block check webBluetooth availability.
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+                Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
+};
+
+Blocks['huskylens_read_location'] = {
+  init: function () {
+    this.appendValueInput('Thing')
+      .setCheck('Thing')
+      .appendField('read location property of one object in HuskyDuino');
+    this.setOutput(true, 'Array');
+    this.setColour(255);
+    this.setTooltip(
+      'returns ID and location of one object visible to the HuskyLens'
     );
     this.setHelpUrl('');
   },
@@ -212,6 +238,10 @@ implementedThings.push({
     },
     {
       type: 'huskylens_read_id',
+      category: 'Properties',
+    },
+    {
+      type: 'huskylens_read_location',
       category: 'Properties',
     },
   ],
