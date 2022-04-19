@@ -62,6 +62,71 @@ const defaultToolbox = {
       colour: '0',
     },
     {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'uri_from_string'},
+        {kind: 'label', text: 'example audio resources'},
+        {
+          kind: 'BLOCK',
+          type: 'uri_from_string',
+          inputs: {
+            URI: {
+              block: {
+                type: 'string',
+                fields: {
+                  TEXT: 'https://studio.code.org/blockly/media/skins/dance/win.mp3',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'BLOCK',
+          type: 'uri_from_string',
+          inputs: {
+            URI: {
+              block: {
+                type: 'string',
+                fields: {
+                  TEXT: 'https://studio.code.org/blockly/media/click.mp3',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'BLOCK',
+          type: 'uri_from_string',
+          inputs: {
+            URI: {
+              block: {
+                type: 'string',
+                fields: {
+                  TEXT: 'https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg',
+                },
+              },
+            },
+          },
+        },
+        {
+          kind: 'BLOCK',
+          type: 'uri_from_string',
+          inputs: {
+            URI: {
+              block: {
+                type: 'string',
+                fields: {
+                  TEXT: 'https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg',
+                },
+              },
+            },
+          },
+        },
+      ],
+      name: 'Resources',
+      colour: '60',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
