@@ -201,7 +201,7 @@ const readID = async function (blockId, callback) {
     }
     const pseudoArr = getInterpreter().nativeToPseudo(outArr);
     callback(pseudoArr);
-  } else if (str[0] === 0) {
+  } else if (str[0] === '0') {
     throwError('No Recognized Obj');
   } else if (str[0] >= 1 && str[0] <= 9) {
     const loc = str.indexOf('(');
@@ -212,7 +212,6 @@ const readID = async function (blockId, callback) {
   } else {
     throwError(str);
   }
-  callback(str);
 };
 
 asyncApiFunctions.push(['readID', readID]);
