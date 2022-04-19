@@ -352,6 +352,7 @@ export default class StreamDeck {
     }
     this.streamdeck?.removeAllListeners();
     this.eventListenerAttached = false;
+    this.destroy();
   }
 
   public async getThingDescription(): Promise<WoT.ThingDescription | null> {

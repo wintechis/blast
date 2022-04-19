@@ -305,6 +305,7 @@ export default class StreamDeck {
         }
         (_d = this.streamdeck) === null || _d === void 0 ? void 0 : _d.removeAllListeners();
         this.eventListenerAttached = false;
+        this.destroy();
     }
     async getThingDescription() {
         while (!this.thing) {
