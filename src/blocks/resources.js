@@ -23,5 +23,3 @@ Blocks['uri_from_string'] = {
     this.setHelpUrl('');
   },
 };
-
-
