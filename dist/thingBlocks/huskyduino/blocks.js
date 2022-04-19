@@ -215,5 +215,10 @@ implementedThings.push({
       category: 'Properties',
     },
   ],
+  filters: [
+    {
+      services: ['5be35d20-f9b0-11eb-9a03-0242ac130003'],
+    },
+  ],
   optionalServices: ['5be35d20-f9b0-11eb-9a03-0242ac130003'],
 });

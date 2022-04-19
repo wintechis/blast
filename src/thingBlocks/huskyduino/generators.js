@@ -16,11 +16,11 @@ import {
 } from '../../things/bindings/binding-helpers.js';
 
 /**
- * Generates JavaScript code for the things_huskylens block.
- * @param {Blockly.Block} block the things_huskylens block.
+ * Generates JavaScript code for the things_HuskyDuino block.
+ * @param {Blockly.Block} block the things_HuskyDuino block.
  * @returns {String} the generated code.
  */
-JavaScript['things_huskylens'] = function (block) {
+JavaScript['things_HuskyDuino'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
