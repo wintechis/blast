@@ -43,7 +43,7 @@ export default class HuskyDuino {
                     forms: [
                         {
                             op: 'readproperty',
-                            href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/readText',
+                            href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003/readText',
                             'wbt:id': webBluetoothId,
                         },
                         {
