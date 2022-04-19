@@ -54,8 +54,18 @@ export default class WebBluetoothClient implements ProtocolClient {
     );
   }
 
-  public invokeResource(form: Form, content: Content): Promise<Content> {
-    throw new Error('not implemented');
+  public invokeResource(
+    form: WebBluetoothForm,
+    content: Content
+  ): Promise<Content> {
+    // TODO check if href is service/char/operation, then write,
+    // might also be gatt://operation, i.e watchAdvertisements
+    return this.writeResource(form, content).then(() => {
+      return {
+        type: 'text/plain',
+        body: stringToNodeReadable(''),
+      };
+    });
   }
 
   public unlinkResource(form: Form): Promise<void> {

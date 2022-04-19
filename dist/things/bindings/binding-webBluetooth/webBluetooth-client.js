@@ -23,7 +23,14 @@ export default class WebBluetoothClient {
         return this.write(deviceId, serviceId, characteristicId, operation, content);
     }
     invokeResource(form, content) {
-        throw new Error('not implemented');
+        // TODO check if href is service/char/operation, then write,
+        // might also be gatt://operation, i.e watchAdvertisements
+        return this.writeResource(form, content).then(() => {
+            return {
+                type: 'text/plain',
+                body: stringToNodeReadable(''),
+            };
+        });
     }
     unlinkResource(form) {
         throw new Error('not implemented');

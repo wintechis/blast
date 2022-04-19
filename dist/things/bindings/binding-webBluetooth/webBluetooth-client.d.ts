@@ -9,7 +9,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     toString(): string;
     readResource(form: WebBluetoothForm): Promise<Content>;
     writeResource(form: WebBluetoothForm, content: Content): Promise<void>;
-    invokeResource(form: Form, content: Content): Promise<Content>;
+    invokeResource(form: WebBluetoothForm, content: Content): Promise<Content>;
     unlinkResource(form: Form): Promise<void>;
     subscribeResource(form: Form, next: (content: Content) => void, error?: (error: Error) => void, complete?: () => void): Promise<Subscription>;
     start(): Promise<void>;
