@@ -232,7 +232,7 @@ const readLoc = async function (blockId, callback) {
 
   if (str[0] === '[') {
     throwError('Recognized Multi Objs');
-  } else if (str[0] === 0) {
+  } else if (str[0] === '0') {
     throwError('No Recognized Obj');
   } else if (str[0] >= 1 && str[0] <= 9) {
     const loc1 = str.indexOf('(');
