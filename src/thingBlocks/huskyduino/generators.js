@@ -43,8 +43,8 @@ JavaScript['huskylens_choose_algo'] = function (block) {
   };
   const value = dict[algorithm];
   let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
   const code = `chooseAlgo(${blockId}, '${value}');\n`;
@@ -60,8 +60,8 @@ JavaScript['huskylens_write_id'] = function (block) {
   const input = JavaScript.valueToCode(block, 'ID', JavaScript.ORDER_ATOMIC);
   const id = '0x' + parseInt(input).toString(16);
   let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
   const code = `learnID(${blockId}, '${id}');\n`;
@@ -75,8 +75,8 @@ JavaScript['huskylens_write_id'] = function (block) {
  */
 JavaScript['huskylens_write_forget_flag'] = function (block) {
   let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
   const code = `forgetAll(${blockId});\n`;
@@ -91,8 +91,8 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
 JavaScript['huskylens_read_id'] = function (block) {
   const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
   let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  if (block.getInputTargetBlock('Thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
   const code = `readID(${blockId}, ${thing})`;

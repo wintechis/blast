@@ -12,9 +12,9 @@ import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import HuskyDuino from './../../things/HuskyDuino.js';
 
-Blocks['things_huskyDuino'] = {
+Blocks['things_HuskyDuino'] = {
   /**
-   * Block representing a BLE RGB LED controller.
+   * Block representing a HuskyDuino.
    * @this {Blockly.Block}
    */
   init: function () {
@@ -27,14 +27,13 @@ Blocks['things_huskyDuino'] = {
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('A HuskyDuino.');
-    this.setHelpUrl('');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
     this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
+    // on creating this block initialize new instance of HuskyDuino
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
