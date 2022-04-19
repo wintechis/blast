@@ -1,0 +1,25 @@
+on:
+  release:
+    types: [created]
+
+jobs:
+  release-job:
+    name: Releasing
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'created'
+  
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # This allows yarn workspaces --since to compare with origin/main branch
+          fetch-depth: 0
+
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          rm: true
+          source: "./"
+          target: "./public_html/stable/blast/"
