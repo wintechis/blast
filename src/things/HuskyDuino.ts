@@ -26,30 +26,30 @@ export default class HuskyDuino {
           forms: [
             {
               op: 'readproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
+              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/readNumber',
               'wbt:id': webBluetoothId,
             },
             {
               op: 'writeproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/readNumber',
+              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
               'wbt:id': webBluetoothId,
             },
           ],
         },
         id: {
           description: 'The ID of the face or object',
-          type: 'number',
+          type: 'string',
           readOnly: false,
           writeOnly: false,
           forms: [
             {
               op: 'readproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
+              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/readText',
               'wbt:id': webBluetoothId,
             },
             {
               op: 'writeproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/readText',
+              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
               'wbt:id': webBluetoothId,
             },
           ],
