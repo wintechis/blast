@@ -195,13 +195,6 @@ export const writeWithoutResponse = async function (
   characteristicUUID,
   value
 ) {
-  console.log(
-    'writeWithoutResponse',
-    id,
-    serviceUUID,
-    characteristicUUID,
-    value
-  );
   const characteristic = await getCharacteristic(
     id,
     serviceUUID,
