@@ -64,8 +64,8 @@ Blocks['streamdeck_button_event'] = {
       .appendField('on button')
       .appendField(
         new FieldDropdown([
-          ['up', 'Up'],
-          ['down', 'Down'],
+          ['up', 'up'],
+          ['down', 'down'],
         ]),
         'upDown'
       );
