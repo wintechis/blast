@@ -30,6 +30,9 @@ import './ruuviTag/generators.js';
 import './solid/blocks.js';
 import './solid/generators.js';
 
+import './sphero/blocks.js';
+import './sphero/generators.js';
+
 import './streamdeck/blocks.js';
 import './streamdeck/generators.js';
 

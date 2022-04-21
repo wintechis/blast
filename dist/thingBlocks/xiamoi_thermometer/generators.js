@@ -11,8 +11,8 @@ import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
 /**
- * Generates JavaScript code for the things_bleLedController block.
- * @param {Blockly.Block} block the things_bleLedController block.
+ * Generates JavaScript code for the things_xiaomiThermometer block.
+ * @param {Blockly.Block} block the things_xiaomiThermometer block.
  * @returns {String} the generated code.
  */
 JavaScript['things_xiaomiThermometer'] = function (block) {
@@ -39,7 +39,7 @@ JavaScript['read_mijia_property'] = function (block) {
 
 /**
  * Fetches the selected measurement from a RuuviTag.
- * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
+ * @param {Blockly.Block.id} blockId the things_xiaomiThermometer block's id.
  * @param {String} measurement the measurement to fetch.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a RuuviTag.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.

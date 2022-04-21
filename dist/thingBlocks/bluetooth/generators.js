@@ -258,7 +258,7 @@ const readBluetoothService = async function (
 
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
-  const thing = await block.thing;
+  const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty(property);
   const value = await readableStreamToString(interActionInput.content.body);

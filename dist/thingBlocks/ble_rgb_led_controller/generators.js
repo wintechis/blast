@@ -71,7 +71,7 @@ const switchLights = async function (
   const stream = stringToReadable(data);
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
-  const thing = await block.thing;
+  const thing = block.thing;
   await thing.writeProperty('colour', stream);
   callback();
 };
