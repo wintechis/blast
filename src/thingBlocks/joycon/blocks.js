@@ -252,7 +252,13 @@ Blocks['joycon_button_events'] = {
       .setCheck('Thing')
       .appendField('Nintendo JoyCon');
     this.appendDummyInput()
-      .appendField('on')
+      .appendField(
+        new FieldDropdown([
+          ['on', 'on'],
+          ['while', 'while'],
+        ]),
+        'onWhile'
+      )
       .appendField(
         new FieldDropdown([
           ['A', 'a'],

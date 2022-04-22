@@ -99,7 +99,9 @@ asyncApiFunctions.push(['readJoyConProperty', readJoyConProperty]);
  * @returns {String} the generated code.
  */
 JavaScript['joycon_button_events'] = function (block) {
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE);
+  const thing =
+    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
+  const onWhile = JavaScript.quote_(block.getFieldValue('onWhile'));
   const button = JavaScript.quote_(block.getFieldValue('button'));
   const statements = JavaScript.quote_(
     JavaScript.statementToCode(block, 'statements')
@@ -109,7 +111,7 @@ JavaScript['joycon_button_events'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const handler = `handleJoyConButtons(${blockId}, ${thing}, ${button}, ${statements});\n`;
+  const handler = `handleJoyConButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -121,6 +123,7 @@ JavaScript['joycon_button_events'] = function (block) {
  * Handles button pushed on a Nintendo JoyCon.
  * @param {Blockly.Block.id} blockId the things_joycon block's id.
  * @param {string} id identifier of the JoyCon device in {@link Blast.Things.webHidDevices}.
+ * @param {string} onWhile whether the statement should be executed continously while the button is pressed or only once.
  * @param {string} button the button to handle.
  * @param {string} statements the statements to execute when the button is pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
@@ -128,6 +131,7 @@ JavaScript['joycon_button_events'] = function (block) {
 const handleJoyConButtons = async function (
   blockId,
   id,
+  onWhile,
   button,
   statements,
   callback
@@ -182,6 +186,31 @@ const handleJoyConButtons = async function (
   let pushedInLastPacket = false;
   const thingsLog = getThingsLog();
 
+  const interruptAndExecuteStatements = function (stmnts) {
+    // interrupt BLAST execution
+    setInterrupted(false);
+
+    const interpreter = new Interpreter('');
+    interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
+    interpreter.appendCode(stmnts);
+
+    const interruptRunner_ = function () {
+      try {
+        const hasMore = interpreter.step();
+        if (hasMore) {
+          setTimeout(interruptRunner_, 5);
+        } else {
+          // Continue BLAST execution.
+          setInterrupted(false);
+        }
+      } catch (error) {
+        throwError(`Error executing program:\n ${error}`);
+        console.error(error);
+      }
+    };
+    interruptRunner_();
+  };
+
   const hidInputHandler = async function (event) {
     const packet = event.detail;
     if (!packet || !packet.actualOrientation) {
@@ -197,31 +226,16 @@ const handleJoyConButtons = async function (
     );
 
     if (packet.buttonStatus[button]) {
-      if (!pushedInLastPacket) {
+      if (onWhile === 'on' && !pushedInLastPacket) {
         pushedInLastPacket = true;
-        // interrupt BLAST execution
-        setInterrupted(false);
-
-        const interpreter = new Interpreter('');
-        interpreter.getStateStack()[0].scope =
-          getInterpreter().getGlobalScope();
-        interpreter.appendCode(statements);
-
-        const interruptRunner_ = function () {
-          try {
-            const hasMore = interpreter.step();
-            if (hasMore) {
-              setTimeout(interruptRunner_, 5);
-            } else {
-              // Continue BLAST execution.
-              setInterrupted(false);
-            }
-          } catch (error) {
-            throwError(`Error executing program:\n ${error}`);
-            console.error(error);
-          }
-        };
-        interruptRunner_();
+        interruptAndExecuteStatements(statements);
+      }
+      if (onWhile === 'while') {
+        interruptAndExecuteStatements(statements);
+        onWhile = 'wait';
+        setTimeout(() => {
+          onWhile = 'while';
+        }, 100);
       }
     } else {
       pushedInLastPacket = false;
