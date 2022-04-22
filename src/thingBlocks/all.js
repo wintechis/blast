@@ -36,6 +36,9 @@ import './sphero/generators.js';
 import './streamdeck/blocks.js';
 import './streamdeck/generators.js';
 
+import './urdf/blocks.js';
+import './urdf/generators.js';
+
 import './webSpeech/blocks.js';
 import './webSpeech/generators.js';
 

@@ -7,12 +7,9 @@
 'use strict';
 
 import Blockly from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import URdfService from '../../things/urdf/URdfService.js';
 import {
   apiFunctions,
   asyncApiFunctions,
-  getInterpreter,
   getStdOut,
   throwError,
 } from './../../blast_interpreter.js';
@@ -103,78 +100,6 @@ const sendHttpRequest = async function (
 };
 // add sendHTTPRequest method to the interpreter's API.
 asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
-
-/**
- * Generates JavaScript code for the sparql_query block.
- * @param {Blockly.Block} block the sparql_query block.
- * @returns {String} the generated code.
- */
-JavaScript['sparql_query'] = function (block) {
-  let query = block.getFieldValue('query');
-  const uri = JavaScript.valueToCode(block, 'uri', JavaScript.ORDER_NONE);
-  const format = JavaScript.quote_(block.getFieldValue('format')) || '';
-
-  // escape " quotes and replace linebreaks (\n) with \ in query
-  query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
-
-  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
-
-  return [code, JavaScript.ORDER_NONE];
-};
-
-/**
- * Generates JavaScript code for the sparql_ask block.
- * @param {Blockly.Block} block the sparql_ask block.
- * @returns {String} the generated code.
- */
-JavaScript['sparql_ask'] = function (block) {
-  let query = block.getFieldValue('query');
-  const format = JavaScript.quote_(block.getFieldValue('format')) || '';
-  const uri = JavaScript.valueToCode(block, 'uri', JavaScript.ORDER_NONE);
-
-  // escape " quotes and replace linebreaks (\n) with \ in query
-  query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
-
-  const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
-
-  return [code, JavaScript.ORDER_NONE];
-};
-
-/**
- * Wrapper for urdf's query function.
- * @param {String} ressource URI to query.
- * @param {String} format format of the resource to query
- * @param {String} query Query to execute.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-const urdfQueryWrapper = async function (ressource, format, query, callback) {
-  const service = new URdfService();
-  const parameters = {query, format, ressource};
-  const res = await service.invokeAction('runSparqlQuery', parameters);
-
-  // if result is a boolean, return it.
-  if (typeof res === 'boolean') {
-    callback(res);
-    return;
-  }
-
-  // Convert result from array of objects to array of arrays.
-  const resultArray = new Array(res.length);
-  for (const obj of res) {
-    const resultArrayRow = new Array(Object.keys(obj).length);
-    for (const value of Object.values(obj)) {
-      resultArrayRow.push(value.value);
-    }
-    resultArray.push(resultArrayRow);
-  }
-
-  const interpreterObj = getInterpreter().nativeToPseudo(resultArray);
-
-  callback(interpreterObj);
-};
-// add urdfQueryWrapper method to the interpreter's API.
-asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
 
 /**
  * Generates JavaScript code for the display_text block.
