@@ -9,8 +9,6 @@
 import {Blocks, Events, FieldDropdown, FieldTextInput} from 'blockly';
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 import {implementedThings} from './../../blast_things.js';
-// eslint-disable-next-line node/no-missing-import
-import JoyCon from '../../things/joycon/JoyCon.js';
 
 Blocks['things_joycon'] = {
   /**
@@ -32,14 +30,6 @@ Blocks['things_joycon'] = {
     this.firstTime = true;
     this.webHidId = '';
     this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BlinkStick
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webHidId = this.getFieldValue('id');
-      this.thing = new JoyCon(this.webHidId);
-      this.firstTime = false;
-    }
   },
 };
 

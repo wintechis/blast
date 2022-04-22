@@ -17,8 +17,6 @@ import {
 } from 'blockly';
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 import {implementedThings} from '../../blast_things.js';
-// eslint-disable-next-line node/no-missing-import
-import StreamDeck from './../../things/streamdeck/StreamDeck.js';
 
 Blocks['things_streamdeck'] = {
   /**
@@ -40,14 +38,6 @@ Blocks['things_streamdeck'] = {
     this.firstTime = true;
     this.webHidId = '';
     this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BlinkStick
-    if (this.firstTime && this.rendered) {
-      this.webHidId = this.getFieldValue('id');
-      this.thing = new StreamDeck(this.webHidId);
-      this.firstTime = false;
-    }
   },
 };
 
