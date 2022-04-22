@@ -9,7 +9,7 @@
 import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
-const {FieldDropdown, FieldMultilineInput, Blocks} = Blockly;
+const {FieldDropdown, Blocks} = Blockly;
 
 /*****************
  * Action blocks.*

@@ -8,9 +8,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-// eslint-disable-next-line node/no-missing-import
-import SpeechApiService from '../../things/speechApi/SpeechApiService.js';
-import {asyncApiFunctions} from './../../blast_interpreter.js';
+import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the play_audio block.
@@ -55,16 +53,32 @@ Blockly.JavaScript['web_speech'] = function (block) {
 
 /**
  * Outputs speech input as string.
- * @param {string} lang language of the utterance.
+ * @param {Blockly.Block.id} blockId id of the speechToText block.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const speechToText = async function (lang, callback) {
-  const thing = new SpeechApiService();
-  const result = await thing.invokeAction('recognizeSpeech', {lang: lang});
-  callback(result);
+const speechToText = async function (blockId, callback) {
+  const block = getWorkspace().getBlockById(blockId);
+  const recognition = block.recognition;
+  recognition.continuous = false;
+  recognition.lang = 'en-US';
+  let finalTranscript = '';
+
+  recognition.onresult = function (event) {
+    for (let i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      }
+    }
+  };
+
+  recognition.onend = function () {
+    callback(finalTranscript);
+  };
+
+  recognition.start();
 };
-// add block webSpeech to the interpreter's API.
+// add block speechToText to the interpreter's API.
 asyncApiFunctions.push(['speechToText', speechToText]);
 
 /**
@@ -78,18 +92,15 @@ asyncApiFunctions.push(['speechToText', speechToText]);
  * @param {Number=} pitch pitch at which the utterance will be spoken at
  * @param {string} lang language of the utterance.
  */
-const textToSpeech = async function (text, lang, callback) {
+const textToSpeech = async function (text, callback) {
   // eslint-disable-next-line no-undef
-  const options = {
-    text: text,
-    lang: lang,
-    pitch: 1,
-    rate: 1,
-    volume: 1,
-  };
-
-  const thing = new SpeechApiService();
-  await thing.invokeAction('synthesizeText', options);
+  const speech = new SpeechSynthesisUtterance();
+  speech.text = text;
+  window.speechSynthesis.speak(speech);
+  // return after speaking has ended
+  await new Promise(resolve => {
+    speech.onend = resolve;
+  });
   callback();
 };
 // add textToSpeech function to the interpreter's API.
