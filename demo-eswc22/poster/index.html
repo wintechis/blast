@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html version="HTML+RDFa 1.1" lang="en" xmlns:dc="http://purl.org/dc/elements/1.1/">
 
-<head>
+<head profile="http://www.w3.org/1999/xhtml/vocab">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="dc:date dc:created" content="2022-04-10T13:00:00" />
     <link rel="stylesheet" href="style.css">
-    <title>BLAST: Block Applications for Things</title>
+    <meta rel="dc:creator" href="https://freumi.inrupt.net/#me" />
+    <title property="dc:title">BLAST: Block Applications for Things</title>
 </head>
 
 
@@ -75,7 +77,7 @@
 
                 Videos of five different use cases that can be approached with BLAST can be found here:
 
-                <b><a href="https://www.google.de">Demo Videos</a></b>
+                <b><a href="https://freumi.inrupt.net/demo">Demo Videos</a></b>
 
 
             </div>
@@ -117,7 +119,18 @@
                 </ul>
 
                 <h3>5. Conclusion</h3>
-                <img src="contact.png" class="contact">
+
+                <div class="contact">
+                    <img class="imgScale" src="contact.png">
+                    <div class="scale" vocab="http://schema.org/" typeof="Person">
+                        <u>Contact</u> <br><br>
+                        <span property="name">Michael Freund</span>
+                        <span property="email">michael.freund@iis.fraunhofer.de</span><br><br>
+                        <span property="worksFor">Fraunhofer IIS</span><br>
+                        <span property="address">Nordostpark 93 <br> Nürnberg, Germany</span>
+
+                    </div>
+                </div>
                 <ul>
                     <li>We introduced BLAST, a block-based language and programming environment that simplifies the
                         interaction with IoT devices and
