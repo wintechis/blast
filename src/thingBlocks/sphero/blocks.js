@@ -6,7 +6,6 @@ import {
 import SpheroBolt from './lib/spheroBolt.js';
 
 import {Blocks, FieldTextInput} from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
 
 /**
  * Generates JavaScript code for the things_spheroMini block.
