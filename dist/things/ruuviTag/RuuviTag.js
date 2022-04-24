@@ -1,3 +1,4 @@
+// DEPRECATED, THIS FILE IS NOT YET UPDATED TO WORK WITH NEW WOT API
 import { getDeviceById } from '../../blast_webBluetooth.js';
 import { getThing, removeThing } from '../index.js';
 export default class RuuviTag {

@@ -6,6 +6,7 @@ import {
 import SpheroBolt from './lib/spheroBolt.js';
 
 import {Blocks, FieldTextInput} from 'blockly';
+import {addBlock} from './../../blast_toolbox.js';
 
 /**
  * Generates JavaScript code for the things_spheroMini block.
@@ -61,13 +62,14 @@ Blocks['sphero_roll'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput()
-      .appendField('send roll command')
-      .appendField('speed')
+    this.appendDummyInput().appendField('send roll command');
+    this.appendValueInput('speed').appendField('with speed').setCheck('Number');
+    this.appendValueInput('heading')
+      .appendField('and heading')
       .setCheck('Number');
-    this.appendValueInput().appendField('heading').setCheck('Number');
-    this.appendValueInput().appendField('to SpheroMini').setCheck('Thing');
-    this.setInputsInline(true);
+    this.appendValueInput('thing')
+      .appendField('to SpheroMini')
+      .setCheck('Thing');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
@@ -82,10 +84,9 @@ Blocks['sphero_stop'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput()
+    this.appendValueInput('thing')
       .appendField('send stop command to SpheroMini')
       .setCheck('Thing');
-    this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
