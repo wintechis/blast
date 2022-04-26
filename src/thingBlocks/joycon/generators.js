@@ -11,7 +11,6 @@ import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
-  addCleanUpFunction,
   apiFunctions,
   asyncApiFunctions,
   deviceEventHandlers,
