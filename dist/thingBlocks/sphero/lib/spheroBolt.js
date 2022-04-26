@@ -1,23 +1,186 @@
+import Queue from './queue.js';
+import {getDeviceById} from './../../../blast_webBluetooth.js';
+
+export const UUID_SPHERO_SERVICE = '00010001-574f-4f20-5370-6865726f2121';
+export const UUID_SPHERO_SERVICE_INITIALIZE = '00020001-574f-4f20-5370-6865726f2121';
+
+
+let bolt = null;
+
+const APIV2_CHARACTERISTIC = '00010002-574f-4f20-5370-6865726f2121';
+const ANTIDOS_CHARACTERISTIC = '00020005-574f-4f20-5370-6865726f2121';
+const DFU_CONTROL_CHARACTERISTIC = '00020002-574f-4f20-5370-6865726f2121';
+const DFU_INFO_CHARACTERISTIC = '00020004-574f-4f20-5370-6865726f2121';
+const SUBS_CHARACTERISTIC = '00020003-574f-4f20-5370-6865726f2121';
+
+const useTheForce = new Uint8Array([0x75, 0x73, 0x65, 0x74, 0x68, 0x65, 0x66, 0x6f, 0x72, 0x63, 0x65, 0x2e, 0x2e, 0x2e, 0x62, 0x61, 0x6e, 0x64]);
+
+const APIConstants = {
+    escape : 171,
+    startOfPacket : 141,
+    endOfPacket : 216,
+    escapeMask : 136,
+    escapedEscape : 35,
+    escapedStartOfPacket : 5,
+    escapedEndOfPacket : 80,
+}
+
+const BatteryState = {
+    notCharging: 1,
+    charging: 2,
+    charged: 3,
+}
+
+const ApiErrors = {
+    success: 0,
+    badDeviceId: 1,
+    badCommandId: 2,
+    notYetImplemented: 3,
+    commandIsRestricted: 4,
+    badDataLength: 5,
+    commandFailed: 6,
+    badParameterValue: 7,
+    busy: 8,
+    badTargetId: 9,
+    targetUnavailable: 10,
+    unknown: 255,
+}
+
+const Flags = {
+    isResponse : 1,
+    requestsResponse : 2,
+    requestsOnlyErrorResponse : 4,
+    resetsInactivityTimeout : 8,
+    commandHasTargetId : 16,
+    commandHasSourceId : 32,
+}
+
+const DeviceId = {
+    apiProcessor : 16,
+    systemInfo : 17,
+    powerInfo : 19,
+    driving : 22,
+    sensor : 24,
+    userIO : 26,
+}
+
+const DrivingCommandIds = {
+    rawMotor : 1,
+    driveAsRc : 2,
+    driveAsSphero : 4,
+    resetYaw : 6,
+    driveWithHeading : 7,
+    tankDrive : 8,
+    stabilization : 12,
+}
+
+const PowerCommandIds = {
+    deepSleep : 0,
+    sleep : 1,
+    batteryVoltage : 3,
+    wake : 13,
+    willSleepAsync : 25,
+    sleepAsync : 26,
+    batteryStateChange : 33,
+}
+
+const UserIOCommandIds = {
+    playAudioFile : 7,
+    audioVolume : 8,
+    stopAudio : 10,
+    testSound : 24,
+    allLEDs : 28,
+    setUserProfile : 35,
+    matrixPixel :45,
+    matrixColor : 47,
+    clearMatrix : 56, 
+    matrixRotation : 58,
+    matrixScrollText : 59,
+    matrixScrollNotification: 60,
+    matrixLine : 61,
+    matrixFill : 62,
+    printChar : 66,
+}
+
+const SensorCommandIds = {
+    sensorMask : 0,
+    sensorResponse : 2,
+    configureCollision : 17,
+    collisionDetectedAsync : 18,
+    resetLocator : 19,
+    enableCollisionAsync : 20,
+    sensor1 : 15,
+    sensor2 : 23,
+    sensorMaskExtented : 12,
+    calibrateToNorth: 37,
+    compassNotify: 38,
+}
+
+const SensorMaskValues = {
+  off : 0,
+  locator : 1,
+  gyro : 2,
+  orientation : 3,
+  accelerometer : 4
+}
+
+const SensorMask = {
+
+  off : 0,
+  velocityY : 1 << 3,
+  velocityX : 1 << 4,
+  locatorY : 1 << 5,
+  locatorX : 1 << 6,
+
+  gyroZFiltered : 1 << 23,
+  gyroYFiltered : 1 << 24,
+  gyroXFiltered : 1 << 25,
+
+  accelerometerZFiltered : 1 << 13,
+  accelerometerYFiltered : 1 << 14,
+  accelerometerXFiltered : 1 << 15,
+  imuYawAngleFiltered : 1 << 16,
+  imuRollAngleFiltered : 1 << 17,
+  imuPitchAngleFiltered : 1 << 18,
+
+  gyroFilteredAll : 58720256,
+  orientationFilteredAll : 458752,
+  accelerometerFilteredAll : 57344,
+  locatorFilteredAll : 120,
+}
+
 export default class SpheroBolt{
-	constructor() {
+	constructor(webBluetoothId) {
 		this.seqNumber = 0;
 		this.connected = false;
 		this.characs = new Map();
 		this.eventListeners = {};
 		this.device = null
 		this.queue = new Queue(this.write);
-	};
+		bolt = this;
+		getDeviceById(webBluetoothId).then(device => {
+			this.device = device;
+			this.connect().then(() => {
+			  this.on('onWillSleepAsync', () => {
+				console.log('Waking up robot');
+				this.wake();
+			  });
+			  this.on('onCompassNotify', async angle => {
+				this.setAllLeds(0, 0, 0);
+				this.setMainLedColor(255, 0, 0);
+				await this.setHeading(angle);
+			  });
+			});
+			device.addEventListener('gattserverdisconnected', () => {
+				console.log('Disconnected');
+				this.connected = false;
+			});
+		});
+	}
 
 	/* Connect to Sphero */
 	async connect() {
 		try{
-			this.device = await navigator.bluetooth.requestDevice({
-				filters: [{
-					namePrefix: 'SM-',				
-					services: [UUID_SPHERO_SERVICE],
-				}],
-				optionalServices : [UUID_SPHERO_SERVICE_INITIALIZE],
-			})
 			const server = await this.device.gatt.connect();
 			const services = await server.getPrimaryServices();
 			
@@ -83,6 +246,9 @@ export default class SpheroBolt{
 
 	/*  Write a command on a specific characteristic*/
 	async write(data, callback){
+		if (!bolt.connected) {
+			await bolt.connect();
+		}
 		try{
 			await data.charac.writeValue(new Uint8Array(data.command));
 		}
@@ -595,3 +761,217 @@ export default class SpheroBolt{
 	}
 }; 
 
+function commandPushByte(command, b){
+    switch (b){
+    	case APIConstants.startOfPacket:
+    		command.push(APIConstants.escape,APIConstants.escapedStartOfPacket);
+    		break;
+    	case APIConstants.escape:
+    		command.push(APIConstants.escape,APIConstants.escapedEscape);
+    		break;
+    	case APIConstants.endOfPacket:
+    		command.push(APIConstants.escape,APIConstants.escapedEndOfPacket);
+    		break;
+    	default:
+    		command.push(b);
+    }	    
+}
+
+function decodeFlags(flags){
+	let isResponse = flags & Flags.isResponse;
+	let requestsResponse = flags & Flags.requestsResponse;
+	let requestOnlyErrorResponse = flags & Flags.requestOnlyErrorResponse;
+	let resetsInactivityTimeout = flags & Flags.resetsInactivityTimeout;
+	let hasTargetId = flags & Flags.commandHasTargetId;
+	let hasSourceId = flags & Flags.commandHasSourceId;
+	return{
+		isResponse,
+		requestsResponse,
+		requestOnlyErrorResponse,
+		resetsInactivityTimeout,
+		hasTargetId,
+		hasSourceId,
+	}
+}
+
+const wait = (time) =>  {return new Promise(callback => setTimeout(callback, time))};
+
+const maskToRaw = (sensorMask) => {
+	return{
+		aol: sensorMask.reduce((aol,m) => {
+			let mask;
+			switch(m){
+				case SensorMaskValues.accelerometer:
+					mask = SensorMask.accelerometerFilteredAll;
+					break;
+				case SensorMaskValues.locator:
+					mask = SensorMask.locatorFilteredAll;
+					break;
+				case SensorMaskValues.orientation:
+					mask = SensorMask.orientationFilteredAll;
+					break;
+			}
+			if (mask){
+				return [...aol, mask];
+			}
+			return aol;
+		}, []),
+		gyro: sensorMask.reduce((gyro,m) => {
+			let mask;
+			if ( m === SensorMaskValues.gyro){
+				mask = SensorMask.gyroFilteredAll;
+			}
+			if (mask){
+				return [...gyro, mask];
+			}
+			return gyro;
+		}, []),
+	};
+}
+
+const flatSensorMask = (sensorMask) => 
+  sensorMask.reduce((bits, m) => { return (bits |= m); }, 0);
+
+const parseSensorResponse = (data, mask) => {
+	let state = {data,
+				 mask,
+				 offset: 0,
+				 response: {},
+				}
+	state = fillAngle(state);
+	state = fillAccelerometer(state);
+	state = fillLocator(state);
+	state = fillGyro(state);
+	return state.response;
+}
+
+const convertBinaryToFloat = (data, offset) => {
+	if ( offset + 4 > data.length ){
+		console.log('error');
+		return 0;
+	}
+	const uint8Tab = new Uint8Array ([
+		data[offset],
+		data[offset + 1],
+		data[offset + 2],
+		data[offset + 3],
+		]);
+	const view = new DataView(uint8Tab.buffer);
+	return view.getFloat32(0);
+}
+
+const fillAngle = (state) => {
+	const {data, mask} = state;
+	let {offset, response} = state;
+
+	if (mask.aol.indexOf(SensorMask.orientationFilteredAll) >= 0){
+		let pitch = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let roll = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let yaw = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		response.angles = {
+			pitch,
+			roll,
+			yaw,
+		};
+	}
+	return{
+		data,
+		mask,
+		offset,
+		response,
+	};
+}
+
+const fillAccelerometer = (state) => {
+	const {data, mask} = state;
+	let {offset, response} = state;
+
+	if (mask.aol.indexOf(SensorMask.accelerometerFilteredAll) >= 0){
+		let x = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let y = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let z = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		response.accelerometer = {
+			x,
+			y,
+			z,
+		};
+	}
+	return{
+		data,
+		mask,
+		offset,
+		response,
+	};
+}
+
+const fillLocator = (state) => {
+	const {data, mask} = state;
+	let {offset, response} = state;
+
+	if (mask.aol.indexOf(SensorMask.locatorFilteredAll) >= 0){
+		let positionX = convertBinaryToFloat(data, offset) * 100.0;
+		offset += 4;
+		
+		let positionY = convertBinaryToFloat(data, offset) * 100.0;
+		offset += 4;
+
+		let velocityX = convertBinaryToFloat(data, offset) * 100.0;
+		offset += 4;
+
+		let velocityY = convertBinaryToFloat(data, offset) * 100.0;
+		offset += 4;
+
+		response.locator = {
+			positionX,
+			positionY,
+			velocityX,
+			velocityY,
+		};
+	}
+	return{
+		data,
+		mask,
+		offset,
+		response,
+	};
+}
+
+const fillGyro = (state) => {
+	const {data, mask} = state;
+	let {offset, response} = state;
+
+	if (mask.gyro.indexOf(SensorMask.gyroFilteredAll) >= 0){
+		let x = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let y = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		let z = convertBinaryToFloat(data, offset);
+		offset += 4;
+
+		response.gyro = {
+			x,
+			y,
+			z,
+		}
+	}
+	return{
+		data,
+		mask,
+		offset,
+		response,
+	};
+}

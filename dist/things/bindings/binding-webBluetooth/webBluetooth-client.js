@@ -36,6 +36,12 @@ export default class WebBluetoothClient {
         throw new Error('not implemented');
     }
     subscribeResource(form, next, error, complete) {
+        // Check if href is gatt://service/characteristic/operation, then subscribe to characteristic
+        // might also be gatt://operation, i.e watchAdvertisements
+        const path = form.href.split('//')[1];
+        const deviceId = form['wbt:id'];
+        const deconstructedPath = this.deconstructPath(path);
+        const { serviceId, characteristicId, operation } = deconstructedPath;
         throw new Error('not implemented');
     }
     async start() {

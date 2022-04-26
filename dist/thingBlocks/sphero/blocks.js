@@ -2,11 +2,10 @@ import {implementedThings} from '../../blast_things.js';
 import {
   UUID_SPHERO_SERVICE,
   UUID_SPHERO_SERVICE_INITIALIZE,
-} from './lib/const.js';
+} from './lib/spheroBolt.js';
 import SpheroBolt from './lib/spheroBolt.js';
 
 import {Blocks, FieldTextInput} from 'blockly';
-import {addBlock} from './../../blast_toolbox.js';
 
 /**
  * Generates JavaScript code for the things_spheroMini block.
@@ -39,19 +38,7 @@ Blocks['things_spheroMini'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      this.thing = new SpheroBolt();
-      this.thing.connect().then(() => {
-        const bolt = this.thing;
-        bolt.on('onWillSleepAsync', () => {
-          console.log('Waking up robot');
-          bolt.wake();
-        });
-        bolt.on('onCompassNotify', async angle => {
-          bolt.setAllLeds(0, 0, 0);
-          bolt.setMainLedColor(255, 0, 0);
-          await bolt.setHeading(angle);
-        });
-      });
+      this.thing = new SpheroBolt(this.webBluetoothId);
     }
   },
 };
@@ -77,6 +64,21 @@ Blocks['sphero_roll'] = {
     this.setHelpUrl('');
   },
 };
+
+const SPHERO_ROLL_XML = `
+<block type="sphero_roll">
+  <value name="speed">
+    <block type="number_value">
+      <field name="NUM">200</field>
+    </block>
+  </value>
+  <value name="heading">
+    <block type="number_value">
+      <field name="NUM">0</field>
+    </block>
+  </value>
+</block>
+`;
 
 Blocks['sphero_stop'] = {
   /**
@@ -104,6 +106,7 @@ implementedThings.push({
     {
       type: 'sphero_roll',
       category: 'Actions',
+      XML: SPHERO_ROLL_XML,
     },
     {
       type: 'sphero_stop',

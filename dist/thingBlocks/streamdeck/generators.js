@@ -126,8 +126,6 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
     }
   }
 
-  console.log(streamdeck);
-
   let button;
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {

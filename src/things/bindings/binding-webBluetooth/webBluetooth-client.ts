@@ -16,12 +16,12 @@ import {
   readEddystoneProperty,
   writeEddystoneProperty,
 } from './../../../blast_eddystone.js';
-import {Subscription} from 'rxjs/Subscription';
 import {WebBluetoothForm} from './webBluetooth.js';
 import {
   readableStreamToString,
   stringToNodeReadable,
 } from '../binding-helpers.js';
+import {Subscription} from 'rxjs/Subscription';
 
 export default class WebBluetoothClient implements ProtocolClient {
   public toString(): string {
@@ -73,11 +73,18 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public subscribeResource(
-    form: Form,
+    form: WebBluetoothForm,
     next: (content: Content) => void,
     error?: (error: Error) => void,
     complete?: () => void
   ): Promise<Subscription> {
+    // Check if href is gatt://service/characteristic/operation, then subscribe to characteristic
+    // might also be gatt://operation, i.e watchAdvertisements
+    const path = form.href.split('//')[1];
+    const deviceId = form['wbt:id'];
+    const deconstructedPath = this.deconstructPath(path);
+    const {serviceId, characteristicId, operation} = deconstructedPath;
+
     throw new Error('not implemented');
   }
 

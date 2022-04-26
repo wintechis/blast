@@ -9,6 +9,7 @@
 import Blockly from 'blockly';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
+import {getThingsLog} from './blast_things.js';
 
 const {Events, JavaScript, selected} = Blockly;
 
@@ -164,7 +165,7 @@ export const eventsInWorkspace = [];
  * Stores event handlers of webHID devices, in order to remove them on code completion.
  * @type {!Array<{device: HIDDevice, type: string, fn: function}>}
  */
-export let deviceEventHandlers = [];
+export const deviceEventHandlers = [];
 
 /**
  * Stores functions to invoke to reset, when the interpreter is stopped.
@@ -283,9 +284,10 @@ export const getStdError = function () {
 const removeDeviceHandlers = function () {
   for (const handler of deviceEventHandlers) {
     const device = handler.device;
+    getThingsLog()('Removing listener', handler.type, device.productName);
     device.removeEventListener(handler.type, handler.fn);
   }
-  deviceEventHandlers = [];
+  deviceEventHandlers.length = 0;
 };
 
 /**

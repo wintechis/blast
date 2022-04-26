@@ -11,11 +11,11 @@ export let interpreter: Interpreter | null;
 export function getInterpreter(): Interpreter;
 
 /**
- * Array of tuples, containg names and functions defined in the things folder,
+ * Array of tuples, containg names and Functions defined in the things folder,
  * in order to add them to the interpreter API in {@link initAPI}.
- * @type {Array<{name: string, func: function}>}
+ * @type {Array<{name: string, func: Function}>}
  */
-export const apiFunctions: Array<{name: string; func: function}>;
+export const apiFunctions: Array<{name: string; func: Function}>;
 
 /**
  * Getter for interrupted.
@@ -41,7 +41,7 @@ export const statusValues: {
 };
 
 /**
- * Stores functions to be invoked when status changes.
+ * Stores Functions to be invoked when status changes.
  */
 export const onStatusChange: {
   [key: string]: Array<() => void>;
@@ -68,26 +68,28 @@ export function setWorkspace(ws: Blockly.Workspace): void;
 /**
  * Array containing all interval events.
  */
-export const intervalEvents: Array<!NodeJS.Timer>;
+export const intervalEvents: Array<NodeJS.Timer>;
 
 /**
  * Tracks event blocks currently in the workspace,
  * in order to run indefinately if in case there are any.
  */
-export const eventsInWorkspace: Array<!Blockly.Block.id>;
+export const eventsInWorkspace: Array<Blockly.Block.id>;
 
 /**
  * Stores event handlers of webHID devices, in order to remove them on code completion.
  */
-export let deviceEventHandlers: Array<
-  !{device: HIDDevice; type: string; fn: function}
->;
+export let deviceEventHandlers: Array<{
+  device: HIDDevice;
+  type: string;
+  fn: Function;
+}>;
 
 /**
- * Adds a function to be invoked when the interpreter is stopped.
- * @param {function} fn function to add.
+ * Adds a Function to be invoked when the interpreter is stopped.
+ * @param {Function} fn Function to add.
  */
-export function addCleanUpFunction(fn: function): void;
+export function addCleanUpFunction(fn: Function): void;
 
 /**
  * Setter for statesInterpreterRunning.
@@ -96,52 +98,52 @@ export function addCleanUpFunction(fn: function): void;
 export function setStatesInterpreterRunning(val: boolean): void;
 
 /**
- * Setter for the Interpreter's standard input function
- * @param {function} fn new stdIn function
+ * Setter for the Interpreter's standard input Function
+ * @param {Function} fn new stdIn Function
  */
-export function setStdIn(fn: function): void;
+export function setStdIn(fn: Function): void;
 
 /**
- * Getter for the Interpreter's standard input function.
- * @return {function} stdOut
+ * Getter for the Interpreter's standard input Function.
+ * @return {Function} stdOut
  */
-export function getStdIn(): function;
+export function getStdIn(): Function;
 
 /**
- * Setter for the Interpreter's standard output function.
- * @param {function} fn the stdEut function.
+ * Setter for the Interpreter's standard output Function.
+ * @param {Function} fn the stdEut Function.
  */
-export function setStdOut(fn: function): void;
+export function setStdOut(fn: Function): void;
 
 /**
- * Getter for the Interpreter's standard output function.
- * @return {function} the stdOut function.
+ * Getter for the Interpreter's standard output Function.
+ * @return {Function} the stdOut Function.
  */
-export function getStdOut(): function;
+export function getStdOut(): Function;
 
 /**
- * Setter for the Interpreter's standard info output function.
- * @param {function} fn the stdInfo function.
+ * Setter for the Interpreter's standard info output Function.
+ * @param {Function} fn the stdInfo Function.
  */
-export function setStdInfo(fn: function): void;
+export function setStdInfo(fn: Function): void;
 
 /**
- * Getter for the Interpreter's standard info output function.
- * @return {function} the stdInfo function.
+ * Getter for the Interpreter's standard info output Function.
+ * @return {Function} the stdInfo Function.
  */
-export function getStdInfo(): function;
+export function getStdInfo(): Function;
 
 /**
- * Setter for the Interpreter's standard error output function.
- * @param {function} fn the stdErr function.
+ * Setter for the Interpreter's standard error output Function.
+ * @param {Function} fn the stdErr Function.
  */
-export function setStdErr(fn: function): void;
+export function setStdErr(fn: Function): void;
 
 /**
- * Getter for the Interpreter's standard error output function.
- * @return {function} the stdErr function.
+ * Getter for the Interpreter's standard error output Function.
+ * @return {Function} the stdErr Function.
  */
-export function getStdErr(): function;
+export function getStdErr(): Function;
 
 /**
  * Reset the JS Interpreter.

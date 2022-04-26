@@ -1,14 +1,15 @@
 /* The objective of this queue is to send packets in turns to avoid GATT error */
 
-class Queue{
-	constructor(){
+export default class Queue{
+	constructor(write){
 		this.running = false;
 		this.tasks = [];
+        this.write = write
 	}
 
 	runCommand(data){
 		this.running = true;
-		bolt.write(data, _ => {
+		this.write(data, _ => {
 			this.running = false;
 			if (this.tasks.length > 0)
 			{

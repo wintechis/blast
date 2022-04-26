@@ -27,9 +27,6 @@ Blocks['things_joycon'] = {
     this.setTooltip('A Nintendo Joy-Con.');
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/Nintendo-JoyCon');
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.webHidId = '';
-    this.thing = null;
   },
 };
 
@@ -268,7 +265,6 @@ Blocks['joycon_button_events'] = {
       )
       .appendField('pressed');
     this.appendStatementInput('statements').appendField('do').setCheck(null);
-    this.setInputsInline(false);
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
@@ -285,6 +281,7 @@ Blocks['joycon_button_events'] = {
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
+      this.requested = true;
       this.addEvent();
     }
   },
