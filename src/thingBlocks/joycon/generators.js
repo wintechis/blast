@@ -232,7 +232,6 @@ const handleJoyConButtons = async function (
         interruptRunner_();
       }
       if (onWhile === 'while') {
-        console.log('while');
         onWhile = 'wait';
         // interrupt BLAST execution
         interruptRunner();
