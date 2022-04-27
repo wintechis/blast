@@ -45,28 +45,21 @@ export const apiFunctions = [];
 export const asyncApiFunctions = [];
 
 /**
- * Indicates wheter BLAST is current interrupted.
- * @type {boolean}
- * @public
+ * Interrupts the JS Interpreter.
  */
-let interrupted = false;
+export const interruptRunner = function () {
+  clearTimeout(runnerTimeout);
+  runnerTimeout = null;
+};
+apiFunctions.push(['interruptRunner', interruptRunner]);
 
 /**
- * Getter for interrupted.
- * @return {boolean} interrupted
+ * Continues the JS Interpreter.
  */
-export const getInterrupted = function () {
-  return interrupted;
+export const continueRunner = function () {
+  runnerTimeout = setTimeout(runner_, 5);
 };
-
-/**
- * Setter for interrupted.
- * @param {boolean} val value to set.
- */
-export const setInterrupted = function (val) {
-  interrupted = val;
-};
-apiFunctions.push(['setInterrupted', setInterrupted]);
+apiFunctions.push(['continueRunner', continueRunner]);
 
 /**
  * Enum for Blast status
@@ -124,6 +117,11 @@ export const getLatestCode = function () {
  * @private
  */
 let runner_ = null;
+
+/**
+ * The timeout currently used in {@link runner_}.
+ */
+let runnerTimeout = null;
 
 /**
  * Blast's main workspace.
@@ -458,27 +456,19 @@ export const runJS = function () {
     runner_ = function () {
       if (interpreter) {
         try {
-          if (interrupted) {
-            // Execution is currently interrupted, try again later.
-            setTimeout(runner_, 1);
+          const hasMore = interpreter.step();
+          if (hasMore) {
+            // Execution is currently blocked by some async call.
+            // Try again later.
+            runnerTimeout = setTimeout(runner_, 5);
+          } else if (statesInterpreterRunning || eventsInWorkspace.length > 0) {
+            // eventChecker is running,
+            // dont reset UI until stop button is clicked.
           } else {
-            const hasMore = interpreter.step();
-            if (hasMore) {
-              // Execution is currently blocked by some async call.
-              // Try again later.
-              setTimeout(runner_, 1);
-            } else if (
-              statesInterpreterRunning ||
-              eventsInWorkspace.length > 0
-            ) {
-              // eventChecker is running,
-              // dont reset UI until stop button is clicked.
-            } else {
-              // Program is complete.
-              setStatus(statusValues.READY);
-              stdInfo('execution completed');
-              resetInterpreter();
-            }
+            // Program is complete.
+            setStatus(statusValues.READY);
+            stdInfo('execution completed');
+            resetInterpreter();
           }
         } catch (error) {
           throwError(error);

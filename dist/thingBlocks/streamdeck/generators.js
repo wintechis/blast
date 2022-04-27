@@ -16,8 +16,9 @@ import {getThingsLog, getWebHidDevice} from './../../blast_things.js';
 import {
   apiFunctions,
   asyncApiFunctions,
+  continueRunner,
   getInterpreter,
-  setInterrupted,
+  interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
 
@@ -147,7 +148,7 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
     );
     if (keyIndex === button) {
       // interrupt BLAST execution.
-      setInterrupted(true);
+      interruptRunner();
 
       const interpreter = new Interpreter('');
       interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
@@ -160,7 +161,7 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
             setTimeout(interruptRunner_, 5);
           } else {
             // Continue BLAST execution.
-            setInterrupted(false);
+            continueRunner();
           }
         } catch (error) {
           throwError(`Error executing program:\n ${error}`);

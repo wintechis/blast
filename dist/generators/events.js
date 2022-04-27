@@ -10,10 +10,11 @@
 import {JavaScript} from 'blockly';
 import {
   apiFunctions,
+  continueRunner,
   getInterpreter,
   getWorkspace,
   intervalEvents,
-  setInterrupted,
+  interruptRunner,
   throwError,
 } from './../blast_interpreter.js';
 // eslint-disable-next-line node/no-unpublished-import
@@ -52,9 +53,9 @@ JavaScript['event'] = function (block) {
     }
 
     const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
-        setInterrupted(true);
+        interruptRunner();
         ${statements} 
-        setInterrupted(false);
+        continueRunner();
       }`;
 
     addEventCode(block.id, eventCode);
@@ -102,7 +103,7 @@ const addIntervalEvent = (seconds, statements) => {
 
   const func = function () {
     // interrupt BLAST execution
-    setInterrupted(false);
+    interruptRunner();
 
     const interpreter = new Interpreter('');
     interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
@@ -115,7 +116,7 @@ const addIntervalEvent = (seconds, statements) => {
           setTimeout(interruptRunner_, 5);
         } else {
           // Continue BLAST execution.
-          setInterrupted(false);
+          continueRunner();
         }
       } catch (error) {
         throwError(`Error executing program:\n ${error}`);

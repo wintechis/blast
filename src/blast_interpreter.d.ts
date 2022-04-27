@@ -18,16 +18,14 @@ export function getInterpreter(): Interpreter;
 export const apiFunctions: Array<{name: string; func: Function}>;
 
 /**
- * Getter for interrupted.
- * @return {boolean} interrupted
+ * Interrupts the JS Interpreter.
  */
-export function getInterrupted(): boolean;
+export function interruptRunner(): void;
 
 /**
- * Setter for interrupted.
- * @param {boolean} val value to set.
+ * Continues the JS Interpreter.
  */
-export function setInterrupted(val: boolean): void;
+export function continueRunner(): void;
 
 /**
  * Enum for Blast status

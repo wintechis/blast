@@ -13,10 +13,11 @@ import Interpreter from 'js-interpreter';
 import {
   apiFunctions,
   asyncApiFunctions,
+  continueRunner,
   deviceEventHandlers,
   getInterpreter,
   getWorkspace,
-  setInterrupted,
+  interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
 import {getThingsLog, getWebHidDevice} from './../../blast_things.js';
@@ -187,7 +188,9 @@ const handleJoyConButtons = async function (
   const thingsLog = getThingsLog();
 
   const hidInputHandler = async function (event) {
-    console.log(event);
+    if (onWhile === 'wait') {
+      return;
+    }
     const packet = event.detail;
     if (!packet || !packet.actualOrientation) {
       return;
@@ -202,10 +205,10 @@ const handleJoyConButtons = async function (
     );
 
     if (packet.buttonStatus[button]) {
+      // interrupt BLAST execution
+      interruptRunner();
       if (onWhile === 'on' && !pushedInLastPacket) {
         pushedInLastPacket = true;
-        // interrupt BLAST execution
-        setInterrupted(true);
 
         const interpreter = new Interpreter('');
         interpreter.getStateStack()[0].scope =
@@ -219,7 +222,7 @@ const handleJoyConButtons = async function (
               setTimeout(interruptRunner_, 5);
             } else {
               // Continue BLAST execution.
-              setInterrupted(false);
+              continueRunner();
             }
           } catch (error) {
             throwError(`Error executing program:\n ${error}`);
@@ -229,9 +232,10 @@ const handleJoyConButtons = async function (
         interruptRunner_();
       }
       if (onWhile === 'while') {
+        console.log('while');
         onWhile = 'wait';
         // interrupt BLAST execution
-        setInterrupted(true);
+        interruptRunner();
 
         const interpreter = new Interpreter('');
         interpreter.getStateStack()[0].scope =
@@ -244,8 +248,9 @@ const handleJoyConButtons = async function (
             if (hasMore) {
               setTimeout(interruptRunner_, 5);
             } else {
-              // Continue BLAST execution.
-              setInterrupted(false);
+              setTimeout(() => {
+                onWhile = 'while';
+              }, 200);
             }
           } catch (error) {
             throwError(`Error executing program:\n ${error}`);
@@ -253,12 +258,13 @@ const handleJoyConButtons = async function (
           }
         };
         interruptRunner_();
-        setTimeout(() => {
-          onWhile = 'while';
-        }, 200);
       }
     } else {
       pushedInLastPacket = false;
+      if (onWhile === 'while') {
+        // Continue BLAST execution.
+        continueRunner();
+      }
     }
   };
 
