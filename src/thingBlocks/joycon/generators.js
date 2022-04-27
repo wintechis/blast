@@ -7,7 +7,7 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import {JoyConLeft, JoyConRight} from './joycon-webhid/joycon.js';
+import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {

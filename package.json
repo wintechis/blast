@@ -60,7 +60,7 @@
     "@node-wot/td-tools": "^0.8.0",
     "blockly": "8.0.0",
     "file-saver": "^2.0.5",
-    "joy-con-webhid": "latest",
+    "joy-con-webhid": "^0.2.0",
     "rxjs": "5.5.11",
     "urdf": "https://github.com/derwehr/uRDF.js.git",
     "webpack": "^5.70.0",

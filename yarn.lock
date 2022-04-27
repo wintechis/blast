@@ -1184,7 +1184,7 @@ __metadata:
     eslint-plugin-prettier: ^4.0.0
     esmock: ^1.7.4
     file-saver: ^2.0.5
-    joy-con-webhid: latest
+    joy-con-webhid: ^0.2.0
     js-interpreter: "https://github.com/derwehr/js-interpreter.git"
     jsdoc: ^3.6.7
     mocha: ^9.2.2
@@ -2910,7 +2910,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"joy-con-webhid@npm:latest":
+"joy-con-webhid@npm:^0.2.0":
   version: 0.2.0
   resolution: "joy-con-webhid@npm:0.2.0"
   dependencies:
