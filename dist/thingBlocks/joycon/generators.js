@@ -138,7 +138,7 @@ const handleJoyConButtons = async function (
 
   // Mapping button index to each button
   // Each joycon contains 16 buttons indexed
-  const buttonMapping = {
+  const buttonMappingSingle = {
     0: 'A',
     1: 'X',
     2: 'B',
@@ -163,6 +163,30 @@ const handleJoyConButtons = async function (
     31: 'LT',
   };
 
+  const buttonMappingDual = {
+    4: 'RSL',
+    5: 'RSR',
+    6: 'B',
+    7: 'A',
+    8: 'Y',
+    9: 'X',
+    10: 'L',
+    11: 'R',
+    12: 'LT',
+    13: 'RT',
+    14: 'MINUS',
+    15: 'PLUS',
+    16: 'LA',
+    17: 'RA',
+    18: 'UP',
+    19: 'DOWN',
+    20: 'LEFT',
+    21: 'RIGHT',
+    23: 'HOME',
+    24: 'LSL',
+    25: 'LSR',
+  };
+
   if (!('ongamepadconnected' in window)) {
     // No gamepad events available, poll instead.
     interval = setInterval(pollGamepads, 100);
@@ -179,11 +203,11 @@ const handleJoyConButtons = async function (
     }
     const orderedGamepads = [];
     orderedGamepads.push(
-      gamepadArray.find(g => g && g.id.indexOf('Joy-Con (R)') > -1)
+      gamepadArray.find(g => g && g.id.indexOf('Joy-Con') > -1)
     );
-    orderedGamepads.push(
-      gamepadArray.find(g => g && g.id.indexOf('Joy-Con (L)') > -1)
-    );
+
+    let type = orderedGamepads[0].id.indexOf('L+R') > -1 ? 'L+R' : 'L';
+    type = orderedGamepads[0].id.indexOf('(R)') > -1 ? 'R' : type;
 
     lastPressed = pressed;
     pressed = [];
@@ -193,13 +217,23 @@ const handleJoyConButtons = async function (
       if (gp) {
         for (let i = 0; i < gp.buttons.length; i++) {
           if (gp.buttons[i].pressed) {
-            const id = g * 15 + i + g;
-            const button = buttonMapping[id] || id;
+            let id, button;
+            if (type === 'R') {
+              id = i;
+              button = buttonMappingSingle[id] || id;
+            } else if (type === 'L') {
+              id = i + 16;
+              button = buttonMappingSingle[id] || id;
+            } else if (type === 'L+R') {
+              id = i + 6;
+              button = buttonMappingDual[id] || id;
+            }
             pressed.push(button);
           }
         }
       }
     }
+
     if (
       pressed.indexOf(button) > -1 &&
       (onWhile === 'while' || lastPressed.indexOf(button) === -1)
