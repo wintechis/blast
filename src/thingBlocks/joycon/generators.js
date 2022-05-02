@@ -7,7 +7,6 @@
 'use strict';
 
 import {JavaScript} from 'blockly';
-import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
@@ -15,13 +14,11 @@ import {
   apiFunctions,
   asyncApiFunctions,
   continueRunner,
-  deviceEventHandlers,
   getInterpreter,
   getWorkspace,
   interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
-import {getThingsLog, getWebHidDevice} from './../../blast_things.js';
 
 JavaScript['things_joycon'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -135,8 +132,7 @@ const handleJoyConButtons = async function (
   id,
   onWhile,
   button,
-  statements,
-  callback
+  statements
 ) {
   let interval;
 
