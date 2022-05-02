@@ -248,18 +248,18 @@ Blocks['joycon_button_events'] = {
       )
       .appendField(
         new FieldDropdown([
-          ['A', 'a'],
-          ['B', 'b'],
-          ['X', 'x'],
-          ['Y', 'y'],
-          ['up', 'up'],
-          ['left', 'left'],
-          ['down', 'down'],
-          ['right', 'right'],
-          ['R', 'r'],
-          ['L', 'l'],
-          ['ZR', 'zr'],
-          ['ZL', 'zl'],
+          ['A', 'A'],
+          ['B', 'B'],
+          ['X', 'X'],
+          ['Y', 'Y'],
+          ['up', 'UP'],
+          ['left', 'LEFT'],
+          ['down', 'DOWN'],
+          ['right', 'RIGHT'],
+          ['R', 'R'],
+          ['L', 'L'],
+          ['RT', 'RT'],
+          ['LT', 'LT'],
         ]),
         'button'
       )

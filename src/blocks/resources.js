@@ -6,7 +6,23 @@
 
 'use strict';
 
-import {Blocks} from 'blockly';
+import {Blocks, FieldTextInput} from 'blockly';
+
+Blocks['uri'] = {
+  /**
+   * Block representing a URI.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('URI')
+      .appendField(new FieldTextInput('https://example.com'), 'URI');
+    this.setOutput(true, 'URI');
+    this.setColour(60);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
 
 Blocks['uri_from_string'] = {
   /**

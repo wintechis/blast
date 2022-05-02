@@ -11,6 +11,7 @@ import {JoyConLeft, JoyConRight} from 'joy-con-webhid';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
+  addCleanUpFunction,
   apiFunctions,
   asyncApiFunctions,
   continueRunner,
@@ -137,143 +138,106 @@ const handleJoyConButtons = async function (
   statements,
   callback
 ) {
-  // If no things block is attached, return.
-  if (!id) {
-    throwError('No Joy-Con block set.');
-    callback();
-    return;
-  }
+  let interval;
 
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    throwError(
-      'Connected device is not a HID device.\nMake sure you are connecting the JoyCon via webHID'
-    );
-    callback();
-    return;
-  }
-
-  if (!device.opened) {
-    try {
-      await device.open();
-    } catch (error) {
-      throwError(
-        "Failed to open device, your browser or OS probably doesn't support webHID."
-      );
-    }
-  }
-
-  // Check if device is a Joy-Con.
-  if (
-    device.vendorId !== 1406 ||
-    (device.productId !== 0x2006 && device.productId !== 0x2007)
-  ) {
-    throwError('The connected device is not a Joy-Con.');
-    callback();
-    return;
-  }
-
-  let joyCon;
-  if (device.productId === 0x2006) {
-    joyCon = new JoyConLeft(device);
-  } else if (device.productId === 0x2007) {
-    joyCon = new JoyConRight(device);
-  }
-  await joyCon.open();
-  await joyCon.enableStandardFullMode();
-  await joyCon.enableIMUMode();
-
-  let pushedInLastPacket = false;
-  const thingsLog = getThingsLog();
-
-  const hidInputHandler = async function (event) {
-    if (onWhile === 'wait') {
-      return;
-    }
-    const packet = event.detail;
-    if (!packet || !packet.actualOrientation) {
-      return;
-    }
-
-    thingsLog(
-      `Received <code>hidinput</code> event from Joy-Con: <code>${JSON.stringify(
-        packet
-      )}</code>`,
-      'hid',
-      device.productName
-    );
-
-    if (packet.buttonStatus[button]) {
-      // interrupt BLAST execution
-      interruptRunner();
-      if (onWhile === 'on' && !pushedInLastPacket) {
-        pushedInLastPacket = true;
-
-        const interpreter = new Interpreter('');
-        interpreter.getStateStack()[0].scope =
-          getInterpreter().getGlobalScope();
-        interpreter.appendCode(statements);
-
-        const interruptRunner_ = function () {
-          try {
-            const hasMore = interpreter.step();
-            if (hasMore) {
-              setTimeout(interruptRunner_, 5);
-            } else {
-              // Continue BLAST execution.
-              continueRunner();
-            }
-          } catch (error) {
-            throwError(`Error executing program:\n ${error}`);
-            console.error(error);
-          }
-        };
-        interruptRunner_();
-      }
-      if (onWhile === 'while') {
-        onWhile = 'wait';
-        // interrupt BLAST execution
-        interruptRunner();
-
-        const interpreter = new Interpreter('');
-        interpreter.getStateStack()[0].scope =
-          getInterpreter().getGlobalScope();
-        interpreter.appendCode(statements);
-
-        const interruptRunner_ = function () {
-          try {
-            const hasMore = interpreter.step();
-            if (hasMore) {
-              setTimeout(interruptRunner_, 5);
-            } else {
-              setTimeout(() => {
-                onWhile = 'while';
-              }, 200);
-            }
-          } catch (error) {
-            throwError(`Error executing program:\n ${error}`);
-            console.error(error);
-          }
-        };
-        interruptRunner_();
-      }
-    } else {
-      pushedInLastPacket = false;
-      if (onWhile === 'while') {
-        // Continue BLAST execution.
-        continueRunner();
-      }
-    }
+  // Mapping button index to each button
+  // Each joycon contains 16 buttons indexed
+  const buttonMapping = {
+    0: 'A',
+    1: 'X',
+    2: 'B',
+    3: 'Y',
+    4: 'RSL',
+    5: 'RSR',
+    9: 'PLUS',
+    11: 'RA',
+    12: 'HOME',
+    14: 'R',
+    15: 'RT',
+    16: 'LEFT',
+    17: 'DOWN',
+    18: 'UP',
+    19: 'RIGHT',
+    20: 'LSL',
+    21: 'LSR',
+    24: 'MINUS',
+    26: 'LA',
+    29: 'CAPTURE',
+    30: 'L',
+    31: 'LT',
   };
 
-  deviceEventHandlers.push({
-    device: joyCon,
-    type: 'hidinput',
-    fn: hidInputHandler,
-  });
+  if (!('ongamepadconnected' in window)) {
+    // No gamepad events available, poll instead.
+    interval = setInterval(pollGamepads, 100);
+  }
 
-  joyCon.addEventListener('hidinput', hidInputHandler);
+  let lastPressed = [];
+  let pressed = [];
+
+  function pollGamepads() {
+    const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+    const gamepadArray = [];
+    for (let i = 0; i < gamepads.length; i++) {
+      gamepadArray.push(gamepads[i]);
+    }
+    const orderedGamepads = [];
+    orderedGamepads.push(
+      gamepadArray.find(g => g && g.id.indexOf('Joy-Con (R)') > -1)
+    );
+    orderedGamepads.push(
+      gamepadArray.find(g => g && g.id.indexOf('Joy-Con (L)') > -1)
+    );
+
+    lastPressed = pressed;
+    pressed = [];
+
+    for (let g = 0; g < orderedGamepads.length; g++) {
+      const gp = orderedGamepads[g];
+      if (gp) {
+        for (let i = 0; i < gp.buttons.length; i++) {
+          if (gp.buttons[i].pressed) {
+            const id = g * 15 + i + g;
+            const button = buttonMapping[id] || id;
+            pressed.push(button);
+          }
+        }
+      }
+    }
+    if (
+      pressed.indexOf(button) > -1 &&
+      (onWhile === 'while' || lastPressed.indexOf(button) === -1)
+    ) {
+      // interrupt BLAST execution
+      interruptRunner();
+
+      const interpreter = new Interpreter('');
+      interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
+      interpreter.appendCode(statements);
+
+      const interruptRunner_ = function () {
+        try {
+          const hasMore = interpreter.step();
+          if (hasMore) {
+            setTimeout(interruptRunner_, 5);
+          } else {
+            // Continue BLAST execution.
+            continueRunner();
+          }
+        } catch (error) {
+          throwError(`Error executing program:\n ${error}`);
+          console.error(error);
+        }
+      };
+      interruptRunner_();
+    }
+  }
+
+  addCleanUpFunction(() => {
+    if (interval) {
+      clearInterval(interval);
+    }
+  });
 };
 
 // add joycon_button_events function to the interpreter's API.

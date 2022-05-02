@@ -8,7 +8,7 @@
 
 import {dialog, hideChaff, Xml} from 'blockly';
 import FileSaver from 'file-saver';
-import {addWebBluetoothDevice} from './blast_things.js';
+import {addWebBluetoothDevice, implementedThings} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
 import {getWebBluetoothDevices} from './blast_things.js';
 import {getWebHIDDevices} from './blast_things.js';
