@@ -464,20 +464,25 @@ const openConnectModal = function (type) {
     if (type === 'bluetooth') {
       pairButton.setAttribute('value', 'Pair');
       pairButton.addEventListener('click', async () => {
-        await requestDevice(thing);
-        // change pair status to checkmark
-        document.getElementById('pairStatus-' + thing.id).innerHTML =
-          '&#x2714;';
-        document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+        const device = await requestDevice(thing);
+        if (device) {
+          // change pair status to checkmark
+          document.getElementById('pairStatus-' + thing.id).innerHTML =
+            '&#x2714;';
+          document.getElementById('pairStatus-' + thing.id).style.color =
+            'green';
+        }
       });
     } else if (type === 'hid') {
       pairButton.setAttribute('value', 'Connect');
       pairButton.addEventListener('click', async () => {
-        await connectWebHidDevice(thing);
-        // change pair status to checkmark
-        document.getElementById('pairStatus-' + thing.id).innerHTML =
-          '&#x2714;';
-        document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+        const device = await connectWebHidDevice(thing);
+        if (device) {
+          // change pair status to checkmark
+          document.getElementById('pairStatus-' + thing.id).innerHTML =
+            '&#x2714;';
+          document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+        }
       });
     }
     pairCell.appendChild(pairButton);
