@@ -1174,7 +1174,7 @@ __metadata:
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
-    blockly: 8.0.0
+    blockly: 8.0.1
     chai: ^4.3.6
     copyfiles: ^2.4.1
     eslint: ^7.15.0
@@ -1200,12 +1200,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"blockly@npm:8.0.0":
-  version: 8.0.0
-  resolution: "blockly@npm:8.0.0"
+"blockly@npm:8.0.1":
+  version: 8.0.1
+  resolution: "blockly@npm:8.0.1"
   dependencies:
     jsdom: 15.2.1
-  checksum: 0905fd9c4420cbbdbaf4059492108243895039514fd9307dcd20d956de47a02a62f6bfa8cf2107d72bc48a675c6e6b7b9df30725c6443bc62762e3566733dbe5
+  checksum: 767ef81e6e43c24c8627a461ba62908ba4dfeac9325f5ee321be6bab2c9b54b244f6cfe5dfa1d7a529bc75468a21f1485f8182b92f3592f7d1311f580ee55d15
   languageName: node
   linkType: hard
 

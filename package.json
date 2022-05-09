@@ -58,7 +58,7 @@
     "@inrupt/solid-client": "^1.19.0",
     "@node-wot/core": "latest",
     "@node-wot/td-tools": "^0.8.0",
-    "blockly": "8.0.0",
+    "blockly": "8.0.1",
     "file-saver": "^2.0.5",
     "joy-con-webhid": "^0.2.0",
     "rxjs": "5.5.11",
