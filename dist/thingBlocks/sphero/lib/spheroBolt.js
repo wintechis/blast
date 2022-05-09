@@ -245,7 +245,7 @@ export default class SpheroBolt{
 	};
 
 	/*  Write a command on a specific characteristic*/
-	async write(data, callback){
+	async write(data){
 		if (!bolt.connected) {
 			await bolt.connect();
 		}
@@ -254,9 +254,6 @@ export default class SpheroBolt{
 		}
 		catch(error){
 			console.log(error.message);	
-		}
-		if(callback){
-			callback();
 		}
 	}
 

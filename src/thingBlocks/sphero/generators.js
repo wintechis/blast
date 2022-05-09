@@ -64,6 +64,7 @@ function spheroRoll(blockId, speed, heading) {
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
   bolt.roll(speed, heading, []);
+  console.log(bolt.queue.tasks);
 }
 
 // Add spheroRoll function to the interpreter's API
@@ -77,7 +78,11 @@ function spheroStop(blockId) {
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
-  bolt.roll(0, bolt.heading, []);
+  console.log(bolt.queue.tasks);
+  bolt.queue.clear();
+  console.log(bolt.queue.tasks);
+  bolt.roll(0, 0, []);
+  console.log(bolt.queue.tasks);
 }
 
 // Add spheroStop function to the interpreter's API

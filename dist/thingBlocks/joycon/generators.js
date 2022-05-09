@@ -105,12 +105,13 @@ JavaScript['joycon_button_events'] = function (block) {
   const statements = JavaScript.quote_(
     JavaScript.statementToCode(block, 'statements')
   );
+  const released = block.getFieldValue('released') === 'released';
   let blockId = "''";
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const handler = `handleJoyConButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${statements});\n`;
+  const handler = `handleJoyConButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${released}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -124,6 +125,7 @@ JavaScript['joycon_button_events'] = function (block) {
  * @param {string} id identifier of the JoyCon device in {@link Blast.Things.webHidDevices}.
  * @param {string} onWhile whether the statement should be executed continously while the button is pressed or only once.
  * @param {string} button the button to handle.
+ * @param {boolean} released whether the statements should be executed on release or on press.
  * @param {string} statements the statements to execute when the button is pushed.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
@@ -132,6 +134,7 @@ const handleJoyConButtons = async function (
   id,
   onWhile,
   button,
+  released,
   statements
 ) {
   let interval;
@@ -235,8 +238,12 @@ const handleJoyConButtons = async function (
     }
 
     if (
-      pressed.indexOf(button) > -1 &&
-      (onWhile === 'while' || lastPressed.indexOf(button) === -1)
+      (!released &&
+        pressed.indexOf(button) > -1 && // button is pressed
+        (onWhile === 'while' || lastPressed.indexOf(button) === -1)) || // while selected or button was not pressed before
+      (released && // release selected
+        pressed.indexOf(button) === -1 && // button is not pressed
+        lastPressed.indexOf(button) > -1) // and was pressed before
     ) {
       // interrupt BLAST execution
       interruptRunner();

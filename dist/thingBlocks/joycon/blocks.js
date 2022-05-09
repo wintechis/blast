@@ -263,7 +263,13 @@ Blocks['joycon_button_events'] = {
         ]),
         'button'
       )
-      .appendField('pressed');
+      .appendField(
+        new FieldDropdown([
+          ['pressed', 'pressed'],
+          ['released', 'released'],
+        ]),
+        'released'
+      );
     this.appendStatementInput('statements').appendField('do').setCheck(null);
     this.setColour(180);
     this.setTooltip('');

@@ -9,17 +9,22 @@ export default class Queue{
 
 	runCommand(data){
 		this.running = true;
-		this.write(data, _ => {
-			this.running = false;
+		this.write(data).then(() => {
 			if (this.tasks.length > 0)
 			{
 				this.runCommand(this.tasks.shift());
+			} else {
+				this.running = false;
 			}
 		})
 	}
 
 	enqueueCommand(data){
 		this.tasks.push(data);
+	}
+
+	clear(){
+		this.tasks.length = 0;
 	}
 
 	queue (data){
