@@ -7,7 +7,7 @@
 'use strict';
 
 import {addBlock} from './../blast_toolbox.js';
-import {Blocks} from 'blockly';
+import {Blocks, libraryBlocks} from 'blockly';
 
 // Remap blockly blocks to improve naming in xml.
 Blocks['repeat'] = Blocks['controls_repeat_ext'];
@@ -17,9 +17,9 @@ Blocks['break_continue'] = Blocks['controls_flow_statements'];
 Blocks['conditional_statement'] = Blocks['controls_if'];
 
 // add changed names to Loops constant to ensure correct execution.
-// loopTypes.add('repeat');
-// loopTypes.add('while_until');
-// loopTypes.add('for');
+libraryBlocks.loops.loopTypes.add('repeat');
+libraryBlocks.loops.loopTypes.add('while_until');
+libraryBlocks.loops.loopTypes.add('for');
 
 // Define inner block XML for the repeat block.
 const REPEAT_XML = `

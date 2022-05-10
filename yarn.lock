@@ -51,24 +51,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@blockly/block-test@npm:^2.0.6":
-  version: 2.0.6
-  resolution: "@blockly/block-test@npm:2.0.6"
+"@blockly/block-test@npm:^2.0.9":
+  version: 2.0.9
+  resolution: "@blockly/block-test@npm:2.0.9"
   peerDependencies:
     blockly: 7 - 8
-  checksum: e56efef70fcb74e8b8725b2b2d08f4539704fa072b64e20407c13c5033637d28a3f5dd6a1dc51655d03be2c7ffbbe259ca680d8f56de63700328cb27664c700b
+  checksum: 62469c3a1dfcac9c325235776f08dca84ed93c25cf41ccd113012410c8b554e6395404928118cb2c28bf92a85eb21355b6126fe12518209a4d58008a90b2809d
   languageName: node
   linkType: hard
 
-"@blockly/dev-tools@npm:3.1.0":
-  version: 3.1.0
-  resolution: "@blockly/dev-tools@npm:3.1.0"
+"@blockly/dev-tools@npm:3.1.3":
+  version: 3.1.3
+  resolution: "@blockly/dev-tools@npm:3.1.3"
   dependencies:
-    "@blockly/block-test": ^2.0.6
-    "@blockly/theme-dark": ^2.0.7
-    "@blockly/theme-deuteranopia": ^1.0.8
-    "@blockly/theme-highcontrast": ^1.0.8
-    "@blockly/theme-tritanopia": ^1.0.8
+    "@blockly/block-test": ^2.0.9
+    "@blockly/theme-dark": ^3.0.8
+    "@blockly/theme-deuteranopia": ^2.0.8
+    "@blockly/theme-highcontrast": ^2.0.8
+    "@blockly/theme-tritanopia": ^2.0.8
     chai: ^4.2.0
     dat.gui: ^0.7.7
     lodash.assign: ^4.2.0
@@ -77,43 +77,43 @@ __metadata:
     sinon: ^9.0.2
   peerDependencies:
     blockly: 7 - 8
-  checksum: 3247703e738572dc59dc643f373028cc5deeefbe6615cbba447237165d5b9c48ebaaf4ad2458f7aa1933976c65cef4a43bb3929749271e850ae30358a4dcbab9
+  checksum: a1a2a2b9c01b3007d7ee257ff6feee1c832adda2e020db14c5e418f77fa5c6f4ec759de09ca9298f03e8dfa0a133030cd4160137eeb61cc78bfe1b64a32957ae
   languageName: node
   linkType: hard
 
-"@blockly/theme-dark@npm:^2.0.7":
-  version: 2.0.7
-  resolution: "@blockly/theme-dark@npm:2.0.7"
+"@blockly/theme-dark@npm:^3.0.8":
+  version: 3.0.8
+  resolution: "@blockly/theme-dark@npm:3.0.8"
   peerDependencies:
-    blockly: 3.20200123.0 - 7
-  checksum: ca3ec483978a1903f17221af74080fa8ab71846b5e23d3a4ef75707d3f8002db05177feb2ee6747132b4951e3dc6db205d90ceeb3390c831570db1e8892b6045
+    blockly: 7 - 8
+  checksum: 845a446039860507e1912387b574a55585b1a36dfc28f1ae92ddce81d7b803304144421b0e13aa70ab0b86ea54f628fb16040b79985594060223413af572e772
   languageName: node
   linkType: hard
 
-"@blockly/theme-deuteranopia@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "@blockly/theme-deuteranopia@npm:1.0.8"
+"@blockly/theme-deuteranopia@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@blockly/theme-deuteranopia@npm:2.0.8"
   peerDependencies:
-    blockly: 3.20200123.0 - 7
-  checksum: f43a39b693601548aa0ab67bbe69d3996c6facb644ceb52c2eadafcdaaf84c200d05fec5d4bf7a5047fa4d2c215377920936fed4b654e68f4f93c690aada0237
+    blockly: 7 - 8
+  checksum: 18659bd3ef85cff27904fd8b32c7cac11c624e4f22ea44e1814fa612a5fc9081405e5ecafa2743cf9d5a07bb6c396b9004c10c0ac5d57ba19a75dd7fef152b3b
   languageName: node
   linkType: hard
 
-"@blockly/theme-highcontrast@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "@blockly/theme-highcontrast@npm:1.0.8"
+"@blockly/theme-highcontrast@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@blockly/theme-highcontrast@npm:2.0.8"
   peerDependencies:
-    blockly: 3.20200123.0 - 7
-  checksum: 6e3ce7ff1522ceae83d113df304a8ca0d96817d6acadd426f25b523a27fcbe748397cd35d3829518b5fcecc0ea29e9623800747abfa45af3fab9f0f3b7cb833d
+    blockly: 7 - 8
+  checksum: 202b9920254eba8a34d4023c42efb89232883026202c93b1b2998621ec514296e2b0be59084c12836b58b0185a3097729c11845c09f71401b23dad4d086c7fcd
   languageName: node
   linkType: hard
 
-"@blockly/theme-tritanopia@npm:^1.0.8":
-  version: 1.0.8
-  resolution: "@blockly/theme-tritanopia@npm:1.0.8"
+"@blockly/theme-tritanopia@npm:^2.0.8":
+  version: 2.0.8
+  resolution: "@blockly/theme-tritanopia@npm:2.0.8"
   peerDependencies:
-    blockly: 3.20200123.0 - 7
-  checksum: 93ae557015f8250c291a83542dc71d599f1c33b192d33ef5a4ffeebf9743220a532851f3344f1b116f12cbdb77462377a4c5176c90d29799a7e5dcae4400ca7f
+    blockly: 7 - 8
+  checksum: 282764fb8c4bff33231b4e42b1537a013202a736d5f68cf46094e840ff5f900d722452fb88a8fb2d5ce19298a60d9c9474be2952874c8ea47473c2386ddeef23
   languageName: node
   linkType: hard
 
@@ -1165,7 +1165,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "blast@workspace:."
   dependencies:
-    "@blockly/dev-tools": 3.1.0
+    "@blockly/dev-tools": 3.1.3
     "@elgato-stream-deck/webhid": ^5.2.0
     "@inrupt/solid-client": ^1.19.0
     "@node-wot/core": latest
@@ -1174,7 +1174,7 @@ __metadata:
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
-    blockly: 8.0.1
+    blockly: 8.0.2
     chai: ^4.3.6
     copyfiles: ^2.4.1
     eslint: ^7.15.0
@@ -1200,12 +1200,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"blockly@npm:8.0.1":
-  version: 8.0.1
-  resolution: "blockly@npm:8.0.1"
+"blockly@npm:8.0.2":
+  version: 8.0.2
+  resolution: "blockly@npm:8.0.2"
   dependencies:
     jsdom: 15.2.1
-  checksum: 767ef81e6e43c24c8627a461ba62908ba4dfeac9325f5ee321be6bab2c9b54b244f6cfe5dfa1d7a529bc75468a21f1485f8182b92f3592f7d1311f580ee55d15
+  checksum: 4a4275c090731585193cc7ba5722bad74b9066018a945182c75618057ae524ea0e02c7727e934d6594b19e8f4b5dc834b3b8f58fc9ec100d5e50c3f76909c904
   languageName: node
   linkType: hard
 
@@ -5019,7 +5019,7 @@ __metadata:
     n3: 1.13.x
     node-fetch: 2.6.x
     sparqljs: 2.x.x
-  checksum: 741003dcdf72c5c8e05882cce56c0ce2f85115a638298186265c07a5414abdcc239f97af418a4c61d48328e43a0cdf625bf136c996e79501dbbdf4bf4570d453
+  checksum: e59ba86d1cebb6bc14c31310ab92a9deb6cdc8f643d9a648a6fafce93eb914401bb9fc0bc555a8e647c25c3d2a7cc39b3ea46d86d2157fbdbde114591d0215c6
   languageName: node
   linkType: hard
 
