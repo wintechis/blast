@@ -243,7 +243,10 @@ export const loadXML = function (xmlString) {
   }
 
   // prompt to WebBluetooth/webHID device connection
-  if (xml.querySelector('value[name="Thing"]')) {
+  if (
+    xml.querySelector('value[name="Thing"]') ||
+    xml.querySelector('value[name="thing"]')
+  ) {
     generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
@@ -284,126 +287,124 @@ const generatePairButtonsDesktop_ = function (xml) {
     tbody.removeChild(tbody.firstChild);
   }
 
-  //Generates and stores the type (e.g. things_ruuviTag) of all available things.
-  const implemented_things_webBluetooth = [];
-  const implemented_things_webHID = [];
-  for (let i = 0; i < implementedThings.length; i++) {
-    if (implementedThings[i].type === 'bluetooth') {
-      implemented_things_webBluetooth.push(`things_${implementedThings[i].id}`);
-    } else {
-      implemented_things_webHID.push(`things_${implementedThings[i].id}`);
-    }
+  //Generates the type (e.g. things_ruuviTag) of all available things.
+  for (const thing of implementedThings) {
+    thing.block_name = `things_${thing.id}`;
   }
 
   const blocksAdded = [];
   // add pair button for each web bluetooth block
   for (const block of blocks) {
     const type = block.getAttribute('type');
-    if (
-      implemented_things_webBluetooth.includes(type) ||
-      implemented_things_webHID.includes(type)
-    ) {
-      // get user defined name
-      const name = block.firstElementChild.textContent;
-      // skip if block was already added
-      if (blocksAdded.includes(name)) {
-        continue;
-      }
 
-      // add new row
-      const row = document.createElement('tr');
-      // generate name cell html
-      const nameCell = document.createElement('td');
-      nameCell.appendChild(document.createTextNode(name));
-      // pair cell html
-      const pairCell = document.createElement('td');
-      const pairButton = document.createElement('input');
-      pairButton.setAttribute('type', 'button');
-      pairButton.setAttribute('id', 'pairButton-' + name);
-      pairButton.setAttribute('value', 'Pair');
-      // pair status html
-      const statusCell = document.createElement('td');
-      const pairStatus = document.createElement('span');
-      pairStatus.setAttribute('id', 'pairStatus-' + name);
-      pairStatus.innerHTML = '&#x2718;';
-      pairStatus.style.color = 'red';
-      pairStatus.style.fontSize = '20px';
-      pairStatus.style.fontWeight = 'bold';
-      pairStatus.style.marginRight = '10px';
-      // add pair status to status cell
-      statusCell.appendChild(pairStatus);
-
-      // pair button click listener
-      pairButton.addEventListener('click', async () => {
-        if (implemented_things_webBluetooth.includes(type)) {
-          // set webbluetooth options
-          const options = {};
-          options.acceptAllDevices = true;
-          options.optionalServices = optionalServices;
-
-          const device = await requestDevice();
-          // change pair status to checkmark
-          document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
-          document.getElementById('pairStatus-' + name).style.color = 'green';
-
-          // set block id to device id
-          block.firstElementChild.textContent = device.id;
-
-          // if all devices have been paired, enable done button
-          if (allConnectedDesktop_()) {
-            document.getElementById('rc-done').disabled = false;
-            // add done button click listener
-            document
-              .getElementById('rc-done')
-              .addEventListener('click', () => reconnectDoneHandler_(xml));
-          }
-        } else if (implemented_things_webHID.includes(type)) {
-          const filters = [];
-
-          navigator.hid
-            .requestDevice({filters})
-            .then(device => {
-              if (device.length === 0)
-                throwError('Connection failed or cancelled by User.');
-              // generate a unique id for the new device
-              const uid =
-                Date.now().toString(36) +
-                Math.random().toString(36).substring(2);
-              // add device to the device map with its uid
-              addWebHidDevice(uid, name, device[0]);
-              // change pair status to checkmark
-              document.getElementById('pairStatus-' + name).innerHTML =
-                '&#x2714;';
-              document.getElementById('pairStatus-' + name).style.color =
-                'green';
-
-              // set block id to device id
-              block.firstElementChild.textContent = uid;
-
-              // if all devices have been paired, enable done button
-              if (allConnectedDesktop_()) {
-                document.getElementById('rc-done').disabled = false;
-                // add done button click listener
-                document
-                  .getElementById('rc-done')
-                  .addEventListener('click', () => reconnectDoneHandler_(xml));
-              }
-            })
-            .catch(error => {
-              throwError('Connection failed or cancelled by User.');
-              console.error(error);
-            });
+    for (let i = 0; i < implementedThings.length; i++) {
+      if (implementedThings[i].block_name === type) {
+        let thing = implementedThings[i];
+        // get user defined name
+        const name = block.firstElementChild.textContent;
+        // skip if block was already added
+        if (blocksAdded.includes(name)) {
+          continue;
         }
-      });
 
-      pairCell.appendChild(pairButton);
+        // add new row
+        const row = document.createElement('tr');
+        // generate name cell html
+        const nameCell = document.createElement('td');
+        nameCell.appendChild(document.createTextNode(name));
+        // pair cell html
+        const pairCell = document.createElement('td');
+        const pairButton = document.createElement('input');
+        pairButton.setAttribute('type', 'button');
+        pairButton.setAttribute('id', 'pairButton-' + name);
+        pairButton.setAttribute('value', 'Pair');
+        // pair status html
+        const statusCell = document.createElement('td');
+        const pairStatus = document.createElement('span');
+        pairStatus.setAttribute('id', 'pairStatus-' + name);
+        pairStatus.innerHTML = '&#x2718;';
+        pairStatus.style.color = 'red';
+        pairStatus.style.fontSize = '20px';
+        pairStatus.style.fontWeight = 'bold';
+        pairStatus.style.marginRight = '10px';
+        // add pair status to status cell
+        statusCell.appendChild(pairStatus);
 
-      // add new cells to row and row to table
-      row.appendChild(nameCell);
-      row.appendChild(pairCell);
-      row.appendChild(statusCell);
-      tbody.appendChild(row);
-      blocksAdded.push(name);
+        // pair button click listener
+        pairButton.addEventListener('click', async () => {
+          if (thing.type === 'bluetooth') {
+            // set webbluetooth options
+            const options = {};
+            options.acceptAllDevices = true;
+            options.optionalServices = optionalServices;
+
+            const device = await requestDevice(thing);
+            // change pair status to checkmark
+            document.getElementById('pairStatus-' + name).innerHTML =
+              '&#x2714;';
+            document.getElementById('pairStatus-' + name).style.color = 'green';
+
+            // set block id to device id
+            block.firstElementChild.textContent = device.id;
+
+            // if all devices have been paired, enable done button
+            if (allConnectedDesktop_()) {
+              document.getElementById('rc-done').disabled = false;
+              // add done button click listener
+              document
+                .getElementById('rc-done')
+                .addEventListener('click', () => reconnectDoneHandler_(xml));
+            }
+          } else if (thing.type === 'hid') {
+            const filters = [];
+
+            navigator.hid
+              .requestDevice({filters})
+              .then(device => {
+                if (device.length === 0)
+                  throwError('Connection failed or cancelled by User.');
+                // generate a unique id for the new device
+                const uid =
+                  Date.now().toString(36) +
+                  Math.random().toString(36).substring(2);
+                // add device to the device map with its uid
+                addWebHidDevice(uid, name, device[0], thing);
+                // change pair status to checkmark
+                document.getElementById('pairStatus-' + name).innerHTML =
+                  '&#x2714;';
+                document.getElementById('pairStatus-' + name).style.color =
+                  'green';
+
+                // set block id to device id
+                block.firstElementChild.textContent = uid;
+
+                // if all devices have been paired, enable done button
+                if (allConnectedDesktop_()) {
+                  document.getElementById('rc-done').disabled = false;
+                  // add done button click listener
+                  document
+                    .getElementById('rc-done')
+                    .addEventListener('click', () =>
+                      reconnectDoneHandler_(xml)
+                    );
+                }
+              })
+              .catch(error => {
+                throwError('Connection failed or cancelled by User.');
+                console.error(error);
+              });
+          }
+        });
+
+        pairCell.appendChild(pairButton);
+
+        // add new cells to row and row to table
+        row.appendChild(nameCell);
+        row.appendChild(pairCell);
+        row.appendChild(statusCell);
+        tbody.appendChild(row);
+        blocksAdded.push(name);
+      }
     }
     // add cancel button click listener
     document
