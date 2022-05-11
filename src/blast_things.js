@@ -90,6 +90,7 @@ export const resetThings = function () {
   webBluetoothDevices.clear();
   webHidNames.clear();
   webHidDevices.clear();
+  connectedThings.clear();
 };
 
 /**
