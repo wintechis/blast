@@ -286,12 +286,10 @@ const generatePairButtonsDesktop_ = function (xml) {
   while (tbody.firstChild) {
     tbody.removeChild(tbody.firstChild);
   }
-
   //Generates the type (e.g. things_ruuviTag) of all available things.
   for (const thing of implementedThings) {
     thing.block_name = `things_${thing.id}`;
   }
-
   const blocksAdded = [];
   // add pair button for each web bluetooth block
   for (const block of blocks) {
@@ -344,7 +342,8 @@ const generatePairButtonsDesktop_ = function (xml) {
             document.getElementById('pairStatus-' + name).style.color = 'green';
 
             // set block id to device id
-            block.firstElementChild.textContent = device.id;
+            //console.log(block.firstElementChild.textContent);
+            //block.firstElementChild.textContent = device.id;
 
             // if all devices have been paired, enable done button
             if (allConnectedDesktop_()) {
@@ -579,6 +578,7 @@ const allConnectedMobile_ = function () {
  * @private
  */
 const reconnectDoneHandler_ = function (xml) {
+  console.log(xml);
   const workspace = getWorkspace();
   if (window.location.href.includes('mobile')) {
     // hide reconnect dialog
