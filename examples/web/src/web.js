@@ -481,7 +481,8 @@ const openConnectModal = function (type) {
           // change pair status to checkmark
           document.getElementById('pairStatus-' + thing.id).innerHTML =
             '&#x2714;';
-          document.getElementById('pairStatus-' + thing.id).style.color = 'green';
+          document.getElementById('pairStatus-' + thing.id).style.color =
+            'green';
         }
       });
     }
