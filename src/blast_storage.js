@@ -343,7 +343,7 @@ const generatePairButtonsDesktop_ = function (xml) {
             document.getElementById('pairStatus-' + name).style.color = 'green';
 
             // set block id to device id
-            block.firstElementChild.textContent = device.id;
+            block.lastElementChild.textContent = device.id;
 
             // if all devices have been paired, enable done button
             if (allConnectedDesktop_()) {
