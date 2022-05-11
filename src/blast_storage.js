@@ -374,7 +374,7 @@ const generatePairButtonsDesktop_ = function (xml) {
                   'green';
 
                 // set block id to device id
-                block.firstElementChild.textContent = uid;
+                block.lastElementChild.textContent = uid;
 
                 // if all devices have been paired, enable done button
                 if (allConnectedDesktop_()) {
