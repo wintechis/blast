@@ -6,9 +6,9 @@
 
 'use strict';
 
-import {JavaScript, Variables} from 'blockly';
+import {JavaScript} from 'blockly';
 //import express from 'express';
-import {asyncApiFunctions, throwError} from './../../blast_interpreter.js';
+import {asyncApiFunctions} from './../../blast_interpreter.js';
 
 JavaScript['server_route'] = function (block) {
   const value_route = JavaScript.valueToCode(
