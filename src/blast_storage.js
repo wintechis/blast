@@ -12,6 +12,7 @@ import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
 import {getWebBluetoothDevices} from './blast_things.js';
 import {getWebHIDDevices} from './blast_things.js';
+import {implementedThings} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
 import {optionalServices} from './blast_webBluetooth.js';
 import {resetInterpreter} from './blast_interpreter.js';
@@ -242,10 +243,7 @@ export const loadXML = function (xmlString) {
   }
 
   // prompt to WebBluetooth/webHID device connection
-  if (
-    xml.querySelector('block[type="things_webBluetooth"]') ||
-    xml.querySelector('block[type="things_webHID"]')
-  ) {
+  if (xml.querySelector('value[name="Thing"]')) {
     generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
@@ -286,11 +284,25 @@ const generatePairButtonsDesktop_ = function (xml) {
     tbody.removeChild(tbody.firstChild);
   }
 
+  //Generates and stores the type (e.g. things_ruuviTag) of all available things.
+  let implemented_things_webBluetooth = [];
+  let implemented_things_webHID = [];
+  for (let i = 0; i < implementedThings.length; i++) {
+    if (implementedThings[i].type == 'bluetooth') {
+      implemented_things_webBluetooth.push(`things_${implementedThings[i].id}`);
+    } else {
+      implemented_things_webHID.push(`things_${implementedThings[i].id}`);
+    }
+  }
+
   const blocksAdded = [];
   // add pair button for each web bluetooth block
   for (const block of blocks) {
     const type = block.getAttribute('type');
-    if (type === 'things_webBluetooth' || type === 'things_webHID') {
+    if (
+      implemented_things_webBluetooth.includes(type) ||
+      implemented_things_webHID.includes(type)
+    ) {
       // get user defined name
       const name = block.firstElementChild.textContent;
       // skip if block was already added
@@ -323,7 +335,7 @@ const generatePairButtonsDesktop_ = function (xml) {
 
       // pair button click listener
       pairButton.addEventListener('click', async () => {
-        if (type === 'things_webBluetooth') {
+        if (implemented_things_webBluetooth.includes(type)) {
           // set webbluetooth options
           const options = {};
           options.acceptAllDevices = true;
@@ -345,7 +357,7 @@ const generatePairButtonsDesktop_ = function (xml) {
               .getElementById('rc-done')
               .addEventListener('click', () => reconnectDoneHandler_(xml));
           }
-        } else if (type === 'things_webHID') {
+        } else if (implemented_things_webHID.includes(type)) {
           const filters = [];
 
           navigator.hid
