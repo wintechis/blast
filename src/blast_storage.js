@@ -299,6 +299,7 @@ const generatePairButtonsDesktop_ = function (xml) {
       if (thing.block_name === type) {
         // get user defined name
         const name = block.firstElementChild.textContent;
+
         // skip if block was already added
         if (blocksAdded.includes(name)) {
           continue;
@@ -342,7 +343,7 @@ const generatePairButtonsDesktop_ = function (xml) {
             document.getElementById('pairStatus-' + name).style.color = 'green';
 
             // set block id to device id
-            //block.firstElementChild.textContent = device.id;
+            block.firstElementChild.textContent = device.id;
 
             // if all devices have been paired, enable done button
             if (allConnectedDesktop_()) {
@@ -577,7 +578,6 @@ const allConnectedMobile_ = function () {
  * @private
  */
 const reconnectDoneHandler_ = function (xml) {
-  console.log(xml);
   const workspace = getWorkspace();
   if (window.location.href.includes('mobile')) {
     // hide reconnect dialog
