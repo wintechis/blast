@@ -297,9 +297,8 @@ const generatePairButtonsDesktop_ = function (xml) {
   for (const block of blocks) {
     const type = block.getAttribute('type');
 
-    for (let i = 0; i < implementedThings.length; i++) {
-      if (implementedThings[i].block_name === type) {
-        let thing = implementedThings[i];
+    for (const thing of implementedThings) {
+      if (thing.block_name === type) {
         // get user defined name
         const name = block.firstElementChild.textContent;
         // skip if block was already added
