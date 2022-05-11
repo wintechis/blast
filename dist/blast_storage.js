@@ -168,6 +168,8 @@ export const load = function () {
  */
 export const loadXMLFromFile = function (event) {
   return new Promise((resolve, reject) => {
+    resetThings();
+
     // Save filename to {@link filename}
     const fn = event.target.files[0].name;
     if (fn.indexOf('.') > -1) {
@@ -343,7 +345,7 @@ const generatePairButtonsDesktop_ = function (xml) {
             document.getElementById('pairStatus-' + name).style.color = 'green';
 
             // set block id to device id
-            block.firstElementChild.textContent = device.id;
+            block.lastElementChild.textContent = device.id;
 
             // if all devices have been paired, enable done button
             if (allConnectedDesktop_()) {
@@ -374,7 +376,7 @@ const generatePairButtonsDesktop_ = function (xml) {
                   'green';
 
                 // set block id to device id
-                block.firstElementChild.textContent = uid;
+                block.lastElementChild.textContent = uid;
 
                 // if all devices have been paired, enable done button
                 if (allConnectedDesktop_()) {

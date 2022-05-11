@@ -168,6 +168,8 @@ export const load = function () {
  */
 export const loadXMLFromFile = function (event) {
   return new Promise((resolve, reject) => {
+    resetThings();
+
     // Save filename to {@link filename}
     const fn = event.target.files[0].name;
     if (fn.indexOf('.') > -1) {
