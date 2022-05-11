@@ -1,5 +1,4 @@
-.vscode/settings.json
-.vscode/
+.vscode
 **/.yarn/*
 !.yarn/patches
 !.yarn/releases
