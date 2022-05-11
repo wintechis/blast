@@ -27,6 +27,9 @@ import './joycon/generators.js';
 import './ruuviTag/blocks.js';
 import './ruuviTag/generators.js';
 
+import './serverConnector/blocks.js';
+import './serverConnector/generators.js';
+
 import './solid/blocks.js';
 import './solid/generators.js';
 

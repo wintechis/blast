@@ -11,7 +11,8 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'app.js', library: {
+    filename: 'app.js',
+    library: {
       name: 'blast',
       type: 'umd2',
     },
@@ -29,12 +30,13 @@ module.exports = {
   ],
   resolve: {
     fallback: {
-      'fs': false,
+      fs: false,
     },
   },
   target: 'web',
   externals: {
     coffeeScript: 'coffee-script',
     vm2: 'vm2',
+    express: 'express',
   },
 };
