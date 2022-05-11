@@ -285,10 +285,10 @@ const generatePairButtonsDesktop_ = function (xml) {
   }
 
   //Generates and stores the type (e.g. things_ruuviTag) of all available things.
-  let implemented_things_webBluetooth = [];
-  let implemented_things_webHID = [];
+  const implemented_things_webBluetooth = [];
+  const implemented_things_webHID = [];
   for (let i = 0; i < implementedThings.length; i++) {
-    if (implementedThings[i].type == 'bluetooth') {
+    if (implementedThings[i].type === 'bluetooth') {
       implemented_things_webBluetooth.push(`things_${implementedThings[i].id}`);
     } else {
       implemented_things_webHID.push(`things_${implementedThings[i].id}`);
@@ -342,7 +342,6 @@ const generatePairButtonsDesktop_ = function (xml) {
           options.optionalServices = optionalServices;
 
           const device = await requestDevice();
-          console.log('FIN', device);
           // change pair status to checkmark
           document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
           document.getElementById('pairStatus-' + name).style.color = 'green';

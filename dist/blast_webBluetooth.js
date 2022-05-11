@@ -111,13 +111,14 @@ export const requestDevice = async function (thing) {
     if (thing && thing.optionalServices) {
       options.optionalServices = thing.optionalServices;
     }
+
     try {
       const device = await navigator.bluetooth.requestDevice(options);
       thingsLog('Device paired', 'Bluetooth', device.id);
       const name = device.name;
 
       addWebBluetoothDevice(device.id, name, thing);
-      await getWorkspace().refreshToolboxSelection();
+      getWorkspace().refreshToolboxSelection();
       return device;
     } catch (error) {
       throwError(error);
