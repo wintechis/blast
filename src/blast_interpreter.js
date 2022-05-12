@@ -348,8 +348,12 @@ export const throwError = function (text) {
  * @public
  */
 export const generateCode = function () {
-  JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-  JavaScript.addReservedWords('highlightBlock');
+  // Check execution environment (browser/node)
+  // node version does not need highlightBlock
+  if (typeof window !== 'undefined') {
+    JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
+    JavaScript.addReservedWords('highlightBlock');
+  }
   // Generate JavaScript code and parse it.
   latestCode = '';
   latestCode = JavaScript.workspaceToCode(workspace);
@@ -426,10 +430,14 @@ const disableWorkspace = function () {
  * Removes the transparent rectangle over the workspace.
  */
 const enableWorkspace = function () {
-  const workspaceDiv = document.getElementById('content_workspace');
-  const rect = document.getElementById('workspace-disabled');
-  if (rect) {
-    workspaceDiv.removeChild(rect);
+  // Check execution environment (browser/node)
+  // node version does not need enableWorkspace
+  if (typeof window !== 'undefined') {
+    const workspaceDiv = document.getElementById('content_workspace');
+    const rect = document.getElementById('workspace-disabled');
+    if (rect) {
+      workspaceDiv.removeChild(rect);
+    }
   }
 };
 onStatusChange.ready.push(enableWorkspace);
@@ -442,7 +450,12 @@ onStatusChange.error.push(enableWorkspace);
 export const runJS = function () {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
-  disableWorkspace();
+
+  // Check execution environment (browser/node)
+  // if window is not undefined -> Program is running in browser
+  if (typeof window !== 'undefined') {
+    disableWorkspace();
+  }
 
   if (interpreter === null) {
     // Begin execution

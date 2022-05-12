@@ -12,7 +12,7 @@ import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['server_route'] = {
   /**
-   * Block for adding a route in the server connector
+   * Block for adding a route to the server connector
    * @this {Blockly.Block}
    */
   init: function () {
@@ -22,8 +22,8 @@ Blocks['server_route'] = {
       .appendField(
         new FieldDropdown([
           ['GET', '"get"'],
-          ['PUT', '"put"'],
-          ['POST', '"post"'],
+          // ['PUT', '"put"'],
+          // ['POST', '"post"'],
         ]),
         'operation'
       );
@@ -34,6 +34,23 @@ Blocks['server_route'] = {
     this.setHelpUrl('');
   },
 };
-
 // Add server_connector block to the toolbox.
 addBlock('server_route', 'Server Components');
+
+Blocks['response_block'] = {
+  /**
+   * Block for sending a response
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendValueInput('response')
+      .setCheck(null)
+      .appendField('send response');
+    this.setPreviousStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('Send response to sender');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('response_block', 'Server Components');

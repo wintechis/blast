@@ -8,6 +8,8 @@
 
 import Blockly from 'blockly';
 import {initInterpreter} from '../../dist/blast_interpreter.js';
+import {getLatestCode} from '../../dist/blast_interpreter.js';
+import {runJS} from '../../dist/blast_interpreter.js';
 import {initStatesInterpreter} from '../../dist/blast_states_interpreter.js';
 import {getStdInfo} from '../../dist/blast_interpreter.js';
 
@@ -16,18 +18,37 @@ import '../../dist/blocks/all.js';
 import '../../dist/generators/all.js';
 import '../../dist/thingBlocks/all.js';
 
+import * as fs from 'fs';
+
 /**
  * Initialize Blast. Called on page load.
  * @public
  */
 const init = function () {
   const workspace = new Blockly.Workspace();
+  const path = './BLAST_SVR.xml';
+  const xmlString = readBlocklyXML(path);
+  const xml = Blockly.Xml.textToDom(xmlString);
+  Blockly.Xml.domToWorkspace(xml, workspace);
+
   initInterpreter(workspace);
   initStatesInterpreter(workspace);
 
   // Display output hint
   const stdInfo = getStdInfo();
-  stdInfo('Actionblock output will be displayed here');
+  stdInfo('Generated Code:\n', getLatestCode());
+
+  // Run code
+  runJS();
 };
+
+function readBlocklyXML(path) {
+  try {
+    const data = fs.readFileSync(path, 'utf8');
+    return data;
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 init();
