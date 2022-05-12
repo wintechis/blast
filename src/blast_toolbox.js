@@ -14,7 +14,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Things and Resources',
+      name: 'Things',
       custom: 'THINGS',
       colour: '60',
     },
