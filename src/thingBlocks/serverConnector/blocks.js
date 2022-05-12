@@ -15,7 +15,7 @@ Blocks['server_route'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('route').setCheck('String').appendField('Add route');
+    this.appendValueInput('route').setCheck('String').appendField('add route');
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(
