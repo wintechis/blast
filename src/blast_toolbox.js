@@ -19,10 +19,6 @@ const defaultToolbox = {
       colour: '60',
     },
     {
-      kind: 'sep',
-      gap: '32',
-    },
-    {
       kind: 'CATEGORY',
       contents: [
         {
