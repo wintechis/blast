@@ -145,7 +145,6 @@ const defaultToolbox = {
       kind: 'CATEGORY',
       contents: [],
       name: 'Server Components',
-      custom: 'SERVER',
       colour: '240',
     },
     {

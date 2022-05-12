@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, FieldDropdown} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldDropdown} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['server_route'] = {
@@ -15,7 +16,7 @@ Blocks['server_route'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('route').setCheck('String').appendField('Add route');
+    this.appendValueInput('route').setCheck('String').appendField('add route');
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(
@@ -35,4 +36,4 @@ Blocks['server_route'] = {
 };
 
 // Add server_connector block to the toolbox.
-addBlock('server_route', 'Actions');
+addBlock('server_route', 'Server Components');

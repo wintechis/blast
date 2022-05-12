@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldTextInput} = Blockly;
 
 Blocks['uri'] = {
   /**

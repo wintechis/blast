@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {JavaScript} from 'blockly';
+import Blockly from 'blockly';
+const {JavaScript} = Blockly;
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {

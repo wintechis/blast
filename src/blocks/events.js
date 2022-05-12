@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {
+import Blockly from 'blockly';
+const {
   Blocks,
   Events,
   FieldDropdown,
@@ -16,7 +17,7 @@ import {
   SNAP_RADIUS,
   utils,
   Xml,
-} from 'blockly';
+} = Blockly;
 import {eventsInWorkspace, getWorkspace} from './../blast_interpreter.js';
 import {findLegalName, getDefinition, rename} from './../blast_states.js';
 import {removeEventCode} from './../blast_states_interpreter.js';

@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {JavaScript} from 'blockly';
+import Blockly from 'blockly';
+const {JavaScript} = Blockly;
 
 JavaScript['number_value'] = JavaScript['math_number'];
 JavaScript['number_arithmetic'] = JavaScript['math_arithmetic'];

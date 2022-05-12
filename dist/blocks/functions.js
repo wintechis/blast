@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {
+import Blockly from 'blockly';
+const {
   Blocks,
   FieldMultilineInput,
   FieldTextInput,
@@ -16,7 +17,7 @@ import {
   Procedures,
   utils,
   Variables,
-} from 'blockly';
+} = Blockly;
 
 Blocks['procedures_defeval'] = {
   /**

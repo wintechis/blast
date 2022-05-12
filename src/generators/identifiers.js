@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {JavaScript} from 'blockly';
+import Blockly from 'blockly';
+const {JavaScript} = Blockly;
 import {apiFunctions, throwError} from './../blast_interpreter.js';
 
 JavaScript['uri'] = function (block) {

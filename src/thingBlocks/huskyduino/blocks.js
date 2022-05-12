@@ -7,7 +7,8 @@
 
 'use strict';
 
-import {Blocks, dialog, FieldDropdown, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import HuskyDuino from './../../things/HuskyDuino.js';

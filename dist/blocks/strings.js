@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, Msg} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, Msg} = Blockly;
 
 // Remap blockly blocks to improve naming in xml.
 Blocks['string'] = Blocks['text'];

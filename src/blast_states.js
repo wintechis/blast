@@ -5,7 +5,8 @@
  */
 'use strict';
 
-import {Blocks, Msg, Names, utils} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, Msg, Names, utils} = Blockly;
 import {apiFunctions} from './blast_interpreter.js';
 import {getCategory} from './blast_toolbox.js';
 

@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, FieldDropdown} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldDropdown} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['server_route'] = {

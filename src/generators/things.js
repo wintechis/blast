@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {JavaScript, Variables} from 'blockly';
+import Blockly from 'blockly';
+const {JavaScript, Variables} = Blockly;
 import {getWebBluetoothDevices, getWebHIDDevices} from '../blast_things.js';
 import {getWorkspace} from '../blast_interpreter.js';
 

@@ -7,7 +7,8 @@
 'use strict';
 
 import {addBlock} from './../blast_toolbox.js';
-import {Blocks, libraryBlocks} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, libraryBlocks} = Blockly;
 
 // Remap blockly blocks to improve naming in xml.
 Blocks['repeat'] = Blocks['controls_repeat_ext'];
