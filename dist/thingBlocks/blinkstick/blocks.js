@@ -7,7 +7,8 @@
 
 'use strict';
 
-import {Blocks, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldTextInput} = Blockly;
 // eslint-disable-next-line node/no-missing-import
 import Blinkstick from './../../things/Blinkstick.js';
 import {implementedThings} from '../../blast_things.js';

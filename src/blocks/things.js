@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, FieldDropdown} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldDropdown} = Blockly;
 import {getWebBluetoothDevices, getWebHIDDevices} from './../blast_things.js';
 
 Blocks['things_webBluetooth'] = {

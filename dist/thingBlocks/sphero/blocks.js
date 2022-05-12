@@ -5,7 +5,8 @@ import {
 } from './lib/spheroBolt.js';
 import SpheroBolt from './lib/spheroBolt.js';
 
-import {Blocks, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldTextInput} = Blockly;
 
 const thingInstances = new Map();
 

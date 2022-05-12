@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, FieldDropdown, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, FieldDropdown, FieldTextInput} = Blockly;
 import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import XiaomiThermometer from './../../things/xiaomiThermometer/XiaomiThermometer.js';

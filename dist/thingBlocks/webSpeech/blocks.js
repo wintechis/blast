@@ -7,7 +7,8 @@
 
 'use strict';
 
-import {ALIGN_RIGHT, Blocks, dialog, FieldDropdown} from 'blockly';
+import Blockly from 'blockly';
+const {ALIGN_RIGHT, Blocks, dialog, FieldDropdown} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['text_to_speech'] = {

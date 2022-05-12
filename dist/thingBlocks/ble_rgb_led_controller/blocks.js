@@ -7,7 +7,8 @@
 
 'use strict';
 
-import {Blocks, dialog, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, dialog, FieldTextInput} = Blockly;
 // eslint-disable-next-line node/no-missing-import
 import BleRgbController from './../../things/BleRgbController.js';
 import {implementedThings} from '../../blast_things.js';

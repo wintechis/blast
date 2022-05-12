@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {JavaScript, Names} from 'blockly';
+import Blockly from 'blockly';
+const {JavaScript, Names} = Blockly;
 import {apiFunctions} from './../blast_interpreter.js';
 
 JavaScript['procedures_defeval'] = function (block) {

@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks, Events, FieldDropdown, FieldTextInput} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks, Events, FieldDropdown, FieldTextInput} = Blockly;
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 import {implementedThings} from './../../blast_things.js';
 

@@ -6,7 +6,8 @@
 
 'use strict';
 
-import {Blocks} from 'blockly';
+import Blockly from 'blockly';
+const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
 Blocks['upload_image'] = {

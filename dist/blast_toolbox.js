@@ -143,6 +143,12 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
+      contents: [],
+      name: 'Server Components',
+      colour: '240',
+    },
+    {
+      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'logic_compare'},
         {kind: 'BLOCK', type: 'logic_operation'},
