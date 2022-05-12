@@ -9,6 +9,7 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import express from 'express';
+// eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
   apiFunctions,
@@ -102,6 +103,7 @@ apiFunctions.push(['sendResponse', sendResponse]);
  * @param {Object} res Response object.
  * @param {String} statements Code to execute.
  */
+// eslint-disable-next-line no-unused-vars
 function execute_code(req, res, statements, callback) {
   // interrupt BLAST execution
   interruptRunner();
