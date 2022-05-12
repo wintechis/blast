@@ -127,6 +127,12 @@ const defaultToolbox = {
       colour: '0',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Server Components',
+      colour: '240',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -147,12 +153,6 @@ const defaultToolbox = {
       name: 'States',
       custom: 'STATES',
       colour: '180',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Server Components',
-      colour: '240',
     },
     {
       kind: 'CATEGORY',
