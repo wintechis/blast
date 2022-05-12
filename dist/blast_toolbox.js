@@ -46,9 +46,13 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'States and Events',
-      custom: 'STATES',
+      contents: [
+        {
+          kind: 'label',
+          text: '(Connect things to see device dependent blocks)',
+        },
+      ],
+      name: 'Events',
       colour: '180',
     },
     {
@@ -140,6 +144,13 @@ const defaultToolbox = {
       ],
       name: 'Control Flow',
       colour: '120',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'States',
+      custom: 'STATES',
+      colour: '180',
     },
     {
       kind: 'CATEGORY',

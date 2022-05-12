@@ -157,12 +157,8 @@ export const rename = function (name) {
  * @param {!Blockly.Workspace} workspace The workspace containing states.
  * @return {!Array.<!Element>} Array of XML block elements.
  */
-export const eventsFlyoutCategory = function (workspace) {
+export const statesFlyoutCategory = function (workspace) {
   const xmlList = [];
-  // Add label with connect things hint
-  const label = document.createElement('label');
-  label.setAttribute('text', '(Connect things to see device dependent blocks)');
-  xmlList.push(label);
 
   // add event_every_minutes block
   const eventEveryMinutes = utils.xml.createElement('block');
@@ -217,7 +213,7 @@ export const eventsFlyoutCategory = function (workspace) {
   populateEvents(states);
 
   // Add all blocks from the categories contents array to the list.
-  const category = getCategory('States and Events');
+  const category = getCategory('States');
   if (category) {
     for (const content of category.contents) {
       const block = utils.xml.createElement('block');

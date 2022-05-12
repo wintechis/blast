@@ -274,7 +274,7 @@ implementedThings.push({
   blocks: [
     {
       type: 'streamdeck_button_event',
-      category: 'States and Events',
+      category: 'Events',
     },
     {
       type: 'streamdeck_color_buttons',

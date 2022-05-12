@@ -43,7 +43,7 @@ implementedThings.push({
     },
     {
       type: 'joycon_button_events',
-      category: 'States and Events',
+      category: 'Events',
     },
   ],
   infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
