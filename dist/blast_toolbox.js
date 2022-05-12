@@ -61,12 +61,6 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'Requests and Queries',
-      colour: '0',
-    },
-    {
-      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'uri_from_string'},
         {kind: 'label', text: 'example audio resources'},
@@ -129,6 +123,12 @@ const defaultToolbox = {
       ],
       name: 'Resources',
       colour: '60',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Requests and Queries',
+      colour: '0',
     },
     {
       kind: 'sep',
