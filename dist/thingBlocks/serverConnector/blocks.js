@@ -7,8 +7,9 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, FieldDropdown} = Blockly;
+const {Blocks, Events, FieldDropdown} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
+import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 
 Blocks['server_route'] = {
   /**
@@ -32,6 +33,42 @@ Blocks['server_route'] = {
     this.setColour(230);
     this.setTooltip('Add a route to the server');
     this.setHelpUrl('');
+    this.requested = false;
+  },
+  /**
+   * Add this block's id to the events array.
+   */
+  addEvent: async function () {
+    eventsInWorkspace.push(this.id);
+    // remove event if block is deleted
+    getWorkspace().addChangeListener(event => this.onDispose(event));
+  },
+  onchange: function () {
+    if (!this.isInFlyout && !this.requested && this.rendered) {
+      // Block is newly created
+      this.addEvent();
+    }
+  },
+  onDispose: function (event) {
+    if (event.type === Events.BLOCK_DELETE) {
+      if (
+        event.type === Events.BLOCK_DELETE &&
+        event.ids.indexOf(this.id) !== -1
+      ) {
+        // block is being deleted
+        this.removeFromEvents();
+      }
+    }
+  },
+  /**
+   * Remove this block's id from the events array.
+   */
+  removeFromEvents: function () {
+    // remove this block from the events array.
+    const index = eventsInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      eventsInWorkspace.splice(index, 1);
+    }
   },
 };
 // Add server_connector block to the toolbox.
