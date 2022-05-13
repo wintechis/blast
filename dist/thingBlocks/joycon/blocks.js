@@ -372,7 +372,7 @@ Blocks['joycon_gamepad_joystick'] = {
     this.appendDummyInput()
       .appendField('uses variables')
       .appendField(new FieldTextInput('gp-x'), 'gp-x')
-      .appendField(new FieldTextInput('gp-y'), 'gp-y')
+      .appendField(new FieldTextInput('gp-y'), 'gp-y');
     this.appendDummyInput().appendField('when joystick moves');
     this.appendStatementInput('statements').appendField('do');
     this.setInputsInline(false);

@@ -65,7 +65,6 @@ function spheroRoll(blockId, speed, heading) {
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
   bolt.roll(speed, heading, []);
-  console.log(bolt.queue.tasks);
 }
 
 // Add spheroRoll function to the interpreter's API
