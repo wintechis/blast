@@ -15,6 +15,7 @@ import {
   apiFunctions,
   asyncApiFunctions,
   continueRunner,
+  getInterpreter,
   interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
@@ -108,32 +109,13 @@ function execute_code(req, res, statements, callback) {
   // interrupt BLAST execution
   interruptRunner();
 
-  const initFunc = function (interpreter, globalObject) {
-    // Add functions of {@link apiFunctions} to the new interpreter.
-    for (const f of apiFunctions) {
-      // Add function to global scope.
-      interpreter.setProperty(
-        globalObject,
-        f[0], // the function name
-        interpreter.createNativeFunction(f[1]) // the function
-      );
-    }
-
-    // Add functions of {@link asyncApiFunctions} to the new interpreter.
-    for (const f of asyncApiFunctions) {
-      interpreter.setProperty(
-        globalObject,
-        f[0], // the function name
-        interpreter.createAsyncFunction(f[1]) // the function
-      );
-    }
-
-    // Add req and res object to new interpreter
-    interpreter.setProperty(globalObject, 'req', Object(req));
-    interpreter.setProperty(globalObject, 'res', Object(res));
-  };
-
-  const interpreter = new Interpreter(statements, initFunc);
+  const interpreter = new Interpreter('');
+  // add req and res to the interpreter's global scope
+  const scope = getInterpreter().getGlobalScope();
+  interpreter.setProperty(scope.object, 'res', res);
+  interpreter.setProperty(scope.object, 'req', req);
+  interpreter.getStateStack()[0].scope = scope;
+  interpreter.appendCode(statements);
 
   const interruptRunner_ = function () {
     try {
