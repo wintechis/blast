@@ -251,6 +251,7 @@ Blocks['event_every_minutes'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
@@ -258,7 +259,9 @@ Blocks['event_every_minutes'] = {
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    getWorkspace().addChangeListener(event => this.onDispose(event));
+    this.changeListener = getWorkspace().addChangeListener(event =>
+      this.onDispose(event)
+    );
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -274,6 +277,7 @@ Blocks['event_every_minutes'] = {
       ) {
         // Block is being deleted
         this.removeFromEvents();
+        getWorkspace().removeChangeListener(this.changeListener);
       }
     }
   },

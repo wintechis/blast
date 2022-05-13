@@ -20,6 +20,7 @@ import {
   interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
+import SwitchPro from './switchPro/SwitchPro.js';
 
 JavaScript['things_joycon'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -280,3 +281,93 @@ const handleJoyConButtons = async function (
 
 // add joycon_button_events function to the interpreter's API.
 apiFunctions.push(['handleJoyConButtons', handleJoyConButtons]);
+
+JavaScript['things_gamepad_pro'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
+
+/**
+ * Generates JavaScript code for the joycon_gamepad_joystick block.
+ * @param {Blockly.Block} block the joycon_gamepad_joystick block.
+ * @returns {String} the generated code.
+ */
+JavaScript['joycon_gamepad_joystick'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
+  );
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
+
+  const handler = `handleGamepadJoystick(${blockId}, ${thing}, ${statements});\n`;
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
+};
+
+/**
+ * Handles gamepad joystick events.
+ * @param {string} blockId the block id of the block that triggered the event.
+ * @param {string} id the id of the gamepad.
+ * @param {string} statements the statements to execute.
+ */
+const handleGamepadJoystick = function (blockId, id, statements) {
+  const switchPro = new SwitchPro();
+  switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
+
+  const interpreter = getInterpreter();
+  const scope = interpreter.getGlobalScope();
+  scope.object.properties['gp_x'] = 0;
+  scope.object.properties['gp_y'] = 0;
+
+  const handleJoystick = function (joystick) {
+    const up = joystick['LS-UP'] || 0;
+    const down = joystick['LS-DOWN'] || 0;
+    const y = up - down;
+    const pseudoY = interpreter.nativeToPseudo(y);
+    scope.object.properties['gp_y'] = pseudoY;
+
+    const right = joystick['LS-RIGHT'] || 0;
+    const left = joystick['LS-LEFT'] || 0;
+    const x = right - left;
+    const pseudoX = interpreter.nativeToPseudo(x);
+    scope.object.properties['gp_x'] = pseudoX;
+
+    // interrupt BLAST execution
+    interruptRunner();
+
+    const newInterpreter = new Interpreter('');
+    newInterpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
+    newInterpreter.appendCode(statements);
+
+    const interruptRunner_ = function () {
+      try {
+        const hasMore = newInterpreter.step();
+        if (hasMore) {
+          setTimeout(interruptRunner_, 5);
+        } else {
+          // Continue BLAST execution.
+          continueRunner();
+        }
+      } catch (error) {
+        throwError(`Error executing program:\n ${error}`);
+        console.error(error);
+      }
+    };
+    interruptRunner_();
+  };
+
+  switchPro.addListener(handleJoystick);
+
+  addCleanUpFunction(() => {
+    clearInterval(switchPro.interval);
+  });
+};
+
+apiFunctions.push(['handleGamepadJoystick', handleGamepadJoystick]);
