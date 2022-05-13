@@ -2,251 +2,364 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style2.css">
-    <link href="https://vjs.zencdn.net/7.18.1/video-js.css" rel="stylesheet" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	<link href="style.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	<script
+		src="https://jsfiddle.net/solodev/5uy31hbg/37/https//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+	<link href="https://vjs.zencdn.net/7.18.1/video-js.css" rel="stylesheet" />
+
+	<script src="main.js"></script>
 </head>
 
 <body>
-    <div class="sidenav">
-        <a href="#intro">Introduction</a>
-        <hr>
-        <a href="#usecase1">Use Case 1</a>
-        <a href="#usecase2">Use Case 2</a>
-        <a href="#usecase3">Use Case 3</a>
-        <a href="#usecase4">Use Case 4</a>
-        <a href="#usecase5">Use Case 5</a>
-    </div>
 
-    <div class="main">
-        <div class="heading">
-            <img src="./img/fraunhofer.png" class="headerIMG">
-            <h1>BLAST: <br>Block Applications for Things <br>__</h1>
-            <h2>Michael Freund, Thomas Wehr, Andreas Harth</h2>
-        </div>
-        <hr>
-        <section id="intro">
-            <h3>Introduction</h3>
-            <p>
-                On this website, we demonstrate BLAST, a block-based software tool to create applications that interact
-                with
-                IoT
-                devices, REST APIs, and much more. We prepared five Use Cases that utilize different aspects and
-                features
-                of
-                BLAST. Each Use Case contains a textual description, an image of the BLAST program, and a video
-                demonstration.
-            </p>
 
-        </section>
 
-        <section id="usecase1">
-            <h3>Use Case 1: Switching a Signal Light</h3>
+	<div class="container">
+		<div class="row">
+			<div class="hidden-lg hidden-md visible-sm visible-xs">
+				<nav class="navbar navbar-default navbar-fixed-top">
+					<select id="sub-menu" name="sub-menu">
+						<option value="#intro">Introduction</option>
+						<option value="#usecase1">Switching a Signal Light</option>
+						<option value="#usecase2">Temperature Monitoring</option>
+						<option value="#usecase3">Anti-Theft Alarm</option>
+						<option value="#usecase4">Speech Input</option>
+						<option value="#usecase5">Interaction with SOLID Pod</option>
+					</select>
+				</nav>
 
-            <p>
-                The first use case implements a switch for a signal light. The switching device is an Elgato Stream Deck
-                with multiple buttons, colored in red, yellow, and green.
-                Pressing a button turns on the corresponding color of the signal light.
-                The BLAST code that realizes this behavior can be seen in the Figure below.
-            </p>
-            <br>
-            <figure>
-                <img class="blastCode" style="width: 37%" src="./img/usecase1_BLAST.png">
-                <figcaption class="center"><br>Figure 1: BLAST program switching a signal light
-                </figcaption>
-            </figure>
-            <br>
-            <p>
-                In the first part of the program, the desired colors are assigned to the buttons of the stream deck.
-                Then
-                three events are defined, which specify the behavior when a button is pressed. When an event is
-                triggered, the program writes the
-                respective color of the button to the BLE LED controller and changes the color of the active light. <br>
-                The video below demonstrates this process.
-            </p>
-            <br>
-            <div class="left">
-                <video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls preload="auto"
-                    poster="./img/usecase1_img.png" data-setup='{"fluid": true}'>
-                    <source src="./video/UseCase1_SwitchLight.mp4" type="video/mp4" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-        </section>
+			</div>
+		</div>
+	</div>
 
-        <section id="usecase2">
-            <h3>Use Case 2: Coffee Temperature Monitoring </h3>
+	<div class="container">
+		<div class="row">
+			<aside class="sidebar col-lg-3 col-md-4 col-xs-12 mb-5">
+				<div class="dynamicDiv" id="dd.0.4.0">
+					<div class="sidebar-wrapper">
+						<nav>
+							<ul class="nolist hidden-sm hidden-xs">
+								<li><a href="#intro">Introduction</a></li>
+								<li><a href="#usecase1">Switching a Signal Light</a></li>
+								<li><a href="#usecase2">Temperature Monitoring</a></li>
+								<li><a href="#usecase3">Anti-Theft Alarm</a></li>
+								<li><a href="#usecase4">Speech Input</a></li>
+								<li><a href="#usecase5">Interaction with SOLID Pod</a></li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</aside>
+			<div class="content col-lg-9 col-md-8 col-xs-12">
+				<div class="dynamicDiv" id="dd.0.4.1"></div>
+				<div class="heading">
+					<img src="./img/fraunhofer.png" class="headerIMG">
+					<h1>BLAST: <br>Block Applications for Things <br>__</h1>
+					<h2>Michael Freund, Thomas Wehr, Andreas Harth</h2>
+				</div>
+				<hr>
+				<section id="intro">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Introduction to BLAST</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p>On this website, we demonstrate BLAST, a block-based software tool to create
+									applications that interact
+									with IoT devices, REST APIs, and much more. We prepared five Use Cases that utilize
+									different aspects and features
+									of BLAST. Each Use Case contains a textual description, an image of the BLAST
+									program, and a video demonstration.</p>
+							</div>
+						</div>
+					</article>
+				</section>
+				<hr>
+				<section id="usecase1">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Use Case 1: Switching a Signal Light</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p> The first use case implements a switch for a signal light. The switching device is
+									an Elgato Stream Deck
+									with multiple buttons, colored in red, yellow, and green.
+									Pressing a button turns on the corresponding color of the signal light.
+									The BLAST code that realizes this behavior can be seen in the Figure below.</p>
 
-            <p>
-                The second use case uses a BLE beacon with an integrated temperature sensor to monitor the temperature
-                of the coffee. As soon as the temperature drops below 55 degrees, the coffee is drinkable and the user
-                is
-                notified by a green WebHID light.
-            </p>
-            <br>
-            <figure>
-                <img class="blastCode" style="width: 60%" src="./img/usecase2_BLAST.png">
-                <figcaption class="center"><br>Figure 2: BLAST program monitoring the temperature of the coffee
-                </figcaption>
-            </figure>
-            <br>
-            <p>
-                This BLAST program is based on events. For this a state is defined by a boolean expression. As soon as
-                this
-                expression evaluates to true, blast enters the state and executes the corresponding code.
-            </p>
-            <br>
-            <div class="left">
-                <video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls preload="auto"
-                    poster="./img/usecase2_img.png" data-setup='{"fluid": true}'>
-                    <source src="./video/UseCase2_CoffeeThermometer.mp4" type="video/mp4" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-        </section>
+								<br>
+								<figure>
+									<img class="center" style="width: 70%" src="./img/usecase1_BLAST.png">
+									<figcaption class="center"><br>Figure 1: BLAST program switching a signal light
+									</figcaption>
+								</figure>
+								<br>
+								<p>
+									In the first part of the program, the desired colors are assigned to the buttons of
+									the stream deck.
+									Then
+									three events are defined, which specify the behavior when a button is pressed. When
+									an event is
+									triggered, the program writes the
+									respective color of the button to the BLE LED controller and changes the color of
+									the active light. <br>
+									The video below demonstrates this process.
+								</p>
+								<br>
 
-        <section id="usecase3">
-            <h3>Use Case 3: Movement Detection and Anti-Theft Alarm</h3>
-            <p>
-                In Use Case 3 we demonstrate how a simple Anti-Theft Alarm can be implemented using a RuuviTag and
-                BLAST. To
-                do so, the BLAST program continuously reads the integrated movement counter of the RuuviTag via
-                Bluetooth. A
-                change of the movement counter value triggers an event and a predefined sound that is loaded from a URI
-                is
-                played. The program can be seen below.
-            </p>
+								<video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls
+									preload="auto" poster="./img/usecase1_img.png" data-setup='{"fluid": true}'>
+									<source src="./video/UseCase1_SwitchLight.mp4" type="video/mp4" />
+									<p class="vjs-no-js">
+										To view this video please enable JavaScript, and consider upgrading to a
+										web browser that
+										<a href="https://videojs.com/html5-video-support/" target="_blank">supports
+											HTML5 video</a>
+									</p>
+								</video>
+							</div>
+						</div>
+					</article>
+				</section>
+				<hr>
+				<section id="usecase2">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Use Case 2: Coffee Temperature Monitoring</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p>The second use case uses a BLE beacon with an integrated temperature sensor to
+									monitor the temperature
+									of the coffee. As soon as the temperature drops below 55 degrees, the coffee is
+									drinkable and the user
+									is
+									notified by a green WebHID light.</p>
 
-            <figure>
-                <img class="blastCode" src="./img/usecase3-BLAST.png">
-                <figcaption class="center">Figure 3: BLAST program monitoring the movement of a RuuviTag and sound
-                    output
-                </figcaption>
-            </figure>
-            <br>
-            <p>
-                The integrated movement detection of the RuuviTag can detect motion alongside different axis and
-                automatically increases the movement counter. The RuuviTag
-                broadcasts updates at a regular interval of 10 seconds to the BLAST program, thus the maximal delay
-                between
-                movement and alarm sound is 10 seconds.
-            </p>
-            <br>
-            <div class="left">
-                <video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls preload="auto"
-                    poster="./img/usecase3_img.png" data-setup='{"fluid": true}'>
-                    <source src="./video/UseCase3_anti_theft.mp4" type="video/mp4" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-        </section>
+								<br>
+								<figure>
+									<img class="center" style="width: 100%" src="./img/usecase2_BLAST.png">
+									<figcaption class="center"><br>Figure 2: BLAST program monitoring the temperature of
+										the coffee
+									</figcaption>
+								</figure>
+								<br>
+								<p>
+									This BLAST program is based on events. For this a state is defined by a boolean
+									expression. As soon as
+									this
+									expression evaluates to true, blast enters the state and executes the corresponding
+									code.
+								</p>
+								<br>
 
-        <section id="usecase4">
-            <h3>Use Case 4: Interaction with a REST API via Speech Input</h3>
-            <p>
-                Use Case 4 illustrates the usage of the included Speech-API and the interaction with a simple RESTful
-                geolocation API. The user is asked to say the name of a well-known city, the Speech-API transforms the
-                input
-                to text and sends an HTTP GET request to a REST API which returns different information such as the
-                latitude
-                and longitude of the selected city.
-            </p>
-            <figure>
-                <img src="./img/usecase4-BLAST.png" class="blastCode">
-                <figcaption class="center">Figure 4: BLAST program using the Speech-API, a custom function, and an HTTP
-                    request
-                </figcaption>
-            </figure>
-            <br>
-            <p>
-                Since there is no block to transform the received JSON object to simple datatypes known in BLAST we make
-                use
-                of the custom JavaScript function block, where we can provide our JavaScript code.
-                With this block, we create a function called "json2list" to transform the received JSON into a
-                two-dimensional list and use for-loops to
-                iterate over it. <br>
-                In the following video, we look up three cities, namely Rome, Munich, and New York and display the
-                coordinates in the action block output on the right-hand side.
-            </p>
-            <br>
-            <div class="left">
-                <video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls preload="auto"
-                    poster="./img/usecase4_img.png" data-setup='{"fluid": true}'>
-                    <source src="./video/UseCase4_SpeechApi.mp4" type="video/mp4" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-        </section>
+								<video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls
+									preload="auto" poster="./img/usecase2_img.png" data-setup='{"fluid": true}'>
+									<source src="./video/UseCase2_CoffeeThermometer.mp4" type="video/mp4" />
+									<p class="vjs-no-js">
+										To view this video please enable JavaScript, and consider upgrading to a
+										web browser that
+										<a href="https://videojs.com/html5-video-support/" target="_blank">supports
+											HTML5 video</a>
+									</p>
+								</video>
+							</div>
+						</div>
+					</article>
+				</section>
+				<hr>
+				<section id="usecase3">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Use Case 3: Movement Detection and Anti-Theft Alarm</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p>In Use Case 3 we demonstrate how a simple Anti-Theft Alarm can be implemented using a
+									RuuviTag and
+									BLAST. To
+									do so, the BLAST program continuously reads the integrated movement counter of the
+									RuuviTag via
+									Bluetooth. A
+									change of the movement counter value triggers an event and a predefined sound that
+									is loaded from a URI
+									is
+									played. The program can be seen below.</p>
 
-        <section id="usecase5">
-            <h3>Use Case 5: Exchanging Data using SOLID Pods</h3>
-            <p>
-                In the final Use Case, we use two instances of BLAST, the first one interacts with a Xiaomi Mija
-                Thermometer and uploads the received humidity values to a SOLID Pod.
-                The second one retrieves the data from the Pod and changes the color of the WebHID light
-                depending on the received values. <br> If the humidity is below 65 percent, the light turns green.
-                However, if the humidity is above 65 percent, the light turns red informing
-                the user that the humidity is too high.
+								<br>
+								<figure>
+									<img class="center" style="width: 100%" src="./img/usecase3-BLAST.png">
+									<figcaption class="center"><br>Figure 3: BLAST program monitoring the movement of a
+										RuuviTag and sound
+										output
+									</figcaption>
+								</figure>
+								<br>
+								<p>
+									The integrated movement detection of the RuuviTag can detect motion alongside
+									different axis and
+									automatically increases the movement counter. The RuuviTag
+									broadcasts updates at a regular interval of 10 seconds to the BLAST program, thus
+									the maximal delay
+									between
+									movement and alarm sound is 10 seconds.
+								</p>
+								<br>
 
-            </p>
+								<video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls
+									preload="auto" poster="./img/usecase3_img.png" data-setup='{"fluid": true}'>
+									<source src="./video/UseCase3_anti_theft.mp4" type="video/mp4" />
+									<p class="vjs-no-js">
+										To view this video please enable JavaScript, and consider upgrading to a
+										web browser that
+										<a href="https://videojs.com/html5-video-support/" target="_blank">supports
+											HTML5 video</a>
+									</p>
+								</video>
+							</div>
+						</div>
+					</article>
+				</section>
+				<hr>
+				<section id="usecase4">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Use Case 4: Interaction with a REST API via Speech Input</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p>Use Case 4 illustrates the usage of the included Speech-API and the interaction with
+									a simple RESTful
+									geolocation API. The user is asked to say the name of a well-known city, the
+									Speech-API transforms the
+									input
+									to text and sends an HTTP GET request to a REST API which returns different
+									information such as the
+									latitude
+									and longitude of the selected city.</p>
 
-            <figure>
-                <img src="./img/usecase5_upload_BLAST.png" class="blastCode">
-                <figcaption class="center">Figure 5: Instance 1 retrieves humidity values and uploads them to a SOLID
-                    Pod
-                </figcaption>
-            </figure>
-            <br>
-            <figure>
-                <img src="./img/usecase5_download_BLAST.png" class="blastCode">
-                <figcaption class="center">Figure 6: Instance 2 downloads data from a SOLID Pod and interacts with the
-                    light
-                </figcaption>
-            </figure>
-            <br>
-            <p>
-                The interaction with the SOLID Pod is realized with HTTP GET and PUT requests. Authentication is not
-                required to access the Pod. <br>
-                The video shows instance 1 on top of instance 2. As soon as the humidity changes, the new values get
-                transmitted via Bluetooth to instance 1 and uploaded to the SOLID Pod.
-                Instance 2 sends every second an HTTP GET request to the Pod, prints the current value, and changes the
-                HID light accordingly.
-            </p>
-            <br>
-            <div class="left">
-                <video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls preload="auto"
-                    poster="./img/usecase5_img.png" data-setup='{"fluid": true}'>
-                    <source src="./video/UseCase5_humidity.mp4" type="video/mp4" />
-                    <p class="vjs-no-js">
-                        To view this video please enable JavaScript, and consider upgrading to a
-                        web browser that
-                        <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
-                    </p>
-                </video>
-            </div>
-            <br>
-        </section>
+								<br>
+								<figure>
+									<img class="center" style="width: 100%" src="./img/usecase4-BLAST.png">
+									<figcaption class="center"><br>Figure 4: BLAST program using the Speech-API, a
+										custom function, and an HTTP
+										request
+									</figcaption>
+								</figure>
+								<br>
+								<p>
+									Since there is no block to transform the received JSON object to simple datatypes
+									known in BLAST we make
+									use
+									of the custom JavaScript function block, where we can provide our JavaScript code.
+									With this block, we create a function called "json2list" to transform the received
+									JSON into a
+									two-dimensional list and use for-loops to
+									iterate over it. <br>
+									In the following video, we look up three cities, namely Rome, Munich, and New York
+									and display the
+									coordinates in the action block output on the right-hand side.
+								</p>
+								<br>
 
-    </div>
+								<video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls
+									preload="auto" poster="./img/usecase4_img.png" data-setup='{"fluid": true}'>
+									<source src="./video/UseCase4_SpeechApi.mp4" type="video/mp4" />
+									<p class="vjs-no-js">
+										To view this video please enable JavaScript, and consider upgrading to a
+										web browser that
+										<a href="https://videojs.com/html5-video-support/" target="_blank">supports
+											HTML5 video</a>
+									</p>
+								</video>
+							</div>
+						</div>
+					</article>
+				</section>
+				<hr>
+				<section id="usecase5">
+					<article>
+						<div class="row">
+							<div class="col-sm-12">
+								<h2>Use Case 5: Exchanging Data using SOLID Pods</h2>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<p>In the final Use Case, we use two instances of BLAST, the first one interacts with a
+									Xiaomi Mija
+									Thermometer and uploads the received humidity values to a SOLID Pod.
+									The second one retrieves the data from the Pod and changes the color of the WebHID
+									light
+									depending on the received values. <br> If the humidity is below 65 percent, the
+									light turns green.
+									However, if the humidity is above 65 percent, the light turns red informing
+									the user that the humidity is too high.</p>
 
-    <script src="https://vjs.zencdn.net/7.18.1/video.min.js"></script>
+								<br>
+								<figure>
+									<img class="center" style="width: 100%" src="./img/usecase5_upload_BLAST.png">
+									<figcaption class="center"><br>Figure 5: Instance 1 retrieves humidity values and
+										uploads them to a SOLID
+										Pod
+									</figcaption>
+								</figure>
+								<br>
+								<figure>
+									<img class="center" style="width: 100%" src="./img/usecase5_download_BLAST.png">
+									<figcaption class="center"><br>Figure 6: Instance 2 downloads data from a SOLID Pod
+										and interacts with the
+										light
+									</figcaption>
+								</figure>
+								<br>
+								<p>
+									The interaction with the SOLID Pod is realized with HTTP GET and PUT requests.
+									Authentication is not
+									required to access the Pod. <br>
+									The video shows instance 1 on top of instance 2. As soon as the humidity changes,
+									the new values get
+									transmitted via Bluetooth to instance 1 and uploaded to the SOLID Pod.
+									Instance 2 sends every second an HTTP GET request to the Pod, prints the current
+									value, and changes the
+									HID light accordingly.
+								</p>
+								<br>
+								<video id="my-video" class="video-js vjs-big-play-centered vjs-16-9" controls
+									preload="auto" poster="./img/usecase5_img.png" data-setup='{"fluid": true}'>
+									<source src="./video/UseCase5_humidity.mp4" type="video/mp4" />
+									<p class="vjs-no-js">
+										To view this video please enable JavaScript, and consider upgrading to a
+										web browser that
+										<a href="https://videojs.com/html5-video-support/" target="_blank">supports
+											HTML5 video</a>
+									</p>
+								</video>
+							</div>
+						</div>
+					</article>
+				</section>
+				<br>
+			</div>
+		</div>
+	</div>
+	<script src="https://vjs.zencdn.net/7.18.1/video.min.js"></script>
 </body>
 
 </html>

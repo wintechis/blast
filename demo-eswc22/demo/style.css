@@ -1,61 +1,76 @@
 body {
-    font-family: Helvetica,Helvetica,Arial,sans-serif;
+    font-family: Helvetica, Helvetica, Arial, sans-serif;
     font-size: 1.8rem;
     line-height: 28px;
+    padding-top: 18px;
+    font-family: frutiger, sans-serif;
 }
+
 .nolist {
     list-style: none;
 }
+
 .sidebar-wrapper {
     position: fixed;
-	max-width: 295px;
-	margin-bottom: 50px
+    max-width: 300px;
+    margin-bottom: 50px;
+    padding-right: 40px
 }
-@media (max-width:991px) {
-	.sidebar-wrapper {
-		width: 100%;
-		max-width: 992px;
-		margin-bottom: 0;
-	}
 
-    body{
+@media (max-width:991px) {
+    .sidebar-wrapper {
+        width: 100%;
+        max-width: 992px;
+        margin-bottom: 0;
+    }
+
+    body {
         padding-top: 125px;
-        font-family: Helvetica,Helvetica,Arial,sans-serif;
+        font-family: Helvetica, Helvetica, Arial, sans-serif;
         font-size: 1.8rem;
         line-height: 28px;
+        font-family: frutiger, sans-serif;
     }
 }
+
 .sidebar-wrapper>ul li {
-	font-size: 1.8rem;
-	font-weight: 500
+    font-size: 1.8rem;
+    font-weight: 500
 }
+
 .sidebar-wrapper>ul>li {
-	border-top: 1px solid #e9e7e7;
-	font-weight: 500
+    border-top: 1px solid #e9e7e7;
+    font-weight: 500
 }
+
 .sidebar-wrapper nav>ul {
-	font-family: Montserrat, sans-serif;
-	margin-bottom: 0
+    font-family: Montserrat, sans-serif;
+    margin-bottom: 0
 }
+
 .sidebar-wrapper nav>ul li {
-	font-size: 1.8rem;
-	font-weight: 500
+    font-size: 1.8rem;
+    font-weight: 500
 }
+
 .sidebar-wrapper nav>ul>li {
-	border-top: 1px solid #e9e7e7;
-	font-weight: 500
+    border-top: 1px solid #e9e7e7;
+    font-weight: 500
 }
+
 .sidebar-wrapper nav>ul>li:first-child {
-	border: 0
+    border: 0
 }
+
 .sidebar-wrapper nav>ul>li>a {
-	color: #1f1a17;
-	display: block;
-	padding: 20px 20px
+    color: #1f1a17;
+    display: block;
+    padding: 20px 20px
 }
+
 .sidebar-wrapper nav>ul>li>a:hover {
-	color: #fff;
-  background: #179c7d;
+    color: #fff;
+    background: #179c7d;
 }
 
 select#sub-menu {
@@ -71,13 +86,17 @@ select#sub-menu {
     text-overflow: '';
     background: url("./img/arrow.png") right no-repeat;
 }
-select#sub-menu, select#sub-menu>option {
-    font-family: Helvetica,Helvetica,Arial,sans-serif;
+
+select#sub-menu,
+select#sub-menu>option {
+    font-family: Helvetica, Helvetica, Arial, sans-serif;
     font-size: 1.8rem;
     line-height: 28px;
 }
-select#sub-menu, select#sub-menu>option {
-    font-family: Helvetica,Helvetica,Arial,sans-serif;
+
+select#sub-menu,
+select#sub-menu>option {
+    font-family: Helvetica, Helvetica, Arial, sans-serif;
     font-size: 1.8rem;
     line-height: 28px;
 }
@@ -86,4 +105,11 @@ select#sub-menu, select#sub-menu>option {
     float: right;
     width: 40%;
     height: auto
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
 }
