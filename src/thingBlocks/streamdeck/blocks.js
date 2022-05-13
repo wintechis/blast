@@ -104,6 +104,7 @@ Blocks['streamdeck_button_event'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.changeListener = null;
     this.requested = false;
     this.keyState = new Array(6).fill(false);
   },
@@ -127,7 +128,9 @@ Blocks['streamdeck_button_event'] = {
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    getWorkspace().addChangeListener(event => this.onDispose(event));
+    this.changeListener = getWorkspace().addChangeListener(event =>
+      this.onDispose(event)
+    );
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -143,6 +146,7 @@ Blocks['streamdeck_button_event'] = {
       ) {
         // block is being deleted
         this.removeFromEvents();
+        getWorkspace().removeChangeListener(this.changeListener);
       }
     }
   },
@@ -274,7 +278,7 @@ implementedThings.push({
   blocks: [
     {
       type: 'streamdeck_button_event',
-      category: 'States and Events',
+      category: 'Events',
     },
     {
       type: 'streamdeck_color_buttons',

@@ -43,7 +43,7 @@ implementedThings.push({
     },
     {
       type: 'joycon_button_events',
-      category: 'States and Events',
+      category: 'Events',
     },
   ],
   infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
@@ -272,9 +272,11 @@ Blocks['joycon_button_events'] = {
         'released'
       );
     this.appendStatementInput('statements').appendField('do').setCheck(null);
+    this.setInputsInline(false);
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.changeListener = null;
     this.requested = false;
   },
   /**
@@ -283,7 +285,9 @@ Blocks['joycon_button_events'] = {
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    getWorkspace().addChangeListener(event => this.onDispose(event));
+    this.changeListener = getWorkspace().addChangeListener(event =>
+      this.onDispose(event)
+    );
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -300,6 +304,7 @@ Blocks['joycon_button_events'] = {
       ) {
         // Block is being deleted
         this.removeFromEvents();
+        getWorkspace().removeChangeListener(this.changeListener);
       }
     }
   },
@@ -311,6 +316,110 @@ Blocks['joycon_button_events'] = {
     const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
       eventsInWorkspace.splice(index, 1);
+    }
+  },
+};
+
+Blocks['things_gamepad_pro'] = {
+  /**
+   * Block representing a Nintendo Switch Gamepad Pro.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput()
+      .appendField('Gamepad Pro')
+      .appendField(new FieldTextInput('Error getting name'), 'name');
+    this.appendDummyInput()
+      .appendField(new FieldTextInput('Error getting id'), 'id')
+      .setVisible(false);
+    this.setOutput(true, 'Thing');
+    this.setColour(60);
+    this.setTooltip('A Nintendo Switch Gamepad Pro.');
+    this.setHelpUrl('https://github.com/wintechis/blast/wiki/Nintendo-JoyCon');
+    this.getField('name').setEnabled(false);
+  },
+};
+
+// Add Joy-Con block to list of implemented things.
+implementedThings.push({
+  id: 'gamepad_pro',
+  name: 'Nintendo Switch Gamepad Pro',
+  type: 'hid',
+  blocks: [
+    {
+      type: 'joycon_gamepad_joystick',
+      category: 'Events',
+    },
+  ],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
+  filters: [
+    {
+      vendorId: 0x057e,
+      productId: 0x2009,
+    },
+  ],
+});
+
+Blocks['joycon_gamepad_joystick'] = {
+  /**
+   * Block to subscribe to Gamepad Joystick events.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendValueInput('thing')
+      .setCheck('Thing')
+      .appendField('Joystick events of Gamepad Pro');
+    this.appendDummyInput()
+      .appendField('uses variables')
+      .appendField(new FieldTextInput('gp-x'), 'gp-x')
+      .appendField(new FieldTextInput('gp-y'), 'gp-y');
+    this.appendDummyInput().appendField('when joystick moves');
+    this.appendStatementInput('statements').appendField('do');
+    this.setInputsInline(false);
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.changeListener = null;
+    this.getField('gp-x').setEnabled(false);
+    this.getField('gp-y').setEnabled(false);
+  },
+  /**
+   * Add this block's id to the events array.
+   */
+  addEvent: async function () {
+    eventsInWorkspace.push(this.id);
+    // remove event if block is deleted
+    this.changeListener = getWorkspace().addChangeListener(event =>
+      this.onDispose(event)
+    );
+  },
+  onchange: function () {
+    if (!this.isInFlyout && !this.requested && this.rendered) {
+      // Block is newly created
+      this.requested = true;
+      this.addEvent();
+      this.createVars();
+    }
+  },
+  onDispose: function (event) {
+    if (event.type === Events.BLOCK_DELETE) {
+      if (
+        event.type === Events.BLOCK_DELETE &&
+        event.ids.indexOf(this.id) !== -1
+      ) {
+        // Block is being deleted
+        this.removeFromEvents();
+        getWorkspace().removeChangeListener(this.changeListener);
+      }
+    }
+  },
+  createVars: function () {
+    const ws = getWorkspace();
+    if (!ws.getVariable('gp-x')) {
+      ws.createVariable('gp-x');
+    }
+    if (!ws.getVariable('gp-y')) {
+      ws.createVariable('gp-y');
     }
   },
 };

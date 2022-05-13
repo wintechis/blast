@@ -10,7 +10,7 @@ import Blockly from 'blockly';
 import {apiFunctions} from '../../../dist/blast_interpreter.js';
 import {currentToolbox} from '../../../dist/blast_toolbox.js';
 import {downloadScreenshot} from './screenshot.js';
-import {eventsFlyoutCategory} from '../../../dist/blast_states.js';
+import {statesFlyoutCategory} from '../../../dist/blast_states.js';
 import {initInterpreter} from '../../../dist/blast_interpreter.js';
 import {initStatesInterpreter} from '../../../dist/blast_states_interpreter.js';
 import {initUi} from './web.js';
@@ -105,7 +105,7 @@ const init = function () {
   // register things category flyout callback
   workspace.registerToolboxCategoryCallback('THINGS', thingsFlyoutCategory);
   // register event category flyout callback
-  workspace.registerToolboxCategoryCallback('STATES', eventsFlyoutCategory);
+  workspace.registerToolboxCategoryCallback('STATES', statesFlyoutCategory);
 
   // Display output hint
   const stdInfo = getStdInfo();

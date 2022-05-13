@@ -14,13 +14,9 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Things and Resources',
+      name: 'Things',
       custom: 'THINGS',
       colour: '60',
-    },
-    {
-      kind: 'sep',
-      gap: '32',
     },
     {
       kind: 'CATEGORY',
@@ -46,20 +42,18 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
-      contents: [],
-      name: 'States and Events',
-      custom: 'STATES',
+      contents: [
+        {
+          kind: 'label',
+          text: '(Connect things to see device dependent blocks)',
+        },
+      ],
+      name: 'Events',
       colour: '180',
     },
     {
       kind: 'sep',
       gap: '32',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
-      name: 'Requests and Queries',
-      colour: '0',
     },
     {
       kind: 'CATEGORY',
@@ -127,6 +121,18 @@ const defaultToolbox = {
       colour: '60',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Requests and Queries',
+      colour: '0',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Server Components',
+      colour: '240',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
@@ -144,8 +150,9 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Server Components',
-      colour: '240',
+      name: 'States',
+      custom: 'STATES',
+      colour: '180',
     },
     {
       kind: 'CATEGORY',
