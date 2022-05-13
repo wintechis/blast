@@ -1,0 +1,19 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="server_route">
+    <field name="operation">"get"</field>
+    <value name="route">
+      <block type="string">
+        <field name="TEXT">/</field>
+      </block>
+    </value>
+    <statement name="list">
+      <block type="response_block">
+        <value name="response">
+          <block type="string">
+            <field name="TEXT">Hello World!</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>
