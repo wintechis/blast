@@ -129,7 +129,6 @@ JavaScript['joycon_button_events'] = function (block) {
  * @param {string} button the button to handle.
  * @param {boolean} released whether the statements should be executed on release or on press.
  * @param {string} statements the statements to execute when the button is pushed.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 const handleJoyConButtons = async function (
   blockId,
@@ -395,3 +394,51 @@ JavaScript['joycon_gamepad_button'] = function (block) {
 
   return '';
 };
+
+/**
+ * Handles gamepad button events.
+ * @param {Blockly.Block.id} blockId the things_joycon block's id.
+ * @param {string} id identifier of the JoyCon device in {@link Blast.Things.webHidDevices}.
+ * @param {string} button the button to handle.
+ * @param {string} statements the statements to execute when the button is pushed.
+ */
+const handleGamepadButton = function (blockId, id, button, statements) {
+  const switchPro = new SwitchPro();
+  switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
+
+  const handleButton = function (pressed) {
+    if (pressed[button]) {
+      // interrupt BLAST execution
+      interruptRunner();
+
+      const newInterpreter = new Interpreter('');
+      newInterpreter.getStateStack()[0].scope =
+        getInterpreter().getGlobalScope();
+      newInterpreter.appendCode(statements);
+
+      const interruptRunner_ = function () {
+        try {
+          const hasMore = newInterpreter.step();
+          if (hasMore) {
+            setTimeout(interruptRunner_, 5);
+          } else {
+            // Continue BLAST execution.
+            continueRunner();
+          }
+        } catch (error) {
+          throwError(`Error executing program:\n ${error}`);
+          console.error(error);
+        }
+      };
+      interruptRunner_();
+    }
+  };
+
+  switchPro.addListener(handleButton);
+
+  addCleanUpFunction(() => {
+    clearInterval(switchPro.interval);
+  });
+};
+
+apiFunctions.push(['handleGamepadButton', handleGamepadButton]);

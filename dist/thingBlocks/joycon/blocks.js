@@ -350,6 +350,10 @@ implementedThings.push({
       type: 'joycon_gamepad_joystick',
       category: 'Events',
     },
+    {
+      type: 'joycon_gamepad_button',
+      category: 'Events',
+    },
   ],
   infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
   filters: [
@@ -413,6 +417,16 @@ Blocks['joycon_gamepad_joystick'] = {
       }
     }
   },
+  /**
+   * Remove this block's id from the events array.
+   */
+  removeFromEvents: function () {
+    // remove this block from the events array.
+    const index = eventsInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      eventsInWorkspace.splice(index, 1);
+    }
+  },
   createVars: function () {
     const ws = getWorkspace();
     if (!ws.getVariable('gp-x')) {
@@ -420,6 +434,84 @@ Blocks['joycon_gamepad_joystick'] = {
     }
     if (!ws.getVariable('gp-y')) {
       ws.createVariable('gp-y');
+    }
+  },
+};
+
+Blocks['joycon_gamepad_button'] = {
+  /**
+   * Block to subscribe to Gamepad Button events.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendValueInput('thing')
+      .setCheck('Thing')
+      .appendField('Button events of Gamepad Pro');
+    this.appendDummyInput()
+      .appendField('on button')
+      .appendField(
+        new FieldDropdown([
+          ['A', 'A'],
+          ['B', 'B'],
+          ['X', 'X'],
+          ['Y', 'Y'],
+          ['up', 'UP'],
+          ['left', 'LEFT'],
+          ['down', 'DOWN'],
+          ['right', 'RIGHT'],
+          ['R', 'R'],
+          ['L', 'L'],
+          ['RT', 'ZR'],
+          ['LT', 'ZL'],
+        ]),
+        'button'
+      )
+      .appendField('pressed');
+    this.appendStatementInput('statements').appendField('do');
+    this.setInputsInline(false);
+    this.setColour(180);
+    this.setTooltip('');
+    this.setHelpUrl('');
+    this.requested = false;
+    this.changeListener = null;
+  },
+  /**
+   * Add this block's id to the events array.
+   */
+  addEvent: async function () {
+    eventsInWorkspace.push(this.id);
+    // remove event if block is deleted
+    this.changeListener = getWorkspace().addChangeListener(event =>
+      this.onDispose(event)
+    );
+  },
+  onchange: function () {
+    if (!this.isInFlyout && !this.requested && this.rendered) {
+      // Block is newly created
+      this.requested = true;
+      this.addEvent();
+    }
+  },
+  onDispose: function (event) {
+    if (event.type === Events.BLOCK_DELETE) {
+      if (
+        event.type === Events.BLOCK_DELETE &&
+        event.ids.indexOf(this.id) !== -1
+      ) {
+        // Block is being deleted
+        this.removeFromEvents();
+        getWorkspace().removeChangeListener(this.changeListener);
+      }
+    }
+  },
+  /**
+   * Remove this block's id from the events array.
+   */
+  removeFromEvents: function () {
+    // remove this block from the events array.
+    const index = eventsInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      eventsInWorkspace.splice(index, 1);
     }
   },
 };
