@@ -14,6 +14,22 @@ import EddystoneDevice from '../../things/EddystoneDevice.js';
 // eslint-disable-next-line node/no-missing-import
 import BluetoothGeneric from '../../things/BluetoothGeneric.js';
 
+const EddystoneDeviceInstances = new Map();
+
+/**
+ * Keeps singleton instances of EddystoneDevice instantiated by BLAST.
+ * @param {string} id The id of the EddystoneDevice.
+ */
+const getEddystoneDevice = function (id) {
+  if (EddystoneDeviceInstances.has(id)) {
+    return EddystoneDeviceInstances.get(id);
+  } else {
+    const thing = new EddystoneDevice();
+    EddystoneDeviceInstances.set(id, thing);
+    return thing;
+  }
+};
+
 Blocks['things_eddyStoneDevice'] = {
   /**
    * Block representing an Eddystone device.
@@ -42,11 +58,29 @@ Blocks['things_eddyStoneDevice'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      new EddystoneDevice().init(this.webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
+      getEddystoneDevice(this.webBluetoothId)
+        .init(this.webBluetoothId)
+        .then(thing => {
+          this.thing = thing;
+        });
     }
   },
+};
+
+const BluetoothGenericInstances = new Map();
+
+/**
+ * Keeps singleton instances of BluetoothGeneric instantiated by BLAST.
+ * @param {string} id The id of the BluetoothGeneric.
+ */
+const getBluetoothGeneric = function (id) {
+  if (BluetoothGenericInstances.has(id)) {
+    return BluetoothGenericInstances.get(id);
+  } else {
+    const thing = new BluetoothGeneric();
+    BluetoothGenericInstances.set(id, thing);
+    return thing;
+  }
 };
 
 Blocks['things_bluetoothGeneric'] = {
@@ -75,9 +109,11 @@ Blocks['things_bluetoothGeneric'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      new BluetoothGeneric().init(this.webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
+      getBluetoothGeneric(this.webBluetoothId)
+        .init(this.webBluetoothId)
+        .then(thing => {
+          this.thing = thing;
+        });
     }
   },
 };

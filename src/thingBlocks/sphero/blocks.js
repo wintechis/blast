@@ -8,18 +8,18 @@ import SpheroBolt from './lib/spheroBolt.js';
 import Blockly from 'blockly';
 const {Blocks, FieldTextInput} = Blockly;
 
-const thingInstances = new Map();
+const spheroInstances = new Map();
 
 /**
- * Keeps singleton instances of all things instantiated by BLAST.
- * @param {string} id The id of the thing.
+ * Keeps singleton instances of SpheroMinis instantiated by BLAST.
+ * @param {string} id The id of the SpheroMini.
  */
-export const getThing = function (id) {
-  if (thingInstances.has(id)) {
-    return thingInstances.get(id);
+const getSpheroMini = function (id) {
+  if (spheroInstances.has(id)) {
+    return spheroInstances.get(id);
   } else {
     const thing = new SpheroBolt(id);
-    thingInstances.set(id, thing);
+    spheroInstances.set(id, thing);
     return thing;
   }
 };
@@ -55,7 +55,7 @@ Blocks['things_spheroMini'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      this.thing = getThing(this.webBluetoothId);
+      this.thing = getSpheroMini(this.webBluetoothId);
     }
   },
 };

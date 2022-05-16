@@ -13,6 +13,22 @@ const {Blocks, FieldTextInput} = Blockly;
 import Blinkstick from './../../things/Blinkstick.js';
 import {implementedThings} from '../../blast_things.js';
 
+const blinkstickInstances = new Map();
+
+/**
+ * Keeps singleton instances of Blinkstick instantiated by BLAST.
+ * @param {string} id The id of the Blinkstick.
+ */
+const getBlinkstick = function (id) {
+  if (blinkstickInstances.has(id)) {
+    return blinkstickInstances.get(id);
+  } else {
+    const thing = new Blinkstick();
+    blinkstickInstances.set(id, thing);
+    return thing;
+  }
+};
+
 /**
  * Generates JavaScript code for the things_blinkstick block.
  * @param {Blockly.Block} block the things_blinkstick block.
@@ -44,9 +60,11 @@ Blocks['things_blinkstick'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webHidId = this.getFieldValue('id');
       this.firstTime = false;
-      new Blinkstick().init(this.webHidId).then(thing => {
-        this.thing = thing;
-      });
+      getBlinkstick(this.webHidId)
+        .init(this.webHidId)
+        .then(thing => {
+          this.thing = thing;
+        });
     }
   },
 };

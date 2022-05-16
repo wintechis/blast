@@ -13,6 +13,22 @@ const {Blocks, dialog, FieldTextInput} = Blockly;
 import BleRgbController from './../../things/BleRgbController.js';
 import {implementedThings} from '../../blast_things.js';
 
+const bleRgbControllerInstances = new Map();
+
+/**
+ * Keeps singleton instances of BleRgbControllers instantiated by BLAST.
+ * @param {string} id The id of the BleRgbControllers.
+ */
+const getBleRgbController = function (id) {
+  if (bleRgbControllerInstances.has(id)) {
+    return bleRgbControllerInstances.get(id);
+  } else {
+    const thing = new BleRgbController();
+    bleRgbControllerInstances.set(id, thing);
+    return thing;
+  }
+};
+
 Blocks['things_bleLedController'] = {
   /**
    * Block representing a BLE RGB LED controller.
@@ -41,9 +57,11 @@ Blocks['things_bleLedController'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      new BleRgbController().init(this.webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
+      getBleRgbController(this.webBluetoothId)
+        .init(this.webBluetoothId)
+        .then(thing => {
+          this.thing = thing;
+        });
     }
   },
 };

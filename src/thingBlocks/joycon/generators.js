@@ -371,3 +371,27 @@ const handleGamepadJoystick = function (blockId, id, statements) {
 };
 
 apiFunctions.push(['handleGamepadJoystick', handleGamepadJoystick]);
+
+/**
+ * Generates JavaScript code for the joycon_gamepad_button block.
+ * @param {Blockly.Block} block the joycon_gamepad_button block.
+ */
+JavaScript['joycon_gamepad_button'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const button = JavaScript.quote_(block.getFieldValue('button'));
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
+  );
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
+
+  const handler = `handleGamepadButton(${blockId}, ${thing}, ${button}, ${statements});\n`;
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
+};
