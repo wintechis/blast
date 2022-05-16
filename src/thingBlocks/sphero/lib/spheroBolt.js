@@ -89,7 +89,7 @@ const UserIOCommandIds = {
     audioVolume : 8,
     stopAudio : 10,
     testSound : 24,
-    allLEDs : 28,
+    allLEDs : 14,
     setUserProfile : 35,
     matrixPixel :45,
     matrixColor : 47,
@@ -167,7 +167,7 @@ export default class SpheroBolt{
 			  });
 			  this.on('onCompassNotify', async angle => {
 				this.setAllLeds(0, 0, 0);
-				this.setMainLedColor(255, 0, 0);
+				// this.setMainLedColor(255, 0, 0);
 				await this.setHeading(angle);
 			  });
 			});
@@ -368,18 +368,7 @@ export default class SpheroBolt{
 		let commandInfo = {
 			deviceId: DeviceId.userIO,
 			commandId: UserIOCommandIds.allLEDs,
-			data: [0x3f, r, g, b, r, g, b],
-		};
-		let command = this.createCommand(commandInfo);
-		this.queueCommand(command);
-	}
-
-	/* Sets the color of the front LED */
-	setMainLedColor(r, g, b){
-		let commandInfo = {
-			deviceId: DeviceId.userIO,
-			commandId: UserIOCommandIds.allLEDs,
-			data: [0x07, r, g, b],
+			data: [0x00, 0x0e, r, g, b],
 		};
 		let command = this.createCommand(commandInfo);
 		this.queueCommand(command);
@@ -479,7 +468,6 @@ export default class SpheroBolt{
 	/* Set the color of the LEd matrix and front and back LED */
 	setAllLeds(r, g, b){
 		this.setLedsColor(r, g, b);
-		this.setMatrixColor(r, g, b);
 	}
 
 	/* Sets Sphero heading */
@@ -693,6 +681,8 @@ export default class SpheroBolt{
 
 	/* Prints the status of a command */
 	printCommandStatus(command){
+
+		console.log(command);
 		switch(command.data[0]){
 			case ApiErrors.success:
 				//console.log('Command succefully executed!');

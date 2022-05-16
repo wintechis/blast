@@ -114,6 +114,24 @@ Blocks['sphero_stop'] = {
   },
 };
 
+Blocks['sphero_color'] = {
+  /**
+   * Block representing a color command.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendValueInput('thing')
+      .appendField('set LED color property of SpheroMini')
+      .setCheck('Thing');
+    this.appendValueInput('color').appendField('to colour').setCheck('Colour');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(255);
+    this.setTooltip('Sets the LED color of the Sphero Mini.');
+    this.setHelpUrl('');
+  },
+};
+
 // Add spheromini blocks to the list of implemented things.
 implementedThings.push({
   id: 'spheroMini',
@@ -128,6 +146,10 @@ implementedThings.push({
     {
       type: 'sphero_stop',
       category: 'Actions',
+    },
+    {
+      type: 'sphero_color',
+      category: 'Properties',
     },
   ],
   infoUrl: 'https://github.com/wintechis/blast/wiki/SpheroMini',

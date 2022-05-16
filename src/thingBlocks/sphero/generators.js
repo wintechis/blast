@@ -8,7 +8,11 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {apiFunctions, getWorkspace} from '../../blast_interpreter.js';
+import {
+  apiFunctions,
+  asyncApiFunctions,
+  getWorkspace,
+} from '../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -55,6 +59,21 @@ JavaScript['sphero_stop'] = function (block) {
 };
 
 /**
+ * Generates JavaScript code for the sphero_color block.
+ * @param {Blockly.Block} block the sphero_color block.
+ * @returns {String} the generated code.
+ */
+JavaScript['sphero_color'] = function (block) {
+  const color = JavaScript.valueToCode(block, 'color', JavaScript.ORDER_ATOMIC);
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
+  const code = `spheroColor(${blockId}, ${color});\n`;
+  return code;
+};
+
+/**
  * Sends a roll command to the Sphero Mini.
  * @param {Blockly.Block.id} blockId the things_spheroMini block's id.
  * @param {Number} speed the speed of the roll.
@@ -78,12 +97,31 @@ function spheroStop(blockId) {
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
-  console.log(bolt.queue.tasks);
   bolt.queue.clear();
-  console.log(bolt.queue.tasks);
   bolt.roll(0, 0, []);
-  console.log(bolt.queue.tasks);
 }
 
 // Add spheroStop function to the interpreter's API
 apiFunctions.push(['spheroStop', spheroStop]);
+
+/**
+ * Sets the color of the Sphero Mini.
+ * @param {Blockly.Block.id} blockId the things_spheroMini block's id.
+ * @param {Number} color the color of the Sphero Mini.
+ * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ */
+async function spheroColor(blockId, color, callback) {
+  // get thing instance of block
+  const block = getWorkspace().getBlockById(blockId);
+  const bolt = block.thing;
+
+  // convert color to rgb
+  const red = parseInt(color.substring(1, 3), 16);
+  const green = parseInt(color.substring(3, 5), 16);
+  const blue = parseInt(color.substring(5, 7), 16);
+
+  await bolt.setAllLeds(red, green, blue);
+  callback();
+}
+
+asyncApiFunctions.push(['spheroColor', spheroColor]);
