@@ -446,7 +446,7 @@ Blocks['joycon_gamepad_button'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('Button events of Gamepad Pro');
+      .appendField('button events of Gamepad Pro');
     this.appendDummyInput()
       .appendField('on button')
       .appendField(
