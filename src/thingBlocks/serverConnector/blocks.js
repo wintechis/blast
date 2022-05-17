@@ -7,9 +7,8 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldDropdown} = Blockly;
+const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
-import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 
 Blocks['add_server_block'] = {
   /**

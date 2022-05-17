@@ -9,7 +9,6 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import express from 'express';
-import {stat} from 'fs/promises';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
@@ -26,6 +25,7 @@ import {
  * @param {Blockly.Block} block the add_server block.
  * @returns {String} the generated code.
  */
+// eslint-disable-next-line no-unused-vars
 JavaScript['add_server_block'] = function (block) {
   const code = `addServerConnector();\n`;
   return code;
@@ -108,7 +108,7 @@ JavaScript['server_route'] = function (block) {
  * @param {String} statements Code to execute when route is activated.
  */
 const addRoute = function (route, operation, statements, app) {
-  if (operation == 'get') {
+  if (operation === 'get') {
     app.get(route, (req, res) => {
       execute_code(req, res, statements);
     });
