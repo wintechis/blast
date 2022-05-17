@@ -6,6 +6,12 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 module.exports = {
   entry: './src/index.js',
   devtool: 'eval-source-map',
+  devServer: {
+    https: true,
+    port: 3000,
+    static: path.join(__dirname, ''),
+    watchFiles: ['index.html', 'style.css', 'dist/app.js'],
+  },
   optimization: {
     minimize: false,
   },

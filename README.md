@@ -8,7 +8,13 @@ Employing a VPE, BLAST makes creating WoT Applications more accessible: Without 
 Check [./docs/](docs/) for detailed documentation.
 
 ## Usage
-To view a web demo of BLAST, open `examples/web/index.html` in your favorite browser or see https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/ for an online version.
+In order to use BLAST open a Terminal and enter the following commands:
+1. Clone this repository with `git clone https://github.com/wintechis/blast`
+2. Install dependencies: `yarn install`
+3. Build BLAST: `yarn build`
+4. Host BLAST: `yarn serve`
+5. Open your Browser and navigate to `localhost:3000`
+
 If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
 
 > :warning: **Blocks that perform fetch requests, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  

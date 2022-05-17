@@ -11,3 +11,9 @@ To build this example yourself:
 4. `cd examples/web/`
 5. `yarn`
 6. `yarn run build`
+
+# Serving
+To serve this example on `localhost:3000`, run the following command, after building:
+```bash
+yarn run serve
+```

@@ -20,6 +20,7 @@
   "scripts": {
     "build": "yarn run clean && tsc && yarn run copy && yarn run build:web",
     "build:web": "cd examples/web/ && yarn install && yarn run build",
+    "serve": "cd examples/web/ && yarn run serve",
     "copy": "copyfiles -u 1 \"src/**/*.js\" dist/",
     "lint": "eslint \"src/**/**.js\"",
     "clean": "yarn rimraf dist",
