@@ -11,6 +11,23 @@ const {Blocks, Events, FieldDropdown} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 
+Blocks['add_server_block'] = {
+  /**
+   * Block for adding a server connector on port
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput().appendField('create server');
+    this.setInputsInline(true);
+    this.setNextStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('add_server_block', 'Server Components');
+
 Blocks['server_route'] = {
   /**
    * Block for adding a route to the server connector
@@ -21,58 +38,39 @@ Blocks['server_route'] = {
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(
-        new FieldDropdown([
-          ['GET', '"get"'],
-          // ['PUT', '"put"'],
-          // ['POST', '"post"'],
+        new Blockly.FieldDropdown([
+          ['GET', 'get'],
+          ['PUT', 'put'],
+          ['POST', 'post'],
         ]),
         'operation'
       );
     this.appendStatementInput('list').setCheck(null);
     this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip('Add a route to the server');
+    this.setTooltip('');
     this.setHelpUrl('');
-    this.requested = false;
-  },
-  /**
-   * Add this block's id to the events array.
-   */
-  addEvent: async function () {
-    eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    getWorkspace().addChangeListener(event => this.onDispose(event));
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // block is being deleted
-        this.removeFromEvents();
-      }
-    }
-  },
-  /**
-   * Remove this block's id from the events array.
-   */
-  removeFromEvents: function () {
-    // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
-    if (index !== -1) {
-      eventsInWorkspace.splice(index, 1);
-    }
   },
 };
 // Add server_connector block to the toolbox.
 addBlock('server_route', 'Server Components');
+
+Blocks['start_server'] = {
+  init: function () {
+    this.appendValueInput('port')
+      .setCheck('Number')
+      .appendField('start server on port');
+    this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('start_server', 'Server Components');
 
 Blocks['response_block'] = {
   /**
