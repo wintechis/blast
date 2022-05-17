@@ -65,7 +65,7 @@ Blocks['joycon_read_property'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('read')
       .appendField(
@@ -236,7 +236,7 @@ Blocks['joycon_button_events'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('Nintendo JoyCon');
     this.appendDummyInput()

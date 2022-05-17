@@ -79,7 +79,7 @@ After writing a blocks definition, the block has to be added to the toolbox, by 
 >   * @this {Blockly.Block}
 >   */
 >  init: function() {
->    this.appendValueInput('Thing')
+>    this.appendValueInput('thing')
 >        .setCheck('Thing')
 >        .appendField('get temperature of Ruuvi Tag');
 >    this.setOutput(true, ['String', 'Number']);

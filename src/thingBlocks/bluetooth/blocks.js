@@ -125,7 +125,7 @@ Blocks['get_signal_strength_wb'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('read signal-strength property of Bluetooth device');
     this.setOutput(true, ['String', 'Number']);
@@ -186,7 +186,7 @@ Blocks['write_eddystone_property'] = {
       )
       .setVisible(false);
     this.appendValueInput('Value').appendField('value').setCheck('Number');
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .appendField('to Eddystone device')
       .setCheck('Thing');
     this.setPreviousStatement(true, null);
@@ -249,7 +249,7 @@ Blocks['read_eddystone_property'] = {
       )
       .appendField('property');
     this.appendValueInput('Slot').setCheck('Number').appendField('at slot');
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .appendField('of Eddystone device')
       .setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
@@ -305,7 +305,7 @@ Blocks['read_gatt_characteristic'] = {
         'characteristic'
       )
       .appendField('of Bluetooth device');
-    this.appendValueInput('Thing').setCheck('Thing');
+    this.appendValueInput('thing').setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads a property from a Bluetooth device.');

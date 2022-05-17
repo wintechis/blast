@@ -47,7 +47,7 @@ Blocks['things_HuskyDuino'] = {
 
 Blocks['huskylens_choose_algo'] = {
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('write algorithm property')
       .appendField(
@@ -88,7 +88,7 @@ Blocks['huskylens_write_id'] = {
     this.appendValueInput('ID')
       .setCheck('Number')
       .appendField('write ID property');
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('to HuskyDuino');
     this.setInputsInline(true);
@@ -130,7 +130,7 @@ Blocks['huskylens_write_forget_flag'] = {
     this.appendValueInput('forgetFlag')
       .setCheck('Boolean')
       .appendField('write forget flag property');
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('to HuskyDuino');
     this.setInputsInline(true);
@@ -167,7 +167,7 @@ const HUSKYLENS_FORGET_FLAG_XML = `
 
 Blocks['huskylens_read_id'] = {
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('read ID property of object(s) in HuskyDuino');
     this.setOutput(true, 'Array');
@@ -193,7 +193,7 @@ Blocks['huskylens_read_id'] = {
 
 Blocks['huskylens_read_location'] = {
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('read location property of one object in HuskyDuino');
     this.setOutput(true, 'Array');

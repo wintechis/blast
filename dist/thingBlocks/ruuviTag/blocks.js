@@ -50,7 +50,7 @@ Blocks['read_ruuvi_property'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('Thing')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('read')
       .appendField(
