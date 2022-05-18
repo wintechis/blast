@@ -174,8 +174,9 @@ function execute_code(req, res, statements) {
   interruptRunner_();
 }
 
+// eslint-disable-next-line no-unused-vars
 Blockly.JavaScript['get_body'] = function (block) {
-  var code = 'getBody(req)';
+  const code = 'getBody(req)';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
