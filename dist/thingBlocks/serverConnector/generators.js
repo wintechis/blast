@@ -9,7 +9,6 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import express from 'express';
-import {stat} from 'fs/promises';
 // eslint-disable-next-line node/no-unpublished-import
 import Interpreter from 'js-interpreter';
 import {
@@ -27,46 +26,35 @@ import {
  * @returns {String} the generated code.
  */
 JavaScript['add_server_block'] = function (block) {
-  const code = `addServerConnector();\n`;
+  var value_port = Blockly.JavaScript.valueToCode(
+    block,
+    'port',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  var statements_list = JavaScript.statementToCode(block, 'list');
+  // addServer; statements_list -> addRoutes; startServer
+  const code = `addServerConnector();\n ${statements_list} startServer(${value_port}, app)`;
   return code;
 };
 
 /**
- * Creates a express API
- * @param {String} route Route to add to express API.
- * @param {String} operation HTTP operation type of added route [get, put, post].
- * @param {String} statements Code to execute when route is activated.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * Creates an express API and adds 'app' object to interpreter
  */
 const addServerConnector = function () {
+  console.log('Add Server');
   const app = express();
 
   app.use(express.urlencoded({extended: true}));
   app.use(express.json());
 
-  // Add App to interpreter
+  // Add 'app' to interpreter
   const scope = getInterpreter().getGlobalScope();
   getInterpreter().setProperty(scope.object, 'app', app);
 };
 apiFunctions.push(['addServerConnector', addServerConnector]);
 
 /**
- * Generates JavaScript code for the start_server block.
- * @param {Blockly.Block} block the add_server block.
- * @returns {String} the generated code.
- */
-JavaScript['start_server'] = function (block) {
-  const value_port = JavaScript.valueToCode(
-    block,
-    'port',
-    JavaScript.ORDER_ATOMIC
-  );
-  const code = `startServer(${value_port}, app);\n`;
-  return code;
-};
-
-/**
- * starts to listen on port
+ * start to listen on port
  * @param {Number} port Port to listen on.
  * @param {Object} app app object of express.js.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
@@ -74,7 +62,7 @@ JavaScript['start_server'] = function (block) {
 // eslint-disable-next-line no-unused-vars
 const startServer = async function (port, app, callback) {
   app.listen(port);
-  console.log('Server is up');
+  console.log(`Server is up on port ${port}`);
 };
 // Add addRoute function to the interpreter's API.
 asyncApiFunctions.push(['startServer', startServer]);
@@ -106,9 +94,12 @@ JavaScript['server_route'] = function (block) {
  * @param {String} route New route for the express API.
  * @param {String} operation HTTP operation type of added route [get, put, post].
  * @param {String} statements Code to execute when route is activated.
+ * @param {Object} app app object of express.js.
  */
 const addRoute = function (route, operation, statements, app) {
-  if (operation == 'get') {
+  console.log('Add Rotue');
+
+  if (operation === 'get') {
     app.get(route, (req, res) => {
       execute_code(req, res, statements);
     });

@@ -7,9 +7,8 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldDropdown} = Blockly;
+const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
-import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 
 Blocks['add_server_block'] = {
   /**
@@ -17,9 +16,11 @@ Blocks['add_server_block'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput().appendField('create server');
+    this.appendValueInput('port')
+      .setCheck(null)
+      .appendField('add server on port');
+    this.appendStatementInput('list').setCheck(null);
     this.setInputsInline(true);
-    this.setNextStatement(true, null);
     this.setColour(230);
     this.setTooltip('');
     this.setHelpUrl('');
@@ -34,7 +35,7 @@ Blocks['server_route'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('route').setCheck('String').appendField('add route');
+    this.appendValueInput('route').setCheck(null).appendField('add route');
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(

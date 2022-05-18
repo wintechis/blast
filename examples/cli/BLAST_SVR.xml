@@ -1,11 +1,16 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <block type="add_server_block">
-    <next>
+    <value name="port">
+      <block type="number_value">
+        <field name="NUM">8080</field>
+      </block>
+    </value>
+    <statement name="list">
       <block type="server_route">
         <field name="operation">get</field>
         <value name="route">
           <block type="string">
-            <field name="TEXT">/test</field>
+            <field name="TEXT">/</field>
           </block>
         </value>
         <statement name="list">
@@ -17,16 +22,7 @@
             </value>
           </block>
         </statement>
-        <next>
-          <block type="start_server">
-            <value name="port">
-              <block type="number_value">
-                <field name="NUM">8080</field>
-              </block>
-            </value>
-          </block>
-        </next>
       </block>
-    </next>
+    </statement>
   </block>
 </xml>
