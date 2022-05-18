@@ -26,12 +26,12 @@ import {
  * @returns {String} the generated code.
  */
 JavaScript['add_server_block'] = function (block) {
-  var value_port = Blockly.JavaScript.valueToCode(
+  const value_port = Blockly.JavaScript.valueToCode(
     block,
     'port',
     Blockly.JavaScript.ORDER_ATOMIC
   );
-  var statements_list = JavaScript.statementToCode(block, 'list');
+  const statements_list = JavaScript.statementToCode(block, 'list');
   // addServer; statements_list -> addRoutes; startServer
   const code = `addServerConnector();\n ${statements_list} startServer(${value_port}, app)`;
   return code;
