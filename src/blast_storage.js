@@ -245,7 +245,10 @@ export const loadXML = function (xmlString) {
   }
 
   // prompt to WebBluetooth/webHID device connection
-  if (xml.querySelector('value[name="thing"]')) {
+  if (
+    xml.querySelector('value[name="thing"]') ||
+    xml.querySelector('value[name="id"]')
+  ) {
     generatePairButtons(xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
