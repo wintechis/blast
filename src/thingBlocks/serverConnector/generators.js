@@ -104,6 +104,11 @@ const addRoute = function (route, operation, statements, app) {
       execute_code(req, res, statements);
     });
   }
+  if (operation === 'put') {
+    app.put(route, (req, res) => {
+      execute_code(req, res, statements);
+    });
+  }
 };
 // Add addRoute function to the interpreter's API.
 apiFunctions.push(['addRoute', addRoute]);
@@ -168,3 +173,22 @@ function execute_code(req, res, statements) {
   };
   interruptRunner_();
 }
+
+Blockly.JavaScript['get_body'] = function (block) {
+  var code = 'getBody(req)';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+/**
+ * adds a route to the express API
+ * @param {String} route New route for the express API.
+ * @param {String} operation HTTP operation type of added route [get, put, post].
+ * @param {String} statements Code to execute when route is activated.
+ * @param {Object} app app object of express.js.
+ */
+const getBody = function (req) {
+  return req.body;
+};
+// Add addRoute function to the interpreter's API.
+apiFunctions.push(['getBody', getBody]);

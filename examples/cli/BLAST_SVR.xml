@@ -22,6 +22,23 @@
             </value>
           </block>
         </statement>
+        <next>
+          <block type="server_route">
+            <field name="operation">put</field>
+            <value name="route">
+              <block type="string">
+                <field name="TEXT">/test</field>
+              </block>
+            </value>
+            <statement name="list">
+              <block type="response_block">
+                <value name="response">
+                  <block type="get_body"></block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </next>
       </block>
     </statement>
   </block>

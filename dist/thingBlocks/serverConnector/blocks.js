@@ -35,7 +35,7 @@ Blocks['server_route'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('route').setCheck(null).appendField('add route');
+    this.appendValueInput('route').setCheck('String').appendField('add route');
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(
@@ -90,3 +90,15 @@ Blocks['response_block'] = {
 };
 // Add server_connector block to the toolbox.
 addBlock('response_block', 'Server Components');
+
+Blocks['get_body'] = {
+  init: function () {
+    this.appendDummyInput().appendField('get body');
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('get_body', 'Server Components');
