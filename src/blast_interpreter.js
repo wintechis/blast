@@ -410,7 +410,6 @@ export const initInterpreter = function (ws) {
 export const runJS = function () {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
-
   if (interpreter === null) {
     // Begin execution
     interpreter = new Interpreter(latestCode, initApi);
