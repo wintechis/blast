@@ -10,8 +10,6 @@ import {dialog, hideChaff, Xml} from 'blockly';
 import FileSaver from 'file-saver';
 import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
-import {getWebBluetoothDevices} from './blast_things.js';
-import {getWebHIDDevices} from './blast_things.js';
 import {implementedThings} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
 import {optionalServices} from './blast_webBluetooth.js';
@@ -62,8 +60,6 @@ export const link = function (download) {
       block.removeAttribute('y');
     }
   }
-  // Remove device id from xml.
-  xml = removeDeviceId_(xml);
   // prettify xml.
   xml = Xml.domToPrettyText(xml);
 
@@ -81,42 +77,6 @@ export const link = function (download) {
   }
   const data = Xml.domToText(xml);
   saveXML_(path, data);
-};
-
-/**
- * Replaces device ID with user defined name in all blocks of type
- * things_webBluetooth and webHID in the xml.
- * @param {!Element} xml XML to remove device ids from.
- * @return {!Element} XML with device ids removed.
- * @private
- */
-const removeDeviceId_ = function (xml) {
-  const blocks = xml.querySelectorAll('block');
-
-  for (const block of blocks) {
-    const type = block.getAttribute('type');
-    if (type === 'things_webBluetooth' || type === 'things_webHID') {
-      // first child is the device id
-      const device = block.firstElementChild;
-      if (device) {
-        const id = device.textContent;
-        const tuples =
-          type === 'things_webBluetooth'
-            ? getWebBluetoothDevices()
-            : getWebHIDDevices();
-        let name;
-        // get the key of the device id
-        for (const [key, value] of tuples) {
-          if (value === id) {
-            name = key;
-            break;
-          }
-        }
-        device.textContent = name;
-      }
-    }
-  }
-  return xml;
 };
 
 /**
@@ -245,8 +205,9 @@ export const loadXML = function (xmlString) {
   }
 
   // prompt to WebBluetooth/webHID device connection
-  if (xml.querySelector('block[type^="things_"]')) {
-    generatePairButtons(xml);
+  const thingBlocks = xml.querySelectorAll('block[type^="things_"]');
+  if (thingBlocks) {
+    generatePairButtons(thingBlocks, xml);
     // show reconnect modal
     if (document.getElementById('rcModal')) {
       document.getElementById('rcModal').style.display = 'block';
@@ -261,25 +222,26 @@ export const loadXML = function (xmlString) {
 
 /**
  * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
- * @param {!Element} xml XML to parse for devices.
+ * @param {!NodeList} blocks thing blocks to generate pair buttons for.
+ * @param {!Xml} xml xml of the program to load.
  * @private
  */
-const generatePairButtons = function (xml) {
+const generatePairButtons = function (blocks, xml) {
   if (window.location.href.includes('mobile')) {
     window.app.openReconnectDialog();
-    generatePairButtonsMobile_(xml);
+    generatePairButtonsMobile_(blocks, xml);
   } else {
-    generatePairButtonsDesktop_(xml);
+    generatePairButtonsDesktop_(blocks, xml);
   }
 };
 
 /**
  * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
- * @param {!Element} xml XML to parse for devices.
+ * @param {!NodeList} blocks thing blocks to generate pair buttons for.
+ * @param {!Xml} xml xml of the program to load.
  * @private
  */
-const generatePairButtonsDesktop_ = function (xml) {
-  const blocks = xml.querySelectorAll('block');
+const generatePairButtonsDesktop_ = function (blocks, xml) {
   const tbody = document.getElementById('rc-tbody');
   // delete all table rows from tbody
   while (tbody.firstChild) {
@@ -290,52 +252,85 @@ const generatePairButtonsDesktop_ = function (xml) {
     thing.block_name = `things_${thing.id}`;
   }
   const blocksAdded = [];
-  // add pair button for each web bluetooth block
+
+  console.log(blocks);
+  // add pair button for each device block
   for (const block of blocks) {
+    // get user defined name
+    const name = block.firstElementChild.textContent;
+    // skip if block was already added
+    if (blocksAdded.includes(name)) {
+      continue;
+    }
+
+    // get thing from implementedThings
     const type = block.getAttribute('type');
+    const thing = implementedThings.find(t => t.block_name === type);
 
-    for (const thing of implementedThings) {
-      if (thing.block_name === type) {
-        // get user defined name
-        const name = block.firstElementChild.textContent;
+    // add new row
+    const row = document.createElement('tr');
+    // generate name cell html
+    const nameCell = document.createElement('td');
+    nameCell.appendChild(document.createTextNode(name));
+    // pair cell html
+    const pairCell = document.createElement('td');
+    const pairButton = document.createElement('input');
+    pairButton.setAttribute('type', 'button');
+    pairButton.setAttribute('id', 'pairButton-' + name);
+    pairButton.setAttribute('value', 'Pair');
+    // pair status html
+    const statusCell = document.createElement('td');
+    const pairStatus = document.createElement('span');
+    pairStatus.setAttribute('id', 'pairStatus-' + name);
+    pairStatus.innerHTML = '&#x2718;';
+    pairStatus.style.color = 'red';
+    pairStatus.style.fontSize = '20px';
+    pairStatus.style.fontWeight = 'bold';
+    pairStatus.style.marginRight = '10px';
+    // add pair status to status cell
+    statusCell.appendChild(pairStatus);
 
-        // skip if block was already added
-        if (blocksAdded.includes(name)) {
-          continue;
+    // pair button click listener
+    pairButton.addEventListener('click', async () => {
+      if (thing.type === 'bluetooth') {
+        // set webbluetooth options
+        const options = {};
+        options.acceptAllDevices = true;
+        options.optionalServices = optionalServices;
+
+        const device = await requestDevice(thing);
+        // change pair status to checkmark
+        document.getElementById('pairStatus-' + name).innerHTML = '&#x2714;';
+        document.getElementById('pairStatus-' + name).style.color = 'green';
+
+        // In all blocks representing the same device, set the id to device id.
+        for (const block1 of blocks) {
+          if (block1.firstElementChild.textContent === name) {
+            block1.lastElementChild.textContent = device.id;
+          }
         }
 
-        // add new row
-        const row = document.createElement('tr');
-        // generate name cell html
-        const nameCell = document.createElement('td');
-        nameCell.appendChild(document.createTextNode(name));
-        // pair cell html
-        const pairCell = document.createElement('td');
-        const pairButton = document.createElement('input');
-        pairButton.setAttribute('type', 'button');
-        pairButton.setAttribute('id', 'pairButton-' + name);
-        pairButton.setAttribute('value', 'Pair');
-        // pair status html
-        const statusCell = document.createElement('td');
-        const pairStatus = document.createElement('span');
-        pairStatus.setAttribute('id', 'pairStatus-' + name);
-        pairStatus.innerHTML = '&#x2718;';
-        pairStatus.style.color = 'red';
-        pairStatus.style.fontSize = '20px';
-        pairStatus.style.fontWeight = 'bold';
-        pairStatus.style.marginRight = '10px';
-        // add pair status to status cell
-        statusCell.appendChild(pairStatus);
+        // if all devices have been paired, enable done button
+        if (allConnectedDesktop_()) {
+          document.getElementById('rc-done').disabled = false;
+          // add done button click listener
+          document
+            .getElementById('rc-done')
+            .addEventListener('click', () => reconnectDoneHandler_(xml));
+        }
+      } else if (thing.type === 'hid') {
+        const filters = [];
 
-        // pair button click listener
-        pairButton.addEventListener('click', async () => {
-          if (thing.type === 'bluetooth') {
-            // set webbluetooth options
-            const options = {};
-            options.acceptAllDevices = true;
-            options.optionalServices = optionalServices;
-
-            const device = await requestDevice(thing);
+        navigator.hid
+          .requestDevice({filters})
+          .then(device => {
+            if (device.length === 0)
+              throwError('Connection failed or cancelled by User.');
+            // generate a unique id for the new device
+            const uid =
+              Date.now().toString(36) + Math.random().toString(36).substring(2);
+            // add device to the device map with its uid
+            addWebHidDevice(uid, name, device[0], thing);
             // change pair status to checkmark
             document.getElementById('pairStatus-' + name).innerHTML =
               '&#x2714;';
@@ -344,7 +339,7 @@ const generatePairButtonsDesktop_ = function (xml) {
             // set block id to device id in all blocks with same name
             for (const block1 of blocks) {
               if (block1.firstElementChild.textContent === name) {
-                block1.lastElementChild.textContent = device.id;
+                block1.lastElementChild.textContent = uid;
               }
             }
 
@@ -356,61 +351,23 @@ const generatePairButtonsDesktop_ = function (xml) {
                 .getElementById('rc-done')
                 .addEventListener('click', () => reconnectDoneHandler_(xml));
             }
-          } else if (thing.type === 'hid') {
-            const filters = [];
-
-            navigator.hid
-              .requestDevice({filters})
-              .then(device => {
-                if (device.length === 0)
-                  throwError('Connection failed or cancelled by User.');
-                // generate a unique id for the new device
-                const uid =
-                  Date.now().toString(36) +
-                  Math.random().toString(36).substring(2);
-                // add device to the device map with its uid
-                addWebHidDevice(uid, name, device[0], thing);
-                // change pair status to checkmark
-                document.getElementById('pairStatus-' + name).innerHTML =
-                  '&#x2714;';
-                document.getElementById('pairStatus-' + name).style.color =
-                  'green';
-
-                // set block id to device id in all blocks with same name
-                for (const block1 of blocks) {
-                  if (block1.firstElementChild.textContent === name) {
-                    block1.lastElementChild.textContent = uid;
-                  }
-                }
-
-                // if all devices have been paired, enable done button
-                if (allConnectedDesktop_()) {
-                  document.getElementById('rc-done').disabled = false;
-                  // add done button click listener
-                  document
-                    .getElementById('rc-done')
-                    .addEventListener('click', () =>
-                      reconnectDoneHandler_(xml)
-                    );
-                }
-              })
-              .catch(error => {
-                throwError('Connection failed or cancelled by User.');
-                console.error(error);
-              });
-          }
-        });
-
-        pairCell.appendChild(pairButton);
-
-        // add new cells to row and row to table
-        row.appendChild(nameCell);
-        row.appendChild(pairCell);
-        row.appendChild(statusCell);
-        tbody.appendChild(row);
-        blocksAdded.push(name);
+          })
+          .catch(error => {
+            throwError('Connection failed or cancelled by User.');
+            console.error(error);
+          });
       }
-    }
+    });
+
+    pairCell.appendChild(pairButton);
+
+    // add new cells to row and row to table
+    row.appendChild(nameCell);
+    row.appendChild(pairCell);
+    row.appendChild(statusCell);
+    tbody.appendChild(row);
+    blocksAdded.push(name);
+
     // add cancel button click listener
     document
       .getElementById('rc-cancel')
@@ -420,123 +377,138 @@ const generatePairButtonsDesktop_ = function (xml) {
 
 /**
  * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
+ * @param {!NodeList} blocks thing blocks to generate pair buttons for.
+ * @param {!Xml} xml xml of the program to load.
  * @param {!Element} xml XML to parse for devices.
  */
-const generatePairButtonsMobile_ = function (xml) {
-  const blocks = xml.querySelectorAll('block');
+const generatePairButtonsMobile_ = function (blocks, xml) {
   // empty list
   const list = document.getElementById('rc-list');
   while (list.firstChild) {
     list.removeChild(list.firstChild);
   }
+  //Generates the type (e.g. things_ruuviTag) of all available things.
+  for (const thing of implementedThings) {
+    thing.block_name = `things_${thing.id}`;
+  }
   const blocksAdded = [];
-  // add pair button for each webBluetooth and webHID block
+
+  // add pair button for each device block
   for (const block of blocks) {
-    const type = block.getAttribute('type');
-    if (type === 'things_webBluetooth' || type === 'things_webHID') {
-      // get user defined name
-      const name = block.firstElementChild.textContent;
-      // skip if block was already added
-      if (blocksAdded.includes(name)) {
-        continue;
-      }
-      // add new list item
-      const item = document.createElement('li');
-      item.setAttribute('id', 'rc-item-' + name);
-      item.setAttribute('class', 'mdc-list-item');
-      // add bluetooth icon to list item
-      const icon = document.createElement('span');
-      icon.setAttribute('id', 'rc-icon-' + name);
-      icon.setAttribute('class', 'mdc-list-item__graphic material-icons');
-      icon.setAttribute('aria-hidden', 'true');
-      icon.innerHTML =
-        type === 'things_webBluetooth' ? 'bluetooth_disabled' : 'usb_off';
-      item.appendChild(icon);
-      // add name and status to list item
-      const text = document.createElement('span');
-      text.setAttribute('class', 'mdc-list-item__text');
-      const primaryText = document.createElement('span');
-      primaryText.setAttribute('class', 'mdc-list-item__primary-text');
-      primaryText.innerHTML = name;
-      text.appendChild(primaryText);
-      const secondaryText = document.createElement('span');
-      secondaryText.setAttribute('class', 'mdc-list-item__secondary-text');
-      secondaryText.setAttribute('id', 'rc-status-' + name);
-      secondaryText.innerHTML = 'disconnected';
-      text.appendChild(secondaryText);
-      item.appendChild(text);
-      // add click listener to list item
-      item.addEventListener('click', async () => {
-        if (type === 'things_webBluetooth') {
-          // set webbluetooth options
-          const options = {};
-          options.acceptAllDevices = true;
-          options.optionalServices = optionalServices;
-
-          const device = await requestDevice();
-          addWebBluetoothDevice(device.id, name);
-          // change pair status to connected
-          document.getElementById('rc-status-' + name).innerHTML = 'connected';
-          // change icon to bluetooth connected
-          document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
-          // change icon color to blue
-          document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
-
-          // set block id to device id
-          block.firstElementChild.textContent = device.id;
-
-          // if all devices have been paired, enable done button
-          if (allConnectedMobile_()) {
-            document.getElementById('rc-done').disabled = false;
-            // add done button click listener
-            document
-              .getElementById('rc-done')
-              .addEventListener('click', () => reconnectDoneHandler_(xml));
-          }
-        } else if (type === 'things_webHID') {
-          const filters = [];
-
-          navigator.hid
-            .requestDevice({filters})
-            .then(device => {
-              if (device.length === 0)
-                throwError('Connection failed or cancelled by User.');
-              // generate a unique id for the new device
-              const uid =
-                Date.now().toString(36) + Math.random().toString(36).substr(2);
-              // add device to the device map with its uid
-              addWebHidDevice(uid, name, device[0]);
-              // change pair status to connected
-              document.getElementById('rc-status-' + name).innerHTML =
-                'connected';
-              // change icon to usb connected
-              document.getElementById('rc-icon-' + name).innerHTML = 'usb';
-              // change icon color to blue
-              document.getElementById('rc-icon-' + name).style.color =
-                '#0d30b1';
-
-              // set block id to device id
-              block.firstElementChild.textContent = uid;
-
-              // if all devices have been paired, enable done button
-              if (allConnectedMobile_()) {
-                document.getElementById('rc-done').disabled = false;
-                // add done button click listener
-                document
-                  .getElementById('rc-done')
-                  .addEventListener('click', () => reconnectDoneHandler_(xml));
-              }
-            })
-            .catch(error => {
-              throwError('Connection failed or cancelled by User.');
-              console.error(error);
-            });
-        }
-      });
-      // add list item to list
-      list.appendChild(item);
-      blocksAdded.push(name);
+    // get user defined name
+    const name = block.firstElementChild.textContent;
+    // skip if block was already added
+    if (blocksAdded.includes(name)) {
+      continue;
     }
+
+    // get thing from implementedThings
+    const type = block.getAttribute('type');
+    const thing = implementedThings.find(t => t.block_name === type);
+
+    // add new list item
+    const item = document.createElement('li');
+    item.setAttribute('id', 'rc-item-' + name);
+    item.setAttribute('class', 'mdc-list-item');
+    // add icon to list item
+    const icon = document.createElement('span');
+    icon.setAttribute('id', 'rc-icon-' + name);
+    icon.setAttribute('class', 'mdc-list-item__graphic material-icons');
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML =
+      thing.type === 'bluetooth' ? 'bluetooth_disabled' : 'usb_off';
+    item.appendChild(icon);
+    // add name and status to list item
+    const text = document.createElement('span');
+    text.setAttribute('class', 'mdc-list-item__text');
+    const primaryText = document.createElement('span');
+    primaryText.setAttribute('class', 'mdc-list-item__primary-text');
+    primaryText.innerHTML = name;
+    text.appendChild(primaryText);
+    const secondaryText = document.createElement('span');
+    secondaryText.setAttribute('class', 'mdc-list-item__secondary-text');
+    secondaryText.setAttribute('id', 'rc-status-' + name);
+    secondaryText.innerHTML = 'disconnected';
+    text.appendChild(secondaryText);
+    item.appendChild(text);
+    // add click listener to list item
+    item.addEventListener('click', async () => {
+      if (thing.type === 'bluetooth') {
+        // set webbluetooth options
+        const options = {};
+        options.acceptAllDevices = true;
+        options.optionalServices = optionalServices;
+
+        const device = await requestDevice();
+        addWebBluetoothDevice(device.id, name);
+        // change pair status to connected
+        document.getElementById('rc-status-' + name).innerHTML = 'connected';
+        // change icon to bluetooth connected
+        document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
+        // change icon color to blue
+        document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+
+        // In all blocks representing the same device, set the id to device id.
+        for (const block1 of blocks) {
+          if (block1.firstElementChild.textContent === name) {
+            block1.lastElementChild.textContent = device.id;
+          }
+        }
+
+        // if all devices have been paired, enable done button
+        if (allConnectedMobile_()) {
+          document.getElementById('rc-done').disabled = false;
+          // add done button click listener
+          document
+            .getElementById('rc-done')
+            .addEventListener('click', () => reconnectDoneHandler_(xml));
+        }
+      } else if (type === 'hid') {
+        const filters = [];
+
+        navigator.hid
+          .requestDevice({filters})
+          .then(device => {
+            if (device.length === 0)
+              throwError('Connection failed or cancelled by User.');
+            // generate a unique id for the new device
+            const uid =
+              Date.now().toString(36) + Math.random().toString(36).substr(2);
+            // add device to the device map with its uid
+            addWebHidDevice(uid, name, device[0]);
+            // change pair status to connected
+            document.getElementById('rc-status-' + name).innerHTML =
+              'connected';
+            // change icon to usb connected
+            document.getElementById('rc-icon-' + name).innerHTML = 'usb';
+            // change icon color to blue
+            document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
+
+            // set block id to device id in all blocks with same name
+            for (const block1 of blocks) {
+              if (block1.firstElementChild.textContent === name) {
+                block1.lastElementChild.textContent = uid;
+              }
+            }
+
+            // if all devices have been paired, enable done button
+            if (allConnectedMobile_()) {
+              document.getElementById('rc-done').disabled = false;
+              // add done button click listener
+              document
+                .getElementById('rc-done')
+                .addEventListener('click', () => reconnectDoneHandler_(xml));
+            }
+          })
+          .catch(error => {
+            throwError('Connection failed or cancelled by User.');
+            console.error(error);
+          });
+      }
+    });
+    // add list item to list
+    list.appendChild(item);
+    blocksAdded.push(name);
   }
   // Init material ui list
   window.app.initLists();
