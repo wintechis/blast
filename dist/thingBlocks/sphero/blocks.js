@@ -47,15 +47,13 @@ Blocks['things_spheroMini'] = {
     this.setHelpUrl('');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of SpheroMini
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      this.thing = getSpheroMini(this.webBluetoothId);
+      this.thing = getSpheroMini(this.getFieldValue('id'));
     }
   },
 };

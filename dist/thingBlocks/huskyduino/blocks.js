@@ -30,15 +30,14 @@ Blocks['things_HuskyDuino'] = {
     this.setTooltip('A HuskyDuino.');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of HuskyDuino
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
+      const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      new HuskyDuino().init(this.webBluetoothId).then(thing => {
+      new HuskyDuino().init(webBluetoothId).then(thing => {
         this.thing = thing;
       });
     }

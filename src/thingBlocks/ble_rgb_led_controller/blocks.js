@@ -49,16 +49,15 @@ Blocks['things_bleLedController'] = {
     );
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
+      const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getBleRgbController(this.webBluetoothId)
-        .init(this.webBluetoothId)
+      getBleRgbController(webBluetoothId)
+        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });

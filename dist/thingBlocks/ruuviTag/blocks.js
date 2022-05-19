@@ -31,14 +31,13 @@ Blocks['things_ruuviTag'] = {
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/RuuviTag');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
-      this.thing = new RuuviTag(this.webBluetoothId);
+      const webBluetoothId = this.getFieldValue('id');
+      this.thing = new RuuviTag(webBluetoothId);
       this.firstTime = false;
     }
   },

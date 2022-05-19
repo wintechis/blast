@@ -50,16 +50,15 @@ Blocks['things_eddyStoneDevice'] = {
     );
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
+      const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getEddystoneDevice(this.webBluetoothId)
-        .init(this.webBluetoothId)
+      getEddystoneDevice(webBluetoothId)
+        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });
@@ -101,16 +100,15 @@ Blocks['things_bluetoothGeneric'] = {
     this.getField('name').setEnabled(false);
     this.firstTime = true;
     this.firstTime = true;
-    this.webBluetoothId = '';
     this.thing = null;
   },
   onchange: function () {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.webBluetoothId = this.getFieldValue('id');
+      const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getBluetoothGeneric(this.webBluetoothId)
-        .init(this.webBluetoothId)
+      getBluetoothGeneric(webBluetoothId)
+        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });
