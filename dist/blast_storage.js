@@ -245,7 +245,6 @@ export const loadXML = function (xmlString) {
   }
 
   // prompt to WebBluetooth/webHID device connection
-  console.log(xml);
   if (xml.querySelector('block[type^="things_"]')) {
     generatePairButtons(xml);
     // show reconnect modal
@@ -342,8 +341,12 @@ const generatePairButtonsDesktop_ = function (xml) {
               '&#x2714;';
             document.getElementById('pairStatus-' + name).style.color = 'green';
 
-            // set block id to device id
-            block.lastElementChild.textContent = device.id;
+            // set block id to device id in all blocks with same name
+            for (const block1 of blocks) {
+              if (block1.firstElementChild.textContent === name) {
+                block1.lastElementChild.textContent = device.id;
+              }
+            }
 
             // if all devices have been paired, enable done button
             if (allConnectedDesktop_()) {
@@ -373,8 +376,12 @@ const generatePairButtonsDesktop_ = function (xml) {
                 document.getElementById('pairStatus-' + name).style.color =
                   'green';
 
-                // set block id to device id
-                block.lastElementChild.textContent = uid;
+                // set block id to device id in all blocks with same name
+                for (const block1 of blocks) {
+                  if (block1.firstElementChild.textContent === name) {
+                    block1.lastElementChild.textContent = uid;
+                  }
+                }
 
                 // if all devices have been paired, enable done button
                 if (allConnectedDesktop_()) {
