@@ -11,7 +11,7 @@ import Blockly from 'blockly';
 import Interpreter from 'js-interpreter';
 import {getThingsLog} from './blast_things.js';
 
-const {Events, JavaScript, selected} = Blockly;
+const {Events, JavaScript} = Blockly;
 
 /**
  * Instance of the JS Interpreter.
@@ -405,57 +405,11 @@ export const initInterpreter = function (ws) {
 };
 
 /**
- * Places a transparent rectangle over the workspace to prevent
- * the user from interacting with the workspace.
- */
-const disableWorkspace = function () {
-  const workspaceDiv = document.getElementById('content_workspace');
-  const rect = document.createElement('div');
-  rect.id = 'workspace-disabled';
-  rect.style.position = 'absolute';
-  rect.style.top = '0';
-  rect.style.left = '0';
-  rect.style.width = '100%';
-  rect.style.height = '100%';
-  rect.style.zIndex = '1';
-  rect.style.backgroundColor = 'rgba(0, 0, 0, 0.1)';
-  workspaceDiv.appendChild(rect);
-  // de-select current block so that the delete key won't work.
-  if (selected) {
-    selected.unselect();
-  }
-};
-
-/**
- * Removes the transparent rectangle over the workspace.
- */
-const enableWorkspace = function () {
-  // Check execution environment (browser/node)
-  // node version does not need enableWorkspace
-  if (typeof window !== 'undefined') {
-    const workspaceDiv = document.getElementById('content_workspace');
-    const rect = document.getElementById('workspace-disabled');
-    if (rect) {
-      workspaceDiv.removeChild(rect);
-    }
-  }
-};
-onStatusChange.ready.push(enableWorkspace);
-onStatusChange.stopped.push(enableWorkspace);
-onStatusChange.error.push(enableWorkspace);
-
-/**
  * Execute the user's code.
  */
 export const runJS = function () {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
-
-  // Check execution environment (browser/node)
-  // if window is not undefined -> Program is running in browser
-  if (typeof window !== 'undefined') {
-    disableWorkspace();
-  }
 
   if (interpreter === null) {
     // Begin execution
