@@ -141,7 +141,6 @@ const handleStreamdeck = async function (id, buttons, upDown, statements) {
   }
 
   streamdeck.on(upDown, keyIndex => {
-    console.log(`${upDown} ${keyIndex}`);
     thingsLog(
       `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
       'hid',

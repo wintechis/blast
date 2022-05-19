@@ -253,7 +253,6 @@ const generatePairButtonsDesktop_ = function (blocks, xml) {
   }
   const blocksAdded = [];
 
-  console.log(blocks);
   // add pair button for each device block
   for (const block of blocks) {
     // get user defined name
