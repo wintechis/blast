@@ -167,6 +167,7 @@ const flyoutCategoryBlocks = function () {
       if (thing.type === 'bluetooth' && !getRssiBlockadded) {
         addBlock('get_signal_strength_wb', 'Properties');
         getRssiBlockadded = true;
+        reloadToolbox();
       }
       const id = thing.id;
       const block = Blockly.utils.xml.createElement('block');
