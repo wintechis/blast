@@ -426,7 +426,7 @@ export const runJS = function () {
           if (hasMore) {
             // Execution is currently blocked by some async call.
             // Try again later.
-            runnerTimeout = setTimeout(runner_, 5);
+            runnerTimeout = setTimeout(runner_, 0);
           } else if (statesInterpreterRunning || eventsInWorkspace.length > 0) {
             // eventChecker is running,
             // dont reset UI until stop button is clicked.
