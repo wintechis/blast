@@ -25,7 +25,7 @@ import {
  * @returns {String} the generated code.
  */
 JavaScript['get_signal_strength_wb'] = function (block) {
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE);
+  const thing = JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE);
   const code = `getRSSIWb(${thing})`;
 
   return [code, JavaScript.ORDER_NONE];
@@ -213,6 +213,11 @@ const readEddystoneProperty = async function (
 asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
 
 JavaScript['things_eddyStoneDevice'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
+
+JavaScript['things_bluetoothGeneric'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
