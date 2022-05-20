@@ -80,6 +80,9 @@ JavaScript['sphero_color'] = function (block) {
  * @param {Number} heading the heading in degrees, (0 is forwards, 90 is right, 180 is backwards, 270 is left).
  */
 function spheroRoll(blockId, speed, heading) {
+  if (speed > 255) {
+    speed = 255;
+  }
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;

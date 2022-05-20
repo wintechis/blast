@@ -1,27 +1,25 @@
 class JoyStick {
   constructor(type, horizAxis, vertAxis) {
     this.type = type;
-    this.horizAxis = horizAxis;
-    this.vertAxis = vertAxis;
-
-    this.values = {
-      up: vertAxis < 0 && Math.round((vertAxis / -1) * 100) / 100,
-      down: vertAxis > 0 && Math.round((vertAxis / 1) * 100) / 100,
-      left: horizAxis < 0 && Math.round((horizAxis / -1) * 100) / 100,
-      right: horizAxis > 0 && Math.round((horizAxis / 1) * 100) / 100,
-    };
+    this.horizAxis = Math.round(horizAxis * 100) / 100;
+    this.vertAxis = -1 * (Math.round(vertAxis * 100) / 100);
   }
 
   pressValues() {
     const pressed = {};
 
-    const directions = ['up', 'down', 'left', 'right'];
-    directions.forEach(dir => {
-      if (this.values[dir] > 0) {
-        const key = `${this.type}-${dir.toUpperCase()}`;
-        pressed[key] = this.values[dir];
-      }
-    });
+    pressed['x'] = this.horizAxis;
+    pressed['y'] = this.vertAxis;
+    // calculate angle
+    let angle = (Math.atan2(this.horizAxis, this.vertAxis) / Math.PI) * 180;
+    // vertAxis: -1 and horizAxis: 0 should be 0 degrees, horizAxis: 1 is 90 degrees
+    // vertAxis: 1 and horizAxis: 0 should be 180 degrees, horizAxis: -1 is 270 degrees
+    if (this.horizAxis < 0) {
+      angle += 360;
+    }
+    pressed['angle'] = angle;
+
+    console.log(pressed);
 
     return pressed;
   }

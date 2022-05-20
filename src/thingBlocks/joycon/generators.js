@@ -324,19 +324,20 @@ const handleGamepadJoystick = function (blockId, id, statements) {
   const scope = interpreter.getGlobalScope();
   scope.object.properties['gp_x'] = 0;
   scope.object.properties['gp_y'] = 0;
+  scope.object.properties['gp_angle'] = 0;
 
   const handleJoystick = function (joystick) {
-    const up = joystick['LS-UP'] || 0;
-    const down = joystick['LS-DOWN'] || 0;
-    const y = up - down;
+    const y = joystick['y'] || 0;
     const pseudoY = interpreter.nativeToPseudo(y);
     scope.object.properties['gp_y'] = pseudoY;
 
-    const right = joystick['LS-RIGHT'] || 0;
-    const left = joystick['LS-LEFT'] || 0;
-    const x = right - left;
+    const x = joystick['x'] || 0;
     const pseudoX = interpreter.nativeToPseudo(x);
     scope.object.properties['gp_x'] = pseudoX;
+
+    const angle = joystick['angle'] || 0;
+    const pseudoAngle = interpreter.nativeToPseudo(angle);
+    scope.object.properties['gp_angle'] = pseudoAngle;
 
     // interrupt BLAST execution
     interruptRunner();

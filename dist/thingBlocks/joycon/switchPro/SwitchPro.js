@@ -52,12 +52,12 @@ export default class SwitchPro {
     }
 
     const leftStick = new JoyStick('LS', gp.axes[0], gp.axes[1]);
-    const rightStick = new JoyStick('RS', gp.axes[2], gp.axes[3]);
+    // const rightStick = new JoyStick('RS', gp.axes[2], gp.axes[3]);
 
     this.pressed = {
       ...this.pressed,
       ...leftStick.pressValues(),
-      ...rightStick.pressValues(),
+      // ...rightStick.pressValues(),
     };
 
     // only emit if somethign changed

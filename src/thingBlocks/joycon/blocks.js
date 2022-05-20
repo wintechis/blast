@@ -376,7 +376,8 @@ Blocks['joycon_gamepad_joystick'] = {
     this.appendDummyInput()
       .appendField('uses variables')
       .appendField(new FieldTextInput('gp-x'), 'gp-x')
-      .appendField(new FieldTextInput('gp-y'), 'gp-y');
+      .appendField(new FieldTextInput('gp-y'), 'gp-y')
+      .appendField(new FieldTextInput('gp-angle'), 'gp-angle');
     this.appendDummyInput().appendField('when joystick moves');
     this.appendStatementInput('statements').appendField('do');
     this.setInputsInline(false);
@@ -386,6 +387,7 @@ Blocks['joycon_gamepad_joystick'] = {
     this.changeListener = null;
     this.getField('gp-x').setEnabled(false);
     this.getField('gp-y').setEnabled(false);
+    this.getField('gp-angle').setEnabled(false);
   },
   /**
    * Add this block's id to the events array.
@@ -434,6 +436,9 @@ Blocks['joycon_gamepad_joystick'] = {
     }
     if (!ws.getVariable('gp-y')) {
       ws.createVariable('gp-y');
+    }
+    if (!ws.getVariable('gp-angle')) {
+      ws.createVariable('gp-angle');
     }
   },
 };
