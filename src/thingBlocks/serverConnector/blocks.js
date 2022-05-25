@@ -10,7 +10,7 @@ import Blockly from 'blockly';
 const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
-Blocks['add_server_block'] = {
+Blocks['add_server'] = {
   /**
    * Block for adding a server connector on port
    * @this {Blockly.Block}
