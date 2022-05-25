@@ -27,7 +27,7 @@ Blocks['add_server'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('add_server_block', 'Server Components');
+addBlock('add_server', 'Server Components');
 
 Blocks['server_route'] = {
   /**
