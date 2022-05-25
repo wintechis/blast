@@ -17,7 +17,7 @@ Blocks['add_server'] = {
    */
   init: function () {
     this.appendValueInput('port')
-      .setCheck(null)
+      .setCheck(Number)
       .appendField('add server on port');
     this.appendStatementInput('list').setCheck(null);
     this.setInputsInline(true);
