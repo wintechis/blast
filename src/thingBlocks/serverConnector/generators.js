@@ -25,7 +25,7 @@ import {
  * @param {Blockly.Block} block the add_server block.
  * @returns {String} the generated code.
  */
-JavaScript['add_server'] = function (block) {
+JavaScript['server_add_connector'] = function (block) {
   const value_port = Blockly.JavaScript.valueToCode(
     block,
     'port',
@@ -182,14 +182,11 @@ Blockly.JavaScript['get_body'] = function (block) {
 };
 
 /**
- * adds a route to the express API
- * @param {String} route New route for the express API.
- * @param {String} operation HTTP operation type of added route [get, put, post].
- * @param {String} statements Code to execute when route is activated.
- * @param {Object} app app object of express.js.
+ * returns the body of a request
+ * @param {Object} req request object of express.js.
  */
 const getBody = function (req) {
   return req.body;
 };
-// Add addRoute function to the interpreter's API.
+// Add getBody function to the interpreter's API.
 apiFunctions.push(['getBody', getBody]);

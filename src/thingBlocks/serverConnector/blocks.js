@@ -10,14 +10,14 @@ import Blockly from 'blockly';
 const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
 
-Blocks['add_server'] = {
+Blocks['server_add_connector'] = {
   /**
    * Block for adding a server connector on port
    * @this {Blockly.Block}
    */
   init: function () {
     this.appendValueInput('port')
-      .setCheck(Number)
+      .setCheck('Number')
       .appendField('add server on port');
     this.appendStatementInput('list').setCheck(null);
     this.setInputsInline(true);
@@ -27,7 +27,7 @@ Blocks['add_server'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('add_server', 'Server Components');
+addBlock('server_add_connector', 'Server Components');
 
 Blocks['server_route'] = {
   /**
@@ -57,21 +57,6 @@ Blocks['server_route'] = {
 };
 // Add server_connector block to the toolbox.
 addBlock('server_route', 'Server Components');
-
-Blocks['start_server'] = {
-  init: function () {
-    this.appendValueInput('port')
-      .setCheck('Number')
-      .appendField('start server on port');
-    this.setInputsInline(true);
-    this.setPreviousStatement(true, null);
-    this.setColour(230);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  },
-};
-// Add server_connector block to the toolbox.
-addBlock('start_server', 'Server Components');
 
 Blocks['response_block'] = {
   /**
