@@ -25,7 +25,7 @@ import {
  * @param {Blockly.Block} block the add_server block.
  * @returns {String} the generated code.
  */
-JavaScript['add_server_block'] = function (block) {
+JavaScript['add_server'] = function (block) {
   const value_port = Blockly.JavaScript.valueToCode(
     block,
     'port',
