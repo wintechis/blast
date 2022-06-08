@@ -20,8 +20,8 @@ import {
 } from './../../blast_interpreter.js';
 
 /**
- * Generates JavaScript code for the add_server block.
- * @param {Blockly.Block} block the add_server block.
+ * Generates JavaScript code for the server_add_connector block.
+ * @param {Blockly.Block} block the server_add_connector block.
  * @returns {String} the generated code.
  */
 JavaScript['server_add_connector'] = function (block) {
@@ -111,11 +111,11 @@ const addRoute = function (route, operation, statements, app) {
 apiFunctions.push(['addRoute', addRoute]);
 
 /**
- * Generates JavaScript code for the response block.
- * @param {Blockly.Block} block the response block.
+ * Generates JavaScript code for the server_response block.
+ * @param {Blockly.Block} block the server_response block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['response_block'] = function (block) {
+Blockly.JavaScript['server_response'] = function (block) {
   const value_response = JavaScript.valueToCode(
     block,
     'response',
@@ -172,7 +172,7 @@ function execute_code(req, res, statements) {
 }
 
 // eslint-disable-next-line no-unused-vars
-Blockly.JavaScript['get_body'] = function (block) {
+Blockly.JavaScript['server_get_body'] = function (block) {
   const code = 'getBody(req)';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];

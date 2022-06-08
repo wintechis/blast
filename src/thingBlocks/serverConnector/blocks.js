@@ -58,7 +58,7 @@ Blocks['server_route'] = {
 // Add server_connector block to the toolbox.
 addBlock('server_route', 'Server Components');
 
-Blocks['response_block'] = {
+Blocks['server_response'] = {
   /**
    * Block for sending a response
    * @this {Blockly.Block}
@@ -76,7 +76,7 @@ Blocks['response_block'] = {
 // Add server_connector block to the toolbox.
 addBlock('response_block', 'Server Components');
 
-Blocks['get_body'] = {
+Blocks['server_get_body'] = {
   init: function () {
     this.appendDummyInput().appendField('get body');
     this.setOutput(true, null);
