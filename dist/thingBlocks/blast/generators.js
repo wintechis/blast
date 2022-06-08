@@ -7,11 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {
-  asyncApiFunctions,
-  getStdOut,
-  throwError,
-} from './../../blast_interpreter.js';
+import {getStdOut, throwError} from './../../blast_interpreter.js';
 
 const {JavaScript} = Blockly;
 
@@ -36,7 +32,7 @@ JavaScript['http_request'] = function (block) {
   const output = block.getFieldValue('OUTPUT');
   const body = JavaScript.valueToCode(block, 'body', JavaScript.ORDER_NONE);
 
-  const code = `sendHttpRequest(${uri},'${method}', 
+  const code = `await sendHttpRequest(${uri},'${method}', 
       '{${headers}}', ${body}, '${output}')\n`;
   return [code, JavaScript.ORDER_NONE];
 };
@@ -50,17 +46,15 @@ JavaScript['http_request'] = function (block) {
  * @param {string=} body JSON string containing body, optional.
  * Not needed when method is GET.
  * @param {string} output Output can be status or response.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {string} the response status code or body, depending on output parameter.
  * @private
  */
-const sendHttpRequest = async function (
+globalThis['sendHttpRequest'] = async function (
   uri,
   method,
   headersString,
   body,
-  output,
-  callback
+  output
 ) {
   if (uri === null || uri === undefined || uri === '') {
     throwError('URI input of HttpRequest blocks must not be empty');
@@ -87,18 +81,15 @@ const sendHttpRequest = async function (
     }
 
     if (output === 'status') {
-      callback(res.status);
-      return;
+      return res.status;
     }
 
     const response = await res.text();
-    callback(response);
+    return response;
   } catch (error) {
     throwError(`Failed to get ${uri}, Error: ${error.message}`);
   }
 };
-// add sendHTTPRequest method to the interpreter's API.
-asyncApiFunctions.push(['sendHttpRequest', sendHttpRequest]);
 
 /**
  * Generates JavaScript code for the display_text block.
@@ -130,17 +121,16 @@ globalThis['displayText'] = function (text) {
  */
 JavaScript['play_audio'] = function (block) {
   const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
-  const code = `playAudio(${uri});\n`;
+  const code = `await playAudio(${uri});\n`;
   return code;
 };
 
 /**
  * Plays an audio file provided by URI.
  * @param {string} uri URI of the audio file to play.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const playAudio = async function (uri, callback) {
+globalThis['playAudio'] = async function (uri) {
   await new Promise((resolve, reject) => {
     const audio = new Audio(uri);
     audio.preload = 'auto';
@@ -154,10 +144,7 @@ const playAudio = async function (uri, callback) {
     };
     audio.onended = resolve;
   });
-  callback();
 };
-// add playAudio method to the interpreter's API.
-asyncApiFunctions.push(['playAudio', playAudio]);
 
 /**
  * Generates JavaScript code for the capture_image block.
@@ -166,15 +153,15 @@ asyncApiFunctions.push(['playAudio', playAudio]);
  */
 // eslint-disable-next-line no-unused-vars
 JavaScript['capture_image'] = function (block) {
-  const code = 'captureImage()';
+  const code = 'await captureImage()';
   return [code, JavaScript.ORDER_NONE];
 };
 
 /**
  * Captures a snapshot from camera and returns it as a base64 encoded string.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @returns {string} base64 encoded string of the image.
  */
-const captureImage = async function (callback) {
+globalThis['captureImage'] = async function () {
   // Create video element.
   const videoElem = document.createElement('video');
   videoElem.id = 'video';
@@ -214,8 +201,5 @@ const captureImage = async function (callback) {
   videoElem.remove();
   canvas.remove();
 
-  callback(data);
+  return data;
 };
-
-// add capture_image method to the interpreter's API.
-asyncApiFunctions.push(['captureImage', captureImage]);
