@@ -13,12 +13,56 @@ import express from 'express';
 import Interpreter from 'js-interpreter';
 import {
   apiFunctions,
-  asyncApiFunctions,
   continueRunner,
   getInterpreter,
   interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
+
+/**
+ * Generates JavaScript code for the server_add_connector block.
+ * @param {Blockly.Block} block the server_add_connector block.
+ * @returns {String} the generated code.
+ */
+JavaScript['server_add_connector'] = function (block) {
+  const value_port = Blockly.JavaScript.valueToCode(
+    block,
+    'port',
+    Blockly.JavaScript.ORDER_ATOMIC
+  );
+  const statements_list = JavaScript.statementToCode(block, 'list');
+  // addServer; statements_list -> addRoutes; startServer
+  const code = `addServerConnector();\n ${statements_list} startServer(${value_port}, app)`;
+  return code;
+};
+
+/**
+ * Creates an express API and adds 'app' object to interpreter
+ */
+const addServerConnector = function () {
+  console.log('Add Server');
+  const app = express();
+
+  app.use(express.urlencoded({extended: true}));
+  app.use(express.json());
+
+  // Add 'app' to interpreter
+  const scope = getInterpreter().getGlobalScope();
+  getInterpreter().setProperty(scope.object, 'app', app);
+};
+apiFunctions.push(['addServerConnector', addServerConnector]);
+
+/**
+ * start to listen on port
+ * @param {Number} port Port to listen on.
+ * @param {Object} app app object of express.js.
+ */
+const startServer = function (port, app) {
+  app.listen(port);
+  console.log(`Server is up on port ${port}`);
+};
+// Add addRoute function to the interpreter's API.
+apiFunctions.push(['startServer', startServer]);
 
 /**
  * Generates JavaScript code for the server_route block.
@@ -31,54 +75,48 @@ JavaScript['server_route'] = function (block) {
     'route',
     JavaScript.ORDER_ATOMIC
   );
-  const dropdown_operation = block.getFieldValue('operation');
+  const dropdown_operation = JavaScript.quote_(
+    block.getFieldValue('operation')
+  );
   const statements_list = JavaScript.quote_(
     JavaScript.statementToCode(block, 'list')
   );
 
-  const code = `addRoute(${value_route}, ${dropdown_operation}, ${statements_list});\n`;
+  const code = `addRoute(${value_route}, ${dropdown_operation}, ${statements_list}, app);\n`;
   return code;
 };
 
 /**
- * creates an EXPRESS.js API
- * @param {String} route Route to add to express API.
+ * adds a route to the express API
+ * @param {String} route New route for the express API.
  * @param {String} operation HTTP operation type of added route [get, put, post].
  * @param {String} statements Code to execute when route is activated.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
+ * @param {Object} app app object of express.js.
  */
-const addRoute = async function (route, operation, statements, callback) {
-  const app = express();
-
-  app.use(express.urlencoded({extended: true}));
-  app.use(express.json());
+const addRoute = function (route, operation, statements, app) {
+  console.log('Add Rotue');
 
   if (operation === 'get') {
     app.get(route, (req, res) => {
-      execute_code(req, res, statements, callback);
+      execute_code(req, res, statements);
     });
   }
-
-  /*
-  app.post('/test', (req, res) => {
-    console.log(req.body);
-    res.json(req.body);
-  });
-  */
-
-  app.listen(8000);
-  console.log('Server is up');
+  if (operation === 'put') {
+    app.put(route, (req, res) => {
+      execute_code(req, res, statements);
+    });
+  }
 };
 // Add addRoute function to the interpreter's API.
-asyncApiFunctions.push(['addRoute', addRoute]);
+apiFunctions.push(['addRoute', addRoute]);
 
 /**
- * Generates JavaScript code for the response block.
- * @param {Blockly.Block} block the response block.
+ * Generates JavaScript code for the server_response block.
+ * @param {Blockly.Block} block the server_response block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['response_block'] = function (block) {
-  const value_response = Blockly.JavaScript.valueToCode(
+Blockly.JavaScript['server_response'] = function (block) {
+  const value_response = JavaScript.valueToCode(
     block,
     'response',
     Blockly.JavaScript.ORDER_ATOMIC
@@ -104,8 +142,7 @@ apiFunctions.push(['sendResponse', sendResponse]);
  * @param {Object} res Response object.
  * @param {String} statements Code to execute.
  */
-// eslint-disable-next-line no-unused-vars
-function execute_code(req, res, statements, callback) {
+function execute_code(req, res, statements) {
   // interrupt BLAST execution
   interruptRunner();
 
@@ -133,3 +170,20 @@ function execute_code(req, res, statements, callback) {
   };
   interruptRunner_();
 }
+
+// eslint-disable-next-line no-unused-vars
+Blockly.JavaScript['server_get_body'] = function (block) {
+  const code = 'getBody(req)';
+  // TODO: Change ORDER_NONE to the correct strength.
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
+/**
+ * returns the body of a request
+ * @param {Object} req request object of express.js.
+ */
+const getBody = function (req) {
+  return req.body;
+};
+// Add getBody function to the interpreter's API.
+apiFunctions.push(['getBody', getBody]);
