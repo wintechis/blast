@@ -8,13 +8,10 @@
 
  import Blockly from 'blockly';
  import urdf from 'urdf';
- import {
-   asyncApiFunctions,
-   getInterpreter,
-   throwError,
- } from './../../blast_interpreter.js';
+ import {throwError} from './../../blast_interpreter.js';
  
  const {JavaScript} = Blockly;
+ globalThis['urdf'] = urdf;
 
  /**
  * Generates JavaScript code for the sparql_query block.
@@ -29,7 +26,7 @@ JavaScript['sparql_query'] = function (block) {
     // escape " quotes and replace linebreaks (\n) with \ in query
     query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
   
-    const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
+    const code = `await urdfQueryWrapper(${uri}, ${format}, '${query}')`;
   
     return [code, JavaScript.ORDER_NONE];
   };
@@ -47,7 +44,7 @@ JavaScript['sparql_query'] = function (block) {
     // escape " quotes and replace linebreaks (\n) with \ in query
     query = query.replace(/"/g, '\\"').replace(/[\n\r]/g, ' ');
   
-    const code = `urdfQueryWrapper(${uri}, ${format}, '${query}')`;
+    const code = `await urdfQueryWrapper(${uri}, ${format}, '${query}')`;
   
     return [code, JavaScript.ORDER_NONE];
   };
@@ -57,10 +54,9 @@ JavaScript['sparql_query'] = function (block) {
    * @param {String} uri URI to query.
    * @param {String} format format of the resource to query
    * @param {String} query Query to execute.
-   * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
    * @public
    */
-  const urdfQueryWrapper = async function (uri, format, query, callback) {
+  globalThis['urdfQueryWrapper'] = async function (uri, format, query) {
     let res;
   
     try {
@@ -85,8 +81,7 @@ JavaScript['sparql_query'] = function (block) {
   
     // if result is a boolean, return it.
     if (typeof res === 'boolean') {
-      callback(res);
-      return;
+      return res;
     }
   
     // Convert result from array of objects to array of arrays.
@@ -99,9 +94,5 @@ JavaScript['sparql_query'] = function (block) {
       resultArray.push(resultArrayRow);
     }
   
-    const interpreterObj = getInterpreter().nativeToPseudo(resultArray);
-  
-    callback(interpreterObj);
+    return resultArray;
   };
-  // add urdfQueryWrapper method to the interpreter's API.
-  asyncApiFunctions.push(['urdfQueryWrapper', urdfQueryWrapper]);
