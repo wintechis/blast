@@ -23,6 +23,7 @@ import StreamDeck from '@elgato-stream-deck/webhid';
 globalThis['StreamDeck'] = StreamDeck;
 
 const streamDeckInstances = new Map();
+let openening = false;
 
 /**
  * Keeps singleton instances of StreamDeck instantiated by BLAST.
@@ -32,11 +33,15 @@ export const getStreamdeck = async function (id) {
   if (streamDeckInstances.has(id)) {
     return streamDeckInstances.get(id);
   } else {
+    if (openening) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      return getStreamdeck(id);
+    }
     const device = getWebHidDevice(id);
-    // In order to work during loading, we can't wait for async functions here.
-    streamDeckInstances.set(id, 'temp');
+    openening = true;
     const thing = await StreamDeck.openDevice(device);
     streamDeckInstances.set(id, thing);
+    openening = false;
     return thing;
   }
 };
