@@ -7,9 +7,27 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldDropdown} = Blockly;
+const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
-import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
+
+Blocks['server_add_connector'] = {
+  /**
+   * Block for adding a server connector on port
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendValueInput('port')
+      .setCheck('Number')
+      .appendField('add server on port');
+    this.appendStatementInput('list').setCheck(null);
+    this.setInputsInline(true);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('server_add_connector', 'Server Components');
 
 Blocks['server_route'] = {
   /**
@@ -21,60 +39,26 @@ Blocks['server_route'] = {
     this.appendDummyInput()
       .appendField('for operation')
       .appendField(
-        new FieldDropdown([
-          ['GET', '"get"'],
-          // ['PUT', '"put"'],
-          // ['POST', '"post"'],
+        new Blockly.FieldDropdown([
+          ['GET', 'get'],
+          ['PUT', 'put'],
+          //['POST', 'post'],
         ]),
         'operation'
       );
     this.appendStatementInput('list').setCheck(null);
     this.setInputsInline(true);
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
     this.setColour(230);
-    this.setTooltip('Add a route to the server');
+    this.setTooltip('');
     this.setHelpUrl('');
-    this.requested = false;
-  },
-  /**
-   * Add this block's id to the events array.
-   */
-  addEvent: async function () {
-    eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    getWorkspace().addChangeListener(event => this.onDispose(event));
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // block is being deleted
-        this.removeFromEvents();
-      }
-    }
-  },
-  /**
-   * Remove this block's id from the events array.
-   */
-  removeFromEvents: function () {
-    // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
-    if (index !== -1) {
-      eventsInWorkspace.splice(index, 1);
-    }
   },
 };
 // Add server_connector block to the toolbox.
 addBlock('server_route', 'Server Components');
 
-Blocks['response_block'] = {
+Blocks['server_response'] = {
   /**
    * Block for sending a response
    * @this {Blockly.Block}
@@ -91,3 +75,15 @@ Blocks['response_block'] = {
 };
 // Add server_connector block to the toolbox.
 addBlock('response_block', 'Server Components');
+
+Blocks['server_get_body'] = {
+  init: function () {
+    this.appendDummyInput().appendField('get body');
+    this.setOutput(true, null);
+    this.setColour(230);
+    this.setTooltip('');
+    this.setHelpUrl('');
+  },
+};
+// Add server_connector block to the toolbox.
+addBlock('get_body', 'Server Components');

@@ -1,18 +1,44 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="server_route">
-    <field name="operation">"get"</field>
-    <value name="route">
-      <block type="string">
-        <field name="TEXT">/</field>
+  <block type="add_server_block">
+    <value name="port">
+      <block type="number_value">
+        <field name="NUM">8080</field>
       </block>
     </value>
     <statement name="list">
-      <block type="response_block">
-        <value name="response">
+      <block type="server_route">
+        <field name="operation">get</field>
+        <value name="route">
           <block type="string">
-            <field name="TEXT">Hello World!</field>
+            <field name="TEXT">/</field>
           </block>
         </value>
+        <statement name="list">
+          <block type="response_block">
+            <value name="response">
+              <block type="string">
+                <field name="TEXT">Hello World!</field>
+              </block>
+            </value>
+          </block>
+        </statement>
+        <next>
+          <block type="server_route">
+            <field name="operation">put</field>
+            <value name="route">
+              <block type="string">
+                <field name="TEXT">/test</field>
+              </block>
+            </value>
+            <statement name="list">
+              <block type="response_block">
+                <value name="response">
+                  <block type="get_body"></block>
+                </value>
+              </block>
+            </statement>
+          </block>
+        </next>
       </block>
     </statement>
   </block>
