@@ -20,14 +20,14 @@ JavaScript['wait_seconds'] = function (block) {
   const seconds =
     JavaScript.valueToCode(block, 'SECONDS', JavaScript.ORDER_ATOMIC) || 0;
 
-  const functionName = JavaScript.provideFunction_(
-    'waitSeconds',
-    `
-async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(seconds) {
-    await new Promise(resolve => setTimeout(resolve, seconds * 1000));
-}`
-  );
-
-  const code = `await ${functionName}(${seconds});\n`;
+  const code = `await waitSeconds(${seconds});\n`;
   return code;
+};
+
+/**
+ * Halts the program execution for the given number of seconds.
+ * @param {Number} seconds the number of seconds to wait.
+ */
+globalThis['waitSeconds'] = async function (seconds) {
+  await new Promise(resolve => setTimeout(resolve, seconds * 1000));
 };
