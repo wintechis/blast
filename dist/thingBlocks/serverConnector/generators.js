@@ -13,7 +13,6 @@ import express from 'express';
 import Interpreter from 'js-interpreter';
 import {
   apiFunctions,
-  asyncApiFunctions,
   continueRunner,
   getInterpreter,
   interruptRunner,
@@ -21,8 +20,8 @@ import {
 } from './../../blast_interpreter.js';
 
 /**
- * Generates JavaScript code for the add_server block.
- * @param {Blockly.Block} block the add_server block.
+ * Generates JavaScript code for the server_add_connector block.
+ * @param {Blockly.Block} block the server_add_connector block.
  * @returns {String} the generated code.
  */
 JavaScript['server_add_connector'] = function (block) {
@@ -57,15 +56,13 @@ apiFunctions.push(['addServerConnector', addServerConnector]);
  * start to listen on port
  * @param {Number} port Port to listen on.
  * @param {Object} app app object of express.js.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-// eslint-disable-next-line no-unused-vars
-const startServer = async function (port, app, callback) {
+const startServer = function (port, app) {
   app.listen(port);
   console.log(`Server is up on port ${port}`);
 };
 // Add addRoute function to the interpreter's API.
-asyncApiFunctions.push(['startServer', startServer]);
+apiFunctions.push(['startServer', startServer]);
 
 /**
  * Generates JavaScript code for the server_route block.
@@ -114,11 +111,11 @@ const addRoute = function (route, operation, statements, app) {
 apiFunctions.push(['addRoute', addRoute]);
 
 /**
- * Generates JavaScript code for the response block.
- * @param {Blockly.Block} block the response block.
+ * Generates JavaScript code for the server_response block.
+ * @param {Blockly.Block} block the server_response block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['response_block'] = function (block) {
+Blockly.JavaScript['server_response'] = function (block) {
   const value_response = JavaScript.valueToCode(
     block,
     'response',
@@ -175,7 +172,7 @@ function execute_code(req, res, statements) {
 }
 
 // eslint-disable-next-line no-unused-vars
-Blockly.JavaScript['get_body'] = function (block) {
+Blockly.JavaScript['server_get_body'] = function (block) {
   const code = 'getBody(req)';
   // TODO: Change ORDER_NONE to the correct strength.
   return [code, Blockly.JavaScript.ORDER_NONE];
