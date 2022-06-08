@@ -8,7 +8,6 @@
 
 import Blockly from 'blockly';
 const {JavaScript, Names} = Blockly;
-import {apiFunctions} from './../blast_interpreter.js';
 
 JavaScript['procedures_defeval'] = function (block) {
   const funcName = JavaScript.variableDB_.getName(
@@ -74,6 +73,3 @@ JavaScript['procedures_calleval'] = function (block) {
   const code = funcName + '(' + args.join(', ') + ')';
   return [code, JavaScript.ORDER_FUNCTION_CALL];
 };
-
-// Add console to JSInterpreter for debugging with the procedures_calleval block.
-apiFunctions.push(['log', console.log]);

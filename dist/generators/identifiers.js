@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {apiFunctions, throwError} from './../blast_interpreter.js';
+import {throwError} from './../blast_interpreter.js';
 
 JavaScript['uri'] = function (block) {
   const uri = JavaScript.quote_(block.getFieldValue('URI'));
@@ -23,7 +23,7 @@ JavaScript['uri_from_string'] = function (block) {
   return [code, JavaScript.ORDER_NONE];
 };
 
-const convertToUri = function (uri) {
+globalThis['convertToUri'] = function (uri) {
   // Check if the string is a valid URI.
   try {
     new URL(uri);
@@ -32,9 +32,6 @@ const convertToUri = function (uri) {
   }
   return uri;
 };
-
-// add convertToUri method to the interpreter's API.
-apiFunctions.push(['convertToUri', convertToUri]);
 
 JavaScript['mac'] = function (block) {
   const mac = JavaScript.quote_(block.getFieldValue('MAC'));

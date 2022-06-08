@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {asyncApiFunctions, getStdIn} from './../blast_interpreter.js';
+import {getStdIn} from './../blast_interpreter.js';
 
 // Remap blockly blocks to improve naming in xml.
 JavaScript['string'] = JavaScript['text'];
@@ -48,10 +48,8 @@ JavaScript['string_showPrompt'] = function (block) {
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {String} the input string
  */
-const stdIn = async function (message, callback) {
+globalThis['stdIn'] = async function (message, callback) {
   const input = getStdIn();
   const inputString = await input(message);
   callback(inputString);
 };
-
-asyncApiFunctions.push(['stdIn', stdIn]);
