@@ -34,7 +34,7 @@ JavaScript['string_showPrompt'] = function (block) {
     // External message.
     msg = JavaScript.valueToCode(block, 'TEXT', JavaScript.ORDER_NONE) || "''";
   }
-  let code = `stdIn(${msg})`;
+  let code = `await showPrompt(${msg})`;
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = `Number(${code})`;
@@ -45,11 +45,10 @@ JavaScript['string_showPrompt'] = function (block) {
 /**
  * String input function
  * @param {String} message the message to show
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {String} the input string
  */
-globalThis['stdIn'] = async function (message, callback) {
+globalThis['showPrompt'] = async function (message) {
   const input = getStdIn();
   const inputString = await input(message);
-  callback(inputString);
+  return inputString;
 };
