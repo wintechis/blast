@@ -13,7 +13,6 @@ import express from 'express';
 import Interpreter from 'js-interpreter';
 import {
   apiFunctions,
-  asyncApiFunctions,
   continueRunner,
   getInterpreter,
   interruptRunner,
@@ -57,15 +56,13 @@ apiFunctions.push(['addServerConnector', addServerConnector]);
  * start to listen on port
  * @param {Number} port Port to listen on.
  * @param {Object} app app object of express.js.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-// eslint-disable-next-line no-unused-vars
-const startServer = async function (port, app, callback) {
+const startServer = function (port, app) {
   app.listen(port);
   console.log(`Server is up on port ${port}`);
 };
 // Add addRoute function to the interpreter's API.
-asyncApiFunctions.push(['startServer', startServer]);
+apiFunctions.push(['startServer', startServer]);
 
 /**
  * Generates JavaScript code for the server_route block.
