@@ -8,7 +8,6 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {asyncApiFunctions} from './../blast_interpreter.js';
 
 // Remap blockly blocks to improve naming in xml.
 JavaScript['repeat'] = JavaScript['controls_repeat_ext'];

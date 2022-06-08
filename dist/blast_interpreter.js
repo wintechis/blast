@@ -51,6 +51,8 @@ export const interruptRunner = function () {
 };
 apiFunctions.push(['interruptRunner', interruptRunner]);
 
+const runner_ = null;
+
 /**
  * Continues the JS Interpreter.
  */
