@@ -12,7 +12,6 @@ import {currentToolbox} from '../../../dist/blast_toolbox.js';
 import {downloadScreenshot} from './screenshot.js';
 import {statesFlyoutCategory} from '../../../dist/blast_states.js';
 import {initInterpreter} from '../../../dist/blast_interpreter.js';
-import {initStatesInterpreter} from '../../../dist/blast_states_interpreter.js';
 import {initUi} from './web.js';
 import {link} from '../../../dist/blast_storage.js';
 import {load} from '../../../dist/blast_storage.js';
@@ -86,7 +85,6 @@ const init = function () {
   }
 
   initInterpreter(workspace);
-  initStatesInterpreter(workspace);
 
   // Initialize UI
   initUi(workspace);

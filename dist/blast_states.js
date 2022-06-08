@@ -7,8 +7,8 @@
 
 import Blockly from 'blockly';
 const {Blocks, Msg, Names, utils} = Blockly;
-import {apiFunctions} from './blast_interpreter.js';
 import {getCategory} from './blast_toolbox.js';
+import {EventEmitter} from 'events';
 
 /**
  * State block type.
@@ -22,30 +22,11 @@ import {getCategory} from './blast_toolbox.js';
 export let StateBlock;
 
 /**
- * Map containing previous values for events identified by block IDs.
- * @type {Map<!Blockly.Block.id, boolean>}
+ * Singleton intstance of BLAST's EventEmitter.
+ * @type {EventEmitter}
  * @public
  */
-const eventValues = new Map();
-
-/**
- * Compares a given state condition with its' previous value.
- * @param {Blockly.Block.id} blockId id of the state definition block.
- * @param {boolean} curValue the current condition evaluated.
- * @return {boolean} true if state condition is now true and was false before,
- * false otherwise.
- */
-const eventChecker = function (blockId, curValue) {
-  const prevValue = eventValues.get(blockId);
-  eventValues.set(blockId, curValue);
-
-  if (prevValue !== undefined) {
-    return !prevValue && curValue;
-  }
-  return false;
-};
-// Add eventChecker to the interpreter api.
-apiFunctions.push(['eventChecker', eventChecker]);
+export const eventEmitter = new EventEmitter();
 
 /**
  * Find all user-created state definitions in a workspace.

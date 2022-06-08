@@ -7,8 +7,6 @@
 'use strict';
 
 import Blockly from 'blockly';
-// eslint-disable-next-line node/no-unpublished-import
-import Interpreter from 'js-interpreter';
 import {getThingsLog} from './blast_things.js';
 
 const {Events, JavaScript} = Blockly;
@@ -18,7 +16,7 @@ const {Events, JavaScript} = Blockly;
  * @type {?Interpreter}
  * @public
  */
-export let interpreter = null;
+export const interpreter = null;
 
 /**
  * Getter for the interpreter.
@@ -112,13 +110,6 @@ export const getLatestCode = function () {
 };
 
 /**
- * Instance of runner function.
- * @type {?function}
- * @private
- */
-let runner_ = null;
-
-/**
  * The timeout currently used in {@link runner_}.
  */
 let runnerTimeout = null;
@@ -176,19 +167,6 @@ const cleanUpFunctions = [];
  */
 export const addCleanUpFunction = function (fn) {
   cleanUpFunctions.push(fn);
-};
-
-/**
- * Set to true if the States Interpreter is running.
- */
-let statesInterpreterRunning = false;
-
-/**
- * Setter for {@link statesInterpreterRunning}.
- * @param {boolean} val value to set.
- */
-export const setStatesInterpreterRunning = function (val) {
-  statesInterpreterRunning = val;
 };
 
 /**
@@ -303,11 +281,6 @@ const clearIntervalEvents = function () {
  * @public
  */
 export const resetInterpreter = function () {
-  interpreter = null;
-  if (runner_) {
-    clearTimeout(runner_);
-    runner_ = null;
-  }
   removeDeviceHandlers();
   clearIntervalEvents();
 
@@ -348,44 +321,10 @@ export const throwError = function (text) {
  * @public
  */
 export const generateCode = function () {
-  // Check execution environment (browser/node)
-  // node version does not need highlightBlock
-  if (typeof window !== 'undefined') {
-    JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
-    JavaScript.addReservedWords('highlightBlock');
-  }
   // Generate JavaScript code and parse it.
   latestCode = '';
   latestCode = JavaScript.workspaceToCode(workspace);
 };
-
-/**
- * defines an API for the JS Interpreter.
- * @param {!Interpreter} interpreter interpreter object.
- * @param {!Interpreter.Object} globalObject global scope object.
- */
-function initApi(interpreter, globalObject) {
-  // Add functions of {@link apiFunctions} to the interpreter.
-  for (const f of apiFunctions) {
-    // Add function name to reserverd words.
-    JavaScript.addReservedWords(f[0]);
-    // Add function to global scope.
-    interpreter.setProperty(
-      globalObject,
-      f[0], // the function name
-      interpreter.createNativeFunction(f[1]) // the function
-    );
-  }
-
-  // Add functions of {@link asyncApiFunctions} to the interpreter.
-  for (const f of asyncApiFunctions) {
-    interpreter.setProperty(
-      globalObject,
-      f[0], // the function name
-      interpreter.createAsyncFunction(f[1]) // the function
-    );
-  }
-}
 
 /**
  * Initializes the JS Interpreter.
@@ -407,43 +346,17 @@ export const initInterpreter = function (ws) {
 /**
  * Execute the user's code.
  */
-export const runJS = function () {
+export const runJS = async function () {
   setStatus(statusValues.RUNNING);
   stdInfo('execution started');
-  if (interpreter === null) {
-    // Begin execution
-    interpreter = new Interpreter(latestCode, initApi);
-
-    /**
-     * executes {@link latestCode} using {@link interpreter}.
-     * @function runner_
-     * @memberof Blast#
-     */
-    runner_ = function () {
-      if (interpreter) {
-        try {
-          const hasMore = interpreter.step();
-          if (hasMore) {
-            // Execution is currently blocked by some async call.
-            // Try again later.
-            runnerTimeout = setTimeout(runner_, 0);
-          } else if (statesInterpreterRunning || eventsInWorkspace.length > 0) {
-            // eventChecker is running,
-            // dont reset UI until stop button is clicked.
-          } else {
-            // Program is complete.
-            setStatus(statusValues.READY);
-            stdInfo('execution completed');
-            resetInterpreter();
-          }
-        } catch (error) {
-          throwError(error);
-          resetInterpreter();
-          console.error(error);
-        }
-      }
-    };
-
-    runner_();
+  try {
+    eval(
+      `(async () => {${latestCode} if(${
+        eventsInWorkspace.length === 0
+      }) {stopJS()}})();`
+    );
+  } catch (e) {
+    throwError(e);
+    console.error(e);
   }
 };

@@ -17,7 +17,29 @@ const {
 } = Blockly;
 
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
-import {implementedThings} from '../../blast_things.js';
+import {implementedThings, getWebHidDevice} from '../../blast_things.js';
+import StreamDeck from '@elgato-stream-deck/webhid';
+
+globalThis['StreamDeck'] = StreamDeck;
+
+const streamDeckInstances = new Map();
+
+/**
+ * Keeps singleton instances of StreamDeck instantiated by BLAST.
+ * @param {string} id The id of the StreamDeck.
+ */
+export const getStreamdeck = async function (id) {
+  if (streamDeckInstances.has(id)) {
+    return streamDeckInstances.get(id);
+  } else {
+    const device = getWebHidDevice(id);
+    // In order to work during loading, we can't wait for async functions here.
+    streamDeckInstances.set(id, 'temp');
+    const thing = await StreamDeck.openDevice(device);
+    streamDeckInstances.set(id, thing);
+    return thing;
+  }
+};
 
 Blocks['things_streamdeck'] = {
   /**
@@ -40,6 +62,16 @@ Blocks['things_streamdeck'] = {
     this.webHidId = '';
     this.thing = null;
   },
+  onchange: function () {
+    // on creating this block initialize new instance of Streamdeck
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.webHidId = this.getFieldValue('id');
+      this.firstTime = false;
+      getStreamdeck(this.webHidId).then(thing => {
+        this.thing = thing;
+      });
+    }
+  },
 };
 
 Blocks['streamdeck_button_event'] = {
@@ -48,7 +80,7 @@ Blocks['streamdeck_button_event'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('id')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('Stream Deck Mini');
     this.appendDummyInput()
@@ -182,7 +214,7 @@ Blocks['streamdeck_color_buttons'] = {
       .appendField(new FieldCheckbox('FALSE'), 'button4')
       .appendField(new FieldCheckbox('FALSE'), 'button5')
       .appendField(new FieldCheckbox('FALSE'), 'button6');
-    this.appendValueInput('id')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('of Stream Deck Mini');
     this.setColour(255);
@@ -226,7 +258,7 @@ Blocks['streamdeck_write_on_buttons'] = {
       .appendField(new FieldCheckbox('FALSE'), 'button4')
       .appendField(new FieldCheckbox('FALSE'), 'button5')
       .appendField(new FieldCheckbox('FALSE'), 'button6');
-    this.appendValueInput('id')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('of Stream Deck Mini');
     this.setColour(255);
@@ -248,7 +280,7 @@ Blocks['streamdeck_set_brightness'] = {
     this.appendValueInput('value')
       .setCheck('Number')
       .appendField('write brightness property');
-    this.appendValueInput('id')
+    this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('to Stream Deck Mini');
     this.setInputsInline(true);

@@ -15,7 +15,7 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "engines": {
-    "node": ">=8.3.0"
+    "node": ">=12.11.0"
   },
   "scripts": {
     "build": "yarn run clean && tsc && yarn run copy && yarn run build:web",

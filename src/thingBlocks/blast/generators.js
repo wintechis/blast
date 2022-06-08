@@ -8,7 +8,6 @@
 
 import Blockly from 'blockly';
 import {
-  apiFunctions,
   asyncApiFunctions,
   getStdOut,
   throwError,
@@ -119,12 +118,10 @@ JavaScript['display_text'] = function (block) {
  * @param {string} text text message to output.
  * @public
  */
-const displayText = function (text) {
+globalThis['displayText'] = function (text) {
   const stdOut = getStdOut();
   stdOut(text);
 };
-// Add displayText method to the interpreter's API.
-apiFunctions.push(['displayText', displayText]);
 
 /**
  * Generates JavaScript code for the play_audio block.

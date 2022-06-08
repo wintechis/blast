@@ -20,18 +20,15 @@ JavaScript['conditional_statement'] = JavaScript['controls_if'];
 JavaScript['wait_seconds'] = function (block) {
   const seconds =
     JavaScript.valueToCode(block, 'SECONDS', JavaScript.ORDER_ATOMIC) || 0;
-  const code = 'waitForSeconds(' + seconds + ');\n';
+
+  const functionName = JavaScript.provideFunction_(
+    'waitSeconds',
+    `
+async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(seconds) {
+    await new Promise(resolve => setTimeout(resolve, seconds * 1000));
+}`
+  );
+
+  const code = `await ${functionName}(${seconds});\n`;
   return code;
 };
-
-/**
- * Sets a timeout of timeInSeconds.
- * @param {*} timeInSeconds time in seconds to wait
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
- */
-const waitForSeconds = function (timeInSeconds, callback) {
-  setTimeout(callback, timeInSeconds * 1000);
-};
-// Add waitForSeconds method to the interpreter's API
-asyncApiFunctions.push(['waitForSeconds', waitForSeconds]);

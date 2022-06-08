@@ -9,126 +9,79 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  apiFunctions,
-  continueRunner,
-  getInterpreter,
-  getWorkspace,
-  intervalEvents,
-  interruptRunner,
-  throwError,
-} from './../blast_interpreter.js';
-// eslint-disable-next-line node/no-unpublished-import
-import Interpreter from 'js-interpreter';
-import {addEventCode} from './../blast_states_interpreter.js';
-import {getDefinition} from './../blast_states.js';
+import {throwError} from './../blast_interpreter.js';
 
 // eslint-disable-next-line no-unused-vars
 JavaScript['state_definition'] = function (block) {
-  // event code is generated at Blast.States.generateCode(),
-  // and the event block generator
-  return null;
+  const stateName = block.getFieldValue('NAME');
+  const stateCondition = JavaScript.valueToCode(
+    block,
+    'state_condition',
+    JavaScript.ORDER_NONE
+  );
+
+  JavaScript.definitions_[
+    block.id
+  ] = `const stateEvent = new CustomEvent("${stateName}");`;
+  JavaScript.definitions_['eventTargets'] = 'const eventTargets = new Map()';
+
+  const functionName = JavaScript.provideFunction_(
+    stateName,
+    `
+eventTargets.set("${stateName}", new EventTarget());
+let prevValue = ${stateCondition};
+async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
+    while (true) {
+        const value = ${stateCondition};
+        if (!prevValue && value) {
+          eventTargets.get("${stateName}").dispatchEvent(stateEvent);
+        }
+        prevValue = value;
+        await new Promise(resolve => setTimeout(resolve, 5));
+    }
+}`
+  );
+
+  const code = `${functionName}();\n`;
+
+  return code;
 };
 
 JavaScript['event'] = function (block) {
   // read block inputs
-  const entersExits = block.getFieldValue('entersExits');
   const stateName = block.getFieldValue('NAME');
   const statements = JavaScript.statementToCode(block, 'statements');
 
-  // When an event block is in the workspace start the event interpreter
-  JavaScript.definitions_['eventChecker'] = 'startEventChecker()';
+  const code = `eventTargets.get("${stateName}").addEventListener("${stateName}", () => {\n${statements}});\n`;
 
-  // get this events' conditions
-  const stateBlock = getDefinition(stateName, getWorkspace());
-  if (stateBlock) {
-    const stateConditions = JavaScript.valueToCode(
-      stateBlock,
-      'state_condition',
-      JavaScript.ORDER_NONE
-    );
-
-    let conditions = stateConditions;
-    if (entersExits !== 'ENTERS') {
-      conditions = `!(${conditions})`;
-    }
-
-    const eventCode = `if(eventChecker("${block.id}", ${conditions})) {
-        interruptRunner();
-        ${statements} 
-        continueRunner();
-      }`;
-
-    addEventCode(block.id, eventCode);
-  }
-
-  return null;
+  return code;
 };
 
 JavaScript['event_every_minutes'] = function (block) {
   // read block inputs
   const value =
-    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 0;
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 1;
   const unit = block.getFieldValue('units');
   const statements = JavaScript.quote_(
     JavaScript.statementToCode(block, 'statements')
   );
 
-  let seconds;
+  if (value < 0.1) {
+    throwError('Event interval value must be greater than 0.1.');
+  }
+
+  let milliSeconds;
   if (unit === 'seconds') {
-    seconds = value;
+    milliSeconds = value * 1000;
   } else if (unit === 'minutes') {
-    seconds = value * 60;
+    milliSeconds = value * 60 * 1000;
   } else if (unit === 'hours') {
-    seconds = value * 60 * 60;
+    milliSeconds = value * 60 * 60 * 1000;
   }
 
-  // When an event block is in the workspace start the event interpreter
-  JavaScript.definitions_[
-    block.id
-  ] = `addIntervalEvent(${seconds}, ${statements});\n`;
+  const code = `const interval = setInterval(() => eval(${statements}), ${milliSeconds});
+// Add interval to intervalEvents, so it can be removed when BLAST is stopped.
+intervalEvents.push(interval);\n`;
 
-  return null;
+  return code;
 };
-
-/**
- * Executes statements every x seconds.
- * @param {!number} seconds seconds to wait.
- * @param {!string} statements statements to execute.
- */
-const addIntervalEvent = (seconds, statements) => {
-  if (seconds === undefined || typeof seconds !== 'number' || seconds <= 0) {
-    throwError('Timed event interval must be a number greater than 0.');
-    return;
-  }
-
-  const func = function () {
-    // interrupt BLAST execution
-    interruptRunner();
-
-    const interpreter = new Interpreter('');
-    interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
-    interpreter.appendCode(statements);
-
-    const interruptRunner_ = function () {
-      try {
-        const hasMore = interpreter.step();
-        if (hasMore) {
-          setTimeout(interruptRunner_, 5);
-        } else {
-          // Continue BLAST execution.
-          continueRunner();
-        }
-      } catch (error) {
-        throwError(`Error executing program:\n ${error}`);
-        console.error(error);
-      }
-    };
-    interruptRunner_();
-  };
-
-  const interval = setInterval(func, seconds * 1000);
-  intervalEvents.push(interval);
-};
-
-apiFunctions.push(['addIntervalEvent', addIntervalEvent]);

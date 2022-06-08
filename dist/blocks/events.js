@@ -20,7 +20,6 @@ const {
 } = Blockly;
 import {eventsInWorkspace, getWorkspace} from './../blast_interpreter.js';
 import {findLegalName, getDefinition, rename} from './../blast_states.js';
-import {removeEventCode} from './../blast_states_interpreter.js';
 
 Blocks['state_definition'] = {
   /**
@@ -182,10 +181,11 @@ Blocks['event'] = {
         Events.setGroup(false);
       }
     } else if (event.type === Events.BLOCK_DELETE) {
+      // Remove this blocks eventListeners.
+      const name = this.getStateName();
       // Look for the case where a state definition has been deleted,
       // leaving this block (an event block) orphaned. In this case, delete
       // the orphan.
-      const name = this.getStateName();
       const def = getDefinition(name, this.workspace);
       if (!def) {
         Events.setGroup(event.group);
@@ -218,17 +218,6 @@ Blocks['event'] = {
       }
     }
   },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        removeEventCode(this.event.blockId);
-      }
-    }
-  },
   defType_: 'state_definition',
 };
 
@@ -238,7 +227,7 @@ Blocks['event_every_minutes'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput('value').setCheck('Number').appendField('every');
+    this.appendValueInput('value').appendField('every').setCheck('Number');
     this.appendDummyInput('units').appendField(
       new FieldDropdown([
         ['seconds', 'seconds'],

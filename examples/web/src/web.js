@@ -17,11 +17,9 @@ import {
   setStdOut,
   statusValues,
   stopJS,
-  throwError,
 } from '../../../dist/blast_interpreter.js';
 import {link, loadXMLFromFile} from '../../../dist/blast_storage.js';
 import {
-  addWebHidDevice,
   connectWebHidDevice,
   connectedThings,
   implementedThings,
@@ -30,7 +28,6 @@ import {
   setWebHidButtonHandler,
 } from '../../../dist/blast_things.js';
 import {requestDevice} from '../../../dist/blast_webBluetooth.js';
-import {addBlock, reloadToolbox} from '../../../dist/blast_toolbox.js';
 
 /**
  * List of tab names.

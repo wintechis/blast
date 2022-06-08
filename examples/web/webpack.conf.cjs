@@ -12,6 +12,9 @@ module.exports = {
     static: path.join(__dirname, ''),
     watchFiles: ['index.html', 'style.css', 'dist/app.js'],
   },
+  experiments: {
+    outputModule: true,
+  },
   optimization: {
     minimize: false,
   },
@@ -19,10 +22,8 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: 'app.js',
     library: {
-      name: 'blast',
-      type: 'umd2',
+      type: 'module',
     },
-    globalObject: 'this',
   },
   mode: 'development',
   plugins: [
@@ -40,9 +41,11 @@ module.exports = {
     },
   },
   target: 'web',
+  externalsType: 'script',
   externals: {
-    coffeeScript: 'coffee-script',
-    vm2: 'vm2',
-    express: 'express',
+    '@node-wot/core': [
+      'https://cdn.jsdelivr.net/npm/@node-wot/browser-bundle@latest/dist/wot-bundle.min.js',
+      'Wot',
+    ],
   },
 };

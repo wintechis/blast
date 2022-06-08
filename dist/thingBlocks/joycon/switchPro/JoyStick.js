@@ -19,8 +19,6 @@ class JoyStick {
     }
     pressed['angle'] = angle;
 
-    console.log(pressed);
-
     return pressed;
   }
 }

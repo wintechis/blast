@@ -10,13 +10,15 @@ import Blockly from 'blockly';
 import {initInterpreter} from '../../dist/blast_interpreter.js';
 import {getLatestCode} from '../../dist/blast_interpreter.js';
 import {runJS} from '../../dist/blast_interpreter.js';
-import {initStatesInterpreter} from '../../dist/blast_states_interpreter.js';
 import {getStdInfo} from '../../dist/blast_interpreter.js';
 
 // import block blast files to include them in bundled code.
 import '../../dist/blocks/all.js';
 import '../../dist/generators/all.js';
 import '../../dist/thingBlocks/all.js';
+
+// import server specific block files
+import './blocks/all.js';
 
 import * as fs from 'fs';
 
@@ -32,7 +34,6 @@ const init = function () {
   Blockly.Xml.domToWorkspace(xml, workspace);
 
   initInterpreter(workspace);
-  initStatesInterpreter(workspace);
 
   // Display output hint
   const stdInfo = getStdInfo();
