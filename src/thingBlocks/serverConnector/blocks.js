@@ -1,5 +1,5 @@
 /**
- * @fileoverview Blocks definitions for blocks interacting with solid pods.
+ * @fileoverview Blocks definitions for server connector blocks.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -27,7 +27,7 @@ Blocks['server_add_connector'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('server_add_connector', 'Server Components');
+addBlock('server_add_connector', 'Server Connector');
 
 Blocks['server_route'] = {
   /**
@@ -43,6 +43,7 @@ Blocks['server_route'] = {
           ['GET', 'get'],
           ['PUT', 'put'],
           //['POST', 'post'],
+          //['DELETE', 'delete']
         ]),
         'operation'
       );
@@ -56,7 +57,7 @@ Blocks['server_route'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('server_route', 'Server Components');
+addBlock('server_route', 'Server Connector');
 
 Blocks['server_response'] = {
   /**
@@ -74,7 +75,7 @@ Blocks['server_response'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('response_block', 'Server Components');
+addBlock('server_response', 'Server Connector');
 
 Blocks['server_get_body'] = {
   init: function () {
@@ -86,4 +87,4 @@ Blocks['server_get_body'] = {
   },
 };
 // Add server_connector block to the toolbox.
-addBlock('get_body', 'Server Components');
+addBlock('server_get_body', 'Server Connector');
