@@ -129,7 +129,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Server Components',
+      name: 'Server Connector',
       colour: '240',
     },
     {
