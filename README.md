@@ -61,6 +61,11 @@ In order to build BLAST yourself, follow these steps:
 2. run `yarn` from within the root directory
 3. run `yarn run build` from within the root directory
 
+### Serving locally
+When developing for BLAST it is necessary to test the added features locally.
+To start a local HTTPS server you can run `yarn serve` (after you built your project with `yarn run build`). 
+This will start a local server on [https://localhost:3000/](https://localhost:3000/).
+
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
 * **unit testing** add unit tests
