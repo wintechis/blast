@@ -9,11 +9,10 @@
 import Blockly from 'blockly';
 import {
   initInterpreter,
-  eventsInWorkspace,
+  getLatestCode,
+  runJS,
+  getStdInfo,
 } from '../../dist/blast_interpreter.js';
-import {getLatestCode} from '../../dist/blast_interpreter.js';
-import {runJS} from '../../dist/blast_interpreter.js';
-import {getStdInfo} from '../../dist/blast_interpreter.js';
 
 // import block blast files to include them in bundled code.
 import '../../dist/blocks/all.js';
