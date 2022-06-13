@@ -42,8 +42,8 @@ Blocks['server_route'] = {
         new Blockly.FieldDropdown([
           ['GET', 'get'],
           ['PUT', 'put'],
-          //['POST', 'post'],
-          //['DELETE', 'delete']
+          ['POST', 'post'],
+          ['DELETE', 'delete'],
         ]),
         'operation'
       );
