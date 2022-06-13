@@ -10,7 +10,7 @@
         <field name="operation">get</field>
         <value name="route">
           <block type="string">
-            <field name="TEXT">/get</field>
+            <field name="TEXT">/</field>
           </block>
         </value>
         <statement name="list">
@@ -27,7 +27,7 @@
             <field name="operation">put</field>
             <value name="route">
               <block type="string">
-                <field name="TEXT">/put</field>
+                <field name="TEXT">/</field>
               </block>
             </value>
             <statement name="list">
@@ -42,7 +42,7 @@
                 <field name="operation">post</field>
                 <value name="route">
                   <block type="string">
-                    <field name="TEXT">/post</field>
+                    <field name="TEXT">/</field>
                   </block>
                 </value>
                 <statement name="list">
@@ -57,7 +57,7 @@
                     <field name="operation">delete</field>
                     <value name="route">
                       <block type="string">
-                        <field name="TEXT">/delete</field>
+                        <field name="TEXT">/</field>
                       </block>
                     </value>
                     <statement name="list">

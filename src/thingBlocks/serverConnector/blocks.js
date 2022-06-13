@@ -9,6 +9,7 @@
 import Blockly from 'blockly';
 const {Blocks} = Blockly;
 import {addBlock} from './../../blast_toolbox.js';
+import {eventsInWorkspace} from '../../../dist/blast_interpreter.js';
 
 Blocks['server_add_connector'] = {
   /**
@@ -24,6 +25,10 @@ Blocks['server_add_connector'] = {
     this.setColour(230);
     this.setTooltip('');
     this.setHelpUrl('');
+    /**
+     * Add this block's id to the events array.
+     */
+    eventsInWorkspace.push(this.id);
   },
 };
 // Add server_connector block to the toolbox.
