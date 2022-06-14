@@ -7,10 +7,12 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {initInterpreter} from '../../dist/blast_interpreter.js';
-import {getLatestCode} from '../../dist/blast_interpreter.js';
-import {runJS} from '../../dist/blast_interpreter.js';
-import {getStdInfo} from '../../dist/blast_interpreter.js';
+import {
+  initInterpreter,
+  getLatestCode,
+  runJS,
+  getStdInfo,
+} from '../../dist/blast_interpreter.js';
 
 // import block blast files to include them in bundled code.
 import '../../dist/blocks/all.js';
@@ -23,7 +25,7 @@ import './blocks/all.js';
 import * as fs from 'fs';
 
 /**
- * Initialize Blast. Called on page load.
+ * Initialize Blast, generate and execute code.
  * @public
  */
 const init = function () {
