@@ -9,7 +9,6 @@
 import Blockly from 'blockly';
 const {Blocks} = Blockly;
 import {addBlock} from '../../blast_toolbox.js';
-import {eventsInWorkspace} from '../../../dist/blast_interpreter.js';
 
 Blocks['server_add_connector'] = {
   /**
