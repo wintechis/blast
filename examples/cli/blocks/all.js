@@ -1,2 +1,2 @@
-//import './blocks.js';
-import './generators.js';
+import './server_connector/blocks.js';
+import './server_connector/generators.js';
