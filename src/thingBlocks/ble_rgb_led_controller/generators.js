@@ -9,11 +9,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  asyncApiFunctions,
-  getWorkspace,
-  throwError,
-} from './../../blast_interpreter.js';
+import {getWorkspace, throwError} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
 import {stringToReadable} from './../../things/bindings/binding-helpers.js';
 
@@ -43,7 +39,7 @@ JavaScript['switch_lights_rgb'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `switchLights(${blockId}, ${thing}, ${colour});\n`;
+  const code = `await switchLights(${blockId}, ${thing}, ${colour});\n`;
   return code;
 };
 
@@ -54,16 +50,10 @@ JavaScript['switch_lights_rgb'] = function (block) {
  * @param {String} colour the colour to switch the lights to, as hex value.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const switchLights = async function (
-  blockId,
-  webBluetoothId,
-  colour,
-  callback
-) {
+globalThis['switchLights'] = async function (blockId, webBluetoothId, colour) {
   // make sure a device is connected.
   if (!webBluetoothId) {
     throwError('No LED Controller is set.');
-    callback();
     return;
   }
   // convert data to json
@@ -74,7 +64,4 @@ const switchLights = async function (
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   await thing.writeProperty('colour', stream);
-  callback();
 };
-// Add switchLights function to the interpreter's API.
-asyncApiFunctions.push(['switchLights', switchLights]);

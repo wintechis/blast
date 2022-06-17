@@ -7,9 +7,15 @@ let servient: Servient;
 let wot: typeof WoT;
 const things: {[key: string]: WoT.ExposedThing} = {};
 
+declare const Wot: any;
+
 export const getServient = function (): Servient {
   if (!servient) {
-    servient = new Servient();
+    try {
+      servient = new Servient();
+    } catch (e) {
+      servient = new Wot.Core.Servient();
+    }
     servient.addClientFactory(new WebBluetoothClientFactory());
     servient.addClientFactory(new WebHidClientFactory());
   }
