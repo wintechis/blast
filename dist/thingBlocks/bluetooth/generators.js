@@ -13,11 +13,7 @@ import {
   readableStreamToString,
   // eslint-disable-next-line node/no-missing-import
 } from '../../things/bindings/binding-helpers.js';
-import {
-  asyncApiFunctions,
-  getWorkspace,
-  throwError,
-} from './../../blast_interpreter.js';
+import {getWorkspace, throwError} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the get_signal_strength block.
@@ -34,10 +30,8 @@ JavaScript['get_signal_strength_wb'] = function (block) {
 /**
  * Get the RSSI of a bluetooth device, using webBluetooth.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
  */
-const getRSSIWb = async function (webBluetoothId, callback) {
+globalThis['getRSSIWb'] = async function (webBluetoothId) {
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
@@ -58,13 +52,11 @@ const getRSSIWb = async function (webBluetoothId, callback) {
     // Stop watching advertisements
     abortController.abort();
     // Advertisement data can be read from |evt|.
-    callback(evt.rssi);
+    return evt.rssi;
   });
 
   await device.watchAdvertisements({signal: abortController.signal});
 };
-// add getRSSIWb method to the interpreter's API.
-asyncApiFunctions.push(['getRSSIWb', getRSSIWb]);
 
 /**
  * Generates JavaScript code for the write_eddystone_property block.
@@ -95,34 +87,29 @@ JavaScript['write_eddystone_property'] = function (block) {
  * @param {number} slot The slot to write to.
  * @param {String} property The property to write.
  * @param {String} value The value to write.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const writeEddystoneProperty = async function (
+globalThis['writeEddystoneProperty'] = async function (
   blockId,
   webBluetoothId,
   slot,
   property,
-  value,
-  callback
+  value
 ) {
   // make sure a device block is connected
   if (!webBluetoothId) {
     throwError('No bluetooth device set.');
-    callback();
     return;
   }
 
   // make sure a slot is set
   if (slot === null || slot === undefined) {
     throwError('No slot set.');
-    callback();
     return;
   }
 
   // make sure a property is set
   if (!property) {
     throwError('No property set.');
-    callback();
     return;
   }
 
@@ -134,12 +121,7 @@ const writeEddystoneProperty = async function (
   // Write the property
   const valueReadable = stringToReadable(value);
   await thing.writeProperty(property, valueReadable);
-
-  callback();
 };
-
-// add writeEddystoneProperty method to the interpreter's API.
-asyncApiFunctions.push(['writeEddystoneProperty', writeEddystoneProperty]);
 
 /**
  * Generates JavaScript code for the read_eddystone_property block.
@@ -168,33 +150,28 @@ JavaScript['read_eddystone_property'] = function (block) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  * @param {number} slot The slot to read from.
  * @param {String} property The property to read.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const readEddystoneProperty = async function (
+globalThis['readEddystoneProperty'] = async function (
   blockId,
   webBluetoothId,
   slot,
-  property,
-  callback
+  property
 ) {
   // make sure a device block is connected
   if (!webBluetoothId) {
     throwError('No bluetooth device set.');
-    callback();
     return;
   }
 
   // make sure a slot is set
   if (slot === null || slot === undefined) {
     throwError('No slot set.');
-    callback();
     return;
   }
 
   // make sure a property is set
   if (!property) {
     throwError('No property set.');
-    callback();
     return;
   }
 
@@ -206,11 +183,8 @@ const readEddystoneProperty = async function (
   // Read property data
   const interActionInput = await thing.readProperty(property);
   const value = await readableStreamToString(interActionInput.content.body);
-  callback(value);
+  return value;
 };
-
-// Add readEddystoneProperty method to the interpreter's API.
-asyncApiFunctions.push(['readEddystoneProperty', readEddystoneProperty]);
 
 JavaScript['things_eddyStoneDevice'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -249,16 +223,14 @@ JavaScript['read_gatt_characteristic'] = function (block) {
  * @param {String} property The characteristic to read.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const readBluetoothService = async function (
+globalThis['readBluetoothService'] = async function (
   blockId,
   webBluetoothId,
-  property,
-  callback
+  property
 ) {
   // make sure a device block is connected
   if (!webBluetoothId) {
     throwError('No bluetooth device set.');
-    callback();
     return;
   }
 
@@ -268,7 +240,5 @@ const readBluetoothService = async function (
   // Read property data
   const interActionInput = await thing.readProperty(property);
   const value = await readableStreamToString(interActionInput.content.body);
-  callback(value);
+  return value;
 };
-
-asyncApiFunctions.push(['readBluetoothService', readBluetoothService]);
