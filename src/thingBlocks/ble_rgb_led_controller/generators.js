@@ -48,7 +48,6 @@ JavaScript['switch_lights_rgb'] = function (block) {
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} webBluetoothId identifier of the LED controller.
  * @param {String} colour the colour to switch the lights to, as hex value.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
 globalThis['switchLights'] = async function (blockId, webBluetoothId, colour) {
   // make sure a device is connected.
