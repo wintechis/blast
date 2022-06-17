@@ -9,12 +9,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  asyncApiFunctions,
-  getInterpreter,
-  getWorkspace,
-  throwError,
-} from './../../blast_interpreter.js';
+import {getWorkspace, throwError} from './../../blast_interpreter.js';
 import {
   readableStreamToString,
   stringToReadable,
@@ -53,7 +48,7 @@ JavaScript['huskylens_choose_algo'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `chooseAlgo(${blockId}, '${value}');\n`;
+  const code = `huskyduino_chooseAlgo(${blockId}, '${value}');\n`;
   return code;
 };
 
@@ -70,7 +65,7 @@ JavaScript['huskylens_write_id'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `learnID(${blockId}, '${id}');\n`;
+  const code = `huskyduino_learnID(${blockId}, '${id}');\n`;
   return code;
 };
 
@@ -85,7 +80,7 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `forgetAll(${blockId});\n`;
+  const code = `huskyduino_forgetAll(${blockId});\n`;
   return code;
 };
 
@@ -101,7 +96,7 @@ JavaScript['huskylens_read_id'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const code = `readID(${blockId}, ${thing})`;
+  const code = `huskyduino_readID(${blockId}, ${thing})`;
   // Return code.
   return [code, JavaScript.ORDER_NONE];
 };
@@ -118,7 +113,7 @@ JavaScript['huskylens_read_location'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const str = `readLoc(${blockId}, ${thing})`;
+  const str = `huskyduino_readLoc(${blockId}, ${thing})`;
   return [str, JavaScript.ORDER_NONE];
 };
 
@@ -126,62 +121,49 @@ JavaScript['huskylens_read_location'] = function (block) {
  * Write the choosen algorithm value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} value represents the algorithm, ranges from 1 to 7.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const chooseAlgo = async function (blockId, value, callback) {
+globalThis['huskyduino_chooseAlgo'] = async function (blockId, value) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Write face id to thing.
   const valueReadable = stringToReadable(value);
   await thing.writeProperty('algorithm', valueReadable);
-  callback();
 };
-
-asyncApiFunctions.push(['chooseAlgo', chooseAlgo]);
 
 /**
  * write face id value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} value faceID to write to the Huskyduino.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const learnID = async function (blockId, value, callback) {
+globalThis['huskyduino_learnID'] = async function (blockId, value) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Write face id to thing.
   const valueReadable = stringToReadable(value);
   await thing.writeProperty('id', valueReadable);
-  callback();
 };
-
-asyncApiFunctions.push(['learnID', learnID]);
 
 /**
  * write forget flag to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} flag whether to forget all saved values or not.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const forgetAll = async function (blockId, callback) {
+globalThis['huskyduino_forgetAll'] = async function (blockId) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // invoke action.
   await thing.invokeAction('forgetAll');
-  callback();
 };
-
-asyncApiFunctions.push(['forgetAll', forgetAll]);
 
 /**
  * read the face IDs of all known faces currently visible to the camera via bluetooth.
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {Array<Number>} contains all known IDs currently visible to the camera.
  */
-const readID = async function (blockId, callback) {
+globalThis['huskyduino_readID'] = async function (blockId) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
@@ -200,30 +182,24 @@ const readID = async function (blockId, callback) {
     if (outArr.length === 0) {
       throwError('No Recognized Obj');
     }
-    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
-    callback(pseudoArr);
+    return outArr;
   } else if (str[0] === '0') {
     throwError('No Recognized Obj');
   } else if (str[0] >= 1 && str[0] <= 9) {
     const loc = str.indexOf('(');
     const id = parseInt(str.slice(0, loc));
-    const outArr = [id];
-    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
-    callback(pseudoArr);
+    return [id];
   } else {
     throwError(str);
   }
 };
 
-asyncApiFunctions.push(['readID', readID]);
-
 /**
  * read the ID and its x y location on display of the object currently visible to the camera.
  * @param {String} thing identifier of the Huskyduino.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {Array<Number>} contains ID and location of the object currently visible to the camera.
  */
-const readLoc = async function (blockId, callback) {
+globalThis['huskyduino_outArrreadLoc'] = async function (blockId) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
@@ -242,12 +218,8 @@ const readLoc = async function (blockId, callback) {
     const id = parseInt(str.slice(0, loc1));
     const x = parseInt(str.slice(loc1 + 1, loc2));
     const y = parseInt(str.slice(loc2 + 1, loc3));
-    const outArr = [id, x, y];
-    const pseudoArr = getInterpreter().nativeToPseudo(outArr);
-    callback(pseudoArr);
+    return [id, x, y];
   } else {
     throwError(str);
   }
 };
-
-asyncApiFunctions.push(['readLoc', readLoc]);
