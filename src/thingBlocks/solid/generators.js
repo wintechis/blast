@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {throwError} from '../../blast_interpreter';
+import {throwError} from './../../blast_interpreter.js';
 import {saveFileInContainer} from '@inrupt/solid-client';
 
 /**
