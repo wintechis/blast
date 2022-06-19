@@ -9,11 +9,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  asyncApiFunctions,
-  getWorkspace,
-  throwError,
-} from './../../blast_interpreter.js';
+import {getWorkspace, throwError} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
 import {jsonToReadble} from './../../things/bindings/binding-helpers.js';
 
@@ -30,7 +26,7 @@ JavaScript['blinkstick_set_colors'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `blinkstickSetColors(${blockId}, ${thing}, ${index}, ${colour});\n`;
+  const code = `blinkstick_setColors(${blockId}, ${thing}, ${index}, ${colour});\n`;
   return code;
 };
 
@@ -50,26 +46,22 @@ JavaScript['things_blinkstick'] = function (block) {
  * @param {string} id the id identifier of the BlinkStick.
  * @param {number} index index of the LED.
  * @param {string} colour the color to set, as hex value.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const blinkstickSetColors = async function (
+globalThis['blinkstick_setColors'] = async function (
   blockId,
   id,
   index,
-  colour,
-  callback
+  colour
 ) {
   // check if index is between 0 and 7.
   if (index < 0 || index > 7) {
     throwError('BlinkStick index must be between 0 and 7.');
-    callback();
     return;
   }
 
   // If no things block is attached, return.
   if (!id) {
     throwError('No BlinkStick block set.');
-    callback();
     return;
   }
 
@@ -86,8 +78,4 @@ const blinkstickSetColors = async function (
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   await thing.writeProperty('colours', stream);
-  callback();
 };
-
-// add joycon_read_property function to the interpreter's API.
-asyncApiFunctions.push(['blinkstickSetColors', blinkstickSetColors]);

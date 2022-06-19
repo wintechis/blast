@@ -13,6 +13,22 @@ import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import HuskyDuino from './../../things/HuskyDuino.js';
 
+const huskyduinos = new Map();
+
+/**
+ * Keeps singleton instances of HuskyDuinos instantiated by BLAST.
+ * @param {string} id The id of the HuskyDuinos.
+ */
+const getHuskyduino = function (id) {
+  if (huskyduinos.has(id)) {
+    return huskyduinos.get(id);
+  } else {
+    const thing = new HuskyDuino();
+    huskyduinos.set(id, thing);
+    return thing;
+  }
+};
+
 Blocks['things_HuskyDuino'] = {
   /**
    * Block representing a HuskyDuino.
@@ -37,9 +53,11 @@ Blocks['things_HuskyDuino'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      new HuskyDuino().init(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
+      getHuskyduino(webBluetoothId)
+        .init(webBluetoothId)
+        .then(thing => {
+          this.thing = thing;
+        });
     }
   },
 };

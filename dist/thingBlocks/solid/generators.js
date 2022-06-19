@@ -8,8 +8,8 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
+import {throwError} from './../../blast_interpreter.js';
 import {saveFileInContainer} from '@inrupt/solid-client';
-import {asyncApiFunctions, throwError} from './../../blast_interpreter.js';
 
 /**
  * Generates Javascript code for the upload_image block.
@@ -20,7 +20,7 @@ JavaScript['upload_image'] = function (block) {
   const image = JavaScript.valueToCode(block, 'image', JavaScript.ORDER_NONE);
   const url = JavaScript.valueToCode(block, 'url', JavaScript.ORDER_NONE);
 
-  const code = `uploadImage(${image}, ${url});\n`;
+  const code = `solid_uploadImage(${image}, ${url});\n`;
   return code;
 };
 
@@ -28,9 +28,8 @@ JavaScript['upload_image'] = function (block) {
  * Uploads an image to a solid container.
  * @param {string} image the image to upload as data URI.
  * @param {string} url the url of the solid container.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-const uploadImage = async function (image, url, callback) {
+globalThis['solid_uploadImage'] = async function (image, url) {
   // convert base64/URLEncoded data component to raw binary data held in a string
   // eslint-disable-next-line no-undef
   const byteString = atob(image.split(',')[1]);
@@ -51,8 +50,4 @@ const uploadImage = async function (image, url, callback) {
     throwError(e);
     console.error(e);
   }
-  callback();
 };
-
-// Add uploadImage method to the interpreter's API.
-asyncApiFunctions.push(['uploadImage', uploadImage]);

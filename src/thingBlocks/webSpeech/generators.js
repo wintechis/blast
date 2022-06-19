@@ -8,7 +8,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
+import {getWorkspace} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the play_audio block.
@@ -54,10 +54,8 @@ Blockly.JavaScript['web_speech'] = function (block) {
 /**
  * Outputs speech input as string.
  * @param {Blockly.Block.id} blockId id of the speechToText block.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
- * @public
  */
-const speechToText = async function (blockId, callback) {
+globalThis['speechToText'] = async function (blockId) {
   const block = getWorkspace().getBlockById(blockId);
   const recognition = block.recognition;
   recognition.continuous = false;
@@ -73,18 +71,15 @@ const speechToText = async function (blockId, callback) {
   };
 
   recognition.onend = function () {
-    callback(finalTranscript);
+    return finalTranscript;
   };
 
   recognition.start();
 };
-// add block speechToText to the interpreter's API.
-asyncApiFunctions.push(['speechToText', speechToText]);
 
 /**
  * Invokes a SpeechSynthesisUtterance to read out a text.
  * @param {string} text text that will be synthesised when the utterance is spoken.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * TODO #53 Add the following parameters (#53)
  * @param {SpeechSynthesisVoice=} voice voice that will be used to speak the utterance.
  * @param {Number=} rate speed at which the utterance will be spoken at
@@ -92,7 +87,7 @@ asyncApiFunctions.push(['speechToText', speechToText]);
  * @param {Number=} pitch pitch at which the utterance will be spoken at
  * @param {string} lang language of the utterance.
  */
-const textToSpeech = async function (text, callback) {
+globalThis['textToSpeech'] = async function (text) {
   // eslint-disable-next-line no-undef
   const speech = new SpeechSynthesisUtterance();
   speech.text = text;
@@ -101,7 +96,4 @@ const textToSpeech = async function (text, callback) {
   await new Promise(resolve => {
     speech.onend = resolve;
   });
-  callback();
 };
-// add textToSpeech function to the interpreter's API.
-asyncApiFunctions.push(['textToSpeech', textToSpeech]);

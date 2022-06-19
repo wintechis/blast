@@ -8,16 +8,9 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-// eslint-disable-next-line node/no-unpublished-import
-import Interpreter from 'js-interpreter';
 import {
   addCleanUpFunction,
-  apiFunctions,
-  asyncApiFunctions,
-  continueRunner,
-  getInterpreter,
   getWorkspace,
-  interruptRunner,
   throwError,
 } from './../../blast_interpreter.js';
 import SwitchPro from './switchPro/SwitchPro.js';
@@ -33,17 +26,22 @@ JavaScript['things_joycon'] = function (block) {
  * @returns {String} the generated code.
  */
 JavaScript['joycon_read_property'] = function (block) {
-  const property = block.getFieldValue('property');
-  const sub = block.getFieldValue('propertySubValue') || '';
-  const sub2 = block.getFieldValue('propertySubValue2') || '';
-  const sub3 = block.getFieldValue('propertySubValue3') || '';
-  const id = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE);
+  const property = JavaScript.quote_(block.getFieldValue('property'));
+  const sub = JavaScript.quote_(block.getFieldValue('propertySubValue') || '');
+  const sub2 = JavaScript.quote_(
+    block.getFieldValue('propertySubValue2') || ''
+  );
+  const sub3 = JavaScript.quote_(
+    block.getFieldValue('propertySubValue3') || ''
+  );
+  const id =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `readJoyConProperty(${blockId}, ${id}, '${property}', '${sub}', '${sub2}', '${sub3}')`;
+  const code = `joyCon_readProperty(${blockId}, ${id}, ${property}, ${sub}, ${sub2}, ${sub3})`;
   return [code, JavaScript.ORDER_NONE];
 };
 
@@ -55,23 +53,20 @@ JavaScript['joycon_read_property'] = function (block) {
  * @param {string} subValue first sub level of the property.
  * @param {string} subValue2 second sub level of the property.
  * @param {string} subValue3 third sub level of the property.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @returns {string} the value of the property.
  * @private
  */
-const readJoyConProperty = async function (
+globalThis['joyCon_readProperty'] = async function (
   blockId,
   id,
   property,
   subValue,
   subValue2,
-  subValue3,
-  callback
+  subValue3
 ) {
   // If no things block is attached, return.
   if (!id) {
     throwError('No Joy-Con block set.');
-    callback();
     return;
   }
 
@@ -80,19 +75,16 @@ const readJoyConProperty = async function (
   const packet = await thing.readProperty(property);
   if (subValue2 !== '') {
     if (property === 'accelerometers') {
-      callback(packet[subValue][subValue2]['acc']);
+      return packet[subValue][subValue2]['acc'];
     } else if (property === 'gyroscopes') {
-      callback(packet[subValue][subValue2][subValue3]);
+      return packet[subValue][subValue2][subValue3];
     } else {
-      callback(packet[subValue][subValue2]);
+      return packet[subValue][subValue2];
     }
   } else {
-    callback(packet[subValue]);
+    return packet[subValue];
   }
 };
-
-// add joycon_read_property function to the interpreter's API.
-asyncApiFunctions.push(['readJoyConProperty', readJoyConProperty]);
 
 /**
  * Generates JavaScript code for the joycon_button_events block.
@@ -113,7 +105,7 @@ JavaScript['joycon_button_events'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const handler = `handleJoyConButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${released}, ${statements});\n`;
+  const handler = `joyCon_handleButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${released}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -130,7 +122,7 @@ JavaScript['joycon_button_events'] = function (block) {
  * @param {boolean} released whether the statements should be executed on release or on press.
  * @param {string} statements the statements to execute when the button is pushed.
  */
-const handleJoyConButtons = async function (
+globalThis['joyCon_handleButtons'] = async function (
   blockId,
   id,
   onWhile,
@@ -246,28 +238,12 @@ const handleJoyConButtons = async function (
         pressed.indexOf(button) === -1 && // button is not pressed
         lastPressed.indexOf(button) > -1) // and was pressed before
     ) {
-      // interrupt BLAST execution
-      interruptRunner();
-
-      const interpreter = new Interpreter('');
-      interpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
-      interpreter.appendCode(statements);
-
-      const interruptRunner_ = function () {
-        try {
-          const hasMore = interpreter.step();
-          if (hasMore) {
-            setTimeout(interruptRunner_, 5);
-          } else {
-            // Continue BLAST execution.
-            continueRunner();
-          }
-        } catch (error) {
-          throwError(`Error executing program:\n ${error}`);
-          console.error(error);
-        }
-      };
-      interruptRunner_();
+      try {
+        eval(statements);
+      } catch (e) {
+        throwError(e);
+        console.error(e);
+      }
     }
   }
 
@@ -277,9 +253,6 @@ const handleJoyConButtons = async function (
     }
   });
 };
-
-// add joycon_button_events function to the interpreter's API.
-apiFunctions.push(['handleJoyConButtons', handleJoyConButtons]);
 
 JavaScript['things_gamepad_pro'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -302,7 +275,7 @@ JavaScript['joycon_gamepad_joystick'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const handler = `handleGamepadJoystick(${blockId}, ${thing}, ${statements});\n`;
+  const handler = `gamepad_handleJoystick(${blockId}, ${thing}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -316,51 +289,25 @@ JavaScript['joycon_gamepad_joystick'] = function (block) {
  * @param {string} id the id of the gamepad.
  * @param {string} statements the statements to execute.
  */
-const handleGamepadJoystick = function (blockId, id, statements) {
+globalThis['gamepad_handleJoystick'] = function (blockId, id, statements) {
   const switchPro = new SwitchPro();
   switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
 
-  const interpreter = getInterpreter();
-  const scope = interpreter.getGlobalScope();
-  scope.object.properties['gp_x'] = 0;
-  scope.object.properties['gp_y'] = 0;
-  scope.object.properties['gp_angle'] = 0;
+  globalThis['gp_x'] = 0;
+  globalThis['gp_y'] = 0;
+  globalThis['gp_angle'] = 0;
 
   const handleJoystick = function (joystick) {
-    const y = joystick['y'] || 0;
-    const pseudoY = interpreter.nativeToPseudo(y);
-    scope.object.properties['gp_y'] = pseudoY;
+    globalThis['gp_y'] = joystick['y'] || 0;
+    globalThis['gp_x'] = joystick['x'] || 0;
+    globalThis['gp_angle'] = joystick['angle'] || 0;
 
-    const x = joystick['x'] || 0;
-    const pseudoX = interpreter.nativeToPseudo(x);
-    scope.object.properties['gp_x'] = pseudoX;
-
-    const angle = joystick['angle'] || 0;
-    const pseudoAngle = interpreter.nativeToPseudo(angle);
-    scope.object.properties['gp_angle'] = pseudoAngle;
-
-    // interrupt BLAST execution
-    interruptRunner();
-
-    const newInterpreter = new Interpreter('');
-    newInterpreter.getStateStack()[0].scope = getInterpreter().getGlobalScope();
-    newInterpreter.appendCode(statements);
-
-    const interruptRunner_ = function () {
-      try {
-        const hasMore = newInterpreter.step();
-        if (hasMore) {
-          setTimeout(interruptRunner_, 5);
-        } else {
-          // Continue BLAST execution.
-          continueRunner();
-        }
-      } catch (error) {
-        throwError(`Error executing program:\n ${error}`);
-        console.error(error);
-      }
-    };
-    interruptRunner_();
+    try {
+      eval(statements);
+    } catch (e) {
+      throwError(e);
+      console.error(e);
+    }
   };
 
   switchPro.addListener(handleJoystick);
@@ -369,8 +316,6 @@ const handleGamepadJoystick = function (blockId, id, statements) {
     clearInterval(switchPro.interval);
   });
 };
-
-apiFunctions.push(['handleGamepadJoystick', handleGamepadJoystick]);
 
 /**
  * Generates JavaScript code for the joycon_gamepad_button block.
@@ -388,7 +333,7 @@ JavaScript['joycon_gamepad_button'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const handler = `handleGamepadButton(${blockId}, ${thing}, ${button}, ${statements});\n`;
+  const handler = `gamepad_handleButton(${blockId}, ${thing}, ${button}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -403,35 +348,23 @@ JavaScript['joycon_gamepad_button'] = function (block) {
  * @param {string} button the button to handle.
  * @param {string} statements the statements to execute when the button is pushed.
  */
-const handleGamepadButton = function (blockId, id, button, statements) {
+globalThis['gamepad_handleButton'] = function (
+  blockId,
+  id,
+  button,
+  statements
+) {
   const switchPro = new SwitchPro();
   switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
 
   const handleButton = function (pressed) {
     if (pressed[button]) {
-      // interrupt BLAST execution
-      interruptRunner();
-
-      const newInterpreter = new Interpreter('');
-      newInterpreter.getStateStack()[0].scope =
-        getInterpreter().getGlobalScope();
-      newInterpreter.appendCode(statements);
-
-      const interruptRunner_ = function () {
-        try {
-          const hasMore = newInterpreter.step();
-          if (hasMore) {
-            setTimeout(interruptRunner_, 5);
-          } else {
-            // Continue BLAST execution.
-            continueRunner();
-          }
-        } catch (error) {
-          throwError(`Error executing program:\n ${error}`);
-          console.error(error);
-        }
-      };
-      interruptRunner_();
+      try {
+        eval(statements);
+      } catch (e) {
+        throwError(e);
+        console.error(e);
+      }
     }
   };
 
@@ -441,5 +374,3 @@ const handleGamepadButton = function (blockId, id, button, statements) {
     clearInterval(switchPro.interval);
   });
 };
-
-apiFunctions.push(['handleGamepadButton', handleGamepadButton]);
