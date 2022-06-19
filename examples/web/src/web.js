@@ -517,47 +517,6 @@ const openConnectModal = function (type) {
 };
 
 /**
- * Places a transparent rectangle over the workspace to prevent
- * the user from interacting with the workspace.
- */
-const disableWorkspace = function () {
-  const workspaceDiv = document.getElementById('content_workspace');
-  const rect = document.createElement('div');
-  rect.id = 'workspace-disabled';
-  const disabledhint = document.createElement('p');
-  disabledhint.id = 'workspace-disabled-text';
-  disabledhint.innerHTML = 'Workspace is disabled during execution.';
-  rect.appendChild(disabledhint);
-  rect.addEventListener('click', () => {
-    // if rect has class blink, remove it
-    if (disabledhint.classList.contains('blink')) {
-      disabledhint.classList.remove('blink');
-    }
-    disabledhint.classList.add('blink');
-  });
-  workspaceDiv.appendChild(rect);
-  // de-select current block so that the delete key won't work.
-  if (Blockly.selected) {
-    Blockly.selected.unselect();
-  }
-};
-onStatusChange.running.push(disableWorkspace);
-
-/**
- * Removes the transparent rectangle over the workspace.
- */
-const enableWorkspace = function () {
-  const workspaceDiv = document.getElementById('content_workspace');
-  const rect = document.getElementById('workspace-disabled');
-  if (rect) {
-    workspaceDiv.removeChild(rect);
-  }
-};
-onStatusChange.ready.push(enableWorkspace);
-onStatusChange.stopped.push(enableWorkspace);
-onStatusChange.error.push(enableWorkspace);
-
-/**
  * Initialize the UI by binding onclick events.
  * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
  */
