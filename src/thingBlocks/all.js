@@ -47,3 +47,6 @@ import './webSpeech/generators.js';
 
 import './xiamoi_thermometer/blocks.js';
 import './xiamoi_thermometer/generators.js';
+
+import './text2code/blocks.js';
+import './text2code/generators.js';

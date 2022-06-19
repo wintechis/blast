@@ -383,6 +383,102 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tensorflow/tfjs-backend-cpu@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-backend-cpu@npm:3.18.0"
+  dependencies:
+    "@types/seedrandom": 2.4.27
+    seedrandom: 2.4.3
+  peerDependencies:
+    "@tensorflow/tfjs-core": 3.18.0
+  checksum: 74f07ee1dd8a9a5f27253ec731f08f624395eb7632c5289297c83c3a839d6f441f3fd5d65cddf5c614766f5a5075972973f86876351d713367dd367d892a93a1
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs-backend-webgl@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-backend-webgl@npm:3.18.0"
+  dependencies:
+    "@tensorflow/tfjs-backend-cpu": 3.18.0
+    "@types/offscreencanvas": ~2019.3.0
+    "@types/seedrandom": 2.4.27
+    "@types/webgl-ext": 0.0.30
+    "@types/webgl2": 0.0.6
+    seedrandom: 2.4.3
+  peerDependencies:
+    "@tensorflow/tfjs-core": 3.18.0
+  checksum: b2254e0b61342e88aa43544637938dcafb2bf1500b2d0ba4af27aea27a601cb1dfceed21f9cd7ae6ebfe7e63005582b80b94fc6ce667bfe45de1cd4f126dbdab
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs-converter@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-converter@npm:3.18.0"
+  peerDependencies:
+    "@tensorflow/tfjs-core": 3.18.0
+  checksum: 8bbbda5f09f4bba80cf0772a89febbc53c4def7aa1471a8ebd6ee1096cb2c07773b60ac146ef976315deb1ed1599ee87ac32161c72c06518aea6a85239f1cb55
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs-core@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-core@npm:3.18.0"
+  dependencies:
+    "@types/long": ^4.0.1
+    "@types/offscreencanvas": ~2019.3.0
+    "@types/seedrandom": 2.4.27
+    "@types/webgl-ext": 0.0.30
+    "@webgpu/types": ^0.1.16
+    long: 4.0.0
+    node-fetch: ~2.6.1
+    seedrandom: 2.4.3
+  checksum: ec7842a7d8da43b72567dba036faadbb73dad4562d93edec57d6d2e03d49718a91fc1636ac08d4fe90c9e0be9de8fde117ce88f2097646e1c033f7b2d3fa9408
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs-data@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-data@npm:3.18.0"
+  dependencies:
+    "@types/node-fetch": ^2.1.2
+    node-fetch: ~2.6.1
+  peerDependencies:
+    "@tensorflow/tfjs-core": 3.18.0
+    seedrandom: ~2.4.3
+  checksum: 69803c505cd93fc0fcfde5cc8b18722519103985695810f5e7f8f32f017cccc23ef84d28d9cbc4009783a36f547e31f2dc2396d26e838636c0bac5c3346f58b8
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs-layers@npm:3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs-layers@npm:3.18.0"
+  peerDependencies:
+    "@tensorflow/tfjs-core": 3.18.0
+  checksum: 8c4eaecbd15b6a37e5b2183505fdf66210ade19e476a4adb340c78300561aa5e429f0004df7b5cdf431f1ff64b8ec612f833a36105502351fb92b10263782ef1
+  languageName: node
+  linkType: hard
+
+"@tensorflow/tfjs@npm:^3.18.0":
+  version: 3.18.0
+  resolution: "@tensorflow/tfjs@npm:3.18.0"
+  dependencies:
+    "@tensorflow/tfjs-backend-cpu": 3.18.0
+    "@tensorflow/tfjs-backend-webgl": 3.18.0
+    "@tensorflow/tfjs-converter": 3.18.0
+    "@tensorflow/tfjs-core": 3.18.0
+    "@tensorflow/tfjs-data": 3.18.0
+    "@tensorflow/tfjs-layers": 3.18.0
+    argparse: ^1.0.10
+    chalk: ^4.1.0
+    core-js: 3
+    regenerator-runtime: ^0.13.5
+    yargs: ^16.0.3
+  bin:
+    tfjs-custom-module: dist/tools/custom_module/cli.js
+  checksum: 8e53927245fab2566f3e1c9885a4386e27da2017d167ccc1477ae535e0a213b8123683abb7d160d2be1349e8de1c7ada4d7eae2b6111b97b2cfa3c4aaebb1884
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -431,6 +527,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/long@npm:^4.0.1":
+  version: 4.0.2
+  resolution: "@types/long@npm:4.0.2"
+  checksum: d16cde7240d834cf44ba1eaec49e78ae3180e724cd667052b194a372f350d024cba8dd3f37b0864931683dab09ca935d52f0c4c1687178af5ada9fc85b0635f4
+  languageName: node
+  linkType: hard
+
 "@types/markdown-it@npm:^12.2.3":
   version: 12.2.3
   resolution: "@types/markdown-it@npm:12.2.3"
@@ -458,6 +561,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node-fetch@npm:^2.1.2":
+  version: 2.6.1
+  resolution: "@types/node-fetch@npm:2.6.1"
+  dependencies:
+    "@types/node": "*"
+    form-data: ^3.0.0
+  checksum: a3e5d7f413d1638d795dff03f7b142b1b0e0c109ed210479000ce7b3ea11f9a6d89d9a024c96578d9249570c5fe5287a5f0f4aaba98199222230196ff2d6b283
+  languageName: node
+  linkType: hard
+
 "@types/node@npm:*":
   version: 17.0.25
   resolution: "@types/node@npm:17.0.25"
@@ -472,12 +585,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/offscreencanvas@npm:~2019.3.0":
+  version: 2019.3.0
+  resolution: "@types/offscreencanvas@npm:2019.3.0"
+  checksum: 006361d170aac80925b16a8c0421d5ee7bfe6acb5cd6b22407e2c28be091becc7de5ba1fd21293a1fdff70648918d9c035001ffafd4d6c49d1c5a22dab88ed0d
+  languageName: node
+  linkType: hard
+
 "@types/rdfjs__dataset@npm:^1.0.4":
   version: 1.0.5
   resolution: "@types/rdfjs__dataset@npm:1.0.5"
   dependencies:
     rdf-js: ^4.0.2
   checksum: 1ba0d3c6afcb29c52b315c90aca5077d8e9d7202249b20f59d14fadf3215cedac4220254b98b974b1b25ea47eb46378c59f39e2a69a93308043795c67f2f5bde
+  languageName: node
+  linkType: hard
+
+"@types/seedrandom@npm:2.4.27":
+  version: 2.4.27
+  resolution: "@types/seedrandom@npm:2.4.27"
+  checksum: a41069fa5f280801125e24d9eebcb934f21e74d691a05cc34d727825a24ed58a4a31cbae0b47fb9bd1a9170fa9d7508b49730d0f65779b64ffed79fafb2dd0bc
   languageName: node
   linkType: hard
 
@@ -492,6 +619,20 @@ __metadata:
   version: 0.0.14
   resolution: "@types/web-bluetooth@npm:0.0.14"
   checksum: 1eb694ff2ba6ef239e10024bfb205c087fb1a43aa8b4a31f3a3b7c90eccf2f55c7fb4c1057e382e1c2f4d6d8a137e68bf1255790b980c5ac95026419a623c6b5
+  languageName: node
+  linkType: hard
+
+"@types/webgl-ext@npm:0.0.30":
+  version: 0.0.30
+  resolution: "@types/webgl-ext@npm:0.0.30"
+  checksum: c98aa8af2d24d54dc29d836aed0ca5acff45903dc91879d62110e84e615024ca071af69d1dcff26857aa2ab80c86bea9373d718616dcc61dbfdc6a6dd917a064
+  languageName: node
+  linkType: hard
+
+"@types/webgl2@npm:0.0.6":
+  version: 0.0.6
+  resolution: "@types/webgl2@npm:0.0.6"
+  checksum: 32a6ff40882b065742ee40e4c2e3d62958d553212743c514e3202d87864276fc8c3c2f278587cef91f5d080bd4ad6ceaa18046f0154f387613ab66f10d1f01ca
   languageName: node
   linkType: hard
 
@@ -767,6 +908,13 @@ __metadata:
     "@webassemblyjs/ast": 1.11.1
     "@xtuc/long": 4.2.2
   checksum: f15ae4c2441b979a3b4fce78f3d83472fb22350c6dc3fd34bfe7c3da108e0b2360718734d961bba20e7716cb8578e964b870da55b035e209e50ec9db0378a3f7
+  languageName: node
+  linkType: hard
+
+"@webgpu/types@npm:^0.1.16":
+  version: 0.1.19
+  resolution: "@webgpu/types@npm:0.1.19"
+  checksum: 2118d8d136cd9e119c84b11edee4522516d6055373cafb99c8c5f106c03f84a7612223a2bce9873ed4cc3158aae08f6a31780b99d678d4b238ad8174dd61a00a
   languageName: node
   linkType: hard
 
@@ -1067,7 +1215,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"argparse@npm:^1.0.7":
+"argparse@npm:^1.0.10, argparse@npm:^1.0.7":
   version: 1.0.10
   resolution: "argparse@npm:1.0.10"
   dependencies:
@@ -1155,6 +1303,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"babel-polyfill@npm:^6.26.0":
+  version: 6.26.0
+  resolution: "babel-polyfill@npm:6.26.0"
+  dependencies:
+    babel-runtime: ^6.26.0
+    core-js: ^2.5.0
+    regenerator-runtime: ^0.10.5
+  checksum: 6fb1a3c0bfe1b6fc56ce1afcf531878aa629b309277a05fbf3fe950589b24cb4052a6e487db21d318eb5336b68730a21f5ef62166b6cc8aea3406261054d1118
+  languageName: node
+  linkType: hard
+
+"babel-runtime@npm:^6.26.0":
+  version: 6.26.0
+  resolution: "babel-runtime@npm:6.26.0"
+  dependencies:
+    core-js: ^2.4.0
+    regenerator-runtime: ^0.11.0
+  checksum: 8aeade94665e67a73c1ccc10f6fd42ba0c689b980032b70929de7a6d9a12eb87ef51902733f8fefede35afea7a5c3ef7e916a64d503446c1eedc9e3284bd3d50
+  languageName: node
+  linkType: hard
+
 "balanced-match@npm:^1.0.0":
   version: 1.0.2
   resolution: "balanced-match@npm:1.0.2"
@@ -1187,10 +1356,12 @@ __metadata:
     "@inrupt/solid-client": ^1.19.0
     "@node-wot/core": latest
     "@node-wot/td-tools": ^0.8.0
+    "@tensorflow/tfjs": ^3.18.0
     "@types/node": ^14.11.2
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
+    babel-polyfill: ^6.26.0
     blockly: 8.0.2
     chai: ^4.3.6
     copyfiles: ^2.4.1
@@ -1558,7 +1729,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"combined-stream@npm:^1.0.6, combined-stream@npm:~1.0.6":
+"combined-stream@npm:^1.0.6, combined-stream@npm:^1.0.8, combined-stream@npm:~1.0.6":
   version: 1.0.8
   resolution: "combined-stream@npm:1.0.8"
   dependencies:
@@ -1640,6 +1811,20 @@ __metadata:
     copyfiles: copyfiles
     copyup: copyfiles
   checksum: aea69873bb99cc5f553967660cbfb70e4eeda198f572a36fb0f748b36877ff2c90fd906c58b1d540adbad8afa8ee82820172f1c18e69736f7ab52792c12745a7
+  languageName: node
+  linkType: hard
+
+"core-js@npm:3":
+  version: 3.22.8
+  resolution: "core-js@npm:3.22.8"
+  checksum: c79bcfea37920a5da880ad1fc8336355e833c83998bb28cd45cc59eef4d9824dd8d59ccd24d6b18ff88f284d53d9eef021ddbd2b5ab1c6305b01e98c1402e510
+  languageName: node
+  linkType: hard
+
+"core-js@npm:^2.4.0, core-js@npm:^2.5.0":
+  version: 2.6.12
+  resolution: "core-js@npm:2.6.12"
+  checksum: 44fa9934a85f8c78d61e0c8b7b22436330471ffe59ec5076fe7f324d6e8cf7f824b14b1c81ca73608b13bdb0fef035bd820989bf059767ad6fa13123bb8bd016
   languageName: node
   linkType: hard
 
@@ -2525,6 +2710,17 @@ __metadata:
   version: 0.6.1
   resolution: "forever-agent@npm:0.6.1"
   checksum: 766ae6e220f5fe23676bb4c6a99387cec5b7b62ceb99e10923376e27bfea72f3c3aeec2ba5f45f3f7ba65d6616965aa7c20b15002b6860833bb6e394dea546a8
+  languageName: node
+  linkType: hard
+
+"form-data@npm:^3.0.0":
+  version: 3.0.1
+  resolution: "form-data@npm:3.0.1"
+  dependencies:
+    asynckit: ^0.4.0
+    combined-stream: ^1.0.8
+    mime-types: ^2.1.12
+  checksum: b019e8d35c8afc14a2bd8a7a92fa4f525a4726b6d5a9740e8d2623c30e308fbb58dc8469f90415a856698933c8479b01646a9dff33c87cc4e76d72aedbbf860d
   languageName: node
   linkType: hard
 
@@ -3508,6 +3704,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"long@npm:4.0.0":
+  version: 4.0.0
+  resolution: "long@npm:4.0.0"
+  checksum: 16afbe8f749c7c849db1f4de4e2e6a31ac6e617cead3bdc4f9605cb703cd20e1e9fc1a7baba674ffcca57d660a6e5b53a9e236d7b25a295d3855cca79cc06744
+  languageName: node
+  linkType: hard
+
 "loupe@npm:^2.3.1":
   version: 2.3.4
   resolution: "loupe@npm:2.3.4"
@@ -3920,7 +4123,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-fetch@npm:2.6.7, node-fetch@npm:2.6.x":
+"node-fetch@npm:2.6.7, node-fetch@npm:2.6.x, node-fetch@npm:~2.6.1":
   version: 2.6.7
   resolution: "node-fetch@npm:2.6.7"
   dependencies:
@@ -4521,6 +4724,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"regenerator-runtime@npm:^0.10.5":
+  version: 0.10.5
+  resolution: "regenerator-runtime@npm:0.10.5"
+  checksum: 35b33dbe5381d268b2be98f4ee4b028702acb38b012bff90723df067f915a337e5c979cce4dab4ed23febb223bbebb8820d46902f897742c55818c22c14e2a7c
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.11.0":
+  version: 0.11.1
+  resolution: "regenerator-runtime@npm:0.11.1"
+  checksum: 3c97bd2c7b2b3247e6f8e2147a002eb78c995323732dad5dc70fac8d8d0b758d0295e7015b90d3d444446ae77cbd24b9f9123ec3a77018e81d8999818301b4f4
+  languageName: node
+  linkType: hard
+
+"regenerator-runtime@npm:^0.13.5":
+  version: 0.13.9
+  resolution: "regenerator-runtime@npm:0.13.9"
+  checksum: 65ed455fe5afd799e2897baf691ca21c2772e1a969d19bb0c4695757c2d96249eb74ee3553ea34a91062b2a676beedf630b4c1551cc6299afb937be1426ec55e
+  languageName: node
+  linkType: hard
+
 "regexpp@npm:^3.0.0, regexpp@npm:^3.1.0, regexpp@npm:^3.2.0":
   version: 3.2.0
   resolution: "regexpp@npm:3.2.0"
@@ -4740,6 +4964,13 @@ __metadata:
     ajv: ^6.12.5
     ajv-keywords: ^3.5.2
   checksum: fb73f3d759d43ba033c877628fe9751620a26879f6301d3dbeeb48cf2a65baec5cdf99da65d1bf3b4ff5444b2e59cbe4f81c2456b5e0d2ba7d7fd4aed5da29ce
+  languageName: node
+  linkType: hard
+
+"seedrandom@npm:2.4.3":
+  version: 2.4.3
+  resolution: "seedrandom@npm:2.4.3"
+  checksum: 81f6b15753a8373322e76806b4d69ae668a6c097598a901939e7b4c8096d5baaf95f0c5b5de41aea6a5cfb49e9f88029c2d6c03c290e0a1f71c9462f50bd6e08
   languageName: node
   linkType: hard
 
@@ -5889,7 +6120,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:16.2.0, yargs@npm:^16.1.0":
+"yargs@npm:16.2.0, yargs@npm:^16.0.3, yargs@npm:^16.1.0":
   version: 16.2.0
   resolution: "yargs@npm:16.2.0"
   dependencies:
