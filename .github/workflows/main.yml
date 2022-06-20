@@ -30,7 +30,7 @@ jobs:
         run: yarn run lint
   build-and-test:
     runs-on: ubuntu-latest
-    needs: lint-and-test
+    needs: lint
       
     steps:
       - uses: actions/checkout@v3
@@ -56,7 +56,7 @@ jobs:
         run: yarn run test
   deploy:
     runs-on: ubuntu-latest
-    needs: build-examples
+    needs: build-and-test
     if: github.ref == 'refs/heads/master'
   
     steps:
