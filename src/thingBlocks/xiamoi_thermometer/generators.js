@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {asyncApiFunctions, getWorkspace} from './../../blast_interpreter.js';
+import {getWorkspace} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
 /**
@@ -33,7 +33,7 @@ JavaScript['read_mijia_property'] = function (block) {
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
-  const code = `readMijiaProperty(${blockId}, ${measurement}, ${thing})`;
+  const code = `await readMijiaProperty(${blockId}, ${measurement}, ${thing})`;
 
   return [code, JavaScript.ORDER_NONE];
 };
@@ -43,26 +43,20 @@ JavaScript['read_mijia_property'] = function (block) {
  * @param {Blockly.Block.id} blockId the things_xiaomiThermometer block's id.
  * @param {String} measurement the measurement to fetch.
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a RuuviTag.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const readMijiaProperty = async function (
+globalThis['readMijiaProperty'] = async function (
   blockId,
   measurement,
-  webBluetoothId,
-  callback
+  webBluetoothId
 ) {
   // make sure a device is connected.
   if (!webBluetoothId) {
     throwError('No Thermometer is set.');
-    callback();
     return;
   }
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   const value = await thing.readProperty(measurement);
-  callback(value);
+  return value;
 };
-
-// add readMijiaProperty to the interpreter's API.
-asyncApiFunctions.push(['readMijiaProperty', readMijiaProperty]);

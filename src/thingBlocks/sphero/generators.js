@@ -8,11 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  apiFunctions,
-  asyncApiFunctions,
-  getWorkspace,
-} from '../../blast_interpreter.js';
+import {getWorkspace} from '../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -69,7 +65,7 @@ JavaScript['sphero_color'] = function (block) {
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
-  const code = `spheroColor(${blockId}, ${color});\n`;
+  const code = `await spheroColor(${blockId}, ${color});\n`;
   return code;
 };
 
@@ -79,7 +75,7 @@ JavaScript['sphero_color'] = function (block) {
  * @param {Number} speed the speed of the roll.
  * @param {Number} heading the heading in degrees, (0 is forwards, 90 is right, 180 is backwards, 270 is left).
  */
-function spheroRoll(blockId, speed, heading) {
+globalThis['spheroRoll'] = function (blockId, speed, heading) {
   if (speed > 255) {
     speed = 255;
   }
@@ -87,33 +83,26 @@ function spheroRoll(blockId, speed, heading) {
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
   bolt.roll(speed, heading, []);
-}
-
-// Add spheroRoll function to the interpreter's API
-apiFunctions.push(['spheroRoll', spheroRoll]);
+};
 
 /**
  * Sends a stop command to the Sphero Mini.
  * @param {Blockly.Block.id} blockId the things_spheroMini block's id.
  */
-function spheroStop(blockId) {
+globalThis['spheroStop'] = function (blockId) {
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
   bolt.queue.clear();
   bolt.roll(0, 0, []);
-}
-
-// Add spheroStop function to the interpreter's API
-apiFunctions.push(['spheroStop', spheroStop]);
+};
 
 /**
  * Sets the color of the Sphero Mini.
  * @param {Blockly.Block.id} blockId the things_spheroMini block's id.
  * @param {Number} color the color of the Sphero Mini.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-async function spheroColor(blockId, color, callback) {
+globalThis['spheroColor'] = async function (blockId, color) {
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const bolt = block.thing;
@@ -124,7 +113,4 @@ async function spheroColor(blockId, color, callback) {
   const blue = parseInt(color.substring(5, 7), 16);
 
   await bolt.setAllLeds(red, green, blue);
-  callback();
-}
-
-asyncApiFunctions.push(['spheroColor', spheroColor]);
+};

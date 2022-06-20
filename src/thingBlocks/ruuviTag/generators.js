@@ -9,7 +9,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {asyncApiFunctions, getWorkspace} from '../../blast_interpreter.js';
+import {getWorkspace} from '../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the things_ruuviTag block.
@@ -35,7 +35,7 @@ JavaScript['read_ruuvi_property'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `getRuuviProperty(${blockId}, ${measurement}, ${thing})`;
+  const code = `await getRuuviProperty(${blockId}, ${measurement}, ${thing})`;
   return [code, JavaScript.ORDER_NONE];
 };
 
@@ -43,16 +43,12 @@ JavaScript['read_ruuvi_property'] = function (block) {
  * Fetches the selected measurement from a RuuviTag.
  * @param {Blockly.Block.id} blockId the read_ruuvi_property block's id.
  * @param {String} measurement the measurement to fetch.
- * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  * @public
  */
-const getRuuviProperty = async function (blockId, measurement, callback) {
+globalThis['getRuuviProperty'] = async function (blockId, measurement) {
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   await thing.subscribeEvent('rawv2', value => {
-    callback(value[measurement]);
+    return value[measurement];
   });
 };
-
-// add getRuuviProperty function to the interpreter's API.
-asyncApiFunctions.push(['getRuuviProperty', getRuuviProperty]);

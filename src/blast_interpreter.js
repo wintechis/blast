@@ -12,56 +12,6 @@ import {getThingsLog} from './blast_things.js';
 const {Events, JavaScript} = Blockly;
 
 /**
- * Instance of the JS Interpreter.
- * @type {?Interpreter}
- * @public
- */
-export const interpreter = null;
-
-/**
- * Getter for the interpreter.
- * @return {Interpreter} the interpreter.
- */
-export const getInterpreter = function () {
-  return interpreter;
-};
-
-/**
- * Array of tuples, containg names and functions defined in the things folder,
- * in order to add them to the interpreter API in {@link initAPI}.
- * @public
- * @type {Array<{name: string, func: function}>}
- */
-export const apiFunctions = [];
-
-/**
- * Array of tuples, containg names and asynchronous functions defined in the
- * things folder, in order to add them to the interpreter API in {@link initAPI}.
- * @type {Array<{name: string, func: function}>}
- * @public
- */
-export const asyncApiFunctions = [];
-
-/**
- * Interrupts the JS Interpreter.
- */
-export const interruptRunner = function () {
-  clearTimeout(runnerTimeout);
-  runnerTimeout = null;
-};
-apiFunctions.push(['interruptRunner', interruptRunner]);
-
-const runner_ = null;
-
-/**
- * Continues the JS Interpreter.
- */
-export const continueRunner = function () {
-  runnerTimeout = setTimeout(runner_, 5);
-};
-apiFunctions.push(['continueRunner', continueRunner]);
-
-/**
  * Enum for Blast status
  * @enum {string}
  * @public
@@ -110,11 +60,6 @@ let latestCode = '';
 export const getLatestCode = function () {
   return latestCode;
 };
-
-/**
- * The timeout currently used in {@link runner_}.
- */
-let runnerTimeout = null;
 
 /**
  * Blast's main workspace.
