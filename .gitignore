@@ -1,6 +1,7 @@
 .vscode
 **/.yarn/*
 !.yarn/patches
+**/dist
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
