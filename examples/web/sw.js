@@ -25,7 +25,7 @@ registerRoute(
     new CacheFirst(),
 );
 
-precacheAndRoute([{"revision":"c818dccbf511504d84d0fefdb0dc2873","url":"src/blocks.js"},{"revision":"f2d5c4af38f20cb469155a2de32c857b","url":"src/generators.js"},{"revision":"4489494d19c121185a53b69948e4b782","url":"src/index.js"},{"revision":"3e07a041289aa1782c5f26fe22a87dcc","url":"src/screenshot.js"},{"revision":"ed05f13a5e6c4cedcacf2bfac18aca64","url":"src/web.js"}]);
+precacheAndRoute([{"revision":"c818dccbf511504d84d0fefdb0dc2873","url":"src/blocks.js"},{"revision":"f2d5c4af38f20cb469155a2de32c857b","url":"src/generators.js"},{"revision":"0123e9d1c5f992cab21afb5d9bb296b2","url":"src/index.js"},{"revision":"3e07a041289aa1782c5f26fe22a87dcc","url":"src/screenshot.js"},{"revision":"af725c3f5b2569a9e56f50ef3031616a","url":"src/web.js"}]);
 
 // Cache CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
 registerRoute(

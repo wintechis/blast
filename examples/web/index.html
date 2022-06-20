@@ -241,6 +241,9 @@
       </span>
     </button>
   </div>
+  <div id="version">
+    
+  </div>
 </body>
 <script>
   // Add service worker to the page
@@ -249,9 +252,6 @@
       navigator.serviceWorker.register('sw.js', { scope: './' });
     }
   });
-
-  // Track current gulp revision for bug reporting
-  const rev = 'blast-fd533f4ca8.min.js';
 
   /**
    * Bluetooth device chooser

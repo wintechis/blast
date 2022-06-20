@@ -128,6 +128,13 @@ export const setRunButton = function (button) {
 let workspace = null;
 
 /**
+ * Current version of BLAST.
+ * This string will be replaced with the current commit hash,
+ * when the application is built.
+ */
+const rev = '{{commit_hash}}';
+
+/**
  * Bind a function to a button's click event.
  * @param {!Element|string} el Button element or ID thereof.
  * @param {!Function} func func Event handler to bind.
@@ -240,7 +247,7 @@ const addMessage = function (message, type) {
     debugInfo.style.display = 'block';
     const debugTbody = document.getElementById('debug-tbody');
     debugTbody.innerHTML = '';
-    // Get current BLAST revision
+    // Get current BLAST version
     const revisionRow = document.createElement('tr');
     revisionRow.innerHTML = `<td>BLAST</td><td>${rev}</td>`;
     debugTbody.appendChild(revisionRow);
@@ -521,6 +528,10 @@ const openConnectModal = function (type) {
  * @param {!Blockly.Workspace} ws The workspace to bind to the UI.
  */
 export const initUi = function (ws) {
+  // Display current version
+  const version = document.getElementById('version');
+  version.textContent = `version #${rev}`;
+
   workspace = ws;
   // Set remaining properties.
   runButton = document.getElementById('runButton');

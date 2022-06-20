@@ -110,17 +110,5 @@ const init = function () {
   stdInfo('Actionblock output will be displayed here');
 };
 
-/**
- * Highlight a block with id id.
- * @param {!Blockly.Block.id} id identifier of the block to be highlighted.
- * @public
- */
-const highlightBlock = function (id) {
-  const workspace = getWorkspace();
-  workspace.highlightBlock(id);
-};
-// Add highlightBlock function to interpreter api
-apiFunctions.push(['highlightBlock', highlightBlock]);
-
 // initialize blast when page dom is loaded
 window.addEventListener('load', init);
