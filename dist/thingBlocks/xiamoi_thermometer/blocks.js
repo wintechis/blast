@@ -83,7 +83,7 @@ implementedThings.push({
   ],
   filters: [
     {
-      namePrefix: 'lywsd03mmc',
+      services: 'LYWSD03MMC',
     },
   ],
   optionalServices: ['ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6'],
