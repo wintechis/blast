@@ -76,7 +76,7 @@ jobs:
           target: "./public_html/testing/blast/"
   deploy_ren:
     runs-on: ubuntu-latest
-    needs: build-examples
+    needs: build-and-test
     if: github.ref == 'refs/heads/ren'
   
     steps:
