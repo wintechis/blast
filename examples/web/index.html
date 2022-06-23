@@ -24,7 +24,6 @@
   <meta name="msapplication-TileColor" content="#ffffff">
   <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
   <meta name="theme-color" content="#ffffff">
-  <link rel="manifest" href="site.webmanifest">
 
   <script>
     // redirect to HTTPS
@@ -246,13 +245,6 @@
   </div>
 </body>
 <script>
-  // Add service worker to the page
-  window.addEventListener('load', function() {
-    if (navigator.serviceWorker) {
-      navigator.serviceWorker.register('sw.js', { scope: './' });
-    }
-  });
-
   /**
    * Bluetooth device chooser
    */
