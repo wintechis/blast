@@ -274,8 +274,9 @@ JavaScript['joycon_gamepad_joystick'] = function (block) {
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
+  const ownId = JavaScript.quote_(block.id);
 
-  const handler = `gamepad_handleJoystick(${blockId}, ${thing}, ${statements});\n`;
+  const handler = `gamepad_handleJoystick(${ownId}, ${blockId}, ${thing}, ${statements});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -285,22 +286,33 @@ JavaScript['joycon_gamepad_joystick'] = function (block) {
 
 /**
  * Handles gamepad joystick events.
- * @param {string} blockId the block id of the block that triggered the event.
+ * @param {string} ownId the block id of this event block.
+ * @param {string} blockId the block id of the thing_gamepad block connected this event block.
  * @param {string} id the id of the gamepad.
  * @param {string} statements the statements to execute.
  */
-globalThis['gamepad_handleJoystick'] = function (blockId, id, statements) {
+globalThis['gamepad_handleJoystick'] = function (
+  ownId,
+  blockId,
+  id,
+  statements
+) {
   const switchPro = new SwitchPro();
   switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
 
-  globalThis['gp_x'] = 0;
-  globalThis['gp_y'] = 0;
-  globalThis['gp_angle'] = 0;
+  const self = getWorkspace().getBlockById(ownId);
+  const xName = self.xName;
+  const yName = self.yName;
+  const angleName = self.angleName;
+
+  globalThis[xName] = 0;
+  globalThis[yName] = 0;
+  globalThis[angleName] = 0;
 
   const handleJoystick = function (joystick) {
-    globalThis['gp_y'] = joystick['y'] || 0;
-    globalThis['gp_x'] = joystick['x'] || 0;
-    globalThis['gp_angle'] = joystick['angle'] || 0;
+    globalThis[xName] = joystick['x'] || 0;
+    globalThis[yName] = joystick['y'] || 0;
+    globalThis[angleName] = joystick['angle'] || 0;
 
     try {
       eval(statements);

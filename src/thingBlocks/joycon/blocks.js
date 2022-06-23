@@ -7,7 +7,8 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldDropdown, FieldTextInput} = Blockly;
+const {Blocks, Events, FieldDropdown, FieldTextInput, JavaScript, Names} =
+  Blockly;
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 import {implementedThings} from './../../blast_things.js';
 
@@ -388,6 +389,9 @@ Blocks['joycon_gamepad_joystick'] = {
     this.getField('gp-x').setEnabled(false);
     this.getField('gp-y').setEnabled(false);
     this.getField('gp-angle').setEnabled(false);
+    this.xName = '';
+    this.yName = '';
+    this.angleName = '';
   },
   /**
    * Add this block's id to the events array.
@@ -431,15 +435,36 @@ Blocks['joycon_gamepad_joystick'] = {
   },
   createVars: function () {
     const ws = getWorkspace();
-    if (!ws.getVariable('gp-x')) {
-      ws.createVariable('gp-x');
+    // Create variable for x coordinate.
+    let xName = JavaScript.nameDB_.getName('gp-x', Names.NameType.VARIABLE);
+    for (let i = 1; ws.getVariable(xName) !== null; i++) {
+      // if variable already exists, append a number.
+      xName = JavaScript.nameDB_.getName('gp-x-' + i, Names.NameType.VARIABLE);
     }
-    if (!ws.getVariable('gp-y')) {
-      ws.createVariable('gp-y');
+    this.xName = ws.createVariable(xName).name;
+    this.getField('gp-x').setValue(this.xName);
+    // Create variable for y coordinate.
+    let yName = JavaScript.nameDB_.getName('gp-y', Names.NameType.VARIABLE);
+    for (let i = 1; ws.getVariable(yName) !== null; i++) {
+      // if variable already exists, append a number.
+      yName = JavaScript.nameDB_.getName('gp-y-' + i, Names.NameType.VARIABLE);
     }
-    if (!ws.getVariable('gp-angle')) {
-      ws.createVariable('gp-angle');
+    this.yName = ws.createVariable(yName).name;
+    this.getField('gp-y').setValue(this.yName);
+    // Create variable for joystick angle.
+    let angleName = JavaScript.nameDB_.getName(
+      'gp-angle',
+      Names.NameType.VARIABLE
+    );
+    for (let i = 1; ws.getVariable(angleName) !== null; i++) {
+      // if variable already exists, append a number.
+      angleName = JavaScript.nameDB_.getName(
+        'gp-angle-' + i,
+        Names.NameType.VARIABLE
+      );
     }
+    this.angleName = ws.createVariable(angleName).name;
+    this.getField('gp-angle').setValue(this.angleName);
   },
 };
 
