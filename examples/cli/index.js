@@ -43,7 +43,7 @@ const init = function () {
 
   // Check file type, only .xml is supported
   const path_arr = path.split('.');
-  const file_type = path_arr.at(-1);
+  const file_type = path_arr[path_arr.length - 1];
   if (file_type !== 'xml') {
     throw new Error("Passed file is not supported. File must end in '.xml'.");
   }
