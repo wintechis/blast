@@ -29,23 +29,48 @@ import * as fs from 'fs';
  * @public
  */
 const init = function () {
+  const stdInfo = getStdInfo();
+
+  // Check number of provided arguments
+  if (process.argv.length !== 3) {
+    throw new Error(
+      'Invalid number of arguments passed.\n The call must be in the form: <node> <index.js> <path-to-file>'
+    );
+  }
+
+  // Path is third passed argument
+  const path = process.argv[2];
+
+  // Check file type, only .xml is supported
+  const path_arr = path.split('.');
+  const file_type = path_arr.at(-1);
+  if (file_type !== 'xml') {
+    throw new Error("Passed file is not supported. File must end in '.xml'.");
+  }
+
+  // Create Environment
   const workspace = new Blockly.Workspace();
-  const path = './BLAST_SVR.xml';
-  const xmlString = readBlocklyXML(path);
+  const xmlString = readXML(path);
   const xml = Blockly.Xml.textToDom(xmlString);
   Blockly.Xml.domToWorkspace(xml, workspace);
-
   initInterpreter(workspace);
 
-  // Display output hint
-  const stdInfo = getStdInfo();
-  stdInfo('Generated Code:\n', getLatestCode());
+  // Display generated code
+  stdInfo('Generated Code:');
+  stdInfo('===================================');
+  stdInfo(getLatestCode());
+  stdInfo('===================================');
 
-  // Run code
+  // Run generated code
   runJS();
 };
 
-function readBlocklyXML(path) {
+/**
+ * Function to read XML file.
+ * @param {string} path The path to the XML file to load.
+ * @returns {string} The XML string.
+ */
+function readXML(path) {
   try {
     const data = fs.readFileSync(path, 'utf8');
     return data;
