@@ -7,8 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldDropdown, FieldTextInput, JavaScript, Names} =
-  Blockly;
+const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
 import {eventsInWorkspace, getWorkspace} from './../../blast_interpreter.js';
 import {implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import

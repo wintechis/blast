@@ -69,7 +69,7 @@ globalThis['xiaomi_handleThermometer'] = async function (
 
   const block = getWorkspace().getBlockById(blockId);
   const thermometer = block.thing;
-  const handler = async function () {
+  const handler = async function (event) {
     const value = event.target.value;
     if (value) {
       const sign = value.getUint8(1) & (1 << 7);
