@@ -4,7 +4,9 @@
 
 import {Content, ProtocolClient} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
+import {Subscription} from 'rxjs';
 import {
+  getCharacteristic,
   readHex,
   readNumber,
   readText,
@@ -21,7 +23,6 @@ import {
   readableStreamToString,
   stringToNodeReadable,
 } from '../binding-helpers.js';
-import {Subscription} from 'rxjs/Subscription';
 
 export default class WebBluetoothClient implements ProtocolClient {
   public toString(): string {
@@ -72,7 +73,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     throw new Error('not implemented');
   }
 
-  public subscribeResource(
+  public async subscribeResource(
     form: WebBluetoothForm,
     next: (content: Content) => void,
     error?: (error: Error) => void,
@@ -85,7 +86,41 @@ export default class WebBluetoothClient implements ProtocolClient {
     const deconstructedPath = this.deconstructPath(path);
     const {serviceId, characteristicId, operation} = deconstructedPath;
 
-    throw new Error('not implemented');
+    if (operation !== 'subscribe') {
+      throw new Error(
+        `[binding-webBluetooth] operation ${operation} is not supported`
+      );
+    }
+
+    const char = await getCharacteristic(deviceId, serviceId, characteristicId);
+    if (!char) {
+      throw new Error(
+        `[binding-webBluetooth] could not find characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
+      );
+    }
+
+    console.debug(
+      '[binding-webBluetooth]',
+      `subscribing to characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
+    );
+
+    const handler = (event: Event) => {
+      const value = (event.target as any).value;
+      const content = {
+        type: form.contentType || 'text/plain',
+        body: stringToNodeReadable(value.toString()),
+      };
+      console.log(event);
+      next(content);
+    };
+
+    char.addEventListener('characteristicvaluechanged', handler);
+
+    await char.startNotifications();
+
+    return new Subscription(() => {
+      char.removeEventListener('characteristicvaluechanged', handler);
+    });
   }
 
   public async start(): Promise<void> {

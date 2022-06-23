@@ -1,4 +1,5 @@
 import {Readable} from 'stream';
+import {ProtocolHelpers} from '@node-wot/core';
 
 /**
  * Decodes a ReadableStream into JSON.
@@ -71,13 +72,13 @@ export const stringToReadable = function (str: string): ReadableStream {
  * @param data The string to convert
  * @returns The converted string as a ReadableStream
  */
-export const stringToNodeReadable = function (
-  data: string
-): NodeJS.ReadableStream {
+export const stringToNodeReadable = function (data: string): Readable {
   // create a new NodeJS.ReadableStream and push the data into it
   const readable = new Readable();
   readable.push(data);
   readable.push(null);
 
-  return readable;
+  const stream = ProtocolHelpers.toNodeStream(readable);
+
+  return stream;
 };

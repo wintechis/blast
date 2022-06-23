@@ -66,6 +66,21 @@ export async function writeWithResponse(
 ): Promise<string>;
 
 /**
+ * Returns a promise to the BluetoothRemoteGATTCharacteristic offered by
+ * the bluetooth device for a specified BluetoothServiceUUID and
+ * BluetoothCharacteristicUUID.
+ * @param {BluetoothDevice.id} id identifier of the device to get the characteristic from.
+ * @param {BluetoothServiceUUID} serviceUUID identifier of the service.
+ * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
+ * @returns {Promise<BluetoothRemoteGATTCharacteristic>} A BluetoothRemoteGATTCharacteristic object.
+ */
+export async function getCharacteristic(
+  id: BluetoothDevice.id,
+  serviceUUID: BluetoothServiceUUID,
+  characteristicUUID: BluetoothCharacteristicUUID
+): Promise<BluetoothRemoteGATTCharacteristic>;
+
+/**
  * Reads data from Bluetooth device using the gatt protocol.
  * @param id identifier of the device to read from.
  * @param serviceUUID identifier of the service.

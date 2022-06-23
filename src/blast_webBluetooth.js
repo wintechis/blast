@@ -322,7 +322,11 @@ const getPrimaryService = async function (id, serviceUUID) {
  * @param {BluetoothCharacteristicUUID} characteristicUUID identifier of the characteristic.
  * @returns {Promise<BluetoothRemoteGATTCharacteristic>} A BluetoothRemoteGATTCharacteristic object.
  */
-const getCharacteristic = async function (id, serviceUUID, characteristicUUID) {
+export const getCharacteristic = async function (
+  id,
+  serviceUUID,
+  characteristicUUID
+) {
   const service = await getPrimaryService(id, serviceUUID);
   if (!service) {
     return;
