@@ -22,7 +22,7 @@ import {getWorkspace, throwError} from './../../blast_interpreter.js';
  */
 JavaScript['get_signal_strength_wb'] = function (block) {
   const thing = JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE);
-  const code = `getRSSIWb(${thing})`;
+  const code = `await getRSSIWb(${thing})`;
 
   return [code, JavaScript.ORDER_NONE];
 };
