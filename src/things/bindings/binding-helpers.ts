@@ -1,5 +1,6 @@
 import {Readable} from 'stream';
-import {ProtocolHelpers} from '@node-wot/core';
+import * as core from '@node-wot/core';
+const {ProtocolHelpers} = core;
 
 /**
  * Decodes a ReadableStream into JSON.
