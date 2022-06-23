@@ -141,11 +141,6 @@ export const rename = function (name) {
 export const statesFlyoutCategory = function (workspace) {
   const xmlList = [];
 
-  // add event_every_minutes block
-  const eventEveryMinutes = utils.xml.createElement('block');
-  eventEveryMinutes.setAttribute('type', 'event_every_minutes');
-  xmlList.push(eventEveryMinutes);
-
   if (Blocks['state_definition']) {
     const block = utils.xml.createElement('block');
     block.setAttribute('type', 'state_definition');

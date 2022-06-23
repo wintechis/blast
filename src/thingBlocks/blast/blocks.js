@@ -109,7 +109,7 @@ const HTTP_REQUEST_XML = `
 </block>`;
 
 // Add http_request block to the toolbox.
-addBlock('http_request', 'Requests and Queries', HTTP_REQUEST_XML);
+addBlock('http_request', 'Requests', HTTP_REQUEST_XML);
 
 Blocks['display_text'] = {
   /**

@@ -9,7 +9,6 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {throwError} from './../blast_interpreter.js';
 
 // eslint-disable-next-line no-unused-vars
 JavaScript['state_definition'] = function (block) {
@@ -53,35 +52,6 @@ JavaScript['event'] = function (block) {
   const statements = JavaScript.statementToCode(block, 'statements');
 
   const code = `eventTargets.get("${stateName}").addEventListener("${stateName}", () => {\n${statements}});\n`;
-
-  return code;
-};
-
-JavaScript['event_every_minutes'] = function (block) {
-  // read block inputs
-  const value =
-    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 1;
-  const unit = block.getFieldValue('units');
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-
-  if (value < 0.1) {
-    throwError('Event interval value must be greater than 0.1.');
-  }
-
-  let milliSeconds;
-  if (unit === 'seconds') {
-    milliSeconds = value * 1000;
-  } else if (unit === 'minutes') {
-    milliSeconds = value * 60 * 1000;
-  } else if (unit === 'hours') {
-    milliSeconds = value * 60 * 60 * 1000;
-  }
-
-  const code = `const interval = setInterval(() => eval(${statements}), ${milliSeconds});
-// Add interval to intervalEvents, so it can be removed when BLAST is stopped.
-intervalEvents.push(interval);\n`;
 
   return code;
 };

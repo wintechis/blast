@@ -6,10 +6,10 @@
 'use strict';
 
 import './colours.js';
-import './control_flow.js';
 import './events.js';
 import './functions.js';
 import './lists.js';
+import './loops.js';
 import './numbers.js';
 import './resources.js';
 import './strings.js';

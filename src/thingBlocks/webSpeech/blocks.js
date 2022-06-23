@@ -234,7 +234,7 @@ Blocks['text_to_speech'] = {
 };
 
 // Add the block to the toolbox.
-addBlock('text_to_speech', 'actions');
+addBlock('text_to_speech', 'Requests');
 
 Blocks['web_speech'] = {
   /**
@@ -469,4 +469,4 @@ Blocks['web_speech'] = {
 };
 
 // Add the block to the toolbox.
-addBlock('web_speech', 'actions');
+addBlock('web_speech', 'Requests');

@@ -31,4 +31,4 @@ Blocks['upload_image'] = {
 };
 
 // Add display_image block to the toolbox.
-addBlock('upload_image', 'Actions');
+addBlock('upload_image', 'Requests');

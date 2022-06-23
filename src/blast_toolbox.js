@@ -123,7 +123,7 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Requests and Queries',
+      name: 'Requests',
       colour: '0',
     },
     {
@@ -133,18 +133,34 @@ const defaultToolbox = {
       colour: '240',
     },
     {
+      kind: 'CATEGORY',
+      contents: [],
+      name: 'Queries',
+      colour: '180',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
     {
       kind: 'CATEGORY',
       contents: [
+        {kind: 'BLOCK', type: 'conditional_statement'},
+        {kind: 'BLOCK', type: 'logic_compare'},
+        {kind: 'BLOCK', type: 'logic_operation'},
+        {kind: 'BLOCK', type: 'logic_negate'},
+      ],
+      name: 'Conditions',
+      colour: '210',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [
         {kind: 'BLOCK', type: 'while_until'},
         {kind: 'BLOCK', type: 'break_continue'},
-        {kind: 'BLOCK', type: 'conditional_statement'},
         {kind: 'BLOCK', type: 'controls_forEach'},
       ],
-      name: 'Control Flow',
+      name: 'Loops',
       colour: '120',
     },
     {
@@ -153,16 +169,6 @@ const defaultToolbox = {
       name: 'States',
       custom: 'STATES',
       colour: '180',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'logic_compare'},
-        {kind: 'BLOCK', type: 'logic_operation'},
-        {kind: 'BLOCK', type: 'logic_negate'},
-      ],
-      name: 'Boolean Expressions',
-      colour: '210',
     },
     {
       kind: 'CATEGORY',

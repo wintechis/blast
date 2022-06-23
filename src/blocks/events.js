@@ -18,7 +18,6 @@ const {
   utils,
   Xml,
 } = Blockly;
-import {eventsInWorkspace, getWorkspace} from './../blast_interpreter.js';
 import {findLegalName, getDefinition, rename} from './../blast_states.js';
 
 Blocks['state_definition'] = {
@@ -219,65 +218,4 @@ Blocks['event'] = {
     }
   },
   defType_: 'state_definition',
-};
-
-Blocks['event_every_minutes'] = {
-  /**
-   * Block for every x minutes event.
-   * @this Blockly.Block
-   */
-  init: function () {
-    this.appendValueInput('value').appendField('every').setCheck('Number');
-    this.appendDummyInput('units').appendField(
-      new FieldDropdown([
-        ['seconds', 'seconds'],
-        ['minutes', 'minutes'],
-        ['hours', 'hours'],
-      ]),
-      'units'
-    );
-    this.appendStatementInput('statements').appendField('do');
-    this.setColour(180);
-    this.setTooltip('');
-    this.setHelpUrl('');
-    this.changeListener = null;
-  },
-  /**
-   * Add this block's id to the events array.
-   */
-  addEvent: async function () {
-    eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
-    }
-  },
-  /**
-   * Remove this block's id from the events array.
-   */
-  removeFromEvents: function () {
-    // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
-    if (index !== -1) {
-      eventsInWorkspace.splice(index, 1);
-    }
-  },
 };

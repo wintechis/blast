@@ -43,7 +43,7 @@ Blocks['sparql_query'] = {
   },
 };
 // Add sparql_query block to the toolbox.
-addBlock('sparql_query', 'Requests and Queries');
+addBlock('sparql_query', 'Queries');
 
 Blocks['sparql_ask'] = {
   /**
@@ -80,4 +80,4 @@ Blocks['sparql_ask'] = {
   },
 };
 // Add sparql_ask block to the toolbox.
-addBlock('sparql_ask', 'Requests and Queries');
+addBlock('sparql_ask', 'Queries');
