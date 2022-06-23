@@ -213,32 +213,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-wot/core@npm:latest":
-  version: 0.8.0
-  resolution: "@node-wot/core@npm:0.8.0"
+"@node-wot/core@npm:0.8.1":
+  version: 0.8.1
+  resolution: "@node-wot/core@npm:0.8.1"
   dependencies:
-    "@node-wot/td-tools": 0.8.0
+    "@node-wot/td-tools": 0.8.1
     "@petamoriken/float16": ^3.1.1
     ajv: ^7.0.4
     rxjs: 5.5.11
     uritemplate: 0.3.4
     uuid: ^7.0.3
-    vm2: ^3.9.6
     web-streams-polyfill: ^3.0.1
-  checksum: dde574f74fed55e2b14bbe66aa85ede006994800211745b6d5e4c1ff6b205d689355381a3041f645068eea57099fae82adbabbf8b5ee022a448b19c17196bb29
+  checksum: 999442ce58fe894d8d5b521062d353cb883706266c38d8fd1289ed1e44ede87f57e9c502e3c5299cd47f8dc279eb92a01ff67560be7ae874d6ea3d692af9ac5b
   languageName: node
   linkType: hard
 
-"@node-wot/td-tools@npm:0.8.0, @node-wot/td-tools@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "@node-wot/td-tools@npm:0.8.0"
+"@node-wot/td-tools@npm:0.8.1":
+  version: 0.8.1
+  resolution: "@node-wot/td-tools@npm:0.8.1"
   dependencies:
+    ajv: ^7.0.4
     is-absolute-url: 3.0.3
+    json-placeholder-replacer: ^1.0.35
     url-toolkit: 2.1.6
     wot-thing-description-types: ^1.1.0-09-February-2022
     wot-thing-model-types: ^1.1.0-3-February-2022
     wot-typescript-definitions: 0.8.0-SNAPSHOT.22
-  checksum: ef11f1ab4789dc491ed968cef1c25f3c0f6edfa93dd993e76972408b2de636752957ef54f421ec0756ebc58f74476f9b924e7465699ec6227479208f10048200
+  checksum: 22ca8c476011fa0f3f98bf7d8c73a9fc1dca08ac0525bab8a554f6c1576a1d51f4a561b4e05da9cb0e98f4ed5848ec11c2c6da91637c723ec37e86f848a9aa57
   languageName: node
   linkType: hard
 
@@ -1033,13 +1034,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn-walk@npm:^8.2.0":
-  version: 8.2.0
-  resolution: "acorn-walk@npm:8.2.0"
-  checksum: 1715e76c01dd7b2d4ca472f9c58968516a4899378a63ad5b6c2d668bba8da21a71976c14ec5f5b75f887b6317c4ae0b897ab141c831d741dc76024d8745f1ad1
-  languageName: node
-  linkType: hard
-
 "acorn@npm:^6.0.1":
   version: 6.4.2
   resolution: "acorn@npm:6.4.2"
@@ -1354,8 +1348,8 @@ __metadata:
     "@blockly/dev-tools": 3.1.3
     "@elgato-stream-deck/webhid": ^5.2.0
     "@inrupt/solid-client": ^1.19.0
-    "@node-wot/core": latest
-    "@node-wot/td-tools": ^0.8.0
+    "@node-wot/core": 0.8.1
+    "@node-wot/td-tools": 0.8.1
     "@tensorflow/tfjs": ^3.18.0
     "@types/node": ^14.11.2
     "@types/web-bluetooth": ^0.0.14
@@ -1385,7 +1379,7 @@ __metadata:
     urdf: "https://github.com/derwehr/uRDF.js.git"
     webpack: ^5.70.0
     webpack-cli: ^4.9.2
-    wot-typescript-definitions: latest
+    wot-typescript-definitions: 0.8.0-SNAPSHOT.23
   languageName: unknown
   linkType: soft
 
@@ -3480,6 +3474,16 @@ __metadata:
   version: 1.0.2
   resolution: "json-parse-better-errors@npm:1.0.2"
   checksum: ff2b5ba2a70e88fd97a3cb28c1840144c5ce8fae9cbeeddba15afa333a5c407cf0e42300cd0a2885dbb055227fe68d405070faad941beeffbfde9cf3b2c78c5d
+  languageName: node
+  linkType: hard
+
+"json-placeholder-replacer@npm:^1.0.35":
+  version: 1.0.35
+  resolution: "json-placeholder-replacer@npm:1.0.35"
+  bin:
+    jpr: dist/index.js
+    json-placeholder-replacer: dist/index.js
+  checksum: 89b354d3ec25945657e73fcc681c3ecbba345298e33a634d25a7d561908b010ebebcf8b46c1827fd2194c5f1a08b02c735a6553560ad4134e073192ce7ee5dbd
   languageName: node
   linkType: hard
 
@@ -5679,7 +5683,7 @@ __metadata:
     n3: 1.13.x
     node-fetch: 2.6.x
     sparqljs: 2.x.x
-  checksum: e59ba86d1cebb6bc14c31310ab92a9deb6cdc8f643d9a648a6fafce93eb914401bb9fc0bc555a8e647c25c3d2a7cc39b3ea46d86d2157fbdbde114591d0215c6
+  checksum: 741003dcdf72c5c8e05882cce56c0ce2f85115a638298186265c07a5414abdcc239f97af418a4c61d48328e43a0cdf625bf136c996e79501dbbdf4bf4570d453
   languageName: node
   linkType: hard
 
@@ -5760,18 +5764,6 @@ __metadata:
     core-util-is: 1.0.2
     extsprintf: ^1.2.0
   checksum: c431df0bedf2088b227a4e051e0ff4ca54df2c114096b0c01e1cbaadb021c30a04d7dd5b41ab277bcd51246ca135bf931d4c4c796ecae7a4fef6d744ecef36ea
-  languageName: node
-  linkType: hard
-
-"vm2@npm:^3.9.6":
-  version: 3.9.9
-  resolution: "vm2@npm:3.9.9"
-  dependencies:
-    acorn: ^8.7.0
-    acorn-walk: ^8.2.0
-  bin:
-    vm2: bin/vm2
-  checksum: ea4859565668918b53cf8c087bc18e2a9506f9f4ef919528707a6fecf50a110a2a8c48bc0c7a754c9d12b97cd16775f005b2b941e99d3a52aadfaac5ce77e04d
   languageName: node
   linkType: hard
 
@@ -6005,10 +5997,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.22, wot-typescript-definitions@npm:latest":
+"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.22":
   version: 0.8.0-SNAPSHOT.22
   resolution: "wot-typescript-definitions@npm:0.8.0-SNAPSHOT.22"
   checksum: 94af3ee1ebb4a020f4f5f04c7a4b429afac5e1191d5efca441e56ad280f662faebc0d02ce80783a6ed56240976f8a57048f3080853269076e56c01c0b0b8c7bb
+  languageName: node
+  linkType: hard
+
+"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.23":
+  version: 0.8.0-SNAPSHOT.23
+  resolution: "wot-typescript-definitions@npm:0.8.0-SNAPSHOT.23"
+  checksum: 1043f2d7b9c70c5ebbd145500b7023ef47fb7b2b05cd77c0f2303f4058688c40c593a7d4cac96cba1628eff6ede476bf384e069fc943b8e74298a4ed1dd21420
   languageName: node
   linkType: hard
 

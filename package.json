@@ -18,18 +18,15 @@
     "node": ">=12.11.0"
   },
   "scripts": {
-    "build": "yarn run clean && tsc && yarn run copy && yarn run build:web",
+    "build": "yarn run build:core && yarn run build:web",
+    "build:core": "yarn run clean && tsc && yarn run copy",
     "build:web": "cd examples/web/ && yarn install && yarn run build",
-    "serve": "cd examples/web/ && yarn run serve",
+    "serve": "yarn run build && cd examples/web/ && yarn run serve",
     "copy": "copyfiles -u 1 \"src/**/*.js\" \"src/**/*.json\" \"src/**/*.bin\" dist/",
     "lint": "eslint \"src/**/**.js\"",
     "clean": "yarn rimraf dist",
-    "compile": "yarn run clean && tsc && yarn run copy",
     "fix": "eslint --fix \"src/**/**.js\"",
-    "prepare": "yarn run compile",
-    "pretest": "yarn run compile",
-    "test": "mocha --loader=esmock \"test/**/*.mocha.js\" -u tdd",
-    "posttest": "yarn run lint"
+    "test": "mocha --loader=esmock \"test/**/*.mocha.js\" -u tdd"
   },
   "type": "module",
   "main": "index.html",
@@ -60,8 +57,8 @@
   "dependencies": {
     "@elgato-stream-deck/webhid": "^5.2.0",
     "@inrupt/solid-client": "^1.19.0",
-    "@node-wot/core": "latest",
-    "@node-wot/td-tools": "^0.8.0",
+    "@node-wot/core": "0.8.1",
+    "@node-wot/td-tools": "0.8.1",
     "@tensorflow/tfjs": "^3.18.0",
     "babel-polyfill": "^6.26.0",
     "blockly": "8.0.2",
@@ -71,7 +68,7 @@
     "rxjs": "5.5.11",
     "urdf": "https://github.com/derwehr/uRDF.js.git",
     "webpack": "^5.70.0",
-    "wot-typescript-definitions": "latest"
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.23"
   },
   "packageManager": "yarn@3.2.0"
 }

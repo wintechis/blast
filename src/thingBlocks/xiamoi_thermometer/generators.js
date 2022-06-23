@@ -26,37 +26,59 @@ JavaScript['things_xiaomiThermometer'] = function (block) {
  * @param {Blockly.Block} block the get_temperature block.
  * @returns {String} the generated code.
  */
-JavaScript['read_mijia_property'] = function (block) {
-  const measurement = JavaScript.quote_(block.getFieldValue('measurement'));
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
+JavaScript['xiaomi_thermometer_event'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.quote_(
+    JavaScript.statementToCode(block, 'statements')
+  );
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
-  const code = `await readMijiaProperty(${blockId}, ${measurement}, ${thing})`;
+  const ownId = JavaScript.quote_(block.id);
 
-  return [code, JavaScript.ORDER_NONE];
+  const handler = `xiaomi_handleThermometer(${ownId}, ${blockId}, ${thing}, ${statements})\n`;
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
 };
 
 /**
- * Fetches the selected measurement from a RuuviTag.
- * @param {Blockly.Block.id} blockId the things_xiaomiThermometer block's id.
- * @param {String} measurement the measurement to fetch.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a RuuviTag.
- * @public
+ * Handles xiaomi thermometer events.
+ * @param {string} ownId the block id of this event block.
+ * @param {string} blockId the block id of the thing_xiaomi_thermometer block connected to this block.
+ * @param {string} id the id of the xiaomi thermometer.
+ * @param {string} measurement the sensor to retrieve measurements from.
+ * @param {string} statements the statements to execute.
  */
-globalThis['readMijiaProperty'] = async function (
+globalThis['xiaomi_handleThermometer'] = async function (
+  ownId,
   blockId,
-  measurement,
-  webBluetoothId
+  id,
+  statements
 ) {
-  // make sure a device is connected.
-  if (!webBluetoothId) {
-    throwError('No Thermometer is set.');
-    return;
+  if (id === null) {
+    throwError('No thermometer is set');
   }
+  const self = getWorkspace().getBlockById(ownId);
+  const humidityName = self.humidityName;
+  const temperatureName = self.temperatureName;
+
   const block = getWorkspace().getBlockById(blockId);
-  const thing = block.thing;
-  const value = await thing.readProperty(measurement);
-  return value;
+  const thermometer = block.thing;
+  const handler = async function () {
+    const value = event.target.value;
+    if (value) {
+      const sign = value.getUint8(1) & (1 << 7);
+      let temp = ((value.getUint8(1) & 0x7f) << 8) | value.getUint8(0);
+      if (sign) temp = temp - 32767;
+      globalThis[temperatureName] = temp / 100;
+      globalThis[humidityName] = value.getUint8(2);
+      eval(statements);
+    }
+  };
+  await thermometer.subscribeEvent('measurements', handler);
 };
