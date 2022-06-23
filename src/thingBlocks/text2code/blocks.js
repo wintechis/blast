@@ -1,7 +1,9 @@
 'use strict';
 
-import {Blocks} from 'blockly';
+import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
+
+const {Blocks} = Blockly;
 
 Blocks['text_to_code'] = {
   /**
