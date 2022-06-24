@@ -11,7 +11,7 @@ import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
 // eslint-disable-next-line node/no-missing-import
-import {jsonToReadble} from './../../things/bindings/binding-helpers.js';
+import {jsonToReadable} from './../../things/bindings/binding-helpers.js';
 
 JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
@@ -73,7 +73,7 @@ globalThis['blinkstick_setColors'] = async function (
   // create report
   const reportId = 5;
   const report = [reportId, index, red, green, blue];
-  const stream = jsonToReadble({reportId, report});
+  const stream = jsonToReadable({reportId, report});
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
