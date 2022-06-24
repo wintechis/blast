@@ -39,7 +39,7 @@ export const readableStreamToString = async function (
  * Endocdes json data into a ReadableStream.
  * @param {JSON} data the data to encode
  */
-export const jsonToReadble = function (data: JSON): ReadableStream {
+export const jsonToReadable = function (data: JSON): ReadableStream {
   const encoder = new TextEncoder();
   const jsonArr = encoder.encode(JSON.stringify(data));
 
@@ -69,16 +69,17 @@ export const stringToReadable = function (str: string): ReadableStream {
 };
 
 /**
- * Converts a string into a NodeJS.ReadableStream.
- * @param data The string to convert
- * @returns The converted string as a ReadableStream
+ * Converts data into a NodeJS.ReadableStream.
+ * @param data The data to convert
+ * @returns The converted data as a ReadableStream
  */
-export const stringToNodeReadable = function (data: string): Readable {
+export const convertToNodeReadable = function (data: any): Readable {
   // create a new NodeJS.ReadableStream and push the data into it
   const readable = new Readable();
+  // push buffer into readable
   readable.push(data);
+  // close readable
   readable.push(null);
-
   const stream = ProtocolHelpers.toNodeStream(readable);
 
   return stream;
