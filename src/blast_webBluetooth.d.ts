@@ -148,6 +148,21 @@ export async function subscribe(
 ): Promise<void>;
 
 /**
+ * Unsubscribes from a Bluetooth characteristic.
+ * @param id identifier of the device to read from.
+ * @param serviceUUID identifier of the service.
+ * @param characteristicUUID identifier of the characteristic.
+ * @param handler function to call on notifications.
+ * @returns A Promise to void.
+ */
+export async function unsubscribe(
+  id: BluetoothDevice.id,
+  serviceUUID: BluetoothServiceUUID,
+  characteristicUUID: BluetoothCharacteristicUUID,
+  handler: Function
+): Promise<void>;
+
+/**
  * Starts an LE Scan for 30 seconds.
  */
 export async function startLEScan(): void;
