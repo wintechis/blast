@@ -2,14 +2,16 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient} from '@node-wot/core';
+import {Content, ProtocolClient, ProtocolHelpers} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {
-  getCharacteristic,
+  getDeviceById,
   readHex,
   readNumber,
   readText,
+  subscribe,
+  unsubscribe,
   writeWithoutResponse,
   writeWithResponse,
 } from '../../../blast_webBluetooth.js';
@@ -21,8 +23,9 @@ import {
 import {WebBluetoothForm} from './webBluetooth.js';
 import {
   readableStreamToString,
-  stringToNodeReadable,
+  convertToNodeReadable,
 } from '../binding-helpers.js';
+import {Readable} from 'stream';
 
 export default class WebBluetoothClient implements ProtocolClient {
   public toString(): string {
@@ -64,7 +67,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     return this.writeResource(form, content).then(() => {
       return {
         type: 'text/plain',
-        body: stringToNodeReadable(''),
+        body: convertToNodeReadable(''),
       };
     });
   }
@@ -79,48 +82,15 @@ export default class WebBluetoothClient implements ProtocolClient {
     error?: (error: Error) => void,
     complete?: () => void
   ): Promise<Subscription> {
-    // Check if href is gatt://service/characteristic/operation, then subscribe to characteristic
-    // might also be gatt://operation, i.e watchAdvertisements
+    // Check if href is gatt://service/characteristic/subscibre, then subscribe to characteristic
+    //if href is gatt://watchAdvertisements then subscribe to watchAdvertisements
     const path = form.href.split('//')[1];
-    const deviceId = form['wbt:id'];
-    const deconstructedPath = this.deconstructPath(path);
-    const {serviceId, characteristicId, operation} = deconstructedPath;
-
-    if (operation !== 'subscribe') {
-      throw new Error(
-        `[binding-webBluetooth] operation ${operation} is not supported`
-      );
+    if (path === 'watchadvertisements') {
+      console.debug('[binding-webBluetooth]', 'invoking watchAdvertisements');
+      return this.watchAdvertisements(form, next, error, complete);
+    } else {
+      return this.subscribeToCharacteristic(form, next, error, complete);
     }
-
-    const char = await getCharacteristic(deviceId, serviceId, characteristicId);
-    if (!char) {
-      throw new Error(
-        `[binding-webBluetooth] could not find characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
-      );
-    }
-
-    console.debug(
-      '[binding-webBluetooth]',
-      `subscribing to characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
-    );
-
-    const handler = (event: Event) => {
-      const value = (event.target as any).value;
-      const content = {
-        type: form.contentType || 'text/plain',
-        body: stringToNodeReadable(value.toString()),
-      };
-      console.log(event);
-      next(content);
-    };
-
-    char.addEventListener('characteristicvaluechanged', handler);
-
-    await char.startNotifications();
-
-    return new Subscription(() => {
-      char.removeEventListener('characteristicvaluechanged', handler);
-    });
   }
 
   public async start(): Promise<void> {
@@ -207,7 +177,7 @@ export default class WebBluetoothClient implements ProtocolClient {
         );
       }
     }
-    const readable = stringToNodeReadable(value);
+    const readable = convertToNodeReadable(value);
     return {
       type: 'text/plain',
       body: readable,
@@ -260,5 +230,70 @@ export default class WebBluetoothClient implements ProtocolClient {
         );
       }
     }
+  }
+
+  private async subscribeToCharacteristic(
+    form: WebBluetoothForm,
+    next: (content: Content) => void,
+    error?: (error: Error) => void,
+    complete?: () => void
+  ): Promise<Subscription> {
+    const path = form.href.split('//')[1];
+    const deviceId = form['wbt:id'];
+    const deconstructedPath = this.deconstructPath(path);
+    const {serviceId, characteristicId, operation} = deconstructedPath;
+
+    if (operation !== 'subscribe') {
+      throw new Error(
+        `[binding-webBluetooth] operation ${operation} is not supported`
+      );
+    }
+
+    console.debug(
+      '[binding-webBluetooth]',
+      `subscribing to characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
+    );
+
+    const handler = (event: Event) => {
+      const value = (event.target as any).value as DataView;
+      const array = new Uint8Array(value.buffer);
+      // Convert value a DataView to ReadableStream
+      const content = {
+        type: form.contentType || 'text/plain',
+        body: convertToNodeReadable(array),
+      };
+      next(content);
+    };
+
+    await subscribe(deviceId, serviceId, characteristicId, handler);
+
+    return new Subscription(() => {
+      unsubscribe(deviceId, serviceId, characteristicId, handler);
+    });
+  }
+
+  private async watchAdvertisements(
+    form: WebBluetoothForm,
+    next: (content: Content) => void,
+    error?: (error: Error) => void,
+    complete?: () => void
+  ): Promise<Subscription> {
+    const deviceId = form['wbt:id'];
+    const device = await getDeviceById(deviceId);
+    const handler = (event: Event) => {
+      const value = (event.target as any).value as DataView;
+      const array = new Uint8Array(value.buffer);
+      const content = {
+        type: form.contentType || 'text/plain',
+        body: convertToNodeReadable(array),
+      };
+      next(content);
+    };
+    device.addEventListener('addvertisementreceived', handler);
+    await device.watchAdvertisements();
+    return new Subscription(() => {
+      device.unwatchAdvertisements();
+      device.removeEventListener('addvertisementreceived', handler);
+    });
   }
 }
