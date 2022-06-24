@@ -483,6 +483,37 @@ export const subscribe = async function (id, serviceUUID, charUUID, handler) {
   }
 };
 
+export const unsubscribe = async function (id, serviceUUID, charUUID, handler) {
+  const characteristic = await getCharacteristic(id, serviceUUID, charUUID);
+  const thingsLog = getThingsLog();
+  thingsLog(
+    `Remove 'characteristicvaluechanged' listener from characteristic ${charUUID}` +
+      ` of service <code>${serviceUUID}</code>`,
+    'Bluetooth',
+    id
+  );
+  characteristic.removeEventListener('characteristicvaluechanged', handler);
+  // remove the event from the list of events.
+  delete charEventListeners[charUUID];
+  try {
+    thingsLog(
+      `Invoke <code>stopNotifications</code> on characteristic ${charUUID}` +
+        ` from service <code>${serviceUUID}</code>`,
+      'Bluetooth',
+      id
+    );
+    await characteristic.stopNotifications();
+    thingsLog(
+      `Finished <code>stopNotifications</code> on characteristic ${charUUID}` +
+        ` from service <code>${serviceUUID}</code>`,
+      'Bluetooth',
+      id
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 /**
  * Starts an LE Scan for 30 seconds.
  */
