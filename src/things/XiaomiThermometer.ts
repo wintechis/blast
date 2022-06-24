@@ -1,5 +1,4 @@
 // DEPRECATED, THIS FILE IS NOT YET UPDATED TO WORK WITH NEW WOT API
-import {ExposedThing} from '@node-wot/core';
 import * as WoT from 'wot-typescript-definitions';
 import {getWot} from './index.js';
 

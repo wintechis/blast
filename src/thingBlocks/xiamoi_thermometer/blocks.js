@@ -124,7 +124,7 @@ Blocks['xiaomi_thermometer_event'] = {
     );
     this.setHelpUrl('');
     this.changeListener = null;
-    this.getField('characteristicvaluechanged').setEnabled(false);
+    this.getField('eventType').setEnabled(false);
     this.getField('humidity').setEnabled(false);
     this.getField('temperature').setEnabled(false);
     this.humidityName = '';

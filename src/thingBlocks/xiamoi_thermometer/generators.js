@@ -8,7 +8,7 @@
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {getWorkspace} from './../../blast_interpreter.js';
+import {addCleanUpFunction, getWorkspace} from './../../blast_interpreter.js';
 import {throwError} from './../../blast_interpreter.js';
 
 /**
@@ -69,16 +69,18 @@ globalThis['xiaomi_handleThermometer'] = async function (
 
   const block = getWorkspace().getBlockById(blockId);
   const thermometer = block.thing;
-  const handler = async function (event) {
-    const value = event.target.value;
-    if (value) {
-      const sign = value.getUint8(1) & (1 << 7);
-      let temp = ((value.getUint8(1) & 0x7f) << 8) | value.getUint8(0);
+  const handler = async function (interactionOutput) {
+    const arr = await interactionOutput.arrayBuffer();
+    const data = new DataView(arr.buffer);
+    if (data) {
+      const sign = data.getUint8(1) & (1 << 7);
+      let temp = ((data.getUint8(1) & 0x7f) << 8) | data.getUint8(0);
       if (sign) temp = temp - 32767;
       globalThis[temperatureName] = temp / 100;
-      globalThis[humidityName] = value.getUint8(2);
+      globalThis[humidityName] = data.getUint8(2);
       eval(statements);
     }
   };
-  await thermometer.subscribeEvent('measurements', handler);
+  const sub = await thermometer.subscribeEvent('measurements', handler);
+  addCleanUpFunction(async () => sub.stop());
 };
