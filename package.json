@@ -51,7 +51,6 @@
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
     "sinon": "^13.0.1",
-    "typescript": "^4.0.3",
     "webpack-cli": "^4.9.2"
   },
   "dependencies": {
@@ -66,6 +65,7 @@
     "file-saver": "^2.0.5",
     "joy-con-webhid": "^0.2.0",
     "rxjs": "5.5.11",
+    "typescript": "^4.7.4",
     "urdf": "https://github.com/derwehr/uRDF.js.git",
     "webpack": "^5.70.0",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.23"

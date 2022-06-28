@@ -6,13 +6,6 @@ import {implementedThing} from './blast_things';
 export const optionalServices: BluetoothServiceUUID[];
 
 /**
- * Contains block types that require a LE Scan.
- * On runtine, if any of these blocks is in the workspace,
- * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
- */
-export const scanBlocks: string[];
-
-/**
  * Contains the results of a LE Scan.
  */
 export let LEScanResults: {
@@ -165,4 +158,9 @@ export async function unsubscribe(
 /**
  * Starts an LE Scan for 30 seconds.
  */
-export async function startLEScan(): void;
+export async function startLEScan(): Promise<void>;
+
+/**
+ * Stops the LE Scan
+ */
+export function stopLEScan(): void;
