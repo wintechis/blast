@@ -63,11 +63,12 @@ globalThis['xiaomi_handleThermometer'] = async function (
   if (id === null) {
     throwError('No thermometer is set');
   }
-  const self = getWorkspace().getBlockById(ownId);
-  const humidityName = self.humidityName;
-  const temperatureName = self.temperatureName;
+  const ws = getWorkspace();
+  const self = ws.getBlockById(ownId);
+  const humidityName = self.getFieldValue('humidity');
+  const temperatureName = self.getFieldValue('temperature');
 
-  const block = getWorkspace().getBlockById(blockId);
+  const block = ws.getBlockById(blockId);
   const thermometer = block.thing;
   const handler = async function (interactionOutput) {
     const arr = await interactionOutput.arrayBuffer();

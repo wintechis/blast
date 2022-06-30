@@ -19,11 +19,11 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2018",
-    "outDir": "dist/things/"
+    "outDir": "dist/"
   },
   "include": [
-    "src/things/**/*.ts",
-    "src/things/**/*.js"
+    "src/**/*.ts",
+    "src/**/*.js"
   ],
   "exclude": [
     ".yarn"

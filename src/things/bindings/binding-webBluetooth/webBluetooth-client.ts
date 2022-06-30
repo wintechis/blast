@@ -10,6 +10,8 @@ import {
   readHex,
   readNumber,
   readText,
+  startLEScan,
+  stopLEScan,
   subscribe,
   unsubscribe,
   writeWithoutResponse,
@@ -88,6 +90,9 @@ export default class WebBluetoothClient implements ProtocolClient {
     if (path === 'watchadvertisements') {
       console.debug('[binding-webBluetooth]', 'invoking watchAdvertisements');
       return this.watchAdvertisements(form, next, error, complete);
+    } else if (path === 'startLEScan') {
+      console.debug('[binding-webBluetooth]', 'invoking startLEScan');
+      return this.startLEScan(form, next, error, complete);
     } else {
       return this.subscribeToCharacteristic(form, next, error, complete);
     }
@@ -280,20 +285,33 @@ export default class WebBluetoothClient implements ProtocolClient {
   ): Promise<Subscription> {
     const deviceId = form['wbt:id'];
     const device = await getDeviceById(deviceId);
-    const handler = (event: Event) => {
-      const value = (event.target as any).value as DataView;
-      const array = new Uint8Array(value.buffer);
+    const handler = (event: BluetoothAdvertisingEvent) => {
+      // Convert event to Content
       const content = {
         type: form.contentType || 'text/plain',
-        body: convertToNodeReadable(array),
+        body: convertToNodeReadable(JSON.stringify(event)),
       };
       next(content);
     };
-    device.addEventListener('addvertisementreceived', handler);
+    device.addEventListener('advertisementreceived', handler);
     await device.watchAdvertisements();
     return new Subscription(() => {
-      device.unwatchAdvertisements();
-      device.removeEventListener('addvertisementreceived', handler);
+      device.removeEventListener(
+        'addvertisementreceived',
+        handler as (evt: Event) => void
+      );
+    });
+  }
+
+  private async startLEScan(
+    form: WebBluetoothForm,
+    next: (content: Content) => void,
+    error?: (error: Error) => void,
+    complete?: () => void
+  ): Promise<Subscription> {
+    await startLEScan();
+    return new Subscription(() => {
+      stopLEScan();
     });
   }
 }

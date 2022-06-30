@@ -25,15 +25,6 @@ const {dialog} = Blockly;
 export const optionalServices = [];
 
 /**
- * Contains block types that require a LE Scan.
- * On runtine, if any of these blocks is in the workspace,
- * the LE Scan will be requested and results cached in {@link Blast.Bluetooth.LEScanResults}.
- * @type {Array<Blockly.Blocky.type>}
- * @public
- */
-export const scanBlocks = [];
-
-/**
  * Contains the results of a LE Scan.
  */
 export let LEScanResults = {};
@@ -542,7 +533,7 @@ export const startLEScan = async function () {
  * Stops the BLE Scan.
  * @public
  */
-const stopLEScan = function () {
+export const stopLEScan = function () {
   if (isLEScanRunning) {
     const thingsLog = getThingsLog();
     thingsLog('Stopping LE Scan', 'Bluetooth');

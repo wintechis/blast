@@ -127,8 +127,6 @@ Blocks['xiaomi_thermometer_event'] = {
     this.getField('eventType').setEnabled(false);
     this.getField('humidity').setEnabled(false);
     this.getField('temperature').setEnabled(false);
-    this.humidityName = '';
-    this.temperatureName = '';
   },
   /**
    * Add this block's id to the events array.
@@ -172,34 +170,25 @@ Blocks['xiaomi_thermometer_event'] = {
   },
   createVars: function () {
     const ws = getWorkspace();
-    // Create variable for humidity value.
-    let humidityName = JavaScript.nameDB_.getName(
-      'humidity',
-      Names.NameType.VARIABLE
-    );
-    for (let i = 1; ws.getVariable(humidityName) !== null; i++) {
-      // if variable already exists, append a number.
-      humidityName = JavaScript.nameDB_.getName(
-        'humidity-' + i,
+    const varNames = ['humidity', 'temperature'];
+    for (const varName of varNames) {
+      // create legal variable name
+      let legalName = JavaScript.nameDB_.getName(
+        varName,
         Names.NameType.VARIABLE
       );
+      for (let i = 1; ws.getVariable(legalName) !== null; i++) {
+        // if name already exists, append a number
+        legalName = JavaScript.nameDB_.getName(
+          legalName + '-' + i,
+          Names.NameType.VARIABLE
+        );
+      }
+      // create variable
+      legalName = ws.createVariable(legalName).name;
+      // set field value
+      this.getField(varName).setValue(legalName);
     }
-    this.humidityName = ws.createVariable(humidityName).name;
-    this.getField('humidity').setValue(this.humidityName);
-    // Create variable for temperature value.
-    let temperatureName = JavaScript.nameDB_.getName(
-      'temperature',
-      Names.NameType.VARIABLE
-    );
-    for (let i = 1; ws.getVariable(temperatureName) !== null; i++) {
-      // if variable already exists, append a number.
-      temperatureName = JavaScript.nameDB_.getName(
-        'temperature-' + i,
-        Names.NameType.VARIABLE
-      );
-    }
-    this.temperatureName = ws.createVariable(temperatureName).name;
-    this.getField('temperature').setValue(this.temperatureName);
   },
 };
 
