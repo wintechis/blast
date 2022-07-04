@@ -27,7 +27,7 @@ Blockly.Blocks['display_table'] = {
   },
 };
 // Add display_table block to the toolbox.
-addBlock('display_table', 'Actions');
+addBlock('display_table', 'Display');
 
 Blockly.Blocks['display_image'] = {
   /**
@@ -47,4 +47,4 @@ Blockly.Blocks['display_image'] = {
 };
   
 // Add display_image block to the toolbox.
-addBlock('display_image', 'Actions');
+addBlock('display_image', 'Display');

@@ -144,6 +144,22 @@ const defaultToolbox = {
     },
     {
       kind: 'CATEGORY',
+      name: 'Display',
+      contents: [],
+      colour: '0',
+    },
+    {
+      kind: 'CATEGORY',
+      contents: [{kind: 'BLOCK', type: 'string_showPrompt'}],
+      name: 'Text Interface',
+      colour: '160',
+    },
+    {
+      kind: 'sep',
+      gap: '32',
+    },
+    {
+      kind: 'CATEGORY',
       contents: [
         {kind: 'BLOCK', type: 'conditional_statement'},
         {kind: 'BLOCK', type: 'logic_compare'},
@@ -223,7 +239,6 @@ const defaultToolbox = {
         {kind: 'BLOCK', type: 'string_count'},
         {kind: 'BLOCK', type: 'string_replace'},
         {kind: 'BLOCK', type: 'string_reverse'},
-        {kind: 'BLOCK', type: 'string_showPrompt'},
       ],
       name: 'Strings',
       colour: '160',

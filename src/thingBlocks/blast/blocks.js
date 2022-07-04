@@ -128,7 +128,7 @@ Blocks['display_text'] = {
   },
 };
 // Add display_text block to the toolbox.
-addBlock('display_text', 'Actions');
+addBlock('display_text', 'Display');
 
 Blocks['play_audio'] = {
   /**
