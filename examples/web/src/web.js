@@ -631,7 +631,6 @@ BlockSvg.prototype.toPseudoCode = function (opt_emptyToken) {
   ASTNode.NAVIGATE_ALL_FIELDS = true;
 
   let node = ASTNode.createBlockNode(this);
-  const rootNode = node;
 
   /**
    * Whether or not to add parentheses around an input.
@@ -649,19 +648,6 @@ BlockSvg.prototype.toPseudoCode = function (opt_emptyToken) {
     );
   }
 
-  /**
-   * Check that we haven't circled back to the original root node.
-   */
-  function checkRoot() {
-    if (
-      node &&
-      node.getType() === rootNode.getType() &&
-      node.getLocation() === rootNode.getLocation()
-    ) {
-      node = null;
-    }
-  }
-
   let scopeDepth = 0;
   // Traverse the AST building up our text string.
   while (node) {
@@ -674,7 +660,7 @@ BlockSvg.prototype.toPseudoCode = function (opt_emptyToken) {
           pseudo.push('(');
         }
         if (connection.type === 3) {
-          pseudo.push('{');
+          pseudo.push('{\n');
           scopeDepth++;
         }
         break;
@@ -689,15 +675,16 @@ BlockSvg.prototype.toPseudoCode = function (opt_emptyToken) {
     }
 
     const current = node;
+    if (current.getType() === ASTNode.types.NEXT) {
+      pseudo.push('\n');
+    }
     node = current.in() || current.next();
 
     if (!node) {
       // Can't go in or next, keep going out until we can go next.
       node = current.out();
-      checkRoot();
       while (node && !node.next()) {
         node = node.out();
-        checkRoot();
         // If we hit an input on the way up, possibly close out parentheses.
         if (node && node.getType() === ASTNode.types.INPUT) {
           const connection = /** @type {!Connection} */ (node.getLocation());
