@@ -20,7 +20,6 @@ suite('things_bleLedController block', () => {
   function assertThingsBleLedControllerBlockStructure(block) {
     expect(block.type).to.equal('things_bleLedController');
     expect(block.inputList.length).to.equal(2);
-    console.log(block.inputList[0]);
     const nameInput = block.inputList[0];
     expect(nameInput.name).to.equal('name');
     const nameInputLabel = nameInput.fieldRow[0];
