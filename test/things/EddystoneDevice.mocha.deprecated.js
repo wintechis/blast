@@ -1,14 +1,12 @@
 /* eslint-disable node/no-unpublished-import */
 import chai from 'chai';
 import sinon from 'sinon';
-import esmock from 'esmock';
+import EddystoneDevice from '../../dist/things/EddystoneDevice.js';
 
 const {expect} = chai;
 
 suite('Eddystone device', function () {
-  this.class;
-  this.spy;
-  this.thing;
+  this.thing = null;
 
   suiteSetup(async () => {
     sinon.stub(console);
@@ -19,19 +17,7 @@ suite('Eddystone device', function () {
   });
 
   setup(async function () {
-    // Sets up a mock for the EddystoneDevice class with stubs for the bluetooth operations
-    this.spy = sinon.spy();
-    this.EddystoneDevice = await esmock(
-      '../../dist/things/eddystone/EddystoneDevice.js',
-      {
-        '../../dist/blast_eddystone.js': {
-          setActiveSlot: this.spy,
-          writeEddystoneProperty: this.spy,
-          readEddystoneProperty: this.spy,
-        },
-      }
-    );
-    this.thing = new this.EddystoneDevice('deadbeef');
+    this.thing = await new EddystoneDevice().init('deadbeef');
   });
 
   teardown(function () {

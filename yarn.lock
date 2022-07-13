@@ -1364,7 +1364,6 @@ __metadata:
     eslint-config-prettier: ^8.5.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.0.0
-    esmock: ^1.7.4
     express: ^4.18.1
     file-saver: ^2.0.5
     joy-con-webhid: ^0.2.0
@@ -2370,15 +2369,6 @@ __metadata:
   version: 3.2.25
   resolution: "esm@npm:3.2.25"
   checksum: 978aabe2de83541c105605a6d60a26ed8e627ef6bb0a7605fe15a95bbdea6b8348bd045255cb22219c054dd09a81a94823df00843d9e97f42419c92015ce3a64
-  languageName: node
-  linkType: hard
-
-"esmock@npm:^1.7.4":
-  version: 1.7.5
-  resolution: "esmock@npm:1.7.5"
-  dependencies:
-    resolvewithplus: ^0.8.0
-  checksum: f11a72d4bdebea81d67dde5ed9dd733fc6706ee2cfee9ba734902c37302d22742e60cfbcade92b80285692d22cddb5cbf7dad4bb010066fcf0a8439d9ae1313b
   languageName: node
   linkType: hard
 
@@ -4877,13 +4867,6 @@ __metadata:
   bin:
     resolve: bin/resolve
   checksum: c79ecaea36c872ee4a79e3db0d3d4160b593f2ca16e031d8283735acd01715a203607e9ded3f91f68899c2937fa0d49390cddbe0fb2852629212f3cda283f4a7
-  languageName: node
-  linkType: hard
-
-"resolvewithplus@npm:^0.8.0":
-  version: 0.8.0
-  resolution: "resolvewithplus@npm:0.8.0"
-  checksum: dc017e78a8d0e818b8b1f5eec5bc4f5161971f299b5bfacea82a6ce2e698769f32380e67ad3994759c8814bc30757dc8ca27f0ccebc9aad87b7fd7c3e55e23e5
   languageName: node
   linkType: hard
 

@@ -35,10 +35,10 @@ Blocks['things_bleLedController'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput()
-      .appendField('BLE LED controller')
+    this.appendDummyInput('name')
+      .appendField('BLE LED controller', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
+    this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
@@ -73,10 +73,10 @@ Blocks['switch_lights_rgb'] = {
   init: function () {
     this.appendValueInput('colour')
       .setCheck('Colour')
-      .appendField('write colour property');
+      .appendField('write colour property', 'label');
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('to LED controller');
+      .appendField('to LED controller', 'label');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

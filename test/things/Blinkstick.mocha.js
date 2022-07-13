@@ -1,13 +1,12 @@
 /* eslint-disable node/no-unpublished-import */
 import chai from 'chai';
 import sinon from 'sinon';
-import esmock from 'esmock';
+import Blinkstick from '../../dist/things/Blinkstick.js';
 
 const {expect} = chai;
 
 suite('Blinkstick', function () {
-  this.thing;
-  this.class;
+  this.thing = null;
 
   suiteSetup(async () => {
     // Omit WoT console output
@@ -19,29 +18,11 @@ suite('Blinkstick', function () {
   });
 
   setup(async function () {
-    // Sets up a mock for the Blinkstick class with stubs for the writeProperty affordance
-    this.Blinkstick = await esmock(
-      '../../dist/things/blinkstick/Blinkstick.js'
-    );
-    this.thing = new this.Blinkstick('deadbeef');
-    const mockDevice = {
-      vendorId: 8352,
-      open: async () => {},
-      close: async () => {},
-      productName: 'productName',
-      sendFeatureReport: async () => {},
-    };
-    sinon.stub(this.thing, 'open').resolves(mockDevice);
-    this.thing.opened = true;
+    this.thing = await new Blinkstick().init('deadbeef');
   });
 
   teardown(function () {
-    this.thing.destroy();
     this.thing = null;
-  });
-
-  test('Creation', function () {
-    expect(this.thing).to.be.an.instanceof(this.Blinkstick);
   });
 
   test('Thing description', async function () {
@@ -63,7 +44,7 @@ suite('Blinkstick', function () {
           scheme: 'nosec',
         },
       },
-      security: 'nosec_sc',
+      security: ['nosec_sc'],
       properties: {
         colours: {
           title: 'colours',
@@ -133,26 +114,18 @@ suite('Blinkstick', function () {
           writeOnly: true,
           forms: [
             {
-              href: '',
+              href: 'hid://sendFeatureReport',
+              'wHid:id': 'deadbeef',
             },
           ],
         },
       },
+      actions: {},
+      events: {},
+      links: [],
+      observedProperties: {},
+      subscribedEvents: {},
     };
     expect(actualTd).to.deep.equal(expectedTd);
-  });
-
-  suite('Thing affordances', () => {
-    test('writing a property', async function () {
-      const spy = sinon.spy();
-      sinon.stub(this.thing, 'setColour').callsFake(spy);
-      await this.thing.writeProperty('colours', {
-        index: 0,
-        red: 255,
-        green: 0,
-        blue: 0,
-      });
-      expect(spy.calledOnce).to.be.true;
-    });
   });
 });

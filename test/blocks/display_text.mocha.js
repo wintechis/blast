@@ -1,6 +1,5 @@
 /* eslint-disable node/no-unpublished-import */
 import Blockly from 'blockly';
-// import devTools from '@blockly/dev-tools';
 import chai from 'chai';
 import devTools from '@blockly/dev-tools';
 // import the display_text block and its generator
@@ -15,7 +14,6 @@ suite('display_text block', () => {
   /**
    * Asserts that the display_text block has the inputs and fields we expect.
    * @param {!Blockly.Block} block The display_text block.
-   * @param {number=} inputCount The number of inputs we expect.
    */
   function assertDisplayTextBlockStructure(block) {
     assert.equal(block.type, 'display_text');
@@ -75,7 +73,7 @@ suite('display_text block', () => {
       title: 'With input',
       xml: '<block type="display_text"><value name="text"><block type="text"><field name="TEXT">Hello</field></block></value></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="display_text" id="1">\n'+
+        '<block xmlns="https://developers.google.com/blockly/xml" type="display_text" id="1">\n' +
         '  <value name="text">\n' +
         '    <block type="text" id="1">\n' +
         '      <field name="TEXT">Hello</field>\n' +

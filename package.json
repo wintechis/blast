@@ -26,7 +26,7 @@
     "lint": "eslint \"src/**/**.js\"",
     "clean": "yarn rimraf dist",
     "fix": "eslint --fix \"src/**/**.js\"",
-    "test": "mocha --loader=esmock \"test/**/*.mocha.js\" -u tdd"
+    "test": "mocha \"test/**/*.mocha.js\" -u tdd"
   },
   "type": "module",
   "main": "index.html",
@@ -44,7 +44,6 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "esmock": "^1.7.4",
     "js-interpreter": "https://github.com/derwehr/js-interpreter.git",
     "jsdoc": "^3.6.7",
     "mocha": "^9.2.2",

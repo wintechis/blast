@@ -4,6 +4,12 @@
     "plugin:node/recommended",
     "prettier"
   ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true,
+    "mocha": true
+  },
   "plugins": [
     "node",
     "prettier"
@@ -16,7 +22,6 @@
     "FileReader": "readonly",
     "fetch": "readonly",
     "Headers": "readonly",
-    "Interpreter":"readonly",
     "location": "readonly",
     "navigator": "readonly",
     "window": "readonly"
