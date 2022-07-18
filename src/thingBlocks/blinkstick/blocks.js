@@ -40,10 +40,10 @@ Blocks['things_blinkstick'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendDummyInput()
-      .appendField('BlinkStick')
+    this.appendDummyInput('name')
+      .appendField('BlinkStick', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
+    this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
@@ -75,13 +75,15 @@ Blocks['blinkstick_set_colors'] = {
    * @this Blockly.Block
    */
   init: function () {
-    this.appendValueInput('COLOUR')
-      .setCheck('Colour')
-      .appendField('write colour property');
-    this.appendValueInput('index').setCheck('Number').appendField('of LED #');
+    this.appendValueInput('colour')
+      .appendField('write colour property', 'label')
+      .setCheck('Colour');
+    this.appendValueInput('index')
+      .appendField('of LED #', 'label')
+      .setCheck('Number');
     this.appendValueInput('thing')
-      .setCheck('Thing')
-      .appendField('to BlinkStick');
+      .appendField('to BlinkStick', 'label')
+      .setCheck('Thing');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);

@@ -15,18 +15,18 @@ import {jsonToReadable} from './../../things/bindings/binding-helpers.js';
 
 JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
-    JavaScript.valueToCode(block, 'COLOUR', JavaScript.ORDER_NONE) ||
+    JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
   const index =
     JavaScript.valueToCode(block, 'index', JavaScript.ORDER_NONE) || '0';
   const thing =
-    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || "''";
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `blinkstick_setColors(${blockId}, ${thing}, ${index}, ${colour});\n`;
+  const code = `await blinkstick_setColors(${blockId}, ${thing}, ${index}, ${colour});\n`;
   return code;
 };
 

@@ -65,18 +65,18 @@ globalThis['getRSSIWb'] = async function (webBluetoothId) {
  */
 JavaScript['write_eddystone_property'] = function (block) {
   const thing =
-    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
-  const property = JavaScript.quote_(block.getFieldValue('Property'));
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const property = JavaScript.quote_(block.getFieldValue('property'));
   const slot =
-    JavaScript.valueToCode(block, 'Slot', JavaScript.ORDER_NONE) || null;
+    JavaScript.valueToCode(block, 'slot', JavaScript.ORDER_NONE) || null;
   const value =
-    JavaScript.valueToCode(block, 'Value', JavaScript.ORDER_NONE) || null;
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `writeEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property}, ${value});\n`;
+  const code = `await writeEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property}, ${value});\n`;
   return code;
 };
 

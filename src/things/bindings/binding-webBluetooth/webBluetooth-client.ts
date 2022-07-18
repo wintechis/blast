@@ -27,7 +27,6 @@ import {
   readableStreamToString,
   convertToNodeReadable,
 } from '../binding-helpers.js';
-import {Readable} from 'stream';
 
 export default class WebBluetoothClient implements ProtocolClient {
   public toString(): string {

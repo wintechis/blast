@@ -36,10 +36,10 @@ Blocks['things_eddyStoneDevice'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput()
-      .appendField('Eddystone device')
+    this.appendDummyInput('name')
+      .appendField('Eddystone device', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
+    this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
@@ -154,8 +154,8 @@ Blocks['write_eddystone_property'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput('Property')
-      .appendField('write')
+    this.appendDummyInput('property')
+      .appendField('write', 'label')
       .appendField(
         new FieldDropdown(
           [
@@ -166,12 +166,13 @@ Blocks['write_eddystone_property'] = {
           ],
           this.propertyValidator
         ),
-        'Property'
-      )
-      .appendField('property at slot');
-    this.appendValueInput('Slot').setCheck('Number');
-    this.appendDummyInput('FrameType')
-      .appendField('frame type')
+        'property'
+      );
+    this.appendValueInput('slot')
+      .appendField('property at slot', 'label')
+      .setCheck('Number');
+    this.appendDummyInput('frameType')
+      .appendField('frame type', 'label')
       .appendField(
         new FieldDropdown(
           [
@@ -180,12 +181,14 @@ Blocks['write_eddystone_property'] = {
           ],
           this.frameTypeValidator
         ),
-        'FrameType'
+        'frameType'
       )
       .setVisible(false);
-    this.appendValueInput('Value').appendField('value').setCheck('Number');
+    this.appendValueInput('value')
+      .appendField('value', 'label')
+      .setCheck('Number');
     this.appendValueInput('thing')
-      .appendField('to Eddystone device')
+      .appendField('to Eddystone device', 'label')
       .setCheck('Thing');
     this.setPreviousStatement(true, null);
     this.setInputsInline(true);
@@ -198,20 +201,20 @@ Blocks['write_eddystone_property'] = {
   },
   propertyValidator: function (property) {
     const block = this.getSourceBlock();
-    const frameType = block.getInput('FrameType');
+    const frameType = block.getInput('frameType');
     frameType.setVisible(false);
     if (property === 'advertisementData') {
       frameType.setVisible(true);
     } else {
-      block.getInput('Value').setCheck('Number');
+      block.getInput('value').setCheck('Number');
     }
   },
   frameTypeValidator: function (frameType) {
     const block = this.getSourceBlock();
     if (frameType === 'UID') {
-      block.getInput('Value').setCheck('String');
+      block.getInput('value').setCheck('String');
     } else if (frameType === 'URL') {
-      block.getInput('Value').setCheck('URI');
+      block.getInput('value').setCheck('URI');
     }
   },
 };

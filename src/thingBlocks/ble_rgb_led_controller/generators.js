@@ -33,13 +33,13 @@ JavaScript['switch_lights_rgb'] = function (block) {
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
   const thing =
-    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || 'null';
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `await switchLights(${blockId}, ${thing}, ${colour});\n`;
+  const code = `await bleLedController_switchLights(${blockId}, ${thing}, ${colour});\n`;
   return code;
 };
 
@@ -49,7 +49,11 @@ JavaScript['switch_lights_rgb'] = function (block) {
  * @param {String} webBluetoothId identifier of the LED controller.
  * @param {String} colour the colour to switch the lights to, as hex value.
  */
-globalThis['switchLights'] = async function (blockId, webBluetoothId, colour) {
+globalThis['bleLedController_switchLights'] = async function (
+  blockId,
+  webBluetoothId,
+  colour
+) {
   // make sure a device is connected.
   if (!webBluetoothId) {
     throwError('No LED Controller is set.');
