@@ -21,7 +21,8 @@ import {getWorkspace, throwError} from './../../blast_interpreter.js';
  * @returns {String} the generated code.
  */
 JavaScript['get_signal_strength_wb'] = function (block) {
-  const thing = JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE);
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const code = `await getRSSIWb(${thing})`;
 
   return [code, JavaScript.ORDER_NONE];
@@ -32,6 +33,11 @@ JavaScript['get_signal_strength_wb'] = function (block) {
  * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
  */
 globalThis['getRSSIWb'] = async function (webBluetoothId) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    throwError('No device connected.');
+  }
+
   const devices = await navigator.bluetooth.getDevices();
   let device = null;
 
@@ -130,16 +136,16 @@ globalThis['writeEddystoneProperty'] = async function (
  */
 JavaScript['read_eddystone_property'] = function (block) {
   const thing =
-    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
-  const property = JavaScript.quote_(block.getFieldValue('Property'));
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const property = JavaScript.quote_(block.getFieldValue('property'));
   const slot =
-    JavaScript.valueToCode(block, 'Slot', JavaScript.ORDER_NONE) || null;
+    JavaScript.valueToCode(block, 'slot', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `readEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property})`;
+  const code = `await readEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property})`;
 
   return [code, JavaScript.ORDER_NONE];
 };

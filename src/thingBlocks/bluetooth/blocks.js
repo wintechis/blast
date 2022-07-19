@@ -88,10 +88,10 @@ Blocks['things_bluetoothGeneric'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput()
-      .appendField('generic Bluetooth device')
+    this.appendDummyInput('name')
+      .appendField('generic Bluetooth device', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
+    this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
@@ -124,8 +124,8 @@ Blocks['get_signal_strength_wb'] = {
    */
   init: function () {
     this.appendValueInput('thing')
-      .setCheck('Thing')
-      .appendField('read signal-strength property of Bluetooth device');
+      .appendField('read signal-strength property of Bluetooth device', 'label')
+      .setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip(
@@ -211,6 +211,10 @@ Blocks['write_eddystone_property'] = {
   },
   frameTypeValidator: function (frameType) {
     const block = this.getSourceBlock();
+    const frameTypeInput = block.getInput('frameType');
+    if (frameTypeInput.visible_ === false) {
+      return;
+    }
     if (frameType === 'UID') {
       block.getInput('value').setCheck('String');
     } else if (frameType === 'URL') {
@@ -235,8 +239,8 @@ Blocks['read_eddystone_property'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput('Property')
-      .appendField('read')
+    this.appendDummyInput('property')
+      .appendField('read', 'label')
       .appendField(
         new FieldDropdown([
           ['advertised tx power', 'advertisedTxPower'],
@@ -246,12 +250,14 @@ Blocks['read_eddystone_property'] = {
           ['public ECDH key', 'publicECDHKey'],
           ['radio tx power', 'radioTxPower'],
         ]),
-        'Property'
+        'property'
       )
       .appendField('property');
-    this.appendValueInput('Slot').setCheck('Number').appendField('at slot');
+    this.appendValueInput('slot')
+      .appendField('at slot', 'label')
+      .setCheck('Number');
     this.appendValueInput('thing')
-      .appendField('of Eddystone device')
+      .appendField('of Eddystone device', 'label')
       .setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
