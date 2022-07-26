@@ -1,10 +1,10 @@
 .vscode
 **/.yarn/*
-!.yarn/patches
+!**/.yarn/patches
 **/dist
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
+!**/.yarn/releases
+!**/.yarn/plugins
+!**/.yarn/sdks
+!**/.yarn/versions
 node_modules
 js/blast.min.js
