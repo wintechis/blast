@@ -1,5 +1,5 @@
 # Web Example
-This example shows how to use BLAST in a web environment and can be previewed at [https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/](https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/examples/web/).
+This example shows how to use BLAST in a web environment and can be previewed at [https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/packages/web/](https://paul.ti.rw.fau.de/~qa60fyri/testing/blast/packages/web/).
 
 To use this demo locally just open `index.html` in your favorite Browser.
 
@@ -8,7 +8,7 @@ To build this example yourself:
 1. clone this repository
 2. `cd blast`
 3. `yarn`
-4. `cd examples/web/`
+4. `cd packages/web/`
 5. `yarn`
 6. `yarn run build`
 

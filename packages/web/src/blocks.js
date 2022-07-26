@@ -6,11 +6,11 @@
        
 'use strict';
 
-import Blockly from 'blockly';
-import {addBlock} from './../../../dist/blast_toolbox.js';
+import {addBlock} from './../../core/dist/blast_toolbox.js';
+import {Blocks} from './../../core/dist/blast_blockly_interface.js';
 
 
-Blockly.Blocks['display_table'] = {
+Blocks['display_table'] = {
   /**
           * Block for outputting data tables (rdf graphs).
           * @this {Blockly.Block}
@@ -29,7 +29,7 @@ Blockly.Blocks['display_table'] = {
 // Add display_table block to the toolbox.
 addBlock('display_table', 'Display');
 
-Blockly.Blocks['display_image'] = {
+Blocks['display_image'] = {
   /**
      * Block for displaying an image.
      * @this {Blockly.Block}

@@ -37,7 +37,7 @@ jobs:
           name: dist
           path: |
             dist
-            examples/web/dist
+            packages/web/dist
   deploy:
     runs-on: ubuntu-latest
     needs: lint-build-test

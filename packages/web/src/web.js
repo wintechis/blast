@@ -6,7 +6,6 @@
 
 'use strict';
 
-import Blockly from 'blockly';
 import {
   getLatestCode,
   getWorkspace,
@@ -18,8 +17,8 @@ import {
   setStdOut,
   statusValues,
   stopJS,
-} from '../../../dist/blast_interpreter.js';
-import {link, loadXMLFromFile} from '../../../dist/blast_storage.js';
+} from '../../core/dist/blast_interpreter.js';
+import {link, loadXMLFromFile} from '../../core/dist/blast_storage.js';
 import {
   connectWebHidDevice,
   connectedThings,
@@ -27,9 +26,9 @@ import {
   setThingsLog,
   setWebBluetoothButtonHandler,
   setWebHidButtonHandler,
-} from '../../../dist/blast_things.js';
-import {requestDevice} from '../../../dist/blast_webBluetooth.js';
-const {ASTNode, BlockSvg, constants, WorkspaceSvg} = Blockly;
+} from '../../core/dist/blast_things.js';
+import {requestDevice} from '../../core/dist/blast_webBluetooth.js';
+import {ASTNode, BlockSvg, constants, Events, svgResize, WorkspaceSvg, Xml} from '../../core/dist/blast_blockly_interface.js';
 
 /**
  * List of tab names.
@@ -309,7 +308,7 @@ const tabClick_ = function (clickedName) {
   // Show the selected pane.
   document.getElementById('content_' + clickedName).style.visibility =
     'visible';
-  Blockly.svgResize(workspace);
+  svgResize(workspace);
 };
 
 /**
@@ -319,8 +318,8 @@ const tabClick_ = function (clickedName) {
 const renderContent_ = function () {
   // render the xml content.
   const xmlTextarea = document.getElementById('content_xml');
-  const xmlDom = Blockly.Xml.workspaceToDom(workspace);
-  const xmlText = Blockly.Xml.domToPrettyText(xmlDom);
+  const xmlDom = Xml.workspaceToDom(workspace);
+  const xmlText = Xml.domToPrettyText(xmlDom);
   xmlTextarea.value = xmlText;
   xmlTextarea.focus();
 
@@ -578,16 +577,16 @@ export const initUi = function (ws) {
       document.getElementById('tab_workspace').style.minWidth =
         workspace.getToolbox().width - 38 + 'px';
     }
-    Blockly.svgResize(workspace);
+    svgResize(workspace);
   };
   window.addEventListener('resize', onresize, false);
 
   onresize();
-  Blockly.svgResize(workspace);
+  svgResize(workspace);
 
   // Call renderContent_ on changes to the workspace.
   workspace.addChangeListener(event => {
-    if (!(event instanceof Blockly.Events.Ui)) {
+    if (!(event instanceof Events.Ui)) {
       renderContent_();
     }
   });

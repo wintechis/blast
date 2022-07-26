@@ -1,5 +1,5 @@
 {
-    "name": "blast-web-demo",
+    "name": "@blast/web",
     "version": "0.0.1",
     "description": "Block Applications for Things, web demo",
     "repository": {
@@ -11,7 +11,7 @@
     },
     "scripts": {
         "serve": "webpack serve -c webpack.conf.cjs",
-        "test": "echo \"Error: no test specified\" && exit 1",
+        "test": "echo \"Error: no test specified\"",
         "build": "yarn run clean && yarn run build:prod",
         "build:prod": "webpack --config webpack.conf.cjs && gulp update-version",
         "clean": "yarn rimraf dist"

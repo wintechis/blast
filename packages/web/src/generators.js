@@ -5,24 +5,24 @@
  */
 'use strict';
 
-import Blockly from 'blockly';
 import {addElementToOutputContainer} from './web.js';
-import {getStdOut} from '../../../dist/blast_interpreter.js';
+import {getStdOut} from '../../core/dist/blast_interpreter.js';
+import {JavaScript} from '../../core/dist/blast_blockly_interface.js';
 
 /**
  * Generates JavaScript code for the capture_image block.
  * @param {Blockly.Block} block the display_image block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['display_image'] = function (block) {
-  const image = Blockly.JavaScript.valueToCode(
+JavaScript['display_image'] = function (block) {
+  const image = JavaScript.valueToCode(
     block,
     'image',
-    Blockly.JavaScript.ORDER_NONE
+    JavaScript.ORDER_NONE
   );
 
   // This block only works if you define displayImage in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
+  // and add it to the interpreter's API. See packages/web for an example.
   const code = `displayImage(${image});\n`;
   return code;
 };
@@ -43,15 +43,15 @@ globalThis['displayImage'] = function (image) {
  * @param {Blockly.Block} block the display_table block.
  * @returns {String} the generated code.
  */
-Blockly.JavaScript['display_table'] = function (block) {
-  const table = Blockly.JavaScript.valueToCode(
+JavaScript['display_table'] = function (block) {
+  const table = JavaScript.valueToCode(
     block,
     'table',
-    Blockly.JavaScript.ORDER_NONE
+    JavaScript.ORDER_NONE
   );
 
   // This block only works if you define displayTable in your Environmnet
-  // and add it to the interpreter's API. See examples/web for an example.
+  // and add it to the interpreter's API. See packages/web for an example.
   const code = `displayTable(${table});\n`;
   return code;
 };
