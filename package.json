@@ -12,7 +12,8 @@
     "scripts": {
         "build": "yarn workspaces run build",
         "lint": "yarn workspace @blast/core run lint",
-        "test": "yarn workspaces run test"
+        "test": "yarn workspaces run test",
+        "install": "yarn workspace @blast/core install --immutable && yarn workspace @blast/web install --immutable"
     },
     "workspaces": [
         "./packages/*"
