@@ -6,7 +6,6 @@
 
 'use strict';
 
-
 import {Blocks} from './../../../core/dist/blast_blockly_interface.js';
 import {addBlock} from './../../../core/dist/blast_toolbox.js';
 import {eventsInWorkspace} from './../../../core/dist/blast_interpreter.js';
