@@ -6,8 +6,7 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-const {JavaScript} = Blockly;
+import {JavaScript} from './../../../core/dist/blast_blockly_interface.js';
 import express from 'express';
 // eslint-disable-next-line node/no-unpublished-import
 

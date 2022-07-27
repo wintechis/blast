@@ -6,18 +6,18 @@
  */
 'use strict';
 
-import Blockly from 'blockly';
+import {Workspace, Xml} from './../core/dist/blast_blockly_interface.js';
 import {
   initInterpreter,
   getLatestCode,
   runJS,
   getStdInfo,
-} from '../../dist/blast_interpreter.js';
+} from '../core/dist/blast_interpreter.js';
 
 // import block blast files to include them in bundled code.
-import '../../dist/blocks/all.js';
-import '../../dist/generators/all.js';
-import '../../dist/thingBlocks/all.js';
+import '../core/dist/blocks/all.js';
+import '../core/dist/generators/all.js';
+import '../core/dist/thingBlocks/all.js';
 
 // import server specific block files
 import './blocks/all.js';
@@ -49,10 +49,10 @@ const init = function () {
   }
 
   // Create Environment
-  const workspace = new Blockly.Workspace();
+  const workspace = new Workspace();
   const xmlString = readXML(path);
-  const xml = Blockly.Xml.textToDom(xmlString);
-  Blockly.Xml.domToWorkspace(xml, workspace);
+  const xml = Xml.textToDom(xmlString);
+  Xml.domToWorkspace(xml, workspace);
   initInterpreter(workspace);
 
   // Display generated code

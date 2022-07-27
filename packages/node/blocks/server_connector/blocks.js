@@ -6,10 +6,10 @@
 
 'use strict';
 
-import Blockly from 'blockly';
-const {Blocks} = Blockly;
-import {addBlock} from './../../../../dist/blast_toolbox.js';
-import {eventsInWorkspace} from './../../../../dist/blast_interpreter.js';
+
+import {Blocks} from './../../../core/dist/blast_blockly_interface.js';
+import {addBlock} from './../../../core/dist/blast_toolbox.js';
+import {eventsInWorkspace} from './../../../core/dist/blast_interpreter.js';
 
 Blocks['server_add_connector'] = {
   /**

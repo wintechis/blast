@@ -1,0 +1,19 @@
+{
+    "name": "@blast/node",
+    "version": "0.0.1",
+    "description": "Block Applications for Things, cli application",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wintechis/blast.git"
+    },
+    "bugs": {
+        "url": "https://github.com/wintechis/blast/issues"
+    },
+    "scripts": {
+        "test": "echo \"Error: no test specified\""
+    },
+    "homepage": "https://github.com/wintechis/blast#readme",
+    "type": "module",
+    "main": "index.js",
+    "license": "AGPL-3.0"
+}
