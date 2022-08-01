@@ -14,11 +14,11 @@ Blocks['text_to_code'] = {
       .setCheck('String')
       .appendField('generate code from text');
     this.setOutput(true, null);
-    this.setColour(0);
+    this.setColour(160);
     this.setTooltip('');
     this.setHelpUrl('');
   },
 };
 
 // Add the block to the toolbox.
-addBlock('text_to_code', 'actions');
+addBlock('text_to_code', 'Text Interface');

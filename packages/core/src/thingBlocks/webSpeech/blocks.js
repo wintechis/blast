@@ -211,7 +211,7 @@ Blocks['text_to_speech'] = {
       .setVisible(false);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(0);
+    this.setColour(160);
     this.setTooltip('');
     this.setHelpUrl('');
   },
@@ -234,7 +234,7 @@ Blocks['text_to_speech'] = {
 };
 
 // Add the block to the toolbox.
-addBlock('text_to_speech', 'Requests');
+addBlock('text_to_speech', 'Text Interface');
 
 Blocks['web_speech'] = {
   /**
@@ -433,7 +433,7 @@ Blocks['web_speech'] = {
       .setAlign(ALIGN_RIGHT)
       .setVisible(false);
     this.setOutput(true, 'String');
-    this.setColour(0);
+    this.setColour(160);
     this.setTooltip('outputs speech command from microphone as a string');
     this.setHelpUrl('');
     this.firstTime = true;
@@ -469,4 +469,4 @@ Blocks['web_speech'] = {
 };
 
 // Add the block to the toolbox.
-addBlock('web_speech', 'Requests');
+addBlock('web_speech', 'Text Interface');
