@@ -10,8 +10,6 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import {stringToReadable} from './../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
