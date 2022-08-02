@@ -72,7 +72,6 @@ import {
   throwError,
 } from '../../blast_interpreter.js';
 import {LEScanResults} from '../../blast_webBluetooth.js';
-import {readableStreamToString} from '../../things/bindings/binding-helpers.js';
 
 /**
  * Generates JavaScript code for the things_ruuviTag block.
