@@ -35,10 +35,10 @@ Blocks['things_HuskyDuino'] = {
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendDummyInput()
-      .appendField('HuskyDuino')
+    this.appendDummyInput('name')
+      .appendField('HuskyDuino', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
-    this.appendDummyInput()
+    this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
@@ -66,20 +66,20 @@ Blocks['huskylens_choose_algo'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('write algorithm property')
+      .appendField('write algorithm property', 'label')
       .appendField(
         new FieldDropdown([
-          ['Face Recognition', 'face_recognition'],
-          ['Object Tracking', 'object_tracking'],
-          ['Object Recognition', 'object_recognition'],
-          ['Line Tracking', 'line_tracking'],
-          ['Color Recognition', 'color_recognition'],
-          ['Tag Recognition', 'tag_recognition'],
-          ['Object Classification', 'object_classification'],
+          ['Face Recognition', '0x01'],
+          ['Object Tracking', '0x02'],
+          ['Object Recognition', '0x03'],
+          ['Line Tracking', '0x04'],
+          ['Color Recognition', '0x05'],
+          ['Tag Recognition', '0x06'],
+          ['Object Classification', '0x07'],
         ]),
-        'Algorithms'
+        'algorithm'
       )
-      .appendField('to HuskyDuino');
+      .appendField('to HuskyDuino', 'label');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);

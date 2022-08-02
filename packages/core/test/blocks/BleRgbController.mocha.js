@@ -1,4 +1,3 @@
-/* eslint-disable node/no-unpublished-import */
 import BleRgbController from '../../dist/things/BleRgbController.js';
 import Blockly from 'blockly';
 import chai from 'chai';

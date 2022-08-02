@@ -10,7 +10,9 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
-import {ProtocolHelpers} from '@node-wot/core';
+import * as core from '@node-wot/core';
+
+const {ProtocolHelpers} = core;
 
 /**
  * Generates JavaScript code for the things_HuskyDuino block.
@@ -28,23 +30,13 @@ JavaScript['things_HuskyDuino'] = function (block) {
  * @returns {String} the generated JavaScript code
  */
 JavaScript['huskylens_choose_algo'] = function (block) {
-  const algorithm = block.getFieldValue('Algorithms');
-  const dict = {
-    face_recognition: '0x01',
-    object_tracking: '0x02',
-    object_recognition: '0x03',
-    line_tracking: '0x04',
-    color_recognition: '0x05',
-    tag_recognition: '0x06',
-    object_classification: '0x07',
-  };
-  const value = dict[algorithm];
+  const algorithm = JavaScript.quote_(block.getFieldValue('algorithm'));
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `huskyduino_chooseAlgo(${blockId}, '${value}');\n`;
+  const code = `await huskyduino_chooseAlgo(${blockId}, ${algorithm});\n`;
   return code;
 };
 
@@ -55,13 +47,13 @@ JavaScript['huskylens_choose_algo'] = function (block) {
  */
 JavaScript['huskylens_write_id'] = function (block) {
   const input = JavaScript.valueToCode(block, 'ID', JavaScript.ORDER_ATOMIC);
-  const id = '0x' + parseInt(input).toString(16);
+  const id = JavaScript.quote_('0x' + parseInt(input).toString(16));
   let blockId = "''";
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `huskyduino_learnID(${blockId}, '${id}');\n`;
+  const code = `await huskyduino_learnID(${blockId}, ${id});\n`;
   return code;
 };
 
@@ -76,7 +68,7 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `huskyduino_forgetAll(${blockId});\n`;
+  const code = `await huskyduino_forgetAll(${blockId});\n`;
   return code;
 };
 
@@ -92,7 +84,7 @@ JavaScript['huskylens_read_id'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const code = `huskyduino_readID(${blockId}, ${thing})`;
+  const code = `await huskyduino_readID(${blockId}, ${thing})`;
   // Return code.
   return [code, JavaScript.ORDER_NONE];
 };
@@ -109,7 +101,7 @@ JavaScript['huskylens_read_location'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const str = `huskyduino_readLoc(${blockId}, ${thing})`;
+  const str = `await huskyduino_readLoc(${blockId}, ${thing})`;
   return [str, JavaScript.ORDER_NONE];
 };
 
