@@ -61,8 +61,6 @@ globalThis['bleLedController_switchLights'] = async function (
   }
   // convert data to json
   const data = '7e000503' + colour.substring(1, 7) + '00ef';
-  // convert json to stream
-  const stream = stringToReadable(data);
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
