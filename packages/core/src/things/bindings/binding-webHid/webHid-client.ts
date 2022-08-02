@@ -2,7 +2,7 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient} from '@node-wot/core';
+import {Content, ProtocolClient, ProtocolHelpers} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs/Subscription';
 import {webHidForm} from './webHid.js';
@@ -20,11 +20,12 @@ export default class WebHidClient implements ProtocolClient {
   public writeResource(form: webHidForm, content: Content): Promise<void> {
     const method = form.href.split('//')[1];
     const deviceId = form['wHid:id'];
+    const reportId = form['wHid:reportId'];
     switch (method) {
       case 'sendReport':
-        return this.sendReport(deviceId, content);
+        return this.sendReport(deviceId, reportId, content);
       case 'sendFeatureReport':
-        return this.sendFeatureReport(deviceId, content);
+        return this.sendFeatureReport(deviceId, reportId, content);
       default:
         throw new Error(`[binding-webHid] Invalid href: ${form.href}`);
     }
@@ -62,12 +63,12 @@ export default class WebHidClient implements ProtocolClient {
     return false;
   }
 
-  private async sendReport(deviceId: string, content: Content): Promise<void> {
+  private async sendReport(deviceId: string, reportId: number, content: Content): Promise<void> {
     const device = getWebHidDevice(deviceId);
     if (!device.opened) {
       await device.open();
     }
-    const {reportId, report} = await readableStreamToJson(content.body);
+    const report = await readableStreamToJson(content.body);
     console.debug(
       `[binding-webHid] invoking sendReport, with reportId: ${reportId} and report: ${report}`
     );
@@ -76,17 +77,17 @@ export default class WebHidClient implements ProtocolClient {
 
   private async sendFeatureReport(
     deviceId: string,
+    reportId: number,
     content: Content
   ): Promise<void> {
     const device = getWebHidDevice(deviceId);
     if (!device.opened) {
       await device.open();
     }
-    const {reportId, report} = await readableStreamToJson(content.body);
-    const data = Int8Array.from(report);
+    const report = await ProtocolHelpers.readStreamFully(content.body);
     console.debug(
       `[binding-webHid] invoking sendFeatureReport, with reportId: ${reportId} and report: ${report}`
     );
-    await device.sendFeatureReport(reportId, Int8Array.from(data));
+    await device.sendFeatureReport(reportId, Uint8Array.from(JSON.parse(report.toString())));
   }
 }

@@ -10,8 +10,6 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
-// eslint-disable-next-line node/no-missing-import
-import {jsonToReadable} from './../../things/bindings/binding-helpers.js';
 
 JavaScript['blinkstick_set_colors'] = function (block) {
   const colour =
@@ -64,6 +62,7 @@ globalThis['blinkstick_setColors'] = async function (
     throwError('No BlinkStick block set.');
     return;
   }
+  const channel = 0;
 
   // convert hex colour to rgb
   const red = parseInt(colour.substring(1, 3), 16);
@@ -71,11 +70,9 @@ globalThis['blinkstick_setColors'] = async function (
   const blue = parseInt(colour.substring(5, 7), 16);
 
   // create report
-  const reportId = 5;
-  const report = [reportId, index, red, green, blue];
-  const stream = jsonToReadable({reportId, report});
+  const report = [channel, index, red, green, blue];
 
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('colours', stream);
+  await thing.writeProperty('colours', report);
 };

@@ -5,4 +5,5 @@ export {default as WebHidClientFactory} from './webHid-client-factory.js';
 
 export class webHidForm extends Form {
   public 'wHid:id': string;
+  public 'wHid:reportId': number;
 }

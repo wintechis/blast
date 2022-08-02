@@ -90,6 +90,7 @@ export default class Blinkstick {
             {
               href: 'hid://sendFeatureReport',
               'wHid:id': webHidId,
+              'wHid:reportId': 5,
             },
           ],
         },
