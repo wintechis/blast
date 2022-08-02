@@ -66,5 +66,5 @@ globalThis['bleLedController_switchLights'] = async function (
   // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('colour', stream);
+  await thing.writeProperty('colour', data);
 };

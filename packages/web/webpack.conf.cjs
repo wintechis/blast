@@ -41,6 +41,9 @@ module.exports = {
     new NodePolyfillPlugin(),
   ],
   resolve: {
+    alias: {
+      stream: require.resolve('readable-stream/lib/stream'),
+    },
     fallback: {
       fs: false,
     },
