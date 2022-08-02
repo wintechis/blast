@@ -1,4 +1,3 @@
-.vscode
 **/.yarn/*
 !**/.yarn/patches
 **/dist
