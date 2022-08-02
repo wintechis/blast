@@ -2,12 +2,15 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient, ProtocolHelpers} from '@node-wot/core';
+import {Content, ProtocolClient} from '@node-wot/core';
+import * as core from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs/Subscription';
 import {webHidForm} from './webHid.js';
 import {getWebHidDevice} from './../../../blast_things.js';
 import {readableStreamToJson} from './../binding-helpers.js';
+
+const { ProtocolHelpers } = core;
 
 export default class WebHidClient implements ProtocolClient {
   public toString(): string {
