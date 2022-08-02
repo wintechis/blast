@@ -10,11 +10,7 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
-import {
-  readableStreamToString,
-  stringToReadable,
-  // eslint-disable-next-line node/no-missing-import
-} from '../../things/bindings/binding-helpers.js';
+import {ProtocolHelpers} from '@node-wot/core';
 
 /**
  * Generates JavaScript code for the things_HuskyDuino block.
@@ -127,8 +123,7 @@ globalThis['huskyduino_chooseAlgo'] = async function (blockId, value) {
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Write face id to thing.
-  const valueReadable = stringToReadable(value);
-  await thing.writeProperty('algorithm', valueReadable);
+  await thing.writeProperty('algorithm', value);
 };
 
 /**
@@ -141,8 +136,7 @@ globalThis['huskyduino_learnID'] = async function (blockId, value) {
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Write face id to thing.
-  const valueReadable = stringToReadable(value);
-  await thing.writeProperty('id', valueReadable);
+  await thing.writeProperty('id', value);
 };
 
 /**
@@ -169,7 +163,9 @@ globalThis['huskyduino_readID'] = async function (blockId) {
   const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty('id');
-  const str = await readableStreamToString(interActionInput.content.body);
+  const str = await ProtocolHelpers.readStreamFully(
+    interActionInput.content.body
+  );
   if (str[0] === '[') {
     const arr = JSON.parse(str);
     // output is all non 0 element in the array
@@ -205,7 +201,9 @@ globalThis['huskyduino_outArrreadLoc'] = async function (blockId) {
   const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty('id');
-  const str = await readableStreamToString(interActionInput.content.body);
+  const str = await ProtocolHelpers.readStreamFully(
+    interActionInput.content.body
+  );
 
   if (str[0] === '[') {
     throwError('Recognized Multi Objs');
