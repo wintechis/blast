@@ -443,7 +443,7 @@ suite('Blinkstick', function () {
             {
               href: 'hid://sendFeatureReport',
               'wHid:id': 'deadbeef',
-              'wHid:reportId': 5,
+              'wHid:reportId'
             },
           ],
         },
