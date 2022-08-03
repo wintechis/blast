@@ -64,7 +64,6 @@ declare global {
 }
 
 import Blockly from 'blockly';
-import {InteractionOutput} from 'wot-typescript-definitions';
 const {JavaScript} = Blockly;
 import {
   addCleanUpFunction,
