@@ -8,7 +8,6 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {getWorkspace} from './../../blast_interpreter.js';
 
 /**
  * Generates JavaScript code for the play_audio block.
