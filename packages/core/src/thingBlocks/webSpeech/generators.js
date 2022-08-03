@@ -28,7 +28,7 @@ Blockly.JavaScript['text_to_speech'] = function (block) {
   }
   lang = Blockly.JavaScript.quote_(lang);
 
-  const code = `textToSpeech(${text}, ${lang});\n`;
+  const code = `await textToSpeech(${text}, ${lang});\n`;
 
   return code;
 };
@@ -46,7 +46,7 @@ Blockly.JavaScript['web_speech'] = function (block) {
     lang = block.getFieldValue(lang);
   }
   lang = Blockly.JavaScript.quote_(lang);
-  const code = `speechToText(${lang})`;
+  const code = `await speechToText(${lang})`;
 
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
@@ -55,42 +55,45 @@ Blockly.JavaScript['web_speech'] = function (block) {
  * Outputs speech input as string.
  * @param {Blockly.Block.id} blockId id of the speechToText block.
  */
-globalThis['speechToText'] = async function (blockId) {
-  const block = getWorkspace().getBlockById(blockId);
-  const recognition = block.recognition;
-  recognition.continuous = false;
-  recognition.lang = 'en-US';
-  let finalTranscript = '';
+globalThis['speechToText'] = async function (lang) {
+  return new Promise(resolve => {
+    // eslint-disable-next-line no-undef
+    const recognition = new webkitSpeechRecognition();
+    recognition.continuous = false;
+    recognition.lang = lang;
+    let finalTranscript = '';
 
-  recognition.onresult = function (event) {
-    for (let i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        finalTranscript += event.results[i][0].transcript;
+    recognition.onresult = function (event) {
+      for (let i = event.resultIndex; i < event.results.length; ++i) {
+        if (event.results[i].isFinal) {
+          finalTranscript += event.results[i][0].transcript;
+        }
       }
-    }
-  };
+    };
 
-  recognition.onend = function () {
-    return finalTranscript;
-  };
+    recognition.onend = function () {
+      resolve(finalTranscript);
+    };
 
-  recognition.start();
+    recognition.start();
+  });
 };
 
 /**
  * Invokes a SpeechSynthesisUtterance to read out a text.
  * @param {string} text text that will be synthesised when the utterance is spoken.
+ * @param {string} lang language of the utterance.
  * TODO #53 Add the following parameters (#53)
  * @param {SpeechSynthesisVoice=} voice voice that will be used to speak the utterance.
  * @param {Number=} rate speed at which the utterance will be spoken at
  * @param {Number=} volume volume that the utterance will be spoken at.
  * @param {Number=} pitch pitch at which the utterance will be spoken at
- * @param {string} lang language of the utterance.
  */
-globalThis['textToSpeech'] = async function (text) {
+globalThis['textToSpeech'] = async function (text, lang) {
   // eslint-disable-next-line no-undef
   const speech = new SpeechSynthesisUtterance();
   speech.text = text;
+  speech.lang = lang;
   window.speechSynthesis.speak(speech);
   // return after speaking has ended
   await new Promise(resolve => {
