@@ -1,25 +1,28 @@
 const {createBluetooth} = require('node-ble')
 const {bluetooth, destroy} = createBluetooth()
 
+// TODO: error handling, that is, catch exceptions, e.g., the DBusError, and re-try or fail cleanly
+
 // main, mandatory
 async function main() {
     console.log('awaiting adapter...')
     const adapter = await bluetooth.defaultAdapter()
 
     // the mac address
-    var MAC = 'FF:AB:61:04:33:9C'
+    const MAC = 'FF:AB:61:04:33:9C'
     // the service
-    var SERVICE = '932c32bd-0000-47a2-835a-a8d455b859dd'
+    const SERVICE = '932c32bd-0000-47a2-835a-a8d455b859dd'
     // the characteristic
-    var CHARACTERISTIC = '932c32bd-0002-47a2-835a-a8d455b859dd'
+    const CHARACTERISTIC = '932c32bd-0002-47a2-835a-a8d455b859dd'
     // ON
-    var ON = Buffer.from('01', 'hex')
+    const ON = Buffer.from('01', 'hex')
     // OFF
-    var OFF = Buffer.from('00', 'hex')
+    const OFF = Buffer.from('00', 'hex')
 
     console.log('starting discovering...')
-    if (! await adapter.isDiscovering())
+    if (! await adapter.isDiscovering()) {
 	await adapter.startDiscovery()
+    }
 
     console.log('waiting for gatt...')
     const device = await adapter.waitDevice(MAC)
@@ -30,12 +33,26 @@ async function main() {
     const s1 = await gattServer.getPrimaryService(SERVICE)
     const c1 = await s1.getCharacteristic(CHARACTERISTIC)
 
-    console.log('writing value...')
-    await c1.writeValue(ON)
-
     console.log('reading value...')
-    const buffer = await c1.readValue()
+    var buffer = await c1.readValue()
     console.log(buffer)
+
+    // toggle
+    // Buffer.compare(buffer, ON)
+    if (buffer.compare(ON) == 0) {
+	buffer = OFF
+    } else {
+	buffer = ON
+    }
+
+    console.log('writing value...', buffer)
+    try {
+	await c1.writeValue(buffer)
+    } catch (e) {
+	if (e instanceof DBusError) {
+	    console.log('DBusError: ', e.message)
+	}
+    }
 
     console.log('disconnecting...')
     await device.disconnect()
