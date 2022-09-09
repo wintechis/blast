@@ -1,7 +1,7 @@
+//import DBusError from 'dbus-next'
+const {DBusError} = require('dbus-next')
 const {createBluetooth} = require('node-ble')
 const {bluetooth, destroy} = createBluetooth()
-
-// TODO: error handling, that is, catch exceptions, e.g., the DBusError, and re-try or fail cleanly
 
 // main, mandatory
 async function main() {
@@ -19,44 +19,54 @@ async function main() {
     // OFF
     const OFF = Buffer.from('00', 'hex')
 
-    console.log('starting discovering...')
-    if (! await adapter.isDiscovering()) {
-	await adapter.startDiscovery()
-    }
-
-    console.log('waiting for gatt...')
-    const device = await adapter.waitDevice(MAC)
-    await device.connect()
-    const gattServer = await device.gatt()
-
-    console.log('selecting service/characteristics...')
-    const s1 = await gattServer.getPrimaryService(SERVICE)
-    const c1 = await s1.getCharacteristic(CHARACTERISTIC)
-
-    console.log('reading value...')
-    var buffer = await c1.readValue()
-    console.log(buffer)
-
-    // toggle
-    // Buffer.compare(buffer, ON)
-    if (buffer.compare(ON) == 0) {
-	buffer = OFF
-    } else {
-	buffer = ON
-    }
-
-    console.log('writing value...', buffer)
     try {
+	console.log('starting discovering...')
+	if (! await adapter.isDiscovering()) {
+	    await adapter.startDiscovery()
+	}
+
+	console.log('connecting to device...')
+	const device = await adapter.waitDevice(MAC)
+	await device.connect()
+
+	console.log('waiting for gatt...')
+    	const gattServer = await device.gatt()
+
+	console.log('selecting service...')
+	const s1 = await gattServer.getPrimaryService(SERVICE)
+
+	console.log('selecting characteristics...')
+	const c1 = await s1.getCharacteristic(CHARACTERISTIC)
+
+	console.log('reading value...')
+	var buffer = await c1.readValue()
+	console.log(buffer)
+
+	// toggle
+	// Buffer.compare(buffer, ON)
+	if (buffer.compare(ON) == 0) {
+	    buffer = OFF
+	} else {
+	    buffer = ON
+	}
+
+	console.log('writing value...', buffer)
 	await c1.writeValue(buffer)
+
+	console.log('disconnecting...')
+	await device.disconnect()
+	destroy()
     } catch (e) {
 	if (e instanceof DBusError) {
+	    // FIXME if error abort by local, mitigation strategy is to try again
+	    // abort by local could be type: 3 or body: [ 'le-connection-abort-by-local' ], but not sure
 	    console.log('DBusError: ', e.message)
+	} else {
+	    console.log('Error: ', e.message)
 	}
+	console.log('exiting with return code 1')
+	process.exit(1)
     }
-
-    console.log('disconnecting...')
-    await device.disconnect()
-    destroy()
 }
 
 main()
