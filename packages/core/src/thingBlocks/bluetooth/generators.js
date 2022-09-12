@@ -44,15 +44,11 @@ globalThis['getRSSIWb'] = async function (webBluetoothId) {
       // eslint-disable-next-line no-undef
       const abortController = new AbortController();
 
-      console.log(device);
-
       device.addEventListener('advertisementreceived', event => {
         abortController.abort();
-        console.log(event);
         resolve(event.rssi);
       });
       device.watchAdvertisements({signal: abortController.signal});
-      console.log('watching');
     });
   });
 };
