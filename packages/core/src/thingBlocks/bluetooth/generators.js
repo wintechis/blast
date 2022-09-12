@@ -7,6 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
+import {getDeviceById} from '../../blast_webBluetooth.js';
 const {JavaScript} = Blockly;
 import {
   stringToReadable,
@@ -38,30 +39,22 @@ globalThis['getRSSIWb'] = async function (webBluetoothId) {
     throwError('No device connected.');
   }
 
-  const devices = await navigator.bluetooth.getDevices();
-  let device = null;
+  return new Promise(resolve => {
+    getDeviceById(webBluetoothId).then(device => {
+      // eslint-disable-next-line no-undef
+      const abortController = new AbortController();
 
-  for (const d of devices) {
-    if (d.id === webBluetoothId) {
-      device = d;
-      break;
-    }
-  }
-  if (device === null) {
-    throwError('Error pairing with Bluetooth device.');
-  }
+      console.log(device);
 
-  // eslint-disable-next-line no-undef
-  const abortController = new AbortController();
-
-  device.addEventListener('advertisementreceived', async evt => {
-    // Stop watching advertisements
-    abortController.abort();
-    // Advertisement data can be read from |evt|.
-    return evt.rssi;
+      device.addEventListener('advertisementreceived', event => {
+        abortController.abort();
+        console.log(event);
+        resolve(event.rssi);
+      });
+      device.watchAdvertisements({signal: abortController.signal});
+      console.log('watching');
+    });
   });
-
-  await device.watchAdvertisements({signal: abortController.signal});
 };
 
 /**
