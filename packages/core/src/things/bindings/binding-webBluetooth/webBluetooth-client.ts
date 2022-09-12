@@ -2,7 +2,7 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient, ProtocolHelpers} from '@node-wot/core';
+import {Content, ProtocolClient} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {
