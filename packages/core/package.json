@@ -23,7 +23,7 @@
     "lint": "eslint \"src/**/**.js\"",
     "clean": "yarn rimraf dist",
     "fix": "eslint --fix \"src/**/**.js\"",
-    "test": "mocha \"test/**/*.mocha.js\" -u tdd"
+    "test": "mocha \"test/**/*.mocha.js\" -u tdd --reporter-option maxDiffSize=0"
   },
   "type": "module",
   "main": "index.html",
