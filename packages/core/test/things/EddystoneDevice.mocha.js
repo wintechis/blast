@@ -2,7 +2,6 @@
 import Blockly from 'blockly';
 import chai from 'chai';
 import EddystoneDevice from '../../dist/things/EddystoneDevice.js';
-import devTools from '@blockly/dev-tools';
 import sinon from 'sinon';
 
 import '../../dist/thingBlocks/bluetooth/blocks.js';
