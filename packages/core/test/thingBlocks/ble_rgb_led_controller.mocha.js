@@ -175,6 +175,9 @@ suite('switch_lights_rgb block', () => {
     expect(colourInputLabel.name).to.equal('label');
     expect(colourInputLabel.value_).to.equal('write colour property');
     const thingInput = block.inputList[1];
+    expect(thingInput.connection.check_).to.be.an('array');
+    expect(thingInput.connection.check_.length).to.equal(1);
+    expect(thingInput.connection.check_[0]).to.equal('Thing');
     expect(thingInput.name).to.equal('thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');

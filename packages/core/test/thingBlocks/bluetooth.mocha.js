@@ -211,6 +211,9 @@ suite('write_eddystone_property block', () => {
     // thing input
     const thingInput = block.inputList[4];
     expect(thingInput.name).to.equal('thing');
+    expect(thingInput.connection.check_).to.be.an('array');
+    expect(thingInput.connection.check_.length).to.equal(1);
+    expect(thingInput.connection.check_[0]).to.equal('Thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
     expect(thingInputLabel.value_).to.equal('to Eddystone device');
@@ -402,6 +405,9 @@ suite('read_eddystone_property block', () => {
     // thing input
     const thingInput = block.inputList[2];
     expect(thingInput.name).to.equal('thing');
+    expect(thingInput.connection.check_).to.be.an('array');
+    expect(thingInput.connection.check_.length).to.equal(1);
+    expect(thingInput.connection.check_[0]).to.equal('Thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
     expect(thingInputLabel.value_).to.equal('of Eddystone device');
@@ -699,6 +705,10 @@ suite('get_signal_strength_wb block', () => {
     // Thing input
     const thingInput = block.inputList[0];
     expect(thingInput.name).to.equal('thing');
+
+    expect(thingInput.connection.check_).to.be.an('array');
+    expect(thingInput.connection.check_.length).to.equal(1);
+    expect(thingInput.connection.check_[0]).to.equal('Thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
     expect(thingInputLabel.value_).to.equal(

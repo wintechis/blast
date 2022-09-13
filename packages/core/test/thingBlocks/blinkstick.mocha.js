@@ -184,6 +184,9 @@ suite('blinkstick_set_colors block', () => {
     expect(indexInputLabel.name).to.equal('label');
     expect(indexInputLabel.value_).to.equal('of LED #');
     const thingInput = block.inputList[2];
+    expect(thingInput.connection.check_).to.be.an('array');
+    expect(thingInput.connection.check_.length).to.equal(1);
+    expect(thingInput.connection.check_[0]).to.equal('Thing');
     expect(thingInput.name).to.equal('thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
@@ -232,7 +235,7 @@ suite('blinkstick_set_colors block', () => {
               colourBlock.setFieldValue('#ffffff', 'COLOUR');
               const colourInput = block.getInput('colour');
               colourInput.connection.connect(colourBlock.outputConnection);
-              // Append number_input block
+              // Append number_value block
               const indexBlock = workspace.newBlock('number_value');
               indexBlock.setFieldValue(2, 'NUM');
               const indexInput = block.getInput('index');

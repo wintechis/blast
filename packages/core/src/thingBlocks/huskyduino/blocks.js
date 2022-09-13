@@ -102,12 +102,12 @@ Blocks['huskylens_choose_algo'] = {
 
 Blocks['huskylens_write_id'] = {
   init: function () {
-    this.appendValueInput('ID')
+    this.appendValueInput('id')
       .setCheck('Number')
-      .appendField('write ID property');
+      .appendField('write id property', 'label');
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('to HuskyDuino');
+      .appendField('to HuskyDuino', 'label');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -146,10 +146,10 @@ Blocks['huskylens_write_forget_flag'] = {
   init: function () {
     this.appendValueInput('forgetFlag')
       .setCheck('Boolean')
-      .appendField('write forget flag property');
+      .appendField('write forget flag property', 'label');
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('to HuskyDuino');
+      .appendField('to HuskyDuino', 'label');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
@@ -186,7 +186,7 @@ Blocks['huskylens_read_id'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('read ID property of object(s) in HuskyDuino');
+      .appendField('read ID property of object(s) in HuskyDuino', 'label');
     this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip(
@@ -212,7 +212,10 @@ Blocks['huskylens_read_location'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('read location property of one object in HuskyDuino');
+      .appendField(
+        'read location property of one object in HuskyDuino',
+        'label'
+      );
     this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip(

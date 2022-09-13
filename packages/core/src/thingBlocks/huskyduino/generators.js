@@ -46,14 +46,15 @@ JavaScript['huskylens_choose_algo'] = function (block) {
  * @returns {String} the generated JavaScript code
  */
 JavaScript['huskylens_write_id'] = function (block) {
-  const input = JavaScript.valueToCode(block, 'ID', JavaScript.ORDER_ATOMIC);
+  const input =
+    JavaScript.valueToCode(block, 'id', JavaScript.ORDER_ATOMIC) || '0';
   const id = JavaScript.quote_('0x' + parseInt(input).toString(16));
   let blockId = "''";
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
 
-  const code = `await huskyduino_learnID(${blockId}, ${id});\n`;
+  const code = `await huskyduino_learnId(${blockId}, ${id});\n`;
   return code;
 };
 
@@ -78,13 +79,12 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
  * @returns {String} the generated JavaScript code
  */
 JavaScript['huskylens_read_id'] = function (block) {
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
   let blockId = "''";
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const code = `await huskyduino_readID(${blockId}, ${thing})`;
+  const code = `await huskyduino_readId(${blockId})`;
   // Return code.
   return [code, JavaScript.ORDER_NONE];
 };
@@ -95,13 +95,12 @@ JavaScript['huskylens_read_id'] = function (block) {
  * @returns {String} the generated JavaScript code
  */
 JavaScript['huskylens_read_location'] = function (block) {
-  const thing = JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_ATOMIC);
   let blockId = "''";
   if (block.getInputTargetBlock('Thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
   }
   // Assemble JavaScript into code variable.
-  const str = `await huskyduino_readLoc(${blockId}, ${thing})`;
+  const str = `await huskyduino_readLoc(${blockId})`;
   return [str, JavaScript.ORDER_NONE];
 };
 
@@ -123,7 +122,7 @@ globalThis['huskyduino_chooseAlgo'] = async function (blockId, value) {
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} value faceID to write to the Huskyduino.
  */
-globalThis['huskyduino_learnID'] = async function (blockId, value) {
+globalThis['huskyduino_learnId'] = async function (blockId, value) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
@@ -149,7 +148,7 @@ globalThis['huskyduino_forgetAll'] = async function (blockId) {
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @returns {Array<Number>} contains all known IDs currently visible to the camera.
  */
-globalThis['huskyduino_readID'] = async function (blockId) {
+globalThis['huskyduino_readId'] = async function (blockId) {
   // Get thing instance of block.
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
