@@ -1,11 +1,6 @@
-import HuskyDuino from '../../dist/things/HuskyDuino.js';
 import Blockly from 'blockly';
 import chai from 'chai';
 import devTools from '@blockly/dev-tools';
-import sinon from 'sinon';
-
-import '../../dist/thingBlocks/huskyduino/blocks.js';
-import '../../dist/thingBlocks/huskyduino/generators.js';
 
 const {expect} = chai;
 const {testHelpers} = devTools;
