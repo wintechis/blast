@@ -111,8 +111,7 @@ globalThis['writeEddystoneProperty'] = async function (
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Set the active slot
-  const slotReadable = stringToReadable(slot);
-  await thing.writeProperty('activeSlot', slotReadable);
+  await thing.writeProperty('activeSlot', slot);
   // Write the property
   const valueReadable = stringToReadable(value);
   await thing.writeProperty(property, valueReadable);
@@ -173,8 +172,7 @@ globalThis['readEddystoneProperty'] = async function (
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Set the active slot
-  const slotReadable = stringToReadable(slot);
-  await thing.writeProperty('activeSlot', slotReadable);
+  await thing.writeProperty('activeSlot', 0);
   // Read property data
   const interActionInput = await thing.readProperty(property);
   const value = await readableStreamToString(interActionInput.content.body);
