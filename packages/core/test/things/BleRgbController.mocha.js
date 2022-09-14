@@ -11,10 +11,6 @@ const {expect} = chai;
 suite('BLE RGB Controller', function () {
   this.thing = null;
 
-  suiteSetup(async () => {
-    sinon.stub(console);
-  });
-
   suiteTeardown(() => {
     sinon.restore();
   });
