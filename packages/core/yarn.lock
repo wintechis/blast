@@ -92,6 +92,7 @@ __metadata:
     sinon: ^13.0.1
     typescript: ^4.7.4
     urdf: "https://github.com/derwehr/uRDF.js.git"
+    web-bluetooth-mock: ^1.1.0
     webpack: ^5.70.0
     webpack-cli: ^4.9.2
     wot-typescript-definitions: 0.8.0-SNAPSHOT.23
@@ -753,6 +754,13 @@ __metadata:
   version: 0.0.14
   resolution: "@types/web-bluetooth@npm:0.0.14"
   checksum: 1eb694ff2ba6ef239e10024bfb205c087fb1a43aa8b4a31f3a3b7c90eccf2f55c7fb4c1057e382e1c2f4d6d8a137e68bf1255790b980c5ac95026419a623c6b5
+  languageName: node
+  linkType: hard
+
+"@types/web-bluetooth@npm:^0.0.3":
+  version: 0.0.3
+  resolution: "@types/web-bluetooth@npm:0.0.3"
+  checksum: 684fa2264e2967261b397ea853e2a92e2f916df1cdf9ef9e4626bac33f4b477acd44c9a24990c812a1f7d7b65d8b77c4fac7ab47b5d27f1a727d0cb88d57c9b2
   languageName: node
   linkType: hard
 
@@ -2529,6 +2537,13 @@ __metadata:
   version: 1.8.1
   resolution: "etag@npm:1.8.1"
   checksum: 571aeb3dbe0f2bbd4e4fadbdb44f325fc75335cd5f6f6b6a091e6a06a9f25ed5392f0863c5442acb0646787446e816f13cbfc6edce5b07658541dff573cab1ff
+  languageName: node
+  linkType: hard
+
+"event-target-shim@npm:^3.0.0":
+  version: 3.0.2
+  resolution: "event-target-shim@npm:3.0.2"
+  checksum: 9ed8f5109c494a2a4c2f33e0676ad6b300831863df3387037387e5df3ad0ef24a3b7ba38bcbf02398ff5406b7a24f48dad9fb448868b8b90102a95bf23d7ed8b
   languageName: node
   linkType: hard
 
@@ -5889,6 +5904,16 @@ __metadata:
     glob-to-regexp: ^0.4.1
     graceful-fs: ^4.1.2
   checksum: 23d4bc58634dbe13b86093e01c6a68d8096028b664ab7139d58f0c37d962d549a940e98f2f201cecdabd6f9c340338dc73ef8bf094a2249ef582f35183d1a131
+  languageName: node
+  linkType: hard
+
+"web-bluetooth-mock@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "web-bluetooth-mock@npm:1.1.0"
+  dependencies:
+    "@types/web-bluetooth": ^0.0.3
+    event-target-shim: ^3.0.0
+  checksum: 88c72f6016c122eea0bdefa0bc4f5fac10052e12ffd88694db7e847721107cd143ce4633d1f99c1ef5fc01d867b99f4c62683dca5fcae44bf65f9a36715a0516
   languageName: node
   linkType: hard
 
