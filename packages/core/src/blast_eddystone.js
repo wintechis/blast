@@ -67,6 +67,9 @@ export const getCapabilities = async function (webBluetoothId) {
     UUIDS.CONFIG_SERVICE,
     UUIDS.CAPABILITIES_CHARACTERISTIC
   );
+  if (!capabilitiesArray) {
+    return;
+  }
   const capabilities = parseCapabilities(capabilitiesArray);
 
   thingsLog(
@@ -85,7 +88,6 @@ export const getCapabilities = async function (webBluetoothId) {
  */
 export const parseCapabilities = function (dataView) {
   const capabilitiesArray = new Int8Array(dataView.buffer);
-  console.log(capabilitiesArray);
 
   // Parse the capabilities.
   const supportedTxPowerLevels = [];

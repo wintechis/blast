@@ -140,6 +140,9 @@ export const getDeviceById = async function (id) {
 const connect = async function (id) {
   try {
     const device = await getDeviceById(id);
+    if (!device) {
+      return;
+    }
     const thingsLog = getThingsLog();
     thingsLog(`Connecting to <code>${id}</code>`, 'Bluetooth');
     const request = await device.gatt.connect();
@@ -283,6 +286,9 @@ export const writeWithResponse = async function (
  */
 const getPrimaryService = async function (id, serviceUUID) {
   const server = await connect(id);
+  if (!server) {
+    return;
+  }
   let service;
   try {
     const thingsLog = getThingsLog();
@@ -357,6 +363,9 @@ export const read = async function (id, serviceUUID, characteristicUUID) {
     serviceUUID,
     characteristicUUID
   );
+  if (!characteristic) {
+    return;
+  }
   try {
     const thingsLog = getThingsLog();
     thingsLog(
