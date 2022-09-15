@@ -6,6 +6,7 @@ const {expect} = chai;
 import {eddystoneProperties, getCapabilities} from '../dist/blast_eddystone.js';
 import {optionalServices} from '../dist/blast_webBluetooth.js';
 import {mockBluetooth} from './bluetooth_helpers.js';
+import {getStatus, statusValues} from '../dist/blast_interpreter.js';
 
 suite('blast_eddystone configs', () => {
   test('eddystoneProperties', () => {
@@ -50,23 +51,35 @@ suite('blast_eddystone functions', () => {
     sinon.stub(console);
   });
 
+  suiteTeardown(() => {
+    sinon.restore();
+  });
+
   setup(() => {
     mockBluetooth();
   });
-  test('getCapabilities', async () => {
-    const capabilities = await getCapabilities('eddy');
-    expect(capabilities).to.be.an('object');
-    expect(capabilities).to.deep.equal({
-      specVersion: 0,
-      maxSlots: 4,
-      maxEidPerSlot: 1,
-      isVarriableAdvIntervalSupported: true,
-      isVariableTxPowerSupported: true,
-      isUIDSupported: true,
-      isURLSupported: true,
-      isTLMSupported: true,
-      isEIDSupported: true,
-      supportedTxPowerLevels: [-30, -20, -16, -12, -8, -4, 0, 4],
+
+  suite('getCapabilities function', () => {
+    test('returns correct capabilites object', async () => {
+      const capabilities = await getCapabilities('eddy');
+      expect(capabilities).to.be.an('object');
+      expect(capabilities).to.deep.equal({
+        specVersion: 0,
+        maxSlots: 4,
+        maxEidPerSlot: 1,
+        isVarriableAdvIntervalSupported: true,
+        isVariableTxPowerSupported: true,
+        isUIDSupported: true,
+        isURLSupported: true,
+        isTLMSupported: true,
+        isEIDSupported: true,
+        supportedTxPowerLevels: [-30, -20, -16, -12, -8, -4, 0, 4],
+      });
+    });
+
+    test('errors, if device is not paired', async () => {
+      await getCapabilities('none');
+      expect(getStatus()).to.equal(statusValues.ERROR);
     });
   });
 });
