@@ -86,7 +86,7 @@ export const getCapabilities = async function (webBluetoothId) {
  * @param {DataView} dataView A DataView of the data received from the device.
  * @returns {Array<boolean | number>} An array of the parsed data.
  */
-export const parseCapabilities = function (dataView) {
+const parseCapabilities = function (dataView) {
   const capabilitiesArray = new Int8Array(dataView.buffer);
 
   // Parse the capabilities.
