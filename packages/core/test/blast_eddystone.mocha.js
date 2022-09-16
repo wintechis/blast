@@ -3,10 +3,20 @@ import sinon from 'sinon';
 
 const {expect} = chai;
 
-import {eddystoneProperties, getCapabilities} from '../dist/blast_eddystone.js';
+import {
+  eddystoneProperties,
+  getCapabilities,
+  getActiveSlot,
+} from '../dist/blast_eddystone.js';
 import {optionalServices} from '../dist/blast_webBluetooth.js';
 import {mockBluetooth} from './bluetooth_helpers.js';
-import {getStatus, statusValues} from '../dist/blast_interpreter.js';
+import {
+  getStatus,
+  getStdError,
+  setStdError,
+  setStdInfo,
+  statusValues,
+} from '../dist/blast_interpreter.js';
 
 suite('blast_eddystone configs', () => {
   test('eddystoneProperties', () => {
@@ -47,12 +57,17 @@ suite('blast_eddystone configs', () => {
 });
 
 suite('blast_eddystone functions', () => {
+  let prevLog;
+
   suiteSetup(async () => {
-    sinon.stub(console);
+    sinon.stub(console, 'log');
+    sinon.stub(console, 'info');
+    prevLog = getStdError();
   });
 
   suiteTeardown(() => {
     sinon.restore();
+    setStdError(prevLog);
   });
 
   setup(() => {
@@ -78,7 +93,43 @@ suite('blast_eddystone functions', () => {
     });
 
     test('errors, if device is not paired', async () => {
+      const errStub = sinon.stub();
+      setStdError(errStub);
+      const infoStub = sinon.stub();
+      setStdInfo(infoStub);
+
       await getCapabilities('none');
+
+      expect(
+        errStub.calledWith(
+          "Bluetooth device none wasn't found in paired devices."
+        )
+      );
+      expect(infoStub.calledWith('Execution stopped.'));
+      expect(getStatus()).to.equal(statusValues.ERROR);
+    });
+  });
+
+  suite('getActiveSlot function', () => {
+    test('returns correct active slot', async () => {
+      const activeSlot = await getActiveSlot('eddy');
+      expect(activeSlot).to.equal(0);
+    });
+
+    test('errors, if device is not paired', async () => {
+      const errStub = sinon.stub();
+      setStdError(errStub);
+      const infoStub = sinon.stub();
+      setStdInfo(infoStub);
+
+      await getActiveSlot('none');
+
+      expect(
+        errStub.calledWith(
+          "Bluetooth device none wasn't found in paired devices."
+        )
+      );
+      expect(infoStub.calledWith('Execution stopped.'));
       expect(getStatus()).to.equal(statusValues.ERROR);
     });
   });

@@ -412,6 +412,9 @@ export const readText = async function (id, serviceUUID, characteristicUUID) {
  */
 export const readNumber = async function (id, serviceUUID, characteristicUUID) {
   let dataView = await read(id, serviceUUID, characteristicUUID);
+  if (!dataView) {
+    return;
+  }
   // If value is not a DataView already, convert it.
   if (!(dataView instanceof DataView)) {
     dataView = new DataView(dataView);
