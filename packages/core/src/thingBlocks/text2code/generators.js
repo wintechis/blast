@@ -31,10 +31,10 @@ Blockly.JavaScript['text_to_code'] = function (block) {
  */
 globalThis['textToCode'] = async function (text) {
   const encoder = await tf.loadLayersModel(
-    '../../dist/thingBlocks/text2code/tfjs_model/encoder/model.json'
+    '../core/dist/thingBlocks/text2code/tfjs_model/encoder/model.json'
   );
   const decoder = await tf.loadLayersModel(
-    '../../dist/thingBlocks/text2code/tfjs_model/decoder/model.json'
+    '../core/dist/thingBlocks/text2code/tfjs_model/decoder/model.json'
   );
 
   const inputTensor = convertSentenceToTensor(text);
