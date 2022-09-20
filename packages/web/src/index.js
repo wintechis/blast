@@ -23,6 +23,8 @@ import '../../core/dist/blocks/all.js';
 import '../../core/dist/generators/all.js';
 import '../../core/dist/thingBlocks/all.js';
 
+import '../../core/dist/drivers/all.js';
+
 // import additional block definitions for web example
 import './blocks.js';
 import './generators.js';

@@ -18,8 +18,7 @@
     "node": ">=12.11.0"
   },
   "scripts": {
-    "build": "yarn run clean && tsc && yarn run copy",
-    "copy": "copyfiles -u 1 \"src/**/*.js\" \"src/**/*.json\" \"src/**/*.bin\" dist/",
+    "build": "yarn run clean && tsc",
     "lint": "eslint \"src/**/**.js\"",
     "clean": "yarn rimraf dist",
     "fix": "eslint --fix \"src/**/**.js\"",
