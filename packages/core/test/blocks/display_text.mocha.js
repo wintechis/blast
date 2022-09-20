@@ -3,8 +3,8 @@ import Blockly from 'blockly';
 import chai from 'chai';
 import devTools from '@blockly/dev-tools';
 // import the display_text block and its generator
-import '../../dist/thingBlocks/blast/blocks.js';
-import '../../dist/thingBlocks/blast/generators.js';
+import '../../dist/blocks/display.js';
+import '../../dist/generators/display.js';
 
 const {assert} = chai;
 const {testHelpers} = devTools;

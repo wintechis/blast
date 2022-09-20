@@ -1,11 +1,11 @@
 /* eslint-disable node/no-unpublished-import */
-import Blinkstick from '../../dist/things/Blinkstick.js';
+import Blinkstick from '../../dist/drivers/blinkstick/Blinkstick.js';
 import Blockly from 'blockly';
 import chai from 'chai';
 import sinon from 'sinon';
 
-import '../../dist/thingBlocks/blinkstick/blocks.js';
-import '../../dist/thingBlocks/blinkstick/generators.js';
+import '../../dist/drivers/blinkstick/blocks.js';
+import '../../dist/drivers/blinkstick/generators.js';
 import '../../dist/blocks/numbers.js';
 import '../../dist/generators/numbers.js';
 

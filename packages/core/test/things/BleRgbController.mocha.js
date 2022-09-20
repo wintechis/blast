@@ -1,10 +1,10 @@
-import BleRgbController from '../../dist/things/BleRgbController.js';
+import BleRgbController from '../../dist/drivers/bleRgbController/BleRgbController.js';
 import Blockly from 'blockly';
 import chai from 'chai';
 import sinon from 'sinon';
 
-import '../../dist/thingBlocks/ble_rgb_led_controller/blocks.js';
-import '../../dist/thingBlocks/ble_rgb_led_controller/generators.js';
+import '../../dist/drivers/bleRgbController/blocks.js';
+import '../../dist/drivers/bleRgbController/generators.js';
 
 const {expect} = chai;
 

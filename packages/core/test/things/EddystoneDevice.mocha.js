@@ -1,11 +1,11 @@
 /* eslint-disable node/no-unpublished-import */
 import Blockly from 'blockly';
 import chai from 'chai';
-import EddystoneDevice from '../../dist/things/EddystoneDevice.js';
+import EddystoneDevice from '../../dist/drivers/bluetooth/EddystoneDevice.js';
 import sinon from 'sinon';
 
-import '../../dist/thingBlocks/bluetooth/blocks.js';
-import '../../dist/thingBlocks/bluetooth/generators.js';
+import '../../dist/drivers/bluetooth/blocks.js';
+import '../../dist/drivers/bluetooth/generators.js';
 import '../../dist/blocks/numbers.js';
 import '../../dist/generators/numbers.js';
 

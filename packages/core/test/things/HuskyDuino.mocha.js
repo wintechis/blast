@@ -1,10 +1,10 @@
-import HuskyDuino from '../../dist/things/HuskyDuino.js';
+import HuskyDuino from '../../dist/drivers/huskyduino/HuskyDuino.js';
 import Blockly from 'blockly';
 import chai from 'chai';
 import sinon from 'sinon';
 
-import '../../dist/thingBlocks/huskyduino/blocks.js';
-import '../../dist/thingBlocks/huskyduino/generators.js';
+import '../../dist/drivers/huskyduino/blocks.js';
+import '../../dist/drivers/huskyduino/generators.js';
 import '../../dist/blocks/numbers.js';
 import '../../dist/generators/numbers.js';
 
