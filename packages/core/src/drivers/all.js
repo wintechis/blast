@@ -20,6 +20,7 @@ import './joycon/blocks.js';
 import './joycon/generators.js';
 
 import './ruuviTag/blocks.js';
+// eslint-disable-next-line node/no-missing-import
 import './ruuviTag/generators.js';
 
 import './server_connector/blocks.js';
