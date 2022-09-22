@@ -278,7 +278,63 @@ export const throwError = function (text) {
 export const generateCode = function () {
   // Generate JavaScript code and parse it.
   latestCode = '';
-  latestCode = JavaScript.workspaceToCode(workspace);
+  latestCode = workspaceToCode(workspace);
+};
+
+/**
+ * Generate code for all blocks in the workspace to the specified language.
+ * @param {!Workspace=} workspace Workspace to generate code from.
+ * @return {string} Generated code.
+ */
+const workspaceToCode = function (workspace) {
+  if (!workspace) {
+    // Backwards compatibility from before there could be multiple workspaces.
+    console.warn('No workspace specified in workspaceToCode call.  Guessing.');
+    workspace = getWorkspace();
+  }
+  let code = [];
+  JavaScript.init(workspace);
+  const blocks = workspace.getTopBlocks(true);
+  // Generate code for state_definition and event blocks first.
+  for (const block of blocks) {
+    if (block.type === 'event' || block.type === 'state_definition') {
+      const line = JavaScript.blockToCode(block);
+      code.push(line);
+    }
+  }
+  // Generate code for remaining blocks.
+  for (const block of blocks) {
+    if (block.type === 'event' || block.type === 'state_definition') {
+      continue;
+    }
+    let line = JavaScript.blockToCode(block);
+    if (Array.isArray(line)) {
+      // Value blocks return tuples of code and operator order.
+      // Top-level blocks don't care about operator order.
+      line = line[0];
+    }
+    if (line) {
+      if (block.outputConnection) {
+        // This block is a naked value.  Ask the language's code generator if
+        // it wants to append a semicolon, or something.
+        line = JavaScript.scrubNakedValue(line);
+        if (JavaScript.STATEMENT_PREFIX && !block.suppressPrefixSuffix) {
+          line = JavaScript.injectId(JavaScript.STATEMENT_PREFIX, block) + line;
+        }
+        if (JavaScript.STATEMENT_SUFFIX && !block.suppressPrefixSuffix) {
+          line = line + JavaScript.injectId(JavaScript.STATEMENT_SUFFIX, block);
+        }
+      }
+      code.push(line);
+    }
+  }
+  code = code.join('\n'); // Blank line between each section.
+  code = JavaScript.finish(code);
+  // Final scrubbing of whitespace.
+  code = code.replace(/^\s+\n/, '');
+  code = code.replace(/\n\s+$/, '\n');
+  code = code.replace(/[ \t]+\n/g, '\n');
+  return code;
 };
 
 /**
