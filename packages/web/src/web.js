@@ -27,6 +27,7 @@ import {
   setThingsLog,
   setWebBluetoothButtonHandler,
   setWebHidButtonHandler,
+  getDevMode,
 } from '../../core/dist/blast_things.js';
 import {requestDevice} from '../../core/dist/blast_webBluetooth.js';
 import {
@@ -551,6 +552,13 @@ export const initUi = function (ws) {
   const devModeSwitch = document.getElementById('devModeSwitch');
   devModeSwitch.addEventListener('change', event => {
     setDevMode(event.target.checked);
+    if (getDevMode() === true) {
+      document.getElementById('runButton').style.display = 'none';
+      statusContainer.innerHTML = 'Dev mode enabled';
+    } else {
+      document.getElementById('runButton').style.display = 'inline-block';
+      statusContainer.innerHTML = 'ready';
+    }
   });
 
   workspace = ws;
