@@ -166,7 +166,7 @@
       <div class="modal-content">
         <span id ="rcClose" class="close">&times;</span>
         <h1>Please connect these devices to load the Program:</h1>
-        <hr>     
+        <hr>
         <div class="row" id="reconnect-row">
           <div class="col">
             <table id="rc-table">
@@ -193,7 +193,7 @@
       <div class="modal-content">
         <span id ="connect-close" class="close">&times;</span>
         <h1>Please select a device type from the list of implemented devices below</h1>
-        <hr>     
+        <hr>
         <div class="row" id="connect-row">
           <div class="col">
             <table id="connect-table">
@@ -212,7 +212,7 @@
           </div>
         </div>
       </div>
-    </div>    
+    </div>
 
     <!-- Debug info modal -->
     <div id="debugModal" class="modal">
@@ -220,7 +220,7 @@
         <span id ="debugClose" class="close">&times;</span>
         <h1>Debug Info:</h1>
         Please attach these Information to any issue you are reporting on <a href="https://github.com/wintechis/blast/issues">GitHub</a>:
-        <hr>     
+        <hr>
         <div class="row" id="debug-row">
           <div class="col">
             <table id="debug-table">
@@ -243,8 +243,15 @@
       </span>
     </button>
   </div>
-  <div id="version">
-    
+  <div id="devInfo">
+    <span id="version">version: #{version}</span>
+    <span style="display: block">&nbsp;</span>
+    <span id="devMode">toggle dev mode
+      <label class="switch">
+        <input type="checkbox" id="devModeSwitch">
+        <span class="slider round"></span>
+      </label>
+    </span>
   </div>
 </body>
 <script>

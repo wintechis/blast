@@ -23,12 +23,21 @@ import {
   connectWebHidDevice,
   connectedThings,
   implementedThings,
+  setDevMode,
   setThingsLog,
   setWebBluetoothButtonHandler,
   setWebHidButtonHandler,
 } from '../../core/dist/blast_things.js';
 import {requestDevice} from '../../core/dist/blast_webBluetooth.js';
-import {ASTNode, BlockSvg, constants, Events, svgResize, WorkspaceSvg, Xml} from '../../core/dist/blast_blockly_interface.js';
+import {
+  ASTNode,
+  BlockSvg,
+  constants,
+  Events,
+  svgResize,
+  WorkspaceSvg,
+  Xml,
+} from '../../core/dist/blast_blockly_interface.js';
 
 /**
  * List of tab names.
@@ -433,7 +442,7 @@ const importPrettify = function () {
   const script = document.createElement('script');
   script.setAttribute(
     'src',
-    'https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js'
+    'https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js'
   );
   document.head.appendChild(script);
 };
@@ -536,7 +545,13 @@ const openConnectModal = function (type) {
 export const initUi = function (ws) {
   // Display current version
   const version = document.getElementById('version');
-  version.textContent = `version #${rev}`;
+  version.textContent = version.textContent.replace('{version}', rev);
+
+  // Bind dev mode switch
+  const devModeSwitch = document.getElementById('devModeSwitch');
+  devModeSwitch.addEventListener('change', event => {
+    setDevMode(event.target.checked);
+  });
 
   workspace = ws;
   // Set remaining properties.

@@ -23,6 +23,11 @@ export const implementedThings: implementedThing[];
 export const connectedThings: Record<string, connectedThing>;
 
 /**
+ * Wether development mode is turned on or off.
+ */
+ export let devMode: Boolean;
+
+/**
  * Sets the 'pair via webBluetooth' button handler.
  * @param {function} handler The handler to set.
  */

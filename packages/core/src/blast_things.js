@@ -7,7 +7,7 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {addBlock, reloadToolbox} from './blast_toolbox.js';
+import {addBlock, reloadToolbox, removeBlock} from './blast_toolbox.js';
 import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
@@ -36,6 +36,37 @@ export const implementedThings = [];
  * Lists all things connected to BLAST identified by their user defined name.
  */
 export const connectedThings = new Map();
+
+/**
+ * Wether development mode is turned on or off.
+ */
+let devMode = false;
+export const setDevMode = function (value) {
+  if (value === true) {
+    // add all thing blocks to the toolbox
+    for (const thing of implementedThings) {
+      for (const block of thing.blocks) {
+        addBlock(block.type, block.category);
+      }
+    }
+    reloadToolbox();
+  } else {
+    // remove all thing blocks from the toolbox
+    for (const thing of implementedThings) {
+      for (const block of thing.blocks) {
+        removeBlock(block.type, block.category);
+      }
+    }
+    removeBlock('generic_thing', 'Things');
+
+    resetThings();
+    reloadToolbox();
+  }
+  devMode = value;
+};
+export const getDevMode = function () {
+  return devMode;
+};
 
 /**
  * Sets the 'pair via webBluetooth' button handler.
@@ -110,6 +141,15 @@ export const getWebHidDevice = function (deviceId) {
  */
 export const thingsFlyoutCategory = function (workspace) {
   const xmlList = [];
+
+  if (devMode) {
+    // add generic thing block
+    const block = Blockly.utils.xml.createElement('block');
+    block.setAttribute('type', 'generic_thing');
+    block.setAttribute('gap', 8);
+    xmlList.push(block);
+  }
+
   // get connected things
   const connectedThingBlocks = flyoutCategoryBlocks();
 
@@ -160,8 +200,7 @@ export const thingsFlyoutCategory = function (workspace) {
  */
 const flyoutCategoryBlocks = function () {
   const xmlList = {bluetooth: [], hid: []};
-
-  // add webHID devices to xmlList
+  // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
       if (thing.type === 'bluetooth' && !getRssiBlockadded) {

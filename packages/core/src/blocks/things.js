@@ -7,26 +7,11 @@
 'use strict';
 
 import Blockly from 'blockly';
-const {Blocks, FieldDropdown} = Blockly;
-import {getWebBluetoothDevices, getWebHIDDevices} from './../blast_things.js';
+const {Blocks} = Blockly;
 
-Blocks['things_webBluetooth'] = {
+Blocks['generic_thing'] = {
   init: function () {
-    this.appendDummyInput()
-      .appendField('webBluetooth device')
-      .appendField(new FieldDropdown(getWebBluetoothDevices), 'id');
-    this.setOutput(true, 'Thing');
-    this.setColour(60);
-    this.setTooltip('');
-    this.setHelpUrl('');
-  },
-};
-
-Blocks['things_webHID'] = {
-  init: function () {
-    this.appendDummyInput()
-      .appendField('HID device')
-      .appendField(new FieldDropdown(getWebHIDDevices), 'id');
+    this.appendDummyInput().appendField('generic thing');
     this.setOutput(true, 'Thing');
     this.setColour(60);
     this.setTooltip('');

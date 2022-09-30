@@ -322,8 +322,25 @@ export const addBlock = function (type, blockCategory, blockxml) {
 };
 
 /**
+ * Removes a block from the toolbox.
+ * @param {string} type The type of block to add.
+ * @param {string} blockCategory The category of the block.
+ */
+export const removeBlock = function (type, blockCategory) {
+  // Find the category and remove the block from it.
+  const category = getCategory(blockCategory);
+  if (category) {
+    category.contents = category.contents.filter(block => {
+      return block.type !== type;
+    });
+  }
+};
+
+/**
  * Reloads the toolbox
  */
 export const reloadToolbox = function () {
   getWorkspace().updateToolbox(currentToolbox);
+  // close flyout
+  getWorkspace().getFlyout().hide();
 };
