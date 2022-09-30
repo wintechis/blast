@@ -551,14 +551,24 @@ export const initUi = function (ws) {
   // Bind dev mode switch
   const devModeSwitch = document.getElementById('devModeSwitch');
   devModeSwitch.addEventListener('change', event => {
-    setDevMode(event.target.checked);
-    if (getDevMode() === true) {
+    const value = event.target.checked;
+    if (value === true) {
       document.getElementById('runButton').style.display = 'none';
       statusContainer.innerHTML = 'Dev mode enabled';
     } else {
+      if (getWorkspace().getAllBlocks().length > 0) {
+        const confirm = window.confirm(
+          'Disabling dev mode will clear your workspace, continue?'
+        );
+        if (!confirm) {
+          devModeSwitch.checked = true;
+          return;
+        }
+      }
       document.getElementById('runButton').style.display = 'inline-block';
       statusContainer.innerHTML = 'ready';
     }
+    setDevMode(value);
   });
 
   workspace = ws;

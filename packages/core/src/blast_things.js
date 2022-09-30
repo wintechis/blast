@@ -49,7 +49,6 @@ export const setDevMode = function (value) {
         addBlock(block.type, block.category);
       }
     }
-    reloadToolbox();
   } else {
     // remove all thing blocks from the toolbox
     for (const thing of implementedThings) {
@@ -59,10 +58,13 @@ export const setDevMode = function (value) {
     }
     removeBlock('generic_thing', 'Things');
 
+    // empty workspace
+    getWorkspace().clear();
+
     resetThings();
-    reloadToolbox();
   }
   devMode = value;
+  reloadToolbox();
 };
 export const getDevMode = function () {
   return devMode;

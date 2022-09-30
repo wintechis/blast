@@ -5,7 +5,7 @@
 import Blockly from 'blockly';
 
 // used in web/index.js
-export const {inject} = Blockly;
+export const {alert, inject} = Blockly;
 export const {workspaceCommentOption} = Blockly.ContextMenu;
 // used in web/web.js
 export const {
