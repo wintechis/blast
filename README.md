@@ -13,7 +13,7 @@ In order to use BLAST open a Terminal and enter the following commands:
 2. Install dependencies: `yarn install`
 3. Build BLAST: `yarn build`
 4. Host BLAST: `yarn serve`
-5. Open your Browser and navigate to `localhost:3000`
+5. Open your Browser and navigate to `https://localhost:3000`
 
 If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
 
