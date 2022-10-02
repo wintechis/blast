@@ -54,6 +54,7 @@
     "@node-wot/core": "0.8.1",
     "@node-wot/td-tools": "0.8.1",
     "@tensorflow/tfjs": "^3.18.0",
+    "@types/uritemplate": "^0.3.4",
     "babel-polyfill": "^6.26.0",
     "blockly": "8.0.2",
     "express": "^4.18.1",

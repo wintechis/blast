@@ -6,11 +6,9 @@
  */
 
 'use strict';
-
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from '../../blast_interpreter.js';
-
 /**
  * Generates JavaScript code for the things_bleLedController block.
  * @param {Blockly.Block} block the things_bleLedController block.
