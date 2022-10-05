@@ -7,7 +7,13 @@
 'use strict';
 
 import Blockly from 'blockly';
-import {addBlock, addCategoryAt, reloadToolbox, removeBlock, removeCategory} from './blast_toolbox.js';
+import {
+  addBlock,
+  addCategoryAt,
+  reloadToolbox,
+  removeBlock,
+  removeCategory,
+} from './blast_toolbox.js';
 import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
