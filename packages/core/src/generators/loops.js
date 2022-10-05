@@ -38,9 +38,7 @@ JavaScript['every_seconds'] = function (block) {
   const value =
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 1;
   const unit = block.getFieldValue('units');
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
+  const statements = JavaScript.statementToCode(block, 'statements');
 
   if (value < 0.1) {
     throwError('Event interval value must be greater than 0.1.');
@@ -55,7 +53,10 @@ JavaScript['every_seconds'] = function (block) {
     milliSeconds = value * 60 * 60 * 1000;
   }
 
-  const code = `const interval = setInterval(() => eval(async () => {${statements}}()), ${milliSeconds});
+  const code = `const interval = setInterval(
+  async () => {${statements}},
+  ${milliSeconds}
+);
 // Add interval to intervalEvents, so it can be removed when BLAST is stopped.
 intervalEvents.push(interval);\n`;
 
