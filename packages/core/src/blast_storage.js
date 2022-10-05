@@ -4,7 +4,6 @@
  * @author derwehr@gmail.com (Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
-'use strict';
 
 import {dialog, hideChaff, Xml} from 'blockly';
 import FileSaver from 'file-saver';
@@ -323,8 +322,9 @@ const generatePairButtonsDesktop_ = function (blocks, xml) {
         navigator.hid
           .requestDevice({filters})
           .then(device => {
-            if (device.length === 0)
+            if (device.length === 0) {
               throwError('Connection failed or cancelled by User.');
+            }
             // generate a unique id for the new device
             const uid =
               Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -468,8 +468,9 @@ const generatePairButtonsMobile_ = function (blocks, xml) {
         navigator.hid
           .requestDevice({filters})
           .then(device => {
-            if (device.length === 0)
+            if (device.length === 0) {
               throwError('Connection failed or cancelled by User.');
+            }
             // generate a unique id for the new device
             const uid =
               Date.now().toString(36) + Math.random().toString(36).substr(2);

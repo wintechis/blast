@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
 import {eventsInWorkspace, getWorkspace} from '../../blast_interpreter.js';
@@ -18,6 +16,7 @@ const xiaomiThermometerInstances = new Map();
 /**
  * Keeps singleton instances of XiaomiThermometers instantiated by BLAST.
  * @param {string} id the id of the XiaomiThermometer.
+ * @return {XiaomiThermometer} the instance.
  */
 const getXiaomiThermometer = function (id) {
   if (xiaomiThermometerInstances.has(id)) {
@@ -33,6 +32,7 @@ Blocks['things_xiaomiThermometer'] = {
   /**
    * Block representing a BLE RGB LED controller.
    * @this {Blockly.Block}
+   * @return {null}.
    */
   init: function () {
     this.appendDummyInput()
@@ -53,6 +53,7 @@ Blocks['things_xiaomiThermometer'] = {
   },
   /**
    * Add this block's id to the events array.
+   * @return {null}.
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
@@ -88,6 +89,7 @@ Blocks['things_xiaomiThermometer'] = {
   },
   /**
    * Remove this block's id from the events array.
+   * @return {null}.
    */
   removeFromEvents: function () {
     // remove this block from the events array.
@@ -102,6 +104,7 @@ Blocks['xiaomi_thermometer_event'] = {
   /**
    * Block for reading a property of a Xiaomi Mijia thermometer.
    * @this {Blockly.Block}
+   * @return {null}.
    */
   init: function () {
     this.appendValueInput('thing')
@@ -130,6 +133,7 @@ Blocks['xiaomi_thermometer_event'] = {
   },
   /**
    * Add this block's id to the events array.
+   * @return {null}.
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
@@ -160,6 +164,7 @@ Blocks['xiaomi_thermometer_event'] = {
   },
   /**
    * Remove this block's id from the events array.
+   * @return {null}.
    */
   removeFromEvents: function () {
     // remove this block from the events array.

@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {
@@ -117,7 +115,7 @@ JavaScript['joycon_button_events'] = function (block) {
  * Handles button pushed on a Nintendo JoyCon.
  * @param {Blockly.Block.id} blockId the things_joycon block's id.
  * @param {string} id identifier of the JoyCon device in {@link Blast.Things.webHidDevices}.
- * @param {string} onWhile whether the statement should be executed continously while the button is pressed or only once.
+ * @param {string} onWhile determines whether the statements are executed while the button is pressed or only once.
  * @param {string} button the button to handle.
  * @param {boolean} released whether the statements should be executed on release or on press.
  * @param {string} statements the statements to execute when the button is pushed.

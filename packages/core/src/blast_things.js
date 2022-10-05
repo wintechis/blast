@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 import {
   addBlock,
@@ -262,7 +260,9 @@ export const getWebBluetoothDevices = function () {
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) return [];
+  if (keysSorted.legnth === 0) {
+    return [];
+  }
 
   // build options array
   const options = [];
@@ -284,7 +284,9 @@ export const getWebHIDDevices = function () {
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) return [];
+  if (keysSorted.legnth === 0) {
+    return [];
+  }
 
   // build options array
   const options = [];

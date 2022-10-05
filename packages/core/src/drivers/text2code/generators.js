@@ -1,4 +1,3 @@
-'use strict';
 import * as tf from '@tensorflow/tfjs';
 import 'babel-polyfill';
 import inputWord2idx from './mappings/input-word2idx.js';

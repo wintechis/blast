@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import {addBlock} from './../blast_toolbox.js';
 
 // Define inner block XML for the colour_rgb block.

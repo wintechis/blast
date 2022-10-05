@@ -5,8 +5,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {Blocks, dialog, FieldTextInput} = Blockly;
 // eslint-disable-next-line node/no-missing-import

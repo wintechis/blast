@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import './display.js';
 import './events.js';
 import './functions.js';

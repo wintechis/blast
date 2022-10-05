@@ -1,5 +1,3 @@
-'use strict';
-
 import Blockly from 'blockly';
 import {addBlock} from './../../blast_toolbox.js';
 
