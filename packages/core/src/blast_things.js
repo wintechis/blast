@@ -4,10 +4,14 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
-import {addBlock, reloadToolbox, removeBlock} from './blast_toolbox.js';
+import {
+  addBlock,
+  addCategoryAt,
+  reloadToolbox,
+  removeBlock,
+  removeCategory,
+} from './blast_toolbox.js';
 import {getWorkspace, throwError} from './blast_interpreter.js';
 
 /**
@@ -49,6 +53,19 @@ export const setDevMode = function (value) {
         addBlock(block.type, block.category);
       }
     }
+    // add Server Connector category
+    const serverConnector = {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'server_add_connector'},
+        {kind: 'BLOCK', type: 'server_route'},
+        {kind: 'BLOCK', type: 'server_response'},
+        {kind: 'BLOCK', type: 'server_get_body'},
+      ],
+      name: 'Server Connector',
+      colour: '240',
+    };
+    addCategoryAt(serverConnector, 7);
   } else {
     // remove all thing blocks from the toolbox
     for (const thing of implementedThings) {
@@ -57,6 +74,7 @@ export const setDevMode = function (value) {
       }
     }
     removeBlock('generic_thing', 'Things');
+    removeCategory('Server Connector');
 
     // empty workspace
     getWorkspace().clear();
@@ -242,7 +260,9 @@ export const getWebBluetoothDevices = function () {
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) return [];
+  if (keysSorted.legnth === 0) {
+    return [];
+  }
 
   // build options array
   const options = [];
@@ -264,7 +284,9 @@ export const getWebHIDDevices = function () {
   const keysSorted = keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) return [];
+  if (keysSorted.legnth === 0) {
+    return [];
+  }
 
   // build options array
   const options = [];

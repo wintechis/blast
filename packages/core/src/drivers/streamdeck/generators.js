@@ -5,8 +5,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import StreamDeck from '@elgato-stream-deck/webhid';
@@ -113,14 +111,14 @@ globalThis['handleStreamdeck'] = async function (
     return;
   }
 
-  streamdeck.on(upDown, keyIndex => {
+  streamdeck.on(upDown, async keyIndex => {
     thingsLog(
       `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
       'hid',
       device.productName
     );
     if (keyIndex === button) {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     }
   });
 

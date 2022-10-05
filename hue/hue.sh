@@ -1,10 +1,5 @@
 #!/usr/bin/expect -f
 
-# a hue device can only be connected to one central
-# use the app to reset the device to factory setting
-# after factory reset, the device will get a new mac address
-# then, pair the device at the central using the new mac address
-
 # ./hue.sh C4:73:3C:9E:FE:CE 0 (off)
 # ./hue.sh E0:B0:58:AC:E7:F6 1 (on)
 set device [lindex $argv 0];

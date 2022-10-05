@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {addCleanUpFunction, getWorkspace} from './../../blast_interpreter.js';
@@ -76,10 +74,12 @@ globalThis['xiaomi_handleThermometer'] = async function (
     if (data) {
       const sign = data.getUint8(1) & (1 << 7);
       let temp = ((data.getUint8(1) & 0x7f) << 8) | data.getUint8(0);
-      if (sign) temp = temp - 32767;
+      if (sign) {
+        temp = temp - 32767;
+      }
       globalThis[temperatureName] = temp / 100;
       globalThis[humidityName] = data.getUint8(2);
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     }
   };
   const sub = await thermometer.subscribeEvent('measurements', handler);

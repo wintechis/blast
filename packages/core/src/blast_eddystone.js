@@ -5,8 +5,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import {read} from './blast_webBluetooth.js';
 import {readHex} from './blast_webBluetooth.js';
 import {readNumber} from './blast_webBluetooth.js';

@@ -292,9 +292,9 @@ globalThis['ruuvi_handleEvents'] = async function (
    * @param tries the current number of tries.
    * @returns the measurements.
    */
-  const getAdvertisementData = function (
+  const getAdvertisementData = async function (
     tries: number
-  ): Promise<RAWv1 | RAWv2> | void {
+  ): Promise<void | RAWv2 | RAWv1> {
     // try to get the measurements from the cache once per second for 10 seconds
     if (tries < 30) {
       const events = LEScanResults[id];
@@ -332,7 +332,7 @@ globalThis['ruuvi_handleEvents'] = async function (
     // declare parsedData in global scope
     Object.assign(globalThis, parsedData);
     // execute statements
-    eval(statements);
+        eval(`(async () => {${statements}})();`);
   }
 
   const sub = await thing.subscribeEvent('manufacturerData', null);

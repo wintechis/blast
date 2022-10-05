@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 import {throwError} from './../../blast_interpreter.js';
 
@@ -25,7 +23,7 @@ JavaScript['play_audio'] = function (block) {
 /**
  * Plays an audio file provided by URI.
  * @param {string} uri URI of the audio file to play.
- * @public
+ * @returns {Promise<void>}.
  */
 globalThis['playAudio'] = async function (uri) {
   await new Promise((resolve, reject) => {

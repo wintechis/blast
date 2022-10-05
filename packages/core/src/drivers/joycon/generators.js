@@ -4,8 +4,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {
@@ -117,7 +115,7 @@ JavaScript['joycon_button_events'] = function (block) {
  * Handles button pushed on a Nintendo JoyCon.
  * @param {Blockly.Block.id} blockId the things_joycon block's id.
  * @param {string} id identifier of the JoyCon device in {@link Blast.Things.webHidDevices}.
- * @param {string} onWhile whether the statement should be executed continously while the button is pressed or only once.
+ * @param {string} onWhile determines whether the statements are executed while the button is pressed or only once.
  * @param {string} button the button to handle.
  * @param {boolean} released whether the statements should be executed on release or on press.
  * @param {string} statements the statements to execute when the button is pushed.
@@ -191,11 +189,11 @@ globalThis['joyCon_handleButtons'] = async function (
   let lastPressed = [];
   let pressed = [];
 
-  function pollGamepads() {
+  async function pollGamepads() {
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
     const gamepadArray = [];
-    for (let i = 0; i < gamepads.length; i++) {
-      gamepadArray.push(gamepads[i]);
+    for (const gamepad of gamepads) {
+      gamepadArray.push(gamepad);
     }
     const orderedGamepads = [];
     orderedGamepads.push(
@@ -208,11 +206,10 @@ globalThis['joyCon_handleButtons'] = async function (
     lastPressed = pressed;
     pressed = [];
 
-    for (let g = 0; g < orderedGamepads.length; g++) {
-      const gp = orderedGamepads[g];
-      if (gp) {
-        for (let i = 0; i < gp.buttons.length; i++) {
-          if (gp.buttons[i].pressed) {
+    for (const gamepad of orderedGamepads) {
+      if (gamepad) {
+        for (let i = 0; i < gamepad.buttons.length; i++) {
+          if (gamepad.buttons[i].pressed) {
             let id, button;
             if (type === 'R') {
               id = i;
@@ -239,7 +236,7 @@ globalThis['joyCon_handleButtons'] = async function (
         lastPressed.indexOf(button) > -1) // and was pressed before
     ) {
       try {
-        eval(statements);
+        eval(`(async () => {${statements}})();`);
       } catch (e) {
         throwError(e);
         console.error(e);
@@ -315,7 +312,7 @@ globalThis['gamepad_handleJoystick'] = function (
     globalThis[angleName] = joystick['angle'] || 0;
 
     try {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     } catch (e) {
       throwError(e);
       console.error(e);
@@ -360,7 +357,7 @@ JavaScript['joycon_gamepad_button'] = function (block) {
  * @param {string} button the button to handle.
  * @param {string} statements the statements to execute when the button is pushed.
  */
-globalThis['gamepad_handleButton'] = function (
+globalThis['gamepad_handleButton'] = async function (
   blockId,
   id,
   button,
@@ -369,10 +366,10 @@ globalThis['gamepad_handleButton'] = function (
   const switchPro = new SwitchPro();
   switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
 
-  const handleButton = function (pressed) {
+  const handleButton = async function (pressed) {
     if (pressed[button]) {
       try {
-        eval(statements);
+        eval(`(async () => {${statements}})();`);
       } catch (e) {
         throwError(e);
         console.error(e);

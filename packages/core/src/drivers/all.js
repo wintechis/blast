@@ -2,8 +2,6 @@
  * @fileoverview Defines which thing drivers to import.
  */
 
-'use strict';
-
 import './bleRgbController/blocks.js';
 import './bleRgbController/generators.js';
 

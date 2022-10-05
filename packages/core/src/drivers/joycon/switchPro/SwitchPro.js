@@ -38,7 +38,9 @@ export default class SwitchPro {
 
   pollGamepads() {
     const gp = this._getGamepad();
-    if (!gp) return;
+    if (!gp) {
+      return;
+    }
 
     // keep track of previous teration to know if we need to emit changes
     this.prevPressed = this.pressed;
@@ -69,7 +71,9 @@ export default class SwitchPro {
   // get reference to the gamepad
   _getGamepad() {
     const gps = navigator.getGamepads ? navigator.getGamepads() : [];
-    if (gps.length === 0 || !Array.from(gps).some(gp => !!gp)) return;
+    if (gps.length === 0 || !Array.from(gps).some(gp => !!gp)) {
+      return;
+    }
 
     // the gamepad shows up twice when connected via bluetooth
     //   0: Pro Controller (STANDARD GAMEPAD)
