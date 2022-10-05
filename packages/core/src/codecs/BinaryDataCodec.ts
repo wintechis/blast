@@ -14,8 +14,6 @@ export class BLEBinaryCodec implements ContentCodec {
     parameters?: {[key: string]: string}
   ): DataSchemaValue {
 
-    console.log("LKJSDLFKJSDLFKJ")
-
     let parsed: any;
     let name_list;
     let value_list;
@@ -245,6 +243,12 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
       let buf = int2byte(params, dataValue[key]);
       // Convert Buffer back to hex
       dataValue[key] = buf.toString('hex');
+    }
+    // Fill in Hex values
+    if (params.type == 'string') {
+      if (params.format == 'hex'){
+        dataValue[key] = dataValue[key]
+      }
     }
   }
 
