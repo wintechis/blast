@@ -191,7 +191,7 @@ globalThis['joyCon_handleButtons'] = async function (
   let lastPressed = [];
   let pressed = [];
 
-  function pollGamepads() {
+  async function pollGamepads() {
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
     const gamepadArray = [];
     for (let i = 0; i < gamepads.length; i++) {
