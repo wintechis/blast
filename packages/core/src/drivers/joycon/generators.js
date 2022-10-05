@@ -194,8 +194,8 @@ globalThis['joyCon_handleButtons'] = async function (
   async function pollGamepads() {
     const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
     const gamepadArray = [];
-    for (let i = 0; i < gamepads.length; i++) {
-      gamepadArray.push(gamepads[i]);
+    for (const gamepad of gamepads) {
+      gamepadArray.push(gamepad);
     }
     const orderedGamepads = [];
     orderedGamepads.push(
@@ -208,11 +208,10 @@ globalThis['joyCon_handleButtons'] = async function (
     lastPressed = pressed;
     pressed = [];
 
-    for (let g = 0; g < orderedGamepads.length; g++) {
-      const gp = orderedGamepads[g];
-      if (gp) {
-        for (let i = 0; i < gp.buttons.length; i++) {
-          if (gp.buttons[i].pressed) {
+    for (const gamepad of orderedGamepads) {
+      if (gamepad) {
+        for (let i = 0; i < gamepad.buttons.length; i++) {
+          if (gamepad.buttons[i].pressed) {
             let id, button;
             if (type === 'R') {
               id = i;
