@@ -13,7 +13,6 @@ export class BLEBinaryCodec implements ContentCodec {
     schema: DataSchema,
     parameters?: {[key: string]: string}
   ): DataSchemaValue {
-
     let parsed: any;
     let name_list;
     let value_list;

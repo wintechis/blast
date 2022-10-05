@@ -10,9 +10,6 @@
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
-import * as core from '@node-wot/core';
-
-const {ProtocolHelpers} = core;
 
 /**
  * Generates JavaScript code for the things_HuskyDuino block.
@@ -48,10 +45,10 @@ JavaScript['huskylens_choose_algo'] = function (block) {
 JavaScript['huskylens_write_id'] = function (block) {
   const input =
     JavaScript.valueToCode(block, 'id', JavaScript.ORDER_ATOMIC) || '0';
-  const id = JavaScript.quote_('0x' + parseInt(input).toString(16));
+  const id = JavaScript.quote_(input);
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
   const code = `await huskyduino_learnId(${blockId}, ${id});\n`;
@@ -65,8 +62,8 @@ JavaScript['huskylens_write_id'] = function (block) {
  */
 JavaScript['huskylens_write_forget_flag'] = function (block) {
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
   const code = `await huskyduino_forgetAll(${blockId});\n`;
@@ -80,8 +77,8 @@ JavaScript['huskylens_write_forget_flag'] = function (block) {
  */
 JavaScript['huskylens_read_id'] = function (block) {
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
   // Assemble JavaScript into code variable.
   const code = `await huskyduino_readId(${blockId})`;
@@ -90,17 +87,17 @@ JavaScript['huskylens_read_id'] = function (block) {
 };
 
 /**
- * Generate JavaScript code for the huskylens_read_location block.
- * @param {Blockly.Block} block the huskylens_read_location block
+ * Generate JavaScript code for the huskylens_read_coordinates block.
+ * @param {Blockly.Block} block the huskylens_read_coordinates block
  * @returns {String} the generated JavaScript code
  */
-JavaScript['huskylens_read_location'] = function (block) {
+JavaScript['huskylens_read_coordinates'] = function (block) {
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
   // Assemble JavaScript into code variable.
-  const str = `await huskyduino_readLoc(${blockId})`;
+  const str = `await huskyduino_outArrreadLoc(${blockId})`;
   return [str, JavaScript.ORDER_NONE];
 };
 
@@ -117,6 +114,10 @@ globalThis['huskyduino_chooseAlgo'] = async function (blockId, value) {
   await thing.writeProperty('algorithm', value);
 };
 
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 /**
  * write face id value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
@@ -127,7 +128,9 @@ globalThis['huskyduino_learnId'] = async function (blockId, value) {
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // Write face id to thing.
-  await thing.writeProperty('id', value);
+  await thing.invokeAction('learn', value);
+  // Should wait a few seconds -> huskylens needs time to learn
+  await sleep(1500);
 };
 
 /**
@@ -140,7 +143,7 @@ globalThis['huskyduino_forgetAll'] = async function (blockId) {
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
   // invoke action.
-  await thing.invokeAction('forgetAll');
+  await thing.invokeAction('forgetAll', 'true');
 };
 
 /**
@@ -154,11 +157,12 @@ globalThis['huskyduino_readId'] = async function (blockId) {
   const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty('id');
-  const str = await ProtocolHelpers.readStreamFully(
-    interActionInput.content.body
-  );
-  if (str[0] === '[') {
-    const arr = JSON.parse(str);
+  const value = await interActionInput.value();
+
+  if (value === 'No Block') {
+    return 'No Obj recognized';
+  } else if (value[0] === '[') {
+    const arr = JSON.parse(value);
     // output is all non 0 element in the array
     const outArr = [];
     arr.forEach(item => {
@@ -170,14 +174,14 @@ globalThis['huskyduino_readId'] = async function (blockId) {
       throwError('No Recognized Obj');
     }
     return outArr;
-  } else if (str[0] === '0') {
+  } else if (value[0] === '0') {
     throwError('No Recognized Obj');
-  } else if (str[0] >= 1 && str[0] <= 9) {
-    const loc = str.indexOf('(');
-    const id = parseInt(str.slice(0, loc));
+  } else if (value[0] >= 1 && value[0] <= 9) {
+    const loc = value.indexOf('(');
+    const id = parseInt(value.slice(0, loc));
     return [id];
   } else {
-    throwError(str);
+    throwError(value);
   }
 };
 
@@ -192,23 +196,21 @@ globalThis['huskyduino_outArrreadLoc'] = async function (blockId) {
   const thing = block.thing;
   // Read property data
   const interActionInput = await thing.readProperty('id');
-  const str = await ProtocolHelpers.readStreamFully(
-    interActionInput.content.body
-  );
+  const value = await interActionInput.value();
 
-  if (str[0] === '[') {
+  if (value[0] === '[') {
     throwError('Recognized Multi Objs');
-  } else if (str[0] === '0') {
+  } else if (value[0] === '0') {
     throwError('No Recognized Obj');
-  } else if (str[0] >= 1 && str[0] <= 9) {
-    const loc1 = str.indexOf('(');
-    const loc2 = str.indexOf(',');
-    const loc3 = str.indexOf(')');
-    const id = parseInt(str.slice(0, loc1));
-    const x = parseInt(str.slice(loc1 + 1, loc2));
-    const y = parseInt(str.slice(loc2 + 1, loc3));
+  } else if (value[0] >= 1 && value[0] <= 9) {
+    const loc1 = value.indexOf('(');
+    const loc2 = value.indexOf(',');
+    const loc3 = value.indexOf(')');
+    const id = parseInt(value.slice(0, loc1));
+    const x = parseInt(value.slice(loc1 + 1, loc2));
+    const y = parseInt(value.slice(loc2 + 1, loc3));
     return [id, x, y];
   } else {
-    throwError(str);
+    throwError(value);
   }
 };

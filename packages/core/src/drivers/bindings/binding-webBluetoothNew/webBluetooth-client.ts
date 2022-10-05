@@ -7,59 +7,155 @@ import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {
   getDeviceById,
-  readHex,
-  readNumber,
-  readText,
   startLEScan,
   stopLEScan,
   subscribe,
   unsubscribe,
-  writeWithoutResponse,
-  writeWithResponse,
-} from '../../../blast_webBluetooth.js';
-import {
-  eddystoneProperties,
-  readEddystoneProperty,
-  writeEddystoneProperty,
-} from '../../../blast_eddystone.js';
+  getCharacteristic,
+} from '../../../webBluetooth.js';
 import {WebBluetoothForm} from './webBluetooth.js';
 import {
-  readableStreamToString,
   convertToNodeReadable,
+  readableStreamToBuffer,
 } from '../binding-helpers.js';
+import {throwError} from '../../../blast_interpreter.js';
+import {getThingsLog} from '../../../blast_things.js';
 
 export default class WebBluetoothClientNew implements ProtocolClient {
   public toString(): string {
     return '[WebBluetoothClientNew]';
   }
-  public readResource(form: WebBluetoothForm): Promise<Content> {
-    //const res = this.deconstructForm(form);
-    console.debug("SDLKFJLKSDFJLKDSJF")
-    const path = form.href.split('//')[1];
-    const deviceId = form['wbt:id'];
-    const deconstructedPath = this.deconstructPath(path);
-    const {serviceId, characteristicId, operation} = deconstructedPath;
+  public async readResource(form: WebBluetoothForm): Promise<Content> {
+    const deconstructedForm = this.deconstructForm(form);
+    let value: any;
 
-    return this.read(deviceId, serviceId, characteristicId, operation);
+    const characteristic = await getCharacteristic(
+      deconstructedForm.deviceId,
+      deconstructedForm.serviceId,
+      deconstructedForm.characteristicId
+    );
+
+    try {
+      const thingsLog = getThingsLog();
+      thingsLog(
+        `Invoke <code>ReadValue</code> on characteristic <code>${deconstructedForm.characteristicId}</code>` +
+          ` from service <code>${deconstructedForm.serviceId}</code>`,
+        'Bluetooth',
+        deconstructedForm.deviceId
+      );
+      value = await characteristic.readValue();
+      thingsLog(
+        `Finished <code>ReadValue</code> on characteristic <code>${deconstructedForm.characteristicId}</code>` +
+          ` from service <code>${
+            deconstructedForm.serviceId
+          }</code> - value: <code>${value.toString()}</code>`,
+        'Bluetooth',
+        deconstructedForm.deviceId
+      );
+    } catch (error) {
+      console.error(error);
+      throwError(
+        `Error reading from Bluetooth device ${deconstructedForm.deviceId}`
+      );
+    }
+
+    const buff = new Uint8Array(value.buffer);
+    // Convert to readable
+    const body = convertToNodeReadable(buff);
+
+    // Return
+    return {
+      type: form.contentType || 'application/x.binary-data-stream',
+      body: body,
+    };
   }
 
-  public writeResource(
+  public async writeResource(
     form: WebBluetoothForm,
     content: Content
   ): Promise<void> {
+    // Extract information out of form
     const deconstructedForm = this.deconstructForm(form);
-    const deviceId = deconstructedForm.deviceId;
-    const operation = deconstructedForm.ble_operation
-    const serviceId = deconstructedForm.serviceId
-    const characteristicId = deconstructedForm.characteristicId
 
-    return this.write(
-      deviceId,
-      serviceId,
-      characteristicId,
-      operation,
-      content
+    let buffer;
+    //Convert readableStreamToBuffer
+    if (typeof content != 'undefined') {
+      buffer = await readableStreamToBuffer(content.body);
+    } else {
+      // If content not definied write buffer < 00 >
+      buffer = Buffer.alloc(1);
+    }
+
+    const characteristic = await getCharacteristic(
+      deconstructedForm.deviceId,
+      deconstructedForm.serviceId,
+      deconstructedForm.characteristicId
     );
+
+    // Select what operation should be executed
+    switch (deconstructedForm.ble_operation) {
+      case 'sbo:write-without-response':
+        try {
+          const thingsLog = getThingsLog();
+          thingsLog(
+            'Invoke <code>WriteValueWithoutResponse</code> on characteristic ' +
+              `<code>${
+                deconstructedForm.characteristicId
+              }</code> with value <code>${buffer.toString()}</code>`,
+            'Bluetooth',
+            deconstructedForm.deviceId
+          );
+          await characteristic.writeValueWithoutResponse(buffer);
+          thingsLog(
+            'Finished <code>WriteValueWithoutResponse</code> on characteristic ' +
+              `<code>${
+                deconstructedForm.characteristicId
+              }</code> with value <code>${buffer.toString()}</code>`,
+            'Bluetooth',
+            deconstructedForm.deviceId
+          );
+        } catch (error) {
+          const errorMsg =
+            'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+          console.error(error);
+          throwError(errorMsg);
+        }
+        break;
+
+      case 'sbo:write':
+        try {
+          const thingsLog = getThingsLog();
+          thingsLog(
+            'Invoke <code>WriteValueWithResponse</code> on characteristic ' +
+              `<code>${
+                deconstructedForm.characteristicId
+              }</code> with value <code>${buffer.toString()}</code>`,
+            'Bluetooth',
+            deconstructedForm.deviceId
+          );
+          await characteristic.writeValueWithResponse(buffer);
+          thingsLog(
+            'Finished <code>WriteValueWithResponse</code> on characteristic ' +
+              `<code>${
+                deconstructedForm.characteristicId
+              }</code> with value <code>${buffer.toString()}</code>`,
+            'Bluetooth',
+            deconstructedForm.deviceId
+          );
+        } catch (error) {
+          const errorMsg =
+            'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
+          console.error(error);
+          throwError(errorMsg);
+        }
+        break;
+
+      default: {
+        throw new Error(
+          `[binding-Bluetooth] unknown operation ${deconstructedForm.operation}`
+        );
+      }
+    }
   }
 
   public invokeResource(
@@ -144,19 +240,47 @@ export default class WebBluetoothClientNew implements ProtocolClient {
   deconstructForm = function (form: WebBluetoothForm) {
     const deconstructedForm: Record<string, any> = {};
 
-    console.log(form);
-
     // Remove gatt://
     deconstructedForm.path = form.href.split('//')[1];
 
+    // If deviceID contains '/' it gets also split.
+    // path string is check if it is a UUID; everything else is added together to deviceID
+    let path_elements = deconstructedForm.path.split('/');
+
+    let deviceId;
+    let characteristicId;
+    let serviceId;
+
+    if (path_elements.length != 3) {
+      const regex = new RegExp(
+        '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+      );
+
+      deviceId = path_elements[0];
+      for (let i = 1; i < path_elements.length; i++) {
+        if (regex.test(path_elements[i]) == false) {
+          deviceId = deviceId + '/' + path_elements[i];
+        } else {
+          // second last element is service id
+          if (i == path_elements.length - 2) {
+            serviceId = path_elements[i];
+          }
+          // Last element is characteristic
+          if (i == path_elements.length - 1) {
+            characteristicId = path_elements[i];
+          }
+        }
+      }
+    }
+
     // DeviceId
-    deconstructedForm.deviceId = deconstructedForm.path.split('/')[0];
+    deconstructedForm.deviceId = deviceId;
 
     // Extract serviceId
-    deconstructedForm.serviceId = deconstructedForm.path.split('/')[1];
+    deconstructedForm.serviceId = serviceId;
 
     // Extract characteristicId
-    deconstructedForm.characteristicId = deconstructedForm.path.split('/')[2];
+    deconstructedForm.characteristicId = characteristicId;
 
     // Extract operation -> e.g. readproperty; writeproperty
     deconstructedForm.operation = form.op;
@@ -166,109 +290,6 @@ export default class WebBluetoothClientNew implements ProtocolClient {
 
     return deconstructedForm;
   };
-
-  private async read(
-    deviceId: string,
-    serviceId: BluetoothServiceUUID,
-    characteristicId: BluetoothCharacteristicUUID,
-    operation = 'readText'
-  ) {
-    let property: string;
-    let value = '';
-    switch (operation) {
-      case 'readText':
-        console.debug(
-          '[binding-webBluetooth]',
-          `invoking readText with serviceId ${serviceId} characteristicId ${characteristicId}`
-        );
-        value = await readText(deviceId, serviceId, characteristicId);
-        break;
-      case 'readNumber':
-        console.debug(
-          '[binding-webBluetooth]',
-          `invoking readNumber with serviceId ${serviceId} characteristicId ${characteristicId}`
-        );
-        value = (
-          await readNumber(deviceId, serviceId, characteristicId)
-        ).toString();
-        break;
-      case 'readHex':
-        console.debug(
-          '[binding-webBluetooth]',
-          `invoking readHex with serviceId ${serviceId} characteristicId ${characteristicId}`
-        );
-        value = await readHex(deviceId, serviceId, characteristicId);
-        break;
-      case 'readEddystoneProperty':
-        property = eddystoneProperties.get(characteristicId) || '';
-        if (property) {
-          console.debug(
-            '[binding-webBluetooth]',
-            `invoking readEddystoneProperty with property ${property}`
-          );
-          value = (await readEddystoneProperty(deviceId, property)).toString();
-        }
-        break;
-      default: {
-        throw new Error(
-          `[binding-webBluetooth] unknown return format ${operation}`
-        );
-      }
-    }
-    const readable = convertToNodeReadable(value);
-    return {
-      type: 'text/plain',
-      body: readable,
-    };
-  }
-
-  private async write(
-    deviceId: string,
-    serviceId: BluetoothServiceUUID,
-    characteristicId: BluetoothCharacteristicUUID,
-    operation: string,
-    content: Content
-  ) {
-    const value = await readableStreamToString(content.body);
-    let property = '';
-
-    switch (operation) {
-      case 'sbo:write':
-        console.debug(
-          '[binding-webBluetooth]',
-          `invoking writeWithResponse with value ${value}`
-        );
-        await writeWithResponse(deviceId, serviceId, characteristicId, value);
-        break;
-      case 'writeWithoutResponse':
-        console.debug(
-          '[binding-webBluetooth]',
-          `invoking writeWithoutResponse with value ${value}`
-        );
-        await writeWithoutResponse(
-          deviceId,
-          serviceId,
-          characteristicId,
-          value
-        );
-        break;
-      case 'writeEddystoneProperty':
-        property = eddystoneProperties.get(characteristicId) || '';
-        if (property) {
-          console.debug(
-            '[binding-webBluetooth]',
-            `invoking writeEddystoneProperty on property ${property} with value ${value}`
-          );
-          await writeEddystoneProperty(deviceId, property, value);
-        }
-        break;
-      default: {
-        throw new Error(
-          `[binding-webBluetooth] unknown operation ${operation}`
-        );
-      }
-    }
-  }
 
   private async subscribeToCharacteristic(
     form: WebBluetoothForm,
