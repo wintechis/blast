@@ -1,7 +1,10 @@
 #!/usr/bin/expect -f
 
-# ./hue.sh C4:73:3C:9E:FE:CE 0 (off)
-# ./hue.sh E0:B0:58:AC:E7:F6 1 (on)
+# see https://gist.github.com/simont77/3f4d4330fa55b83f8ca96388d9004e7d
+
+# ./eve-flare.sh FE:6E:56:8E:23:F9 0 (off)
+# ./eve-flare.sh FE:6E:56:8E:23:F9 1 (on)
+
 set device [lindex $argv 0];
 set on [lindex $argv 1];
 
@@ -19,15 +22,15 @@ expect "Discovering: no"
 send -- "connect $device\r"
 expect "Connection successful"
 send -- "menu gatt\r"
-expect "Hue"
+expect "Eve"
 sleep 1
 send -- "select-attribute 932c32bd-0002-47a2-835a-a8d455b859dd\r"
-expect "Hue"
+expect "service"
 send -- "write $on\r"
-expect "Hue"
+expect "Eve"
 sleep 1
 send -- "back\r"
-expect "Hue"
+expect "Eve"
 send -- "disconnect\r"
 expect "#"
 send -- "exit\r"
