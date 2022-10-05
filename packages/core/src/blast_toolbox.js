@@ -129,12 +129,6 @@ const defaultToolbox = {
     {
       kind: 'CATEGORY',
       contents: [],
-      name: 'Server Connector',
-      colour: '240',
-    },
-    {
-      kind: 'CATEGORY',
-      contents: [],
       name: 'Queries',
       colour: '180',
     },
@@ -300,6 +294,39 @@ export const getCategory = function (name) {
     }
     return false;
   });
+};
+
+/**
+ * Adds a categroy at index to the toolbox.
+ * @param {Object} category The category to add.
+ * @param {number} index The index of the category.
+ * @returns {Object} the category
+ */
+export const addCategoryAt = function (category, index) {
+  const categoryExists = getCategory(category.name);
+  if (categoryExists) {
+    // Category already exists, so we replace it.
+    currentToolbox.contents.splice(
+      currentToolbox.contents.indexOf(categoryExists),
+      1
+    );
+  }
+  currentToolbox.contents.splice(index, 0, category);
+  return category;
+};
+
+/**
+ * Removes a category from the toolbox.
+ * @param {string} name The name of the category.
+ */
+export const removeCategory = function (name) {
+  const category = getCategory(name);
+  if (category) {
+    currentToolbox.contents.splice(
+      currentToolbox.contents.indexOf(category),
+      1
+    );
+  }
 };
 
 /**
