@@ -83,22 +83,22 @@ JavaScript['server_route'] = function (block) {
 globalThis['addRoute'] = function (route, operation, statements, app) {
   if (operation === 'get') {
     app.get(route, (req, res) => {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     });
   }
   if (operation === 'put') {
     app.put(route, (req, res) => {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     });
   }
   if (operation === 'post') {
     app.post(route, (req, res) => {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     });
   }
   if (operation === 'delete') {
     app.delete(route, (req, res) => {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     });
   }
 };

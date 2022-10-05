@@ -79,7 +79,7 @@ globalThis['xiaomi_handleThermometer'] = async function (
       if (sign) temp = temp - 32767;
       globalThis[temperatureName] = temp / 100;
       globalThis[humidityName] = data.getUint8(2);
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     }
   };
   const sub = await thermometer.subscribeEvent('measurements', handler);

@@ -239,7 +239,7 @@ globalThis['joyCon_handleButtons'] = async function (
         lastPressed.indexOf(button) > -1) // and was pressed before
     ) {
       try {
-        eval(statements);
+        eval(`(async () => {${statements}})();`);
       } catch (e) {
         throwError(e);
         console.error(e);
@@ -315,7 +315,7 @@ globalThis['gamepad_handleJoystick'] = function (
     globalThis[angleName] = joystick['angle'] || 0;
 
     try {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     } catch (e) {
       throwError(e);
       console.error(e);
@@ -360,7 +360,7 @@ JavaScript['joycon_gamepad_button'] = function (block) {
  * @param {string} button the button to handle.
  * @param {string} statements the statements to execute when the button is pushed.
  */
-globalThis['gamepad_handleButton'] = function (
+globalThis['gamepad_handleButton'] = async function (
   blockId,
   id,
   button,
@@ -369,10 +369,10 @@ globalThis['gamepad_handleButton'] = function (
   const switchPro = new SwitchPro();
   switchPro.interval = setInterval(switchPro.pollGamepads.bind(switchPro), 200);
 
-  const handleButton = function (pressed) {
+  const handleButton = async function (pressed) {
     if (pressed[button]) {
       try {
-        eval(statements);
+        eval(`(async () => {${statements}})();`);
       } catch (e) {
         throwError(e);
         console.error(e);

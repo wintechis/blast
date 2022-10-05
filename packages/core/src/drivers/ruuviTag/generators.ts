@@ -332,7 +332,7 @@ globalThis['ruuvi_handleEvents'] = async function (
     // declare parsedData in global scope
     Object.assign(globalThis, parsedData);
     // execute statements
-    eval(statements);
+        eval(`(async () => {${statements}})();`);
   }
 
   const sub = await thing.subscribeEvent('manufacturerData', null);

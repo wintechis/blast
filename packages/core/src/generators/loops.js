@@ -55,7 +55,7 @@ JavaScript['every_seconds'] = function (block) {
     milliSeconds = value * 60 * 60 * 1000;
   }
 
-  const code = `const interval = setInterval(() => eval(${statements}), ${milliSeconds});
+  const code = `const interval = setInterval(() => eval(async () => {${statements}}()), ${milliSeconds});
 // Add interval to intervalEvents, so it can be removed when BLAST is stopped.
 intervalEvents.push(interval);\n`;
 

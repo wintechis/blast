@@ -120,7 +120,7 @@ globalThis['handleStreamdeck'] = async function (
       device.productName
     );
     if (keyIndex === button) {
-      eval(statements);
+      eval(`(async () => {${statements}})();`);
     }
   });
 
