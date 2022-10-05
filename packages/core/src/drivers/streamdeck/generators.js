@@ -113,7 +113,7 @@ globalThis['handleStreamdeck'] = async function (
     return;
   }
 
-  streamdeck.on(upDown, keyIndex => {
+  streamdeck.on(upDown, async keyIndex => {
     thingsLog(
       `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
       'hid',
