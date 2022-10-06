@@ -6,8 +6,9 @@
  */
 
 import Blockly from 'blockly';
-const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from '../../blast_interpreter.js';
+
+const {JavaScript} = Blockly;
 
 /**
  * Generates JavaScript code for the things_bleLedController block.

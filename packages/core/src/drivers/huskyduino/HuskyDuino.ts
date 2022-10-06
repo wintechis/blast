@@ -6,79 +6,124 @@ export default class HuskyDuino {
 
   async init(webBluetoothId: string) {
     const td: WoT.ThingDescription = {
-      '@context': ['https://www.w3.org/2019/wot/td/v1'],
-      '@type': ['Thing'],
-      id: 'blast:bluetooth:HuskyDuino',
+      '@context': [
+        'https://www.w3.org/2019/wot/td/v1',
+        'https://www.w3.org/2022/wot/td/v1.1',
+        {
+          sbo: 'http://example.org/simple-bluetooth-ontology#',
+          bdo: 'http://example.org/binary-data-ontology#',
+        },
+        {'@language': 'en'},
+      ],
       title: 'HuskyDuino',
-      description: 'A HuskyLens interface running on Arduino',
+      description: 'A HuskyLens interface running on Arduino.',
       securityDefinitions: {
         nosec_sc: {
           scheme: 'nosec',
         },
       },
-      security: 'nosec_sc',
+      '@type': 'Thing',
+      security: ['nosec_sc'],
+
+      'sbo:hasGAPRole': 'sbo:Peripheral',
+      'sbo:isConnectable': true,
+      'sbo:hasAdvertisingIntervall': {
+        'qudt:numericValue': 200,
+        'qutdUnit:unit': 'qudtUnit:MilliSEC',
+      },
+
       properties: {
         algorithm: {
-          description: 'The currently active algorithm',
-          type: 'number',
+          type: 'integer',
+          observable: false,
           readOnly: false,
           writeOnly: false,
+          description: 'The currently active algorithm',
+
+          minimum: 1,
+          maximum: 7,
+
+          'bdo:bytelength': 1,
           forms: [
             {
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/readNumber',
-              'wbt:id': webBluetoothId,
+              'sbo:methodName': 'sbo:read',
+              contentType: 'application/x.binary-data-stream',
             },
             {
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
               op: 'writeproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
-              'wbt:id': webBluetoothId,
+              'sbo:methodName': 'sbo:write-without-response',
+              contentType: 'application/x.binary-data-stream',
             },
           ],
         },
         id: {
-          description: 'The ID of the face or object',
           type: 'string',
-          readOnly: false,
+          observable: false,
+          readOnly: true,
           writeOnly: false,
+          description: 'The ID of the face or object',
+
           forms: [
             {
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003/readText',
-              'wbt:id': webBluetoothId,
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
-              'wbt:id': webBluetoothId,
+              'sbo:methodName': 'sbo:read',
+              contentType: 'application/x.binary-data-stream',
             },
           ],
         },
         location: {
-          description: 'The location of the face or object',
           type: 'string',
+          observable: false,
           readOnly: true,
           writeOnly: false,
+          description: 'The location of the face or object',
+
           forms: [
             {
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003/readText',
-              'wbt:id': webBluetoothId,
+              'sbo:methodName': 'sbo:read',
+              contentType: 'application/x.binary-data-stream',
             },
           ],
         },
       },
       actions: {
         forgetAll: {
-          title: 'Forget all faces and objects',
           description: 'Forget all faces and objects',
           input: {
-            type: 'null',
+            type: 'string',
+            enum: ['true'],
           },
           forms: [
             {
-              href: 'gatt://5be35d20-f9b0-11eb-9a03-0242ac130003/5be361b8-f9b0-11eb-9a03-0242ac130003/writeWithoutResponse',
-              'wbt:id': webBluetoothId,
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be361b8-f9b0-11eb-9a03-0242ac130003`,
+              op: 'invokeaction',
+              'sbo:methodName': 'sbo:write-without-response',
+              contentType: 'application/x.binary-data-stream',
+            },
+          ],
+        },
+
+        learn: {
+          description: 'Learn a new face or object.',
+          input: {
+            type: 'integer',
+            minimum: 0,
+            maximum: 255,
+            'bdo:bytelength': 1,
+            description: 'The ID of the face or object to learn.',
+          },
+          forms: [
+            {
+              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003`,
+              op: 'invokeaction',
+              'sbo:methodName': 'sbo:write-without-response',
+              contentType: 'application/x.binary-data-stream',
             },
           ],
         },

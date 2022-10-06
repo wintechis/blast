@@ -30,6 +30,7 @@ module.exports = {
     },
     globalObject: 'this',
   },
+  devtool: 'source-map',
   mode: 'development',
   plugins: [
     new ProvidePlugin({

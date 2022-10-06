@@ -1,6 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
 import {WebBluetoothClientFactory} from './bindings/binding-webBluetooth/webBluetooth.js';
+import {WebBluetoothClientFactoryNew} from './bindings/binding-webBluetoothNew/webBluetooth.js';
 import {WebHidClientFactory} from './bindings/binding-webHid/webHid.js';
 
 let servient: Servient;
@@ -18,6 +19,7 @@ export const getServient = function (): Servient {
     }
     servient.addClientFactory(new WebBluetoothClientFactory());
     servient.addClientFactory(new WebHidClientFactory());
+    servient.addClientFactory(new WebBluetoothClientFactoryNew());
   }
   return servient;
 };

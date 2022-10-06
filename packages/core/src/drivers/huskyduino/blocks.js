@@ -64,7 +64,7 @@ Blocks['huskylens_choose_algo'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('write algorithm property', 'label')
+      .appendField('activate algorithm', 'label')
       .appendField(
         new FieldDropdown([
           ['Face Recognition', '0x01'],
@@ -77,7 +77,7 @@ Blocks['huskylens_choose_algo'] = {
         ]),
         'algorithm'
       )
-      .appendField('to HuskyDuino', 'label');
+      .appendField('on', 'label');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(255);
@@ -102,14 +102,12 @@ Blocks['huskylens_write_id'] = {
   init: function () {
     this.appendValueInput('id')
       .setCheck('Number')
-      .appendField('write id property', 'label');
-    this.appendValueInput('thing')
-      .setCheck('Thing')
-      .appendField('to HuskyDuino', 'label');
+      .appendField('learn visible object using ID', 'label');
+    this.appendValueInput('thing').setCheck('Thing').appendField('on', 'label');
     this.setInputsInline(true);
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(255);
+    this.setColour(0);
     this.setTooltip(
       'Sets the ID of the object currently on camera. ID shoud be a value between 1 and 255'
     );
@@ -142,17 +140,13 @@ const HUSKYLENS_WRITE_ID_XML = `
 
 Blocks['huskylens_write_forget_flag'] = {
   init: function () {
-    this.appendValueInput('forgetFlag')
-      .setCheck('Boolean')
-      .appendField('write forget flag property', 'label');
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('to HuskyDuino', 'label');
-    this.setInputsInline(true);
+      .appendField('forget all learned faces and objects on', 'label');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
-    this.setColour(255);
-    this.setTooltip('forget all values of the currently selected algorithm');
+    this.setColour(0);
+    this.setTooltip('Forget all values of the currently selected algorithm');
     this.setHelpUrl('');
   },
 
@@ -169,22 +163,11 @@ Blocks['huskylens_write_forget_flag'] = {
   },
 };
 
-// Define inner blocks XML for the huskylens_write_forget_flag block.
-const HUSKYLENS_FORGET_FLAG_XML = `
-<block type="huskylens_write_forget_flag">
-  <value name="forgetFlag">
-    <block type="logic_boolean">
-      <field name="BOOL">TRUE</field>
-    </block>
-  </value>
-</block>
-`;
-
 Blocks['huskylens_read_id'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('read ID property of object(s) in HuskyDuino', 'label');
+      .appendField('read ID(s) of visible object(s) on', 'label');
     this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip(
@@ -206,18 +189,15 @@ Blocks['huskylens_read_id'] = {
   },
 };
 
-Blocks['huskylens_read_location'] = {
+Blocks['huskylens_read_coordinates'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField(
-        'read location property of one object in HuskyDuino',
-        'label'
-      );
+      .appendField('read coordinates of visible object(s) on', 'label');
     this.setOutput(true, 'Array');
     this.setColour(255);
     this.setTooltip(
-      'returns ID and location of one object visible to the HuskyLens'
+      'returns ID and coordinates of one object visible to the HuskyLens'
     );
     this.setHelpUrl('');
   },
@@ -247,20 +227,19 @@ implementedThings.push({
     },
     {
       type: 'huskylens_write_id',
-      category: 'Properties',
+      category: 'Actions',
       XML: HUSKYLENS_WRITE_ID_XML,
     },
     {
       type: 'huskylens_write_forget_flag',
-      category: 'Properties',
-      XML: HUSKYLENS_FORGET_FLAG_XML,
+      category: 'Actions',
     },
     {
       type: 'huskylens_read_id',
       category: 'Properties',
     },
     {
-      type: 'huskylens_read_location',
+      type: 'huskylens_read_coordinates',
       category: 'Properties',
     },
   ],
