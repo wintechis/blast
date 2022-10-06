@@ -1,3 +1,8 @@
+/**
+ * @fileoverview Blocks definitions for blocks interacting with the SpheroMini.
+ * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
+ */
+
 import {implementedThings} from '../../blast_things.js';
 import {
   UUID_SPHERO_SERVICE,
@@ -8,7 +13,31 @@ import SpheroBolt from './lib/spheroBolt.js';
 import Blockly from 'blockly';
 const {Blocks, FieldTextInput} = Blockly;
 
-const spheroInstances = new Map();
+// In order to dynamically add a calibration button to the toolbox, we need to
+// subscribe to the instantiated SpheroMinis.
+class ObservableMap extends Map {
+  constructor() {
+    super();
+    this.observers = [];
+  }
+  notify() {
+    this.observers.forEach(observer => observer());
+  }
+  subscribe(observer) {
+    this.observers.push(observer);
+  }
+  unsubscribe(observer) {
+    this.observers = this.observers.filter(obs => obs !== observer);
+  }
+
+  set(key, value) {
+    super.set(key, value);
+    this.notify();
+  }
+}
+
+export const spheroInstances = new Map();
+export const spheroIds = new ObservableMap();
 
 /**
  * Keeps singleton instances of SpheroMinis instantiated by BLAST.
@@ -54,6 +83,7 @@ Blocks['things_spheroMini'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       this.thing = getSpheroMini(this.getFieldValue('id'));
+      spheroIds.set(this.getFieldValue('name'), this.getFieldValue('id'));
     }
   },
 };

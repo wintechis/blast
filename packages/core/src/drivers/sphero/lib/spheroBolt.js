@@ -388,6 +388,16 @@ export default class SpheroBolt {
     this.queueCommand(command);
   }
 
+  setBackLedIntensity(intensity) {
+    const commandInfo = {
+      deviceId: DeviceId.userIO,
+      commandId: UserIOCommandIds.allLEDs,
+      data: [0x00, 0x01, intensity],
+    };
+    const command = this.createCommand(commandInfo);
+    this.queueCommand(command);
+  }
+
   /* Sets the color of the back LED */
   setBackLedColor(r, g, b) {
     const commandInfo = {
@@ -694,7 +704,6 @@ export default class SpheroBolt {
 
   /* Prints the status of a command */
   printCommandStatus(command) {
-    console.log(command);
     switch (command.data[0]) {
       case ApiErrors.success:
         //console.log('Command succefully executed!');

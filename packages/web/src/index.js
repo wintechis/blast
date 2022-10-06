@@ -6,7 +6,10 @@
  */
 'use strict';
 
-import {inject, workspaceCommentOption} from '../../core/dist//blast_blockly_interface.js';
+import {
+  inject,
+  workspaceCommentOption,
+} from '../../core/dist//blast_blockly_interface.js';
 import {currentToolbox} from '../../core/dist/blast_toolbox.js';
 import {downloadScreenshot} from './screenshot.js';
 import {statesFlyoutCategory} from '../../core/dist/blast_states.js';
@@ -17,6 +20,8 @@ import {load} from '../../core/dist/blast_storage.js';
 import {bindClick} from './web.js';
 import {thingsFlyoutCategory} from '../../core/dist/blast_things.js';
 import {getStdInfo} from '../../core/dist/blast_interpreter.js';
+import {spheroIds} from '../../core/dist/drivers/sphero/blocks.js';
+import {addCalibrateButton} from './spheroCalibration.js';
 
 // import block blast files to include them in bundled code.
 import '../../core/dist/blocks/all.js';
@@ -106,6 +111,8 @@ const init = function () {
   // Display output hint
   const stdInfo = getStdInfo();
   stdInfo('Actionblock output will be displayed here');
+
+  spheroIds.subscribe(addCalibrateButton);
 };
 
 // initialize blast when page dom is loaded
