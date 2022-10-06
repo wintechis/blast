@@ -93,7 +93,7 @@ export default class WebBluetoothClientNew implements ProtocolClient {
     );
 
     // Select what operation should be executed
-    switch (deconstructedForm.ble_operation) {
+    switch (deconstructedForm.bleOperation) {
       case 'sbo:write-without-response':
         try {
           const thingsLog = getThingsLog();
@@ -245,29 +245,29 @@ export default class WebBluetoothClientNew implements ProtocolClient {
 
     // If deviceID contains '/' it gets also split.
     // path string is check if it is a UUID; everything else is added together to deviceID
-    let path_elements = deconstructedForm.path.split('/');
+    let pathElements = deconstructedForm.path.split('/');
 
     let deviceId;
     let characteristicId;
     let serviceId;
 
-    if (path_elements.length != 3) {
+    if (pathElements.length != 3) {
       const regex = new RegExp(
         '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
       );
 
-      deviceId = path_elements[0];
-      for (let i = 1; i < path_elements.length; i++) {
-        if (regex.test(path_elements[i]) == false) {
-          deviceId = deviceId + '/' + path_elements[i];
+      deviceId = pathElements[0];
+      for (let i = 1; i < pathElements.length; i++) {
+        if (regex.test(pathElements[i]) == false) {
+          deviceId = deviceId + '/' + pathElements[i];
         } else {
           // second last element is service id
-          if (i == path_elements.length - 2) {
-            serviceId = path_elements[i];
+          if (i == pathElements.length - 2) {
+            serviceId = pathElements[i];
           }
           // Last element is characteristic
-          if (i == path_elements.length - 1) {
-            characteristicId = path_elements[i];
+          if (i == pathElements.length - 1) {
+            characteristicId = pathElements[i];
           }
         }
       }
@@ -286,7 +286,7 @@ export default class WebBluetoothClientNew implements ProtocolClient {
     deconstructedForm.operation = form.op;
 
     // Get BLE operation type
-    deconstructedForm.ble_operation = form['sbo:methodName'];
+    deconstructedForm.bleOperation = form['sbo:methodName'];
 
     return deconstructedForm;
   };

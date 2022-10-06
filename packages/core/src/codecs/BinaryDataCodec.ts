@@ -2,45 +2,51 @@ import {ContentCodec} from '@node-wot/core';
 import {DataSchema, DataSchemaValue} from 'wot-typescript-definitions';
 import * as UriTemplate from 'uritemplate';
 
-export class BLEBinaryCodec implements ContentCodec {
+export class BinaryDataStreamCodec implements ContentCodec {
   getMediaType(): string {
     return 'application/x.binary-data-stream';
   }
 
-  // Convert bytes to specified value
+  /**
+   * Convert received bytes to concrete value.
+   * @param {Buffer} bytes The received binary buffer.
+   * @param {DataSchema} schema The schema information of the Thing Description for decoding.
+   * @param {[key: string]: string} parameters Additonal parameters; not used in this codec.
+   * @returns {DataSchemaValue} Decoded value.
+   */
   bytesToValue(
     bytes: Buffer,
     schema: DataSchema,
     parameters?: {[key: string]: string}
   ): DataSchemaValue {
     let parsed: any;
-    let name_list;
-    let value_list;
+    let nameList;
+    let valueList;
 
     if (typeof schema['bdo:pattern'] != 'undefined') {
       // Pattern
-      const result_arr = readPattern(schema, bytes);
-      name_list = result_arr[0];
-      value_list = result_arr[1];
-      let decoded_result_arr = [];
-      for (let i = 0; i < name_list.length; i++) {
+      const resultArr = readPattern(schema, bytes);
+      nameList = resultArr[0];
+      valueList = resultArr[1];
+      let decodedResultArr = [];
+      for (let i = 0; i < nameList.length; i++) {
         // Get parameter
-        const schema_temp = schema['bdo:variables'][name_list[i]];
-        const bytes_temp = value_list[i];
+        const schemaTemp = schema['bdo:variables'][nameList[i]];
+        const bytesTemp = valueList[i];
 
-        if (schema_temp.type == 'integer') {
-          decoded_result_arr.push(byte2int(schema_temp, bytes_temp));
-        } else if (schema_temp.type == 'string') {
-          decoded_result_arr.push(byte2string(schema_temp, bytes_temp));
+        if (schemaTemp.type == 'integer') {
+          decodedResultArr.push(byte2int(schemaTemp, bytesTemp));
+        } else if (schemaTemp.type == 'string') {
+          decodedResultArr.push(byte2string(schemaTemp, bytesTemp));
         }
 
         // Used if scale leads to float number, instead of int
-        else if (schema_temp.type == 'number') {
-          decoded_result_arr.push(byte2int(schema_temp, bytes_temp));
+        else if (schemaTemp.type == 'number') {
+          decodedResultArr.push(byte2int(schemaTemp, bytesTemp));
         } else {
           throw new Error('Datatype not supported by codec');
         }
-        parsed = decoded_result_arr;
+        parsed = decodedResultArr;
       }
     } else {
       if (schema.type == 'integer') {
@@ -60,7 +66,13 @@ export class BLEBinaryCodec implements ContentCodec {
     return parsed;
   }
 
-  // Convert value to bytes
+  /**
+   * Convert concrete value to bytes.
+   * @param {any} dataValue The data to be encoded.
+   * @param {DataSchema} schema The schema information of the Thing Description for encoding.
+   * @param {[key: string]: string} parameters Additonal parameters; not used in this codec.
+   * @returns {Buffer} Encodec value.
+   */
   valueToBytes(
     dataValue: any,
     schema: DataSchema,
@@ -170,27 +182,33 @@ function int2byte(schema: DataSchema, dataValue: number) {
   return buf;
 }
 
+/**
+ * Reads binary buffer based on provided pattern.
+ * @param {DataSchema} schema schema of executed property, action or event.
+ * @param {Buffer} bytes received byte value.
+ * @return {Array} Array containing bytes in the order of the provided variables.
+ */
 function readPattern(schema: DataSchema, bytes: Buffer) {
   // Get name of variables in template
   let template = schema['bdo:pattern'];
   let variables = schema['bdo:variables'];
 
   // Find Names and positions of variables
-  let open_pos = [];
-  let close_pos = [];
+  let openPos = [];
+  let closePos = [];
   for (let i = 0; i < template.length; i++) {
     if (template[i] == '{') {
-      open_pos.push(i);
+      openPos.push(i);
     }
     if (template[i] == '}') {
-      close_pos.push(i);
+      closePos.push(i);
     }
   }
-  let variable_name_list = [];
-  if (open_pos.length == close_pos.length) {
-    for (let i = 0; i < open_pos.length; i++) {
-      variable_name_list.push(
-        template.substring(open_pos[i] + 1, close_pos[i])
+  let variableNameList = [];
+  if (openPos.length == closePos.length) {
+    for (let i = 0; i < openPos.length; i++) {
+      variableNameList.push(
+        template.substring(openPos[i] + 1, closePos[i])
       );
     }
   } else {
@@ -198,40 +216,42 @@ function readPattern(schema: DataSchema, bytes: Buffer) {
   }
 
   // replace variabel with actual length placeholder
-  for (let i = 0; i < variable_name_list.length; i++) {
-    let var_name = variable_name_list[i];
-    let byteleng = variables[var_name]['bdo:bytelength'];
+  for (let i = 0; i < variableNameList.length; i++) {
+    let varName = variableNameList[i];
+    let byteleng = variables[varName]['bdo:bytelength'];
     template = template.replace(
-      '{' + var_name + '}',
+      '{' + varName + '}',
       '[' + 'X'.repeat((byteleng - 1) * 2) + ']'
     );
   }
 
   // Get start and end positions of relevant parts
-  let start_vals = [];
-  let stop_vals = [];
+  let startVals = [];
+  let stopVals = [];
   for (let i = 0; i < template.length; i++) {
     if (template[i] == '[') {
-      start_vals.push(i);
+      startVals.push(i);
     }
     if (template[i] == ']') {
-      stop_vals.push(i);
+      stopVals.push(i);
     }
   }
 
   // Slice Buffer
   let res = [];
-  for (let i = 0; i < start_vals.length; i++) {
-    res.push(bytes.subarray(start_vals[i] / 2, (stop_vals[i] + 1) / 2));
+  for (let i = 0; i < startVals.length; i++) {
+    res.push(bytes.subarray(startVals[i] / 2, (stopVals[i] + 1) / 2));
   }
 
-  return [variable_name_list, res];
+  return [variableNameList, res];
 }
 
-function extractVariableNames(template: string) {}
-
-// Function fills in the desired pattern
-// return filled in hexString
+/**
+ * Fills in the desired pattern.
+ * @param {DataSchema} schema schema of executed property, action or event.
+ * @param {any} dataValue values to fill in.
+ * @return {String} filled in hexString.
+ */
 function fillStringPattern(schema: DataSchema, dataValue: any) {
   let key: string;
   let params: any;
@@ -245,8 +265,8 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
     }
     // Fill in Hex values
     if (params.type == 'string') {
-      if (params.format == 'hex'){
-        dataValue[key] = dataValue[key]
+      if (params.format == 'hex') {
+        dataValue[key] = dataValue[key];
       }
     }
   }
@@ -259,7 +279,12 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
   return dataValue;
 }
 
-// Convert string to buffer
+/**
+ * Convert string to buffer.
+ * @param {DataSchema} schema schema of executed property, action or event.
+ * @param {String} dataValue values to convert.
+ * @return {String} hexString.
+ */
 function string2byte(schema: DataSchema, dataValue: string) {
   let buf: Buffer;
   if (typeof schema.format == 'undefined') {
@@ -273,7 +298,12 @@ function string2byte(schema: DataSchema, dataValue: string) {
   }
 }
 
-// Convert buffer to string
+/**
+ * Convert buffer to string.
+ * @param {DataSchema} schema schema of executed property, action or event.
+ * @param {Buffer} bytes values to convert.
+ * @return {String} Converted String.
+ */
 function byte2string(schema: DataSchema, bytes: Buffer) {
   let value;
   if (typeof schema.format == 'undefined') {
@@ -283,6 +313,3 @@ function byte2string(schema: DataSchema, bytes: Buffer) {
   }
   return value;
 }
-// TODO
-// scale?
-// readpattern
