@@ -20,6 +20,22 @@ export const readableStreamToJson = async function (
 };
 
 /**
+ * Converts a ReadableStream into buffer.
+ * @param data The ReadableStream to convert
+ * @returns The converted buffer
+ */
+export const readableStreamToBuffer = async function (
+  data: NodeJS.ReadableStream
+) {
+  const chunks = [];
+  for await (const chunk of data) {
+    chunks.push(chunk as Buffer);
+  }
+  const buffer = Buffer.concat(chunks);
+  return buffer;
+};
+
+/**
  * Converts a ReadableStream into a string.
  * @param data The ReadableStream to convert
  * @returns The converted string

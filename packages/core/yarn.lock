@@ -69,6 +69,7 @@ __metadata:
     "@node-wot/td-tools": 0.8.1
     "@tensorflow/tfjs": ^3.18.0
     "@types/node": ^14.11.2
+    "@types/uritemplate": ^0.3.4
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
@@ -740,6 +741,13 @@ __metadata:
   version: 2.4.30
   resolution: "@types/seedrandom@npm:2.4.30"
   checksum: 1bcf634bb0146b5de443d4581556795e52186f830072ef12f42efb6f15a4e9950630f1c4322356df0f39e953436d4fb17b5fb2834e867ff6cf6e5570849ebad2
+  languageName: node
+  linkType: hard
+
+"@types/uritemplate@npm:^0.3.4":
+  version: 0.3.4
+  resolution: "@types/uritemplate@npm:0.3.4"
+  checksum: 558be9b39a9c902d98f16694cb46b7b98e9544fc175de49b52431a5805e586134e170ec8561a8444a75334c25bb3388ecd23b64874676f80d4b9d6cdca0f45b7
   languageName: node
   linkType: hard
 

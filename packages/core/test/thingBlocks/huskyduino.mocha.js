@@ -173,7 +173,7 @@ suite('huskylens_choose_algo block', () => {
     expect(thingInput.connection.check_[0]).to.equal('Thing');
     const thingInputLabel1 = thingInput.fieldRow[0];
     expect(thingInputLabel1.name).to.equal('label');
-    expect(thingInputLabel1.value_).to.equal('write algorithm property');
+    expect(thingInputLabel1.value_).to.equal('activate algorithm');
     const algorithmDropdown = thingInput.fieldRow[1];
     expect(algorithmDropdown.name).to.equal('algorithm');
     expect(algorithmDropdown.menuGenerator_).to.deep.equal([
@@ -187,7 +187,7 @@ suite('huskylens_choose_algo block', () => {
     ]);
     const thingInputLabel2 = thingInput.fieldRow[2];
     expect(thingInputLabel2.name).to.equal('label');
-    expect(thingInputLabel2.value_).to.equal('to HuskyDuino');
+    expect(thingInputLabel2.value_).to.equal('on');
   };
 
   setup(function () {
@@ -294,7 +294,7 @@ suite('huskylens_write_id block', () => {
     expect(idInput.connection.check_[0]).to.equal('Number');
     const idInputLabel = idInput.fieldRow[0];
     expect(idInputLabel.name).to.equal('label');
-    expect(idInputLabel.value_).to.equal('write id property');
+    expect(idInputLabel.value_).to.equal('learn visible object using ID');
     const thingInput = block.inputList[1];
     expect(thingInput.name).to.equal('thing');
     expect(thingInput.connection.check_).to.be.an('array');
@@ -302,7 +302,7 @@ suite('huskylens_write_id block', () => {
     expect(thingInput.connection.check_[0]).to.equal('Thing');
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
-    expect(thingInputLabel.value_).to.equal('to HuskyDuino');
+    expect(thingInputLabel.value_).to.equal('on');
   }
 
   setup(function () {
@@ -330,14 +330,14 @@ suite('huskylens_write_id block', () => {
         testCases: [
           {
             title: 'Empty',
-            expectedCode: "await huskyduino_learnId('', '0x0');\n",
+            expectedCode: "await huskyduino_learnId('', '0');\n",
             createBlock: function (workspace) {
               return workspace.newBlock('huskylens_write_id');
             },
           },
           {
             title: 'Non-empty',
-            expectedCode: "await huskyduino_learnId('', '0x7b');\n",
+            expectedCode: /await huskyduino_learnId\('.*', '123'\);\n/m,
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_write_id');
               // append number_value block
@@ -429,23 +429,16 @@ suite('huskylens_write_forget_flag block', () => {
    */
   function assertHuskylensWriteForgetFlagBlockStructure(block) {
     expect(block.type).to.equal('huskylens_write_forget_flag');
-    expect(block.inputList.length).to.equal(2);
+    expect(block.inputList.length).to.equal(1);
     const flagInput = block.inputList[0];
-    expect(flagInput.name).to.equal('forgetFlag');
+    expect(flagInput.name).to.equal('thing');
     expect(flagInput.connection.check_).to.be.an('array');
     expect(flagInput.connection.check_.length).to.equal(1);
-    expect(flagInput.connection.check_[0]).to.equal('Boolean');
+    expect(flagInput.connection.check_[0]).to.equal('Thing');
     const flagInputLabel = flagInput.fieldRow[0];
-    expect(flagInputLabel.name).to.equal('label');
-    expect(flagInputLabel.value_).to.equal('write forget flag property');
-    const thingInput = block.inputList[1];
-    expect(thingInput.name).to.equal('thing');
-    expect(thingInput.connection.check_).to.be.an('array');
-    expect(thingInput.connection.check_.length).to.equal(1);
-    expect(thingInput.connection.check_[0]).to.equal('Thing');
-    const thingInputLabel = thingInput.fieldRow[0];
-    expect(thingInputLabel.name).to.equal('label');
-    expect(thingInputLabel.value_).to.equal('to HuskyDuino');
+    expect(flagInputLabel.value_).to.equal(
+      'forget all learned faces and objects on'
+    );
   }
 
   setup(function () {
@@ -480,7 +473,7 @@ suite('huskylens_write_forget_flag block', () => {
           },
           {
             title: 'non-empty',
-            expectedCode: "await huskyduino_forgetAll('');\n",
+            expectedCode: /await huskyduino_forgetAll\('.*'\);\n/m,
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_write_forget_flag');
               const thingsHuskyduinoBlock =
@@ -516,11 +509,6 @@ suite('huskylens_write_forget_flag block', () => {
       title: 'non-empty',
       xml:
         '<block type="huskylens_write_forget_flag">' +
-        '  <value name="forgetFlag">' +
-        '    <block type="logic_boolean">' +
-        '      <field name="BOOL">TRUE</field>' +
-        '    </block>' +
-        '  </value>' +
         '  <value name="thing">' +
         '    <block type="things_HuskyDuino">' +
         '      <field name="name">My Thing</field>' +
@@ -530,11 +518,6 @@ suite('huskylens_write_forget_flag block', () => {
         '</block>',
       expectedXml:
         '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_write_forget_flag" id="1">\n' +
-        '  <value name="forgetFlag">\n' +
-        '    <block type="logic_boolean" id="1">\n' +
-        '      <field name="BOOL">TRUE</field>\n' +
-        '    </block>\n' +
-        '  </value>\n' +
         '  <value name="thing">\n' +
         '    <block type="things_HuskyDuino" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
@@ -570,7 +553,7 @@ suite('huskylens_read_id block', () => {
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
     expect(thingInputLabel.value_).to.equal(
-      'read ID property of object(s) in HuskyDuino'
+      'read ID(s) of visible object(s) on'
     );
   }
 
@@ -606,7 +589,7 @@ suite('huskylens_read_id block', () => {
           },
           {
             title: 'non-empty',
-            expectedCode: "await huskyduino_readId('')",
+            expectedCode: /await huskyduino_readId\('.*'\)/m,
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_read_id');
               const thingsHuskyduinoBlock =
@@ -670,13 +653,13 @@ suite('huskylens_read_id block', () => {
   runSerializationTestSuite(testCases);
 });
 
-suite('huskylens_read_location block', () => {
+suite('huskylens_read_coordinates block', () => {
   /**
-   * Asserts that a huskylens_read_location block has the expected structure.
+   * Asserts that a huskylens_read_coordinates block has the expected structure.
    * @param {!Blockly.Block} block The block to assert the structure of.
    */
   function assertHuskylensReadLocationBlockStructure(block) {
-    expect(block.type).to.equal('huskylens_read_location');
+    expect(block.type).to.equal('huskylens_read_coordinates');
     expect(block.inputList.length).to.equal(1);
     const thingInput = block.inputList[0];
     expect(thingInput.name).to.equal('thing');
@@ -686,7 +669,7 @@ suite('huskylens_read_location block', () => {
     const thingInputLabel = thingInput.fieldRow[0];
     expect(thingInputLabel.name).to.equal('label');
     expect(thingInputLabel.value_).to.equal(
-      'read location property of one object in HuskyDuino'
+      'read coordinates of visible object(s) on'
     );
   }
 
@@ -699,7 +682,7 @@ suite('huskylens_read_location block', () => {
   });
 
   test('Creation', function () {
-    const block = this.workspace.newBlock('huskylens_read_location');
+    const block = this.workspace.newBlock('huskylens_read_coordinates');
     assertHuskylensReadLocationBlockStructure(block);
   });
 
@@ -715,16 +698,16 @@ suite('huskylens_read_location block', () => {
         testCases: [
           {
             title: 'Empty',
-            expectedCode: "await huskyduino_readLoc('')",
+            expectedCode: "await huskyduino_outArrreadLoc('')",
             createBlock: function (workspace) {
-              return workspace.newBlock('huskylens_read_location');
+              return workspace.newBlock('huskylens_read_coordinates');
             },
           },
           {
             title: 'non-empty',
-            expectedCode: "await huskyduino_readLoc('')",
+            expectedCode: /await huskyduino_outArrreadLoc\('.*'\)/m,
             createBlock: function (workspace) {
-              const block = workspace.newBlock('huskylens_read_location');
+              const block = workspace.newBlock('huskylens_read_coordinates');
               const thingsHuskyduinoBlock =
                 workspace.newBlock('things_HuskyDuino');
               thingsHuskyduinoBlock.setFieldValue('thingId', 'id');
@@ -749,15 +732,15 @@ suite('huskylens_read_location block', () => {
   const testCases = [
     {
       title: 'empty',
-      xml: '<block type="huskylens_read_location"></block>',
+      xml: '<block type="huskylens_read_coordinates"></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_location" id="1"></block>',
+        '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_coordinates" id="1"></block>',
       assertBlockStructure: assertHuskylensReadLocationBlockStructure,
     },
     {
       title: 'non-empty',
       xml:
-        '<block type="huskylens_read_location">' +
+        '<block type="huskylens_read_coordinates">' +
         '  <value name="thing">' +
         '    <block type="things_HuskyDuino">' +
         '      <field name="name">My Thing</field>' +
@@ -766,7 +749,7 @@ suite('huskylens_read_location block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_location" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_coordinates" id="1">\n' +
         '  <value name="thing">\n' +
         '    <block type="things_HuskyDuino" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
