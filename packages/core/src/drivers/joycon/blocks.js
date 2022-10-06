@@ -238,12 +238,15 @@ Blocks['joycon_button_events'] = {
     this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('Nintendo JoyCon');
-    this.appendDummyInput()
+    this.appendDummyInput('dropdowns')
       .appendField(
-        new FieldDropdown([
-          ['on', 'on'],
-          ['while', 'while'],
-        ]),
+        new FieldDropdown(
+          [
+            ['on', 'on'],
+            ['while', 'while'],
+          ],
+          this.onWhileValidator
+        ),
         'onWhile'
       )
       .appendField(
@@ -268,7 +271,7 @@ Blocks['joycon_button_events'] = {
           ['pressed', 'pressed'],
           ['released', 'released'],
         ]),
-        'released'
+        'buttonEvent'
       );
     this.appendStatementInput('statements').appendField('do').setCheck(null);
     this.setInputsInline(false);
@@ -306,6 +309,31 @@ Blocks['joycon_button_events'] = {
         getWorkspace().removeChangeListener(this.changeListener);
       }
     }
+  },
+  /**
+   * Displays the pressed/released dropdown if on is selected.
+   * @param {string} onWhile - The selected option.
+   * @return {string} - The selected option.
+   */
+  onWhileValidator: function (onWhile) {
+    const input = this.sourceBlock_.getInput('dropdowns');
+    if (input) {
+      // remove the pressed/released dropdown
+      input.removeField('buttonEvent');
+    }
+    if (onWhile === 'on') {
+      // add the pressed/released dropdown
+      input.appendField(
+        new FieldDropdown([
+          ['pressed', 'pressed'],
+          ['released', 'released'],
+        ]),
+        'buttonEvent'
+      );
+    } else {
+      input.appendField('pressed', 'buttonEvent');
+    }
+    return onWhile;
   },
   /**
    * Remove this block's id from the events array.
