@@ -142,7 +142,7 @@ Blocks['huskylens_write_forget_flag'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('forget all learned faces and objects on');
+      .appendField('forget all learned faces and objects on', 'label');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
     this.setColour(0);
