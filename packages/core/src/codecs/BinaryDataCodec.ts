@@ -193,57 +193,37 @@ function readPattern(schema: DataSchema, bytes: Buffer) {
   let template = schema['bdo:pattern'];
   let variables = schema['bdo:variables'];
 
-  // Find Names and positions of variables
-  let openPos = [];
-  let closePos = [];
-  for (let i = 0; i < template.length; i++) {
-    if (template[i] == '{') {
-      openPos.push(i);
-    }
-    if (template[i] == '}') {
-      closePos.push(i);
-    }
-  }
+  // additionalOffset is offset beetween variables
+  // e.g.  {temp}00{light}
+  // additionalOffset = [0, 1]
+  // means: no offset before temp but offset of 1 byte after temp
+  let additionalOffset = [];
   let variableNameList = [];
-  if (openPos.length == closePos.length) {
-    for (let i = 0; i < openPos.length; i++) {
-      variableNameList.push(
-        template.substring(openPos[i] + 1, closePos[i])
-      );
+
+  // Get variable names and additional offset
+  let splitTemplate = template.split('{');
+  for (let i = 0; i < splitTemplate.length; i++) {
+    let splitValue = splitTemplate[i].split('}');
+    if (i == 0) {
+      // Only additional offest at i == 0; never a variable name
+      // divided by 2 to get bytelength
+      additionalOffset.push(splitValue[0].length / 2);
+    } else {
+      variableNameList.push(splitValue[0]);
+      additionalOffset.push(splitValue[1].length / 2);
     }
-  } else {
-    throw Error('number of "{" not equal to "}" in pattern');
   }
 
-  // replace variabel with actual length placeholder
+  // Slice buffer
+  let valueList = [];
+  let offset = 0 + additionalOffset[0];
   for (let i = 0; i < variableNameList.length; i++) {
-    let varName = variableNameList[i];
-    let byteleng = variables[varName]['bdo:bytelength'];
-    template = template.replace(
-      '{' + varName + '}',
-      '[' + 'X'.repeat((byteleng - 1) * 2) + ']'
-    );
+    let byteLength = variables[variableNameList[i]]['bdo:bytelength'];
+    valueList.push(bytes.subarray(offset, offset + byteLength));
+    offset += byteLength + additionalOffset[i + 1];
   }
 
-  // Get start and end positions of relevant parts
-  let startVals = [];
-  let stopVals = [];
-  for (let i = 0; i < template.length; i++) {
-    if (template[i] == '[') {
-      startVals.push(i);
-    }
-    if (template[i] == ']') {
-      stopVals.push(i);
-    }
-  }
-
-  // Slice Buffer
-  let res = [];
-  for (let i = 0; i < startVals.length; i++) {
-    res.push(bytes.subarray(startVals[i] / 2, (stopVals[i] + 1) / 2));
-  }
-
-  return [variableNameList, res];
+  return [variableNameList, valueList];
 }
 
 /**

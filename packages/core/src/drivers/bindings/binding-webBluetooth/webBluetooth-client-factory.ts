@@ -7,7 +7,7 @@ import {
   ContentSerdes,
 } from '@node-wot/core';
 import WebBluetoothClient from './webBluetooth-client.js';
-import {BLEBinaryCodec} from '../../../codecs/BinaryDataCodec.js';
+import {BinaryDataStreamCodec} from '../../../codecs/BinaryDataCodec.js';
 
 export default class WebBluetoothClientFactory
   implements ProtocolClientFactory
@@ -17,7 +17,7 @@ export default class WebBluetoothClientFactory
   public contentSerdes: ContentSerdes = ContentSerdes.get();
 
   constructor() {
-    this.contentSerdes.addCodec(new BLEBinaryCodec());
+    this.contentSerdes.addCodec(new BinaryDataStreamCodec());
   }
 
   public getClient(): ProtocolClient {
