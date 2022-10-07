@@ -137,7 +137,6 @@ export default class WebBluetoothClientNew implements ProtocolClient {
             'Bluetooth',
             deconstructedForm.deviceId
           );
-          console.debug('1');
           await characteristic.writeValueWithResponse(buffer);
           thingsLog(
             'Finished <code>WriteValueWithResponse</code> on characteristic ' +

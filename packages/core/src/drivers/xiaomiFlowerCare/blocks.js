@@ -1,6 +1,5 @@
 /**
- * @fileoverview Block definitions for the Xiaomi Mijia thermometer.
- * @author derwehr@gmail.com(Thomas Wehr)
+ * @fileoverview Block definitions for the Xiaomi Flower Care blocks.
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 

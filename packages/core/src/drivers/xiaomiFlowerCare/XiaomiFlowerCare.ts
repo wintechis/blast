@@ -78,7 +78,7 @@ export default class XiaomiFlowerCare {
         },
       },
       actions: {
-        writeMode: {
+        readMode: {
           type: 'string',
           observable: false,
           readOnly: false,

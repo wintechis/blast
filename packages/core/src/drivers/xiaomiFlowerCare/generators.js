@@ -1,6 +1,5 @@
 /**
- * @fileoverview JavaScript code generators for the Xiaomi Mijia thermometer.
- * @author derwehr@gmail.com(Thomas Wehr)
+ * @fileoverview JavaScript code generators for the Xiaomi Flower Care blocks.
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
@@ -30,9 +29,8 @@ JavaScript['xiaomiFlowerCare_read'] = function (block) {
 };
 
 /**
- * write face id value to Huskyduino via bluetooth
- * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
- * @param {String} value faceID to write to the Huskyduino.
+ * Read all values of Flower Care Sensor
+ * @param {Blockly.Block.id} blockId the things_xiaomiFlowerCare block's id.
  */
 globalThis['flowerCare_read'] = async function (blockId) {
   // Get thing instance of block.
@@ -40,7 +38,7 @@ globalThis['flowerCare_read'] = async function (blockId) {
   const thing = block.thing;
 
   // Activate read mode.
-  await thing.invokeAction('writeMode', 'A01F');
+  await thing.invokeAction('readMode', 'A01F');
 
   // Read values
   let readValue = await thing.readProperty('valueString');
