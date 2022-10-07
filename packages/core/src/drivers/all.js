@@ -44,3 +44,6 @@ import './webSpeech/generators.js';
 
 import './xiamoi_thermometer/blocks.js';
 import './xiamoi_thermometer/generators.js';
+
+import './xiaomiFlowerCare/blocks.js';
+import './xiaomiFlowerCare/generators.js';

@@ -87,8 +87,6 @@ export class BinaryDataStreamCodec implements ContentCodec {
 
       hexString = fillStringPattern(schema, dataValue);
       buf = string2byte(schema, hexString);
-
-      //console.log('[CODEC]', 'Codec generated value:', hexString);
     }
     // Else create buffer without pattern
     else {
@@ -141,7 +139,9 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
 
   parsed = parsed * scale;
 
-  return parsed;
+  // Round parsed number
+  parsed = Math.round(parsed * 100) / 100;
+  return parsed
 }
 
 /**
