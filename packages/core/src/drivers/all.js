@@ -2,6 +2,9 @@
  * @fileoverview Defines which thing drivers to import.
  */
 
+import './audio/blocks.js';
+import './audio/generators.js';
+
 import './bleRgbController/blocks.js';
 import './bleRgbController/generators.js';
 

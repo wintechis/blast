@@ -20,14 +20,15 @@ import {
 } from '../../core/dist/blast_interpreter.js';
 import {link, loadXMLFromFile} from '../../core/dist/blast_storage.js';
 import {
+  addAudioDevice,
   connectWebHidDevice,
   connectedThings,
   implementedThings,
   setDevMode,
   setThingsLog,
+  setAudioSelectButtonHandler,
   setWebBluetoothButtonHandler,
   setWebHidButtonHandler,
-  getDevMode,
 } from '../../core/dist/blast_things.js';
 import {requestDevice} from '../../core/dist/blast_webBluetooth.js';
 import {
@@ -448,6 +449,77 @@ const importPrettify = function () {
   document.head.appendChild(script);
 };
 
+const getAudioOutputDevices = async function () {
+  await navigator.mediaDevices.getUserMedia({audio: true});
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const audioDevices = devices.filter(device => device.kind === 'audiooutput');
+  return audioDevices;
+};
+
+const openAudioSelectModal = function () {
+  // Clear the table
+  const tbody = document.getElementById('connect-tbody');
+  while (tbody.firstChild) {
+    tbody.removeChild(tbody.firstChild);
+  }
+  // request list of audio devices
+  getAudioOutputDevices().then(devices => {
+    devices.forEach(device => {
+      const row = document.createElement('tr');
+      const nameCell = document.createElement('td');
+      const name = document.createElement('span');
+      name.textContent = device.label;
+      nameCell.appendChild(name);
+      row.appendChild(nameCell);
+
+      const createCell = document.createElement('td');
+      const addButton = document.createElement('input');
+      addButton.type = 'button';
+      addButton.id = 'addButton-' + device.deviceId;
+      addButton.value = 'add';
+      addButton.addEventListener('click', () => {
+        addAudioDevice(device.label, device.deviceId, 'audioOutput');
+        document.getElementById('addStatus-' + device.deviceId).innerHTML =
+          '&#x2714;';
+        document.getElementById('addStatus-' + device.deviceId).style.color =
+          'green';
+      });
+      createCell.appendChild(addButton);
+      row.appendChild(createCell);
+
+      // create status html
+      const statusCell = document.createElement('td');
+      const status = document.createElement('span');
+      status.id = 'addStatus-' + device.deviceId;
+
+      // Check if output was already created
+      let alreadyConnected = false;
+      for (const [, t] of connectedThings) {
+        if (t.id === device.deviceId) {
+          alreadyConnected = true;
+          break;
+        }
+      }
+      if (alreadyConnected) {
+        status.innerHTML = '&#x2714;';
+        status.style.color = 'green';
+      } else {
+        status.innerHTML = '&#x2718;';
+        status.style.color = 'red';
+      }
+      status.style.fontSize = '20px';
+      status.style.fontWeight = 'bold';
+      status.style.marginRight = '10px';
+      statusCell.appendChild(status);
+      row.appendChild(statusCell);
+      // add row to table
+      tbody.appendChild(row);
+    });
+    // Show the modal
+    document.getElementById('connect-modal').style.display = 'block';
+  });
+};
+
 const openConnectModal = function (type) {
   // Clear the table
   const tbody = document.getElementById('connect-tbody');
@@ -476,7 +548,6 @@ const openConnectModal = function (type) {
     }
     row.appendChild(nameCell);
     // Pair cell html
-    row.appendChild(nameCell);
     const pairCell = document.createElement('td');
     const pairButton = document.createElement('input');
     pairButton.setAttribute('type', 'button');
@@ -641,6 +712,7 @@ export const initUi = function (ws) {
 
   setWebBluetoothButtonHandler(() => openConnectModal('bluetooth'));
   setWebHidButtonHandler(() => openConnectModal('hid'));
+  setAudioSelectButtonHandler(() => openAudioSelectModal());
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(importPrettify, 1);

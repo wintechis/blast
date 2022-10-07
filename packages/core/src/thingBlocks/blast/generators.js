@@ -10,38 +10,6 @@ import {throwError} from './../../blast_interpreter.js';
 const {JavaScript} = Blockly;
 
 /**
- * Generates JavaScript code for the play_audio block.
- * @param {Blockly.Block} block the play_audio block.
- * @returns {String} the generated code.
- */
-JavaScript['play_audio'] = function (block) {
-  const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
-  const code = `await playAudio(${uri});\n`;
-  return code;
-};
-
-/**
- * Plays an audio file provided by URI.
- * @param {string} uri URI of the audio file to play.
- * @returns {Promise<void>}.
- */
-globalThis['playAudio'] = async function (uri) {
-  await new Promise((resolve, reject) => {
-    const audio = new Audio(uri);
-    audio.preload = 'auto';
-    audio.autoplay = true;
-    audio.onerror = error => {
-      throwError(
-        `Error trying to play audio from \n${uri}\n See console for details`
-      );
-      console.error(error);
-      reject(error);
-    };
-    audio.onended = resolve;
-  });
-};
-
-/**
  * Generates JavaScript code for the capture_image block.
  * @param {Blockly.Block} block the play_audio block.
  * @returns {String} the generated code.

@@ -6,10 +6,11 @@
  */
 
 import Blockly from 'blockly';
-const {Blocks, dialog, FieldTextInput} = Blockly;
 // eslint-disable-next-line node/no-missing-import
 import BleRgbController from './BleRgbController.js';
 import {implementedThings} from '../../blast_things.js';
+
+const {Blocks, dialog, FieldTextInput} = Blockly;
 
 const bleRgbControllerInstances = new Map();
 

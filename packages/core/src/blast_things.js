@@ -29,7 +29,10 @@ const webHidNames = new Map();
  */
 const webHidDevices = new Map();
 
-let webBluetoothButtonHandler = null;
+/**
+ * Maps audio device labels to audio device ids.
+ */
+const audioDevices = new Map();
 
 /**
  * Lists all things implemented by BLAST.
@@ -101,6 +104,7 @@ export const getDevMode = function () {
   return devMode;
 };
 
+let webBluetoothButtonHandler = null;
 /**
  * Sets the 'pair via webBluetooth' button handler.
  * @param {function} handler The handler to set.
@@ -110,9 +114,6 @@ export const setWebBluetoothButtonHandler = function (handler) {
 };
 
 let webHidButtonHandler = null;
-
-let getRssiBlockadded = false;
-
 /**
  * Sets the 'connect via webHid' button handler.
  * @param {function} handler The handler to set.
@@ -120,6 +121,17 @@ let getRssiBlockadded = false;
 export const setWebHidButtonHandler = function (handler) {
   webHidButtonHandler = handler;
 };
+
+let audioSelectButtonHandler = null;
+/**
+ * Sets the 'select audio output' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setAudioSelectButtonHandler = function (handler) {
+  audioSelectButtonHandler = handler;
+};
+
+let getRssiBlockadded = false;
 
 /**
  * Default method for logging device interaction.
@@ -187,7 +199,6 @@ export const thingsFlyoutCategory = function (workspace) {
   const webBluetoothButton = document.createElement('button');
   webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
-  // eslint-disable-next-line no-unused-vars
   workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', _button => {
     webBluetoothButtonHandler();
   });
@@ -206,7 +217,6 @@ export const thingsFlyoutCategory = function (workspace) {
   const webHidbutton = document.createElement('button');
   webHidbutton.setAttribute('text', 'connect via webHID');
   webHidbutton.setAttribute('callbackKey', 'CREATE_WEBHID');
-  // eslint-disable-next-line no-unused-vars
   workspace.registerButtonCallback('CREATE_WEBHID', _button => {
     webHidButtonHandler();
   });
@@ -214,6 +224,24 @@ export const thingsFlyoutCategory = function (workspace) {
   // Add connected blocks for connected webHID devices
   if (connectedThingBlocks.hid.length > 0) {
     xmlList.push(...connectedThingBlocks.hid);
+  }
+
+  // Create Audio Label
+  const audioLabel = document.createElement('label');
+  audioLabel.setAttribute('text', 'Audio Output Devices');
+  xmlList.push(audioLabel);
+
+  // Create Audio add device button
+  const audioButton = document.createElement('button');
+  audioButton.setAttribute('text', 'add audio output');
+  audioButton.setAttribute('callbackKey', 'CREATE_AUDIO');
+  workspace.registerButtonCallback('CREATE_AUDIO', _button => {
+    audioSelectButtonHandler();
+  });
+  xmlList.push(audioButton);
+  // Add connected blocks for connected audio devices
+  if (connectedThingBlocks.audio.length > 0) {
+    xmlList.push(...connectedThingBlocks.audio);
   }
 
   return xmlList;
@@ -224,7 +252,7 @@ export const thingsFlyoutCategory = function (workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocks = function () {
-  const xmlList = {bluetooth: [], hid: []};
+  const xmlList = {bluetooth: [], hid: [], audio: []};
   // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
@@ -246,6 +274,8 @@ const flyoutCategoryBlocks = function () {
         idField.textContent = webBluetoothDevices.get(key);
       } else if (thing.type === 'hid') {
         idField.textContent = webHidNames.get(key);
+      } else if (thing.type === 'audio') {
+        idField.textContent = audioDevices.get(key);
       }
       block.appendChild(idField);
       block.setAttribute('gap', 8);
@@ -426,4 +456,33 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
     );
   };
   promptAndCheckWithAlert(deviceName, uid);
+};
+
+/**
+ * Adds an audio device to BLAST.
+ * @param {string} deviceName Name of the device.
+ * @param {string} deviceId Unique identifier of the device.
+ */
+export const addAudioDevice = function (deviceName, deviceId, type) {
+  let thing;
+  for (const t of implementedThings) {
+    if (t.id === type) {
+      thing = t;
+      break;
+    }
+  }
+  if (typeof thing === 'undefined') {
+    return;
+  }
+  connectedThings.set(deviceName, thing);
+  // add the devices blocks to the toolbox
+  for (const block of thing.blocks) {
+    if (block.XML) {
+      addBlock(block.type, block.category, block.XML);
+    } else {
+      addBlock(block.type, block.category);
+    }
+  }
+  audioDevices.set(deviceName, deviceId);
+  reloadToolbox();
 };
