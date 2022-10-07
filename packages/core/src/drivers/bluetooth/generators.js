@@ -5,7 +5,11 @@
  */
 
 import Blockly from 'blockly';
-import {getDeviceById} from '../../blast_webBluetooth.js';
+import {
+  getDeviceById,
+  read,
+  writeWithoutResponse,
+} from '../../blast_webBluetooth.js';
 const {JavaScript} = Blockly;
 import {
   stringToReadable,
@@ -13,6 +17,16 @@ import {
   // eslint-disable-next-line node/no-missing-import
 } from '../bindings/binding-helpers.js';
 import {getWorkspace, throwError} from '../../blast_interpreter.js';
+
+JavaScript['things_eddyStoneDevice'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
+
+JavaScript['things_bluetoothGeneric'] = function (block) {
+  const id = JavaScript.quote_(block.getFieldValue('id'));
+  return [id, JavaScript.ORDER_NONE];
+};
 
 /**
  * Generates JavaScript code for the get_signal_strength block.
@@ -177,32 +191,22 @@ globalThis['readEddystoneProperty'] = async function (
   return value;
 };
 
-JavaScript['things_eddyStoneDevice'] = function (block) {
-  const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
-};
-
-JavaScript['things_bluetoothGeneric'] = function (block) {
-  const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
-};
-
 /**
- * Generates JavaScript code for the read_bluetooth_service block.
- * @param {Blockly.Block} block the read_bluetooth_service block.
+ * Generates JavaScript code for the read_gatt_characteristic block.
+ * @param {Blockly.Block} block the read_gatt_characteristic block.
  * @returns {String} the generated code.
  */
 JavaScript['read_gatt_characteristic'] = function (block) {
   const thing =
-    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const characteristic = JavaScript.quote_(
     block.getFieldValue('characteristic')
   );
   let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing').id);
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
-  const code = `readBluetoothService(${blockId}, ${thing}, ${characteristic})`;
+  const code = `await readBluetoothChar(${blockId}, ${thing}, ${characteristic})`;
 
   return [code, JavaScript.ORDER_NONE];
 };
@@ -214,7 +218,7 @@ JavaScript['read_gatt_characteristic'] = function (block) {
  * @param {String} property The characteristic to read.
  * @param {JSInterpreter.AsyncCallback} callback JS Interpreter callback.
  */
-globalThis['readBluetoothService'] = async function (
+globalThis['readBluetoothChar'] = async function (
   blockId,
   webBluetoothId,
   property
@@ -232,4 +236,106 @@ globalThis['readBluetoothService'] = async function (
   const interActionInput = await thing.readProperty(property);
   const value = await readableStreamToString(interActionInput.content.body);
   return value;
+};
+
+JavaScript['write_gatt_characteristic'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const characteristic = JavaScript.quote_(
+    block.getFieldValue('characteristic')
+  );
+  const value =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
+  let blockId = "''";
+  if (block.getInputTargetBlock('thing')) {
+    blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+  }
+  const code = `await writeBluetoothChar(${blockId}, ${thing}, ${characteristic}, ${value});\n`;
+
+  return code;
+};
+
+globalThis['writeBluetoothChar'] = async function (
+  blockId,
+  webBluetoothId,
+  property,
+  value
+) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    throwError('No bluetooth device set.');
+    return;
+  }
+
+  // get thing instance of block
+  const block = getWorkspace().getBlockById(blockId);
+  const thing = block.thing;
+  // Write property data
+  const valueReadable = stringToReadable(value);
+  await thing.writeProperty(property, valueReadable);
+};
+
+JavaScript['read_characteristic'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const characteristic =
+    JavaScript.valueToCode(block, 'characteristic', JavaScript.ORDER_NONE) ||
+    null;
+  const service =
+    JavaScript.valueToCode(block, 'service', JavaScript.ORDER_NONE) || null;
+
+  const code = `await readCharacteristicRaw(${thing}, ${service}, ${characteristic})`;
+
+  return [code, JavaScript.ORDER_NONE];
+};
+
+globalThis['readCharacteristicRaw'] = async function (
+  webBluetoothId,
+  service,
+  characteristic
+) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    throwError('No bluetooth device set.');
+    return;
+  }
+
+  return await read(webBluetoothId, service, characteristic);
+};
+
+JavaScript['write_characteristic'] = function (block) {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const characteristic =
+    JavaScript.valueToCode(block, 'characteristic', JavaScript.ORDER_NONE) ||
+    null;
+  const service =
+    JavaScript.valueToCode(block, 'service', JavaScript.ORDER_NONE) || null;
+
+  const value =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
+
+  const code = `await writeCharacteristicRaw(${thing}, ${service}, ${characteristic}, ${value});\n`;
+
+  return code;
+};
+
+globalThis['writeCharacteristicRaw'] = async function (
+  webBluetoothId,
+  service,
+  characteristic,
+  value
+) {
+  // make sure a device block is connected
+  if (!webBluetoothId) {
+    throwError('No bluetooth device set.');
+    return;
+  }
+
+  return await writeWithoutResponse(
+    webBluetoothId,
+    service,
+    characteristic,
+    value
+  );
 };

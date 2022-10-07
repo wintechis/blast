@@ -279,7 +279,7 @@ const READ_EDDYSTONE_PROPERTY_XML = `
 
 Blocks['read_gatt_characteristic'] = {
   /**
-   * Block for reading a characteristic from a bluetooth device.
+   * Block for reading a predefined characteristic from a bluetooth device.
    */
   init: function () {
     this.appendDummyInput()
@@ -308,15 +308,82 @@ Blocks['read_gatt_characteristic'] = {
           ['weight', 'weight'],
         ]),
         'characteristic'
-      )
-      .appendField('of Bluetooth device');
-    this.appendValueInput('thing').setCheck('Thing');
+      );
+    this.appendValueInput('thing')
+      .appendField('of Bluetooth device')
+      .setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setTooltip('Reads a property from a Bluetooth device.');
-    this.setHelpUrl(
-      'https://www.bluetooth.com/specifications/assigned-numbers/'
-    );
+  },
+};
+
+Blocks['write_gatt_characteristic'] = {
+  /**
+   * Block for writing a predefined characteristic to a bluetooth device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendDummyInput().appendField('write value');
+    this.appendValueInput('value').setCheck(['String', 'Number']);
+    this.appendDummyInput()
+      .appendField('to gatt characteristic')
+      .appendField(
+        new FieldDropdown([['device name', 'deviceName']]),
+        'characteristic'
+      )
+      .appendField('of Bluetooth device');
+    this.appendValueInput('thing').setCheck('Thing');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(255);
+    this.setTooltip('Writes a property to a Bluetooth device.');
+  },
+};
+
+Blocks['read_characteristic'] = {
+  /**
+   * Block for reading a characteristic from a bluetooth device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendValueInput('characteristic')
+      .appendField('read characteristic', 'label')
+      .setCheck('String');
+    this.appendValueInput('service')
+      .appendField('of service', 'label')
+      .setCheck('String');
+    this.appendValueInput('thing')
+      .appendField('of Bluetooth device', 'label')
+      .setCheck('Thing');
+    this.setOutput(true, ['String', 'Number']);
+    this.setColour(255);
+    this.setTooltip('Reads a characteristic from a Bluetooth device.');
+  },
+};
+
+Blocks['write_characteristic'] = {
+  /**
+   * Block for writing a characteristic to a bluetooth device.
+   * @this {Blockly.Block}
+   */
+  init: function () {
+    this.appendValueInput('value')
+      .setCheck(['String', 'Number'])
+      .appendField('write value', 'label');
+    this.appendValueInput('characteristic')
+      .setCheck('String')
+      .appendField('to characteristic', 'label');
+    this.appendValueInput('Service')
+      .setCheck('String')
+      .appendField('of service', 'label');
+    this.appendValueInput('thing')
+      .setCheck('Thing')
+      .appendField('of Bluetooth device', 'label');
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.setColour(255);
+    this.setTooltip('Writes a property to a Bluetooth device.');
   },
 };
 
@@ -439,6 +506,18 @@ implementedThings.push({
   blocks: [
     {
       type: 'read_gatt_characteristic',
+      category: 'Properties',
+    },
+    {
+      type: 'write_gatt_characteristic',
+      category: 'Properties',
+    },
+    {
+      type: 'read_characteristic',
+      category: 'Properties',
+    },
+    {
+      type: 'write_characteristic',
       category: 'Properties',
     },
   ],
