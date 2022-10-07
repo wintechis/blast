@@ -42,6 +42,18 @@ export const implementedThings = [];
 export const connectedThings = new Map();
 
 /**
+ * Lists all blocks exclusively available in dev mode, as tuples of [blockName, category].
+ * @type {!Array.<!Array<string>>}
+ */
+export const devBlocks = [];
+
+/**
+ * Lists all categories exclusively available in dev mode, as triples of [categoryName, colour, index].
+ * @type {!Array.<!Array<string>>}
+ */
+export const devCategories = [];
+
+/**
  * Wether development mode is turned on or off.
  */
 let devMode = false;
@@ -53,19 +65,14 @@ export const setDevMode = function (value) {
         addBlock(block.type, block.category);
       }
     }
-    // add Server Connector category
-    const serverConnector = {
-      kind: 'CATEGORY',
-      contents: [
-        {kind: 'BLOCK', type: 'server_add_connector'},
-        {kind: 'BLOCK', type: 'server_route'},
-        {kind: 'BLOCK', type: 'server_response'},
-        {kind: 'BLOCK', type: 'server_get_body'},
-      ],
-      name: 'Server Connector',
-      colour: '240',
-    };
-    addCategoryAt(serverConnector, 7);
+    // add all dev block categories to the toolbox
+    for (const category of devCategories) {
+      addCategoryAt(category[0], category[1], category[2]);
+    }
+    // add all dev blocks to the toolbox
+    for (const block of devBlocks) {
+      addBlock(block[0], block[1]);
+    }
   } else {
     // remove all thing blocks from the toolbox
     for (const thing of implementedThings) {
@@ -73,8 +80,14 @@ export const setDevMode = function (value) {
         removeBlock(block.type, block.category);
       }
     }
-    removeBlock('generic_thing', 'Things');
-    removeCategory('Server Connector');
+    // remove all dev blocks from the toolbox
+    for (const block of devBlocks) {
+      removeBlock(block[0], block[1]);
+    }
+    // remove all dev block categories from the toolbox
+    for (const category of devCategories) {
+      removeCategory(category[0]);
+    }
 
     // empty workspace
     getWorkspace().clear();
@@ -161,14 +174,6 @@ export const getWebHidDevice = function (deviceId) {
  */
 export const thingsFlyoutCategory = function (workspace) {
   const xmlList = [];
-
-  if (devMode) {
-    // add generic thing block
-    const block = Blockly.utils.xml.createElement('block');
-    block.setAttribute('type', 'generic_thing');
-    block.setAttribute('gap', 8);
-    xmlList.push(block);
-  }
 
   // get connected things
   const connectedThingBlocks = flyoutCategoryBlocks();

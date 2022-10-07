@@ -5,8 +5,10 @@
  */
 
 import Blockly from 'blockly';
+import {devBlocks, devCategories} from '../../blast_things.js';
 const {Blocks} = Blockly;
-import {addBlock} from '../../blast_toolbox.js';
+
+devCategories.push(['Server Connector', 230, 6]);
 
 Blocks['server_add_connector'] = {
   /**
@@ -24,8 +26,8 @@ Blocks['server_add_connector'] = {
     this.setHelpUrl('');
   },
 };
-// Add server_connector block to the toolbox.
-addBlock('server_add_connector', 'Server Connector');
+// Add server_connector block to the dev blocks.
+devBlocks.push(['server_add_connector', 'Server Connector']);
 
 Blocks['server_route'] = {
   /**
@@ -54,8 +56,8 @@ Blocks['server_route'] = {
     this.setHelpUrl('');
   },
 };
-// Add server_connector block to the toolbox.
-addBlock('server_route', 'Server Connector');
+// Add server_route block to the dev blocks.
+devBlocks.push(['server_route', 'Server Connector']);
 
 Blocks['server_response'] = {
   /**
@@ -72,8 +74,8 @@ Blocks['server_response'] = {
     this.setHelpUrl('');
   },
 };
-// Add server_connector block to the toolbox.
-addBlock('server_response', 'Server Connector');
+// Add server_response block to the dev blocks.
+devBlocks.push(['server_response', 'Server Connector']);
 
 Blocks['server_get_body'] = {
   init: function () {
@@ -84,5 +86,5 @@ Blocks['server_get_body'] = {
     this.setHelpUrl('');
   },
 };
-// Add server_connector block to the toolbox.
-addBlock('server_get_body', 'Server Connector');
+// Add server_get_body block to the dev blocks.
+devBlocks.push(['server_get_body', 'Server Connector']);

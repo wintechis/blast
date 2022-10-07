@@ -14,4 +14,3 @@ import './numbers.js';
 import './requests.js';
 import './resources.js';
 import './strings.js';
-import './things.js';

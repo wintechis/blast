@@ -6,7 +6,7 @@
 
 import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
-import {implementedThings} from '../../blast_things.js';
+import {devBlocks, implementedThings} from '../../blast_things.js';
 // eslint-disable-next-line node/no-missing-import
 import EddystoneDevice from './EddystoneDevice.js';
 // eslint-disable-next-line node/no-missing-import
@@ -361,6 +361,8 @@ Blocks['read_characteristic'] = {
     this.setTooltip('Reads a characteristic from a Bluetooth device.');
   },
 };
+// Add read_characteristic block to the dev blocks.
+devBlocks.push(['read_characteristic', 'Properties']);
 
 Blocks['write_characteristic'] = {
   /**
@@ -386,6 +388,8 @@ Blocks['write_characteristic'] = {
     this.setTooltip('Writes a property to a Bluetooth device.');
   },
 };
+// Add write_characteristic block to the dev blocks.
+devBlocks.push(['write_characteristic', 'Properties']);
 
 // Add Eddystone device to the list of implemented things
 implementedThings.push({
@@ -510,14 +514,6 @@ implementedThings.push({
     },
     {
       type: 'write_gatt_characteristic',
-      category: 'Properties',
-    },
-    {
-      type: 'read_characteristic',
-      category: 'Properties',
-    },
-    {
-      type: 'write_characteristic',
       category: 'Properties',
     },
   ],

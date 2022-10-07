@@ -297,21 +297,22 @@ export const getCategory = function (name) {
 
 /**
  * Adds a categroy at index to the toolbox.
- * @param {Object} category The category to add.
+ * @param {string} categoryName The category to add.
+ * @param {number} colour The colour of the category.
  * @param {number} index The index of the category.
- * @returns {Object} the category
+ * @returns {null} nothing
  */
-export const addCategoryAt = function (category, index) {
-  const categoryExists = getCategory(category.name);
-  if (categoryExists) {
-    // Category already exists, so we replace it.
-    currentToolbox.contents.splice(
-      currentToolbox.contents.indexOf(categoryExists),
-      1
-    );
+export const addCategoryAt = function (categoryName, colour, index) {
+  if (getCategory(categoryName)) {
+    return;
   }
+  const category = {
+    kind: 'CATEGORY',
+    contents: [],
+    name: categoryName,
+    colour: colour,
+  };
   currentToolbox.contents.splice(index, 0, category);
-  return category;
 };
 
 /**

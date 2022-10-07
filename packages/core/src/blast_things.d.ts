@@ -23,6 +23,16 @@ export const implementedThings: implementedThing[];
 export const connectedThings: Record<string, connectedThing>;
 
 /**
+ * Lists all blocks exclusively available in dev mode, as tuples of [blockName, category].
+ */
+export const devBlocks: [string, string][];
+
+/**
+ * Lists all categories exclusively available in dev mode, as triples of [categoryName, colour, index].
+ */
+export const devCategories: [string, number, number][];
+
+/**
  * Wether development mode is turned on or off.
  */
  export let devMode: Boolean;
