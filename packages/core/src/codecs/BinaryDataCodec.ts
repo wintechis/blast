@@ -116,7 +116,7 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
   const byteOrder = schema['bdo:byteOrder'] || 'little';
   const scale = schema['bdo:scale'] || 1;
   const offset = schema['bdo:offset'] || 0;
-  const digits = schema['bdo:precission'] || 2;
+  const precision = schema['bdo:precision'] || 2;
 
   if (typeof bytelength == 'undefined') {
     throw new Error('Not all parameters are provided!');
@@ -141,8 +141,8 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
   parsed = parsed * scale;
 
   // Round parsed number
-  parsed = Math.round(parsed * Math.pow(10, digits)) / Math.pow(10, digits);
-  return parsed
+  parsed = +(Math.round(Number(parsed + 'e+' + precision)) + 'e-' + precision);
+  return parsed;
 }
 
 /**
