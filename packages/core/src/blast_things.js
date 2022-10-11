@@ -35,6 +35,11 @@ const webHidDevices = new Map();
 const audioDevices = new Map();
 
 /**
+ * Maps video device labels to video device ids.
+ */
+const videoDevices = new Map();
+
+/**
  * Lists all things implemented by BLAST.
  */
 export const implementedThings = [];
@@ -129,6 +134,15 @@ let audioSelectButtonHandler = null;
  */
 export const setAudioSelectButtonHandler = function (handler) {
   audioSelectButtonHandler = handler;
+};
+
+let videoSelectButtonHandler = null;
+/**
+ * Sets the 'select video input' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setVideoSelectButtonHandler = function (handler) {
+  videoSelectButtonHandler = handler;
 };
 
 let getRssiBlockadded = false;
@@ -239,9 +253,29 @@ export const thingsFlyoutCategory = function (workspace) {
     audioSelectButtonHandler();
   });
   xmlList.push(audioButton);
+
   // Add connected blocks for connected audio devices
   if (connectedThingBlocks.audio.length > 0) {
     xmlList.push(...connectedThingBlocks.audio);
+  }
+
+  // Create Video Label
+  const videoLabel = document.createElement('label');
+  videoLabel.setAttribute('text', 'Video Input Devices');
+  xmlList.push(videoLabel);
+
+  // Create Video add device button
+  const videoButton = document.createElement('button');
+  videoButton.setAttribute('text', 'add video input');
+  videoButton.setAttribute('callbackKey', 'CREATE_VIDEO');
+  workspace.registerButtonCallback('CREATE_VIDEO', _button => {
+    videoSelectButtonHandler();
+  });
+  xmlList.push(videoButton);
+
+  // Add connected blocks for connected video devices
+  if (connectedThingBlocks.video.length > 0) {
+    xmlList.push(...connectedThingBlocks.video);
   }
 
   return xmlList;
@@ -252,7 +286,7 @@ export const thingsFlyoutCategory = function (workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocks = function () {
-  const xmlList = {bluetooth: [], hid: [], audio: []};
+  const xmlList = {bluetooth: [], hid: [], audio: [], video: []};
   // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
@@ -459,11 +493,11 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
 };
 
 /**
- * Adds an audio device to BLAST.
+ * Adds a device to BLAST.
  * @param {string} deviceName Name of the device.
  * @param {string} deviceId Unique identifier of the device.
  */
-export const addAudioDevice = function (deviceName, deviceId, type) {
+export const addDevice = function (deviceName, deviceId, type) {
   let thing;
   for (const t of implementedThings) {
     if (t.id === type) {
@@ -483,6 +517,10 @@ export const addAudioDevice = function (deviceName, deviceId, type) {
       addBlock(block.type, block.category);
     }
   }
-  audioDevices.set(deviceName, deviceId);
+  if (type === 'audioOutput') {
+    audioDevices.set(deviceName, deviceId);
+  } else if (type === 'videoInput') {
+    videoDevices.set(deviceName, deviceId);
+  }
   reloadToolbox();
 };

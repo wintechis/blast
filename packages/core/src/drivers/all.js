@@ -42,6 +42,9 @@ import './text2code/generators.js';
 import './urdf/blocks.js';
 import './urdf/generators.js';
 
+import './video/blocks.js';
+import './video/generators.js';
+
 import './webSpeech/blocks.js';
 import './webSpeech/generators.js';
 

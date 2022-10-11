@@ -20,13 +20,14 @@ import {
 } from '../../core/dist/blast_interpreter.js';
 import {link, loadXMLFromFile} from '../../core/dist/blast_storage.js';
 import {
-  addAudioDevice,
+  addDevice,
   connectWebHidDevice,
   connectedThings,
   implementedThings,
   setDevMode,
   setThingsLog,
   setAudioSelectButtonHandler,
+  setVideoSelectButtonHandler,
   setWebBluetoothButtonHandler,
   setWebHidButtonHandler,
 } from '../../core/dist/blast_things.js';
@@ -449,21 +450,21 @@ const importPrettify = function () {
   document.head.appendChild(script);
 };
 
-const getAudioOutputDevices = async function () {
+const getDevices = async function (kind) {
   await navigator.mediaDevices.getUserMedia({audio: true});
   const devices = await navigator.mediaDevices.enumerateDevices();
-  const audioDevices = devices.filter(device => device.kind === 'audiooutput');
+  const audioDevices = devices.filter(device => device.kind === kind);
   return audioDevices;
 };
 
-const openAudioSelectModal = function () {
+const openVideoAudioSelectModal = function (kind) {
   // Clear the table
   const tbody = document.getElementById('connect-tbody');
   while (tbody.firstChild) {
     tbody.removeChild(tbody.firstChild);
   }
   // request list of audio devices
-  getAudioOutputDevices().then(devices => {
+  getDevices(kind).then(devices => {
     devices.forEach(device => {
       const row = document.createElement('tr');
       const nameCell = document.createElement('td');
@@ -478,7 +479,11 @@ const openAudioSelectModal = function () {
       addButton.id = 'addButton-' + device.deviceId;
       addButton.value = 'add';
       addButton.addEventListener('click', () => {
-        addAudioDevice(device.label, device.deviceId, 'audioOutput');
+        if (kind === 'audiooutput') {
+          addDevice(device.label, device.deviceId, 'audioOutput');
+        } else if (kind === 'videoinput') {
+          addDevice(device.label, device.deviceId, 'videoInput');
+        }
         document.getElementById('addStatus-' + device.deviceId).innerHTML =
           '&#x2714;';
         document.getElementById('addStatus-' + device.deviceId).style.color =
@@ -518,6 +523,13 @@ const openAudioSelectModal = function () {
     // Show the modal
     document.getElementById('connect-modal').style.display = 'block';
   });
+};
+
+const getVideoInputDevices = async function () {
+  await navigator.mediaDevices.getUserMedia({video: true});
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter(device => device.kind === 'videoinput');
+  return videoDevices;
 };
 
 const openConnectModal = function (type) {
@@ -712,7 +724,8 @@ export const initUi = function (ws) {
 
   setWebBluetoothButtonHandler(() => openConnectModal('bluetooth'));
   setWebHidButtonHandler(() => openConnectModal('hid'));
-  setAudioSelectButtonHandler(() => openAudioSelectModal());
+  setAudioSelectButtonHandler(() => openVideoAudioSelectModal('audiooutput'));
+  setVideoSelectButtonHandler(() => openVideoAudioSelectModal('videoinput'));
 
   // Lazy-load the syntax-highlighting.
   window.setTimeout(importPrettify, 1);

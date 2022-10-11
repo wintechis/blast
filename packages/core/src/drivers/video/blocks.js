@@ -1,5 +1,5 @@
 /**
- * @fileoverview Blocks definitions for the audio blocks.
+ * @fileoverview Blocks definitions for the video blocks.
  * @author derwehr@gmail.com(Thomas Wehr)
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -9,52 +9,48 @@ import {implementedThings} from '../../blast_things.js';
 
 const {Blocks, FieldTextInput} = Blockly;
 
-Blocks['things_audioOutput'] = {
+Blocks['things_videoInput'] = {
   /**
-   * Block representing an audio output device.
+   * Block representing a video input device.
    * @this {Blockly.Block}
    */
   init: function () {
     this.appendDummyInput('name')
-      .appendField('Audio output', 'label')
+      .appendField('Video input', 'label')
       .appendField(new FieldTextInput('Error getting name'), 'name');
     this.appendDummyInput('id')
       .appendField(new FieldTextInput('Error getting id'), 'id')
       .setVisible(false);
     this.setOutput(true, 'Thing');
     this.setColour(60);
-    this.setTooltip('An audio output device.');
+    this.setTooltip('A video input device.');
     this.getField('name').setEnabled(false);
   },
 };
 
-Blocks['play_audio'] = {
+Blocks['videoInput_getFrame'] = {
   /**
-   * Block for playing audio from URIs.
+   * Block for getting a frame from a video input device.
    * @this {Blockly.Block}
    */
   init: function () {
-    this.appendValueInput('URI')
-      .appendField('play audio from URI')
-      .setCheck('URI');
     this.appendValueInput('thing')
-      .appendField('on audio output')
+      .appendField('get frame from video input')
       .setCheck('Thing');
-    this.setPreviousStatement(true, null);
-    this.setNextStatement(true, null);
+    this.setOutput(true, 'Image');
     this.setColour(0);
-    this.setTooltip('Plays an audio file from URI.');
+    this.setTooltip('Gets a frame from a video input device.');
     this.setHelpUrl('');
   },
 };
 
 implementedThings.push({
-  id: 'audioOutput',
-  name: 'Audio Output Device',
-  type: 'audio',
+  id: 'videoInput',
+  name: 'Video Input Device',
+  type: 'video',
   blocks: [
     {
-      type: 'play_audio',
+      type: 'videoInput_getFrame',
       category: 'Actions',
     },
   ],

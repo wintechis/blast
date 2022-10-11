@@ -26,7 +26,6 @@ import {addCalibrateButton} from './spheroCalibration.js';
 // import block blast files to include them in bundled code.
 import '../../core/dist/blocks/all.js';
 import '../../core/dist/generators/all.js';
-import '../../core/dist/thingBlocks/all.js';
 
 import '../../core/dist/drivers/all.js';
 
