@@ -66,7 +66,7 @@
     "webpack": "^5.70.0",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.23"
   },
-  "packageManager": "yarn@3.2.0",
+  "packageManager": "yarn@3.2.4",
   "c8": {
     "all": true,
     "src": [
