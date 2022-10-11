@@ -87,8 +87,6 @@ export class BinaryDataStreamCodec implements ContentCodec {
 
       hexString = fillStringPattern(schema, dataValue);
       buf = string2byte(schema, hexString);
-
-      //console.log('[CODEC]', 'Codec generated value:', hexString);
     }
     // Else create buffer without pattern
     else {
@@ -118,6 +116,7 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
   const byteOrder = schema['bdo:byteOrder'] || 'little';
   const scale = schema['bdo:scale'] || 1;
   const offset = schema['bdo:offset'] || 0;
+  const precision = schema['bdo:precision'] || 2;
 
   if (typeof bytelength == 'undefined') {
     throw new Error('Not all parameters are provided!');
@@ -141,6 +140,8 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
 
   parsed = parsed * scale;
 
+  // Round parsed number
+  parsed = +(Math.round(Number(parsed + 'e+' + precision)) + 'e-' + precision);
   return parsed;
 }
 

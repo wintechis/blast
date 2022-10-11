@@ -92,6 +92,10 @@ export default class WebBluetoothClientNew implements ProtocolClient {
       deconstructedForm.characteristicId
     );
 
+    if (typeof characteristic === 'undefined') {
+      throwError('Characteristic not found!');
+    }
+
     // Select what operation should be executed
     switch (deconstructedForm.bleOperation) {
       case 'sbo:write-without-response':
@@ -247,40 +251,39 @@ export default class WebBluetoothClientNew implements ProtocolClient {
     // path string is check if it is a UUID; everything else is added together to deviceID
     let pathElements = deconstructedForm.path.split('/');
 
-    let deviceId;
-    let characteristicId;
-    let serviceId;
-
     if (pathElements.length != 3) {
       const regex = new RegExp(
         '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
       );
 
-      deviceId = pathElements[0];
+      let deviceId = pathElements[0];
+
       for (let i = 1; i < pathElements.length; i++) {
         if (regex.test(pathElements[i]) == false) {
           deviceId = deviceId + '/' + pathElements[i];
         } else {
           // second last element is service id
           if (i == pathElements.length - 2) {
-            serviceId = pathElements[i];
+            deconstructedForm.serviceId = pathElements[i];
           }
           // Last element is characteristic
           if (i == pathElements.length - 1) {
-            characteristicId = pathElements[i];
+            deconstructedForm.characteristicId = pathElements[i];
           }
         }
       }
+      // DeviceId
+      deconstructedForm.deviceId = deviceId;
+    } else {
+      // DeviceId
+      deconstructedForm.deviceId = pathElements[0];
+
+      // Extract serviceId
+      deconstructedForm.serviceId = pathElements[1];
+
+      // Extract characteristicId
+      deconstructedForm.characteristicId = pathElements[2];
     }
-
-    // DeviceId
-    deconstructedForm.deviceId = deviceId;
-
-    // Extract serviceId
-    deconstructedForm.serviceId = serviceId;
-
-    // Extract characteristicId
-    deconstructedForm.characteristicId = characteristicId;
 
     // Extract operation -> e.g. readproperty; writeproperty
     deconstructedForm.operation = form.op;
