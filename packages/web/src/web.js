@@ -339,10 +339,13 @@ const renderContent_ = function () {
   const content = document.getElementById('content_javascript');
 
   // remove highlightblock functions from the js code tab
-  content.textContent = getLatestCode().replace(
-    /highlightBlock\('.*'\);\n/gm,
+  const code = getLatestCode().replace(/highlightBlock\('.*'\);\n/gm, '');
+  // remove 'if (stop === true) resolve();\n' from the js code tabs.
+  content.textContent = code.replace(
+    /if \(interpreterExecutionExit === true\) resolve\(\);\n/gm,
     ''
   );
+
   // Remove the 'prettyprinted' class, so that Prettify will recalculate.
   content.className = content.className.replace('prettyprinted', '');
   if (typeof PR === 'object') {

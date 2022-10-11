@@ -160,3 +160,20 @@ const EVERY_SECONDS_XML = `
 
 // Add the wait_seconds block to the toolbox
 addBlock('every_seconds', 'Loops', EVERY_SECONDS_XML);
+
+Blocks['terminate'] = {
+  /**
+   * Block for terminating the execution.
+   */
+  init: function () {
+    this.appendDummyInput().appendField('terminate program');
+    this.setColour(120);
+    this.setTooltip('Stops the program currently being executed in BLAST.');
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setHelpUrl('');
+  },
+};
+
+// Add the terminate block to the toolbox.
+addBlock('terminate', 'Loops');

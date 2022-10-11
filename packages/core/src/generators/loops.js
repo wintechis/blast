@@ -5,7 +5,7 @@
  */
 
 import Blockly from 'blockly';
-import {throwError} from '../blast_interpreter.js';
+import {stopJS, throwError} from '../blast_interpreter.js';
 const {JavaScript} = Blockly;
 
 // Remap blockly blocks to improve naming in xml.
@@ -15,6 +15,11 @@ JavaScript['for'] = JavaScript['controls_for'];
 JavaScript['break_continue'] = JavaScript['controls_flow_statements'];
 JavaScript['conditional_statement'] = JavaScript['controls_if'];
 
+/**
+ * Generates JavaScript code for the wait_seconds block.
+ * @param {Blockly.Block} block the wait_seconds block.
+ * @returns {String} the generated code.
+ */
 JavaScript['wait_seconds'] = function (block) {
   const seconds =
     JavaScript.valueToCode(block, 'SECONDS', JavaScript.ORDER_ATOMIC) || 0;
@@ -31,6 +36,11 @@ globalThis['waitSeconds'] = async function (seconds) {
   await new Promise(resolve => setTimeout(resolve, seconds * 1000));
 };
 
+/**
+ * Generates JavaScript code for the every_seconds block.
+ * @param {Blockly.Block} block the every_seconds block.
+ * @returns {String} the generated code.
+ */
 JavaScript['every_seconds'] = function (block) {
   // read block inputs
   const value =
@@ -59,4 +69,24 @@ JavaScript['every_seconds'] = function (block) {
 intervalEvents.push(interval);\n`;
 
   return code;
+};
+
+/**
+ * Generates JavaScript for the terminate block.
+ * @param {Blockly.Block} block the terminate block.
+ * @returns {String} the generated code.
+ */
+JavaScript['terminate'] = function (_block) {
+  const code = 'exit()';
+
+  return code;
+};
+JavaScript.STATEMENT_PREFIX =
+  'if (interpreterExecutionExit === true) return;\n';
+
+globalThis['interpreterExecutionExit'] = false;
+globalThis['exit'] = function () {
+  // eslint-disable-next-line no-undef
+  interpreterExecutionExit = true;
+  stopJS();
 };
