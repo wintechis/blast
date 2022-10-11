@@ -112,10 +112,6 @@ globalThis['huskyduino_chooseAlgo'] = async function (blockId, value) {
   await thing.writeProperty('algorithm', value);
 };
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 /**
  * write face id value to Huskyduino via bluetooth
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
@@ -128,7 +124,7 @@ globalThis['huskyduino_learnId'] = async function (blockId, value) {
   // Write face id to thing.
   await thing.invokeAction('learn', value);
   // Should wait a few seconds -> huskylens needs time to learn
-  await sleep(1500);
+  await new Promise(resolve => setTimeout(resolve, 1500));
 };
 
 /**
