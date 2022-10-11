@@ -210,7 +210,7 @@ suite('bleLedController_switch_lights block', () => {
           {
             title: 'Empty',
             expectedCode:
-              "await bleLedController_switch_lights('', null, '#000000');\n",
+              "await bleLedController_switch_lights('', null, 0, 0, 0);\n",
             createBlock: function (workspace) {
               return workspace.newBlock('bleLedController_switch_lights');
             },
@@ -218,7 +218,7 @@ suite('bleLedController_switch_lights block', () => {
           {
             title: 'Non-empty',
             expectedCode:
-              /await bleLedController_switch_lights\('.*', 'thingId', '#ffffff'\);\n/m,
+              /await bleLedController_switch_lights\('.*', 'thingId', 255, 255, 255\);\n/m,
             createBlock: function (workspace) {
               const block = workspace.newBlock(
                 'bleLedController_switch_lights'
