@@ -39,6 +39,7 @@
     "eslint": "^7.15.0",
     "eslint-config-google": "^0.14.0",
     "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-node": "latest",
     "js-interpreter": "https://github.com/derwehr/js-interpreter.git",
     "jsdoc": "^3.6.7",
     "mocha": "^9.2.2",
