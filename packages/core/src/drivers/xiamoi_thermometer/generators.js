@@ -24,7 +24,7 @@ JavaScript['things_xiaomiThermometer'] = function (block) {
  * @param {Blockly.Block} block the get_temperature block.
  * @returns {String} the generated code.
  */
-JavaScript['xiaomi_thermometer_event'] = function (block) {
+JavaScript['xiaomiThermometer_event'] = function (block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.quote_(

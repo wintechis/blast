@@ -62,7 +62,7 @@ Blocks['things_ruuviTag'] = {
   },
 };
 
-Blocks['ruuvi_event'] = {
+Blocks['ruuviTag_event'] = {
   /**
    * Block for reading a property of a Ruuvi Tag.
    * @this {Blockly.Block}
@@ -192,7 +192,7 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'ruuvi_event',
+      type: 'ruuviTag_event',
       category: 'Events',
     },
   ],

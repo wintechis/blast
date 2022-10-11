@@ -19,11 +19,11 @@ JavaScript['things_spheroMini'] = function (block) {
 };
 
 /**
- * Generates JavaScript code for the sphero_roll block.
- * @param {Blockly.Block} block the sphero_roll block.
+ * Generates JavaScript code for the spheroMini_roll block.
+ * @param {Blockly.Block} block the spheroMini_roll block.
  * @returns {String} the generated code.
  */
-JavaScript['sphero_roll'] = function (block) {
+JavaScript['spheroMini_roll'] = function (block) {
   const speed = JavaScript.valueToCode(block, 'speed', JavaScript.ORDER_ATOMIC);
   const heading = JavaScript.valueToCode(
     block,
@@ -39,11 +39,11 @@ JavaScript['sphero_roll'] = function (block) {
 };
 
 /**
- * Generates JavaScript code for the sphero_roll block.
- * @param {Blockly.Block} block the sphero_roll block.
+ * Generates JavaScript code for the spheroMini_roll block.
+ * @param {Blockly.Block} block the spheroMini_roll block.
  * @returns {String} the generated code.
  */
-JavaScript['sphero_stop'] = function (block) {
+JavaScript['spheroMini_stop'] = function (block) {
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
@@ -53,11 +53,11 @@ JavaScript['sphero_stop'] = function (block) {
 };
 
 /**
- * Generates JavaScript code for the sphero_color block.
- * @param {Blockly.Block} block the sphero_color block.
+ * Generates JavaScript code for the spheroMini_color block.
+ * @param {Blockly.Block} block the spheroMini_color block.
  * @returns {String} the generated code.
  */
-JavaScript['sphero_color'] = function (block) {
+JavaScript['spheroMini_color'] = function (block) {
   const color = JavaScript.valueToCode(block, 'color', JavaScript.ORDER_ATOMIC);
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {

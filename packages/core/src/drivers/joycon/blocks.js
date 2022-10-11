@@ -374,11 +374,11 @@ implementedThings.push({
   type: 'hid',
   blocks: [
     {
-      type: 'joycon_gamepad_joystick',
+      type: 'gamepad_pro_joystick',
       category: 'Events',
     },
     {
-      type: 'joycon_gamepad_button',
+      type: 'gamepad_pro_button',
       category: 'Events',
     },
   ],
@@ -391,7 +391,7 @@ implementedThings.push({
   ],
 });
 
-Blocks['joycon_gamepad_joystick'] = {
+Blocks['gamepad_pro_joystick'] = {
   /**
    * Block to subscribe to Gamepad Joystick events.
    * @this Blockly.Block
@@ -494,7 +494,7 @@ Blocks['joycon_gamepad_joystick'] = {
   },
 };
 
-Blocks['joycon_gamepad_button'] = {
+Blocks['gamepad_pro_button'] = {
   /**
    * Block to subscribe to Gamepad Button events.
    * @this Blockly.Block

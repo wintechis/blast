@@ -64,7 +64,7 @@ Blocks['things_bleLedController'] = {
   },
 };
 
-Blocks['switch_lights_rgb'] = {
+Blocks['bleLedController_switch_lights'] = {
   /**
    * Block for switchling rgb lights.
    * @this {Blockly.Block}
@@ -97,9 +97,9 @@ Blocks['switch_lights_rgb'] = {
   },
 };
 
-// Define inner block XML for the switch_lights_rgb block.
+// Define inner block XML for the bleLedController_switch_lights block.
 const SWITCH_LIGHTS_RGB_XML = `
-<block type="switch_lights_rgb">
+<block type="bleLedController_switch_lights">
   <value name="colour">
     <block type="colour_picker">
       <field name="COLOUR">#ff0000</field>
@@ -114,7 +114,7 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'switch_lights_rgb',
+      type: 'bleLedController_switch_lights',
       category: 'Properties',
       XML: SWITCH_LIGHTS_RGB_XML,
     },

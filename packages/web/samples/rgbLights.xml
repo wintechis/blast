@@ -1,5 +1,5 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
-  <block type="switch_lights_rgb">
+  <block type="bleLedController_switch_lights">
     <value name="colour">
       <block type="colour_picker">
         <field name="COLOUR">#ff0000</field>

@@ -291,7 +291,7 @@ const flyoutCategoryBlocks = function () {
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
       if (thing.type === 'bluetooth' && !getRssiBlockadded) {
-        addBlock('get_signal_strength_wb', 'Properties');
+        addBlock('bluetoothGeneric_get_signal_strength_wb', 'Properties');
         getRssiBlockadded = true;
         reloadToolbox();
       }

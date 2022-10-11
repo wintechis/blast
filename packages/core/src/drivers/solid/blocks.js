@@ -8,7 +8,7 @@ import Blockly from 'blockly';
 const {Blocks} = Blockly;
 import {addBlock} from '../../blast_toolbox.js';
 
-Blocks['upload_image'] = {
+Blocks['solid_upload_image'] = {
   /**
    * Block for uploading an image to a solid container.
    * @this {Blockly.Block}
@@ -29,4 +29,4 @@ Blocks['upload_image'] = {
 };
 
 // Add display_image block to the toolbox.
-addBlock('upload_image', 'Requests');
+addBlock('solid_upload_image', 'Requests');

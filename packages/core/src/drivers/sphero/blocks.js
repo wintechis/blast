@@ -88,7 +88,7 @@ Blocks['things_spheroMini'] = {
   },
 };
 
-Blocks['sphero_roll'] = {
+Blocks['spheroMini_roll'] = {
   /**
    * Block representing a roll command.
    * @this Blockly.Block
@@ -110,8 +110,8 @@ Blocks['sphero_roll'] = {
   },
 };
 
-const SPHERO_ROLL_XML = `
-<block type="sphero_roll">
+const SPHEROMINI_ROLL_XML = `
+<block type="spheroMini_roll">
   <value name="speed">
     <block type="number_value">
       <field name="NUM">200</field>
@@ -125,7 +125,7 @@ const SPHERO_ROLL_XML = `
 </block>
 `;
 
-Blocks['sphero_stop'] = {
+Blocks['spheroMini_stop'] = {
   /**
    * Block representing a stop command.
    * @this Blockly.Block
@@ -142,7 +142,7 @@ Blocks['sphero_stop'] = {
   },
 };
 
-Blocks['sphero_color'] = {
+Blocks['spheroMini_color'] = {
   /**
    * Block representing a color command.
    * @this Blockly.Block
@@ -167,16 +167,16 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'sphero_roll',
+      type: 'spheroMini_roll',
       category: 'Actions',
-      XML: SPHERO_ROLL_XML,
+      XML: SPHEROMINI_ROLL_XML,
     },
     {
-      type: 'sphero_stop',
+      type: 'spheroMini_stop',
       category: 'Actions',
     },
     {
-      type: 'sphero_color',
+      type: 'spheroMini_color',
       category: 'Properties',
     },
   ],

@@ -156,13 +156,13 @@ suite('things_eddyStoneDevice block', () => {
   runSerializationTestSuite(testCases);
 });
 
-suite('write_eddystone_property block', () => {
+suite('eddyStoneDevice_write_eddystone_property block', () => {
   /**
-   * Asserts that the write_eddystone_property block has the inputs and fields we expect.
+   * Asserts that the eddyStoneDevice_write_eddystone_property block has the inputs and fields we expect.
    * @param {Blockly.Block} block The block to test.
    */
   function assertWriteEddystonePropertyBlockStructure(block) {
-    expect(block.type).to.equal('write_eddystone_property');
+    expect(block.type).to.equal('eddyStoneDevice_write_eddystone_property');
     expect(block.inputList.length).to.equal(5);
     // property input
     const propertyInput = block.inputList[0];
@@ -228,7 +228,7 @@ suite('write_eddystone_property block', () => {
   });
 
   test('Creation', function () {
-    const block = this.workspace.newBlock('write_eddystone_property');
+    const block = this.workspace.newBlock('eddyStoneDevice_write_eddystone_property');
     assertWriteEddystonePropertyBlockStructure(block);
   });
 
@@ -247,7 +247,7 @@ suite('write_eddystone_property block', () => {
             expectedCode:
               "await writeEddystoneProperty('', null, null, 'advertisedTxPower', null);\n",
             createBlock: function (workspace) {
-              return workspace.newBlock('write_eddystone_property');
+              return workspace.newBlock('eddyStoneDevice_write_eddystone_property');
             },
           },
           {
@@ -255,7 +255,7 @@ suite('write_eddystone_property block', () => {
             expectedCode:
               /await writeEddystoneProperty\('.*', 'thingId', 3, 'advertisingInterval', 200\);\n/m,
             createBlock: function (workspace) {
-              const block = workspace.newBlock('write_eddystone_property');
+              const block = workspace.newBlock('eddyStoneDevice_write_eddystone_property');
               // Set property to advertising interval
               block.setFieldValue('advertisingInterval', 'property');
               // Append number block to slot input
@@ -289,9 +289,9 @@ suite('write_eddystone_property block', () => {
   const testCases = [
     {
       title: 'Empty',
-      xml: '<block type="write_eddystone_property"></block>',
+      xml: '<block type="eddyStoneDevice_write_eddystone_property"></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="write_eddystone_property" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="eddyStoneDevice_write_eddystone_property" id="1">\n' +
         '  <field name="property">advertisedTxPower</field>\n' +
         '  <field name="frameType">UID</field>\n' +
         '</block>',
@@ -304,7 +304,7 @@ suite('write_eddystone_property block', () => {
     {
       title: 'with inputs',
       xml:
-        '<block type="write_eddystone_property">' +
+        '<block type="eddyStoneDevice_write_eddystone_property">' +
         '  <field name="property">advertisingInterval</field>' +
         '  <field name="frameType">UID</field>' +
         '  <value name="slot">' +
@@ -325,7 +325,7 @@ suite('write_eddystone_property block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="write_eddystone_property" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="eddyStoneDevice_write_eddystone_property" id="1">\n' +
         '  <field name="property">advertisingInterval</field>\n' +
         '  <field name="frameType">UID</field>\n' +
         '  <value name="slot">\n' +
@@ -689,13 +689,13 @@ suite('things_bluetoothGeneric block', () => {
   runSerializationTestSuite(testCases);
 });
 
-suite('get_signal_strength_wb block', () => {
+suite('bluetoothGeneric_get_signal_strength_wb block', () => {
   /**
-   * Asserts the structure of a get_signal_strength_wb block.
+   * Asserts the structure of a bluetoothGeneric_get_signal_strength_wb block.
    * @param {!Blockly.Block} block The block to test.
    */
   function assertGetSignalStrengthWbBlockStructure(block) {
-    expect(block.type).to.equal('get_signal_strength_wb');
+    expect(block.type).to.equal('bluetoothGeneric_get_signal_strength_wb');
     expect(block.inputList.length).to.equal(1);
     expect(block.outputConnection).to.not.equal(null);
     expect(block.outputConnection.check_).to.be.an('array');
@@ -725,7 +725,9 @@ suite('get_signal_strength_wb block', () => {
   });
 
   test('Creation', function () {
-    const block = this.workspace.newBlock('get_signal_strength_wb');
+    const block = this.workspace.newBlock(
+      'bluetoothGeneric_get_signal_strength_wb'
+    );
     assertGetSignalStrengthWbBlockStructure(block);
   });
 
@@ -743,14 +745,18 @@ suite('get_signal_strength_wb block', () => {
             title: 'Empty',
             expectedCode: 'await getRSSIWb(null)',
             createBlock: function (workspace) {
-              return workspace.newBlock('get_signal_strength_wb');
+              return workspace.newBlock(
+                'bluetoothGeneric_get_signal_strength_wb'
+              );
             },
           },
           {
             title: 'with input',
             expectedCode: "await getRSSIWb('thingId')",
             createBlock: function (workspace) {
-              const block = workspace.newBlock('get_signal_strength_wb');
+              const block = workspace.newBlock(
+                'bluetoothGeneric_get_signal_strength_wb'
+              );
               const thingBlock = workspace.newBlock('things_bluetoothGeneric');
               thingBlock.setFieldValue('thingId', 'id');
               thingBlock.setFieldValue('thingName', 'name');
@@ -772,9 +778,9 @@ suite('get_signal_strength_wb block', () => {
   const testCases = [
     {
       title: 'Empty',
-      xml: '<block type="get_signal_strength_wb"></block>',
+      xml: '<block type="bluetoothGeneric_get_signal_strength_wb"></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="get_signal_strength_wb" id="1"></block>',
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bluetoothGeneric_get_signal_strength_wb" id="1"></block>',
       assertBlockStructure: block => {
         assertGetSignalStrengthWbBlockStructure(block);
       },
@@ -782,7 +788,7 @@ suite('get_signal_strength_wb block', () => {
     {
       title: 'With input',
       xml:
-        '<block type="get_signal_strength_wb">' +
+        '<block type="bluetoothGeneric_get_signal_strength_wb">' +
         '  <value name="thing">' +
         '    <block type="things_bluetoothGeneric">' +
         '      <field name="id">thingId</field>' +
@@ -791,7 +797,7 @@ suite('get_signal_strength_wb block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="get_signal_strength_wb" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bluetoothGeneric_get_signal_strength_wb" id="1">\n' +
         '  <value name="thing">\n' +
         '    <block type="things_bluetoothGeneric" id="1">\n' +
         '      <field name="name">thingName</field>\n' +

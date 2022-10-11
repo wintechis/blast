@@ -27,7 +27,7 @@ const getHuskyduino = function (id) {
   }
 };
 
-Blocks['things_HuskyDuino'] = {
+Blocks['things_Huskylens'] = {
   /**
    * Block representing a HuskyDuino.
    * @this {Blockly.Block}

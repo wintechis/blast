@@ -158,13 +158,13 @@ suite('things_bleLedController block', () => {
   runSerializationTestSuite(testCases);
 });
 
-suite('switch_lights_rgb block', () => {
+suite('bleLedController_switch_lights block', () => {
   /**
-   * Asserts that the switch_lights_rgb block has the inputs and fields we expect.
-   * @param {!Blockly.Block} block The switch_lights_rgb block.
+   * Asserts that the bleLedController_switch_lights block has the inputs and fields we expect.
+   * @param {!Blockly.Block} block The bleLedController_switch_lights block.
    */
   function assertSwitchLightsRgbBlockStructure(block) {
-    expect(block.type).to.equal('switch_lights_rgb');
+    expect(block.type).to.equal('bleLedController_switch_lights');
     expect(block.inputList.length).to.equal(2);
     const colourInput = block.inputList[0];
     expect(colourInput.name).to.equal('colour');
@@ -193,7 +193,7 @@ suite('switch_lights_rgb block', () => {
   });
 
   test('Creation', function () {
-    const block = this.workspace.newBlock('switch_lights_rgb');
+    const block = this.workspace.newBlock('bleLedController_switch_lights');
     assertSwitchLightsRgbBlockStructure(block);
   });
 
@@ -210,17 +210,19 @@ suite('switch_lights_rgb block', () => {
           {
             title: 'Empty',
             expectedCode:
-              "await bleLedController_switchLights('', null, '#000000');\n",
+              "await bleLedController_switch_lights('', null, '#000000');\n",
             createBlock: function (workspace) {
-              return workspace.newBlock('switch_lights_rgb');
+              return workspace.newBlock('bleLedController_switch_lights');
             },
           },
           {
             title: 'Non-empty',
             expectedCode:
-              /await bleLedController_switchLights\('.*', 'thingId', '#ffffff'\);\n/m,
+              /await bleLedController_switch_lights\('.*', 'thingId', '#ffffff'\);\n/m,
             createBlock: function (workspace) {
-              const block = workspace.newBlock('switch_lights_rgb');
+              const block = workspace.newBlock(
+                'bleLedController_switch_lights'
+              );
               // Append colour picker block
               const colourBlock = workspace.newBlock('colour_picker');
               colourBlock.setFieldValue('#ffffff', 'COLOUR');
@@ -247,9 +249,9 @@ suite('switch_lights_rgb block', () => {
   const testCases = [
     {
       title: 'Thing id and colour unset',
-      xml: '<block type="switch_lights_rgb"/>',
+      xml: '<block type="bleLedController_switch_lights"/>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="switch_lights_rgb" id="1"></block>',
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bleLedController_switch_lights" id="1"></block>',
       assertBlockStructure: block => {
         assertSwitchLightsRgbBlockStructure(block);
       },
@@ -257,7 +259,7 @@ suite('switch_lights_rgb block', () => {
     {
       title: 'Thing id set, colour unset',
       xml:
-        '<block type="switch_lights_rgb">' +
+        '<block type="bleLedController_switch_lights">' +
         '  <value name="thing">' +
         '    <block type="things_bleLedController">' +
         '      <field name="name">ELK-BLEDOM</field>' +
@@ -266,7 +268,7 @@ suite('switch_lights_rgb block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="switch_lights_rgb" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bleLedController_switch_lights" id="1">\n' +
         '  <value name="thing">\n' +
         '    <block type="things_bleLedController" id="1">\n' +
         '      <field name="name">ELK-BLEDOM</field>\n' +
@@ -284,7 +286,7 @@ suite('switch_lights_rgb block', () => {
     {
       title: 'Thing id unset, colour set',
       xml:
-        '<block type="switch_lights_rgb">' +
+        '<block type="bleLedController_switch_lights">' +
         '  <value name="colour">' +
         '    <block type="colour_picker">' +
         '      <field name="COLOUR">#000000</field>' +
@@ -292,7 +294,7 @@ suite('switch_lights_rgb block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="switch_lights_rgb" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bleLedController_switch_lights" id="1">\n' +
         '  <value name="colour">\n' +
         '    <block type="colour_picker" id="1">\n' +
         '      <field name="COLOUR">#000000</field>\n' +
@@ -309,7 +311,7 @@ suite('switch_lights_rgb block', () => {
     {
       title: 'Thing id and colour set',
       xml:
-        '<block type="switch_lights_rgb">' +
+        '<block type="bleLedController_switch_lights">' +
         '  <value name="colour">' +
         '    <block type="colour_picker">' +
         '      <field name="COLOUR">#000000</field>' +
@@ -323,7 +325,7 @@ suite('switch_lights_rgb block', () => {
         '  </value>' +
         '</block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="switch_lights_rgb" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="bleLedController_switch_lights" id="1">\n' +
         '  <value name="colour">\n' +
         '    <block type="colour_picker" id="1">\n' +
         '      <field name="COLOUR">#000000</field>\n' +

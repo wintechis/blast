@@ -21,11 +21,11 @@ JavaScript['things_bleLedController'] = function (block) {
 };
 
 /**
- * Generates JavaScript code for the switch_lights_RGB block.
+ * Generates JavaScript code for the bleLedController_switch_lights block.
  * @param {Blockly.Block} block the get_request block.
  * @returns {String} the generated code.
  */
-JavaScript['switch_lights_rgb'] = function (block) {
+JavaScript['bleLedController_switch_lights'] = function (block) {
   const colour =
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
@@ -36,7 +36,7 @@ JavaScript['switch_lights_rgb'] = function (block) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
 
-  const code = `await bleLedController_switchLights(${blockId}, ${thing}, ${colour});\n`;
+  const code = `await bleLedController_switch_lights(${blockId}, ${thing}, ${colour});\n`;
   return code;
 };
 
@@ -46,7 +46,7 @@ JavaScript['switch_lights_rgb'] = function (block) {
  * @param {String} webBluetoothId identifier of the LED controller.
  * @param {String} colour the colour to switch the lights to, as hex value.
  */
-globalThis['bleLedController_switchLights'] = async function (
+globalThis['bleLedController_switch_lights'] = async function (
   blockId,
   webBluetoothId,
   colour

@@ -100,7 +100,7 @@ Blocks['things_xiaomiThermometer'] = {
   },
 };
 
-Blocks['xiaomi_thermometer_event'] = {
+Blocks['xiaomiThermometer_event'] = {
   /**
    * Block for reading a property of a Xiaomi Mijia thermometer.
    * @this {Blockly.Block}
@@ -204,7 +204,7 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'xiaomi_thermometer_event',
+      type: 'xiaomiThermometer_event',
       category: 'Events',
     },
   ],

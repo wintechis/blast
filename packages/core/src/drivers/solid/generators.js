@@ -10,11 +10,11 @@ import {throwError} from './../../blast_interpreter.js';
 import {saveFileInContainer} from '@inrupt/solid-client';
 
 /**
- * Generates Javascript code for the upload_image block.
- * @param {Blockly.Block} block the upload_image block.
+ * Generates Javascript code for the solid_upload_image block.
+ * @param {Blockly.Block} block the solid_upload_image block.
  * @returns {String} the generated code.
  */
-JavaScript['upload_image'] = function (block) {
+JavaScript['solid_upload_image'] = function (block) {
   const image = JavaScript.valueToCode(block, 'image', JavaScript.ORDER_NONE);
   const url = JavaScript.valueToCode(block, 'url', JavaScript.ORDER_NONE);
 

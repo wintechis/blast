@@ -10,11 +10,11 @@ const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from './../../blast_interpreter.js';
 
 /**
- * Generates JavaScript code for the things_HuskyDuino block.
- * @param {Blockly.Block} block the things_HuskyDuino block.
+ * Generates JavaScript code for the things_Huskylens block.
+ * @param {Blockly.Block} block the things_Huskylens block.
  * @returns {String} the generated code.
  */
-JavaScript['things_HuskyDuino'] = function (block) {
+JavaScript['things_Huskylens'] = function (block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };

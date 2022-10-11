@@ -28,7 +28,7 @@ Blocks['things_audioOutput'] = {
   },
 };
 
-Blocks['play_audio'] = {
+Blocks['audioOutput_playFileFromUrl'] = {
   /**
    * Block for playing audio from URIs.
    * @this {Blockly.Block}
@@ -54,7 +54,7 @@ implementedThings.push({
   type: 'audio',
   blocks: [
     {
-      type: 'play_audio',
+      type: 'audioOutput_playFileFromUrl',
       category: 'Actions',
     },
   ],

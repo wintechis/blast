@@ -2,7 +2,7 @@
   <variables>
     <variable id="@XMUm-iNcZs:Tf!OSXi]">toggle</variable>
   </variables>
-  <block type="switch_lights_rgb" x="66" y="71">
+  <block type="bleLedController_switch_lights" x="66" y="71">
     <value name="colour">
       <block type="colour_picker">
         <field name="COLOUR">#000000</field>
@@ -46,7 +46,7 @@
           </block>
         </value>
         <statement name="DO0">
-          <block type="switch_lights_rgb">
+          <block type="bleLedController_switch_lights">
             <value name="colour">
               <block type="colour_picker">
                 <field name="COLOUR">#ff0000</field>
@@ -70,7 +70,7 @@
           </block>
         </statement>
         <statement name="ELSE">
-          <block type="switch_lights_rgb">
+          <block type="bleLedController_switch_lights">
             <value name="colour">
               <block type="colour_picker">
                 <field name="COLOUR">#000000</field>

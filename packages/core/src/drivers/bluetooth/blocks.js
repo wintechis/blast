@@ -114,7 +114,7 @@ Blocks['things_bluetoothGeneric'] = {
   },
 };
 
-Blocks['get_signal_strength_wb'] = {
+Blocks['bluetoothGeneric_get_signal_strength_wb'] = {
   /**
    * Block for reading the strength of the signal (rssiValue property) sent by a ble device,
    * measured at the sc-ble-adapter.
@@ -146,7 +146,7 @@ Blocks['get_signal_strength_wb'] = {
   },
 };
 
-Blocks['write_eddystone_property'] = {
+Blocks['eddyStoneDevice_write_eddystone_property'] = {
   /**
    * Block for writing a property to an eddystone device.
    * @this {Blockly.Block}
@@ -221,9 +221,9 @@ Blocks['write_eddystone_property'] = {
   },
 };
 
-// Define inner block XML for the write_eddystone_property block.
-const WRITE_EDDYSTONE_PROPERTY_XML = `
-  <block type="write_eddystone_property">
+// Define inner block XML for the eddyStoneDevice_write_eddystone_property block.
+const EDDYSTONEDEVICE_WRITE_EDDYSTONE_PROPERTY_XML = `
+  <block type="eddyStoneDevice_write_eddystone_property">
     <value name="Slot">
       <block type="math_number">
         <field name="NUM">0</field>
@@ -398,9 +398,9 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'write_eddystone_property',
+      type: 'eddyStoneDevice_write_eddystone_property',
       category: 'Properties',
-      XML: WRITE_EDDYSTONE_PROPERTY_XML,
+      XML: EDDYSTONEDEVICE_WRITE_EDDYSTONE_PROPERTY_XML,
     },
     {
       type: 'read_eddystone_property',

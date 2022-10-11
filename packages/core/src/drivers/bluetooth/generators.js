@@ -33,7 +33,7 @@ JavaScript['things_bluetoothGeneric'] = function (block) {
  * @param {Blockly.Block} block the get_signal_strength block.
  * @returns {String} the generated code.
  */
-JavaScript['get_signal_strength_wb'] = function (block) {
+JavaScript['bluetoothGeneric_get_signal_strength_wb'] = function (block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const code = `await getRSSIWb(${thing})`;
@@ -66,11 +66,11 @@ globalThis['getRSSIWb'] = async function (webBluetoothId) {
 };
 
 /**
- * Generates JavaScript code for the write_eddystone_property block.
+ * Generates JavaScript code for the eddyStoneDevice_write_eddystone_property block.
  * @param {Blockly.Block} block the get_signal_strength block.
  * @returns {String} the generated code.
  */
-JavaScript['write_eddystone_property'] = function (block) {
+JavaScript['eddyStoneDevice_write_eddystone_property'] = function (block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const property = JavaScript.quote_(block.getFieldValue('property'));

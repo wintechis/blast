@@ -76,7 +76,7 @@
   * @param {Blockly.Block} block the get_temperature block.
   * @returns {String} the generated code.
   */
- JavaScript['ruuvi_event'] = function (block: Blockly.Block) {
+ JavaScript['ruuviTag_event'] = function (block: Blockly.Block) {
    const thing =
      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
    const statements = JavaScript.quote_(

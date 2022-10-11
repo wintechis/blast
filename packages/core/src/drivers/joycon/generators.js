@@ -257,11 +257,11 @@ JavaScript['things_gamepad_pro'] = function (block) {
 };
 
 /**
- * Generates JavaScript code for the joycon_gamepad_joystick block.
- * @param {Blockly.Block} block the joycon_gamepad_joystick block.
+ * Generates JavaScript code for the gamepad_pro_joystick block.
+ * @param {Blockly.Block} block the gamepad_pro_joystick block.
  * @returns {String} the generated code.
  */
-JavaScript['joycon_gamepad_joystick'] = function (block) {
+JavaScript['gamepad_pro_joystick'] = function (block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.quote_(
@@ -327,10 +327,10 @@ globalThis['gamepad_handleJoystick'] = function (
 };
 
 /**
- * Generates JavaScript code for the joycon_gamepad_button block.
- * @param {Blockly.Block} block the joycon_gamepad_button block.
+ * Generates JavaScript code for the gamepad_pro_button block.
+ * @param {Blockly.Block} block the gamepad_pro_button block.
  */
-JavaScript['joycon_gamepad_button'] = function (block) {
+JavaScript['gamepad_pro_button'] = function (block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const button = JavaScript.quote_(block.getFieldValue('button'));

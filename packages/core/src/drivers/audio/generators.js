@@ -23,7 +23,7 @@ JavaScript['things_audioOutput'] = function (block) {
  * @param {Blockly.Block} block the play_audio block.
  * @returns {String} the generated code.
  */
-JavaScript['play_audio'] = function (block) {
+JavaScript['audioOutput_playFileFromUrl'] = function (block) {
   const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
   const deviceId = JavaScript.valueToCode(
     block,
@@ -31,7 +31,7 @@ JavaScript['play_audio'] = function (block) {
     JavaScript.ORDER_NONE
   );
 
-  const code = `await playAudio(${deviceId}, ${uri});\n`;
+  const code = `await audioOutput_playFileFromUrl(${deviceId}, ${uri});\n`;
   return code;
 };
 
@@ -41,7 +41,7 @@ JavaScript['play_audio'] = function (block) {
  * @param {string} uri URI of the audio file to play.
  * @returns {Promise<void>}.
  */
-globalThis['playAudio'] = async function (deviceId, uri) {
+globalThis['audioOutput_playFileFromUrl'] = async function (deviceId, uri) {
   await new Promise((resolve, reject) => {
     const audio = new Audio(uri);
     // set audio output device

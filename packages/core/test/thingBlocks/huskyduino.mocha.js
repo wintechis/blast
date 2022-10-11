@@ -6,13 +6,13 @@ const {expect} = chai;
 const {testHelpers} = devTools;
 const {runCodeGenerationTestSuites, runSerializationTestSuite} = testHelpers;
 
-suite('things_huskyduino block', () => {
+suite('things_Huskylens block', () => {
   /**
    * Asserts that the given block has the expected structure.
    * @param {Blockly.Block} block The block to test.
    */
   function assertThingsHuskyduinoBlockStructure(block) {
-    expect(block.type).to.equal('things_HuskyDuino');
+    expect(block.type).to.equal('things_Huskylens');
     expect(block.outputConnection.check_).to.be.an('array');
     expect(block.outputConnection.check_.length).to.equal(1);
     expect(block.outputConnection.check_[0]).to.equal('Thing');
@@ -39,7 +39,7 @@ suite('things_huskyduino block', () => {
   });
 
   test('Creation', function () {
-    const block = this.workspace.newBlock('things_HuskyDuino');
+    const block = this.workspace.newBlock('things_Huskylens');
     assertThingsHuskyduinoBlockStructure(block);
   });
 
@@ -57,14 +57,14 @@ suite('things_huskyduino block', () => {
             title: 'Empty',
             expectedCode: "'Error getting id'",
             createBlock: function (workspace) {
-              return workspace.newBlock('things_HuskyDuino');
+              return workspace.newBlock('things_Huskylens');
             },
           },
           {
             title: 'With name',
             expectedCode: "'Error getting id'",
             createBlock: function (workspace) {
-              const block = workspace.newBlock('things_HuskyDuino');
+              const block = workspace.newBlock('things_Huskylens');
               block.setFieldValue('myName', 'name');
               return block;
             },
@@ -73,7 +73,7 @@ suite('things_huskyduino block', () => {
             title: 'With id',
             expectedCode: "'thingId'",
             createBlock: function (workspace) {
-              const block = workspace.newBlock('things_HuskyDuino');
+              const block = workspace.newBlock('things_Huskylens');
               block.setFieldValue('thingId', 'id');
               return block;
             },
@@ -82,7 +82,7 @@ suite('things_huskyduino block', () => {
             title: 'With name and id',
             expectedCode: "'thingId'",
             createBlock: function (workspace) {
-              const block = workspace.newBlock('things_HuskyDuino');
+              const block = workspace.newBlock('things_Huskylens');
               block.setFieldValue('myName', 'name');
               block.setFieldValue('thingId', 'id');
               return block;
@@ -100,9 +100,9 @@ suite('things_huskyduino block', () => {
   const testCases = [
     {
       title: 'Thing id and name unset',
-      xml: '<block type="things_HuskyDuino"/>',
+      xml: '<block type="things_Huskylens"/>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="things_HuskyDuino" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="things_Huskylens" id="1">\n' +
         '  <field name="name">Error getting name</field>\n' +
         '  <field name="id">Error getting id</field>\n' +
         '</block>',
@@ -114,9 +114,9 @@ suite('things_huskyduino block', () => {
     },
     {
       title: 'Thing id set, name unset',
-      xml: '<block type="things_HuskyDuino"><field name="id">123</field></block>',
+      xml: '<block type="things_Huskylens"><field name="id">123</field></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="things_HuskyDuino" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="things_Huskylens" id="1">\n' +
         '  <field name="name">Error getting name</field>\n' +
         '  <field name="id">123</field>\n' +
         '</block>',
@@ -128,9 +128,9 @@ suite('things_huskyduino block', () => {
     },
     {
       title: 'Thing id unset, name set',
-      xml: '<block type="things_HuskyDuino"><field name="name">My Thing</field></block>',
+      xml: '<block type="things_Huskylens"><field name="name">My Thing</field></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="things_HuskyDuino" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="things_Huskylens" id="1">\n' +
         '  <field name="name">My Thing</field>\n' +
         '  <field name="id">Error getting id</field>\n' +
         '</block>',
@@ -142,9 +142,9 @@ suite('things_huskyduino block', () => {
     },
     {
       title: 'Thing id set, name set',
-      xml: '<block type="things_HuskyDuino"><field name="id">123</field><field name="name">My LED</field></block>',
+      xml: '<block type="things_Huskylens"><field name="id">123</field><field name="name">My LED</field></block>',
       expectedXml:
-        '<block xmlns="https://developers.google.com/blockly/xml" type="things_HuskyDuino" id="1">\n' +
+        '<block xmlns="https://developers.google.com/blockly/xml" type="things_Huskylens" id="1">\n' +
         '  <field name="name">My LED</field>\n' +
         '  <field name="id">123</field>\n' +
         '</block>',
@@ -250,7 +250,7 @@ suite('huskylens_choose_algo block', () => {
         '<block type="huskylens_choose_algo">' +
         '  <field name="algorithm">0x02</field>' +
         '  <value name="thing">' +
-        '    <block type="things_HuskyDuino">' +
+        '    <block type="things_Huskylens">' +
         '      <field name="id">123</field>' +
         '      <field name="name">My Thing</field>' +
         '    </block>' +
@@ -260,7 +260,7 @@ suite('huskylens_choose_algo block', () => {
         '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_choose_algo" id="1">\n' +
         '  <field name="algorithm">0x02</field>\n' +
         '  <value name="thing">\n' +
-        '    <block type="things_HuskyDuino" id="1">\n' +
+        '    <block type="things_Huskylens" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
         '      <field name="id">123</field>\n' +
         '    </block>\n' +
@@ -270,7 +270,7 @@ suite('huskylens_choose_algo block', () => {
         assertHuskylensChooseAlgoBlockStructure(block);
         expect(block.getFieldValue('algorithm')).to.equal('0x02');
         const thingBlock = block.getInputTargetBlock('thing');
-        expect(thingBlock.type).to.equal('things_HuskyDuino');
+        expect(thingBlock.type).to.equal('things_Huskylens');
         expect(thingBlock.getFieldValue('name')).to.equal('My Thing');
         expect(thingBlock.getFieldValue('id')).to.equal('123');
       },
@@ -345,9 +345,9 @@ suite('huskylens_write_id block', () => {
               numberInputBlock.setFieldValue('123', 'NUM');
               const idInput = block.getInput('id');
               idInput.connection.connect(numberInputBlock.outputConnection);
-              // append things_huskyduino block
+              // append things_Huskylens block
               const thingsHuskyduinoBlock =
-                workspace.newBlock('things_HuskyDuino');
+                workspace.newBlock('things_Huskylens');
               const thingInput = block.getInput('thing');
               thingInput.connection.connect(
                 thingsHuskyduinoBlock.outputConnection
@@ -387,7 +387,7 @@ suite('huskylens_write_id block', () => {
         '    </block>' +
         '  </value>' +
         '  <value name="thing">' +
-        '    <block type="things_HuskyDuino">' +
+        '    <block type="things_Huskylens">' +
         '      <field name="name">My Thing</field>' +
         '      <field name="id">123</field>' +
         '    </block>' +
@@ -401,7 +401,7 @@ suite('huskylens_write_id block', () => {
         '    </block>\n' +
         '  </value>\n' +
         '  <value name="thing">\n' +
-        '    <block type="things_HuskyDuino" id="1">\n' +
+        '    <block type="things_Huskylens" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
         '      <field name="id">123</field>\n' +
         '    </block>\n' +
@@ -413,7 +413,7 @@ suite('huskylens_write_id block', () => {
         expect(numberBlock.type).to.equal('number_value');
         expect(numberBlock.getFieldValue('NUM')).to.equal(42);
         const thingBlock = block.getInputTargetBlock('thing');
-        expect(thingBlock.type).to.equal('things_HuskyDuino');
+        expect(thingBlock.type).to.equal('things_Huskylens');
         expect(thingBlock.getFieldValue('name')).to.equal('My Thing');
         expect(thingBlock.getFieldValue('id')).to.equal('123');
       },
@@ -477,7 +477,7 @@ suite('huskylens_write_forget_flag block', () => {
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_write_forget_flag');
               const thingsHuskyduinoBlock =
-                workspace.newBlock('things_HuskyDuino');
+                workspace.newBlock('things_Huskylens');
               thingsHuskyduinoBlock.setFieldValue('thingId', 'id');
               const thingInput = block.getInput('thing');
               thingInput.connection.connect(
@@ -510,7 +510,7 @@ suite('huskylens_write_forget_flag block', () => {
       xml:
         '<block type="huskylens_write_forget_flag">' +
         '  <value name="thing">' +
-        '    <block type="things_HuskyDuino">' +
+        '    <block type="things_Huskylens">' +
         '      <field name="name">My Thing</field>' +
         '      <field name="id">123</field>' +
         '    </block>' +
@@ -519,7 +519,7 @@ suite('huskylens_write_forget_flag block', () => {
       expectedXml:
         '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_write_forget_flag" id="1">\n' +
         '  <value name="thing">\n' +
-        '    <block type="things_HuskyDuino" id="1">\n' +
+        '    <block type="things_Huskylens" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
         '      <field name="id">123</field>\n' +
         '    </block>\n' +
@@ -528,7 +528,7 @@ suite('huskylens_write_forget_flag block', () => {
       assertBlockStructure: block => {
         assertHuskylensWriteForgetFlagBlockStructure(block);
         const thingBlock = block.getInputTargetBlock('thing');
-        expect(thingBlock.type).to.equal('things_HuskyDuino');
+        expect(thingBlock.type).to.equal('things_Huskylens');
         expect(thingBlock.getFieldValue('name')).to.equal('My Thing');
         expect(thingBlock.getFieldValue('id')).to.equal('123');
       },
@@ -593,7 +593,7 @@ suite('huskylens_read_id block', () => {
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_read_id');
               const thingsHuskyduinoBlock =
-                workspace.newBlock('things_HuskyDuino');
+                workspace.newBlock('things_Huskylens');
               thingsHuskyduinoBlock.setFieldValue('thingId', 'id');
               const thingInput = block.getInput('thing');
               thingInput.connection.connect(
@@ -626,7 +626,7 @@ suite('huskylens_read_id block', () => {
       xml:
         '<block type="huskylens_read_id">' +
         '  <value name="thing">' +
-        '    <block type="things_HuskyDuino">' +
+        '    <block type="things_Huskylens">' +
         '      <field name="name">My Thing</field>' +
         '      <field name="id">123</field>' +
         '    </block>' +
@@ -635,7 +635,7 @@ suite('huskylens_read_id block', () => {
       expectedXml:
         '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_id" id="1">\n' +
         '  <value name="thing">\n' +
-        '    <block type="things_HuskyDuino" id="1">\n' +
+        '    <block type="things_Huskylens" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
         '      <field name="id">123</field>\n' +
         '    </block>\n' +
@@ -644,7 +644,7 @@ suite('huskylens_read_id block', () => {
       assertBlockStructure: block => {
         assertHuskylensReadIdBlockStructure(block);
         const thingBlock = block.getInputTargetBlock('thing');
-        expect(thingBlock.type).to.equal('things_HuskyDuino');
+        expect(thingBlock.type).to.equal('things_Huskylens');
         expect(thingBlock.getFieldValue('name')).to.equal('My Thing');
         expect(thingBlock.getFieldValue('id')).to.equal('123');
       },
@@ -709,7 +709,7 @@ suite('huskylens_read_coordinates block', () => {
             createBlock: function (workspace) {
               const block = workspace.newBlock('huskylens_read_coordinates');
               const thingsHuskyduinoBlock =
-                workspace.newBlock('things_HuskyDuino');
+                workspace.newBlock('things_Huskylens');
               thingsHuskyduinoBlock.setFieldValue('thingId', 'id');
               const thingInput = block.getInput('thing');
               thingInput.connection.connect(
@@ -742,7 +742,7 @@ suite('huskylens_read_coordinates block', () => {
       xml:
         '<block type="huskylens_read_coordinates">' +
         '  <value name="thing">' +
-        '    <block type="things_HuskyDuino">' +
+        '    <block type="things_Huskylens">' +
         '      <field name="name">My Thing</field>' +
         '      <field name="id">123</field>' +
         '    </block>' +
@@ -751,7 +751,7 @@ suite('huskylens_read_coordinates block', () => {
       expectedXml:
         '<block xmlns="https://developers.google.com/blockly/xml" type="huskylens_read_coordinates" id="1">\n' +
         '  <value name="thing">\n' +
-        '    <block type="things_HuskyDuino" id="1">\n' +
+        '    <block type="things_Huskylens" id="1">\n' +
         '      <field name="name">My Thing</field>\n' +
         '      <field name="id">123</field>\n' +
         '    </block>\n' +
@@ -760,7 +760,7 @@ suite('huskylens_read_coordinates block', () => {
       assertBlockStructure: block => {
         assertHuskylensReadLocationBlockStructure(block);
         const thingBlock = block.getInputTargetBlock('thing');
-        expect(thingBlock.type).to.equal('things_HuskyDuino');
+        expect(thingBlock.type).to.equal('things_Huskylens');
         expect(thingBlock.getFieldValue('name')).to.equal('My Thing');
         expect(thingBlock.getFieldValue('id')).to.equal('123');
       },
