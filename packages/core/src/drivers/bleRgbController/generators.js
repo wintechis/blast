@@ -29,14 +29,17 @@ JavaScript['bleLedController_switch_lights'] = function (block) {
   const colour =
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
+  // Colour is a hex string in quotes, e.g. '#ff0000', convert to rgb.
+  const r = parseInt(colour.slice(2, 4), 16);
+  const g = parseInt(colour.slice(4, 6), 16);
+  const b = parseInt(colour.slice(6, 8), 16);
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
-
-  const code = `await bleLedController_switch_lights(${blockId}, ${thing}, ${colour});\n`;
+  const code = `await bleLedController_switch_lights(${blockId}, ${thing}, ${r}, ${g}, ${b});\n`;
   return code;
 };
 
@@ -44,22 +47,23 @@ JavaScript['bleLedController_switch_lights'] = function (block) {
  * switches lights of an LED controller via Bluetooth, by writing a value to it.
  * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
  * @param {String} webBluetoothId identifier of the LED controller.
- * @param {String} colour the colour to switch the lights to, as hex value.
+ * @param {Number} r red value.
+ * @param {Number} g green value.
+ * @param {Number} b blue value.
  */
 globalThis['bleLedController_switch_lights'] = async function (
   blockId,
   webBluetoothId,
-  colour
+  R,
+  G,
+  B
 ) {
   // make sure a device is connected.
   if (!webBluetoothId) {
     throwError('No LED Controller is set.');
     return;
   }
-  // convert data to json
-  const data = '7e000503' + colour.substring(1, 7) + '00ef';
-  // get thing instance of block
   const block = getWorkspace().getBlockById(blockId);
   const thing = block.thing;
-  await thing.writeProperty('colour', data);
+  await thing.writeProperty('colour', {R, G, B});
 };

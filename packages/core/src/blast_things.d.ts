@@ -4,6 +4,7 @@ export interface implementedThing {
   type: string;
   blocks: {type: string; category: string; XML?: string}[];
   filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[];
+  optionalServices?: string[];
   infoUrl?: string;
 }
 
