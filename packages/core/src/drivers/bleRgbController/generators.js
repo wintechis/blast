@@ -6,7 +6,6 @@
  */
 
 import Blockly from 'blockly';
-import {getWorkspace, throwError} from '../../blast_interpreter.js';
 
 const {JavaScript} = Blockly;
 
@@ -26,6 +25,28 @@ JavaScript['things_bleLedController'] = function (block) {
  * @returns {String} the generated code.
  */
 JavaScript['bleLedController_switch_lights'] = function (block) {
+  const functionBleLedController = JavaScript.provideFunction_(
+    'bleLedControllerSwitchLights',
+    `/**
+    * switches lights of an LED controller via Bluetooth, by writing a value to it.
+    * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
+    * @param {String} webBluetoothId identifier of the LED controller.
+    * @param {Number} r red value.
+    * @param {Number} g green value.
+    * @param {Number} b blue value.
+    */
+    async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, webBluetoothId, R, G, B) {
+      // make sure a device is connected.
+      if (!webBluetoothId) {
+        throwError('No LED Controller is set.');
+        return;
+      }
+      const block = getWorkspace().getBlockById(blockId);
+      const thing = block.thing;
+      await thing.writeProperty('colour', {R, G, B});
+  }`
+  );
+
   const colour =
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
@@ -39,31 +60,6 @@ JavaScript['bleLedController_switch_lights'] = function (block) {
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
-  const code = `await bleLedController_switch_lights(${blockId}, ${thing}, ${r}, ${g}, ${b});\n`;
+  const code = `await ${functionBleLedController}(${blockId}, ${thing}, ${r}, ${g}, ${b});\n`;
   return code;
-};
-
-/**
- * switches lights of an LED controller via Bluetooth, by writing a value to it.
- * @param {Blockly.Block.id} blockId the things_bleLedController block's id.
- * @param {String} webBluetoothId identifier of the LED controller.
- * @param {Number} r red value.
- * @param {Number} g green value.
- * @param {Number} b blue value.
- */
-globalThis['bleLedController_switch_lights'] = async function (
-  blockId,
-  webBluetoothId,
-  R,
-  G,
-  B
-) {
-  // make sure a device is connected.
-  if (!webBluetoothId) {
-    throwError('No LED Controller is set.');
-    return;
-  }
-  const block = getWorkspace().getBlockById(blockId);
-  const thing = block.thing;
-  await thing.writeProperty('colour', {R, G, B});
 };
