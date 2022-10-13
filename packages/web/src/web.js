@@ -340,9 +340,9 @@ const renderContent_ = function () {
 
   // remove highlightblock functions from the js code tab
   const code = getLatestCode().replace(/highlightBlock\('.*'\);\n/gm, '');
-  // remove 'if (stop === true) resolve();\n' from the js code tabs.
+  // remove 'if (interpreterExecutionExit === true) return();\n' from the js code tabs.
   content.textContent = code.replace(
-    /if \(interpreterExecutionExit === true\) resolve\(\);\n/gm,
+    /if \(interpreterExecutionExit === true\) return;\n/gm,
     ''
   );
 
