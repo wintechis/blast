@@ -214,7 +214,7 @@ const setAdvertisingInterval = async function (webBluetoothId, interval) {
     webBluetoothId,
     UUIDS.CONFIG_SERVICE,
     UUIDS.ADVERTISING_INTERVAL_CHARACTERISTIC,
-    interval.toString(16)
+    parseInt(interval).toString(16)
   );
   thingsLog(
     `Eddystone advertising interval set to <code>${interval}</code>`,

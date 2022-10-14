@@ -125,8 +125,7 @@ globalThis['writeEddystoneProperty'] = async function (
   // Set the active slot
   await thing.writeProperty('activeSlot', slot);
   // Write the property
-  const valueReadable = stringToReadable(value);
-  await thing.writeProperty(property, valueReadable);
+  await thing.writeProperty(property, value);
 };
 
 /**
