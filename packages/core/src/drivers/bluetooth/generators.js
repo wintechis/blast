@@ -15,7 +15,7 @@ import {
   stringToReadable,
   readableStreamToString,
   // eslint-disable-next-line node/no-missing-import
-} from '../bindings/binding-helpers.js';
+} from '../../wot/bindings/binding-helpers.js';
 import {getWorkspace, throwError} from '../../blast_interpreter.js';
 
 JavaScript['things_eddyStoneDevice'] = function (block) {

@@ -6,13 +6,13 @@ import {
   ProtocolClient,
   ContentSerdes,
 } from '@node-wot/core';
-import WebBluetoothClientNew from './webBluetooth-client.js';
-import {BinaryDataStreamCodec} from '../../../codecs/BinaryDataCodec.js';
+import WebBluetoothClient from './webBluetooth-client.js';
+import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec.js';
 
-export default class WebBluetoothClientFactoryNew
+export default class WebBluetoothClientFactory
   implements ProtocolClientFactory
 {
-  public readonly scheme: string = 'ble-web+gatt';
+  public readonly scheme: string = 'gatt';
 
   public contentSerdes: ContentSerdes = ContentSerdes.get();
 
@@ -22,10 +22,10 @@ export default class WebBluetoothClientFactoryNew
 
   public getClient(): ProtocolClient {
     console.debug(
-      '[binding-webBluetoothNew]',
+      '[binding-webBluetooth]',
       `WebBluetoothClientFactory creating client for ${this.scheme}`
     );
-    return new WebBluetoothClientNew();
+    return new WebBluetoothClient();
   }
 
   public init = (): boolean => true;

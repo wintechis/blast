@@ -1,6 +1,6 @@
 // DEPRECATED, THIS FILE IS NOT YET UPDATED TO WORK WITH NEW WOT API
 import * as WoT from 'wot-typescript-definitions';
-import {getWot} from '../index.js';
+import {getWot} from '../../wot/index.js';
 
 export default class RuuviTag {
   public thing: WoT.ConsumedThing | null = null;

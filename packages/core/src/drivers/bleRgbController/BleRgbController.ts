@@ -1,5 +1,5 @@
 import * as WoT from 'wot-typescript-definitions';
-import {getWot} from '../index.js';
+import {getWot} from '../../wot/index.js';
 
 export default class BleRgbController {
   public thing: WoT.ConsumedThing | null = null;

@@ -7,7 +7,7 @@ import * as core from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs/Subscription';
 import {webHidForm} from './webHid.js';
-import {getWebHidDevice} from './../../../blast_things.js';
+import {getWebHidDevice} from '../../../blast_things.js';
 
 const { ProtocolHelpers } = core;
 

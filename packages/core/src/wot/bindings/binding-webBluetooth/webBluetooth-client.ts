@@ -21,7 +21,7 @@ import {
   eddystoneProperties,
   readEddystoneProperty,
   writeEddystoneProperty,
-} from './../../../blast_eddystone.js';
+} from '../../../blast_eddystone.js';
 import {WebBluetoothForm} from './webBluetooth.js';
 import {
   readableStreamToString,
