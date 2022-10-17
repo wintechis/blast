@@ -226,9 +226,7 @@ export const addElementToOutputContainer = function (elem) {
 const addMessage = function (message, type) {
   // Send notification if window is not focused.
   let icon = 'media/logo-512x512.png';
-  if (window.location.href.includes('mobile')) {
-    icon = '../' + icon;
-  }
+
   if (!document.hasFocus()) {
     navigator.serviceWorker.ready.then(registration => {
       registration.showNotification('Blast', {

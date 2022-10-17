@@ -7,7 +7,6 @@
 
 import {dialog, hideChaff, Xml} from 'blockly';
 import FileSaver from 'file-saver';
-import {addWebBluetoothDevice} from './blast_things.js';
 import {addWebHidDevice} from './blast_things.js';
 import {implementedThings} from './blast_things.js';
 import {getWorkspace} from './blast_interpreter.js';
@@ -226,21 +225,6 @@ export const loadXML = function (xmlString) {
  * @private
  */
 const generatePairButtons = function (blocks, xml) {
-  if (window.location.href.includes('mobile')) {
-    window.app.openReconnectDialog();
-    generatePairButtonsMobile_(blocks, xml);
-  } else {
-    generatePairButtonsDesktop_(blocks, xml);
-  }
-};
-
-/**
- * Adds pair buttons for each web bluetooth block in xml to the reconnect modal.
- * @param {!NodeList} blocks thing blocks to generate pair buttons for.
- * @param {!Xml} xml xml of the program to load.
- * @private
- */
-const generatePairButtonsDesktop_ = function (blocks, xml) {
   const tbody = document.getElementById('rc-tbody');
   // delete all table rows from tbody
   while (tbody.firstChild) {
@@ -309,7 +293,7 @@ const generatePairButtonsDesktop_ = function (blocks, xml) {
         }
 
         // if all devices have been paired, enable done button
-        if (allConnectedDesktop_()) {
+        if (allConnected()) {
           document.getElementById('rc-done').disabled = false;
           // add done button click listener
           document
@@ -343,7 +327,7 @@ const generatePairButtonsDesktop_ = function (blocks, xml) {
             }
 
             // if all devices have been paired, enable done button
-            if (allConnectedDesktop_()) {
+            if (allConnected()) {
               document.getElementById('rc-done').disabled = false;
               // add done button click listener
               document
@@ -375,151 +359,11 @@ const generatePairButtonsDesktop_ = function (blocks, xml) {
 };
 
 /**
- * Adds pair buttons for each web bluetooth block in xml to the mobile reconnect dialog.
- * @param {!NodeList} blocks thing blocks to generate pair buttons for.
- * @param {!Xml} xml xml of the program to load.
- * @param {!Element} xml XML to parse for devices.
- */
-const generatePairButtonsMobile_ = function (blocks, xml) {
-  // empty list
-  const list = document.getElementById('rc-list');
-  while (list.firstChild) {
-    list.removeChild(list.firstChild);
-  }
-  //Generates the type (e.g. things_ruuviTag) of all available things.
-  for (const thing of implementedThings) {
-    thing.block_name = `things_${thing.id}`;
-  }
-  const blocksAdded = [];
-
-  // add pair button for each device block
-  for (const block of blocks) {
-    // get user defined name
-    const name = block.firstElementChild.textContent;
-    // skip if block was already added
-    if (blocksAdded.includes(name)) {
-      continue;
-    }
-
-    // get thing from implementedThings
-    const type = block.getAttribute('type');
-    const thing = implementedThings.find(t => t.block_name === type);
-
-    // add new list item
-    const item = document.createElement('li');
-    item.setAttribute('id', 'rc-item-' + name);
-    item.setAttribute('class', 'mdc-list-item');
-    // add icon to list item
-    const icon = document.createElement('span');
-    icon.setAttribute('id', 'rc-icon-' + name);
-    icon.setAttribute('class', 'mdc-list-item__graphic material-icons');
-    icon.setAttribute('aria-hidden', 'true');
-    icon.innerHTML =
-      thing.type === 'bluetooth' ? 'bluetooth_disabled' : 'usb_off';
-    item.appendChild(icon);
-    // add name and status to list item
-    const text = document.createElement('span');
-    text.setAttribute('class', 'mdc-list-item__text');
-    const primaryText = document.createElement('span');
-    primaryText.setAttribute('class', 'mdc-list-item__primary-text');
-    primaryText.innerHTML = name;
-    text.appendChild(primaryText);
-    const secondaryText = document.createElement('span');
-    secondaryText.setAttribute('class', 'mdc-list-item__secondary-text');
-    secondaryText.setAttribute('id', 'rc-status-' + name);
-    secondaryText.innerHTML = 'disconnected';
-    text.appendChild(secondaryText);
-    item.appendChild(text);
-    // add click listener to list item
-    item.addEventListener('click', async () => {
-      if (thing.type === 'bluetooth') {
-        // set webbluetooth options
-        const options = {};
-        options.acceptAllDevices = true;
-        options.optionalServices = optionalServices;
-
-        const device = await requestDevice();
-        addWebBluetoothDevice(device.id, name);
-        // change pair status to connected
-        document.getElementById('rc-status-' + name).innerHTML = 'connected';
-        // change icon to bluetooth connected
-        document.getElementById('rc-icon-' + name).innerHTML = 'bluetooth';
-        // change icon color to blue
-        document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
-
-        // In all blocks representing the same device, set the id to device id.
-        for (const block1 of blocks) {
-          if (block1.firstElementChild.textContent === name) {
-            block1.lastElementChild.textContent = device.id;
-          }
-        }
-
-        // if all devices have been paired, enable done button
-        if (allConnectedMobile_()) {
-          document.getElementById('rc-done').disabled = false;
-          // add done button click listener
-          document
-            .getElementById('rc-done')
-            .addEventListener('click', () => reconnectDoneHandler_(xml));
-        }
-      } else if (type === 'hid') {
-        const filters = [];
-
-        navigator.hid
-          .requestDevice({filters})
-          .then(device => {
-            if (device.length === 0) {
-              throwError('Connection failed or cancelled by User.');
-            }
-            // generate a unique id for the new device
-            const uid =
-              Date.now().toString(36) + Math.random().toString(36).substr(2);
-            // add device to the device map with its uid
-            addWebHidDevice(uid, name, device[0]);
-            // change pair status to connected
-            document.getElementById('rc-status-' + name).innerHTML =
-              'connected';
-            // change icon to usb connected
-            document.getElementById('rc-icon-' + name).innerHTML = 'usb';
-            // change icon color to blue
-            document.getElementById('rc-icon-' + name).style.color = '#0d30b1';
-
-            // set block id to device id in all blocks with same name
-            for (const block1 of blocks) {
-              if (block1.firstElementChild.textContent === name) {
-                block1.lastElementChild.textContent = uid;
-              }
-            }
-
-            // if all devices have been paired, enable done button
-            if (allConnectedMobile_()) {
-              document.getElementById('rc-done').disabled = false;
-              // add done button click listener
-              document
-                .getElementById('rc-done')
-                .addEventListener('click', () => reconnectDoneHandler_(xml));
-            }
-          })
-          .catch(error => {
-            throwError('Connection failed or cancelled by User.');
-            console.error(error);
-          });
-      }
-    });
-    // add list item to list
-    list.appendChild(item);
-    blocksAdded.push(name);
-  }
-  // Init material ui list
-  window.app.initLists();
-};
-
-/**
  * Checks if all devices from the reconnect modal have been paired.
  * @return {boolean} true if all devices have been paired.
  * @private
  */
-const allConnectedDesktop_ = function () {
+const allConnected = function () {
   const blocks = document.getElementById('rc-tbody').querySelectorAll('tr');
   for (const block of blocks) {
     const pairStatus = document.getElementById(
@@ -533,38 +377,16 @@ const allConnectedDesktop_ = function () {
 };
 
 /**
- * Checks if all devices from the reconnect modal have been paired.
- * @returns {boolean} true if all devices have been paired.
- */
-const allConnectedMobile_ = function () {
-  const blocks = document
-    .getElementById('rc-list')
-    .querySelectorAll('[id=rc-status-]');
-  for (const block of blocks) {
-    const pairStatus = document.getElementById(
-      'rc-status-' + block.textContent
-    );
-    if (pairStatus.innerHTML === 'disconnected') {
-      return false;
-    }
-  }
-  return true;
-};
-
-/**
  * Continues loading blocks after reconnecting to web bluetooth devices.
  * @param {!Element} xml XML to load into the workspace.
  * @private
  */
 const reconnectDoneHandler_ = function (xml) {
   const workspace = getWorkspace();
-  if (window.location.href.includes('mobile')) {
-    // hide reconnect dialog
-    document.getElementById('rc-dialog').style.display = 'none';
-  } else {
-    // hide reconnect modal
-    document.getElementById('rcModal').style.display = 'none';
-  }
+
+  // hide reconnect modal
+  document.getElementById('rcModal').style.display = 'none';
+
   // Clone rc-done button to remove click listener
   const doneButton = document.getElementById('rc-done');
   const doneButtonClone = doneButton.cloneNode(true);
