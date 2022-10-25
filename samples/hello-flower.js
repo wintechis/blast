@@ -1,22 +1,22 @@
-from blast import driver.xiaomiflowercare;
+import {BleRgbControllerFactory} from '@blast/core';
 
-fc = driver.xiaomiflowercare.createThing('00:11:22:33:44');
 
 /**
  * main
  */
 async function main() {
-    var temp;
+    let color;
 
-    fc.connect();
+    const bleRgbThing = await new BleRgbControllerFactory.create('00:11:22:33:44');
+    bleRgbThing.connect();
 
     // what happens if there is a disconnect in between?
     while (true) {
-	await temp = fc.readProperty('temperature');
-	console.log('temperature is ', temp);
+	  
+	color = await bleRgbThing.readProperty('color');
+	console.log('color is ', color);
     }
-
-    fc.disconnect();
+    bleRgbThing.disconnect();
 }
 
 main();
