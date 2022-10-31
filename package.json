@@ -14,7 +14,7 @@
         "lint": "yarn workspaces run lint",
         "test": "yarn workspaces run test",
         "install": "yarn workspaces run install",
-        "serve": "yarn workspace @blast/web run start"
+        "start": "yarn workspace @blast/web run start"
     },
     "workspaces": [
         "./packages/*"
