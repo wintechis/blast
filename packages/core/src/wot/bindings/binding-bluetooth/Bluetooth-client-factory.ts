@@ -11,7 +11,7 @@ import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
 import {BluetoothAdapter} from './BluetoothAdapter';
 
 export default class BluetoothClientFactory implements ProtocolClientFactory {
-  public readonly scheme: string = 'ble-web+gatt';
+  public readonly scheme: string = 'gatt';
   public contentSerdes: ContentSerdes = ContentSerdes.get();
   adapter: BluetoothAdapter;
 

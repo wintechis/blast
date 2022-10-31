@@ -69,7 +69,7 @@ export default class XiaomiFlowerCare {
           },
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001204-0000-1000-8000-00805f9b34fb/00001a01-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001204-0000-1000-8000-00805f9b34fb/00001a01-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -95,7 +95,7 @@ export default class XiaomiFlowerCare {
 
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001204-0000-1000-8000-00805f9b34fb/00001a00-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001204-0000-1000-8000-00805f9b34fb/00001a00-0000-1000-8000-00805f9b34fb`,
               op: 'invokeaction',
               'sbo:methodName': 'sbo:write',
               contentType: 'application/x.binary-data-stream',

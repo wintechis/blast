@@ -53,7 +53,7 @@
     "@node-wot/td-tools": "0.8.2",
     "@types/uritemplate": "^0.3.4",
     "joy-con-webhid": "^0.2.0",
-    "node-ble": "^1.8.0",
+    "node-ble": "https://github.com/derwehr/node-ble",
     "readable-stream": "^4.2.0",
     "rxjs": "5.5.11",
     "typescript": "^4.7.4",

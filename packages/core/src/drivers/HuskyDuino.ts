@@ -46,13 +46,13 @@ export default class HuskyDuino {
           'bdo:bytelength': 1,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
             },
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35d26-f9b0-11eb-9a03-0242ac130003`,
               op: 'writeproperty',
               'sbo:methodName': 'sbo:write-without-response',
               contentType: 'application/x.binary-data-stream',
@@ -68,7 +68,7 @@ export default class HuskyDuino {
 
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -84,7 +84,7 @@ export default class HuskyDuino {
 
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be3628a-f9b0-11eb-9a03-0242ac130003`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -101,7 +101,7 @@ export default class HuskyDuino {
           },
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be361b8-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be361b8-f9b0-11eb-9a03-0242ac130003`,
               op: 'invokeaction',
               'sbo:methodName': 'sbo:write-without-response',
               contentType: 'application/x.binary-data-stream',
@@ -120,7 +120,7 @@ export default class HuskyDuino {
           },
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003`,
+              href: `gatt://${webBluetoothId}/5be35d20-f9b0-11eb-9a03-0242ac130003/5be35eca-f9b0-11eb-9a03-0242ac130003`,
               op: 'invokeaction',
               'sbo:methodName': 'sbo:write-without-response',
               contentType: 'application/x.binary-data-stream',

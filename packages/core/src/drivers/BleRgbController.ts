@@ -69,7 +69,7 @@ export default class BleRgbController {
           },
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb`,
               op: 'writeproperty',
               'sbo:methodName': 'sbo:write-without-response',
               contentType: 'application/x.binary-data-stream',

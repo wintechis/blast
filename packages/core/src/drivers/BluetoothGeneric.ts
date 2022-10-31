@@ -41,7 +41,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001802-0000-1000-8000-00805f9b34fb/00002a1c-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001802-0000-1000-8000-00805f9b34fb/00002a1c-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -58,7 +58,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180f-0000-1000-8000-00805f9b34fb/00002a19-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180f-0000-1000-8000-00805f9b34fb/00002a19-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -74,13 +74,13 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb`,
               op: 'writeproperty',
               'sbo:methodName': 'sbo:write-without-response',
               contentType: 'application/x.binary-data-stream',
             },
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -96,7 +96,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a6c-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a6c-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -112,7 +112,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a26-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a26-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -128,7 +128,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a27-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a27-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -145,7 +145,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a6f-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a6f-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -161,7 +161,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a77-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001803-0000-1000-8000-00805f9b34fb/00002a77-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -177,7 +177,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1e-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1e-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -192,7 +192,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a29-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a29-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -207,7 +207,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a24-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a24-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -224,7 +224,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a56-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a56-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -241,7 +241,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a6d-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a6d-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -256,7 +256,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a25-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a25-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -272,7 +272,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a28-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/0000180a-0000-1000-8000-00805f9b34fb/00002a28-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -287,7 +287,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a6e-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a6e-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -302,7 +302,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1c-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1c-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -317,7 +317,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1d-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001809-0000-1000-8000-00805f9b34fb/00002a1d-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -332,7 +332,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001804-0000-1000-8000-00805f9b34fb/00002a07-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001804-0000-1000-8000-00805f9b34fb/00002a07-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',
@@ -347,7 +347,7 @@ export default class BluetoothGeneric {
           writeOnly: false,
           forms: [
             {
-              href: `ble-web+gatt://${webBluetoothId}/00001808-0000-1000-8000-00805f9b34fb/00002a9d-0000-1000-8000-00805f9b34fb`,
+              href: `gatt://${webBluetoothId}/00001808-0000-1000-8000-00805f9b34fb/00002a9d-0000-1000-8000-00805f9b34fb`,
               op: 'readproperty',
               'sbo:methodName': 'sbo:read',
               contentType: 'application/x.binary-data-stream',

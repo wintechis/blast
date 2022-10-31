@@ -16,6 +16,7 @@
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
         "start": "yarn workspace @blast/web run start"
     },
+    "type": "module",
     "workspaces": [
         "./packages/*"
     ]

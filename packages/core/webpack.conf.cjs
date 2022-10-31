@@ -23,15 +23,6 @@ const nodeConfig = {
     outputModule: true,
   },
   mode: 'production',
-  plugins: [
-    new ProvidePlugin({
-      Buffer: ['buffer', 'Buffer'],
-    }),
-    new DefinePlugin({
-      'process.versions.node': JSON.stringify(process.versions.node),
-    }),
-    new NodePolyfillPlugin(),
-  ],
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
@@ -39,10 +30,6 @@ const nodeConfig = {
         __dirname,
         './src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter.ts'
       ),
-      stream: require.resolve('readable-stream/lib/stream'),
-    },
-    fallback: {
-      fs: false,
     },
   },
   module: {
