@@ -4,7 +4,7 @@ name: Lint and Deploy
 on: [push, pull_request]
 
 jobs:
-  lint-build-test:
+  lint-build:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,8 +29,6 @@ jobs:
         run: yarn run lint
       - name: build
         run: yarn run build
-      - name: test
-        run: yarn run test
       - name: upload build files
         uses: actions/upload-artifact@v3
         with:
