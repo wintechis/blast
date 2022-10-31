@@ -195,7 +195,7 @@ export default class WebBluetoothClient implements ProtocolClient {
    * @returns {Object} Object containing all parameters
    */
   deconstructForm = function (form: BluetoothForm) {
-    const deconstructedForm: Record<string, string | string[] | undefined> = {};
+    const deconstructedForm: Record<string, string> = {};
 
     // Remove gatt://
     deconstructedForm.path = form.href.split('//')[1];
@@ -239,7 +239,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     }
 
     // Extract operation -> e.g. readproperty; writeproperty
-    deconstructedForm.operation = form.op;
+    deconstructedForm.operation = form.op?.toString() || '';
 
     // Get BLE operation type
     deconstructedForm.bleOperation = form['sbo:methodName'];
