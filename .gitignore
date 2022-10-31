@@ -1,6 +1,7 @@
 **/.yarn/*
 !**/.yarn/patches
 **/dist
+**/build
 !**/.yarn/releases
 !**/.yarn/plugins
 !**/.yarn/sdks

@@ -3,9 +3,10 @@
     "files.insertFinalNewline": true,
     "files.trimFinalNewlines": true,
     "files.trimTrailingWhitespace": true,
+    "eslint.validate": ["typescript", "typescriptreact"],
     "eslint.workingDirectories": [
         "./packages/core",
-        "./packages/node",
         "./packages/web"
-    ]
+    ],
+    "editor.tabSize": 2
 }

@@ -11,10 +11,10 @@
     "license": "AGPL-3.0",
     "scripts": {
         "build": "yarn workspaces run build",
-        "lint": "yarn workspace @blast/core run lint",
+        "lint": "yarn workspaces run lint",
         "test": "yarn workspaces run test",
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
-        "serve": "yarn workspace @blast/web run serve"
+        "serve": "yarn workspace @blast/web run start"
     },
     "workspaces": [
         "./packages/*"

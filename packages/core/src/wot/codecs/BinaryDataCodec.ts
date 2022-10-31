@@ -19,29 +19,29 @@ export class BinaryDataStreamCodec implements ContentCodec {
     schema: DataSchema,
     parameters?: {[key: string]: string}
   ): DataSchemaValue {
-    let parsed: any;
+    let parsed: DataSchemaValue = null;
     let nameList;
     let valueList;
 
-    if (typeof schema['bdo:pattern'] != 'undefined') {
+    if (typeof schema['bdo:pattern'] !== 'undefined') {
       // Pattern
       const resultArr = readPattern(schema, bytes);
       nameList = resultArr[0];
       valueList = resultArr[1];
-      let decodedResultArr = [];
+      const decodedResultArr = [];
       for (let i = 0; i < nameList.length; i++) {
         // Get parameter
         const schemaTemp = schema['bdo:variables'][nameList[i]];
         const bytesTemp = valueList[i];
 
-        if (schemaTemp.type == 'integer') {
+        if (schemaTemp.type === 'integer') {
           decodedResultArr.push(byte2int(schemaTemp, bytesTemp));
-        } else if (schemaTemp.type == 'string') {
+        } else if (schemaTemp.type === 'string') {
           decodedResultArr.push(byte2string(schemaTemp, bytesTemp));
         }
 
         // Used if scale leads to float number, instead of int
-        else if (schemaTemp.type == 'number') {
+        else if (schemaTemp.type === 'number') {
           decodedResultArr.push(byte2int(schemaTemp, bytesTemp));
         } else {
           throw new Error('Datatype not supported by codec');
@@ -49,14 +49,14 @@ export class BinaryDataStreamCodec implements ContentCodec {
         parsed = decodedResultArr;
       }
     } else {
-      if (schema.type == 'integer') {
+      if (schema.type === 'integer') {
         parsed = byte2int(schema, bytes);
-      } else if (schema.type == 'string') {
+      } else if (schema.type === 'string') {
         parsed = byte2string(schema, bytes);
       }
 
       // Used if scale leads to float number, instead of int
-      else if (schema.type == 'number') {
+      else if (schema.type === 'number') {
         parsed = byte2int(schema, bytes);
       } else {
         throw new Error('Datatype not supported by codec');
@@ -82,7 +82,7 @@ export class BinaryDataStreamCodec implements ContentCodec {
     let hexString: string;
 
     // Check if pattern is provieded and fill in
-    if (typeof schema['bdo:pattern'] != 'undefined') {
+    if (typeof schema['bdo:pattern'] !== 'undefined') {
       // String Pattern
 
       hexString = fillStringPattern(schema, dataValue);
@@ -118,19 +118,19 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
   const offset = schema['bdo:offset'] || 0;
   const precision = schema['bdo:precision'] || 2;
 
-  if (typeof bytelength == 'undefined') {
+  if (typeof bytelength === 'undefined') {
     throw new Error('Not all parameters are provided!');
   }
 
-  let parsed: number = 0;
+  let parsed = 0;
 
-  if (byteOrder == 'little') {
+  if (byteOrder === 'little') {
     if (signed) {
       parsed = bytes.readIntLE(offset, bytelength);
     } else {
       parsed = bytes.readUIntLE(offset, bytelength);
     }
-  } else if (byteOrder == 'big') {
+  } else if (byteOrder === 'big') {
     if (signed) {
       parsed = bytes.readIntBE(offset, bytelength);
     } else {
@@ -158,21 +158,21 @@ function int2byte(schema: DataSchema, dataValue: number) {
   const scale = schema['bdo:scale'] || 1;
   const offset = schema['bdo:offset'] || 0;
 
-  if (typeof bytelength == 'undefined') {
+  if (typeof bytelength === 'undefined') {
     throw new Error('Not all parameters are provided!');
   }
 
   // Apply scale
   dataValue = dataValue * scale;
 
-  let buf = Buffer.alloc(bytelength);
-  if (byteOrder == 'little') {
+  const buf = Buffer.alloc(bytelength);
+  if (byteOrder === 'little') {
     if (signed) {
       buf.writeIntLE(dataValue, offset, bytelength);
     } else {
       buf.writeUIntLE(dataValue, offset, bytelength);
     }
-  } else if (byteOrder == 'big') {
+  } else if (byteOrder === 'big') {
     if (signed) {
       buf.writeIntBE(dataValue, offset, bytelength);
     } else {
@@ -191,21 +191,21 @@ function int2byte(schema: DataSchema, dataValue: number) {
  */
 function readPattern(schema: DataSchema, bytes: Buffer) {
   // Get name of variables in template
-  let template = schema['bdo:pattern'];
-  let variables = schema['bdo:variables'];
+  const template = schema['bdo:pattern'];
+  const variables = schema['bdo:variables'];
 
   // additionalOffset is offset beetween variables
   // e.g.  {temp}00{light}
   // additionalOffset = [0, 1]
   // means: no offset before temp but offset of 1 byte after temp
-  let additionalOffset = [];
-  let variableNameList = [];
+  const additionalOffset = [];
+  const variableNameList = [];
 
   // Get variable names and additional offset
-  let splitTemplate = template.split('{');
+  const splitTemplate = template.split('{');
   for (let i = 0; i < splitTemplate.length; i++) {
-    let splitValue = splitTemplate[i].split('}');
-    if (i == 0) {
+    const splitValue = splitTemplate[i].split('}');
+    if (i === 0) {
       // Only additional offest at i == 0; never a variable name
       // divided by 2 to get bytelength
       additionalOffset.push(splitValue[0].length / 2);
@@ -216,10 +216,10 @@ function readPattern(schema: DataSchema, bytes: Buffer) {
   }
 
   // Slice buffer
-  let valueList = [];
+  const valueList = [];
   let offset = 0 + additionalOffset[0];
   for (let i = 0; i < variableNameList.length; i++) {
-    let byteLength = variables[variableNameList[i]]['bdo:bytelength'];
+    const byteLength = variables[variableNameList[i]]['bdo:bytelength'];
     valueList.push(bytes.subarray(offset, offset + byteLength));
     offset += byteLength + additionalOffset[i + 1];
   }
@@ -239,17 +239,17 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
   // Iterate over provided parameters and convert to hex string
   for ([key, params] of Object.entries(schema['bdo:variables'])) {
     // Convert integer values to hex string
-    if (params.type == 'integer') {
-      let buf = int2byte(params, dataValue[key]);
+    if (params.type === 'integer') {
+      const buf = int2byte(params, dataValue[key]);
       // Convert Buffer back to hex
       dataValue[key] = buf.toString('hex');
     }
     // Fill in Hex values
-    if (params.type == 'string') {
-      if (params.format == 'hex') {
-        dataValue[key] = dataValue[key];
-      }
-    }
+    // if (params.type === 'string') {
+    //   if (params.format === 'hex') {
+    //     dataValue[key] = dataValue[key];
+    //   }
+    // }
   }
 
   //Fill in pattern
@@ -268,14 +268,14 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
  */
 function string2byte(schema: DataSchema, dataValue: string) {
   let buf: Buffer;
-  if (typeof schema.format == 'undefined') {
+  if (typeof schema.format === 'undefined') {
     buf = Buffer.from(dataValue, 'utf-8');
     return buf;
-  } else if (schema.format == 'hex') {
+  } else if (schema.format === 'hex') {
     buf = Buffer.from(dataValue, 'hex');
     return buf;
   } else {
-    throw Error('String can not be converte to bytes, format not supported');
+    throw Error('String can not be converted to bytes, format not supported');
   }
 }
 
@@ -285,12 +285,15 @@ function string2byte(schema: DataSchema, dataValue: string) {
  * @param {Buffer} bytes values to convert.
  * @return {String} Converted String.
  */
-function byte2string(schema: DataSchema, bytes: Buffer) {
+function byte2string(schema: DataSchema, bytes: Buffer): string {
   let value;
-  if (typeof schema.format == 'undefined') {
+  if (typeof schema.format === 'undefined') {
     value = bytes.toString('utf-8');
-  } else if (schema.format == 'hex') {
+  } else if (schema.format === 'hex') {
     value = bytes.toString('hex');
+  }
+  if (typeof value === 'undefined') {
+    throw Error('String can not be converted to bytes, format not supported');
   }
   return value;
 }
