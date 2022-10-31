@@ -59,6 +59,8 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/styled-components": "latest",
+    "@typescript-eslint/eslint-plugin": "^5.14.0",
+    "@typescript-eslint/parser": "^5.14.0",
     "babel-polyfill": "^6.26.0",
     "copyfiles": "^2.4.1",
     "craco-alias": "^3.0.1",
