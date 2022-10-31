@@ -1,6 +1,6 @@
 <img src="packages/web/public/assets/media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
-# BLAST - Block Applications For Things 
+# BLAST - Block Applications For Things
 A visual programming environment (VPE) for creating and executing applications, that communicate and interact with devices from the Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)).
 
 Employing a VPE, BLAST makes creating WoT Applications more accessible: Without knowing any details of the technologies or communication protocols used by a device, users can create complete Programs that read or write its properties, invoke actions on it and listen to its events. Programs can then be executed on desktop pcs, smartphones and tablets.
@@ -12,12 +12,8 @@ In order to use BLAST open a Terminal and enter the following commands:
 1. Clone this repository with `git clone https://github.com/wintechis/blast`
 2. Install dependencies: `yarn install`
 3. Build BLAST: `yarn build`
-4. Host BLAST: `yarn serve`
+4. Host BLAST: `yarn start`
 5. Open your Browser and navigate to `https://localhost:3000`
-
-If you want to use the save/load features, however you have to host the files on a server, see [Saving & loading](#saving--loading) for more info on this.
-
-> :warning: **Blocks that perform fetch requests, like the http-request or the SPARQL-blocks, require BLAST to be hosted on a server.**  
 
 > :warning: **BLAST's Bluetooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
@@ -38,7 +34,7 @@ This table displays all blocks with limited compatibility, assuming you're using
 [^1]: https://bugs.chromium.org/p/chromium/issues/detail?id=897312
 [^2]: https://bugs.chromium.org/p/chromium/issues/detail?id=654897
 
-If you need Linux compatibility, it might help to star this [watchAdvertisement implementation issue](https://bugs.chromium.org/p/chromium/issues/detail?id=654897&q=watchAdvertisements&can=2) and to help us implement new features, star the [Bluetooth Scanning issue](https://bugs.chromium.org/p/chromium/issues/detail?id=897312). 
+If you need Linux compatibility, it might help to star this [watchAdvertisement implementation issue](https://bugs.chromium.org/p/chromium/issues/detail?id=654897&q=watchAdvertisements&can=2) and to help us implement new features, star the [Bluetooth Scanning issue](https://bugs.chromium.org/p/chromium/issues/detail?id=897312).
 
 ### Notes
 
@@ -64,7 +60,7 @@ In order to build BLAST yourself, follow these steps:
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
 * **unit testing** add unit tests
-  
+
 For smaller planned improvements see [issues](https://github.com/wintechis/blast/issues)
 
 ## Contributing
