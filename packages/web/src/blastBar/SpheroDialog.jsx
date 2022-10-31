@@ -36,7 +36,7 @@ export default class SpheroDialog extends React.Component {
   setHeading(angle) {
     // only set heading every 100ms
     if (Date.now() - this.state.lastSetHeading > 250) {
-      this.state.lastSetHeading = Date.now();
+      this.setState({lastSetHeading: Date.now()});
       const sphero = spheroInstances.get(this.state.spheroId);
       sphero.setHeading(angle);
     }
@@ -46,7 +46,8 @@ export default class SpheroDialog extends React.Component {
     return (
       <Dialog open={this.state.open} onClose={this.handleClose}>
         <DialogTitle>
-          Drag the slider below, until the sphero's blue LED is pointing at you
+          Drag the slider below, until the sphero&apos;s blue LED is pointing at
+          you
         </DialogTitle>
         <Container>
           <FormControl fullWidth>

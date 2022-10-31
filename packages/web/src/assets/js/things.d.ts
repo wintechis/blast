@@ -36,7 +36,7 @@ export const devCategories: [string, number, number][];
 /**
  * Wether development mode is turned on or off.
  */
- export let devMode: Boolean;
+export let devMode: Boolean;
 
 /**
  * Sets the 'pair via webBluetooth' button handler.

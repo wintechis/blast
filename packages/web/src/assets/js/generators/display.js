@@ -36,7 +36,7 @@ globalThis['displayText'] = function (text) {
  * @param {Blockly.Block} block the display_image block.
  * @returns {String} the generated code.
  */
- JavaScript['display_image'] = function (block) {
+JavaScript['display_image'] = function (block) {
   const image = JavaScript.valueToCode(block, 'image', JavaScript.ORDER_NONE);
 
   // This block only works if you define displayImage in your Environmnet
@@ -50,7 +50,8 @@ globalThis['displayText'] = function (text) {
  * @param {string} image base64 encoded image.
  */
 globalThis['displayImage'] = function (image) {
-  addMessage('image', image);
+  const stdOut = getStdOut();
+  stdOut(image, 'image');
 };
 
 /**
@@ -74,12 +75,12 @@ JavaScript['display_table'] = function (block) {
  * @public
  */
 globalThis['displayTable'] = function (arr) {
+  const stdOut = getStdOut();
   // display message if table is empty
   if (arr.length === 0) {
-    const stdOut = getStdOut();
     stdOut('empty table');
     return;
   }
 
-  addMessage('table', arr);
+  stdOut(arr, 'table');
 };

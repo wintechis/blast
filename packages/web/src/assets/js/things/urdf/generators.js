@@ -3,8 +3,6 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-'use strict';
-
 import Blockly from 'blockly';
 import urdf from 'urdf';
 import {throwError} from '../../interpreter.js';

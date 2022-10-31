@@ -126,7 +126,8 @@ export default class WebBluetoothClient implements ProtocolClient {
     );
 
     const handler = (event: Event) => {
-      const value = (event.target as BluetoothRemoteGATTCharacteristic).value as DataView;
+      const value = (event.target as BluetoothRemoteGATTCharacteristic)
+        .value as DataView;
       const array = new Uint8Array(value.buffer);
       // Convert value a DataView to ReadableStream
       const content = {

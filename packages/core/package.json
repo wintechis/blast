@@ -48,18 +48,14 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@elgato-stream-deck/webhid": "^5.2.0",
-    "@inrupt/solid-client": "^1.19.0",
     "@node-wot/core": "0.8.2",
     "@node-wot/td-tools": "0.8.2",
-    "@tensorflow/tfjs": "^3.18.0",
     "@types/uritemplate": "^0.3.4",
     "joy-con-webhid": "^0.2.0",
     "node-ble": "^1.8.0",
     "readable-stream": "^4.2.0",
     "rxjs": "5.5.11",
     "typescript": "^4.7.4",
-    "urdf": "https://github.com/derwehr/uRDF.js.git",
     "uritemplate": "^0.3.4",
     "webpack": "^5.74.0",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.23",

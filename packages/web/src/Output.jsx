@@ -26,18 +26,11 @@ export default class Output extends React.Component {
   }
 
   componentDidMount() {
-    setStdOut(msg => {
-      this.setState(state => {
-        return {
-          messages: state.messages.concat({
-            text: msg,
-            time: new Date().toLocaleTimeString(),
-          }),
-        };
-      });
+    setStdOut((msg, type) => {
+      this.addMessage(msg, type);
     });
     setStdError(msg => {
-      console.log(msg);
+      console.error(msg);
       this.setState(state => {
         return {
           messages: state.messages.concat({
@@ -69,7 +62,7 @@ export default class Output extends React.Component {
     container.scrollTop = container.scrollHeight;
   }
 
-  addMessage(type, text) {
+  addMessage(text, type) {
     this.setState(state => {
       return {
         messages: state.messages.concat({

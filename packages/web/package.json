@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@elgato-stream-deck/webhid": "^5.2.0",
+    "@inrupt/solid-client": "^1.19.0",
     "@fontsource/roboto": "^4.5.8",
     "@fseehawer/react-circular-slider": "^2.5.16",
     "@mui/icons-material": "^5.10.9",
@@ -10,6 +12,7 @@
     "@mui/material": "latest",
     "@mui/styled-engine-sc": "latest",
     "@mui/styles": "latest",
+    "@tensorflow/tfjs": "^3.18.0",
     "@testing-library/jest-dom": "latest",
     "@testing-library/react": "latest",
     "@testing-library/user-event": "latest",
@@ -22,13 +25,15 @@
     "react-dom": "latest",
     "react-scripts": "latest",
     "react-syntax-highlighter": "^15.5.0",
-    "styled-components": "latest"
+    "styled-components": "latest",
+    "urdf": "https://github.com/derwehr/uRDF.js.git"
   },
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
     "start": "gulp update-version &&  craco start",
     "copy-blast": "copyfiles -u 3 \"../core/dist/blast.web.min.*\" \"./public/assets/blast/\"",
     "build": "yarn run copy-blast && gulp update-version && craco build",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "test": "craco test",
     "eject": "react-scripts eject"
   },
@@ -54,6 +59,7 @@
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/styled-components": "latest",
+    "babel-polyfill": "^6.26.0",
     "copyfiles": "^2.4.1",
     "craco-alias": "^3.0.1",
     "eslint": "^8.26.0",

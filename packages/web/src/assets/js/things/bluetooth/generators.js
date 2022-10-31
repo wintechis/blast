@@ -4,11 +4,7 @@
  */
 
 import Blockly from 'blockly';
-import {
-  getDeviceById,
-  read,
-  writeWithoutResponse,
-} from '../../webBluetooth.js';
+import {getDeviceById, read, writeWithoutResponse} from '../../webBluetooth.js';
 const {JavaScript} = Blockly;
 import {getWorkspace, throwError} from '../../interpreter.js';
 

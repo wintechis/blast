@@ -5,11 +5,7 @@
 
 import 'buffer';
 import Blockly from 'blockly';
-import {
-  addCleanUpFunction,
-  getWorkspace,
-  throwError,
-} from './interpreter.js';
+import {addCleanUpFunction, getWorkspace, throwError} from './interpreter.js';
 import {addWebBluetoothDevice, getThingsLog} from './things.js';
 
 const {dialog} = Blockly;

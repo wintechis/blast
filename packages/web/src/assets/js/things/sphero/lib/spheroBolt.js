@@ -518,7 +518,7 @@ export default class SpheroBolt {
       let value = event.target.value.getUint8(i);
       switch (value) {
         case APIConstants.startOfPacket:
-          if (this.packet === undefined || this.packet.length != 0) {
+          if (this.packet === undefined || this.packet.length !== 0) {
             this.init();
           }
           this.packet.push(value);
@@ -531,7 +531,7 @@ export default class SpheroBolt {
 
             break;
           }
-          if (this.packet[this.packet.length - 1] != (~this.sum & 0xff)) {
+          if (this.packet[this.packet.length - 1] !== (~this.sum & 0xff)) {
             console.log('Bad checksum');
             this.init();
             break;
@@ -869,8 +869,8 @@ const convertBinaryToFloat = (data, offset) => {
 };
 
 const fillAngle = state => {
-  const {data, mask} = state;
-  let {offset, response} = state;
+  const {data, mask, response} = state;
+  let {offset} = state;
 
   if (mask.aol.indexOf(SensorMask.orientationFilteredAll) >= 0) {
     const pitch = convertBinaryToFloat(data, offset);
@@ -897,8 +897,8 @@ const fillAngle = state => {
 };
 
 const fillAccelerometer = state => {
-  const {data, mask} = state;
-  let {offset, response} = state;
+  const {data, mask, response} = state;
+  let {offset} = state;
 
   if (mask.aol.indexOf(SensorMask.accelerometerFilteredAll) >= 0) {
     const x = convertBinaryToFloat(data, offset);
@@ -925,8 +925,8 @@ const fillAccelerometer = state => {
 };
 
 const fillLocator = state => {
-  const {data, mask} = state;
-  let {offset, response} = state;
+  const {data, mask, response} = state;
+  let {offset} = state;
 
   if (mask.aol.indexOf(SensorMask.locatorFilteredAll) >= 0) {
     const positionX = convertBinaryToFloat(data, offset) * 100.0;
@@ -957,8 +957,8 @@ const fillLocator = state => {
 };
 
 const fillGyro = state => {
-  const {data, mask} = state;
-  let {offset, response} = state;
+  const {data, mask, response} = state;
+  let {offset} = state;
 
   if (mask.gyro.indexOf(SensorMask.gyroFilteredAll) >= 0) {
     const x = convertBinaryToFloat(data, offset);

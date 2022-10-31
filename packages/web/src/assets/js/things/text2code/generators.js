@@ -1,5 +1,4 @@
 import * as tf from '@tensorflow/tfjs';
-import 'babel-polyfill';
 import inputWord2idx from './mappings/input-word2idx.js';
 import wordContext from './mappings/word-context.js';
 import targetWord2idx from './mappings/target-word2idx.js';
