@@ -13,12 +13,12 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     const formattedDeviceId = deviceId?.replace(/(.{2})/g, '$1:').slice(0, -1);
 
     if (!this.adapter) {
-      const {bluetooth} = createBluetooth()
-      this.adapter = await bluetooth.defaultAdapter()
+      const {bluetooth} = createBluetooth();
+      this.adapter = await bluetooth.defaultAdapter();
     }
 
-    if (!await this.adapter.isDiscovering()) {
-      await this.adapter.startDiscovery()
+    if (!(await this.adapter.isDiscovering())) {
+      await this.adapter.startDiscovery();
     }
 
     const device = await this.adapter.waitDevice(formattedDeviceId);
