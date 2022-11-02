@@ -1,4 +1,6 @@
 export default {
+  "0": "<PAD>",
+  "1": "<UNK>",
   "2": "the",
   "3": "light",
   "4": "philips",
@@ -6,10 +8,10 @@ export default {
   "6": "to",
   "7": "on",
   "8": "color",
-  "9": "bulb",
-  "10": "blinkstick",
-  "11": "led",
-  "12": "strip",
+  "9": "blinkstick",
+  "10": "led",
+  "11": "strip",
+  "12": "bulb",
   "13": "change",
   "14": "switch",
   "15": "turn",
@@ -171,7 +173,5 @@ export default {
   "171": "white",
   "172": "whitesmoke",
   "173": "yellow",
-  "174": "yellowgreen",
-  "0": "<PAD>",
-  "1": "<UNK>"
+  "174": "yellowgreen"
 }

@@ -1,4 +1,5 @@
 export default {
+  "0": "<UNK>",
   "1": "<SOS>",
   "2": "<EOS>",
   "3": "ledStrip.writeProperty('color',",
@@ -146,6 +147,5 @@ export default {
   "145": "'#F5F5F5');",
   "146": "'#FFFF00');",
   "147": "'#9ACD32');",
-  "148": "'#F0F8FF');",
-  "0": "<UNK>"
+  "148": "'#F0F8FF');"
 }
