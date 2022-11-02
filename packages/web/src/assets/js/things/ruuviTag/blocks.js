@@ -6,7 +6,11 @@
 
 import Blockly from 'blockly';
 const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
-import {eventsInWorkspace, getWorkspace} from '../../interpreter.js';
+import {
+  eventsInWorkspace,
+  getStdWarn,
+  getWorkspace,
+} from '../../interpreter.js';
 import {implementedThings} from '../../things.js';
 
 const {RuuviTag} = Blast;
@@ -122,9 +126,21 @@ Blocks['ruuviTag_event'] = {
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
+      this.checkCompatibility();
       this.requested = true;
       this.addEvent();
       this.createVars();
+    }
+  },
+  checkCompatibility: function () {
+    const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
+    const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
+
+    if (!isWindows && !isAndroid) {
+      const stdWarn = getStdWarn();
+      stdWarn(
+        'Reading from the Ruuvi Tag is only supported on Windows and Android'
+      );
     }
   },
   onDispose: function (event) {

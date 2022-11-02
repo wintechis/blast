@@ -6,6 +6,7 @@
 
 import Blockly from 'blockly';
 import {implementedThings} from '../../things.js';
+import {getStdInfo} from '../../interpreter.js';
 
 const {BleRgbController} = Blast;
 const {Blocks, dialog, FieldTextInput} = Blockly;

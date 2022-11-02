@@ -6,6 +6,7 @@
 import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {devBlocks, implementedThings} from '../../things.js';
+import {getStdWarn} from '../../interpreter.js';
 
 const {BluetoothGeneric, EddystoneDevice} = Blast;
 
@@ -133,12 +134,24 @@ Blocks['bluetoothGeneric_get_signal_strength_wb'] = {
   onchange: function () {
     // on creating this block check webBluetooth availability
     if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.checkCompatibility();
       this.firstTime = false;
       if (!navigator.bluetooth) {
         dialog.alert(`Webbluetooth is not supported by this browser.\n
           Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
+    }
+  },
+  checkCompatibility: function () {
+    const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
+    const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
+
+    if (!isWindows && !isAndroid) {
+      const stdWarn = getStdWarn();
+      stdWarn(
+        'reading signal strength is only supported on Windows and Android'
+      );
     }
   },
 };

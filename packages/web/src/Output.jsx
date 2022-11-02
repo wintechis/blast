@@ -14,6 +14,7 @@ import {
   setStdError,
   setStdIn,
   setStdInfo,
+  setStdWarn,
 } from './assets/js/interpreter.js';
 
 export default class Output extends React.Component {
@@ -48,6 +49,17 @@ export default class Output extends React.Component {
             text: msg,
             time: new Date().toLocaleTimeString(),
             type: 'info',
+          }),
+        };
+      });
+    });
+    setStdWarn(msg => {
+      this.setState(state => {
+        return {
+          messages: state.messages.concat({
+            text: msg,
+            time: new Date().toLocaleTimeString(),
+            type: 'warning',
           }),
         };
       });

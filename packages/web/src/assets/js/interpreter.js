@@ -187,6 +187,24 @@ export const getStdInfo = function () {
   return stdInfo;
 };
 
+let stdWarn = console.warn;
+
+/**
+ * Setter for the Interpreter's standard warning output function.
+ * @param {function} fn the stdWarn function.
+ */
+export const setStdWarn = function (fn) {
+  stdWarn = fn;
+};
+
+/**
+ * Getter for the Interpreter's standard warning output function.
+ * @return {function} the stdWarn function.
+ */
+export const getStdWarn = function () {
+  return stdWarn;
+};
+
 /**
  * Defines the Interpreters standard error output.
  */

@@ -20,6 +20,7 @@ import {
   setWebHidButtonHandler,
 } from './assets/js/things.js';
 
+import {getStdWarn} from './assets/js/interpreter.js';
 import {requestDevice} from './assets/js/webBluetooth.js';
 
 export default class ConnectDialog extends React.Component {
@@ -81,6 +82,24 @@ export default class ConnectDialog extends React.Component {
                     <ListItemButton
                       onClick={async () => {
                         if (this.state.selectedAdapter === 'bluetooth') {
+                          const stdWarn = getStdWarn();
+                          const isChrome = !!window.chrome;
+                          const supportsWebBluetooth = 'bluetooth' in navigator;
+
+                          if (!isChrome) {
+                            stdWarn(
+                              'Blocks using Bluetooth are supported in Chrome only.'
+                            );
+                            this.handleClose();
+                          }
+                          if (isChrome && !supportsWebBluetooth) {
+                            stdWarn(
+                              'Experimental Web Bluetooth support is required in order to use Bluetooth devices. ' +
+                                'Enable it in chrome://flags/#enable-experimental-web-platform-features'
+                            );
+                            this.handleClose();
+                          }
+
                           await requestDevice(thing);
                           if (thing.id === 'spheroMini') {
                             this.props.blastBarRef.current.setSpheroConnected(
