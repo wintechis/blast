@@ -48,9 +48,6 @@ If you need Linux compatibility, it might help to star this [watchAdvertisement 
 ### Saving & Loading
 Loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions.
 
-### Customizing BLAST
-The BLAST library allows developers to customize its output method to adapt to their own UI. See [integration.md](./integration.md) for detailed information on how to do this.
-
 ### Building
 In order to build BLAST yourself, follow these steps:
 1. install [yarn](https://yarnpkg.com/)
