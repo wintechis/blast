@@ -1,7 +1,10 @@
 import React from 'react';
+
+import {styled} from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import Tab from '@mui/material/Tab';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,6 +19,16 @@ import {
   setStdInfo,
   setStdWarn,
 } from './assets/js/interpreter.js';
+
+const OutputTab = styled(props => (
+  <Tab disableFocusRipple disableRipple {...props} />
+))(() => ({
+  opacity: 1,
+  color: 'rgba(0,0,0,0.6)',
+  '&:hover': {
+    cursor: 'default',
+  },
+}));
 
 export default class Output extends React.Component {
   constructor(props) {
@@ -140,7 +153,7 @@ export default class Output extends React.Component {
   render() {
     return (
       <>
-        <Typography variant="h4">Output</Typography>
+        <OutputTab label="Output" />
         <Paper>
           <Box
             id="outputContainer"

@@ -18,10 +18,10 @@ export default class Controls extends React.Component {
 
   render() {
     return (
-      <Paper sx={{p: 1, boxSizing: 'content-box'}}>
+      <>
         <Output ref={this.outputRef} />
         <Version />
-      </Paper>
+      </>
     );
   }
 }

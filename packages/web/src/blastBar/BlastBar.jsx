@@ -120,7 +120,7 @@ export default class BlastBar extends React.Component {
             src={logo}
             alt="logo"
           />
-          <Typography variant="h6" component="div">
+          <Typography variant="h5" component="div">
             BLAST
           </Typography>
           <Tooltip title="Load sample">
