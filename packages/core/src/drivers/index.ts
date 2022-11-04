@@ -1,5 +1,4 @@
 import BleRgbController from './BleRgbController';
-import Blinkstick from './Blinkstick';
 import BluetoothGeneric from './BluetoothGeneric';
 import EddystoneDevice from './EddystoneDevice';
 import HuskyDuino from './HuskyDuino';
@@ -9,7 +8,6 @@ import XiaomiThermometer from './XiaomiThermometer';
 
 export default {
   BleRgbController,
-  Blinkstick,
   BluetoothGeneric,
   EddystoneDevice,
   HuskyDuino,
