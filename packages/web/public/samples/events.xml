@@ -1,0 +1,102 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="O:TGjbXpf9:@A(a;5emL">number</variable>
+  </variables>
+  <block type="variables_set" id="1j`S7;cCCK`xB+.iizTE" x="172" y="32">
+    <field name="VAR" id="O:TGjbXpf9:@A(a;5emL">number</field>
+    <value name="VALUE">
+      <block type="number_value" id="g082tNl{K@STr:TbyR=|">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <next>
+      <block type="repeat" id="%Sr7SfnLm5orx]o%c2o,">
+        <value name="TIMES">
+          <block type="number_value" id="5M#0/SQa`;kw4VK7t4r}">
+            <field name="NUM">9</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="variables_set" id="yKso.GyFgndRcpH?m`{K">
+            <field name="VAR" id="O:TGjbXpf9:@A(a;5emL">number</field>
+            <value name="VALUE">
+              <block type="number_arithmetic" id="7hZf9$WIDlccK56GsXe}">
+                <field name="OP">ADD</field>
+                <value name="A">
+                  <block type="variables_get" id="CK6Y9(TG3X)M41DN+a|c">
+                    <field name="VAR" id="O:TGjbXpf9:@A(a;5emL">number</field>
+                  </block>
+                </value>
+                <value name="B">
+                  <block type="number_value" id="w.mtKe=pL~Ab[wqc%=!S">
+                    <field name="NUM">1</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="wait_seconds" id="X#VgMjqIFwQfdAp6Ci(3">
+                <value name="SECONDS">
+                  <block type="math_number" id="xtFE8?(-LsA+tR`yTvJ]">
+                    <field name="NUM">0.1</field>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+  <block type="state_definition" id="s8F]Vo=Vn9?wyzhwGAxX" x="170" y="220">
+    <field name="NAME">even</field>
+    <value name="state_condition">
+      <block type="logic_compare" id="Iu078ZwE_I)]xe3pg7H)">
+        <field name="OP">EQ</field>
+        <value name="A">
+          <block type="number_modulo" id="6~:`L)VT?N08ck2^M^;g">
+            <value name="DIVIDEND">
+              <block type="variables_get" id="}LqR=P_!64?[qD8O$~P%">
+                <field name="VAR" id="O:TGjbXpf9:@A(a;5emL">number</field>
+              </block>
+            </value>
+            <value name="DIVISOR">
+              <block type="number_value" id="x_X4RWQPK~ya41]pU5jm">
+                <field name="NUM">2</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <value name="B">
+          <block type="number_value" id="~7^AIFpI7*C.[g^X_dZZ">
+            <field name="NUM">0</field>
+          </block>
+        </value>
+      </block>
+    </value>
+  </block>
+  <block type="event" id="W3w2f$H||*fiRs_*+pbE" x="171" y="294">
+    <mutation name="even"></mutation>
+    <field name="entersExits">ENTERS</field>
+    <field name="NAME">even</field>
+    <statement name="statements">
+      <block type="display_text" id="qu6xZvqbK+ezXeRT7DL:">
+        <value name="text">
+          <block type="string_join" id="uA)0pK$3?gGls%^-~~Ie">
+            <mutation items="2"></mutation>
+            <value name="ADD0">
+              <block type="variables_get" id="E8FO,|*=uIffVtj(Gt/W">
+                <field name="VAR" id="O:TGjbXpf9:@A(a;5emL">number</field>
+              </block>
+            </value>
+            <value name="ADD1">
+              <block type="string" id=".**bosFj9~UMbrm7jIRf">
+                <field name="TEXT"> is even.</field>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>

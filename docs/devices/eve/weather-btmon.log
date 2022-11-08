@@ -1,0 +1,1467 @@
+Bluetooth monitor ver 5.65
+= Note: Linux version 5.19.0-2-amd64 (x86_64)                          0.680976
+= Note: Bluetooth subsystem version 2.22                               0.680978
+= New Index: E8:48:B8:C8:20:00 (Primary,USB,hci0)               [hci0] 0.680979
+= Open Index: E8:48:B8:C8:20:00                                 [hci0] 0.680979
+= Index Info: E8:48:B8:C.. (Realtek Semiconductor Corporation)  [hci0] 0.680980
+= New Index: 94:B8:6D:CE:AB:48 (Primary,USB,hci1)               [hci1] 0.680981
+= Open Index: 94:B8:6D:CE:AB:48                                 [hci1] 0.680981
+= Index Info: 94:B8:6D:CE:AB:48 (Intel Corp.)                   [hci1] 0.680982
+@ MGMT Open: bluetoothd (privileged) version 1.22             {0x0001} 0.680983
+@ MGMT Command: Start Discovery (0x0023) plen 1        {0x0001} [hci0] 2.559332
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+< HCI Command: LE Set Random Address (0x08|0x0005) plen 6    #1 [hci0] 2.559394
+        Address: 14:AB:B8:E8:7F:88 (Non-Resolvable)
+> HCI Event: Command Complete (0x0e) plen 4                  #2 [hci0] 2.677236
+      LE Set Random Address (0x08|0x0005) ncmd 2
+        Status: Success (0x00)
+< HCI Command: LE Set Extended Scan... (0x08|0x0041) plen 8  #3 [hci0] 2.677300
+        Own address type: Random (0x01)
+        Filter policy: Accept all advertisement (0x00)
+        PHYs: 0x01
+        Entry 0: LE 1M
+          Type: Active (0x01)
+          Interval: 22.500 msec (0x0024)
+          Window: 11.250 msec (0x0012)
+> HCI Event: Command Complete (0x0e) plen 4                  #4 [hci0] 2.678233
+      LE Set Extended Scan Parameters (0x08|0x0041) ncmd 2
+        Status: Success (0x00)
+< HCI Command: LE Set Extended Scan... (0x08|0x0042) plen 6  #5 [hci0] 2.678286
+        Extended scan: Enabled (0x01)
+        Filter duplicates: Enabled (0x01)
+        Duration: 0 msec (0x0000)
+        Period: 0.00 sec (0x0000)
+> HCI Event: Command Complete (0x0e) plen 4                  #6 [hci0] 2.680320
+      LE Set Extended Scan Enable (0x08|0x0042) ncmd 2
+        Status: Success (0x00)
+< HCI Command: Inquiry (0x01|0x0001) plen 5                  #7 [hci0] 2.680387
+        Access code: 0x9e8b33 (General Inquiry)
+        Length: 10.24s (0x08)
+        Num responses: 0
+> HCI Event: Command Status (0x0f) plen 4                    #8 [hci0] 2.682128
+      Inquiry (0x01|0x0001) ncmd 2
+        Status: Success (0x00)
+@ MGMT Event: Command Complete (0x0001) plen 4         {0x0001} [hci0] 2.682184
+      Start Discovery (0x0023) plen 1
+        Status: Success (0x00)
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+@ MGMT Event: Discovering (0x0013) plen 2              {0x0001} [hci0] 2.682188
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+        Discovery: Enabled (0x01)
+> HCI Event: LE Meta Event (0x3e) plen 57                    #9 [hci0] 3.085346
+      LE Extended Advertising Report (0x0d)
+        Num reports: 1
+        Entry 0
+          Event type: 0x0013
+            Props: 0x0013
+              Connectable
+              Scannable
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: ADV_IND (0x0013)
+          Address type: Random (0x01)
+          Address: D2:2F:E8:B9:5D:76 (Static)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -64 dBm (0xc0)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x1f
+        02 01 06 16 ff 4c 00 06 31 01 11 55 a3 a7 cb 99  .....L..1..U....
+        0a 00 09 00 02 02 80 ce f4 60 04 08 45 76 65     .........`..Eve 
+        Flags: 0x06
+          LE General Discoverable Mode
+          BR/EDR Not Supported
+        Company: Apple, Inc. (76)
+          Type: Unknown (6)
+        01 11 55 a3 a7 cb 99 0a 00 09 00 02 02 80 ce f4  ..U.............
+        60                                               `               
+        Name (short): Eve
+> HCI Event: LE Meta Event (0x3e) plen 76                   #10 [hci0] 3.236202
+      LE Extended Advertising Report (0x0d)
+        Num reports: 2
+        Entry 0
+          Event type: 0x0013
+            Props: 0x0013
+              Connectable
+              Scannable
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: ADV_IND (0x0013)
+          Address type: Random (0x01)
+          Address: 50:BC:FB:6C:6C:92 (Resolvable)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -68 dBm (0xbc)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x1a
+        02 01 1c 0c 09 56 65 63 74 6f 72 20 54 39 55 33  .....Vector T9U3
+        05 ff f8 05 76 00 03 03 e3 fe                    ....v.....      
+        Flags: 0x1c
+          BR/EDR Not Supported
+          Simultaneous LE and BR/EDR (Controller)
+          Simultaneous LE and BR/EDR (Host)
+        Name (complete): Vector T9U3
+        Company: Anki Inc. (1528)
+          Data: 7600
+        16-bit Service UUIDs (complete): 1 entry
+          Anki, Inc. (0xfee3)
+        Entry 1
+          Event type: 0x001b
+            Props: 0x001b
+              Connectable
+              Scannable
+              Scan response
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: SCAN_RSP to an ADV_SCAN_IND (0x001b)
+          Address type: Random (0x01)
+          Address: 50:BC:FB:6C:6C:92 (Resolvable)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -68 dBm (0xbc)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x00
+@ MGMT Event: Device Found (0x0012) plen 45            {0x0001} [hci0] 3.236306
+        LE Address: D2:2F:E8:B9:5D:76 (Static)
+        RSSI: -64 dBm (0xc0)
+        Flags: 0x00000000
+        Data length: 31
+        Flags: 0x06
+          LE General Discoverable Mode
+          BR/EDR Not Supported
+        Company: Apple, Inc. (76)
+          Type: Unknown (6)
+        01 11 55 a3 a7 cb 99 0a 00 09 00 02 02 80 ce f4  ..U.............
+        60                                               `               
+        Name (short): Eve
+@ MGMT Event: Device Found (0x0012) plen 40            {0x0001} [hci0] 3.236308
+        LE Address: 50:BC:FB:6C:6C:92 (Resolvable)
+        RSSI: -68 dBm (0xbc)
+        Flags: 0x00000000
+        Data length: 26
+        Flags: 0x1c
+          BR/EDR Not Supported
+          Simultaneous LE and BR/EDR (Controller)
+          Simultaneous LE and BR/EDR (Host)
+        Name (complete): Vector T9U3
+        Company: Anki Inc. (1528)
+          Data: 7600
+        16-bit Service UUIDs (complete): 1 entry
+          Anki, Inc. (0xfee3)
+> HCI Event: LE Meta Event (0x3e) plen 68                   #11 [hci0] 4.136265
+      LE Extended Advertising Report (0x0d)
+        Num reports: 2
+        Entry 0
+          Event type: 0x0013
+            Props: 0x0013
+              Connectable
+              Scannable
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: ADV_IND (0x0013)
+          Address type: Random (0x01)
+          Address: 57:08:58:1A:AF:1D (Resolvable)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -58 dBm (0xc6)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x12
+        02 01 1a 02 0a 0c 0b ff 4c 00 10 06 18 1d eb 60  ........L......`
+        52 48                                            RH              
+        Flags: 0x1a
+          LE General Discoverable Mode
+          Simultaneous LE and BR/EDR (Controller)
+          Simultaneous LE and BR/EDR (Host)
+        TX power: 12 dBm
+        Company: Apple, Inc. (76)
+          Type: Unknown (16)
+          Data: 181deb605248
+        Entry 1
+          Event type: 0x001b
+            Props: 0x001b
+              Connectable
+              Scannable
+              Scan response
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: SCAN_RSP to an ADV_SCAN_IND (0x001b)
+          Address type: Random (0x01)
+          Address: 57:08:58:1A:AF:1D (Resolvable)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -58 dBm (0xc6)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x00
+@ MGMT Event: Device Found (0x0012) plen 32            {0x0001} [hci0] 4.136317
+        LE Address: 57:08:58:1A:AF:1D (Resolvable)
+        RSSI: -58 dBm (0xc6)
+        Flags: 0x00000000
+        Data length: 18
+        Flags: 0x1a
+          LE General Discoverable Mode
+          Simultaneous LE and BR/EDR (Controller)
+          Simultaneous LE and BR/EDR (Host)
+        TX power: 12 dBm
+        Company: Apple, Inc. (76)
+          Type: Unknown (16)
+          Data: 181deb605248
+@ MGMT Command: Stop Discovery (0x0024) plen 1         {0x0001} [hci0] 4.383958
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+< HCI Command: Inquiry Cancel (0x01|0x0002) plen 0          #12 [hci0] 4.384007
+> HCI Event: Command Complete (0x0e) plen 4                 #13 [hci0] 4.387171
+      Inquiry Cancel (0x01|0x0002) ncmd 2
+        Status: Success (0x00)
+< HCI Command: LE Set Extended Scan.. (0x08|0x0042) plen 6  #14 [hci0] 4.387205
+        Extended scan: Disabled (0x00)
+        Filter duplicates: Disabled (0x00)
+        Duration: 0 msec (0x0000)
+        Period: 0.00 sec (0x0000)
+> HCI Event: Command Complete (0x0e) plen 4                 #15 [hci0] 4.388289
+      LE Set Extended Scan Enable (0x08|0x0042) ncmd 2
+        Status: Success (0x00)
+@ MGMT Event: Discovering (0x0013) plen 2              {0x0001} [hci0] 4.388304
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+        Discovery: Disabled (0x00)
+@ MGMT Event: Command Complete (0x0001) plen 4         {0x0001} [hci0] 4.388313
+      Stop Discovery (0x0024) plen 1
+        Status: Success (0x00)
+        Address type: 0x07
+          BR/EDR
+          LE Public
+          LE Random
+@ MGMT Command: Pair Device (0x0019) plen 8            {0x0001} [hci0] 5.903684
+        LE Address: D2:2F:E8:B9:5D:76 (Static)
+        Capability: KeyboardDisplay (0x04)
+< HCI Command: LE Set Extended Scan.. (0x08|0x0041) plen 8  #16 [hci0] 5.903746
+        Own address type: Public (0x00)
+        Filter policy: Ignore not in accept list (0x01)
+        PHYs: 0x01
+        Entry 0: LE 1M
+          Type: Passive (0x00)
+          Interval: 60.000 msec (0x0060)
+          Window: 60.000 msec (0x0060)
+> HCI Event: Command Complete (0x0e) plen 4                 #17 [hci0] 5.905256
+      LE Set Extended Scan Parameters (0x08|0x0041) ncmd 2
+        Status: Success (0x00)
+< HCI Command: LE Set Extended Scan.. (0x08|0x0042) plen 6  #18 [hci0] 5.905394
+        Extended scan: Enabled (0x01)
+        Filter duplicates: Enabled (0x01)
+        Duration: 0 msec (0x0000)
+        Period: 0.00 sec (0x0000)
+> HCI Event: Command Complete (0x0e) plen 4                 #19 [hci0] 5.907255
+      LE Set Extended Scan Enable (0x08|0x0042) ncmd 2
+        Status: Success (0x00)
+> HCI Event: LE Meta Event (0x3e) plen 57                   #20 [hci0] 9.451286
+      LE Extended Advertising Report (0x0d)
+        Num reports: 1
+        Entry 0
+          Event type: 0x0013
+            Props: 0x0013
+              Connectable
+              Scannable
+              Use legacy advertising PDUs
+            Data status: [0;32mComplete[0m
+          Legacy PDU Type: ADV_IND (0x0013)
+          Address type: Random (0x01)
+          Address: D2:2F:E8:B9:5D:76 (Static)
+          Primary PHY: LE 1M
+          Secondary PHY: No packets
+          SID: no ADI field (0xff)
+          TX power: 127 dBm
+          RSSI: -66 dBm (0xbe)
+          Periodic advertising interval: 0.00 msec (0x0000)
+          Direct address type: Public (0x00)
+          Direct address: 00:00:00:00:00:00 (OUI 00-00-00)
+          Data length: 0x1f
+        02 01 06 16 ff 4c 00 06 31 01 11 55 a3 a7 cb 99  .....L..1..U....
+        0a 00 09 00 02 02 80 ce f4 60 04 08 45 76 65     .........`..Eve 
+        Flags: 0x06
+          LE General Discoverable Mode
+          BR/EDR Not Supported
+        Company: Apple, Inc. (76)
+          Type: Unknown (6)
+        01 11 55 a3 a7 cb 99 0a 00 09 00 02 02 80 ce f4  ..U.............
+        60                                               `               
+        Name (short): Eve
+< HCI Command: LE Set Extended Scan.. (0x08|0x0042) plen 6  #21 [hci0] 9.451308
+        Extended scan: Disabled (0x00)
+        Filter duplicates: Disabled (0x00)
+        Duration: 0 msec (0x0000)
+        Period: 0.00 sec (0x0000)
+> HCI Event: Command Complete (0x0e) plen 4                 #22 [hci0] 9.452384
+      LE Set Extended Scan Enable (0x08|0x0042) ncmd 2
+        Status: Success (0x00)
+< HCI Command: LE Extended Create... (0x08|0x0043) plen 26  #23 [hci0] 9.452518
+        Filter policy: Accept list is not used (0x00)
+        Own address type: Public (0x00)
+        Peer address type: Random (0x01)
+        Peer address: D2:2F:E8:B9:5D:76 (Static)
+        Initiating PHYs: 0x01
+        Entry 0: LE 1M
+          Scan interval: 60.000 msec (0x0060)
+          Scan window: 60.000 msec (0x0060)
+          Min connection interval: 15.00 msec (0x000c)
+          Max connection interval: 30.00 msec (0x0018)
+          Connection latency: 0 (0x0000)
+          Supervision timeout: 4000 msec (0x0190)
+          Min connection length: 0.000 msec (0x0000)
+          Max connection length: 0.000 msec (0x0000)
+> HCI Event: Command Status (0x0f) plen 4                   #24 [hci0] 9.454389
+      LE Extended Create Connection (0x08|0x0043) ncmd 2
+        Status: Success (0x00)
+> HCI Event: LE Meta Event (0x3e) plen 31                  #25 [hci0] 10.572504
+      LE Enhanced Connection Complete (0x0a)
+        Status: Success (0x00)
+        Handle: 16
+        Role: Central (0x00)
+        Peer address type: Random (0x01)
+        Peer address: D2:2F:E8:B9:5D:76 (Static)
+        Local resolvable private address: 00:00:00:00:00:00 (Non-Resolvable)
+        Peer resolvable private address: 00:00:00:00:00:00 (Non-Resolvable)
+        Connection interval: 30.00 msec (0x0018)
+        Connection latency: 0 (0x0000)
+        Supervision timeout: 4000 msec (0x0190)
+        Central clock accuracy: 0x00
+@ MGMT Event: Device Connected (0x000b) plen 44       {0x0001} [hci0] 10.572557
+        LE Address: D2:2F:E8:B9:5D:76 (Static)
+        Flags: 0x00000008
+          Connection Locally Initiated
+        Data length: 31
+        Flags: 0x06
+          LE General Discoverable Mode
+          BR/EDR Not Supported
+        Company: Apple, Inc. (76)
+          Type: Unknown (6)
+        01 11 55 a3 a7 cb 99 0a 00 09 00 02 02 80 ce f4  ..U.............
+        60                                               `               
+        Name (short): Eve
+< HCI Command: LE Read Remote Used.. (0x08|0x0016) plen 2  #26 [hci0] 10.572610
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+@ RAW Open: btmon (privileged) version 2.22                  {0x0002} 10.572647
+@ RAW Close: btmon                                           {0x0002} 10.572651
+> HCI Event: Command Status (0x0f) plen 4                  #27 [hci0] 10.574306
+      LE Read Remote Used Features (0x08|0x0016) ncmd 2
+        Status: Success (0x00)
+> HCI Event: LE Meta Event (0x3e) plen 4                   #28 [hci0] 10.588278
+      LE Channel Selection Algorithm (0x14)
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Algorithm: #2 (0x01)
+> HCI Event: LE Meta Event (0x3e) plen 12                  #29 [hci0] 10.618435
+      LE Read Remote Used Features (0x04)
+        Status: Success (0x00)
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Features: 0x25 0x49 0x00 0x00 0x00 0x00 0x00 0x00
+          LE Encryption
+          Extended Reject Indication
+          LE Data Packet Length Extension
+          LE 2M PHY
+          LE Coded PHY
+          Channel Selection Algorithm #2
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #30 [hci0] 10.618521
+      SMP: Pairing Request (0x01) len 6
+        IO capability: KeyboardDisplay (0x04)
+        OOB data: Authentication data not present (0x00)
+        Authentication requirement: Bonding, MITM, SC, No Keypresses, CT2 (0x2d)
+        Max encryption key size: 16
+        Initiator key distribution: EncKey Sign LinkKey (0x0d)
+        Responder key distribution: EncKey IdKey Sign LinkKey (0x0f)
+< ACL Data TX: Handle 16 flags 0x00 dlen 7                 #31 [hci0] 10.618739
+      ATT: Exchange MTU Request (0x02) len 2
+        Client RX MTU: 517
+> HCI Event: Number of Completed Packets (0x13) plen 5     #32 [hci0] 10.677633
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> HCI Event: Number of Completed Packets (0x13) plen 5     #33 [hci0] 10.708517
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> HCI Event: LE Meta Event (0x3e) plen 11                  #34 [hci0] 10.709409
+      LE Data Length Change (0x07)
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Max TX octets: 251
+        Max TX time: 2120
+        Max RX octets: 251
+        Max RX time: 2120
+> ACL Data RX: Handle 16 flags 0x02 dlen 7                 #35 [hci0] 10.737322
+      ATT: Exchange MTU Response (0x03) len 2
+        Server RX MTU: 512
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #36 [hci0] 10.737518
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x0001-0xffff
+        Attribute type: Server Supported Features (0x2b3a)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #37 [hci0] 10.767644
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 9                 #38 [hci0] 10.797605
+      ATT: Error Response (0x01) len 4
+        Read By Type Request (0x08)
+        Handle: 0x0001
+        Error: Attribute Not Found (0x0a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #39 [hci0] 10.797812
+      ATT: Read By Group Type Request (0x10) len 6
+        Handle range: 0x0001-0xffff
+        Attribute group type: Primary Service (0x2800)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #40 [hci0] 10.827656
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 18                #41 [hci0] 10.857703
+      ATT: Read By Group Type Response (0x11) len 13
+        Attribute data length: 6
+        Attribute group list: 2 entries
+        Handle range: 0x0001-0x0009
+        UUID: Generic Access Profile (0x1800)
+        Handle range: 0x000a-0x000a
+        UUID: Generic Attribute Profile (0x1801)
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #42 [hci0] 10.857906
+      ATT: Read By Group Type Request (0x10) len 6
+        Handle range: 0x000b-0xffff
+        Attribute group type: Primary Service (0x2800)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #43 [hci0] 10.887654
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 206               #44 [hci0] 10.919234
+      ATT: Read By Group Type Response (0x11) len 201
+        Attribute data length: 20
+        Attribute group list: 10 entries
+        Handle range: 0x000b-0x0028
+        UUID: Vendor specific (0000003e-0000-1000-8000-0026bb765291)
+        Handle range: 0x0029-0x0031
+        UUID: Vendor specific (000000a2-0000-1000-8000-0026bb765291)
+        Handle range: 0x0032-0x0040
+        UUID: Vendor specific (00000055-0000-1000-8000-0026bb765291)
+        Handle range: 0x0041-0x0056
+        UUID: Vendor specific (00000701-0000-1000-8000-0026bb765291)
+        Handle range: 0x0057-0x0077
+        UUID: Vendor specific (e863f007-079e-48ff-8f27-9c2605a29f52)
+        Handle range: 0x0078-0x0087
+        UUID: Vendor specific (00000239-0000-1000-8000-0026bb765291)
+        Handle range: 0x0088-0x009c
+        UUID: Vendor specific (00000096-0000-1000-8000-0026bb765291)
+        Handle range: 0x009d-0x00ad
+        UUID: Vendor specific (e863f00a-079e-48ff-8f27-9c2605a29f52)
+        Handle range: 0x00ae-0x00be
+        UUID: Vendor specific (0000008a-0000-1000-8000-0026bb765291)
+        Handle range: 0x00bf-0xffff
+        UUID: Vendor specific (00000082-0000-1000-8000-0026bb765291)
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #45 [hci0] 10.919452
+      ATT: Read By Group Type Request (0x10) len 6
+        Handle range: 0x0001-0xffff
+        Attribute group type: Secondary Service (0x2801)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #46 [hci0] 10.947649
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 9                 #47 [hci0] 10.977299
+      ATT: Error Response (0x01) len 4
+        Read By Group Type Request (0x10)
+        Handle: 0x0001
+        Error: Attribute Not Found (0x0a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #48 [hci0] 10.977484
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x0001-0xffff
+        Attribute type: Include (0x2802)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #49 [hci0] 11.007450
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 9                 #50 [hci0] 11.037366
+      ATT: Error Response (0x01) len 4
+        Read By Type Request (0x08)
+        Handle: 0x0001
+        Error: Attribute Not Found (0x0a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #51 [hci0] 11.037515
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x0001-0xffff
+        Attribute type: Characteristic (0x2803)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #52 [hci0] 11.067426
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 34                #53 [hci0] 11.097846
+      ATT: Read By Type Response (0x09) len 29
+        Attribute data length: 7
+        Attribute data list: 4 entries
+        Handle: 0x0002
+        Value: 0a0300002a
+        Handle: 0x0004
+        Value: 020500012a
+        Handle: 0x0006
+        Value: 020700042a
+        Handle: 0x0008
+        Value: 020900a62a
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #54 [hci0] 11.098055
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x0009-0xffff
+        Attribute type: Characteristic (0x2803)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #55 [hci0] 11.127395
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 196               #56 [hci0] 11.158886
+> ACL Data RX: Handle 16 flags 0x01 dlen 251               #57 [hci0] 11.162042
+> ACL Data RX: Handle 16 flags 0x01 dlen 63                #58 [hci0] 11.187823
+      ATT: Read By Type Response (0x09) len 505
+        Attribute data length: 21
+        Attribute data list: 24 entries
+        Handle: 0x000c
+        Value: 020d00d1a0835000aad387174859a75de904e6
+        Handle: 0x000e
+        Value: 0a0f00915276bb260000800010000014000000
+        Handle: 0x0011
+        Value: 0a1200915276bb260000800010000020000000
+        Handle: 0x0014
+        Value: 0a1500915276bb260000800010000021000000
+        Handle: 0x0017
+        Value: 0a1800915276bb260000800010000023000000
+        Handle: 0x001a
+        Value: 0a1b00915276bb260000800010000030000000
+        Handle: 0x001d
+        Value: 0a1e00915276bb260000800010000052000000
+        Handle: 0x0020
+        Value: 0a2100915276bb260000800010000053000000
+        Handle: 0x0023
+        Value: 0a24003b94f9856afdc3ba40437fac1188ab34
+        Handle: 0x0026
+        Value: 0a2700915276bb260000800010000020020000
+        Handle: 0x002a
+        Value: 022b00d1a0835000aad387174859a75de904e6
+        Handle: 0x002c
+        Value: 0a2d00915276bb2600008000100000a5000000
+        Handle: 0x002f
+        Value: 0a3000915276bb260000800010000037000000
+        Handle: 0x0033
+        Value: 023400d1a0835000aad387174859a75de904e6
+        Handle: 0x0035
+        Value: 0a3600915276bb26000080001000004c000000
+        Handle: 0x0038
+        Value: 0a3900915276bb26000080001000004e000000
+        Handle: 0x003b
+        Value: 0a3c00915276bb26000080001000004f000000
+        Handle: 0x003e
+        Value: 0a3f00915276bb260000800010000050000000
+        Handle: 0x0042
+        Value: 024300d1a0835000aad387174859a75de904e6
+        Handle: 0x0044
+        Value: 0a4500915276bb260000800010000002070000
+        Handle: 0x0047
+        Value: 2a4800915276bb260000800010000003070000
+        Handle: 0x004b
+        Value: 0a4c00915276bb260000800010000004070000
+        Handle: 0x004e
+        Value: 0a4f00915276bb260000800010000006070000
+        Handle: 0x0051
+        Value: 0a5200915276bb2600008000100000a5000000
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #59 [hci0] 11.187998
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x0052-0xffff
+        Attribute type: Characteristic (0x2803)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #60 [hci0] 11.217653
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 237               #61 [hci0] 11.249840
+> ACL Data RX: Handle 16 flags 0x01 dlen 251               #62 [hci0] 11.279748
+> ACL Data RX: Handle 16 flags 0x01 dlen 22                #63 [hci0] 11.307750
+      ATT: Read By Type Response (0x09) len 505
+        Attribute data length: 21
+        Attribute data list: 24 entries
+        Handle: 0x0054
+        Value: 0a5500915276bb26000080001000002b020000
+        Handle: 0x0058
+        Value: 025900d1a0835000aad387174859a75de904e6
+        Handle: 0x005a
+        Value: 0a5b00915276bb2600008000100000a5000000
+        Handle: 0x005d
+        Value: 0a5e00529fa205269c278fff489e0731f163e8
+        Handle: 0x0060
+        Value: 0a6100529fa205269c278fff489e071df163e8
+        Handle: 0x0063
+        Value: 0a6400529fa205269c278fff489e0758f163e8
+        Handle: 0x0066
+        Value: 0a6700529fa205269c278fff489e0716f163e8
+        Handle: 0x0069
+        Value: 0a6a00529fa205269c278fff489e0717f163e8
+        Handle: 0x006c
+        Value: 0a6d00529fa205269c278fff489e071cf163e8
+        Handle: 0x006f
+        Value: 0a7000529fa205269c278fff489e0721f163e8
+        Handle: 0x0072
+        Value: 0a7300529fa205269c278fff489e0712f163e8
+        Handle: 0x0075
+        Value: 0a7600529fa205269c278fff489e071ef163e8
+        Handle: 0x0079
+        Value: 027a00d1a0835000aad387174859a75de904e6
+        Handle: 0x007b
+        Value: 0a7c00915276bb2600008000100000a5000000
+        Handle: 0x007e
+        Value: 0a7f00915276bb26000080001000003a020000
+        Handle: 0x0081
+        Value: 0a8200915276bb26000080001000003c020000
+        Handle: 0x0084
+        Value: 2a8500915276bb26000080001000004a020000
+        Handle: 0x0089
+        Value: 028a00d1a0835000aad387174859a75de904e6
+        Handle: 0x008b
+        Value: 0a8c00915276bb2600008000100000a5000000
+        Handle: 0x008e
+        Value: 2a8f00915276bb260000800010000068000000
+        Handle: 0x0092
+        Value: 2a9300915276bb260000800010000079000000
+        Handle: 0x0096
+        Value: 0a9700915276bb260000800010000023000000
+        Handle: 0x0099
+        Value: 2a9a00915276bb26000080001000008f000000
+        Handle: 0x009e
+        Value: 029f00d1a0835000aad387174859a75de904e6
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #64 [hci0] 11.307944
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x009f-0xffff
+        Attribute type: Characteristic (0x2803)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #65 [hci0] 11.337331
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 251               #66 [hci0] 11.369603
+> ACL Data RX: Handle 16 flags 0x01 dlen 7                 #67 [hci0] 11.397401
+      ATT: Read By Type Response (0x09) len 253
+        Attribute data length: 21
+        Attribute data list: 12 entries
+        Handle: 0x00a0
+        Value: 0aa100915276bb260000800010000023000000
+        Handle: 0x00a3
+        Value: 0aa400529fa205269c278fff489e070ff163e8
+        Handle: 0x00a6
+        Value: 2aa700529fa205269c278fff489e0730f163e8
+        Handle: 0x00aa
+        Value: 2aab00529fa205269c278fff489e0736f163e8
+        Handle: 0x00af
+        Value: 02b000d1a0835000aad387174859a75de904e6
+        Handle: 0x00b1
+        Value: 2ab200915276bb260000800010000011000000
+        Handle: 0x00b5
+        Value: 0ab600915276bb260000800010000023000000
+        Handle: 0x00b8
+        Value: 2ab900915276bb260000800010000036000000
+        Handle: 0x00bc
+        Value: 0abd00915276bb2600008000100000a5000000
+        Handle: 0x00c0
+        Value: 02c100d1a0835000aad387174859a75de904e6
+        Handle: 0x00c2
+        Value: 2ac300915276bb260000800010000010000000
+        Handle: 0x00c6
+        Value: 0ac700915276bb260000800010000023000000
+< ACL Data TX: Handle 16 flags 0x00 dlen 11                #68 [hci0] 11.397626
+      ATT: Read By Type Request (0x08) len 6
+        Handle range: 0x00c7-0xffff
+        Attribute type: Characteristic (0x2803)
+> HCI Event: Number of Completed Packets (0x13) plen 5     #69 [hci0] 11.427442
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 9                 #70 [hci0] 11.457626
+      ATT: Error Response (0x01) len 4
+        Read By Type Request (0x08)
+        Handle: 0x00c7
+        Error: Attribute Not Found (0x0a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #71 [hci0] 11.457895
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0010-0x0010
+> HCI Event: Number of Completed Packets (0x13) plen 5     #72 [hci0] 11.487579
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #73 [hci0] 11.517599
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0010
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #74 [hci0] 11.517821
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0013-0x0013
+> HCI Event: Number of Completed Packets (0x13) plen 5     #75 [hci0] 11.547669
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #76 [hci0] 11.577771
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0013
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #77 [hci0] 11.577957
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0016-0x0016
+> HCI Event: Number of Completed Packets (0x13) plen 5     #78 [hci0] 11.607667
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #79 [hci0] 11.667814
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0016
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #80 [hci0] 11.668030
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0019-0x0019
+> HCI Event: Number of Completed Packets (0x13) plen 5     #81 [hci0] 11.697662
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #82 [hci0] 11.727551
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0019
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #83 [hci0] 11.727725
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x001c-0x001c
+> HCI Event: Number of Completed Packets (0x13) plen 5     #84 [hci0] 11.757662
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #85 [hci0] 11.787749
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x001c
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #86 [hci0] 11.787930
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x001f-0x001f
+> HCI Event: Number of Completed Packets (0x13) plen 5     #87 [hci0] 11.817631
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #88 [hci0] 11.847536
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x001f
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #89 [hci0] 11.847744
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0022-0x0022
+> HCI Event: Number of Completed Packets (0x13) plen 5     #90 [hci0] 11.877554
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #91 [hci0] 11.907738
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0022
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #92 [hci0] 11.907920
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0025-0x0025
+> HCI Event: Number of Completed Packets (0x13) plen 5     #93 [hci0] 11.937361
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #94 [hci0] 11.967738
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0025
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #95 [hci0] 11.967930
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0028-0x0028
+> HCI Event: Number of Completed Packets (0x13) plen 5     #96 [hci0] 11.997672
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24                #97 [hci0] 12.027752
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0028
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                 #98 [hci0] 12.027983
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x002e-0x002e
+> HCI Event: Number of Completed Packets (0x13) plen 5     #99 [hci0] 12.057654
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #100 [hci0] 12.087828
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x002e
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #101 [hci0] 12.088046
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0031-0x0031
+> HCI Event: Number of Completed Packets (0x13) plen 5    #102 [hci0] 12.117665
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #103 [hci0] 12.147740
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0031
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #104 [hci0] 12.147961
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0037-0x0037
+> HCI Event: Number of Completed Packets (0x13) plen 5    #105 [hci0] 12.177394
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #106 [hci0] 12.207746
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0037
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #107 [hci0] 12.207918
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x003a-0x003a
+> HCI Event: Number of Completed Packets (0x13) plen 5    #108 [hci0] 12.237317
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #109 [hci0] 12.267548
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x003a
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #110 [hci0] 12.267762
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x003d-0x003d
+> HCI Event: Number of Completed Packets (0x13) plen 5    #111 [hci0] 12.297347
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #112 [hci0] 12.327839
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x003d
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #113 [hci0] 12.328006
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0040-0x0040
+> HCI Event: Number of Completed Packets (0x13) plen 5    #114 [hci0] 12.357646
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #115 [hci0] 12.387497
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0040
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #116 [hci0] 12.387715
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0046-0x0046
+> HCI Event: Number of Completed Packets (0x13) plen 5    #117 [hci0] 12.417360
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #118 [hci0] 12.447540
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0046
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #119 [hci0] 12.447740
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0049-0x004a
+> HCI Event: Number of Completed Packets (0x13) plen 5    #120 [hci0] 12.477461
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #121 [hci0] 12.507694
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x0049
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #122 [hci0] 12.507859
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x004a-0x004a
+> HCI Event: Number of Completed Packets (0x13) plen 5    #123 [hci0] 12.537376
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #124 [hci0] 12.567739
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x004a
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #125 [hci0] 12.567846
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x004d-0x004d
+> HCI Event: Number of Completed Packets (0x13) plen 5    #126 [hci0] 12.597645
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #127 [hci0] 12.627748
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x004d
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #128 [hci0] 12.627964
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0050-0x0050
+> HCI Event: Number of Completed Packets (0x13) plen 5    #129 [hci0] 12.657689
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #130 [hci0] 12.687773
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0050
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #131 [hci0] 12.687910
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0053-0x0053
+> HCI Event: Number of Completed Packets (0x13) plen 5    #132 [hci0] 12.717429
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #133 [hci0] 12.747757
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0053
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #134 [hci0] 12.747975
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0056-0x0056
+> HCI Event: Number of Completed Packets (0x13) plen 5    #135 [hci0] 12.777648
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #136 [hci0] 12.807751
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0056
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #137 [hci0] 12.807886
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x005c-0x005c
+> HCI Event: Number of Completed Packets (0x13) plen 5    #138 [hci0] 12.837577
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #139 [hci0] 12.867551
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x005c
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #140 [hci0] 12.867773
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x005f-0x005f
+> HCI Event: Number of Completed Packets (0x13) plen 5    #141 [hci0] 12.897432
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #142 [hci0] 12.927742
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x005f
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #143 [hci0] 12.927846
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0062-0x0062
+> HCI Event: Number of Completed Packets (0x13) plen 5    #144 [hci0] 12.957691
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #145 [hci0] 12.987699
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0062
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #146 [hci0] 12.987879
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0065-0x0065
+> HCI Event: Number of Completed Packets (0x13) plen 5    #147 [hci0] 13.017662
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #148 [hci0] 13.047468
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0065
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #149 [hci0] 13.047657
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0068-0x0068
+> HCI Event: Number of Completed Packets (0x13) plen 5    #150 [hci0] 13.077662
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #151 [hci0] 13.107433
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0068
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #152 [hci0] 13.107596
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x006b-0x006b
+> HCI Event: Number of Completed Packets (0x13) plen 5    #153 [hci0] 13.137398
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #154 [hci0] 13.167753
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x006b
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #155 [hci0] 13.167926
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x006e-0x006e
+> HCI Event: Number of Completed Packets (0x13) plen 5    #156 [hci0] 13.197583
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #157 [hci0] 13.227731
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x006e
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #158 [hci0] 13.227952
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0071-0x0071
+> HCI Event: Number of Completed Packets (0x13) plen 5    #159 [hci0] 13.257667
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #160 [hci0] 13.287722
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0071
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #161 [hci0] 13.287937
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0074-0x0074
+> HCI Event: Number of Completed Packets (0x13) plen 5    #162 [hci0] 13.317372
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #163 [hci0] 13.347767
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0074
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #164 [hci0] 13.347965
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0077-0x0077
+> HCI Event: Number of Completed Packets (0x13) plen 5    #165 [hci0] 13.377442
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #166 [hci0] 13.407754
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0077
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #167 [hci0] 13.407858
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x007d-0x007d
+> HCI Event: Number of Completed Packets (0x13) plen 5    #168 [hci0] 13.437545
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #169 [hci0] 13.467744
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x007d
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #170 [hci0] 13.467956
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0080-0x0080
+> HCI Event: Number of Completed Packets (0x13) plen 5    #171 [hci0] 13.497671
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #172 [hci0] 13.527642
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0080
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #173 [hci0] 13.527747
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0083-0x0083
+> HCI Event: Number of Completed Packets (0x13) plen 5    #174 [hci0] 13.557673
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #175 [hci0] 13.587746
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0083
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #176 [hci0] 13.587850
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0086-0x0087
+> HCI Event: Number of Completed Packets (0x13) plen 5    #177 [hci0] 13.617674
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #178 [hci0] 13.647357
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x0086
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #179 [hci0] 13.647466
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0087-0x0087
+> HCI Event: Number of Completed Packets (0x13) plen 5    #180 [hci0] 13.677641
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #181 [hci0] 13.707550
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0087
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #182 [hci0] 13.707638
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x008d-0x008d
+> HCI Event: Number of Completed Packets (0x13) plen 5    #183 [hci0] 13.737384
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #184 [hci0] 13.767740
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x008d
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #185 [hci0] 13.767935
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0090-0x0091
+> HCI Event: Number of Completed Packets (0x13) plen 5    #186 [hci0] 13.797495
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #187 [hci0] 13.827493
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x0090
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #188 [hci0] 13.827601
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0091-0x0091
+> HCI Event: Number of Completed Packets (0x13) plen 5    #189 [hci0] 13.857493
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #190 [hci0] 13.887741
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0091
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #191 [hci0] 13.887916
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0094-0x0095
+> HCI Event: Number of Completed Packets (0x13) plen 5    #192 [hci0] 13.917689
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #193 [hci0] 13.947507
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x0094
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #194 [hci0] 13.947597
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0095-0x0095
+> HCI Event: Number of Completed Packets (0x13) plen 5    #195 [hci0] 13.977356
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #196 [hci0] 14.007444
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0095
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #197 [hci0] 14.007650
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x0098-0x0098
+> HCI Event: Number of Completed Packets (0x13) plen 5    #198 [hci0] 14.037386
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #199 [hci0] 14.067442
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x0098
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #200 [hci0] 14.067534
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x009b-0x009c
+> HCI Event: Number of Completed Packets (0x13) plen 5    #201 [hci0] 14.097504
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #202 [hci0] 14.127297
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x009b
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #203 [hci0] 14.127483
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x009c-0x009c
+> HCI Event: Number of Completed Packets (0x13) plen 5    #204 [hci0] 14.157391
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #205 [hci0] 14.187545
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x009c
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #206 [hci0] 14.187637
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00a2-0x00a2
+> HCI Event: Number of Completed Packets (0x13) plen 5    #207 [hci0] 14.217694
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #208 [hci0] 14.247739
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00a2
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #209 [hci0] 14.247956
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00a5-0x00a5
+> HCI Event: Number of Completed Packets (0x13) plen 5    #210 [hci0] 14.277703
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #211 [hci0] 14.307552
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00a5
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #212 [hci0] 14.307649
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00a8-0x00a9
+> HCI Event: Number of Completed Packets (0x13) plen 5    #213 [hci0] 14.337593
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #214 [hci0] 14.367305
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x00a8
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #215 [hci0] 14.367479
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00a9-0x00a9
+> HCI Event: Number of Completed Packets (0x13) plen 5    #216 [hci0] 14.397409
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #217 [hci0] 14.427443
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00a9
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #218 [hci0] 14.427593
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00ac-0x00ad
+> HCI Event: Number of Completed Packets (0x13) plen 5    #219 [hci0] 14.457465
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #220 [hci0] 14.487650
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x00ac
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #221 [hci0] 14.487834
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00ad-0x00ad
+> HCI Event: Number of Completed Packets (0x13) plen 5    #222 [hci0] 14.517601
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #223 [hci0] 14.547554
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00ad
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #224 [hci0] 14.547653
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00b3-0x00b4
+> HCI Event: Number of Completed Packets (0x13) plen 5    #225 [hci0] 14.577369
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #226 [hci0] 14.607273
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x00b3
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #227 [hci0] 14.607382
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00b4-0x00b4
+> HCI Event: Number of Completed Packets (0x13) plen 5    #228 [hci0] 14.637370
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #229 [hci0] 14.667743
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00b4
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #230 [hci0] 14.667848
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00b7-0x00b7
+> HCI Event: Number of Completed Packets (0x13) plen 5    #231 [hci0] 14.697697
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #232 [hci0] 14.727561
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00b7
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #233 [hci0] 14.727763
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00ba-0x00bb
+> HCI Event: Number of Completed Packets (0x13) plen 5    #234 [hci0] 14.757731
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #235 [hci0] 14.787667
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x00ba
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #236 [hci0] 14.787803
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00bb-0x00bb
+> HCI Event: Number of Completed Packets (0x13) plen 5    #237 [hci0] 14.817702
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #238 [hci0] 14.847752
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00bb
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #239 [hci0] 14.847977
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00be-0x00be
+> HCI Event: Number of Completed Packets (0x13) plen 5    #240 [hci0] 14.877699
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #241 [hci0] 14.907522
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00be
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #242 [hci0] 14.907761
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00c4-0x00c5
+> HCI Event: Number of Completed Packets (0x13) plen 5    #243 [hci0] 14.937521
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 10               #244 [hci0] 14.967659
+      ATT: Find Information Response (0x05) len 5
+        Format: UUID-16 (0x01)
+        Handle: 0x00c4
+        UUID: Client Characteristic Configuration (0x2902)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #245 [hci0] 14.967819
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00c5-0x00c5
+> HCI Event: Number of Completed Packets (0x13) plen 5    #246 [hci0] 14.997736
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #247 [hci0] 15.027755
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00c5
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #248 [hci0] 15.027965
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00c8-0xffff
+> HCI Event: Number of Completed Packets (0x13) plen 5    #249 [hci0] 15.057519
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 24               #250 [hci0] 15.087667
+      ATT: Find Information Response (0x05) len 19
+        Format: UUID-128 (0x02)
+        Handle: 0x00c8
+        UUID: Vendor specific (dc46f0fe-81d2-4616-b5d9-6abdd796939a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 9                #251 [hci0] 15.087840
+      ATT: Find Information Request (0x04) len 4
+        Handle range: 0x00c9-0xffff
+> HCI Event: Number of Completed Packets (0x13) plen 5    #252 [hci0] 15.117591
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 9                #253 [hci0] 15.147627
+      ATT: Error Response (0x01) len 4
+        Find Information Request (0x04)
+        Handle: 0x00c9
+        Error: Attribute Not Found (0x0a)
+< ACL Data TX: Handle 16 flags 0x00 dlen 7                #254 [hci0] 15.169724
+      ATT: Read Request (0x0a) len 2
+        Handle: 0x0003 Type: Device Name (0x2a00)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #255 [hci0] 15.177420
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 21               #256 [hci0] 15.207427
+      ATT: Read Response (0x0b) len 16
+        Value: 45766520576561746865722031424631
+< ACL Data TX: Handle 16 flags 0x00 dlen 7                #257 [hci0] 15.207541
+      ATT: Read Request (0x0a) len 2
+        Handle: 0x0005 Type: Appearance (0x2a01)
+> HCI Event: Number of Completed Packets (0x13) plen 5    #258 [hci0] 15.237407
+        Num handles: 1
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Count: 1
+> ACL Data RX: Handle 16 flags 0x02 dlen 7                #259 [hci0] 15.267380
+      ATT: Read Response (0x0b) len 2
+        Value: 0000
+> HCI Event: Disconnect Complete (0x05) plen 4            #260 [hci0] 20.692639
+        Status: Success (0x00)
+        Handle: 16 Address: D2:2F:E8:B9:5D:76 (Static)
+        Reason: Remote User Terminated Connection (0x13)
+@ MGMT Event: Device Disconnected (0x000c) plen 8     {0x0001} [hci0] 20.692687
+        LE Address: D2:2F:E8:B9:5D:76 (Static)
+        Reason: Connection terminated by remote host (0x03)
+@ MGMT Event: Command Complete (0x0001) plen 10       {0x0001} [hci0] 20.692695
+      Pair Device (0x0019) plen 7
+        Status: Failed (0x03)
+        LE Address: D2:2F:E8:B9:5D:76 (Static)

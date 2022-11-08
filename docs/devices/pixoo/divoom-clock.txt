@@ -1,0 +1,30 @@
+requester created
+connected
+{'uuid': '00002a00-0000-1000-8000-00805f9b34fb', 'handle': 2, 'properties': 2, 'value_handle': 3}
+[b'\x00*']
+{'uuid': '00002a01-0000-1000-8000-00805f9b34fb', 'handle': 4, 'properties': 2, 'value_handle': 5}
+[b'\x01*']
+{'uuid': '00002a29-0000-1000-8000-00805f9b34fb', 'handle': 7, 'properties': 2, 'value_handle': 8}
+[b')*']
+{'uuid': '00002a24-0000-1000-8000-00805f9b34fb', 'handle': 9, 'properties': 2, 'value_handle': 10}
+[b'$*']
+{'uuid': '00002a25-0000-1000-8000-00805f9b34fb', 'handle': 11, 'properties': 2, 'value_handle': 12}
+[b'%*']
+{'uuid': '00002a27-0000-1000-8000-00805f9b34fb', 'handle': 13, 'properties': 2, 'value_handle': 14}
+[b"'*"]
+{'uuid': '00002a26-0000-1000-8000-00805f9b34fb', 'handle': 15, 'properties': 2, 'value_handle': 16}
+[b'&*']
+{'uuid': '00002a28-0000-1000-8000-00805f9b34fb', 'handle': 17, 'properties': 2, 'value_handle': 18}
+[b'(*']
+{'uuid': '00002a23-0000-1000-8000-00805f9b34fb', 'handle': 19, 'properties': 2, 'value_handle': 20}
+[b'#*']
+{'uuid': '00002a2a-0000-1000-8000-00805f9b34fb', 'handle': 21, 'properties': 2, 'value_handle': 22}
+[b'**']
+{'uuid': '49535343-6daa-4d02-abf6-19569aca69fe', 'handle': 24, 'properties': 2, 'value_handle': 25}
+[b'\xfei\xca\x9aV\x19\xf6\xab\x02M\xaamCSSI']
+{'uuid': '49535343-aca3-481c-91ec-d85e28a60318', 'handle': 26, 'properties': 24, 'value_handle': 27}
+[b'\x18\x03\xa6(^\xd8\xec\x91\x1cH\xa3\xacCSSI']
+{'uuid': '49535343-1e4d-4bd9-ba61-23c647249616', 'handle': 29, 'properties': 20, 'value_handle': 30}
+[b'\x16\x96$G\xc6#a\xba\xd9KM\x1eCSSI']
+{'uuid': '49535343-8841-43f4-a8d4-ecbe34729bb3', 'handle': 32, 'properties': 12, 'value_handle': 33}
+[b'\xb3\x9br4\xbe\xec\xd4\xa8\xf4CA\x88CSSI']

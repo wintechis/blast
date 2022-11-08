@@ -1,5 +1,1 @@
-build/
-**/joycon-webhid/*.js
-**/urdf/*.js
-**/stream-deck-webhid/*.js
-**/sphero/lib/*.js
+*.json

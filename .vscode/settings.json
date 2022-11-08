@@ -1,9 +1,12 @@
 {
-    "liveServer.settings.https": {
-        "enable": true, //set it true to enable the feature.
-        "cert": "/home/zhou/Documents/blast_utd/blast/.vscode/server.crt", //full path of the certificate
-        "key": "/home/zhou/Documents/blast_utd/blast/.vscode/server.key", //full path of the private key
-        "passphrase": ""
-    },
-    "liveServer.settings.port": 5501
+    "files.eol": "\n",
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "files.trimTrailingWhitespace": true,
+    "eslint.validate": ["typescript", "typescriptreact"],
+    "eslint.workingDirectories": [
+        "./packages/core",
+        "./packages/web"
+    ],
+    "editor.tabSize": 2
 }
