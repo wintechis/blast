@@ -1,8 +1,5 @@
-'use strict';
-
 import {Blocks, FieldDropdown, FieldMultilineInput} from 'blockly';
 import {addBlock} from '../../blast_toolbox.js';
-
 
 Blocks['audio_to_text'] = {
   /**
@@ -11,7 +8,7 @@ Blocks['audio_to_text'] = {
    */
   init: function () {
     this.appendDummyInput().appendField('audio to text');
-    this.appendDummyInput('en')
+    this.appendDummyInput('en');
     this.setOutput(true, 'String');
     this.setColour(230);
     this.setTooltip('outputs speech command from microphone as a string');

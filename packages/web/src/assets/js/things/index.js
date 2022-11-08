@@ -1,6 +1,9 @@
 import './audio/blocks.js';
 import './audio/generators.js';
 
+import './audio2text/blocks.js';
+import './audio2text/generators.js';
+
 import './bleRgbController/blocks.js';
 import './bleRgbController/generators.js';
 

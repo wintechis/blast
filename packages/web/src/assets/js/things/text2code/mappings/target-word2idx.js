@@ -1,7 +1,7 @@
 export default {
-  "<UNK>": 0,
-  "<SOS>": 1,
-  "<EOS>": 2,
+  '<UNK>': 0,
+  '<SOS>': 1,
+  '<EOS>': 2,
   "ledStrip.writeProperty('color',": 3,
   "lightBulb.writeProperty('color',": 4,
   "philipsHue.writeProperty('color',": 5,
@@ -147,5 +147,5 @@ export default {
   "'#F5F5F5');": 145,
   "'#FFFF00');": 146,
   "'#9ACD32');": 147,
-  "'#F0F8FF');": 148
-}
+  "'#F0F8FF');": 148,
+};
