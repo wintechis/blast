@@ -9,4 +9,3 @@
 node_modules
 js/blast.min.js
 packages/core/coverage/tmp/*
-.vscode/
