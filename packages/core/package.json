@@ -22,7 +22,7 @@
     "bundle": "webpack --config webpack.conf.cjs",
     "clean": "yarn rimraf dist",
     "lint": "eslint \"src/**\"",
-    "fix": "eslint --fix \"src/**\""
+    "fix": "eslint --fix \"src/** \""
   },
   "type": "module",
   "main": "index.html",
