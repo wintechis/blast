@@ -85,7 +85,8 @@
     }]
   },
   "globals": {
-    "Blast": true
+    "createThing": true,
+    "tds": true
   },
   "overrides": [
     {

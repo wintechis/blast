@@ -53,10 +53,9 @@ Blocks['things_bleLedController'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getBleRgbController(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      getBleRgbController(webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };

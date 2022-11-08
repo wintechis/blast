@@ -20,7 +20,7 @@ const getXiaomiFlowerCare = async function (id) {
   if (xiaomiFlowerCareInstances.has(id)) {
     return xiaomiFlowerCareInstances.get(id);
   } else {
-    const thing =  await createThing(XiaomiFlowerCare, id);
+    const thing = await createThing(XiaomiFlowerCare, id);
     xiaomiFlowerCareInstances.set(id, thing);
     return thing;
   }
@@ -53,10 +53,9 @@ Blocks['things_xiaomiFlowerCare'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getXiaomiFlowerCare(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      getXiaomiFlowerCare(webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };

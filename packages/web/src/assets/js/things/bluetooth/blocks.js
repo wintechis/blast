@@ -53,10 +53,9 @@ Blocks['things_eddyStoneDevice'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getEddystoneDevice(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      getEddystoneDevice(webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };
@@ -102,10 +101,9 @@ Blocks['things_bluetoothGeneric'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getBluetoothGeneric(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      getBluetoothGeneric(webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };

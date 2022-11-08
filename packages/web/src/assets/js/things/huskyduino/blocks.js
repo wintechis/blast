@@ -50,10 +50,9 @@ Blocks['things_Huskylens'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getHuskyduino(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      getHuskyduino(webBluetoothId).then(thing => {
+        this.thing = thing;
+      });
     }
   },
 };

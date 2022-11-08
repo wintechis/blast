@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Paper} from '@mui/material';
 import Output from './Output.jsx';
 import Version from './Version.jsx';
 

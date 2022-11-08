@@ -66,8 +66,7 @@ Blocks['things_xiaomiThermometer'] = {
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getXiaomiThermometer(webBluetoothId)
-      .then(thing => {
+      getXiaomiThermometer(webBluetoothId).then(thing => {
         this.thing = thing;
       });
       this.addEvent();
