@@ -8,8 +8,6 @@ import Blockly from 'blockly';
 const {Blocks, FieldTextInput} = Blockly;
 import {getWebHidDevice, implementedThings} from '../../things.js';
 
-const {Blinkstick} = Blast;
-
 const blinkstickInstances = new Map();
 
 /**

@@ -8,7 +8,7 @@ import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {implementedThings} from '../../things.js';
 
-const {HuskyDuino} = Blast;
+const {HuskyDuino} = tds;
 
 const huskyduinos = new Map();
 
@@ -16,11 +16,11 @@ const huskyduinos = new Map();
  * Keeps singleton instances of HuskyDuinos instantiated by BLAST.
  * @param {string} id The id of the HuskyDuinos.
  */
-const getHuskyduino = function (id) {
+const getHuskyduino = async function (id) {
   if (huskyduinos.has(id)) {
     return huskyduinos.get(id);
   } else {
-    const thing = new HuskyDuino();
+    const thing = await createThing(HuskyDuino, id);
     huskyduinos.set(id, thing);
     return thing;
   }
@@ -51,7 +51,6 @@ Blocks['things_Huskylens'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getHuskyduino(webBluetoothId)
-        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });

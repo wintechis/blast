@@ -13,7 +13,7 @@ import {
 } from '../../interpreter.js';
 import {implementedThings} from '../../things.js';
 
-const {RuuviTag} = Blast;
+const {RuuviTag} = tds;
 
 const ruuviTagInstances = new Map();
 
@@ -21,11 +21,11 @@ const ruuviTagInstances = new Map();
  * Keeps singleton instances of RuuviTags instantiated by BLAST.
  * @param {string} id The id of the RuuviTag.
  */
-const getRuuviTag = function (id) {
+const getRuuviTag = async function (id) {
   if (ruuviTagInstances.has(id)) {
     return ruuviTagInstances.get(id);
   } else {
-    const thing = new RuuviTag();
+    const thing = await createThing(RuuviTag, id);
     ruuviTagInstances.set(id, thing);
     return thing;
   }
@@ -57,7 +57,6 @@ Blocks['things_ruuviTag'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getRuuviTag(webBluetoothId)
-        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });

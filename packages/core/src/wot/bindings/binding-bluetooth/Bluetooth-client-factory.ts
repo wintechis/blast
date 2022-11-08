@@ -22,7 +22,7 @@ export default class BluetoothClientFactory implements ProtocolClientFactory {
 
   public getClient(): ProtocolClient {
     console.debug(
-      '[binding-webBluetoothNew]',
+      '[binding-webBluetooth]',
       `WebBluetoothClientFactory creating client for ${this.scheme}`
     );
     return new BluetoothClient(this.adapter);

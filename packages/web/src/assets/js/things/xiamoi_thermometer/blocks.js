@@ -8,7 +8,7 @@ const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
 import {eventsInWorkspace, getWorkspace} from '../../interpreter.js';
 import {implementedThings} from '../../things.js';
 
-const {XiaomiThermometer} = Blast;
+const {XiaomiThermometer} = tds;
 
 const xiaomiThermometerInstances = new Map();
 
@@ -17,11 +17,11 @@ const xiaomiThermometerInstances = new Map();
  * @param {string} id the id of the XiaomiThermometer.
  * @return {XiaomiThermometer} the instance.
  */
-const getXiaomiThermometer = function (id) {
+const getXiaomiThermometer = async function (id) {
   if (xiaomiThermometerInstances.has(id)) {
     return xiaomiThermometerInstances.get(id);
   } else {
-    const thing = new XiaomiThermometer();
+    const thing = await createThing(XiaomiThermometer, id);
     xiaomiThermometerInstances.set(id, thing);
     return thing;
   }
@@ -67,10 +67,9 @@ Blocks['things_xiaomiThermometer'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getXiaomiThermometer(webBluetoothId)
-        .init(webBluetoothId)
-        .then(thing => {
-          this.thing = thing;
-        });
+      .then(thing => {
+        this.thing = thing;
+      });
       this.addEvent();
     }
   },

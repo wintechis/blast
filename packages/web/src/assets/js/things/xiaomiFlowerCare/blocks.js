@@ -7,7 +7,7 @@ import Blockly from 'blockly';
 const {Blocks, dialog, FieldTextInput} = Blockly;
 import {implementedThings} from '../../things.js';
 
-const {XiaomiFlowerCare} = Blast;
+const {XiaomiFlowerCare} = tds;
 
 const xiaomiFlowerCareInstances = new Map();
 
@@ -16,11 +16,11 @@ const xiaomiFlowerCareInstances = new Map();
  * @param {string} id the id of the XiaomiPlantSensor.
  * @return {XiaomiPlantSensor} the instance.
  */
-const getXiaomiFlowerCare = function (id) {
+const getXiaomiFlowerCare = async function (id) {
   if (xiaomiFlowerCareInstances.has(id)) {
     return xiaomiFlowerCareInstances.get(id);
   } else {
-    const thing = new XiaomiFlowerCare();
+    const thing =  await createThing(XiaomiFlowerCare, id);
     xiaomiFlowerCareInstances.set(id, thing);
     return thing;
   }
@@ -54,7 +54,6 @@ Blocks['things_xiaomiFlowerCare'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getXiaomiFlowerCare(webBluetoothId)
-        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });

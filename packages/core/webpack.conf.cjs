@@ -8,11 +8,11 @@ const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const nodeConfig = {
   entry: {
-    index: './src/drivers/index.ts',
+    index: './src/wot/index.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.node.min.js',
+    filename: 'blast.node.js',
     chunkFormat: 'module',
     library: {
       type: 'module',
@@ -57,11 +57,12 @@ const nodeConfig = {
 
 const webConfig = {
   entry: {
-    index: './src/drivers/index.ts',
+    web: './src/wot/index.ts',
+    tds: './src/td/index.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.web.min.js',
+    filename: 'blast.[name].js',
     chunkFormat: 'module',
     library: {
       type: 'module',

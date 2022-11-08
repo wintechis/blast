@@ -31,7 +31,7 @@
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
     "start": "gulp update-version &&  craco start",
-    "copy-blast": "copyfiles -u 3 \"../core/dist/blast.web.min.*\" \"./public/assets/blast/\"",
+    "copy-blast": "copyfiles -u 3 \"../core/dist/blast.web.*\" \"../core/dist/blast.tds.*\" \"./public/assets/blast/\"",
     "build": "yarn run copy-blast && gulp update-version && craco build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "test": "craco test",

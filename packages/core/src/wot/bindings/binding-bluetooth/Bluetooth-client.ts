@@ -21,7 +21,7 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public toString(): string {
-    return '[WebBluetoothClientNew]';
+    return '[WebBluetoothClient]';
   }
   public async readResource(form: BluetoothForm): Promise<Content> {
     const deconstructedForm = this.deconstructForm(form);

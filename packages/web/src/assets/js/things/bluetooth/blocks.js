@@ -8,7 +8,7 @@ const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {devBlocks, implementedThings} from '../../things.js';
 import {getStdWarn} from '../../interpreter.js';
 
-const {BluetoothGeneric, EddystoneDevice} = Blast;
+const {BluetoothGeneric, EddystoneDevice} = tds;
 
 const EddystoneDeviceInstances = new Map();
 
@@ -16,11 +16,11 @@ const EddystoneDeviceInstances = new Map();
  * Keeps singleton instances of EddystoneDevice instantiated by BLAST.
  * @param {string} id The id of the EddystoneDevice.
  */
-const getEddystoneDevice = function (id) {
+const getEddystoneDevice = async function (id) {
   if (EddystoneDeviceInstances.has(id)) {
     return EddystoneDeviceInstances.get(id);
   } else {
-    const thing = new EddystoneDevice();
+    const thing = await createThing(EddystoneDevice, id);
     EddystoneDeviceInstances.set(id, thing);
     return thing;
   }
@@ -54,7 +54,6 @@ Blocks['things_eddyStoneDevice'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getEddystoneDevice(webBluetoothId)
-        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });
@@ -68,11 +67,11 @@ const BluetoothGenericInstances = new Map();
  * Keeps singleton instances of BluetoothGeneric instantiated by BLAST.
  * @param {string} id The id of the BluetoothGeneric.
  */
-const getBluetoothGeneric = function (id) {
+const getBluetoothGeneric = async function (id) {
   if (BluetoothGenericInstances.has(id)) {
     return BluetoothGenericInstances.get(id);
   } else {
-    const thing = new BluetoothGeneric();
+    const thing = await createThing(BluetoothGeneric, id);
     BluetoothGenericInstances.set(id, thing);
     return thing;
   }
@@ -104,7 +103,6 @@ Blocks['things_bluetoothGeneric'] = {
       const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
       getBluetoothGeneric(webBluetoothId)
-        .init(webBluetoothId)
         .then(thing => {
           this.thing = thing;
         });

@@ -9,9 +9,7 @@ let wot: typeof WoT;
 
 declare const Wot: any;
 
-export const getServient = function (
-  bluetoothAdapter: BluetoothAdapter
-): Servient {
+const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
   if (!servient) {
     try {
       servient = new Servient();
@@ -23,7 +21,7 @@ export const getServient = function (
   return servient;
 };
 
-export const getWot = async function (
+const getWot = async function (
   bluetoothAdapter?: BluetoothAdapter
 ): Promise<typeof WoT> {
   if (!wot) {
@@ -34,4 +32,41 @@ export const getWot = async function (
     }
   }
   return wot;
+};
+
+export const createThing = async function (
+  td: WoT.ThingDescription,
+  id: string
+): Promise<WoT.ConsumedThing> {
+  td = setIds(td, id);
+  const wotServient = await getWot();
+  return wotServient.consume(td);
+};
+
+const setIds = function (
+  td: WoT.ThingDescription,
+  id: string
+): WoT.ThingDescription {
+  for (const key in td.properties) {
+    if (td.properties[key].forms) {
+      td.properties[key].forms.forEach(form => {
+        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
+      });
+    }
+  }
+  for (const key in td.actions) {
+    if (td.actions[key].forms) {
+      td.actions[key].forms.forEach(form => {
+        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
+      });
+    }
+  }
+  for (const key in td.events) {
+    if (td.events[key].forms) {
+      td.events[key].forms.forEach(form => {
+        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
+      });
+    }
+  }
+  return td;
 };
