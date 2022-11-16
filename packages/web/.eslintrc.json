@@ -86,6 +86,7 @@
   },
   "globals": {
     "createThing": true,
+    "EddystoneHelpers": true,
     "tds": true
   },
   "overrides": [

@@ -38,7 +38,6 @@ export default class WebBluetoothClient implements ProtocolClient {
     // Convert to readable
     const body = convertToNodeReadable(buff);
 
-    // Return
     return {
       type: form.contentType || 'application/x.binary-data-stream',
       body: body,

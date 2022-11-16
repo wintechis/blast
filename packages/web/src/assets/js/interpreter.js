@@ -256,6 +256,7 @@ const clearIntervalEvents = function () {
 export const resetInterpreter = function () {
   removeDeviceHandlers();
   clearIntervalEvents();
+  getWorkspace().highlightBlock(null);
 
   for (const func of cleanUpFunctions) {
     func();
@@ -284,9 +285,10 @@ export const throwError = function (text) {
     text = 'Error executing program - See console for details.';
   }
   globalThis['interpreterExecutionExit'] = true;
-  resetInterpreter();
   stdErr(text);
+  resetInterpreter();
   setStatus(statusValues.ERROR);
+  throw new Error(text);
 };
 
 /**
@@ -389,9 +391,9 @@ export const runJS = async function () {
   stdInfo('execution started');
   try {
     eval(
-      `(async () => {${latestCode} if(${
-        eventsInWorkspace.length === 0
-      }) {stopJS()}})();`
+      `(async () => {
+        ${latestCode}
+        if(${eventsInWorkspace.length === 0}) {stopJS()}})();`
     );
   } catch (e) {
     throwError(e);

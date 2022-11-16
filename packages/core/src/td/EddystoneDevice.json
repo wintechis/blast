@@ -23,13 +23,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response"
         }
       ]
     },
@@ -38,17 +38,20 @@
       "description": "The advertised TX power of the iBeacon",
       "unit": "dBm",
       "type": "integer",
+      "bdo:bytelength": 1,
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -57,17 +60,20 @@
       "description": "The advertised data of the eddystone device",
       "unit": "",
       "type": "string",
+      "format": "hex",
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -76,30 +82,33 @@
       "description": "The advertising interval of the eddystone device",
       "unit": "ms",
       "type": "integer",
+      "bdo:byteOrder": "big",
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response"
         }
       ]
     },
     "capabilities": {
       "title": "Capabilities",
       "description": "The capabilities of the eddystone device",
-      "type": "array",
-      "readOnly": false,
+      "type": "string",
+      "format": "hex",
+      "readOnly": true,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -108,12 +117,13 @@
       "description": "The lock state of the eddystone device",
       "unit": "",
       "type": "string",
+      "format": "hex",
       "readOnly": true,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read"
         }
       ]
     },
@@ -122,12 +132,13 @@
       "description": "The public ECDH key of the eddystone device",
       "unit": "",
       "type": "string",
+      "format": "hex",
       "readOnly": true,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read"
         }
       ]
     },
@@ -136,17 +147,18 @@
       "description": "The radio TX power of the eddystone device",
       "unit": "dBm",
       "type": "integer",
+      "bdo:bytelength": 1,
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295/readEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:read"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295/writeEddystoneProperty",
-          "wbt:id": "webBluetoothId"
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response"
         }
       ]
     }

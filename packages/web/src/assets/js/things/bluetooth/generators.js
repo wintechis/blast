@@ -72,8 +72,9 @@ JavaScript['eddyStoneDevice_write_eddystone_property'] = function (block) {
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
   }
+  const frameType = JavaScript.quote_(block.getFieldValue('frameType'));
 
-  const code = `await writeEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property}, ${value});\n`;
+  const code = `await writeEddystoneProperty(${blockId}, ${thing}, ${slot}, ${property}, ${value}, ${frameType});\n`;
   return code;
 };
 
@@ -84,13 +85,15 @@ JavaScript['eddyStoneDevice_write_eddystone_property'] = function (block) {
  * @param {number} slot The slot to write to.
  * @param {String} property The property to write.
  * @param {String} value The value to write.
+ * @param {String} frameType the eddystone frame type.
  */
 globalThis['writeEddystoneProperty'] = async function (
   blockId,
   webBluetoothId,
   slot,
   property,
-  value
+  value,
+  frameType
 ) {
   // make sure a device block is connected
   if (!webBluetoothId) {
@@ -115,6 +118,9 @@ globalThis['writeEddystoneProperty'] = async function (
   // Set the active slot
   await thing.writeProperty('activeSlot', slot);
   // Write the property
+  if (property === 'advertisedData') {
+    value = EddystoneHelpers.encodeAdvertisingData(value, frameType);
+  }
   await thing.writeProperty(property, value);
 };
 
@@ -176,7 +182,17 @@ globalThis['readEddystoneProperty'] = async function (
   await thing.writeProperty('activeSlot', 0);
   // Read property data
   const interActionInput = await thing.readProperty(property);
-  return interActionInput.content.body;
+  let value = await interActionInput.value();
+  switch (property) {
+    case 'advertisedData':
+      value = EddystoneHelpers.decodeAdvertisingData(value);
+      break;
+    case 'capabilities':
+      value = EddystoneHelpers.parseCapabilities(value);
+      value = JSON.stringify(value);
+      break;
+  }
+  return value;
 };
 
 /**

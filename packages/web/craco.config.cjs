@@ -21,8 +21,5 @@ module.exports = {
     resolve: {
       extensions: ['.js', '.ts'],
     },
-    externals: {
-      Blast: 'Blast',
-    }
   },
 };

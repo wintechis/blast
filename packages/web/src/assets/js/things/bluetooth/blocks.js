@@ -164,7 +164,7 @@ Blocks['eddyStoneDevice_write_eddystone_property'] = {
         new FieldDropdown(
           [
             ['advertised tx power', 'advertisedTxPower'],
-            ['advertisement data', 'advertisementData'],
+            ['advertisement data', 'advertisedData'],
             ['advertising interval', 'advertisingInterval'],
             ['radio tx power', 'radioTxPower'],
           ],
@@ -207,7 +207,7 @@ Blocks['eddyStoneDevice_write_eddystone_property'] = {
     const block = this.getSourceBlock();
     const frameType = block.getInput('frameType');
     frameType.setVisible(false);
-    if (property === 'advertisementData') {
+    if (property === 'advertisedData') {
       frameType.setVisible(true);
     } else {
       block.getInput('value').setCheck('Number');
@@ -250,8 +250,9 @@ Blocks['read_eddystone_property'] = {
           ['advertised tx power', 'advertisedTxPower'],
           ['advertised data', 'advertisedData'],
           ['advertising interval', 'advertisingInterval'],
+          ['capabilities', 'capabilities'],
           ['lock state', 'lockState'],
-          ['public ECDH key', 'publicECDHKey'],
+          ['public ECDH key', 'publicEcdhKey'],
           ['radio tx power', 'radioTxPower'],
         ]),
         'property'

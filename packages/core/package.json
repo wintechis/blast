@@ -28,7 +28,7 @@
   "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@types/node": "^14.11.2",
+    "@types/node": "latest",
     "@types/web-bluetooth": "^0.0.14",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
     "@typescript-eslint/parser": "^5.14.0",

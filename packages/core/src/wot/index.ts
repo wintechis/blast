@@ -3,6 +3,7 @@ import {Servient} from '@node-wot/core';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
+export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 
 let servient: Servient;
 let wot: typeof WoT;
