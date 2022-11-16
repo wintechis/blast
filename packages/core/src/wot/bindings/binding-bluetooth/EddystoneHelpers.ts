@@ -113,16 +113,16 @@ interface Capabilities {
  * @returns the signed integer
  */
 const HexToSignedInt = function (num: string, numSize: number): number {
-  var val = {
-      mask: 0x8 * Math.pow(16, numSize-1),
-      sub: -0x1 * Math.pow(16, numSize)
+  const val = {
+    mask: 0x8 * Math.pow(16, numSize - 1),
+    sub: -0x1 * Math.pow(16, numSize),
+  };
+  if ((parseInt(num, 16) & val.mask) > 0) {
+    return val.sub + parseInt(num, 16);
+  } else {
+    return parseInt(num, 16);
   }
-  if((parseInt(num, 16) & val.mask) > 0) {
-      return (val.sub + parseInt(num, 16))
-  }else {
-      return (parseInt(num,16))
-  }
-}
+};
 
 /**
  * Parses hex string for the Eddystone Capabilities.
@@ -133,7 +133,7 @@ const parseCapabilities = function (data: string): any {
   const capabilitiesArray = [];
 
   for (let i = 0; i < data.length; i += 2) {
-    capabilitiesArray.push(HexToSignedInt(data.substring(i, i+2), 2));
+    capabilitiesArray.push(HexToSignedInt(data.substring(i, i + 2), 2));
   }
 
   // Parse the capabilities.
@@ -270,16 +270,13 @@ export const decodeAdvertisingData = function (hexString: string) {
   };
 
   // Convert DataView to byte value
-  const dataArr = []
+  const dataArr = [];
   for (let c = 0; c < hexString.length; c += 2) {
     dataArr.push(parseInt(hexString.substring(c, c + 2), 16));
   }
-  const advertisingData = new Uint8Array(dataArr).reduce(
-    (acc, byte) => {
-      return acc + ('0' + byte.toString(16)).slice(-2);
-    },
-    ''
-  );
+  const advertisingData = new Uint8Array(dataArr).reduce((acc, byte) => {
+    return acc + ('0' + byte.toString(16)).slice(-2);
+  }, '');
 
   // Frame type is the first byte of the advertising data.
   let data;
@@ -308,10 +305,7 @@ type FrameType = 'UID' | 'URL' | 'TLM' | 'EID';
  * @param frameType The frame type to encode.
  * @returns The encoded data.
  */
-const encodeAdvertisingData = function (
-  data: string,
-  frameType: FrameType
-) {
+const encodeAdvertisingData = function (data: string, frameType: FrameType) {
   const encodeEddystoneUrl = function (url: string) {
     const URL_SCHEMES = ['http://www.', 'https://www.', 'http://', 'https://'];
 
