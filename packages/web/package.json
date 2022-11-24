@@ -10,6 +10,7 @@
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "latest",
+    "@mui/styled-engine": "latest",
     "@mui/styled-engine-sc": "latest",
     "@mui/styles": "latest",
     "@tensorflow/tfjs": "^3.18.0",
