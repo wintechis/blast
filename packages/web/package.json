@@ -6,11 +6,10 @@
     "@elgato-stream-deck/webhid": "^5.2.0",
     "@fontsource/roboto": "^4.5.8",
     "@fseehawer/react-circular-slider": "^2.5.16",
-    "@inrupt/solid-client": "^1.19.0",
+    "@inrupt/solid-client": "latest",
     "@mui/icons-material": "^5.10.9",
     "@mui/lab": "^5.0.0-alpha.104",
     "@mui/material": "latest",
-    "@mui/styled-engine": "latest",
     "@mui/styled-engine-sc": "latest",
     "@mui/styles": "latest",
     "@tensorflow/tfjs": "^3.18.0",
@@ -28,6 +27,9 @@
     "react-syntax-highlighter": "^15.5.0",
     "styled-components": "latest",
     "urdf": "https://github.com/derwehr/uRDF.js.git"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest"
   },
   "scripts": {
     "tsc": "./node_modules/.bin/tsc",
