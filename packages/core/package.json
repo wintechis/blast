@@ -62,7 +62,7 @@
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.23",
     "x11": "^2.3.0"
   },
-  "packageManager": "yarn@3.2.4",
+  "packageManager": "yarn@3.3.0",
   "c8": {
     "all": true,
     "src": [
