@@ -1370,7 +1370,7 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
-"@inrupt/solid-client@^1.19.0":
+"@inrupt/solid-client@latest":
   version "1.23.3"
   resolved "https://registry.yarnpkg.com/@inrupt/solid-client/-/solid-client-1.23.3.tgz#15a394a7831d04ad19cc0b136516c1df18896cb3"
   integrity sha512-+qzlqtXkM1V2wdZcIWpq6mS+NAfJIeAyWghQBHHLz1hmHiKaE+H0UljOt2B4oSrRYuQq/PYvD/a6N4vfMU+vWg==
