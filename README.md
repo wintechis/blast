@@ -10,7 +10,7 @@ Check [./docs/](docs/) for detailed documentation.
 ## Usage
 In order to use BLAST open a Terminal and enter the following commands:
 1. Clone this repository with `git clone https://github.com/wintechis/blast`
-2. Install dependencies: `yarn install`
+2. Install dependencies: `yarn install` (`yarn install --ignore-engines` on node v17+)
 3. Build BLAST: `yarn build`
 4. Host BLAST: `yarn start`
 5. Open your Browser and navigate to `https://localhost:3000`
