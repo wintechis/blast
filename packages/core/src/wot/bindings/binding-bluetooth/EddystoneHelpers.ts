@@ -388,8 +388,11 @@ const encodeAdvertisingData = function (data: string, frameType: FrameType) {
     }
 
     // prefix the frame type
-    encodedData = '0x00' + data;
+    encodedData = '00' + data;
+  } else {
+    throw new Error('Unsupported frametype! Only "URL and "UID" are writeable');
   }
+
   return encodedData;
 };
 

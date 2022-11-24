@@ -3900,10 +3900,10 @@ __metadata:
 
 "node-ble@https://github.com/derwehr/node-ble":
   version: 1.9.0
-  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=2ca526eee1d1eaa0f7510d3a88605eef916a65b6"
+  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"
   dependencies:
     dbus-next: ^0.10.2
-  checksum: 23aa08f102dba6ce9a669222b69fcd67b1c37b94a4677dc5fc2b0c60e07d09a9472ba416053a4ba4009c8f12d4151608b4724a3e61ed4b4837fa7e8f3dd4bdea
+  checksum: 2b1e9582e8748df7f42ee738ce510b88a2275222d4fa2d7c369751cdcebad44fac35e130e35527a9d56369918831e795dea63c79e1f4a7d2a81b1f369f45ac34
   languageName: node
   linkType: hard
 

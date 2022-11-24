@@ -17,9 +17,8 @@ console.log(advData);
 
 // Data needs to be encoded to the correct frame type first,
 // writable frametypes are: 'UID' | 'URL';
-const newData = EddystoneHelpers.encodeAdvertisingData('https://harth.org/', 'URL');
-console.log(newData.buffer);
-console.log('Writing eddystone data...')
+const newData = EddystoneHelpers.encodeAdvertisingData('https://harth.org', 'URL');
+console.log('Writing eddystone data...');
 await thing.writeProperty('advertisedData', newData);
 
 console.log('Reading advertising data...')

@@ -48,7 +48,6 @@ export class BinaryDataStreamCodec implements ContentCodec {
           default:
             throw new Error('Datatype not supported by codec');
         }
-
         parsed = decodedResultArr;
       }
     } else {

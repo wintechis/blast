@@ -50,14 +50,17 @@ export default class WebBluetoothClient implements ProtocolClient {
   ): Promise<void> {
     // Extract information out of form
     const deconstructedForm = this.deconstructForm(form);
-
-    let buffer;
+    let arrBuffer;
     //Convert readableStreamToBuffer
     if (typeof content !== 'undefined') {
-      buffer = await readableStreamToBuffer(content.body);
+      const buffer = await readableStreamToBuffer(content.body);
+      arrBuffer = buffer.buffer.slice(
+        buffer.byteOffset,
+        buffer.byteOffset + buffer.byteLength
+      );
     } else {
-      // If content not definied write buffer < 00 >
-      buffer = Buffer.alloc(1);
+      // If content not defined write buffer < 00 >
+      arrBuffer = new ArrayBuffer(1);
     }
 
     const characteristic = await this.bluetoothAdapter.getCharacteristic(
@@ -69,16 +72,16 @@ export default class WebBluetoothClient implements ProtocolClient {
     // Select what operation should be executed
     switch (deconstructedForm.bleOperation) {
       case 'sbo:write-without-response':
-        await characteristic.writeValueWithoutResponse(buffer);
+        await characteristic.writeValueWithoutResponse(new DataView(arrBuffer));
         break;
 
       case 'sbo:write':
-        await characteristic.writeValueWithResponse(buffer);
+        await characteristic.writeValueWithResponse(new DataView(arrBuffer));
         break;
 
       default: {
         throw new Error(
-          `[binding-Bluetooth] unknown operation ${deconstructedForm.operation}`
+          `[binding-Bluetooth] unknown operation ${deconstructedForm['sbo:methodName']}`
         );
       }
     }
