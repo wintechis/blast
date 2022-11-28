@@ -2,7 +2,7 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient} from '@node-wot/core';
+import {Content, ProtocolClient, createLoggers} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {BluetoothForm} from './Bluetooth';
@@ -12,11 +12,16 @@ import {
 } from '../binding-helpers';
 import {BluetoothAdapter} from './BluetoothAdapter';
 
+const {debug, error, warn} = createLoggers(
+  'binding-bluetooth',
+  'bluetooth-client'
+);
+
 export default class WebBluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
 
   constructor(bluetoothAdapter: BluetoothAdapter) {
-    console.debug('[binding-webBluetooth]', 'created client');
+    debug('created client');
     this.bluetoothAdapter = bluetoothAdapter;
   }
 
@@ -30,6 +35,10 @@ export default class WebBluetoothClient implements ProtocolClient {
       deconstructedForm.deviceId,
       deconstructedForm.serviceId,
       deconstructedForm.characteristicId
+    );
+
+    debug(
+      `invoking "readValue" on characteristic ${deconstructedForm.characteristicId}`
     );
 
     const value = await characteristic.readValue();
@@ -72,16 +81,22 @@ export default class WebBluetoothClient implements ProtocolClient {
     // Select what operation should be executed
     switch (deconstructedForm.bleOperation) {
       case 'sbo:write-without-response':
+        debug(
+          `invoking "writeValueWithoutResponse" on characteristic ${deconstructedForm.characteristicId}`
+        );
         await characteristic.writeValueWithoutResponse(new DataView(arrBuffer));
         break;
 
       case 'sbo:write':
+        debug(
+          `invoking "writeValueWithResponse" on characteristic ${deconstructedForm.characteristicId}`
+        );
         await characteristic.writeValueWithResponse(new DataView(arrBuffer));
         break;
 
       default: {
         throw new Error(
-          `[binding-Bluetooth] unknown operation ${deconstructedForm['sbo:methodName']}`
+          `unknown operation ${deconstructedForm['sbo:methodName']}`
         );
       }
     }
@@ -117,13 +132,10 @@ export default class WebBluetoothClient implements ProtocolClient {
     const {serviceId, characteristicId, operation} = deconstructedPath;
 
     if (operation !== 'subscribe') {
-      throw new Error(
-        `[binding-webBluetooth] operation ${operation} is not supported`
-      );
+      throw new Error(`operation ${operation} is not supported`);
     }
 
-    console.debug(
-      '[binding-webBluetooth]',
+    debug(
       `subscribing to characteristic with serviceId ${serviceId} characteristicId ${characteristicId}`
     );
 
@@ -186,7 +198,6 @@ export default class WebBluetoothClient implements ProtocolClient {
       };
     } else {
       // path is invalid
-      console.warn(`[binding-webBluetooth] invalid path ${path}`);
       throw new Error('href is not valid');
     }
   }

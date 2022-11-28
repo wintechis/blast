@@ -5,10 +5,16 @@ import {
   ProtocolClientFactory,
   ProtocolClient,
   ContentSerdes,
+  createLoggers,
 } from '@node-wot/core';
 import BluetoothClient from './Bluetooth-client';
 import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
 import {BluetoothAdapter} from './BluetoothAdapter';
+
+const {debug, error, warn} = createLoggers(
+  'binding-bluetooth',
+  'bluetooth-client-factory'
+);
 
 export default class BluetoothClientFactory implements ProtocolClientFactory {
   public readonly scheme: string = 'gatt';
@@ -21,10 +27,7 @@ export default class BluetoothClientFactory implements ProtocolClientFactory {
   }
 
   public getClient(): ProtocolClient {
-    console.debug(
-      '[binding-webBluetooth]',
-      `WebBluetoothClientFactory creating client for ${this.scheme}`
-    );
+    debug(`Creating client for ${this.scheme}`);
     return new BluetoothClient(this.adapter);
   }
 
