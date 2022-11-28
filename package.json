@@ -1,6 +1,7 @@
 {
     "private": true,
     "name": "blast",
+    "packageManager": "yarn@3.2.0",
     "description": "Block Applications for Things",
     "version": "0.0.1",
     "author": "Thomas Wehr",
@@ -19,5 +20,8 @@
     "type": "module",
     "workspaces": [
         "./packages/*"
-    ]
+    ],
+    "installConfig": {
+        "pnp": true
+    }
 }

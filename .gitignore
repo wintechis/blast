@@ -1,9 +1,8 @@
 **/.yarn/*
 !**/.yarn/patches
-**/dist
-**/build
-!**/.yarn/releases
 !**/.yarn/plugins
+!**/.yarn/releases
 !**/.yarn/sdks
 !**/.yarn/versions
-node_modules
+**/dist
+**/build
