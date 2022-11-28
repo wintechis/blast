@@ -80,5 +80,6 @@
     "prettier": "latest",
     "typescript": "latest"
   },
-  "homepage": "."
+  "homepage": ".",
+  "packageManager": "yarn@3.3.0"
 }
