@@ -28,7 +28,6 @@
   "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@nornagon/put": "^0.0.8",
     "@types/node": "latest",
     "@types/web-bluetooth": "^0.0.14",
     "@typescript-eslint/eslint-plugin": "^5.14.0",
@@ -48,7 +47,6 @@
     "sinon": "^13.0.1",
     "supports-color": "^9.2.3",
     "ts-loader": "^9.4.1",
-    "usocket": "^1.0.1",
     "web-bluetooth-mock": "^1.1.0",
     "webpack-cli": "^4.10.0"
   },
