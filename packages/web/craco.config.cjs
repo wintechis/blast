@@ -1,25 +1,24 @@
-const CracoAlias = require('craco-alias');
+const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
 
 module.exports = {
   eslint: {
     enable: false,
   },
-  plugins: [
-    {
-      plugin: CracoAlias,
-      options: {
-        source: 'tsconfig',
-        /* tsConfigPath should point to the file where "paths" are specified */
-        tsConfigPath: './tsconfig.paths.json',
-      },
-    },
-  ],
+
   webpack: {
-    alias: {
-      '@mui/styled-engine': '@mui/styled-engine-sc',
-    },
     resolve: {
+      alias: {
+        '@mui/styled-engine': '@mui/styled-engine-sc',
+      },
       extensions: ['.js', '.ts'],
+      plugins: [
+        PnpWebpackPlugin,
+      ],
+    },
+    resolveLoader: {
+      plugins: [
+        PnpWebpackPlugin.moduleLoader(module),
+      ],
     },
   },
 };

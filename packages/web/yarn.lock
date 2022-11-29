@@ -1586,8 +1586,9 @@ __metadata:
     "@mui/icons-material": ^5.10.9
     "@mui/lab": ^5.0.0-alpha.104
     "@mui/material": latest
-    "@mui/styled-engine-sc": latest
+    "@mui/styled-engine-sc": ^5.10.16
     "@mui/styles": latest
+    "@rdfjs/data-model": ^2.0.1
     "@tensorflow/tfjs": ^3.18.0
     "@testing-library/jest-dom": latest
     "@testing-library/react": latest
@@ -1599,11 +1600,10 @@ __metadata:
     "@types/web-bluetooth": ^0.0.16
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
-    babel-polyfill: ^6.26.0
+    babel-polyfill: latest
     blockly: 8.0.2
     buffer: ^6.0.3
     copyfiles: latest
-    craco-alias: ^3.0.1
     eslint: latest
     eslint-config-google: latest
     eslint-config-prettier: latest
@@ -1615,12 +1615,15 @@ __metadata:
     git-rev-sync: ^3.0.2
     gulp: ^4.0.2
     gulp-replace: ^1.1.3
+    pnp-webpack-plugin: ^1.7.0
     prettier: latest
     prop-types: ^15.8.1
     react: latest
     react-dom: latest
+    react-is: ^18.2.0
     react-scripts: latest
     react-syntax-highlighter: ^15.5.0
+    seedrandom: ^3.0.5
     styled-components: latest
     typescript: latest
     urdf: "https://github.com/derwehr/uRDF.js.git"
@@ -2499,11 +2502,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styled-engine-sc@latest":
-  version: 5.10.6
-  resolution: "@mui/styled-engine-sc@npm:5.10.6"
+"@mui/styled-engine-sc@npm:^5.10.16":
+  version: 5.10.16
+  resolution: "@mui/styled-engine-sc@npm:5.10.16"
   dependencies:
-    "@babel/runtime": ^7.19.0
+    "@babel/runtime": ^7.20.1
     prop-types: ^15.8.1
   peerDependencies:
     "@types/styled-components": ^5.1.14
@@ -2511,7 +2514,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/styled-components":
       optional: true
-  checksum: 37e1bc473e02375306a6e57d11b8b1f045bd71e943a2874438ad706f46508d8af4c6cd0645d2df2b97c56eeaaa31c1e038f480aba029e7d7ec9cdd3e480d61be
+  checksum: ddfa39f05a16c2b192f20089e118f09866cc66ab8f0fd372abbdad4669490d5b767c9a9c83062cd02c649d5c373ad9e6132bba9aa44560b734aa2cb48bcd1df8
   languageName: node
   linkType: hard
 
@@ -2727,6 +2730,15 @@ __metadata:
   bin:
     rdfjs-data-model-test: bin/test.js
   checksum: 88a5f8c4364291728728ef8a5e85733c55e61afe70d6f776417f3cfeaa8283c4d95234df993040890e51645022eef1fa457b1cdecbe597360bbb84eacf2a62aa
+  languageName: node
+  linkType: hard
+
+"@rdfjs/data-model@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@rdfjs/data-model@npm:2.0.1"
+  bin:
+    rdfjs-data-model-test: bin/test.js
+  checksum: d110bf71bf2f0d8c6bcc5f25d933a6302616c1b9cb700f1495138c755f68387c01b796d5fe38cd89bdbbd476a12e6059d43eb86e88ea796194063865105cf077
   languageName: node
   linkType: hard
 
@@ -5063,7 +5075,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-polyfill@npm:^6.26.0":
+"babel-polyfill@npm:latest":
   version: 6.26.0
   resolution: "babel-polyfill@npm:6.26.0"
   dependencies:
@@ -6203,13 +6215,6 @@ copyfiles@latest:
     path-type: ^4.0.0
     yaml: ^1.10.0
   checksum: 4be63e7117955fd88333d7460e4c466a90f556df6ef34efd59034d2463484e339666c41f02b523d574a797ec61f4a91918c5b89a316db2ea2f834e0d2d09465b
-  languageName: node
-  linkType: hard
-
-"craco-alias@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "craco-alias@npm:3.0.1"
-  checksum: 8d9a2bf38fa0834f365415509b57c33fda3a0fec18382242d9c92e766029bd72cca3f8aa548ff23c8d1272dd5621c97f9ceaa7e10517f0056a64bc89bff58d1e
   languageName: node
   linkType: hard
 
@@ -8605,7 +8610,7 @@ eslint@latest:
 
 "fsevents@patch:fsevents@^1.2.7#~builtin<compat/fsevents>":
   version: 1.2.13
-  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#~builtin<compat/fsevents>::version=1.2.13&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#~builtin<compat/fsevents>::version=1.2.13&hash=d11327"
   dependencies:
     bindings: ^1.5.0
     nan: ^2.12.1
@@ -8615,7 +8620,7 @@ eslint@latest:
 
 "fsevents@patch:fsevents@^2.3.2#~builtin<compat/fsevents>, fsevents@patch:fsevents@~2.3.2#~builtin<compat/fsevents>":
   version: 2.3.2
-  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=18f3a7"
+  resolution: "fsevents@patch:fsevents@npm%3A2.3.2#~builtin<compat/fsevents>::version=2.3.2&hash=df0bf1"
   dependencies:
     node-gyp: latest
   conditions: os=darwin
@@ -12966,6 +12971,15 @@ eslint@latest:
   languageName: node
   linkType: hard
 
+"pnp-webpack-plugin@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "pnp-webpack-plugin@npm:1.7.0"
+  dependencies:
+    ts-pnp: ^1.1.6
+  checksum: a41716d13607be5a3e06ba58b17e9e619cf07da3a0a7b10bd41cd89362873041054fd2b7966ad30a1b26b826cfb8fecc0469a95902d5b1b8ba8f591e2fe6b96d
+  languageName: node
+  linkType: hard
+
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -14855,7 +14869,7 @@ react@latest:
 
 "resolve@patch:resolve@^1.1.6#~builtin<compat/resolve>, resolve@patch:resolve@^1.1.7#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.10.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.14.2#~builtin<compat/resolve>, resolve@patch:resolve@^1.19.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.20.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.0#~builtin<compat/resolve>, resolve@patch:resolve@^1.22.1#~builtin<compat/resolve>, resolve@patch:resolve@^1.4.0#~builtin<compat/resolve>":
   version: 1.22.1
-  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A1.22.1#~builtin<compat/resolve>::version=1.22.1&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -14868,7 +14882,7 @@ react@latest:
 
 "resolve@patch:resolve@^2.0.0-next.3#~builtin<compat/resolve>":
   version: 2.0.0-next.4
-  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=07638b"
+  resolution: "resolve@patch:resolve@npm%3A2.0.0-next.4#~builtin<compat/resolve>::version=2.0.0-next.4&hash=c3c19d"
   dependencies:
     is-core-module: ^2.9.0
     path-parse: ^1.0.7
@@ -16468,6 +16482,16 @@ styled-components@latest:
   languageName: node
   linkType: hard
 
+"ts-pnp@npm:^1.1.6":
+  version: 1.2.0
+  resolution: "ts-pnp@npm:1.2.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: c2a698b85d521298fe6f2435fbf2d3dc5834b423ea25abd321805ead3f399dbeedce7ca09492d7eb005b9d2c009c6b9587055bc3ab273dc6b9e40eefd7edb5b2
+  languageName: node
+  linkType: hard
+
 "tsconfig-paths@npm:^3.14.1":
   version: 3.14.1
   resolution: "tsconfig-paths@npm:3.14.1"
@@ -16619,11 +16643,11 @@ typescript@latest:
 
 "typescript@patch:typescript@latest#~builtin<compat/typescript>":
   version: 4.8.4
-  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=bda367"
+  resolution: "typescript@patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=0102e9"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 563a0ef47abae6df27a9a3ab38f75fc681f633ccf1a3502b1108e252e187787893de689220f4544aaf95a371a4eb3141e4a337deb9895de5ac3c1ca76430e5f0
+  checksum: 301459fc3eb3b1a38fe91bf96d98eb55da88a9cb17b4ef80b4d105d620f4d547ba776cc27b44cc2ef58b66eda23fe0a74142feb5e79a6fb99f54fc018a696afa
   languageName: node
   linkType: hard
 

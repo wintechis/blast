@@ -1,7 +1,7 @@
 {
     "private": true,
     "name": "blast",
-    "packageManager": "yarn@3.2.0",
+    "packageManager": "yarn@3.3.0",
     "description": "Block Applications for Things",
     "version": "0.0.1",
     "author": "Thomas Wehr",
@@ -11,9 +11,9 @@
     },
     "license": "AGPL-3.0",
     "scripts": {
-        "build": "yarn workspaces run build",
-        "lint": "yarn workspaces run lint",
-        "test": "yarn workspaces run test",
+        "build": "yarn workspace @blast/core run build && yarn workspace @blast/web run build",
+        "lint": "yarn workspaces foreach run lint",
+        "test": "yarn workspaces foreach test",
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
         "start": "yarn workspace @blast/web run start"
     },

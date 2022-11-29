@@ -1,5 +1,6 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
+import {Form} from '@node-wot/td-tools';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
@@ -50,21 +51,21 @@ const setIds = function (
 ): WoT.ThingDescription {
   for (const key in td.properties) {
     if (td.properties[key].forms) {
-      td.properties[key].forms.forEach(form => {
+      td.properties[key].forms.forEach((form: Form) => {
         form.href = form.href.replace('${MacOrWebBluetoothId}', id);
       });
     }
   }
   for (const key in td.actions) {
     if (td.actions[key].forms) {
-      td.actions[key].forms.forEach(form => {
+      td.actions[key].forms.forEach((form: Form) => {
         form.href = form.href.replace('${MacOrWebBluetoothId}', id);
       });
     }
   }
   for (const key in td.events) {
     if (td.events[key].forms) {
-      td.events[key].forms.forEach(form => {
+      td.events[key].forms.forEach((form: Form) => {
         form.href = form.href.replace('${MacOrWebBluetoothId}', id);
       });
     }
