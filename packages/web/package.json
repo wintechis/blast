@@ -12,7 +12,6 @@
     "@mui/material": "latest",
     "@mui/styled-engine-sc": "^5.10.16",
     "@mui/styles": "latest",
-    "@nornagon/put": "^0.0.8",
     "@rdfjs/data-model": "^2.0.1",
     "@tensorflow/tfjs": "^3.18.0",
     "@testing-library/jest-dom": "latest",

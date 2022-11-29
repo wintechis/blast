@@ -45,6 +45,7 @@ __metadata:
   dependencies:
     "@node-wot/core": 0.8.2
     "@node-wot/td-tools": 0.8.2
+    "@nornagon/put": ^0.0.8
     "@types/node": latest
     "@types/uritemplate": ^0.3.4
     "@types/web-bluetooth": ^0.0.14
@@ -259,7 +260,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nornagon/put@npm:0.0.8":
+"@nornagon/put@npm:0.0.8, @nornagon/put@npm:^0.0.8":
   version: 0.0.8
   resolution: "@nornagon/put@npm:0.0.8"
   checksum: 6391a5da488fa86e2fd588205b32f7049a672d75bb040d4d1f544412b3ea53a3f928ee4f1a99b7c55126e0d7e8a37b5857c8d8792b64b71cdd6e18206ca8ec69

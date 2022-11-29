@@ -28,6 +28,7 @@
   "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@nornagon/put": "^0.0.8",
     "@types/node": "latest",
     "@types/web-bluetooth": "^0.0.14",
     "@typescript-eslint/eslint-plugin": "^5.14.0",

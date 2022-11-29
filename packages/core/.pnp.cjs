@@ -30,6 +30,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@node-wot/core", "npm:0.8.2"],\
             ["@node-wot/td-tools", "npm:0.8.2"],\
+            ["@nornagon/put", "npm:0.0.8"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/uritemplate", "npm:0.3.4"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
@@ -115,6 +116,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@blast/core", "workspace:."],\
             ["@node-wot/core", "npm:0.8.2"],\
             ["@node-wot/td-tools", "npm:0.8.2"],\
+            ["@nornagon/put", "npm:0.0.8"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/uritemplate", "npm:0.3.4"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
