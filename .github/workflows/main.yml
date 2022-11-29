@@ -23,6 +23,8 @@ jobs:
           key: yarn-cache-folder-${{ hashFiles('**/yarn.lock', '.yarnrc.yml') }}
           restore-keys: |
             yarn-cache-folder-
+      - name: install dependencies
+        run: yarn install
       - name: run linter
         run: yarn run lint
       - name: build
