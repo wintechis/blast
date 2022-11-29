@@ -1570,6 +1570,7 @@ __metadata:
   dependencies:
     "@node-wot/core": 0.8.2
     "@node-wot/td-tools": 0.8.2
+    "@nornagon/put": ^0.0.8
     "@types/node": latest
     "@types/uritemplate": ^0.3.4
     "@types/web-bluetooth": ^0.0.14
@@ -1597,6 +1598,7 @@ __metadata:
     ts-loader: ^9.4.1
     typescript: ^4.7.4
     uritemplate: ^0.3.4
+    usocket: ^1.0.1
     web-bluetooth-mock: ^1.1.0
     webpack: ^5.74.0
     webpack-cli: ^4.10.0
@@ -2784,7 +2786,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nornagon/put@npm:0.0.8":
+"@nornagon/put@npm:0.0.8, @nornagon/put@npm:^0.0.8":
   version: 0.0.8
   resolution: "@nornagon/put@npm:0.0.8"
   checksum: 6391a5da488fa86e2fd588205b32f7049a672d75bb040d4d1f544412b3ea53a3f928ee4f1a99b7c55126e0d7e8a37b5857c8d8792b64b71cdd6e18206ca8ec69
@@ -13163,7 +13165,7 @@ copyfiles@latest:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.12.1, nan@npm:^2.14.2":
+"nan@npm:^2.12.1, nan@npm:^2.14.2, nan@npm:^2.15.0":
   version: 2.17.0
   resolution: "nan@npm:2.17.0"
   dependencies:
@@ -13334,7 +13336,7 @@ copyfiles@latest:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:latest":
+"node-gyp@npm:^9.0.0, node-gyp@npm:latest":
   version: 9.3.0
   resolution: "node-gyp@npm:9.3.0"
   dependencies:
@@ -18496,6 +18498,18 @@ styled-components@latest:
     nan: ^2.14.2
     node-gyp: ^7.1.2
   checksum: 8a078fe84677923fa0007b8bddfb43c808697f73c540e3561fe9e8f3bb153c69512dfff421c3d042fce29f16f4da80c547d7079a13446bea3a610604c6707f9a
+  languageName: node
+  linkType: hard
+
+"usocket@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "usocket@npm:1.0.1"
+  dependencies:
+    bindings: ^1.5.0
+    debug: ^4.3.4
+    nan: ^2.15.0
+    node-gyp: ^9.0.0
+  checksum: a312863bf32a6dcd2f62186051285a4df3189370763c33e39ad3a168a27d3b31b95ae18a684b89c0ed266a501f0961e7a183533087bf5b0ff216aa6a9b70d40d
   languageName: node
   linkType: hard
 

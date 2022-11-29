@@ -2919,6 +2919,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@blast/core", "workspace:packages/core"],\
             ["@node-wot/core", "npm:0.8.2"],\
             ["@node-wot/td-tools", "npm:0.8.2"],\
+            ["@nornagon/put", "npm:0.0.8"],\
             ["@types/node", "npm:18.11.9"],\
             ["@types/uritemplate", "npm:0.3.4"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
@@ -2946,6 +2947,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-loader", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:9.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
             ["uritemplate", "npm:0.3.4"],\
+            ["usocket", "npm:1.0.1"],\
             ["web-bluetooth-mock", "npm:1.1.0"],\
             ["webpack", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:5.75.0"],\
             ["webpack-cli", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:4.10.0"],\
@@ -24106,6 +24108,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bindings", "npm:1.5.0"],\
             ["nan", "npm:2.17.0"],\
             ["node-gyp", "npm:7.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/unplugged/usocket-npm-1.0.1-6f845b5445/node_modules/usocket/",\
+          "packageDependencies": [\
+            ["usocket", "npm:1.0.1"],\
+            ["bindings", "npm:1.5.0"],\
+            ["debug", "virtual:8f4c743d27d9ca27ce45cf0ef8e4f4250c31cc80d571ed6ac08d549e80ba8f31ba1ad43aeed328cbfce0094594842d8010e7e72bf87225abc3ed56bbc6f7dac4#npm:4.3.4"],\
+            ["nan", "npm:2.17.0"],\
+            ["node-gyp", "npm:9.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\
