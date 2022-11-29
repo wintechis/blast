@@ -17,7 +17,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
       }\
     ],\
     "enableTopLevelFallback": true,\
-    "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
+    "ignorePatternData": "(^(?:\\\\.yarn\\\\/sdks(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)|(^(?:packages(?:\\\\/(?!\\\\.{1,2}(?:\\\\/|$))(?:(?:(?!(?:^|\\\\/)\\\\.{1,2}(?:\\\\/|$)).)*?)|$))$)",\
     "fallbackExclusionList": [\
       ["@blast/core", ["workspace:."]]\
     ],\
@@ -57,6 +57,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-loader", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:9.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
+            ["usocket", "npm:1.0.1"],\
             ["web-bluetooth-mock", "npm:1.1.0"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
@@ -141,6 +142,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-loader", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:9.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
+            ["usocket", "npm:1.0.1"],\
             ["web-bluetooth-mock", "npm:1.1.0"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
@@ -4734,6 +4736,23 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["which", "npm:2.0.2"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:9.3.0", {\
+          "packageLocation": "./.yarn/unplugged/node-gyp-npm-9.3.0-21c41a4dfd/node_modules/node-gyp/",\
+          "packageDependencies": [\
+            ["node-gyp", "npm:9.3.0"],\
+            ["env-paths", "npm:2.2.1"],\
+            ["glob", "npm:7.2.3"],\
+            ["graceful-fs", "npm:4.2.10"],\
+            ["make-fetch-happen", "npm:10.2.0"],\
+            ["nopt", "npm:6.0.0"],\
+            ["npmlog", "npm:6.0.2"],\
+            ["rimraf", "npm:3.0.2"],\
+            ["semver", "npm:7.3.7"],\
+            ["tar", "npm:6.1.11"],\
+            ["which", "npm:2.0.2"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["node-polyfill-webpack-plugin", [\
@@ -4797,6 +4816,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/nopt-npm-5.0.0-304b40fbfe-d35fdec187.zip/node_modules/nopt/",\
           "packageDependencies": [\
             ["nopt", "npm:5.0.0"],\
+            ["abbrev", "npm:1.1.1"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:6.0.0", {\
+          "packageLocation": "./.yarn/cache/nopt-npm-6.0.0-5ea8050815-82149371f8.zip/node_modules/nopt/",\
+          "packageDependencies": [\
+            ["nopt", "npm:6.0.0"],\
             ["abbrev", "npm:1.1.1"]\
           ],\
           "linkType": "HARD"\
@@ -6507,6 +6534,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["bindings", "npm:1.5.0"],\
             ["nan", "npm:2.17.0"],\
             ["node-gyp", "npm:7.1.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:1.0.1", {\
+          "packageLocation": "./.yarn/unplugged/usocket-npm-1.0.1-6f845b5445/node_modules/usocket/",\
+          "packageDependencies": [\
+            ["usocket", "npm:1.0.1"],\
+            ["bindings", "npm:1.5.0"],\
+            ["debug", "virtual:8f4c743d27d9ca27ce45cf0ef8e4f4250c31cc80d571ed6ac08d549e80ba8f31ba1ad43aeed328cbfce0094594842d8010e7e72bf87225abc3ed56bbc6f7dac4#npm:4.3.4"],\
+            ["nan", "npm:2.17.0"],\
+            ["node-gyp", "npm:9.3.0"]\
           ],\
           "linkType": "HARD"\
         }]\
