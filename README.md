@@ -45,20 +45,8 @@ If you need Linux compatibility, it might help to star this [watchAdvertisement 
   * Note that Bluetooth daemon needs to run with experimental interfaces if BlueZ version is lower than 5.43: `sudo /usr/sbin/bluetoothd -E`
 * [Windows](https://crbug.com/507419): Requires Windows 10 version 1706 (Creators Update) or later.
 
-### Saving & Loading
-Loading block programs requires BLAST to be hosted on a server. In addition, if you want to save block programs you'll need to create a directory that allows HTTP-PUT requests, see [here](https://github.com/wintechis/wilde13/blob/master/FAQ.md#how-can-i-create-a-read-write-linked-data-server-based-on-the-apache-http-server) for instructions.
-
-### Building
-In order to build BLAST yourself, follow these steps:
-1. install [yarn](https://yarnpkg.com/)
-2. run `yarn` from within the root directory
-3. run `yarn run build` from within the root directory
-
 ## Planned features
 * **auto generate things blocks** - automatically generate `property`, `action`, and `event` blocks from its [things description](https://www.w3.org/TR/wot-thing-description/)
 * **unit testing** add unit tests
 
 For smaller planned improvements see [issues](https://github.com/wintechis/blast/issues)
-
-## Contributing
-Please see [CONTRIBUTING.md](CONTRIBUTING.md).
