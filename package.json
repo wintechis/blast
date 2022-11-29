@@ -11,7 +11,7 @@
     },
     "license": "AGPL-3.0",
     "scripts": {
-        "build": "yarn workspace @blast/core run build && yarn workspace @blast/web run build",
+        "build": "yarn workspaces foreach run build",
         "lint": "yarn workspaces foreach run lint",
         "test": "yarn workspaces foreach test",
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",

@@ -1577,6 +1577,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.14.0
     c8: ^7.12.0
     chai: ^4.3.6
+    debug: ^4.3.4
     eslint: ^7.15.0
     eslint-config-google: ^0.14.0
     eslint-config-prettier: ^8.5.0
@@ -1586,17 +1587,20 @@ __metadata:
     mocha: ^9.2.2
     node-ble: "https://github.com/derwehr/node-ble"
     node-polyfill-webpack-plugin: ^2.0.1
+    pnp-webpack-plugin: ^1.7.0
     prettier: ^2.7.1
     readable-stream: ^4.2.0
     rimraf: ^3.0.2
     rxjs: 5.5.11
     sinon: ^13.0.1
+    supports-color: ^9.2.3
     ts-loader: ^9.4.1
     typescript: ^4.7.4
     uritemplate: ^0.3.4
     web-bluetooth-mock: ^1.1.0
     webpack: ^5.74.0
     webpack-cli: ^4.10.0
+    wot-thing-description-types: ^1.1.0-13-October-2022
     wot-typescript-definitions: 0.8.0-SNAPSHOT.23
     x11: ^2.3.0
   languageName: unknown
@@ -1614,8 +1618,9 @@ __metadata:
     "@mui/icons-material": ^5.10.9
     "@mui/lab": ^5.0.0-alpha.104
     "@mui/material": latest
-    "@mui/styled-engine-sc": latest
+    "@mui/styled-engine-sc": ^5.10.16
     "@mui/styles": latest
+    "@rdfjs/data-model": ^2.0.1
     "@tensorflow/tfjs": ^3.18.0
     "@testing-library/jest-dom": latest
     "@testing-library/react": latest
@@ -1627,11 +1632,10 @@ __metadata:
     "@types/web-bluetooth": ^0.0.16
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
-    babel-polyfill: ^6.26.0
+    babel-polyfill: latest
     blockly: 8.0.2
     buffer: ^6.0.3
     copyfiles: latest
-    craco-alias: ^3.0.1
     eslint: latest
     eslint-config-google: latest
     eslint-config-prettier: latest
@@ -1643,12 +1647,15 @@ __metadata:
     git-rev-sync: ^3.0.2
     gulp: ^4.0.2
     gulp-replace: ^1.1.3
+    pnp-webpack-plugin: ^1.7.0
     prettier: latest
     prop-types: ^15.8.1
     react: latest
     react-dom: latest
+    react-is: ^18.2.0
     react-scripts: latest
     react-syntax-highlighter: ^15.5.0
+    seedrandom: ^3.0.5
     styled-components: latest
     typescript: latest
     urdf: "https://github.com/derwehr/uRDF.js.git"
@@ -2586,9 +2593,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mui/styled-engine-sc@latest":
-  version: 5.10.14
-  resolution: "@mui/styled-engine-sc@npm:5.10.14"
+"@mui/styled-engine-sc@npm:^5.10.16":
+  version: 5.10.16
+  resolution: "@mui/styled-engine-sc@npm:5.10.16"
   dependencies:
     "@babel/runtime": ^7.20.1
     prop-types: ^15.8.1
@@ -2598,7 +2605,7 @@ __metadata:
   peerDependenciesMeta:
     "@types/styled-components":
       optional: true
-  checksum: 64645560b261f4b671158c8de48f18e7a85c68e06f44652026bd6c95abe029aa13f0544e7ddb65ba73c10b85fe78ae61b22e101e48675febef91c1214624a72e
+  checksum: ddfa39f05a16c2b192f20089e118f09866cc66ab8f0fd372abbdad4669490d5b767c9a9c83062cd02c649d5c373ad9e6132bba9aa44560b734aa2cb48bcd1df8
   languageName: node
   linkType: hard
 
@@ -2865,6 +2872,15 @@ __metadata:
   bin:
     rdfjs-data-model-test: bin/test.js
   checksum: 88a5f8c4364291728728ef8a5e85733c55e61afe70d6f776417f3cfeaa8283c4d95234df993040890e51645022eef1fa457b1cdecbe597360bbb84eacf2a62aa
+  languageName: node
+  linkType: hard
+
+"@rdfjs/data-model@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@rdfjs/data-model@npm:2.0.1"
+  bin:
+    rdfjs-data-model-test: bin/test.js
+  checksum: d110bf71bf2f0d8c6bcc5f25d933a6302616c1b9cb700f1495138c755f68387c01b796d5fe38cd89bdbbd476a12e6059d43eb86e88ea796194063865105cf077
   languageName: node
   linkType: hard
 
@@ -5290,7 +5306,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-polyfill@npm:^6.26.0":
+"babel-polyfill@npm:latest":
   version: 6.26.0
   resolution: "babel-polyfill@npm:6.26.0"
   dependencies:
@@ -6623,13 +6639,6 @@ copyfiles@latest:
     path-type: ^4.0.0
     yaml: ^1.10.0
   checksum: c53bf7befc1591b2651a22414a5e786cd5f2eeaa87f3678a3d49d6069835a9d8d1aef223728e98aa8fec9a95bf831120d245096db12abe019fecb51f5696c96f
-  languageName: node
-  linkType: hard
-
-"craco-alias@npm:^3.0.1":
-  version: 3.0.1
-  resolution: "craco-alias@npm:3.0.1"
-  checksum: 8d9a2bf38fa0834f365415509b57c33fda3a0fec18382242d9c92e766029bd72cca3f8aa548ff23c8d1272dd5621c97f9ceaa7e10517f0056a64bc89bff58d1e
   languageName: node
   linkType: hard
 
@@ -14281,6 +14290,15 @@ copyfiles@latest:
   languageName: node
   linkType: hard
 
+"pnp-webpack-plugin@npm:^1.7.0":
+  version: 1.7.0
+  resolution: "pnp-webpack-plugin@npm:1.7.0"
+  dependencies:
+    ts-pnp: ^1.1.6
+  checksum: a41716d13607be5a3e06ba58b17e9e619cf07da3a0a7b10bd41cd89362873041054fd2b7966ad30a1b26b826cfb8fecc0469a95902d5b1b8ba8f591e2fe6b96d
+  languageName: node
+  linkType: hard
+
 "posix-character-classes@npm:^0.1.0":
   version: 0.1.1
   resolution: "posix-character-classes@npm:0.1.1"
@@ -17503,6 +17521,13 @@ styled-components@latest:
   languageName: node
   linkType: hard
 
+"supports-color@npm:^9.2.3":
+  version: 9.2.3
+  resolution: "supports-color@npm:9.2.3"
+  checksum: 47d598b70d2bac3cbce98950344134de17c2935f45e8ad6256cde78ebe5da440e240d9fa17c1146bd84b1c36f865239fef6c563d70068a8d901ca5a6c56960af
+  languageName: node
+  linkType: hard
+
 "supports-hyperlinks@npm:^2.0.0":
   version: 2.3.0
   resolution: "supports-hyperlinks@npm:2.3.0"
@@ -18017,6 +18042,16 @@ styled-components@latest:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: 090adff1302ab20bd3486e6b4799e90f97726ed39e02b39e566f8ab674fd5bd5f727f43615debbfc580d33c6d9d1c6b1b3ce7d8e3cca3e20530a145ffa232c35
+  languageName: node
+  linkType: hard
+
+"ts-pnp@npm:^1.1.6":
+  version: 1.2.0
+  resolution: "ts-pnp@npm:1.2.0"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: c2a698b85d521298fe6f2435fbf2d3dc5834b423ea25abd321805ead3f399dbeedce7ca09492d7eb005b9d2c009c6b9587055bc3ab273dc6b9e40eefd7edb5b2
   languageName: node
   linkType: hard
 
@@ -19338,6 +19373,13 @@ styled-components@latest:
   version: 1.1.0-13-October-2022
   resolution: "wot-thing-description-types@npm:1.1.0-13-October-2022"
   checksum: cf1fc95291a17e9ad52a27e5e50478cdbcdb64322d0a204b173b8e9e0d84f71dc36e66037e446e038750b607cc962191949b9a48dda60d0c76b59b27c581e722
+  languageName: node
+  linkType: hard
+
+"wot-thing-description-types@npm:^1.1.0-13-October-2022":
+  version: 1.1.0-27-September-2021
+  resolution: "wot-thing-description-types@npm:1.1.0-27-September-2021"
+  checksum: 805de1447f0ed9dde5f4e1b8725d5f0c6cb2aa6d5aa26a0368e2048987e733f90f1dc5faa6eb504c78df8b229f4cc84d1016319d288e49b26fb7f6b1bfe1449f
   languageName: node
   linkType: hard
 
