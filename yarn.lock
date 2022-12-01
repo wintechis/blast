@@ -1625,7 +1625,7 @@ __metadata:
     "@testing-library/jest-dom": latest
     "@testing-library/react": latest
     "@testing-library/user-event": latest
-    "@types/node": latest
+    "@types/node": ^18.11.10
     "@types/react": latest
     "@types/react-dom": latest
     "@types/styled-components": latest
@@ -3682,6 +3682,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/node@npm:^18.11.10":
+  version: 18.11.10
+  resolution: "@types/node@npm:18.11.10"
+  checksum: 0f60cb090b2ee91fcd3dc4311bc1ed7889b92f14644c0069f100776f86474c12eebbcc6c75bc0d7d96b975a103b4d5d6b3c22b4e88bea6e7f4e2b1bb0daf5ea8
+  languageName: node
+  linkType: hard
+
 "@types/offscreencanvas@npm:~2019.3.0":
   version: 2019.3.0
   resolution: "@types/offscreencanvas@npm:2019.3.0"
@@ -5499,6 +5506,19 @@ __metadata:
 "blast@workspace:.":
   version: 0.0.0-use.local
   resolution: "blast@workspace:."
+  dependencies:
+    "@types/node": ^18.11.10
+    "@types/web-bluetooth": ^0.0.16
+    "@typescript-eslint/eslint-plugin": latest
+    "@typescript-eslint/parser": latest
+    eslint: latest
+    eslint-config-google: latest
+    eslint-config-prettier: latest
+    eslint-plugin-node: latest
+    eslint-plugin-prettier: latest
+    eslint-plugin-react: latest
+    prettier: latest
+    typescript: latest
   languageName: unknown
   linkType: soft
 
