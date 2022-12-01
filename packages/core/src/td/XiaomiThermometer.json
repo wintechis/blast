@@ -36,7 +36,7 @@
       "forms": [
         {
           "href": "gatt://ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6/ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6/subscribe",
-          "wbt:id": "webBluetoothId"
+          "wbt:id": "${MacOrWebBluetoothId}"
         }
       ]
     }

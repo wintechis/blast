@@ -67,6 +67,12 @@ const setIds = function (
     if (td.events[key].forms) {
       td.events[key].forms.forEach((form: Form) => {
         form.href = form.href.replace('${MacOrWebBluetoothId}', id);
+        if (form['wbt:id'] !== undefined) {
+          form['wbt:id'] = (form['wbt:id'] as string)?.replace(
+            '${MacOrWebBluetoothId}',
+            id
+          );
+        }
       });
     }
   }
