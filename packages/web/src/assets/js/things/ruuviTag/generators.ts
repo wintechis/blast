@@ -51,12 +51,8 @@ declare global {
 
 import Blockly from 'blockly';
 const {JavaScript} = Blockly;
-import {
-  addCleanUpFunction,
-  getWorkspace,
-  throwError,
-} from '../../interpreter.js';
-import {LEScanResults} from '../../webBluetooth.js';
+import {getWorkspace, throwError} from '../../interpreter.js';
+import {LEScanResults, startLEScan} from '../../webBluetooth.js';
 
 /**
  * Generates JavaScript code for the things_ruuviTag block.
@@ -320,6 +316,5 @@ globalThis['ruuvi_handleEvents'] = async function (
     eval(`(async () => {${statements}})();`);
   }
 
-  const sub = await thing.subscribeEvent('manufacturerData', null);
-  addCleanUpFunction(async () => sub.stop());
+  startLEScan();
 };

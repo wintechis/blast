@@ -158,7 +158,7 @@ export async function unsubscribe(
 /**
  * Starts an LE Scan for 30 seconds.
  */
-export async function startLEScan(): Promise<void>;
+export function startLEScan(): Promise<void>;
 
 /**
  * Stops the LE Scan
