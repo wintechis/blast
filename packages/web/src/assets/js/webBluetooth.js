@@ -5,10 +5,21 @@
 
 import 'buffer';
 import Blockly from 'blockly';
-import {addCleanUpFunction, getWorkspace, throwError} from './interpreter.js';
+import {
+  addCleanUpFunction,
+  getWorkspace,
+  onStatusChange,
+  throwError,
+} from './interpreter.js';
 import {addWebBluetoothDevice, getThingsLog} from './things.js';
 
 const {dialog} = Blockly;
+
+/**
+ * Tracks blocks in the workspace requiring a LE Scan.
+ * @type {!Array<!Blockly.Block.id>}
+ */
+export const blocksRequiringScan = [];
 
 /**
  * Optional serviceUUIDs to scan for.
@@ -533,6 +544,11 @@ export const startLEScan = async function () {
   // Stop scan after 30 seconds.
   setTimeout(stopLEScan, 30000);
 };
+onStatusChange.running.push(() => {
+  if (blocksRequiringScan.length > 0) {
+    startLEScan();
+  }
+});
 
 /**
  * Stops the BLE Scan.

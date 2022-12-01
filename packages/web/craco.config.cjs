@@ -1,4 +1,4 @@
-const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 module.exports = {
   eslint: {
@@ -11,14 +11,10 @@ module.exports = {
         '@mui/styled-engine': '@mui/styled-engine-sc',
       },
       extensions: ['.js', '.ts'],
-      plugins: [
-        PnpWebpackPlugin,
-      ],
+      plugins: [PnpWebpackPlugin],
     },
     resolveLoader: {
-      plugins: [
-        PnpWebpackPlugin.moduleLoader(module),
-      ],
+      plugins: [PnpWebpackPlugin.moduleLoader(module)],
     },
   },
 };

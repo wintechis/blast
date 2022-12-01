@@ -12,6 +12,7 @@ import {
   getWorkspace,
 } from '../../interpreter.js';
 import {implementedThings} from '../../things.js';
+import {blocksRequiringScan} from '../../webBluetooth.js';
 
 const {RuuviTag} = tds;
 
@@ -127,6 +128,7 @@ Blocks['ruuviTag_event'] = {
       this.checkCompatibility();
       this.requested = true;
       this.addEvent();
+      blocksRequiringScan.push(this.id);
       this.createVars();
     }
   },

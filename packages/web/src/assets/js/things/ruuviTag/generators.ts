@@ -89,8 +89,8 @@ JavaScript['ruuviTag_event'] = function (block: Blockly.Block) {
   return '';
 };
 
-const parseRawV1 = function (data: Buffer): RAWv1 {
-  const dataString = data.toString('hex');
+const parseRawV1 = function (data: ArrayBuffer): RAWv1 {
+  const dataString = arrayBufferToHex(data);
 
   const humidityStart = 6;
   const humidityEnd = 8;
@@ -162,11 +162,13 @@ const parseRawV1 = function (data: Buffer): RAWv1 {
   };
 };
 
-const parseRawV2 = function (data: Buffer): RAWv2 {
+const parseRawV2 = function (data: ArrayBuffer): RAWv2 {
+  const dataArr = new Uint8Array(data);
+
   const int2Hex = (str: number) =>
     ('0' + str.toString(16).toUpperCase()).slice(-2);
 
-  let temperature: number | undefined = (data[3] << 8) | (data[4] & 0xff);
+  let temperature: number | undefined = (dataArr[1] << 8) | (dataArr[2] & 0xff);
   if (temperature === 32768) {
     // ruuvi spec := 'invalid/not available'
     temperature = undefined;
@@ -177,15 +179,18 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
     temperature = Number((temperature * 0.005).toFixed(4));
   }
 
-  let humidity: number | undefined = ((data[5] & 0xff) << 8) | (data[6] & 0xff);
+  let humidity: number | undefined =
+    ((dataArr[3] & 0xff) << 8) | (dataArr[4] & 0xff);
   humidity =
     humidity !== 65535 ? Number((humidity * 0.0025).toFixed(4)) : undefined;
 
-  let pressure: number | undefined = ((data[7] & 0xff) << 8) | (data[8] & 0xff);
+  let pressure: number | undefined =
+    ((dataArr[5] & 0xff) << 8) | (dataArr[6] & 0xff);
   pressure =
     pressure !== 65535 ? Number((pressure + 50000).toFixed(4)) : undefined;
 
-  let accelerationX: number | undefined = (data[9] << 8) | (data[10] & 0xff);
+  let accelerationX: number | undefined =
+    (dataArr[7] << 8) | (dataArr[8] & 0xff);
   if (accelerationX === 32768) {
     // ruuvi spec := 'invalid/not available'
     accelerationX = undefined;
@@ -194,7 +199,8 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
     accelerationX = accelerationX - 65536;
   }
 
-  let accelerationY: number | undefined = (data[11] << 8) | (data[12] & 0xff);
+  let accelerationY: number | undefined =
+    (dataArr[9] << 8) | (dataArr[10] & 0xff);
   if (accelerationY === 32768) {
     // ruuvi spec := 'invalid/not available'
     accelerationY = undefined;
@@ -203,7 +209,8 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
     accelerationY = accelerationY - 65536;
   }
 
-  let accelerationZ: number | undefined = (data[13] << 8) | (data[14] & 0xff);
+  let accelerationZ: number | undefined =
+    (dataArr[11] << 8) | (dataArr[12] & 0xff);
   if (accelerationZ === 32768) {
     // ruuvi spec := 'invalid/not available'
     accelerationZ = undefined;
@@ -212,7 +219,7 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
     accelerationZ = accelerationZ - 65536;
   }
 
-  const powerInfo = ((data[15] & 0xff) << 8) | (data[16] & 0xff);
+  const powerInfo = ((dataArr[13] & 0xff) << 8) | (dataArr[14] & 0xff);
 
   let battery: number | undefined = powerInfo >>> 5;
   battery = battery !== 2047 ? battery + 1600 : undefined;
@@ -220,21 +227,21 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
   let txPower: number | undefined = powerInfo & 0b11111;
   txPower = txPower !== 31 ? txPower * 2 - 40 : undefined;
 
-  let movementCounter: number | undefined = data[17] & 0xff;
+  let movementCounter: number | undefined = dataArr[15] & 0xff;
   movementCounter = movementCounter !== 255 ? movementCounter : undefined;
 
   let measurementSequenceNumber: number | undefined =
-    ((data[18] & 0xff) << 8) | (data[19] & 0xff);
+    ((dataArr[16] & 0xff) << 8) | (dataArr[17] & 0xff);
   measurementSequenceNumber =
     measurementSequenceNumber !== 65535 ? measurementSequenceNumber : undefined;
 
   const mac = [
-    int2Hex(data[20]),
-    int2Hex(data[21]),
-    int2Hex(data[22]),
-    int2Hex(data[23]),
-    int2Hex(data[24]),
-    int2Hex(data[25]),
+    int2Hex(dataArr[18]),
+    int2Hex(dataArr[19]),
+    int2Hex(dataArr[20]),
+    int2Hex(dataArr[21]),
+    int2Hex(dataArr[22]),
+    int2Hex(dataArr[23]),
   ].join(':');
 
   return {
@@ -251,6 +258,29 @@ const parseRawV2 = function (data: Buffer): RAWv2 {
     txPower,
   };
 };
+
+// Pre-computing the hex values for the data format bytes
+const byteToHex: Array<string> = [];
+for (let n = 0; n <= 0xff; ++n) {
+  const hexOctet = n.toString(16).padStart(2, '0');
+  byteToHex.push(hexOctet);
+}
+
+/**
+ * Converts an ArrayBuffer to a hex string.
+ * @param arrayBuffer The array buffer to convert.
+ * @returns The hex string.
+ */
+function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
+  const buff = new Uint8Array(arrayBuffer);
+  const hexOctets = [];
+
+  for (let i = 0; i < buff.length; ++i) {
+    hexOctets.push(byteToHex[buff[i]]);
+  }
+
+  return hexOctets.join('');
+}
 
 /**
  * Handles RuuviTag events.
@@ -283,7 +313,7 @@ globalThis['ruuvi_handleEvents'] = async function (
         for (const event of events) {
           const data = event.manufacturerData.get(0x0499);
           if (data) {
-            const buffer = Buffer.from(data.buffer);
+            const buffer = data.buffer;
             const dataFormat = data.getUint8(0);
             if (dataFormat === 3) {
               return new Promise(resolve => resolve(parseRawV1(buffer)));
@@ -304,7 +334,7 @@ globalThis['ruuvi_handleEvents'] = async function (
         )
       );
     }
-    throwError('No measurements found after 30 retries.');
+    throwError('No measurements found after 30 seconds.');
   };
 
   const parsedData = (await getAdvertisementData(0)) as RAWv1 | RAWv2;
@@ -315,6 +345,4 @@ globalThis['ruuvi_handleEvents'] = async function (
     // execute statements
     eval(`(async () => {${statements}})();`);
   }
-
-  startLEScan();
 };

@@ -6,6 +6,11 @@ import {implementedThing} from './things';
 export const optionalServices: BluetoothServiceUUID[];
 
 /**
+ * Tracks blocks in the workspace requiring a LE Scan.
+ */
+export const blocksRequiringScan: Array<Blockly.Block.id>;
+
+/**
  * Contains the results of a LE Scan.
  */
 export let LEScanResults: {
