@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@craco/craco": "latest",
-    "@types/node": "latest",
+    "@types/node": "^18.11.10",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@types/styled-components": "latest",
