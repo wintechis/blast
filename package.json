@@ -21,6 +21,9 @@
     "workspaces": [
         "./packages/*"
     ],
+    "engines": {
+        "node": "16.13.2"
+    },
     "dependencies": {
         "@types/node": "^18.11.10",
         "@types/web-bluetooth": "^0.0.16",
@@ -30,7 +33,6 @@
         "eslint-config-google": "latest",
         "eslint-config-prettier": "latest",
         "eslint-plugin-node": "latest",
-        "eslint-plugin-prettier": "latest",
         "eslint-plugin-react": "latest",
         "prettier": "latest",
         "typescript": "latest"

@@ -45,7 +45,7 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=12.11.0"
+    "node": "16.13.2"
   },
   "browserslist": {
     "production": [
