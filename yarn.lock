@@ -5515,7 +5515,6 @@ __metadata:
     eslint-config-google: latest
     eslint-config-prettier: latest
     eslint-plugin-node: latest
-    eslint-plugin-prettier: latest
     eslint-plugin-react: latest
     prettier: latest
     typescript: latest
