@@ -72,6 +72,48 @@
           "contentType": "application/x.binary-data-stream"
         }
       ]
+    },
+    "colour": {
+      "type": "string",
+      "format": "hex",
+
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "description": "The colour of the LED light.",
+
+      "bdo:pattern": "0F{R}{B}{G}",
+      "bdo:variables": {
+        "R": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Red value."
+        },
+        "B": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Green value."
+        },
+        "G": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Blue value."
+        }
+      },
+      "forms": [
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0005-47a2-835a-a8d455b859dd",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
     }
   }
 }
