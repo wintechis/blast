@@ -1,0 +1,119 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "http://example.org/simple-bluetooth-ontology#",
+      "bdo": "http://example.org/binary-data-ontology#"
+    },
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "PhilipsHue",
+  "description": "A PhilipsHue smart light bulb.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": "Thing",
+  "security": [
+    "nosec_sc"
+  ],
+  "sbo:hasGAPRole": "sbo:Peripheral",
+  "sbo:isConnectable": true,
+
+  "properties": {
+    "power": {
+      "type": "integer",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "minimum": 0,
+      "maximum": 1,
+      "bdo:bytelength": 1,
+      "description": "The current power status of the bulb",
+      "forms": [
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
+          "op": "readproperty",
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
+        },
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    },
+    "brightness": {
+      "type": "integer",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": false,
+      "minimum": 1,
+      "maximum": 255,
+      "bdo:bytelength": 1,
+      "description": "The current brightness value of the bulb",
+      "forms": [
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
+          "op": "readproperty",
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
+        },
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    },
+    "colour": {
+      "type": "string",
+      "format": "hex",
+
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "description": "The colour of the LED light.",
+
+      "bdo:pattern": "0F{R}{B}{G}",
+      "bdo:variables": {
+        "R": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Red value."
+        },
+        "B": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Green value."
+        },
+        "G": {
+          "type": "integer",
+          "bdo:bytelength": 1,
+          "minimum": 1,
+          "maximum": 254,
+          "description": "Blue value."
+        }
+      },
+      "forms": [
+        {
+          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0005-47a2-835a-a8d455b859dd",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    }
+  }
+}
