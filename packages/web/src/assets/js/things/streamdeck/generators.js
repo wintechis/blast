@@ -98,6 +98,17 @@ globalThis['handleStreamdeck'] = async function (
   const block = getWorkspace().getBlockById(blockId);
   const streamdeck = block.thing;
 
+  if (!streamdeck) {
+    throwError('Streamdeck not connected.');
+    return;
+  }
+
+  console.log(streamdeck);
+
+  if (!streamdeck.device.device.device.opened) {
+    await streamdeck.device.device.device.open();
+  }
+
   let button;
   for (let i = 0; i < buttons.length; i++) {
     if (buttons.charAt(i) === '1') {
