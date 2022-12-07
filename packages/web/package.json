@@ -81,7 +81,8 @@
     "gulp-replace": "^1.1.3",
     "pnp-webpack-plugin": "^1.7.0",
     "prettier": "latest",
-    "typescript": "latest"
+    "typescript": "latest",
+    "webpack": "5.74.0"
   },
   "homepage": ".",
   "packageManager": "yarn@3.3.0"
