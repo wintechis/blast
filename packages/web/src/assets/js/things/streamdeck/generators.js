@@ -103,8 +103,6 @@ globalThis['handleStreamdeck'] = async function (
     return;
   }
 
-  console.log(streamdeck);
-
   if (!streamdeck.device.device.device.opened) {
     await streamdeck.device.device.device.open();
   }
