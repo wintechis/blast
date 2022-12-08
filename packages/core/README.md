@@ -16,8 +16,8 @@ This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/t
 
 ### Example
 ```JavaScript
-import {createThing} from '../packages/core/dist/blast.node.js';
-import {BleRgbController} from '../packages/core/dist/blast.tds.js';
+import {createThing} from './dist/blast.node.js';
+import {BleRgbController} from './dist/blast.tds.js';
 
 const mac = 'BE5860018744';
 
