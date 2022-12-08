@@ -3,7 +3,7 @@
 # BLAST - Block Applications For Things
 This is a monorepo with two installable packages:
 * [`@blast/core`](./packages/core/) is a library enabling usage of [WoT Thing Descriptions](https://www.w3.org/2019/wot/td) for Bluetooth devices in [Node.js](https://nodejs.org/).
-* [`@blast/web`](./packages/web/) a programming and execution environment for executing applications interacting with devices from the Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)).
+* [`@blast/web`](./packages/web/) a programming and execution environment for applications interacting with devices from the Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)).
 
 ## Quick start
 In order to use the BLAST web demo open a Terminal and enter the following commands:
