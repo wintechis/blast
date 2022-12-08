@@ -45,7 +45,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.2.1"],\
             ["joy-con-webhid", "npm:0.2.0"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
             ["prettier", "npm:2.7.1"],\
@@ -129,7 +129,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-plugin-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.2.1"],\
             ["joy-con-webhid", "npm:0.2.0"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
             ["prettier", "npm:2.7.1"],\
@@ -4506,6 +4506,14 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["yallist", "npm:4.0.0"]\
           ],\
           "linkType": "HARD"\
+        }],\
+        ["npm:4.0.0", {\
+          "packageLocation": "./.yarn/cache/minipass-npm-4.0.0-2520d5ae3c-7a609afbf3.zip/node_modules/minipass/",\
+          "packageDependencies": [\
+            ["minipass", "npm:4.0.0"],\
+            ["yallist", "npm:4.0.0"]\
+          ],\
+          "linkType": "HARD"\
         }]\
       ]],\
       ["minipass-collect", [\
@@ -4691,10 +4699,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["node-ble", [\
-        ["https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b", {\
-          "packageLocation": "./.yarn/cache/node-ble-https-9bf2dd3283-2b1e9582e8.zip/node_modules/node-ble/",\
+        ["https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed", {\
+          "packageLocation": "./.yarn/cache/node-ble-https-2c0a9782ac-826e0cc2fe.zip/node_modules/node-ble/",\
           "packageDependencies": [\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"],\
             ["dbus-next", "npm:0.10.2"]\
           ],\
           "linkType": "HARD"\
@@ -4713,7 +4721,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["request", "npm:2.88.2"],\
             ["rimraf", "npm:3.0.2"],\
             ["semver", "npm:7.3.8"],\
-            ["tar", "npm:6.1.12"],\
+            ["tar", "npm:6.1.13"],\
             ["which", "npm:2.0.2"]\
           ],\
           "linkType": "HARD"\
@@ -6106,13 +6114,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:6.1.12", {\
-          "packageLocation": "./.yarn/cache/tar-npm-6.1.12-c7d6bb4891-49d72e4420.zip/node_modules/tar/",\
+        ["npm:6.1.13", {\
+          "packageLocation": "./.yarn/cache/tar-npm-6.1.13-3234e72781-8a278bed12.zip/node_modules/tar/",\
           "packageDependencies": [\
-            ["tar", "npm:6.1.12"],\
+            ["tar", "npm:6.1.13"],\
             ["chownr", "npm:2.0.0"],\
             ["fs-minipass", "npm:2.1.0"],\
-            ["minipass", "npm:3.3.5"],\
+            ["minipass", "npm:4.0.0"],\
             ["minizlib", "npm:2.1.2"],\
             ["mkdirp", "npm:1.0.4"],\
             ["yallist", "npm:4.0.0"]\

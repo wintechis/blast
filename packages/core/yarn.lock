@@ -3782,6 +3782,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"minipass@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "minipass@npm:4.0.0"
+  dependencies:
+    yallist: ^4.0.0
+  checksum: 7a609afbf394abfcf9c48e6c90226f471676c8f2a67f07f6838871afb03215ede431d1433feffe1b855455bcb13ef0eb89162841b9796109d6fed8d89790f381
+  languageName: node
+  linkType: hard
+
 "minizlib@npm:^2.1.1, minizlib@npm:^2.1.2":
   version: 2.1.2
   resolution: "minizlib@npm:2.1.2"
@@ -3904,10 +3913,10 @@ __metadata:
 
 "node-ble@https://github.com/derwehr/node-ble":
   version: 1.9.0
-  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"
+  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"
   dependencies:
     dbus-next: ^0.10.2
-  checksum: 2b1e9582e8748df7f42ee738ce510b88a2275222d4fa2d7c369751cdcebad44fac35e130e35527a9d56369918831e795dea63c79e1f4a7d2a81b1f369f45ac34
+  checksum: 826e0cc2fe347ebc4b1b5ed5be30a43d9aa9779ed47ba0bfe325b60e41ffc02af94e67fdc8ec275f046cf77eeec0a619c1d65633d65278c441f6940b1338e5be
   languageName: node
   linkType: hard
 
@@ -5161,16 +5170,16 @@ __metadata:
   linkType: hard
 
 "tar@npm:^6.0.2":
-  version: 6.1.12
-  resolution: "tar@npm:6.1.12"
+  version: 6.1.13
+  resolution: "tar@npm:6.1.13"
   dependencies:
     chownr: ^2.0.0
     fs-minipass: ^2.0.0
-    minipass: ^3.0.0
+    minipass: ^4.0.0
     minizlib: ^2.1.1
     mkdirp: ^1.0.3
     yallist: ^4.0.0
-  checksum: 49d72e4420944e7ede2782d6b0826a6ede6cdab23c7de63470917e7a78166bc4d5b1a96279d3d79a85f1ba5a17cd37c0acbb3cbff19a07447691445b8b051c55
+  checksum: 8a278bed123aa9f53549b256a36b719e317c8b96fe86a63406f3c62887f78267cea9b22dc6f7007009738509800d4a4dccc444abd71d762287c90f35b002eb1c
   languageName: node
   linkType: hard
 
