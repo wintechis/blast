@@ -19,7 +19,6 @@ This table displays all blocks with limited compatibility, assuming you're using
 
 | block | Windows | Linux | Mac | Android |
 |---|---|---|---|---|
-| switch LED | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 | read signal strength | :heavy_check_mark: | :x:[^1] | :heavy_check_mark: | :heavy_check_mark: |
 | read ruuvi property | :heavy_check_mark: | :x:[^2] | :heavy_check_mark: | :heavy_check_mark: |
 
