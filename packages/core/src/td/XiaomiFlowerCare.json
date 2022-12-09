@@ -5,8 +5,8 @@
     {
       "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
       "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
-      "qudt": "",
-      "qudtUnit": ""
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
     },
     {
       "@language": "en"
@@ -42,22 +42,26 @@
           "type": "integer",
           "bdo:bytelength": 2,
           "bdo:scale": 0.1,
-          "description": "The current temperature value."
+          "description": "The current temperature value.",
+          "unit": "qudtUnit:DEG_C"
         },
         "brightness": {
           "type": "integer",
           "bdo:bytelength": 4,
-          "description": "The current brightness value."
+          "description": "The current brightness value.",
+          "unit": "qudtUnit:LUX"
         },
         "moisture": {
           "type": "integer",
           "bdo:bytelength": 1,
-          "description": "The current moisture value."
+          "description": "The current moisture value.",
+          "unit": "qudtUnit:PERCENT"
         },
         "conduct": {
           "type": "integer",
           "bdo:bytelength": 2,
-          "description": "The current conductivity value."
+          "description": "The current conductivity value.",
+          "unit": "qudtUnit:S"
         }
       },
       "forms": [
