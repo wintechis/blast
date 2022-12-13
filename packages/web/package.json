@@ -40,7 +40,7 @@
     "copy-blast": "copyfiles -u 3 \"../core/dist/blast.web.*\" \"../core/dist/blast.tds.*\" \"./public/assets/blast/\"",
     "build": "yarn run copy-blast && gulp update-version && craco build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "test": "craco test",
+    "test": "echo \"Error: no test for @blast/web specified yet\"",
     "eject": "react-scripts eject"
   },
   "type": "module",

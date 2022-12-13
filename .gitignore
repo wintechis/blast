@@ -8,4 +8,5 @@
 !**/.yarn/versions
 **/dist
 **/build
+**/coverage
 node_modules
