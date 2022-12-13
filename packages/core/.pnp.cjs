@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:8.5.0"],\
             ["eslint-plugin-node", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:11.1.0"],\
             ["eslint-plugin-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.2.1"],\
+            ["fs", "npm:0.0.1-security"],\
             ["joy-con-webhid", "npm:0.2.0"],\
             ["mocha", "npm:9.2.2"],\
             ["node-ble", "https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"],\
@@ -127,6 +128,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:8.5.0"],\
             ["eslint-plugin-node", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:11.1.0"],\
             ["eslint-plugin-prettier", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.2.1"],\
+            ["fs", "npm:0.0.1-security"],\
             ["joy-con-webhid", "npm:0.2.0"],\
             ["mocha", "npm:9.2.2"],\
             ["node-ble", "https://github.com/derwehr/node-ble.git#commit=c63e117757631d5f82d14100da0af80be5d746ed"],\
@@ -3106,6 +3108,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/from-npm-0.1.7-6dcf14a57d-b85125b789.zip/node_modules/from/",\
           "packageDependencies": [\
             ["from", "npm:0.1.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fs", [\
+        ["npm:0.0.1-security", {\
+          "packageLocation": "./.yarn/cache/fs-npm-0.0.1-security-5060b47e87-53c6230e1f.zip/node_modules/fs/",\
+          "packageDependencies": [\
+            ["fs", "npm:0.0.1-security"]\
           ],\
           "linkType": "HARD"\
         }]\

@@ -22,7 +22,8 @@
     "bundle": "webpack --config webpack.conf.cjs",
     "clean": "yarn rimraf dist",
     "lint": "eslint \"src/**\"",
-    "fix": "eslint --fix \"src/** \""
+    "fix": "eslint --fix \"src/** \"",
+    "test": "c8 mocha \"test/**/*.mocha.js\" --reporter-option maxDiffsize=0"
   },
   "type": "module",
   "main": "index.html",
@@ -39,6 +40,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "fs": "latest",
     "mocha": "^9.2.2",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "pnp-webpack-plugin": "^1.7.0",
@@ -70,7 +72,10 @@
   "c8": {
     "all": true,
     "src": [
-      "dist/"
+      "src/"
+    ],
+    "x": [
+      ".pnp*"
     ]
   }
 }
