@@ -74,7 +74,6 @@
     "eslint-config-google": "latest",
     "eslint-config-prettier": "latest",
     "eslint-plugin-node": "latest",
-    "eslint-plugin-prettier": "latest",
     "eslint-plugin-react": "latest",
     "git-rev-sync": "^3.0.2",
     "gulp": "^4.0.2",
