@@ -1640,6 +1640,7 @@ __metadata:
     eslint-config-google: latest
     eslint-config-prettier: latest
     eslint-plugin-node: latest
+    eslint-plugin-prettier: latest
     eslint-plugin-react: latest
     events: ^3.3.0
     file-saver: ^2.0.5
@@ -8249,7 +8250,7 @@ copyfiles@latest:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^4.2.1":
+"eslint-plugin-prettier@npm:^4.2.1, eslint-plugin-prettier@npm:latest":
   version: 4.2.1
   resolution: "eslint-plugin-prettier@npm:4.2.1"
   dependencies:
