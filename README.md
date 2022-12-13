@@ -14,5 +14,3 @@ In order to use the BLAST web demo open a Terminal and enter the following comma
 5. Open your Browser and navigate to `https://localhost:3000`
 
 For more detailed descriptions navigate to one of the packages ([`@blast/core`](./packages/core/) or [`@blast/web`](./packages/web/))
-
-> :warning: **BLAST's Bluetooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
