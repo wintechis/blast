@@ -2943,6 +2943,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["eslint-config-prettier", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:8.5.0"],\
             ["eslint-plugin-node", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:11.1.0"],\
             ["eslint-plugin-prettier", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:4.2.1"],\
+            ["fs", "npm:0.0.1-security"],\
             ["joy-con-webhid", "npm:0.2.0"],\
             ["mocha", "npm:9.2.2"],\
             ["node-ble", "https://github.com/derwehr/node-ble.git#commit=2e3519d6e2bbab319e02e9efcbff0c17fee64f3b"],\
@@ -12894,6 +12895,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/from-npm-0.1.7-6dcf14a57d-b85125b789.zip/node_modules/from/",\
           "packageDependencies": [\
             ["from", "npm:0.1.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["fs", [\
+        ["npm:0.0.1-security", {\
+          "packageLocation": "./.yarn/cache/fs-npm-0.0.1-security-5060b47e87-53c6230e1f.zip/node_modules/fs/",\
+          "packageDependencies": [\
+            ["fs", "npm:0.0.1-security"]\
           ],\
           "linkType": "HARD"\
         }]\
