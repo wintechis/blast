@@ -38,7 +38,9 @@ hue.colour = 0xff0000
 
 Instead of
 
-````hue.invokeAction('dim')````
+````
+hue.invokeAction('dim')
+````
 
 we could write
 
