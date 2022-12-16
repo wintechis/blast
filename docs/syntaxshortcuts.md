@@ -8,4 +8,8 @@ Instead of hue.writeProperty('colour', '0xff0000'), we could write hue.colour = 
 
 Instead of hue.invokeAction('dim'), we could write hue.dim().
 
-@@@events?
+## Events
+
+streamdeck.onEvent('buttonDown', ['true', 'false','false','false','false','false']) { displayText('foo') }
+
+xiaomiThermeter.onEvent(?temperature) { displayText(?temperature) }
