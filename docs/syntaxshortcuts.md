@@ -12,15 +12,21 @@ Assume the following devices:
 
 Instead of
 
-````hue.readProperty('colour')````
+````
+hue.readProperty('colour')
+````
 
 we could write
 
-````hue.colour````
+````
+hue.colour
+````
 
 Instead of
 
-````hue.writeProperty('colour', '0xff0000')````
+````
+hue.writeProperty('colour', '0xff0000')
+````
 
 we could write
 
