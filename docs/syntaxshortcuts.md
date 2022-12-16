@@ -1,15 +1,57 @@
 # Syntax shortcuts
 
-Reading and writing .readProperty(), .writeProperty(), .invokeAction() is tedious.
+Reading and writing code with thing.readProperty(), thing.writeProperty(), thing.invokeAction() and thing.subscribeEvent() is tedious.
 
-Instead of hue.readProperty('colour'), we could write hue.colour.
+Assume the following devices:
 
-Instead of hue.writeProperty('colour', '0xff0000'), we could write hue.colour = 0xff0000.
+* hue: a Philips Hue lamp
+* xiaomi: a Xioami thermometer
+* divoo: a Divoom pixel digital frame
 
-Instead of hue.invokeAction('dim'), we could write hue.dim().
+## Properties
+
+Instead of
+
+````hue.readProperty('colour')````
+
+we could write
+
+````hue.colour````
+
+Instead of
+
+````hue.writeProperty('colour', '0xff0000')````
+
+we could write
+
+````
+hue.colour = 0xff0000
+````
+
+## Actions
+
+Instead of
+
+````hue.invokeAction('dim')````
+
+we could write
+
+````
+hue.dim()
+````
 
 ## Events
 
-streamdeck.onEvent('buttonDown', ['true', 'false','false','false','false','false']) { displayText('foo') }
+Instead of
 
-xiaomiThermeter.onEvent(?temperature) { displayText(?temperature) }
+````
+xiaomi.subscribe('update', function(?temp, ?hum) { divoo.print("values update") })
+
+xiaomi.subscribe('update', function(?temp, ?hum) { divoo.print(`values update: ${temp} ${hum}`) })
+````
+
+we could write
+
+````
+@@@
+````
