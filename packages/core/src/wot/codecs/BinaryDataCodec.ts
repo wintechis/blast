@@ -114,7 +114,6 @@ export class BinaryDataStreamCodec implements ContentCodec {
       const execFunction = new Function('buf', body);
       buf = execFunction(buf);
     }
-
     return buf;
   }
 }
