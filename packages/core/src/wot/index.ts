@@ -36,6 +36,13 @@ const getWot = async function (
   return wot;
 };
 
+export const consumeThingDescription = async function (
+  td: WoT.ThingDescription
+): Promise<WoT.ConsumedThing> {
+  const wotServient = await getWot();
+  return wotServient.consume(td);
+};
+
 export const createThing = async function (
   td: WoT.ThingDescription,
   id: string
