@@ -558,8 +558,8 @@ export const addDevice = function (deviceName, deviceId, type) {
     // Object to store property names and allowed ops
     const propertiesObj = {};
 
-    // List of generated Block names
-    const generatedBlockNames = [];
+    //
+    const implementedThingsBlockList = [];
 
     // Generate Thing Block
     if (typeof td.description === 'undefined') {
@@ -582,11 +582,21 @@ export const addDevice = function (deviceName, deviceId, type) {
     for (const [propertyName, operations] of Object.entries(propertiesObj)) {
       for (const op of operations) {
         if (op === 'readproperty') {
-          generatedBlockNames.push(
-            `${deviceName}_readPropertyBlock_${propertyName}`
-          );
           generateReadPropertyBlock(propertyName, deviceName);
           generateReadPropertyCode(propertyName, deviceName);
+          // Add to implementedThingsBlockList
+          implementedThingsBlockList.push({
+            type: `${deviceName}_readPropertyBlock_${propertyName}`,
+            category: 'Properties',
+          });
+        } else if (op === 'writeproperty') {
+          generateWritePropertyBlock(propertyName, deviceName);
+          generateWritePropertyCode(propertyName, deviceName);
+          // Add to implementedThingsBlockList
+          implementedThingsBlockList.push({
+            type: `${deviceName}_writePropertyBlock_${propertyName}`,
+            category: 'Properties',
+          });
         }
       }
     }
@@ -596,12 +606,7 @@ export const addDevice = function (deviceName, deviceId, type) {
       id: deviceName,
       name: deviceName,
       type: type,
-      blocks: [
-        {
-          type: generatedBlockNames[0],
-          category: 'Properties',
-        },
-      ],
+      blocks: implementedThingsBlockList,
     });
 
     for (const t of implementedThings) {
@@ -690,6 +695,8 @@ function generateReadPropertyBlock(propertyName, deviceName) {
         .appendField(`read property ${propertyName} of ${deviceName}`, 'label');
       this.setOutput(true, null);
       this.setColour(230);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
       this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
       this.setHelpUrl('');
     },
@@ -700,7 +707,6 @@ function generateReadPropertyCode(propertyName, deviceName) {
   JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
     block
   ) {
-    console.log('BLOCK:', block);
     const devcieID =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
     let blockId = "''"; //block id of thing block
@@ -709,10 +715,56 @@ function generateReadPropertyCode(propertyName, deviceName) {
     }
     const blockTHING = getWorkspace().getBlockById(blockId);
     const thingTHING = blockTHING.thing;
-    console.log(thingTHING);
-    console.log(thingTHING.readproperty('stat'));
-    const code = `await ${thingTHING}.readproperty(${propertyName});\n`;
-    //const code = `await ${thing}.readproperty(${propertyName});\n`;
+    const code = `await (await ${thingTHING}.readProperty(${propertyName})).value();\n`;
+
+    return code;
+  };
+}
+
+function generateWritePropertyBlock(propertyName, deviceName) {
+  Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
+    init: function () {
+      this.appendValueInput('value')
+        .setCheck()
+        .appendField('write value', 'label');
+      this.appendValueInput('thing')
+        .setCheck('Thing')
+        .appendField(`to "${propertyName}" property of ${deviceName}`, 'label');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(255);
+      this.setTooltip(`Write the ${propertyName} property of a ${deviceName}`);
+      this.setHelpUrl('');
+    },
+  };
+}
+
+function generateWritePropertyCode(propertyName, deviceName) {
+  console.log('PROPNAME:', propertyName);
+  JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
+    block
+  ) {
+    const functionWriteGenericProperty = JavaScript.provideFunction_(
+      'writeGenericProperty',
+      `
+      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceID, propertyName, value) {
+        // make sure a device is connected.
+
+        const block = getWorkspace().getBlockById(blockId);
+        const thing = block.thing;
+        await thing.writeProperty(propertyName, value);
+    }`
+    );
+    const value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+    const devcieID =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+    let blockId = "''"; //block id of thing block
+    if (block.getInputTargetBlock('thing')) {
+      blockId = `${block.getInputTargetBlock('thing').id}`; // WHY? Block is only found this way instead of  blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+    }
+    const code = `await ${functionWriteGenericProperty}("${blockId}", ${devcieID}, "${propertyName}", ${value});\n`;
+
     return code;
   };
 }

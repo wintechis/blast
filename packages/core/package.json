@@ -53,6 +53,7 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "@node-wot/binding-http": "^0.8.2",
     "@node-wot/core": "0.8.2",
     "@node-wot/td-tools": "0.8.2",
     "@types/uritemplate": "^0.3.4",

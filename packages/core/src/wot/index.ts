@@ -1,6 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
 import {Form} from '@node-wot/td-tools';
+import {HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
@@ -12,6 +13,9 @@ let wot: typeof WoT;
 declare const Wot: any;
 
 const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
+  const httpConfig = {
+    allowSelfSigned: true, // client configuration
+  };
   if (!servient) {
     try {
       servient = new Servient();
@@ -19,6 +23,7 @@ const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
       servient = new Wot.Core.Servient();
     }
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
+    servient.addClientFactory(new HttpsClientFactory(httpConfig));
   }
   return servient;
 };
