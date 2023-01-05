@@ -12,6 +12,8 @@ import {
   removeCategory,
 } from './toolbox.js';
 import {getWorkspace, throwError} from './interpreter.js';
+const {Blocks, dialog, FieldTextInput} = Blockly;
+const {JavaScript} = Blockly;
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -37,6 +39,16 @@ const audioDevices = new Map();
  * Maps video device labels to video device ids.
  */
 const videoDevices = new Map();
+
+/**
+ * Maps consumed web device labels to video device ids.
+ */
+const consumedWebDevices = new Map();
+
+/**
+ * Map of consumed devices.
+ */
+const consumedThingInstances = new Map();
 
 /**
  * Lists all things implemented by BLAST.
@@ -142,6 +154,15 @@ let videoSelectButtonHandler = null;
  */
 export const setVideoSelectButtonHandler = function (handler) {
   videoSelectButtonHandler = handler;
+};
+
+let consumeThingButtonHandler = null;
+/**
+ * Sets the 'select video input' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setConsumeThingButtonHandler = function (handler) {
+  consumeThingButtonHandler = handler;
 };
 
 let getRssiBlockadded = false;
@@ -274,7 +295,28 @@ export const thingsFlyoutCategory = function (workspace) {
 
   // Add connected blocks for connected video devices
   if (connectedThingBlocks.video.length > 0) {
+    console.log(...connectedThingBlocks.video);
     xmlList.push(...connectedThingBlocks.video);
+  }
+
+  // Create Consume Thing Label
+  const consumeThingLabel = document.createElement('label');
+  consumeThingLabel.setAttribute('text', 'Consume Thing Description');
+  xmlList.push(consumeThingLabel);
+
+  // Create Consume Thing button
+  const consumeThingButton = document.createElement('button');
+  consumeThingButton.setAttribute('text', 'consume Thing');
+  consumeThingButton.setAttribute('callbackKey', 'CONSUME_THING');
+  workspace.registerButtonCallback('CONSUME_THING', _button => {
+    consumeThingButtonHandler();
+  });
+  xmlList.push(consumeThingButton);
+
+  // Add connected blocks for connected consumed devices
+  if (connectedThingBlocks.consumedDevice.length > 0) {
+    console.log(...connectedThingBlocks.consumedDevice);
+    xmlList.push(...connectedThingBlocks.consumedDevice);
   }
 
   return xmlList;
@@ -285,10 +327,17 @@ export const thingsFlyoutCategory = function (workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocks = function () {
-  const xmlList = {bluetooth: [], hid: [], audio: [], video: []};
+  const xmlList = {
+    bluetooth: [],
+    hid: [],
+    audio: [],
+    video: [],
+    consumedDevice: [],
+  };
   // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
+      console.log(thing.type);
       if (thing.type === 'bluetooth' && !getRssiBlockadded) {
         addBlock('bluetoothGeneric_get_signal_strength_wb', 'Properties');
         getRssiBlockadded = true;
@@ -309,6 +358,8 @@ const flyoutCategoryBlocks = function () {
         idField.textContent = webHidNames.get(key);
       } else if (thing.type === 'audio') {
         idField.textContent = audioDevices.get(key);
+      } else if (thing.type === 'consumedDevice') {
+        idField.textContent = consumedWebDevices.get(key);
       }
       block.appendChild(idField);
       block.setAttribute('gap', 8);
@@ -499,10 +550,73 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
  */
 export const addDevice = function (deviceName, deviceId, type) {
   let thing;
-  for (const t of implementedThings) {
-    if (t.id === type) {
-      thing = t;
-      break;
+  if (type === 'consumedDevice') {
+    const td = deviceId; // I save the td in this varaible!
+    deviceId = 'ThisIsADeviceID'; // TODO: Generate random device ID
+    // TODO: Check if ID is already used
+
+    // Object to store property names and allowed ops
+    const propertiesObj = {};
+
+    // List of generated Block names
+    const generatedBlockNames = [];
+
+    // Generate Thing Block
+    if (typeof td.description === 'undefined') {
+      generateThingBlock(deviceName, deviceName, td);
+    } else {
+      generateThingBlock(deviceName, td.description, td);
+    }
+    generateThingCode(deviceName);
+
+    // get property names
+    for (const [key, val] of Object.entries(td.properties)) {
+      propertiesObj[key] = [];
+      // get allowed operations
+      for (const element of td.properties[key].forms) {
+        propertiesObj[key].push(element.op);
+      }
+    }
+
+    // Generate Blocks
+    for (const [propertyName, operations] of Object.entries(propertiesObj)) {
+      for (const op of operations) {
+        if (op === 'readproperty') {
+          generatedBlockNames.push(
+            `${deviceName}_readPropertyBlock_${propertyName}`
+          );
+          generateReadPropertyBlock(propertyName, deviceName);
+          generateReadPropertyCode(propertyName, deviceName);
+        }
+      }
+    }
+
+    // Push thing and all blocks
+    implementedThings.push({
+      id: deviceName,
+      name: deviceName,
+      type: type,
+      blocks: [
+        {
+          type: generatedBlockNames[0],
+          category: 'Properties',
+        },
+      ],
+    });
+
+    for (const t of implementedThings) {
+      if (t.id === deviceName) {
+        thing = t;
+        break;
+      }
+    }
+  } else {
+    // for video and audio devices
+    for (const t of implementedThings) {
+      if (t.id === type) {
+        thing = t;
+        break;
+      }
     }
   }
   if (typeof thing === 'undefined') {
@@ -521,6 +635,98 @@ export const addDevice = function (deviceName, deviceId, type) {
     audioDevices.set(deviceName, deviceId);
   } else if (type === 'videoInput') {
     videoDevices.set(deviceName, deviceId);
+  } else if (type === 'consumedDevice') {
+    consumedWebDevices.set(deviceName, deviceId);
   }
   reloadToolbox();
+};
+
+function generateThingBlock(deviceName, deviceDescription, td) {
+  Blocks[`things_${deviceName}`] = {
+    /**
+     * Block representing a consumed device.
+     * @this {Blockly.Block}
+     */
+    init: function () {
+      this.appendDummyInput('name')
+        .appendField(deviceName, 'label')
+        .appendField(new FieldTextInput('Error getting name'), 'name');
+      this.appendDummyInput('id')
+        .appendField(new FieldTextInput('Error getting id'), 'id')
+        .setVisible(false);
+      this.setOutput(true, 'Thing');
+      this.setColour(60);
+      this.setTooltip(deviceDescription);
+      this.setHelpUrl();
+      this.getField('name').setEnabled(false);
+      this.firstTime = true;
+      this.thing = null;
+    },
+    onchange: function () {
+      // on creating this block initialize new instance of BleRgbController
+      if (!this.isInFlyout && this.firstTime && this.rendered) {
+        const deviceID = this.getFieldValue('id');
+        this.firstTime = false;
+        getConsumedThing(deviceID, td).then(thing => {
+          this.thing = thing;
+        });
+      }
+    },
+  };
+}
+
+function generateThingCode(deviceName) {
+  JavaScript[`things_${deviceName}`] = function (block) {
+    const id = JavaScript.quote_(block.getFieldValue('id'));
+    return [id, JavaScript.ORDER_NONE];
+  };
+}
+
+function generateReadPropertyBlock(propertyName, deviceName) {
+  Blocks[`${deviceName}_readPropertyBlock_${propertyName}`] = {
+    init: function () {
+      this.appendValueInput('thing')
+        .setCheck('Thing')
+        .appendField(`read property ${propertyName} of ${deviceName}`, 'label');
+      this.setOutput(true, null);
+      this.setColour(230);
+      this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
+      this.setHelpUrl('');
+    },
+  };
+}
+
+function generateReadPropertyCode(propertyName, deviceName) {
+  JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
+    block
+  ) {
+    console.log('BLOCK:', block);
+    const devcieID =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+    let blockId = "''"; //block id of thing block
+    if (block.getInputTargetBlock('thing')) {
+      blockId = `${block.getInputTargetBlock('thing').id}`; // WHY? Block is only found this way instead of  blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+    }
+    const blockTHING = getWorkspace().getBlockById(blockId);
+    const thingTHING = blockTHING.thing;
+    console.log(thingTHING);
+    console.log(thingTHING.readproperty('stat'));
+    const code = `await ${thingTHING}.readproperty(${propertyName});\n`;
+    //const code = `await ${thing}.readproperty(${propertyName});\n`;
+    return code;
+  };
+}
+
+/**
+ * Keeps singleton instances of a consumedThing instantiated by BLAST.
+ * @param {string} id The id of the consumedThing.
+ */
+const getConsumedThing = async function (id, td) {
+  if (consumedThingInstances.has(id)) {
+    return consumedThingInstances.get(id);
+  } else {
+    const thing = await consumeThingDescription(td);
+    consumedThingInstances.set(id, thing);
+    return thing;
+  }
 };
