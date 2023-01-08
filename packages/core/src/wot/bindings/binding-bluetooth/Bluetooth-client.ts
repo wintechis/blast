@@ -46,7 +46,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     const value = await characteristic.readValue();
 
     let buff;
-    if(form['bdo:signed']) {
+    if (form['bdo:signed']) {
       buff = new Int8Array(value.buffer);
     } else {
       buff = new Uint8Array(value.buffer);
