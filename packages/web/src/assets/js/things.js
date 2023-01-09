@@ -580,7 +580,8 @@ export const addDevice = function (deviceName, deviceId, type) {
     }
 
     // Generate Blocks
-    for (const [propertyName, operations] of Object.entries(propertiesObj)) {
+    for (const [propertyName, operations2d] of Object.entries(propertiesObj)) {
+      const operations = operations2d.flat();
       for (const op of operations) {
         if (op === 'readproperty') {
           generateReadPropertyBlock(propertyName, deviceName);
@@ -612,11 +613,12 @@ export const addDevice = function (deviceName, deviceId, type) {
     }
 
     // Generate Blocks
-    for (const [actionName, operations] of Object.entries(actionsObj)) {
+    for (const [actionName, operations2d] of Object.entries(actionsObj)) {
+      const operations = operations2d.flat();
       for (const op of operations) {
         if (op === 'invokeaction') {
-          generateInvokeActionBlock(actionName, deviceName);
-          generateInvokeActionCode(actionName, deviceName);
+          generateInvokeActionBlock(actionName, deviceName, type);
+          generateInvokeActionCode(actionName, deviceName, type);
           // Add to implementedThingsBlockList
           implementedThingsBlockList.push({
             type: `${deviceName}_invokeActionBlock_${actionName}`,
@@ -625,7 +627,7 @@ export const addDevice = function (deviceName, deviceId, type) {
         }
       }
     }
-
+    console.log(implementedThingsBlockList);
     // Push thing and all blocks
     implementedThings.push({
       id: deviceName,
@@ -720,8 +722,6 @@ function generateReadPropertyBlock(propertyName, deviceName) {
         .appendField(`read property ${propertyName} of ${deviceName}`, 'label');
       this.setOutput(true, null);
       this.setColour(230);
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
       this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
       this.setHelpUrl('');
     },
@@ -773,8 +773,6 @@ function generateWritePropertyCode(propertyName, deviceName) {
       'writeGenericProperty',
       `
       async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceID, propertyName, value) {
-        // make sure a device is connected.
-
         const block = getWorkspace().getBlockById(blockId);
         const thing = block.thing;
         await thing.writeProperty(propertyName, value);
@@ -793,6 +791,7 @@ function generateWritePropertyCode(propertyName, deviceName) {
   };
 }
 
+// TODO: Handle Input and Output
 function generateInvokeActionBlock(actionName, deviceName) {
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
