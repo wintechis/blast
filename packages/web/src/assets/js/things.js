@@ -557,6 +557,7 @@ export const addDevice = function (deviceName, deviceId, type) {
 
     // Object to store property names and allowed ops
     const propertiesObj = {};
+    const actionsObj = {};
 
     //
     const implementedThingsBlockList = [];
@@ -596,6 +597,30 @@ export const addDevice = function (deviceName, deviceId, type) {
           implementedThingsBlockList.push({
             type: `${deviceName}_writePropertyBlock_${propertyName}`,
             category: 'Properties',
+          });
+        }
+      }
+    }
+
+    // get action names
+    for (const [key, val] of Object.entries(td.actions)) {
+      actionsObj[key] = [];
+      // get allowed operations
+      for (const element of td.actions[key].forms) {
+        actionsObj[key].push(element.op);
+      }
+    }
+
+    // Generate Blocks
+    for (const [actionName, operations] of Object.entries(actionsObj)) {
+      for (const op of operations) {
+        if (op === 'invokeaction') {
+          generateInvokeActionBlock(actionName, deviceName);
+          generateInvokeActionCode(actionName, deviceName);
+          // Add to implementedThingsBlockList
+          implementedThingsBlockList.push({
+            type: `${deviceName}_invokeActionBlock_${actionName}`,
+            category: 'Actions',
           });
         }
       }
@@ -741,7 +766,6 @@ function generateWritePropertyBlock(propertyName, deviceName) {
 }
 
 function generateWritePropertyCode(propertyName, deviceName) {
-  console.log('PROPNAME:', propertyName);
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
     block
   ) {
@@ -764,6 +788,50 @@ function generateWritePropertyCode(propertyName, deviceName) {
       blockId = `${block.getInputTargetBlock('thing').id}`; // WHY? Block is only found this way instead of  blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
     }
     const code = `await ${functionWriteGenericProperty}("${blockId}", ${devcieID}, "${propertyName}", ${value});\n`;
+
+    return code;
+  };
+}
+
+function generateInvokeActionBlock(actionName, deviceName) {
+  Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
+    init: function () {
+      this.appendValueInput('thing')
+        .setCheck('Thing')
+        .appendField(`invoke "${actionName}" action of ${deviceName}`, 'label');
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(255);
+      this.setTooltip(`Invoke the ${actionName} action of a ${deviceName}`);
+      this.setHelpUrl('');
+    },
+  };
+}
+
+function generateInvokeActionCode(actionName, deviceName) {
+  JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
+    block
+  ) {
+    const functionInvokeGenericAction = JavaScript.provideFunction_(
+      'invokeGenericAction',
+      `
+      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceID, actionName, value) {
+        // make sure a device is connected.
+
+        const block = getWorkspace().getBlockById(blockId);
+        const thing = block.thing;
+        await thing.invokeAction(actionName);
+    }`
+    );
+    //const value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+    const devcieID =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+    let blockId = "''"; //block id of thing block
+    if (block.getInputTargetBlock('thing')) {
+      blockId = `${block.getInputTargetBlock('thing').id}`; // WHY? Block is only found this way instead of  blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+    }
+    const code = `await ${functionInvokeGenericAction}("${blockId}", ${devcieID}, "${actionName}");\n`;
 
     return code;
   };
