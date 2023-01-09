@@ -732,17 +732,27 @@ function generateReadPropertyCode(propertyName, deviceName) {
   JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
     block
   ) {
-    const devcieID =
+    const deviceId =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
     let blockId = "''"; //block id of thing block
     if (block.getInputTargetBlock('thing')) {
-      blockId = `${block.getInputTargetBlock('thing').id}`; // WHY? Block is only found this way instead of  blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
     }
-    const blockTHING = getWorkspace().getBlockById(blockId);
-    const thingTHING = blockTHING.thing;
-    const code = `await (await ${thingTHING}.readProperty(${propertyName})).value();\n`;
 
-    return code;
+    const functionReadGenericProperty = JavaScript.provideFunction_(
+      'readGenericProperty',
+      `
+      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, propertyName) {
+        const block = getWorkspace().getBlockById(blockId);
+        const thing = block.thing;
+        return await (await thing.readProperty(propertyName)).value();
+      }`
+    );
+
+    const code = `await ${functionReadGenericProperty}(${blockId}, ${deviceId}, ${JavaScript.quote_(
+      propertyName
+    )})`;
+    return [code, JavaScript.ORDER_NONE];
   };
 }
 
