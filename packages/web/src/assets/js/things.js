@@ -1068,8 +1068,6 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
           .appendField(` of ${deviceName} `, 'label');
         this.setInputsInline(true);
         this.setOutput(true, null);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
         this.setColour(255);
         this.setTooltip(
           `Incoke ${actionName} action of a ${deviceName} with a given value`
@@ -1175,7 +1173,7 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
       return [code, JavaScript.ORDER_NONE];
     };
   }
-  // Case input, output // TODO: is broken -> value
+  // Case input, output
   if (typeof input !== 'undefined' && typeof output !== 'undefined') {
     JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
       block
@@ -1186,13 +1184,11 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
       if (block.getInputTargetBlock('thing')) {
         blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
       }
-
       const value = JavaScript.valueToCode(
         block,
         'value',
         JavaScript.ORDER_NONE
       );
-
       const functionInvokeGenericAction = JavaScript.provideFunction_(
         'invokeGenericAction',
         `
