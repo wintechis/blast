@@ -11,8 +11,13 @@ import {
   removeBlock,
   removeCategory,
 } from './toolbox.js';
-import {getWorkspace, throwError} from './interpreter.js';
-const {Blocks, FieldTextInput} = Blockly;
+import {
+  getWorkspace,
+  eventsInWorkspace,
+  throwError,
+  addCleanUpFunction,
+} from './interpreter.js';
+const {Blocks, FieldTextInput, Events, Names} = Blockly;
 const {JavaScript} = Blockly;
 
 /**
@@ -543,6 +548,27 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
   promptAndCheckWithAlert(deviceName, uid);
 };
 
+export const handleAddConsumedThing = async function (uri) {
+  // TODO: Check if URI is valid
+  let res;
+  try {
+    res = await fetch(uri);
+  } catch (error) {
+    throwError(error);
+  }
+  // TODO: Error Handling
+  if (res.ok) {
+    const td = await res.json();
+    addDevice(
+      td.title,
+      td, // Pass TD -> TODO: Find other solution
+      'consumedDevice'
+    );
+  } else {
+    throwError('Response not valid');
+  }
+};
+
 /**
  * Adds a device to BLAST.
  * @param {string} deviceName Name of the device.
@@ -552,8 +578,11 @@ export const addDevice = function (deviceName, deviceId, type) {
   let thing;
   if (type === 'consumedDevice') {
     const td = deviceId; // I save the td in this varaible!
-    deviceId = 'ThisIsADeviceID'; // TODO: Generate random device ID
-    // TODO: Check if ID is already used
+    // generate a unique id for the new device
+    const uid =
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
+    deviceId = uid;
+    // TODO: Check if ID is already used ??
 
     // Object to store property names and allowed ops
     const propertiesObj = {};
@@ -563,6 +592,10 @@ export const addDevice = function (deviceName, deviceId, type) {
     const inputObj = {};
     // Store all outputs of actions
     const outputObj = {};
+    // Object to store event names and allowed ops
+    const eventObj = {};
+    // Store "data" of events
+    const dataObj = {};
 
     // List of all created Blocks
     const implementedThingsBlockList = [];
@@ -576,7 +609,7 @@ export const addDevice = function (deviceName, deviceId, type) {
     generateThingCode(deviceName);
 
     // get property names
-    for (const [propertyName, _] of Object.entries(td.properties)) {
+    for (const [propertyName, _] of Object.entries(td.properties ?? {})) {
       propertiesObj[propertyName] = [];
       // get allowed operations
       for (const element of td.properties[propertyName].forms) {
@@ -585,7 +618,9 @@ export const addDevice = function (deviceName, deviceId, type) {
     }
 
     // Generate Property Blocks
-    for (const [propertyName, operations2d] of Object.entries(propertiesObj)) {
+    for (const [propertyName, operations2d] of Object.entries(
+      propertiesObj ?? {}
+    )) {
       const operations = operations2d.flat(); // flatten if ops are a list in TD
       for (const op of operations) {
         if (op === 'readproperty') {
@@ -611,7 +646,7 @@ export const addDevice = function (deviceName, deviceId, type) {
     }
 
     // get action names
-    for (const [actionName, _] of Object.entries(td.actions)) {
+    for (const [actionName, _] of Object.entries(td.actions ?? {})) {
       actionsObj[actionName] = [];
       // Get input and output filed
       inputObj[actionName] = td.actions[actionName].input;
@@ -623,8 +658,8 @@ export const addDevice = function (deviceName, deviceId, type) {
       }
     }
 
-    // Generate Blocks
-    for (const [actionName, operations2d] of Object.entries(actionsObj)) {
+    // Generate Action Blocks
+    for (const [actionName, operations2d] of Object.entries(actionsObj ?? {})) {
       const operations = operations2d.flat();
       for (const op of operations) {
         if (op === 'invokeaction') {
@@ -645,6 +680,38 @@ export const addDevice = function (deviceName, deviceId, type) {
           implementedThingsBlockList.push({
             type: `${deviceName}_invokeActionBlock_${actionName}`,
             category: 'Actions',
+          });
+        }
+      }
+    }
+
+    for (const [eventName, _] of Object.entries(td.events ?? {})) {
+      eventObj[eventName] = [];
+      // Get data
+      dataObj[eventName] = td.events[eventName].data;
+
+      // get allowed operations
+      for (const element of td.events[eventName].forms) {
+        eventObj[eventName].push(element.op);
+      }
+    }
+
+    // Generate Event Blocks
+    for (const [eventName, operations2d] of Object.entries(eventObj ?? {})) {
+      const operations = operations2d.flat();
+      for (const op of operations) {
+        if (op === 'subscribeevent') {
+          generateSubscribeEventBlock(
+            eventName,
+            deviceName,
+            dataObj[eventName]
+          );
+          generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
+
+          // Add to implementedThingsBlockList
+          implementedThingsBlockList.push({
+            type: `${deviceName}_subscribeEventBlock_${eventName}`,
+            category: 'Events',
           });
         }
       }
@@ -676,7 +743,9 @@ export const addDevice = function (deviceName, deviceId, type) {
   if (typeof thing === 'undefined') {
     return;
   }
+
   connectedThings.set(deviceName, thing);
+
   // add the devices blocks to the toolbox
   for (const block of thing.blocks) {
     if (block.XML) {
@@ -696,37 +765,106 @@ export const addDevice = function (deviceName, deviceId, type) {
 };
 
 function generateThingBlock(deviceName, deviceDescription, td) {
-  Blocks[`things_${deviceName}`] = {
-    /**
-     * Block representing a consumed device.
-     * @this {Blockly.Block}
-     */
-    init: function () {
-      this.appendDummyInput('name')
-        .appendField(deviceName, 'label')
-        .appendField(new FieldTextInput('Error getting name'), 'name');
-      this.appendDummyInput('id')
-        .appendField(new FieldTextInput('Error getting id'), 'id')
-        .setVisible(false);
-      this.setOutput(true, 'Thing');
-      this.setColour(60);
-      this.setTooltip(deviceDescription);
-      this.setHelpUrl();
-      this.getField('name').setEnabled(false);
-      this.firstTime = true;
-      this.thing = null;
-    },
-    onchange: function () {
-      // on creating this block initialize new instance of consumedThing
-      if (!this.isInFlyout && this.firstTime && this.rendered) {
-        const deviceID = this.getFieldValue('id');
-        this.firstTime = false;
-        getConsumedThing(deviceID, td).then(thing => {
-          this.thing = thing;
-        });
-      }
-    },
-  };
+  if (td.events !== undefined) {
+    Blocks[`things_${deviceName}`] = {
+      /**
+       * Block representing a consumed device.
+       * @this {Blockly.Block}
+       */
+      init: function () {
+        this.appendDummyInput('name')
+          .appendField(deviceName, 'label')
+          .appendField(new FieldTextInput('Error getting name'), 'name');
+        this.appendDummyInput('id')
+          .appendField(new FieldTextInput('Error getting id'), 'id')
+          .setVisible(false);
+        this.setOutput(true, 'Thing');
+        this.setColour(60);
+        this.setTooltip(deviceDescription);
+        this.setHelpUrl();
+        this.getField('name').setEnabled(false);
+        this.firstTime = true;
+        this.thing = null;
+      },
+      /**
+       * Add this block's id to the events array.
+       * @return {null}.
+       */
+      addEvent: async function () {
+        eventsInWorkspace.push(this.id);
+        // remove event if block is deleted
+        this.changeListener = getWorkspace().addChangeListener(event =>
+          this.onDispose(event)
+        );
+      },
+      onchange: function () {
+        // on creating this block initialize new instance of consumedThing
+        if (!this.isInFlyout && this.firstTime && this.rendered) {
+          const deviceID = this.getFieldValue('id');
+          this.firstTime = false;
+          getConsumedThing(deviceID, td).then(thing => {
+            this.thing = thing;
+          });
+          this.addEvent();
+        }
+      },
+      onDispose: function (event) {
+        if (event.type === Events.BLOCK_DELETE) {
+          if (
+            event.type === Events.BLOCK_DELETE &&
+            event.ids.indexOf(this.id) !== -1
+          ) {
+            // Block is being deleted
+            this.removeFromEvents();
+            getWorkspace().removeChangeListener(this.changeListener);
+          }
+        }
+      },
+      /**
+       * Remove this block's id from the events array.
+       * @return {null}.
+       */
+      removeFromEvents: function () {
+        // remove this block from the events array.
+        const index = eventsInWorkspace.indexOf(this.id);
+        if (index !== -1) {
+          eventsInWorkspace.splice(index, 1);
+        }
+      },
+    };
+  } else {
+    Blocks[`things_${deviceName}`] = {
+      /**
+       * Block representing a consumed device.
+       * @this {Blockly.Block}
+       */
+      init: function () {
+        this.appendDummyInput('name')
+          .appendField(deviceName, 'label')
+          .appendField(new FieldTextInput('Error getting name'), 'name');
+        this.appendDummyInput('id')
+          .appendField(new FieldTextInput('Error getting id'), 'id')
+          .setVisible(false);
+        this.setOutput(true, 'Thing');
+        this.setColour(60);
+        this.setTooltip(deviceDescription);
+        this.setHelpUrl();
+        this.getField('name').setEnabled(false);
+        this.firstTime = true;
+        this.thing = null;
+      },
+      onchange: function () {
+        // on creating this block initialize new instance of consumedThing
+        if (!this.isInFlyout && this.firstTime && this.rendered) {
+          const deviceID = this.getFieldValue('id');
+          this.firstTime = false;
+          getConsumedThing(deviceID, td).then(thing => {
+            this.thing = thing;
+          });
+        }
+      },
+    };
+  }
 }
 
 function generateThingCode(deviceName) {
@@ -831,7 +969,6 @@ function generateWritePropertyCode(propertyName, deviceName) {
   };
 }
 
-// TODO: Handle Input and Output
 function generateInvokeActionBlock(actionName, deviceName, input, output) {
   let inputValueType;
   if (typeof input !== 'undefined') {
@@ -946,8 +1083,6 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
 function generateInvokeActionCode(actionName, deviceName, input, output) {
   // Case no input no output
   if (typeof input === 'undefined' && typeof output === 'undefined') {
-    console.log('no input, no output');
-
     JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
       block
     ) {
@@ -978,8 +1113,6 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
   }
   // Case input, no output
   if (typeof input !== 'undefined' && typeof output === 'undefined') {
-    console.log('input, no output');
-
     JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
       block
     ) {
@@ -1016,8 +1149,6 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
   }
   // Case no input, output
   if (typeof input === 'undefined' && typeof output !== 'undefined') {
-    console.log('no input, output');
-
     JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
       block
     ) {
@@ -1046,8 +1177,6 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
   }
   // Case input, output // TODO: is broken -> value
   if (typeof input !== 'undefined' && typeof output !== 'undefined') {
-    console.log('input, output');
-
     JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
       block
     ) {
@@ -1082,51 +1211,145 @@ function generateInvokeActionCode(actionName, deviceName, input, output) {
   }
 }
 
-
 function generateSubscribeEventBlock(eventName, deviceName) {
   Blocks[`${deviceName}_subscribeEventBlock_${eventName}`] = {
+    /**
+     * Block for reading a property of a Xiaomi Mijia thermometer.
+     * @this {Blockly.Block}
+     * @return {null}.
+     */
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(
-          `read property "${propertyName}" of ${deviceName}`,
-          'label'
-        );
-      this.setOutput(true, null);
-      this.setColour(230);
-      this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
+        .appendField(`on ${eventName}`)
+        .appendField(`events of ${deviceName}`);
+      this.appendDummyInput()
+        .appendField('uses variable')
+        .appendField(new FieldTextInput('eventVar'), 'eventVar');
+      this.appendStatementInput('statements').appendField('do');
+      this.setInputsInline(false);
+      this.setColour(180);
+      this.setTooltip(
+        "Handles 'characteristicvaluechanged' events of a Xiaomi Thermometer."
+      );
       this.setHelpUrl('');
+      this.changeListener = null;
+      this.getField('eventVar').setEnabled(false);
+    },
+    /**
+     * Add this block's id to the events array.
+     * @return {null}.
+     */
+    addEvent: async function () {
+      eventsInWorkspace.push(this.id);
+      // remove event if block is deleted
+      this.changeListener = getWorkspace().addChangeListener(event =>
+        this.onDispose(event)
+      );
+    },
+    onchange: function () {
+      if (!this.isInFlyout && !this.requested && this.rendered) {
+        // Block is newly created
+        this.requested = true;
+        this.addEvent();
+        this.createVars();
+      }
+    },
+    onDispose: function (event) {
+      if (event.type === Events.BLOCK_DELETE) {
+        if (
+          event.type === Events.BLOCK_DELETE &&
+          event.ids.indexOf(this.id) !== -1
+        ) {
+          // Block is being deleted
+          this.removeFromEvents();
+          getWorkspace().removeChangeListener(this.changeListener);
+        }
+      }
+    },
+    /**
+     * Remove this block's id from the events array.
+     * @return {null}.
+     */
+    removeFromEvents: function () {
+      // remove this block from the events array.
+      const index = eventsInWorkspace.indexOf(this.id);
+      if (index !== -1) {
+        eventsInWorkspace.splice(index, 1);
+      }
+    },
+    createVars: function () {
+      const ws = getWorkspace();
+      const varNames = ['eventVar'];
+      for (const varName of varNames) {
+        // create legal variable name
+        let legalName = JavaScript.nameDB_.getName(
+          varName,
+          Names.NameType.VARIABLE
+        );
+        for (let i = 1; ws.getVariable(legalName) !== null; i++) {
+          // if name already exists, append a number
+          legalName = JavaScript.nameDB_.getName(
+            legalName + '-' + i,
+            Names.NameType.VARIABLE
+          );
+        }
+        // create variable
+        legalName = ws.createVariable(legalName).name;
+        // set field value
+        this.getField(varName).setValue(legalName);
+      }
     },
   };
 }
 
-function generateSubscribeEventCode(propertyName, deviceName) {
-  JavaScript[`${deviceName}_subscribeEventBlock_${propertyName}`] = function (
+function generateSubscribeEventCode(eventName, deviceName) {
+  JavaScript[`${deviceName}_subscribeEventBlock_${eventName}`] = function (
     block
   ) {
-    const deviceId =
+    const thing =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-    let blockId = "''"; //block id of thing block
+    const statements = JavaScript.quote_(
+      JavaScript.statementToCode(block, 'statements')
+    );
+    let blockId = "''";
     if (block.getInputTargetBlock('thing')) {
       blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
     }
+    const ownId = JavaScript.quote_(block.id);
 
-    const functionReadGenericProperty = JavaScript.provideFunction_(
-      'readGenericProperty',
-      `
-      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, propertyName) {
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        return await (await thing.readProperty(propertyName)).value();
-      }`
-    );
+    const handler = `handleGenericEvent(${ownId}, ${blockId}, ${thing}, ${statements}, ${JavaScript.quote_(
+      eventName
+    )})\n`;
+    const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+    // Event handlers need to be executed first, so they're added to JavaScript.definitions
+    JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
-    const code = `await ${functionReadGenericProperty}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-      propertyName
-    )})`;
-    return [code, JavaScript.ORDER_NONE];
+    return '';
   };
 }
+
+globalThis['handleGenericEvent'] = async function (
+  ownId,
+  blockId,
+  id,
+  statements,
+  eventName
+) {
+  const ws = getWorkspace();
+  const self = ws.getBlockById(ownId);
+  const eventVariable = self.getFieldValue('eventVar');
+
+  const block = ws.getBlockById(blockId);
+  const thing = block.thing;
+
+  const handler = async function (data) {
+    globalThis[eventVariable] = await data.value();
+    eval(`(async () => {${statements}})();`);
+  };
+  const sub = await thing.subscribeEvent(eventName, handler);
+  addCleanUpFunction(async () => sub.stop());
+};
 
 /**
  * Keeps singleton instances of a consumedThing instantiated by BLAST.

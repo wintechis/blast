@@ -17,6 +17,7 @@ import TextField from '@mui/material/TextField';
 
 import {
   addDevice,
+  handleAddConsumedThing,
   connectWebHidDevice,
   implementedThings,
   setAudioSelectButtonHandler,
@@ -83,25 +84,13 @@ export default class ConnectDialog extends React.Component {
   async handleFetch() {
     this.setState({open: false});
     const uri = this.state.fetchUri;
-    // TODO: Check if URI is valid
+    handleAddConsumedThing(uri);
     this.setState({fetchUri: null});
-    // chrome://flags/#allow-insecure-localhost
-    // Allow Cors
-    const res = await fetch(uri);
-    // TODO: Error Handling
-    if (res.ok) {
-      const td = await res.json();
-      console.log(td);
-      addDevice(
-        td.title,
-        td, // Pass TD -> TODO: Find other solution
-        'consumedDevice'
-      );
-    }
   }
 
   // Save entered text in fetchUri state
   handleChange = function (e) {
+    console.log(isValidHttpUrl(e.target.value));
     this.setState({fetchUri: e.target.value});
   };
 
@@ -220,4 +209,14 @@ export default class ConnectDialog extends React.Component {
       );
     }
   }
+}
+
+function isValidHttpUrl(string) {
+  let url;
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+  return url.protocol === 'https:';
 }
