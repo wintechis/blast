@@ -6,7 +6,7 @@ export const mockEddystoneDevice = function (id = 'eddy') {
     'a3c87500-8ed3-4bdf-8a39-a01bebede295',
   ]);
   // web-bluetooth-mock doesnt implement device.id so we need to mock it
-  eddystoneDevice.id = 'eddy';
+  eddystoneDevice.id = id;
 
   // Add eddystone service
   const configService = eddystoneDevice.getServiceMock(

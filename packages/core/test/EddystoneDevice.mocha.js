@@ -18,6 +18,10 @@ describe('EddystoneDevice', async () => {
     sinon.stub(console, 'warn');
   });
 
+  after(async () => {
+    console.warn.restore();
+  });
+
   describe('Capabilities property', async () => {
     it('should be readable', async () => {
       let capabilities = await thing.readProperty('capabilities');
