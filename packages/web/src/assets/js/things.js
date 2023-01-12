@@ -765,6 +765,23 @@ export const addDevice = function (deviceName, deviceId, type) {
 };
 
 function generateThingBlock(deviceName, deviceDescription, td) {
+  // Get browser language tag
+  const lang = navigator.language || navigator.userLanguage;
+  const langTag = lang.split('-')[0];
+
+  // Generate description depending on available information
+  let description = '';
+  description += td.descriptions[langTag] ?? td.description;
+  if (td.version !== undefined) {
+    description += ` | version: ${td.version}`;
+  }
+  if (td.created !== undefined) {
+    description += ` | created on: ${td.created}`;
+  }
+  if (td.modified !== undefined) {
+    description += ` | modified on: ${td.modified}`;
+  }
+
   if (td.events !== undefined) {
     Blocks[`things_${deviceName}`] = {
       /**
@@ -773,15 +790,16 @@ function generateThingBlock(deviceName, deviceDescription, td) {
        */
       init: function () {
         this.appendDummyInput('name')
-          .appendField(deviceName, 'label')
+          // If device name is available in browser language use that instead
+          .appendField(td.titles[langTag] ?? td.title, 'label')
           .appendField(new FieldTextInput('Error getting name'), 'name');
         this.appendDummyInput('id')
           .appendField(new FieldTextInput('Error getting id'), 'id')
           .setVisible(false);
         this.setOutput(true, 'Thing');
         this.setColour(60);
-        this.setTooltip(deviceDescription);
-        this.setHelpUrl();
+        this.setTooltip(description);
+        this.setHelpUrl(td.support ?? '');
         this.getField('name').setEnabled(false);
         this.firstTime = true;
         this.thing = null;
@@ -1344,7 +1362,7 @@ globalThis['handleGenericEvent'] = async function (
     eval(`(async () => {${statements}})();`);
   };
   const sub = await thing.subscribeEvent(eventName, handler);
-  addCleanUpFunction(async () => sub.stop());
+  addCleanUpFunction(async () => sub.close());
 };
 
 /**
