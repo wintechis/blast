@@ -39,6 +39,8 @@
         "state": {
           "type": "integer",
           "bdo:bytelength": 1,
+          "minimum": 0,
+          "maximum": 1,
           "description": "The current power state"
         }
       },

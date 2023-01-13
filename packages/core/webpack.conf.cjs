@@ -5,7 +5,7 @@ const path = require('path');
 const {ProvidePlugin} = require('webpack');
 const {DefinePlugin} = require('webpack');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const PnpWebpackPlugin = require(`pnp-webpack-plugin`);
+const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 const nodeConfig = {
   entry: {
@@ -32,14 +32,10 @@ const nodeConfig = {
         './src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter.ts'
       ),
     },
-    plugins: [
-      PnpWebpackPlugin,
-    ],
+    plugins: [PnpWebpackPlugin],
   },
   resolveLoader: {
-    plugins: [
-      PnpWebpackPlugin.moduleLoader(module),
-    ],
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   module: {
     rules: [
@@ -103,14 +99,10 @@ const webConfig = {
     fallback: {
       fs: false,
     },
-    plugins: [
-      PnpWebpackPlugin,
-    ],
+    plugins: [PnpWebpackPlugin],
   },
   resolveLoader: {
-    plugins: [
-      PnpWebpackPlugin.moduleLoader(module),
-    ],
+    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   module: {
     rules: [

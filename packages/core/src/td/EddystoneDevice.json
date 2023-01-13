@@ -19,17 +19,20 @@
       "title": "Active Slot",
       "description": "The active slot of the Eddystone device",
       "type": "integer",
+      "bdo:bytelength": 1,
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:read"
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:write-without-response"
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -39,6 +42,7 @@
       "unit": "dBm",
       "type": "integer",
       "bdo:bytelength": 1,
+      "bdo:signed": true,
       "readOnly": false,
       "forms": [
         {
@@ -83,17 +87,20 @@
       "unit": "ms",
       "type": "integer",
       "bdo:byteOrder": "big",
+      "bdo:bytelength": 2,
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:read"
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:write-without-response"
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -118,12 +125,19 @@
       "unit": "",
       "type": "string",
       "format": "hex",
-      "readOnly": true,
+      "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:read"
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
+        },
+        {
+          "op": "writeproperty",
+          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -138,7 +152,8 @@
         {
           "op": "readproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:read"
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
@@ -148,17 +163,20 @@
       "unit": "dBm",
       "type": "integer",
       "bdo:bytelength": 1,
+      "bdo:signed": true,
       "readOnly": false,
       "forms": [
         {
           "op": "readproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:read"
+          "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
           "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
-          "sbo:methodName": "sbo:write-without-response"
+          "sbo:methodName": "sbo:write-without-response",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     }

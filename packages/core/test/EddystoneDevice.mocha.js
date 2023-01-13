@@ -1,181 +1,137 @@
 import chai from 'chai';
-import fs from 'fs';
-import path from 'path';
 import sinon from 'sinon';
+import {EddystoneHelpers} from '../dist/blast.node.js';
+import {EddystoneDevice as td} from '../dist/blast.tds.js';
+import {createThing} from '../dist/blast.web.js';
+import {getWebBluetoothMock} from './helpers/devices/webBluetooth/webBluetoothMock.js';
+import {mockEddystoneDevice} from './helpers/devices/webBluetooth/EddystoneDevice.js';
 
-const {assert} = chai;
+const {assert, expect} = chai;
 
 describe('EddystoneDevice', async () => {
-  let td;
+  let thing = null;
+
   before(async () => {
-    const tdPath = path.resolve('src/td/EddystoneDevice.json');
-    td = JSON.parse(fs.readFileSync(tdPath, 'utf8'));
+    getWebBluetoothMock();
+    mockEddystoneDevice();
+    thing = await createThing(td, 'eddy');
+    sinon.stub(console, 'warn');
   });
 
-  it('should equal the expected thing description', () => {
-    const expectedTd = {
-      '@context': ['https://www.w3.org/2019/wot/td/v1'],
-      '@type': ['Thing'],
-      id: 'blast:bluetooth:EddystoneDevice',
-      title: 'Eddystone Device',
-      description: 'A Bluetooth device implementing the Eddystone protocol',
-      securityDefinitions: {
-        nosec_sc: {
-          scheme: 'nosec',
-        },
-      },
-      security: 'nosec_sc',
-      properties: {
-        activeSlot: {
-          title: 'Active Slot',
-          description: 'The active slot of the Eddystone device',
-          type: 'integer',
-          readOnly: false,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:write-without-response',
-            },
-          ],
-        },
-        advertisedTxPower: {
-          title: 'Advertised Tx Power',
-          description: 'The advertised TX power of the iBeacon',
-          unit: 'dBm',
-          type: 'integer',
-          'bdo:bytelength': 1,
-          readOnly: false,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-              contentType: 'application/x.binary-data-stream',
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:write-without-response',
-              contentType: 'application/x.binary-data-stream',
-            },
-          ],
-        },
-        advertisedData: {
-          title: 'Advertised Data',
-          description: 'The advertised data of the eddystone device',
-          unit: '',
-          type: 'string',
-          format: 'hex',
-          readOnly: false,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-              contentType: 'application/x.binary-data-stream',
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:write-without-response',
-              contentType: 'application/x.binary-data-stream',
-            },
-          ],
-        },
-        advertisingInterval: {
-          title: 'Advertising Interval',
-          description: 'The advertising interval of the eddystone device',
-          unit: 'ms',
-          type: 'integer',
-          'bdo:byteOrder': 'big',
-          readOnly: false,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:write-without-response',
-            },
-          ],
-        },
-        capabilities: {
-          title: 'Capabilities',
-          description: 'The capabilities of the eddystone device',
-          type: 'string',
-          format: 'hex',
-          readOnly: true,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-              contentType: 'application/x.binary-data-stream',
-            },
-          ],
-        },
-        lockState: {
-          title: 'Lock State',
-          description: 'The lock state of the eddystone device',
-          unit: '',
-          type: 'string',
-          format: 'hex',
-          readOnly: true,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-            },
-          ],
-        },
-        publicEcdhKey: {
-          title: 'Public ECDH Key',
-          description: 'The public ECDH key of the eddystone device',
-          unit: '',
-          type: 'string',
-          format: 'hex',
-          readOnly: true,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-            },
-          ],
-        },
-        radioTxPower: {
-          title: 'Radio Tx Power',
-          description: 'The radio TX power of the eddystone device',
-          unit: 'dBm',
-          type: 'integer',
-          'bdo:bytelength': 1,
-          readOnly: false,
-          forms: [
-            {
-              op: 'readproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:read',
-            },
-            {
-              op: 'writeproperty',
-              href: 'gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295',
-              'sbo:methodName': 'sbo:write-without-response',
-            },
-          ],
-        },
-      },
-    };
+  after(async () => {
+    console.warn.restore();
+  });
 
-    assert.deepEqual(td, expectedTd);
+  describe('Capabilities property', async () => {
+    it('should be readable', async () => {
+      let capabilities = await thing.readProperty('capabilities');
+      capabilities = await capabilities.value();
+      assert.equal(capabilities, '00040103000fe2ecf0f4f8fc0004');
+    });
+
+    it('should not be writable', async () => {
+      return thing
+        .writeProperty('capabilities', '00040103000fe2ecf0f4f8fc0004')
+        .then(() => assert(false))
+        .catch(() => assert(true));
+    });
+  });
+
+  describe('Active Slot property', async () => {
+    it('should be readable', async () => {
+      let activeSlot = await thing.readProperty('activeSlot');
+      activeSlot = await activeSlot.value();
+      assert.equal(activeSlot, 0);
+    });
+
+    it('should be writable', async () => {
+      await thing.writeProperty('activeSlot', 1);
+      let activeSlot = await thing.readProperty('activeSlot');
+      activeSlot = await activeSlot.value();
+      assert.equal(activeSlot, 1);
+    });
+  });
+
+  describe('Advertising Interval property', async () => {
+    it('should be readable', async () => {
+      let advertisingInterval = await thing.readProperty('advertisingInterval');
+      advertisingInterval = await advertisingInterval.value();
+      assert.equal(advertisingInterval, 100);
+    });
+
+    it('should be writable', async () => {
+      await thing.writeProperty('advertisingInterval', 200);
+      let advertisingInterval = await thing.readProperty('advertisingInterval');
+      advertisingInterval = await advertisingInterval.value();
+      assert.equal(advertisingInterval, 200);
+    });
+  });
+
+  describe('Radio Tx Power property', async () => {
+    it('should be readable', async () => {
+      let radioTxPower = await thing.readProperty('radioTxPower');
+      radioTxPower = await radioTxPower.value();
+      assert.equal(radioTxPower, -4);
+    });
+
+    it('should be writable', async () => {
+      await thing.writeProperty('radioTxPower', 4);
+      let radioTxPower = await thing.readProperty('radioTxPower');
+      radioTxPower = await radioTxPower.value();
+      assert.equal(radioTxPower, 4);
+    });
+  });
+
+  describe('(Advanced) Advertised Tx Power property', async () => {
+    it('should be readable', async () => {
+      let advertisedTxPower = await thing.readProperty('advertisedTxPower');
+      advertisedTxPower = await advertisedTxPower.value();
+      assert.equal(advertisedTxPower, -20);
+    });
+
+    it('should be writable', async () => {
+      await thing.writeProperty('advertisedTxPower', -40);
+      let advertisedTxPower = await thing.readProperty('advertisedTxPower');
+      advertisedTxPower = await advertisedTxPower.value();
+      assert.equal(advertisedTxPower, -40);
+    });
+  });
+
+  describe('Lock State property', async () => {
+    it('should be readable', async () => {
+      let lockState = await thing.readProperty('lockState');
+      lockState = await lockState.value();
+      assert.equal(lockState, '02');
+    });
+
+    it('should be writeable', async () => {
+      await thing.writeProperty('lockState', '01');
+      let lockState = await thing.readProperty('lockState');
+      lockState = await lockState.value();
+      assert.equal(lockState, '01');
+    });
+  });
+
+  describe('Public ECDH Key property', async () => {
+    it('should be readable', async () => {
+      let publicEcdhKey = await thing.readProperty('publicEcdhKey');
+      publicEcdhKey = await publicEcdhKey.value();
+      assert.equal(publicEcdhKey, '00000000000000000000000000000000');
+    });
+  });
+
+  describe('Advertised Data property', async () => {
+    it('should be readable', async () => {
+      let advertisedData = await thing.readProperty('advertisedData');
+      advertisedData = await advertisedData.value();
+      assert.equal(advertisedData, '1010026578616d706c6507');
+    });
+
+    it('should be writable', async () => {
+      await thing.writeProperty('advertisedData', '10eb036578616d706c6507');
+      let advertisedData = await thing.readProperty('advertisedData');
+      advertisedData = await advertisedData.value();
+      assert.equal(advertisedData, '10eb036578616d706c6507');
+    });
   });
 });

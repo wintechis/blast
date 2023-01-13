@@ -44,7 +44,6 @@ export default class ConnectDialog extends React.Component {
   componentDidMount() {
     setAudioSelectButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'audiooutput'});
-      console.log(this.state);
     });
     setVideoSelectButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'videoinput'});
