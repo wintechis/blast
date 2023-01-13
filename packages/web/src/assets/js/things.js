@@ -608,6 +608,19 @@ export const addDevice = function (deviceName, deviceId, type) {
     }
     generateThingCode(deviceName);
 
+    // Supported is only none_sc and basic_sc
+    if (td.security === 'basic_sc') {
+      //TODO: generate basic sc block
+      td.id = td.id ?? deviceId;
+      generateSecurityBlock(deviceName, td);
+      generateSecurityCode(deviceName, td);
+
+      // Add to implementedThingsBlockList
+      implementedThingsBlockList.push({
+        type: `${deviceName}_SecurityBlock`,
+        category: 'Security',
+      });
+    }
     // get property names
     for (const [propertyName, _] of Object.entries(td.properties ?? {})) {
       propertiesObj[propertyName] = [];
@@ -771,7 +784,11 @@ function generateThingBlock(deviceName, deviceDescription, td) {
 
   // Generate description depending on available information
   let description = '';
-  description += td.descriptions[langTag] ?? td.description;
+  if (td.descriptions !== undefined) {
+    description += td.descriptions[langTag] ?? deviceDescription;
+  } else {
+    description += deviceDescription;
+  }
   if (td.version !== undefined) {
     description += ` | version: ${td.version}`;
   }
@@ -902,7 +919,7 @@ function generateReadPropertyBlock(propertyName, deviceName) {
           'label'
         );
       this.setOutput(true, null);
-      this.setColour(230);
+      this.setColour(255);
       this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
       this.setHelpUrl('');
     },
@@ -1007,7 +1024,8 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
         inputValueType = 'Array';
         break;
       case 'object':
-        throwError('Objects are currently not supportet');
+        //throwError('Objects are currently not supportet');
+        console.log('Objects are currently not supportet');
         break;
       default:
         inputValueType = null;
@@ -1027,7 +1045,7 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(255);
+        this.setColour(0);
         this.setTooltip(`Invoke the ${actionName} action of a ${deviceName}`);
         this.setHelpUrl('');
       },
@@ -1046,7 +1064,7 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(255);
+        this.setColour(0);
         this.setTooltip(
           `Incoke ${actionName} action of a ${deviceName} with a given value`
         );
@@ -1066,7 +1084,7 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
           );
         this.setOutput(true, null);
         this.setInputsInline(true);
-        this.setColour(255);
+        this.setColour(0);
         this.setTooltip(
           `Incoke ${actionName} action of a ${deviceName} with a given value`
         );
@@ -1086,7 +1104,7 @@ function generateInvokeActionBlock(actionName, deviceName, input, output) {
           .appendField(` of ${deviceName} `, 'label');
         this.setInputsInline(true);
         this.setOutput(true, null);
-        this.setColour(255);
+        this.setColour(0);
         this.setTooltip(
           `Incoke ${actionName} action of a ${deviceName} with a given value`
         );
@@ -1363,6 +1381,70 @@ globalThis['handleGenericEvent'] = async function (
   };
   const sub = await thing.subscribeEvent(eventName, handler);
   addCleanUpFunction(async () => sub.close());
+};
+
+function generateSecurityBlock(deviceName, td) {
+  Blocks[`${deviceName}_SecurityBlock`] = {
+    init: function () {
+      this.appendValueInput('username')
+        .setCheck('String')
+        .appendField('Set username');
+      this.appendValueInput('password')
+        .setCheck('String')
+        .appendField('and password');
+      this.appendValueInput('thing').setCheck('Thing').appendField('to device');
+      this.setInputsInline(false);
+      this.setColour(40);
+      this.setTooltip('');
+      this.setHelpUrl('');
+    },
+  };
+}
+
+function generateSecurityCode(deviceName, td) {
+  JavaScript[`${deviceName}_SecurityBlock`] = function (block) {
+    const deviceId =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+    let blockId = "''"; //block id of thing block
+    if (block.getInputTargetBlock('thing')) {
+      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
+    }
+    const username = JavaScript.valueToCode(
+      block,
+      'username',
+      JavaScript.ORDER_NONE
+    );
+    const password = JavaScript.valueToCode(
+      block,
+      'password',
+      JavaScript.ORDER_NONE
+    );
+
+    const id = td.id;
+    const functionSetPassword = JavaScript.provideFunction_(
+      'setCredentials',
+      `
+      function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(id, user, pwd) {
+        const servient = getRunningServient();
+        const credentials = {};
+        credentials[id] = {
+          username: user,
+          password: pwd,
+        };
+        servient.addCredentials(credentials);
+    }`
+    );
+
+    const code = `${functionSetPassword}(${JavaScript.quote_(
+      id
+    )}, ${username}, ${password})`;
+    return code;
+  };
+}
+
+globalThis['getRunningServient'] = function () {
+  const servient = getServient();
+  return servient;
 };
 
 /**

@@ -12,7 +12,7 @@ let wot: typeof WoT;
 
 declare const Wot: any;
 
-const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
+export const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
   const httpConfig = {
     allowSelfSigned: true, // client configuration
   };

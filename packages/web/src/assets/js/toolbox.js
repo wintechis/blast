@@ -49,6 +49,17 @@ const defaultToolbox = {
       colour: '180',
     },
     {
+      kind: 'CATEGORY',
+      contents: [
+        {
+          kind: 'label',
+          text: '(Connect things to see device dependent blocks)',
+        },
+      ],
+      name: 'Security',
+      colour: '40',
+    },
+    {
       kind: 'sep',
       gap: '32',
     },
