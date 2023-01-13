@@ -87,7 +87,6 @@ export class BinaryDataStreamCodec implements ContentCodec {
     // Check if pattern is provieded and fill in
     if (typeof schema['bdo:pattern'] !== 'undefined') {
       // String Pattern
-
       hexString = fillStringPattern(schema, dataValue);
       buf = string2byte(schema, hexString);
     }
@@ -107,6 +106,15 @@ export class BinaryDataStreamCodec implements ContentCodec {
           break;
       }
     }
+
+    // Check if additional function code is provided and execute it
+    // Modify bytes before sending them
+    if (typeof schema['tst:function'] !== 'undefined') {
+      const body = schema['tst:function'];
+      const execFunction = new Function('buf', body);
+      buf = execFunction(buf);
+    }
+
     return buf;
   }
 }
