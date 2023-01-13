@@ -82,30 +82,31 @@
       "writeOnly": true,
       "description": "The colour of the LED light.",
 
-      "bdo:pattern": "0F{R}{B}{G}",
+      "bdo:pattern": "0F{red}{blue}{green}",
       "bdo:variables": {
-        "R": {
+        "red": {
           "type": "integer",
           "bdo:bytelength": 1,
-          "minimum": 1,
-          "maximum": 254,
+          "minimum": 0,
+          "maximum": 255,
           "description": "Red value."
         },
-        "B": {
+        "green": {
           "type": "integer",
           "bdo:bytelength": 1,
-          "minimum": 1,
-          "maximum": 254,
+          "minimum": 0,
+          "maximum": 255,
           "description": "Green value."
         },
-        "G": {
+        "blue": {
           "type": "integer",
           "bdo:bytelength": 1,
-          "minimum": 1,
-          "maximum": 254,
+          "minimum": 0,
+          "maximum": 255,
           "description": "Blue value."
         }
       },
+      "tst:function": "const scale = 0xff; const adjustedArr = []; for (const chan of [buf[1], buf[2], buf[3]]) {adjustedArr.push(Math.max(1, chan));} const total = adjustedArr.reduce((partialSum, a) => partialSum + a, 0); const adjustedArrFinal = []; for (const chan of [buf[1], buf[2], buf[3]]) {let x = Math.round((chan / total) * scale); adjustedArrFinal.push(Math.max(1, x));} for (let i = 1; i < 4; i++) {buf[i] = adjustedArrFinal[i-1]} return buf;",
       "forms": [
         {
           "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0005-47a2-835a-a8d455b859dd",

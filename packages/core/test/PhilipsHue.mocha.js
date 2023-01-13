@@ -89,49 +89,49 @@ describe('Philips Hue', async () => {
 
     it('should be writable', async () => {
       return thing
-        .writeProperty('colour', {R: 254, G: 1, B: 1})
+        .writeProperty('colour', {R: 255, G: 0, B: 0})
         .then(() => assert(true))
         .catch(() => assert(false));
     });
 
-    it("throws on writing an 'R' value greater than 254", async () => {
+    it("throws on writing an 'R' value greater than 255", async () => {
       return thing
-        .writeProperty('colour', {R: 255, G: 1, B: 1})
+        .writeProperty('colour', {R: 256, G: 0, B: 0})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
 
     it("throws on writing an 'R' value less than 0", async () => {
       return thing
-        .writeProperty('colour', {R: -1, G: 1, B: 1})
+        .writeProperty('colour', {R: -1, G: 0, B: 0})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
 
     it("throws on writing a 'G' value greater than 254", async () => {
       return thing
-        .writeProperty('colour', {R: 1, G: 255, B: 1})
+        .writeProperty('colour', {R: 0, G: 256, B: 0})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
 
     it("throws on writing a 'G' value less than 0", async () => {
       return thing
-        .writeProperty('colour', {R: 1, G: -1, B: 1})
+        .writeProperty('colour', {R: 0, G: -1, B: 0})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
 
     it("throws on writing a 'B' value greater than 254", async () => {
       return thing
-        .writeProperty('colour', {R: 1, G: 1, B: 255})
+        .writeProperty('colour', {R: 0, G: 0, B: 256})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
 
     it("throws on writing a 'B' value less than 0", async () => {
       return thing
-        .writeProperty('colour', {R: 1, G: 1, B: -1})
+        .writeProperty('colour', {R: 0, G: 0, B: -1})
         .then(() => assert(false))
         .catch(() => assert(true));
     });
