@@ -1,4 +1,4 @@
-import {WebBluetoothMock, DeviceMock} from 'web-bluetooth-mock';
+import {WebBluetoothMock} from 'web-bluetooth-mock';
 
 const devices = [];
 

@@ -1,11 +1,11 @@
 import chai from 'chai';
 import sinon from 'sinon';
-import {createThing} from '../dist/blast.web.js';
-import {BleRgbController as td} from '../dist/blast.tds.js';
-import {getWebBluetoothMock} from './helpers/devices/webBluetooth/webBluetoothMock.js';
-import {mockBleRgbController} from './helpers/devices/webBluetooth/BleRgbController.js';
+import {createThing} from '../../dist/blast.web.js';
+import {BleRgbController as td} from '../../dist/blast.tds.js';
+import {getWebBluetoothMock} from '../helpers/devices/webBluetooth/webBluetoothMock.js';
+import {mockBleRgbController} from '../helpers/devices/webBluetooth/BleRgbController.js';
 
-const {assert, expect} = chai;
+const {assert} = chai;
 
 describe('BleLedController', async () => {
   let thing = null;

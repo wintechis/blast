@@ -1,12 +1,11 @@
 import chai from 'chai';
 import sinon from 'sinon';
-import {EddystoneHelpers} from '../dist/blast.node.js';
-import {EddystoneDevice as td} from '../dist/blast.tds.js';
-import {createThing} from '../dist/blast.web.js';
-import {getWebBluetoothMock} from './helpers/devices/webBluetooth/webBluetoothMock.js';
-import {mockEddystoneDevice} from './helpers/devices/webBluetooth/EddystoneDevice.js';
+import {EddystoneDevice as td} from '../../dist/blast.tds.js';
+import {createThing} from '../../dist/blast.web.js';
+import {getWebBluetoothMock} from '../helpers/devices/webBluetooth/webBluetoothMock.js';
+import {mockEddystoneDevice} from '../helpers/devices/webBluetooth/EddystoneDevice.js';
 
-const {assert, expect} = chai;
+const {assert} = chai;
 
 describe('EddystoneDevice', async () => {
   let thing = null;

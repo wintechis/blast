@@ -1,11 +1,11 @@
 import chai from 'chai';
 import sinon from 'sinon';
-import {GoveeLamp as td} from '../dist/blast.tds.js';
-import {createThing} from '../dist/blast.web.js';
-import {getWebBluetoothMock} from './helpers/devices/webBluetooth/webBluetoothMock.js';
-import {mockGoveeLamp} from './helpers/devices/webBluetooth/GoveeLamp.js';
+import {GoveeLamp as td} from '../../dist/blast.tds.js';
+import {createThing} from '../../dist/blast.web.js';
+import {getWebBluetoothMock} from '../helpers/devices/webBluetooth/webBluetoothMock.js';
+import {mockGoveeLamp} from '../helpers/devices/webBluetooth/GoveeLamp.js';
 
-const {assert, expect} = chai;
+const {assert} = chai;
 
 describe('GoveeLamp', async () => {
   let thing = null;

@@ -1,11 +1,11 @@
 import chai from 'chai';
 import sinon from 'sinon';
-import {HuskyDuino as td} from '../dist/blast.tds.js';
-import {createThing} from '../dist/blast.web.js';
-import {getWebBluetoothMock} from './helpers/devices/webBluetooth/webBluetoothMock.js';
-import {mockHuskyDuino} from './helpers/devices/webBluetooth/HuskyDuino.js';
+import {HuskyDuino as td} from '../../dist/blast.tds.js';
+import {createThing} from '../../dist/blast.web.js';
+import {getWebBluetoothMock} from '../helpers/devices/webBluetooth/webBluetoothMock.js';
+import {mockHuskyDuino} from '../helpers/devices/webBluetooth/HuskyDuino.js';
 
-const {assert, expect} = chai;
+const {assert} = chai;
 
 describe('HuskyDuino', async () => {
   let thing = null;
