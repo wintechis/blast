@@ -167,13 +167,10 @@ export function generateReadPropertyBlock(propertyName, deviceName) {
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(
-          `read property "${propertyName}" of ${deviceName}`,
-          'label'
-        );
+        .appendField(`read property "${propertyName}" of`, 'label');
       this.setOutput(true, null);
       this.setColour(255);
-      this.setTooltip(`Read the ${propertyName} property of a ${deviceName}`);
+      this.setTooltip(`Read the ${propertyName} property of ${deviceName}`);
       this.setHelpUrl('');
     },
   };
@@ -217,17 +214,12 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
           .appendField('write value', 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(
-            `to "${propertyName}" property of ${deviceName}`,
-            'label'
-          );
+          .appendField(`to "${propertyName}" property of`, 'label');
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(255);
-        this.setTooltip(
-          `Write the ${propertyName} property of a ${deviceName}`
-        );
+        this.setTooltip(`Write the ${propertyName} property of ${deviceName}`);
         this.setHelpUrl('');
       },
     };
@@ -249,10 +241,7 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
           .setCheck('Thing')
           .appendField('write value', 'label')
           .appendField(new FieldDropdown(optionsArr), 'value')
-          .appendField(
-            `to "${propertyName}" property of ${deviceName}`,
-            'label'
-          );
+          .appendField(`to "${propertyName}" property of`, 'label');
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(255);
@@ -300,7 +289,7 @@ export function generateWritePropertyCode(propertyName, deviceName, td) {
 
     const code = `await ${functionWriteGenericProperty}(${blockId}, ${deviceId}, ${JavaScript.quote_(
       propertyName
-    )}, ${JavaScript.quote_(value)})`;
+    )}, ${JavaScript.quote_(value)});\n`;
 
     return code;
   };
@@ -353,7 +342,7 @@ export function generateInvokeActionBlock(
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(0);
-        this.setTooltip(`Invoke the ${actionName} action of a ${deviceName}`);
+        this.setTooltip(`Invoke the ${actionName} action of`);
         this.setHelpUrl('');
       },
     };
@@ -367,7 +356,7 @@ export function generateInvokeActionBlock(
           .appendField(`invoke action "${actionName}" with value`, 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(` of ${deviceName} `, 'label');
+          .appendField(` of`, 'label');
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -385,15 +374,12 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(
-            `invoke "${actionName}" action of ${deviceName}`,
-            'label'
-          );
+          .appendField(`invoke "${actionName}" action of`, 'label');
         this.setOutput(true, null);
         this.setInputsInline(true);
         this.setColour(0);
         this.setTooltip(
-          `Incoke ${actionName} action of a ${deviceName} with a given value`
+          `Invoke ${actionName} action of a ${deviceName} with a given value`
         );
         this.setHelpUrl('');
       },
@@ -453,7 +439,7 @@ export function generateInvokeActionCode(
 
       const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
         actionName
-      )})`;
+      )});\n`;
       return code;
     };
   }
@@ -489,7 +475,7 @@ export function generateInvokeActionCode(
 
       const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
         actionName
-      )}, ${value})`;
+      )}, ${value});\n`;
       return code;
     };
   }
@@ -751,7 +737,7 @@ export function generateSecurityCode(deviceName, td) {
 
     const code = `${functionSetPassword}(${JavaScript.quote_(
       id
-    )}, ${username}, ${password})`;
+    )}, ${username}, ${password});\n`;
     return code;
   };
 }
