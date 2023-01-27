@@ -566,9 +566,17 @@ export const handleAddConsumedThing = async function (uri) {
   // TODO: Error Handling
   if (res.ok) {
     const td = await res.json();
+    // generate a unique id for the new device
+    const uid =
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
+    // TODO: Check if ID is already used ??
+
+    // Set new ID
+    td.id = uid;
+
     addDevice(
       td.title,
-      0, // default ID
+      td.id, // default ID
       'consumedDevice',
       td
     );
@@ -586,10 +594,6 @@ export const addDevice = function (deviceName, deviceId, type, td) {
   let thing;
   if (type === 'consumedDevice') {
     // generate a unique id for the new device
-    const uid =
-      Date.now().toString(36) + Math.random().toString(36).substring(2);
-    deviceId = uid;
-    // TODO: Check if ID is already used ??
 
     // Object to store property names and allowed ops
     const propertiesObj = {};
@@ -636,7 +640,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Generate Property Blocks
     for (const [propertyName, operations] of Object.entries(propertiesObj)) {
-      if (operations.includes('readproperty')) {
+      const op = operations.flat();
+      if (op.includes('readproperty')) {
         generateReadPropertyBlock(propertyName, deviceName);
         generateReadPropertyCode(propertyName, deviceName);
 
@@ -646,7 +651,7 @@ export const addDevice = function (deviceName, deviceId, type, td) {
           category: 'Properties',
         });
       }
-      if (operations.includes('writeproperty')) {
+      if (op.includes('writeproperty')) {
         generateWritePropertyBlock(propertyName, deviceName, td);
         generateWritePropertyCode(propertyName, deviceName, td);
 
@@ -658,75 +663,54 @@ export const addDevice = function (deviceName, deviceId, type, td) {
       }
     }
 
-    // get action names
-    for (const [actionName, _] of Object.entries(td.actions ?? {})) {
-      actionsObj[actionName] = [];
-      // Get input and output filed
-      inputObj[actionName] = td.actions[actionName].input;
-      outputObj[actionName] = td.actions[actionName].output;
-
-      // get allowed operations
-      for (const element of td.actions[actionName].forms) {
-        actionsObj[actionName].push(element.op);
-      }
+    for (const [actionName, action] of Object.entries(td.actions ?? {})) {
+      actionsObj[actionName] = action.forms.map(form => form.op);
+      inputObj[actionName] = action.input;
+      outputObj[actionName] = action.output;
     }
 
     // Generate Action Blocks
-    for (const [actionName, operations2d] of Object.entries(actionsObj ?? {})) {
-      const operations = operations2d.flat();
-      for (const op of operations) {
-        if (op === 'invokeaction') {
-          generateInvokeActionBlock(
-            actionName,
-            deviceName,
-            inputObj[actionName],
-            outputObj[actionName]
-          );
-          generateInvokeActionCode(
-            actionName,
-            deviceName,
-            inputObj[actionName],
-            outputObj[actionName]
-          );
+    for (const [actionName, operations] of Object.entries(actionsObj)) {
+      const op = operations.flat();
+      if (op.includes('invokeaction')) {
+        generateInvokeActionBlock(
+          actionName,
+          deviceName,
+          inputObj[actionName],
+          outputObj[actionName]
+        );
+        generateInvokeActionCode(
+          actionName,
+          deviceName,
+          inputObj[actionName],
+          outputObj[actionName]
+        );
 
-          // Add to implementedThingsBlockList
-          implementedThingsBlockList.push({
-            type: `${deviceName}_invokeActionBlock_${actionName}`,
-            category: 'Actions',
-          });
-        }
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_invokeActionBlock_${actionName}`,
+          category: 'Actions',
+        });
       }
     }
 
-    for (const [eventName, _] of Object.entries(td.events ?? {})) {
-      eventObj[eventName] = [];
-      // Get data
-      dataObj[eventName] = td.events[eventName].data;
-
-      // get allowed operations
-      for (const element of td.events[eventName].forms) {
-        eventObj[eventName].push(element.op);
-      }
+    for (const [eventName, event] of Object.entries(td.events ?? {})) {
+      eventObj[eventName] = event.forms.map(form => form.op);
+      dataObj[eventName] = event.data;
     }
 
     // Generate Event Blocks
-    for (const [eventName, operations2d] of Object.entries(eventObj ?? {})) {
-      const operations = operations2d.flat();
-      for (const op of operations) {
-        if (op === 'subscribeevent') {
-          generateSubscribeEventBlock(
-            eventName,
-            deviceName,
-            dataObj[eventName]
-          );
-          generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
+    for (const [eventName, operations] of Object.entries(eventObj)) {
+      const op = operations.flat();
+      if (op.includes('subscribeevent')) {
+        generateSubscribeEventBlock(eventName, deviceName, dataObj[eventName]);
+        generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
 
-          // Add to implementedThingsBlockList
-          implementedThingsBlockList.push({
-            type: `${deviceName}_subscribeEventBlock_${eventName}`,
-            category: 'Events',
-          });
-        }
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_subscribeEventBlock_${eventName}`,
+          category: 'Events',
+        });
       }
     }
 
@@ -738,17 +722,17 @@ export const addDevice = function (deviceName, deviceId, type, td) {
       blocks: implementedThingsBlockList,
     });
 
-    for (const t of implementedThings) {
-      if (t.id === deviceName) {
-        thing = t;
+    for (const implThing of implementedThings) {
+      if (implThing.id === deviceName) {
+        thing = implThing;
         break;
       }
     }
   } else {
     // for video and audio devices
-    for (const t of implementedThings) {
-      if (t.id === type) {
-        thing = t;
+    for (const implThing of implementedThings) {
+      if (implThing.id === type) {
+        thing = implThing;
         break;
       }
     }
