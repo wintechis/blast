@@ -568,8 +568,9 @@ export const handleAddConsumedThing = async function (uri) {
     const td = await res.json();
     addDevice(
       td.title,
-      td, // Pass TD -> TODO: Find other solution
-      'consumedDevice'
+      0, // default ID
+      'consumedDevice',
+      td
     );
   } else {
     throwError('Response not valid');
@@ -581,10 +582,9 @@ export const handleAddConsumedThing = async function (uri) {
  * @param {string} deviceName Name of the device.
  * @param {string} deviceId Unique identifier of the device.
  */
-export const addDevice = function (deviceName, deviceId, type) {
+export const addDevice = function (deviceName, deviceId, type, td) {
   let thing;
   if (type === 'consumedDevice') {
-    const td = deviceId; // I save the td in this varaible!
     // generate a unique id for the new device
     const uid =
       Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -627,40 +627,34 @@ export const addDevice = function (deviceName, deviceId, type) {
         category: 'Security',
       });
     }
-    // get property names
-    for (const [propertyName, _] of Object.entries(td.properties ?? {})) {
-      propertiesObj[propertyName] = [];
-      // get allowed operations
-      for (const element of td.properties[propertyName].forms) {
-        propertiesObj[propertyName].push(element.op);
-      }
+    // get property names and allowed operations
+    for (const [propertyName, property] of Object.entries(
+      td.properties ?? {}
+    )) {
+      propertiesObj[propertyName] = property.forms.map(form => form.op);
     }
 
     // Generate Property Blocks
-    for (const [propertyName, operations2d] of Object.entries(
-      propertiesObj ?? {}
-    )) {
-      const operations = operations2d.flat(); // flatten if ops are a list in TD
-      for (const op of operations) {
-        if (op === 'readproperty') {
-          generateReadPropertyBlock(propertyName, deviceName);
-          generateReadPropertyCode(propertyName, deviceName);
+    for (const [propertyName, operations] of Object.entries(propertiesObj)) {
+      if (operations.includes('readproperty')) {
+        generateReadPropertyBlock(propertyName, deviceName);
+        generateReadPropertyCode(propertyName, deviceName);
 
-          // Add to implementedThingsBlockList
-          implementedThingsBlockList.push({
-            type: `${deviceName}_readPropertyBlock_${propertyName}`,
-            category: 'Properties',
-          });
-        } else if (op === 'writeproperty') {
-          generateWritePropertyBlock(propertyName, deviceName, td);
-          generateWritePropertyCode(propertyName, deviceName, td);
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_readPropertyBlock_${propertyName}`,
+          category: 'Properties',
+        });
+      }
+      if (operations.includes('writeproperty')) {
+        generateWritePropertyBlock(propertyName, deviceName, td);
+        generateWritePropertyCode(propertyName, deviceName, td);
 
-          // Add to implementedThingsBlockList
-          implementedThingsBlockList.push({
-            type: `${deviceName}_writePropertyBlock_${propertyName}`,
-            category: 'Properties',
-          });
-        }
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_writePropertyBlock_${propertyName}`,
+          category: 'Properties',
+        });
       }
     }
 

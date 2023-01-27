@@ -334,10 +334,7 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(
-            `invoke "${actionName}" action of ${deviceName}`,
-            'label'
-          );
+          .appendField(`invoke "${actionName}" action of`, 'label');
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -394,7 +391,7 @@ export function generateInvokeActionBlock(
           .appendField(`invoke action "${actionName}" with value`, 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(` of ${deviceName} `, 'label');
+          .appendField(` of`, 'label');
         this.setInputsInline(true);
         this.setOutput(true, null);
         this.setColour(0);
