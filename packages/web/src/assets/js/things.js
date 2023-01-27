@@ -621,7 +621,6 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Supported is only none_sc and basic_sc
     if (td.security === 'basic_sc') {
-      td.id = td.id ?? deviceId;
       generateSecurityBlock(deviceName, td);
       generateSecurityCode(deviceName, td);
 
@@ -640,9 +639,12 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Generate Property Blocks
     for (const [propertyName, operations] of Object.entries(propertiesObj)) {
-      const op = operations.flat();
-      if (op.includes('readproperty')) {
-        generateReadPropertyBlock(propertyName, deviceName);
+      const op = new Set(operations.flat());
+      console.log(op);
+      console.log(typeof op);
+
+      if (op.has('readproperty')) {
+        generateReadPropertyBlock(propertyName, deviceName, td);
         generateReadPropertyCode(propertyName, deviceName);
 
         // Add to implementedThingsBlockList
@@ -651,7 +653,7 @@ export const addDevice = function (deviceName, deviceId, type, td) {
           category: 'Properties',
         });
       }
-      if (op.includes('writeproperty')) {
+      if (op.has('writeproperty')) {
         generateWritePropertyBlock(propertyName, deviceName, td);
         generateWritePropertyCode(propertyName, deviceName, td);
 
@@ -671,8 +673,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Generate Action Blocks
     for (const [actionName, operations] of Object.entries(actionsObj)) {
-      const op = operations.flat();
-      if (op.includes('invokeaction')) {
+      const op = new Set(operations.flat());
+      if (op.has('invokeaction')) {
         generateInvokeActionBlock(
           actionName,
           deviceName,
@@ -701,8 +703,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Generate Event Blocks
     for (const [eventName, operations] of Object.entries(eventObj)) {
-      const op = operations.flat();
-      if (op.includes('subscribeevent')) {
+      const op = new Set(operations.flat());
+      if (op.has('subscribeevent')) {
         generateSubscribeEventBlock(eventName, deviceName, dataObj[eventName]);
         generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
 
@@ -741,8 +743,6 @@ export const addDevice = function (deviceName, deviceId, type, td) {
     return;
   }
 
-  connectedThings.set(deviceName, thing);
-
   // add the devices blocks to the toolbox
   for (const block of thing.blocks) {
     if (block.XML) {
@@ -753,10 +753,41 @@ export const addDevice = function (deviceName, deviceId, type, td) {
   }
   if (type === 'audioOutput') {
     audioDevices.set(deviceName, deviceId);
+    connectedThings.set(deviceName, thing);
   } else if (type === 'videoInput') {
     videoDevices.set(deviceName, deviceId);
+    connectedThings.set(deviceName, thing);
   } else if (type === 'consumedDevice') {
-    consumedWebDevices.set(deviceName, deviceId);
+    {
+      // This function needs to be named so it can be called recursively.
+      const promptAndCheckWithAlert = function (name, id) {
+        Blockly.Variables.promptName(
+          'Pair successful! Now give your device a name.',
+          name,
+          text => {
+            if (text) {
+              const existing = webBluetoothDevices.has(text);
+              if (existing) {
+                const msg = 'Name %1 already exists'.replace('%1', text);
+                Blockly.dialog.alert(msg, () => {
+                  promptAndCheckWithAlert(text, id); // Recurse
+                });
+              } else {
+                // No conflict
+                consumedWebDevices.set(deviceName, deviceId);
+                connectedThings.set(text, thing);
+              }
+            } else {
+              const msg = 'Name cannot be empty';
+              Blockly.dialog.alert(msg, () => {
+                promptAndCheckWithAlert(text, id); // Recuse
+              });
+            }
+          }
+        );
+      };
+      promptAndCheckWithAlert(deviceName, td.id);
+    }
   }
   reloadToolbox();
 };

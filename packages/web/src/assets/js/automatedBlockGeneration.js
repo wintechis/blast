@@ -11,12 +11,8 @@ import {
 } from './interpreter.js';
 
 export function generateThingBlock(deviceName, deviceDescription, td) {
-  // Get browser language tag -> currently de and en supported
-  const lang = navigator.language || navigator.userLanguage;
-  console.log(lang);
-  const langTag = lang.split('-')[0];
-
   // Generate description depending on available information
+  const langTag = getLanguage();
   let description = '';
   if (td.descriptions !== undefined) {
     description += td.descriptions[langTag] ?? deviceDescription;
@@ -162,16 +158,29 @@ export function generateThingCode(deviceName) {
   };
 }
 
-export function generateReadPropertyBlock(propertyName, deviceName) {
+export function generateReadPropertyBlock(propertyName, deviceName, td) {
+  const langTag = getLanguage();
+  let blockName = '';
+  if (td.titles && td.titles[langTag]) {
+    blockName = `read property "${td.titles[langTag]}" of`;
+  } else if (td.title) {
+    blockName = `read property "${td.title}" of`;
+  } else {
+    blockName = `read property "${propertyName}" of`;
+  }
+
   Blocks[`${deviceName}_readPropertyBlock_${propertyName}`] = {
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(`read property "${propertyName}" of`, 'label');
-      this.setOutput(true, null);
+        .appendField(blockName, 'label');
+      this.setOutput(true, td.properties.type ?? null);
       this.setColour(255);
-      this.setTooltip(`Read the ${propertyName} property of ${deviceName}`);
-      this.setHelpUrl('');
+      this.setTooltip(
+        (td.descriptions && td.description[langTag]) ??
+          td.description ??
+          `Read the ${propertyName} property of ${deviceName}`
+      );
     },
   };
 }
@@ -556,9 +565,7 @@ export function generateSubscribeEventBlock(eventName, deviceName) {
       this.appendStatementInput('statements').appendField('do');
       this.setInputsInline(false);
       this.setColour(180);
-      this.setTooltip(
-        "Handles 'characteristicvaluechanged' events of a Xiaomi Thermometer."
-      );
+      this.setTooltip('');
       this.setHelpUrl('');
       this.changeListener = null;
       this.getField('eventVar').setEnabled(false);
@@ -756,4 +763,11 @@ const getConsumedThing = async function (id, td) {
     consumedThingInstances.set(id, thing);
     return thing;
   }
+};
+
+const getLanguage = function () {
+  // Get browser language tag -> currently de and en supported
+  const lang = navigator.language || navigator.userLanguage;
+  const langTag = lang.split('-')[0];
+  return langTag;
 };
