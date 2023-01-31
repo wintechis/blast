@@ -3,29 +3,9 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
-const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
-import {eventsInWorkspace, getWorkspace} from '../../interpreter.js';
+import {Blocks, Events, FieldTextInput, JavaScript, Names} from 'blockly';
+import {eventsInWorkspace, getWorkspace} from '../../interpreter.ts';
 import {implementedThings} from '../../things.js';
-
-const {XiaomiThermometer} = tds;
-
-const xiaomiThermometerInstances = new Map();
-
-/**
- * Keeps singleton instances of XiaomiThermometers instantiated by BLAST.
- * @param {string} id the id of the XiaomiThermometer.
- * @return {XiaomiThermometer} the instance.
- */
-const getXiaomiThermometer = async function (id) {
-  if (xiaomiThermometerInstances.has(id)) {
-    return xiaomiThermometerInstances.get(id);
-  } else {
-    const thing = await createThing(XiaomiThermometer, id);
-    xiaomiThermometerInstances.set(id, thing);
-    return thing;
-  }
-};
 
 Blocks['things_xiaomiThermometer'] = {
   /**
@@ -48,7 +28,6 @@ Blocks['things_xiaomiThermometer'] = {
     );
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.thing = null;
   },
   /**
    * Add this block's id to the events array.
@@ -64,11 +43,7 @@ Blocks['things_xiaomiThermometer'] = {
   onchange: function () {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
       this.firstTime = false;
-      getXiaomiThermometer(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
       this.addEvent();
     }
   },

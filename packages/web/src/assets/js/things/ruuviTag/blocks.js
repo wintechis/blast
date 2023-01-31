@@ -1,7 +1,6 @@
 /**
  * @fileoverview Block definitions for the Ruuvi Tag
  * (https://ruuvi.com/ruuvitag/).
- * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 import Blockly from 'blockly';
@@ -10,27 +9,9 @@ import {
   eventsInWorkspace,
   getStdWarn,
   getWorkspace,
-} from '../../interpreter.js';
+} from '../../interpreter.ts';
 import {implementedThings} from '../../things.js';
 import {blocksRequiringScan} from '../../webBluetooth.js';
-
-const {RuuviTag} = tds;
-
-const ruuviTagInstances = new Map();
-
-/**
- * Keeps singleton instances of RuuviTags instantiated by BLAST.
- * @param {string} id The id of the RuuviTag.
- */
-const getRuuviTag = async function (id) {
-  if (ruuviTagInstances.has(id)) {
-    return ruuviTagInstances.get(id);
-  } else {
-    const thing = await createThing(RuuviTag, id);
-    ruuviTagInstances.set(id, thing);
-    return thing;
-  }
-};
 
 Blocks['things_ruuviTag'] = {
   /**
@@ -49,18 +30,6 @@ Blocks['things_ruuviTag'] = {
     this.setTooltip('A Ruuvi Tag');
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/RuuviTag');
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getRuuviTag(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
   },
 };
 

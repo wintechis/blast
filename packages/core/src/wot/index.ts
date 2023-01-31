@@ -11,7 +11,11 @@ let wot: typeof WoT;
 
 declare const Wot: any;
 
-const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
+export const BluetoothWrapper = ConcreteBluetoothAdapter;
+
+export const getServient = function (
+  bluetoothAdapter: BluetoothAdapter
+): Servient {
   if (!servient) {
     try {
       servient = new Servient();

@@ -23,12 +23,7 @@ import logo from '../assets/logo.png';
 import ReconnectDialog from './ReconnectDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';
 
-import {
-  onStatusChange,
-  runJS,
-  statusValues,
-  stopJS,
-} from '../assets/js/interpreter.js';
+import {onStatusChange, runJS, stopJS} from '../assets/js/interpreter.ts';
 import {setDevMode} from '../assets/js/things.js';
 
 const samples = [
@@ -80,16 +75,16 @@ export default class BlastBar extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      status: statusValues.READY,
+      status: 'ready',
       devMode: false,
       spheroConnected: false,
     };
     this.reconnectDialogRef = React.createRef();
     this.spheroDialogRef = React.createRef();
-    onStatusChange.stopped.push(() => this.setStatus(statusValues.STOPPED));
-    onStatusChange.running.push(() => this.setStatus(statusValues.RUNNING));
-    onStatusChange.ready.push(() => this.setStatus(statusValues.READY));
-    onStatusChange.error.push(() => this.setStatus(statusValues.ERROR));
+    onStatusChange.stopped.push(() => this.setStatus('stopped'));
+    onStatusChange.running.push(() => this.setStatus('running'));
+    onStatusChange.ready.push(() => this.setStatus('ready'));
+    onStatusChange.error.push(() => this.setStatus('error'));
   }
 
   setStatus = status => {
@@ -228,7 +223,7 @@ export default class BlastBar extends React.Component {
               aria-label="run"
               sx={{mr: 2}}
               onClick={() => {
-                if (this.state.status === statusValues.RUNNING) {
+                if (this.state.status === 'running') {
                   stopJS();
                 } else {
                   runJS();
@@ -236,7 +231,7 @@ export default class BlastBar extends React.Component {
               }}
               disabled={this.state.devMode}
             >
-              {this.state.status === statusValues.RUNNING ? (
+              {this.state.status === 'running' ? (
                 <StopIcon />
               ) : (
                 <PlayArrowIcon />

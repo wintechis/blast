@@ -1,12 +1,8 @@
 import FileSaver from 'file-saver';
 import Blockly from 'blockly';
-import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.js';
+import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 
-import {
-  getWorkspace,
-  resetInterpreter,
-  throwError,
-} from '../assets/js/interpreter.js';
+import {getWorkspace, resetInterpreter} from '../assets/js/interpreter.ts';
 import {implementedThings, resetThings} from '../assets/js/things.js';
 
 const {hideChaff, Xml} = Blockly;
@@ -29,7 +25,7 @@ export const loadSample = async function (path, reconnectDialogRef) {
   if (response.ok) {
     xml = await response.text();
   } else {
-    throwError(NOT_FOUND_ERROR.replace('%1', path));
+    console.error(NOT_FOUND_ERROR.replace('%1', path));
     return;
   }
   loadXml(xml, reconnectDialogRef);
@@ -45,7 +41,7 @@ const loadXml = function (xml, reconnectDialogRef) {
   try {
     xml = Xml.textToDom(xml);
   } catch (e) {
-    throwError(XML_ERROR + '\nXML: ' + xml);
+    console.error(XML_ERROR + '\nXML: ' + xml);
     return;
   }
 

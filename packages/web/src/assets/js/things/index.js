@@ -1,50 +1,50 @@
 import './audio/blocks.js';
-import './audio/generators.js';
+import './audio/generators.ts';
 
 import './bleRgbController/blocks.js';
-import './bleRgbController/generators.js';
+import './bleRgbController/generators.ts';
 
 import './blinkstick/blocks.js';
-import './blinkstick/generators.js';
+import './blinkstick/generators.ts';
 
 import './bluetooth/blocks.js';
-import './bluetooth/generators.js';
+import './bluetooth/generators.ts';
 
 import './huskyduino/blocks.js';
-import './huskyduino/generators.js';
+import './huskyduino/generators.ts';
 
 import './joycon/blocks.js';
-import './joycon/generators.js';
+import './joycon/generators.ts';
 
 import './ruuviTag/blocks.js';
 import './ruuviTag/generators.ts';
 
 import './server_connector/blocks.js';
-import './server_connector/generators.js';
+import './server_connector/generators.ts';
 
 import './solid/blocks.js';
-import './solid/generators.js';
+import './solid/generators.ts';
 
 import './sphero/blocks.js';
-import './sphero/generators.js';
+import './sphero/generators.ts';
 
 import './streamdeck/blocks.js';
-import './streamdeck/generators.js';
+import './streamdeck/generators.ts';
 
 import './text2code/blocks.js';
-import './text2code/generators.js';
+import './text2code/generators.ts';
 
 import './urdf/blocks.js';
 import './urdf/generators.js';
 
 import './video/blocks.js';
-import './video/generators.js';
+import './video/generators.ts';
 
 import './webSpeech/blocks.js';
-import './webSpeech/generators.js';
+import './webSpeech/generators.ts';
 
 import './xiamoi_thermometer/blocks.js';
-import './xiamoi_thermometer/generators.js';
+import './xiamoi_thermometer/generators.ts';
 
 import './xiaomiFlowerCare/blocks.js';
-import './xiaomiFlowerCare/generators.js';
+import './xiaomiFlowerCare/generators.ts';

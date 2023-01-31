@@ -54,8 +54,8 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@node-wot/core": "0.8.3",
-    "@node-wot/td-tools": "0.8.3",
+    "@node-wot/core": "0.8.4",
+    "@node-wot/td-tools": "0.8.4",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
     "joy-con-webhid": "^0.2.0",

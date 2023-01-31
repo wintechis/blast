@@ -5,26 +5,8 @@
 
 import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
-import {devBlocks, implementedThings} from '../../things.js';
-import {getStdWarn} from '../../interpreter.js';
-
-const {BluetoothGeneric, EddystoneDevice} = tds;
-
-const EddystoneDeviceInstances = new Map();
-
-/**
- * Keeps singleton instances of EddystoneDevice instantiated by BLAST.
- * @param {string} id The id of the EddystoneDevice.
- */
-const getEddystoneDevice = async function (id) {
-  if (EddystoneDeviceInstances.has(id)) {
-    return EddystoneDeviceInstances.get(id);
-  } else {
-    const thing = await createThing(EddystoneDevice, id);
-    EddystoneDeviceInstances.set(id, thing);
-    return thing;
-  }
-};
+import {implementedThings} from '../../things.js';
+import {getStdWarn} from '../../interpreter.ts';
 
 Blocks['things_eddyStoneDevice'] = {
   /**
@@ -48,32 +30,6 @@ Blocks['things_eddyStoneDevice'] = {
     this.firstTime = true;
     this.thing = null;
   },
-  onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getEddystoneDevice(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
-  },
-};
-
-const BluetoothGenericInstances = new Map();
-
-/**
- * Keeps singleton instances of BluetoothGeneric instantiated by BLAST.
- * @param {string} id The id of the BluetoothGeneric.
- */
-const getBluetoothGeneric = async function (id) {
-  if (BluetoothGenericInstances.has(id)) {
-    return BluetoothGenericInstances.get(id);
-  } else {
-    const thing = await createThing(BluetoothGeneric, id);
-    BluetoothGenericInstances.set(id, thing);
-    return thing;
-  }
 };
 
 Blocks['things_bluetoothGeneric'] = {
@@ -95,16 +51,6 @@ Blocks['things_bluetoothGeneric'] = {
     this.firstTime = true;
     this.firstTime = true;
     this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getBluetoothGeneric(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
   },
 };
 
@@ -163,6 +109,7 @@ Blocks['eddyStoneDevice_write_eddystone_property'] = {
       .appendField(
         new FieldDropdown(
           [
+            ['active slot', 'activeSlot'],
             ['advertised tx power', 'advertisedTxPower'],
             ['advertisement data', 'advertisedData'],
             ['advertising interval', 'advertisingInterval'],
@@ -171,10 +118,8 @@ Blocks['eddyStoneDevice_write_eddystone_property'] = {
           this.propertyValidator
         ),
         'property'
-      );
-    this.appendValueInput('slot')
-      .appendField('property at slot', 'label')
-      .setCheck('Number');
+      )
+      .appendField('property', 'label');
     this.appendDummyInput('frameType')
       .appendField('frame type', 'label')
       .appendField(
@@ -257,13 +202,8 @@ Blocks['read_eddystone_property'] = {
         ]),
         'property'
       )
-      .appendField('property');
-    this.appendValueInput('slot')
-      .appendField('at slot', 'label')
-      .setCheck('Number');
-    this.appendValueInput('thing')
-      .appendField('of Eddystone device', 'label')
-      .setCheck('Thing');
+      .appendField('property of Eddystone device', 'label');
+    this.appendValueInput('thing').setCheck('Thing');
     this.setOutput(true, ['String', 'Number']);
     this.setColour(255);
     this.setInputsInline(true);
@@ -360,6 +300,16 @@ Blocks['read_characteristic'] = {
     this.appendValueInput('service')
       .appendField('of service', 'label')
       .setCheck('String');
+    this.appendDummyInput('format')
+      .appendField('in format', 'label')
+      .appendField(
+        new FieldDropdown([
+          ['Hexadecimal', 'hex'],
+          ['UTF-8', 'utf8'],
+          ['Decimal', 'decimal'],
+        ]),
+        'format'
+      );
     this.appendValueInput('thing')
       .appendField('of Bluetooth device', 'label')
       .setCheck('Thing');
@@ -368,8 +318,6 @@ Blocks['read_characteristic'] = {
     this.setTooltip('Reads a characteristic from a Bluetooth device.');
   },
 };
-// Add read_characteristic block to the dev blocks.
-devBlocks.push(['read_characteristic', 'Properties']);
 
 Blocks['write_characteristic'] = {
   /**
@@ -395,8 +343,6 @@ Blocks['write_characteristic'] = {
     this.setTooltip('Writes a property to a Bluetooth device.');
   },
 };
-// Add write_characteristic block to the dev blocks.
-devBlocks.push(['write_characteristic', 'Properties']);
 
 // Add Eddystone device to the list of implemented things
 implementedThings.push({
@@ -521,6 +467,14 @@ implementedThings.push({
     },
     {
       type: 'write_gatt_characteristic',
+      category: 'Properties',
+    },
+    {
+      type: 'read_characteristic',
+      category: 'Properties',
+    },
+    {
+      type: 'write_characteristic',
       category: 'Properties',
     },
   ],

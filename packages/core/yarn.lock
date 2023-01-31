@@ -267,8 +267,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@blast/core@workspace:."
   dependencies:
-    "@node-wot/core": 0.8.3
-    "@node-wot/td-tools": 0.8.3
+    "@node-wot/core": 0.8.4
+    "@node-wot/td-tools": 0.8.4
     "@types/node": latest
     "@types/uritemplate": ^0.3.4
     "@types/web-bluetooth": ^0.0.14
@@ -448,11 +448,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-wot/core@npm:0.8.3":
-  version: 0.8.3
-  resolution: "@node-wot/core@npm:0.8.3"
+"@node-wot/core@npm:0.8.4":
+  version: 0.8.4
+  resolution: "@node-wot/core@npm:0.8.4"
   dependencies:
-    "@node-wot/td-tools": 0.8.3
+    "@node-wot/td-tools": 0.8.4
     "@petamoriken/float16": ^3.1.1
     ajv: ^7.0.4
     debug: ^4.3.4
@@ -460,13 +460,13 @@ __metadata:
     uritemplate: 0.3.4
     uuid: ^7.0.3
     web-streams-polyfill: ^3.0.1
-  checksum: 2fadfa2a493a9c05bef2c637004fb64365ef3cc750bdf69c216a739bd555ad429ec010a85b04da982b4f9b491c464b9e7f280c3d97e7b14689c438ba179959f9
+  checksum: eb5cd1b8ddd25154467b3ae76487c82ce7a792be2f160450345bc3803be5605237050fef934a59570e73c71c04a86e96e2fc0d05e8ece07701854d05e84bb056
   languageName: node
   linkType: hard
 
-"@node-wot/td-tools@npm:0.8.3":
-  version: 0.8.3
-  resolution: "@node-wot/td-tools@npm:0.8.3"
+"@node-wot/td-tools@npm:0.8.4":
+  version: 0.8.4
+  resolution: "@node-wot/td-tools@npm:0.8.4"
   dependencies:
     ajv: ^7.0.4
     debug: ^4.3.4
@@ -476,7 +476,7 @@ __metadata:
     wot-thing-description-types: ^1.1.0-13-October-2022
     wot-thing-model-types: ^1.1.0-13-October-2022
     wot-typescript-definitions: 0.8.0-SNAPSHOT.23
-  checksum: 63b16fdde3ed883dba640b65418ea8168bda5a49f790589aa55290de6df33ac43eda62d71b2eda9bc3c260eba8519dd98350d7921adee16d10edcc16e4a1815e
+  checksum: 1af8bf27c2838482f9709898ab7a8828e4a8e93d6140dd4259e3ad8e0e1f4a465fc142967c2c74fd2d14341aaebcbcc4df2fb80d560a0a887d600c8248ccffc2
   languageName: node
   linkType: hard
 

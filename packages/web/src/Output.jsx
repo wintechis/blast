@@ -13,12 +13,11 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 import {
-  setStdOut,
-  setStdError,
-  setStdIn,
+  resetInterpreter,
+  setStatus,
   setStdInfo,
   setStdWarn,
-} from './assets/js/interpreter.js';
+} from './assets/js/interpreter.ts';
 
 const OutputTab = styled(props => (
   <Tab disableFocusRipple disableRipple {...props} />
@@ -36,25 +35,40 @@ export default class Output extends React.Component {
     this.state = {
       messages: [],
     };
-    this.addMessage = this.addMessage.bind(this);
   }
 
   componentDidMount() {
-    setStdOut((msg, type) => {
-      this.addMessage(msg, type);
-    });
-    setStdError(msg => {
-      console.error(msg);
+    // overwrite console.log
+    const oldLog = console.log;
+    console.log = (msg, type) => {
+      oldLog(msg);
       this.setState(state => {
         return {
           messages: state.messages.concat({
             text: msg.toString(),
             time: new Date().toLocaleTimeString(),
-            type: 'error',
+            type: type || 'text',
           }),
         };
       });
-    });
+    };
+    // overwrite console.error
+    const oldError = console.error;
+    console.error = (msg, type = 'text') => {
+      oldError(msg);
+      globalThis['interpreterExecutionExit'] = true;
+      resetInterpreter();
+      setStatus('error');
+      this.setState(state => {
+        return {
+          messages: state.messages.concat({
+            text: msg.toString(),
+            time: new Date().toLocaleTimeString(),
+            type: type,
+          }),
+        };
+      });
+    };
     setStdInfo(msg => {
       this.setState(state => {
         return {
@@ -77,9 +91,6 @@ export default class Output extends React.Component {
         };
       });
     });
-    setStdIn(async message => {
-      return prompt(message);
-    });
   }
 
   componentDidUpdate() {
@@ -87,51 +98,9 @@ export default class Output extends React.Component {
     container.scrollTop = container.scrollHeight;
   }
 
-  addMessage(text, type) {
-    this.setState(state => {
-      return {
-        messages: state.messages.concat({
-          text: text,
-          type: type,
-          time: new Date().toLocaleTimeString(),
-        }),
-      };
-    });
-  }
-
   renderMessages() {
     return this.state.messages.map((msg, i) => {
-      if (typeof msg.type !== 'undefined') {
-        if (['error', 'info', 'warning'].includes(msg.type)) {
-          return (
-            <Alert key={i} severity={msg.type} sx={{m: 1}}>
-              {msg.text}
-            </Alert>
-          );
-        } else if (msg.type === 'table') {
-          return (
-            <TableContainer key={i} component={Paper}>
-              <Table aria-label="simple table">
-                <TableBody>
-                  {msg.text.map((row, j) => (
-                    <TableRow key={i - j}>
-                      {row.map((cell, k) => (
-                        <TableCell key={i - j - k}>{cell}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          );
-        } else if (msg.type === 'image') {
-          return (
-            <Paper key={i} sx={{m: 1, width: '100%'}}>
-              <img src={msg.text} />
-            </Paper>
-          );
-        }
-      } else {
+      if (msg.type === 'text') {
         return (
           <Paper
             key={i}
@@ -144,6 +113,35 @@ export default class Output extends React.Component {
             >
               {msg.time}
             </Typography>
+          </Paper>
+        );
+      }
+      if (['error', 'info', 'warning'].includes(msg.type)) {
+        return (
+          <Alert key={i} severity={msg.type} sx={{m: 1}}>
+            {msg.text}
+          </Alert>
+        );
+      } else if (msg.type === 'table') {
+        return (
+          <TableContainer key={i} component={Paper}>
+            <Table aria-label="simple table">
+              <TableBody>
+                {msg.text.map((row, j) => (
+                  <TableRow key={i - j}>
+                    {row.map((cell, k) => (
+                      <TableCell key={i - j - k}>{cell}</TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        );
+      } else if (msg.type === 'image') {
+        return (
+          <Paper key={i} sx={{m: 1, width: '100%'}}>
+            <img src={msg.text} />
           </Paper>
         );
       }

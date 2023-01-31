@@ -78,9 +78,7 @@ export function getWebHidDevice(deviceId: HIDDevice.id): HIDDevice;
  * @param {!Blockly.Workspace} workspace The workspace containing things.
  * @return {!Array.<!Element>} Array of XML elements.
  */
-export function thingsFlyoutCategory(
-  workspace: Blockly.Workspace
-): Array<?Element>;
+export function thingsFlyoutCategory(workspace: Blockly.Workspace): Element[];
 
 /**
  * Returns an Array containing tuples of device names and their identifier.

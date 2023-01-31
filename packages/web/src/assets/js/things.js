@@ -11,7 +11,7 @@ import {
   removeBlock,
   removeCategory,
 } from './toolbox.js';
-import {getWorkspace, throwError} from './interpreter.js';
+import {getWorkspace} from './interpreter.ts';
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -309,6 +309,8 @@ const flyoutCategoryBlocks = function () {
         idField.textContent = webHidNames.get(key);
       } else if (thing.type === 'audio') {
         idField.textContent = audioDevices.get(key);
+      } else if (thing.type === 'video') {
+        idField.textContent = videoDevices.get(key);
       }
       block.appendChild(idField);
       block.setAttribute('gap', 8);
@@ -431,7 +433,7 @@ export const connectWebHidDevice = async function (thing) {
   }
   const device = await navigator.hid.requestDevice({filters: filters});
   if (device.length === 0) {
-    throwError('Connection failed or cancelled by User.');
+    console.error('Connection failed or cancelled by User.');
     return;
   }
   // generate a unique id for the new device
