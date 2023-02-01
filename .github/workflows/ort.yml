@@ -1,4 +1,4 @@
-name: Run OSS Review Toolkit
+name: OSS Review Toolkit
 
 # Controls when the action will run.
 on: [push, pull_request]
