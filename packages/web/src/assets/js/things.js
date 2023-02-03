@@ -25,6 +25,7 @@ import {
   generateSubscribeEventCode,
   generateSecurityBlock,
   generateSecurityCode,
+  crawl,
 } from './automatedBlockGeneration.js';
 
 /**
@@ -557,15 +558,11 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
 
 export const handleAddConsumedThing = async function (uri) {
   // TODO: Check if URI is valid
-  let res;
-  try {
-    res = await fetch(uri);
-  } catch (error) {
-    throwError(error);
-  }
-  // TODO: Error Handling
-  if (res.ok) {
-    const td = await res.json();
+
+  // Crawl all referenced Thing Description links
+  const foundTDs = await crawl(uri);
+
+  for (const td of foundTDs) {
     // generate a unique id for the new device
     const uid =
       Date.now().toString(36) + Math.random().toString(36).substring(2);
@@ -580,8 +577,6 @@ export const handleAddConsumedThing = async function (uri) {
       'consumedDevice',
       td
     );
-  } else {
-    throwError('Response not valid');
   }
 };
 
@@ -640,8 +635,6 @@ export const addDevice = function (deviceName, deviceId, type, td) {
     // Generate Property Blocks
     for (const [propertyName, operations] of Object.entries(propertiesObj)) {
       const op = new Set(operations.flat());
-      console.log(op);
-      console.log(typeof op);
 
       if (op.has('readproperty')) {
         generateReadPropertyBlock(propertyName, deviceName, td);

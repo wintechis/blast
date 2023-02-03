@@ -15,7 +15,7 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
   const langTag = getLanguage();
   let description = '';
   if (td.descriptions !== undefined) {
-    description += td.descriptions[langTag] ?? deviceDescription;
+    description += td.descriptions?.[langTag] ?? deviceDescription;
   } else {
     description += deviceDescription;
   }
@@ -56,7 +56,7 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
       init: function () {
         this.appendDummyInput('name')
           // If device name is available in browser language use that instead
-          .appendField(td.titles[langTag] ?? td.title, 'label')
+          .appendField(td.titles?.[langTag] ?? td.title, 'label')
           .appendField(new FieldTextInput('Error getting name'), 'name');
         this.appendDummyInput('id')
           .appendField(new FieldTextInput('Error getting id'), 'id')
@@ -161,8 +161,8 @@ export function generateThingCode(deviceName) {
 export function generateReadPropertyBlock(propertyName, deviceName, td) {
   const langTag = getLanguage();
   let blockName = '';
-  if (td.titles && td.titles[langTag]) {
-    blockName = `read property "${td.titles[langTag]}" of`;
+  if (td.titles && td.titles?.[langTag]) {
+    blockName = `read property "${td.titles?.[langTag]}" of`;
   } else if (td.title) {
     blockName = `read property "${td.title}" of`;
   } else {
@@ -177,7 +177,7 @@ export function generateReadPropertyBlock(propertyName, deviceName, td) {
       this.setOutput(true, td.properties.type ?? null);
       this.setColour(255);
       this.setTooltip(
-        (td.descriptions && td.description[langTag]) ??
+        td.descriptions?.[langTag] ??
           td.description ??
           `Read the ${propertyName} property of ${deviceName}`
       );
@@ -557,10 +557,9 @@ export function generateSubscribeEventBlock(eventName, deviceName) {
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(`on ${eventName}`)
-        .appendField(`events of ${deviceName}`);
+        .appendField(`on ${eventName} events of`);
       this.appendDummyInput()
-        .appendField('uses variable')
+        .appendField('with variable')
         .appendField(new FieldTextInput('eventVar'), 'eventVar');
       this.appendStatementInput('statements').appendField('do');
       this.setInputsInline(false);
@@ -771,3 +770,68 @@ const getLanguage = function () {
   const langTag = lang.split('-')[0];
   return langTag;
 };
+
+export async function crawl(startUri) {
+  // Found Thing Descriptions
+  let foundTDs = new Set();
+  // Visited URIs
+  let visited = new Set();
+  // URIs to visit
+  let todo = new Set();
+
+  // add start uri
+  todo.add(startUri);
+
+  // iterate over todo set until empty
+  for (const uriElement of todo) {
+    // If already visited delete
+    if (visited.has(uriElement)) {
+      todo.delete(uriElement);
+      continue;
+    }
+    // Fetch TD and extract links to linksets in TD
+    const [newTD, newURIs] = await fetchTD(uriElement);
+
+    // Add TD to found TDs
+    foundTDs.add(newTD);
+
+    // Add TD uri to visited
+    visited.add(uriElement);
+
+    // Remove form todo set
+    todo.delete(uriElement);
+
+    // Add new found links in linkset to todos
+    for (let tmpUri of newURIs) {
+      todo.add(tmpUri);
+    }
+  }
+  // Return set of found TDs
+  return foundTDs;
+}
+
+// Fetch Thing Description
+async function fetchTD(uri) {
+  let res;
+  try {
+    res = await fetch(uri);
+  } catch (error) {
+    throw error;
+  }
+  if (res.ok) {
+    const nextTDLinks = [];
+    // Get TD
+    const td = await res.json();
+
+    if (td.links) {
+      // find type of link and get href
+      for (const [_, value] of Object.entries(td.links)) {
+        if (value.rel === 'next') {
+          nextTDLinks.push(value.href);
+        }
+      }
+    }
+
+    return [td, nextTDLinks];
+  }
+}
