@@ -6,7 +6,6 @@ import {consumedThingInstances} from './things.js';
 import {
   getWorkspace,
   eventsInWorkspace,
-  throwError,
   addCleanUpFunction,
 } from './interpreter.js';
 
@@ -162,11 +161,11 @@ export function generateReadPropertyBlock(propertyName, deviceName, td) {
   const langTag = getLanguage();
   let blockName = '';
   if (td.titles && td.titles?.[langTag]) {
-    blockName = `read property "${td.titles?.[langTag]}" of`;
+    blockName = `read property '${td.titles?.[langTag]}' of`;
   } else if (td.title) {
-    blockName = `read property "${td.title}" of`;
+    blockName = `read property '${td.title}' of`;
   } else {
-    blockName = `read property "${propertyName}" of`;
+    blockName = `read property '${propertyName}' of`;
   }
 
   Blocks[`${deviceName}_readPropertyBlock_${propertyName}`] = {
@@ -223,7 +222,7 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
           .appendField('write value', 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(`to "${propertyName}" property of`, 'label');
+          .appendField(`to '${propertyName}' property of`, 'label');
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -250,7 +249,7 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
           .setCheck('Thing')
           .appendField('write value', 'label')
           .appendField(new FieldDropdown(optionsArr), 'value')
-          .appendField(`to "${propertyName}" property of`, 'label');
+          .appendField(`to '${propertyName}' property of`, 'label');
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
         this.setColour(255);
@@ -343,7 +342,7 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(`invoke "${actionName}" action of`, 'label');
+          .appendField(`invoke '${actionName}' action of`, 'label');
         this.setInputsInline(true);
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -359,7 +358,7 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('value')
           .setCheck(inputValueType)
-          .appendField(`invoke action "${actionName}" with value`, 'label');
+          .appendField(`invoke action '${actionName}' with value`, 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField(` of`, 'label');
@@ -380,7 +379,7 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('thing')
           .setCheck('Thing')
-          .appendField(`invoke "${actionName}" action of`, 'label');
+          .appendField(`invoke '${actionName}' action of`, 'label');
         this.setOutput(true, null);
         this.setInputsInline(true);
         this.setColour(0);
@@ -397,7 +396,7 @@ export function generateInvokeActionBlock(
       init: function () {
         this.appendValueInput('value')
           .setCheck(inputValueType)
-          .appendField(`invoke action "${actionName}" with value`, 'label');
+          .appendField(`invoke action '${actionName}' with value`, 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField(` of`, 'label');
@@ -686,7 +685,7 @@ globalThis['handleGenericEvent'] = async function (
 
 // TODO: Automaticall add string inputs
 // Generate only one block even if 2 Things with basic auth are connected
-export function generateSecurityBlock(deviceName, td) {
+export function generateSecurityBlock() {
   Blocks[`SecurityBlock`] = {
     init: function () {
       this.appendValueInput('username')
@@ -704,10 +703,8 @@ export function generateSecurityBlock(deviceName, td) {
   };
 }
 
-export function generateSecurityCode(deviceName, td) {
+export function generateSecurityCode(td) {
   JavaScript[`SecurityBlock`] = function (block) {
-    const deviceId =
-      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
     let blockId = "''"; //block id of thing block
     if (block.getInputTargetBlock('thing')) {
       blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
@@ -773,11 +770,11 @@ const getLanguage = function () {
 
 export async function crawl(startUri) {
   // Found Thing Descriptions
-  let foundTDs = new Set();
+  const foundTDs = new Set();
   // Visited URIs
-  let visited = new Set();
+  const visited = new Set();
   // URIs to visit
-  let todo = new Set();
+  const todo = new Set();
 
   // add start uri
   todo.add(startUri);
@@ -802,7 +799,7 @@ export async function crawl(startUri) {
     todo.delete(uriElement);
 
     // Add new found links in linkset to todos
-    for (let tmpUri of newURIs) {
+    for (const tmpUri of newURIs) {
       todo.add(tmpUri);
     }
   }
@@ -812,12 +809,8 @@ export async function crawl(startUri) {
 
 // Fetch Thing Description
 async function fetchTD(uri) {
-  let res;
-  try {
-    res = await fetch(uri);
-  } catch (error) {
-    throw error;
-  }
+  const res = await fetch(uri);
+
   if (res.ok) {
     const nextTDLinks = [];
     // Get TD

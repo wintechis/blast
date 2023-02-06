@@ -616,8 +616,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     // Supported is only none_sc and basic_sc
     if (td.security === 'basic_sc') {
-      generateSecurityBlock(deviceName, td);
-      generateSecurityCode(deviceName, td);
+      generateSecurityBlock();
+      generateSecurityCode(td);
 
       // Add to implementedThingsBlockList
       implementedThingsBlockList.push({
