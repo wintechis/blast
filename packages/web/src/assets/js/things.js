@@ -350,7 +350,6 @@ const flyoutCategoryBlocks = function () {
   // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
-      console.log(thing.type);
       if (thing.type === 'bluetooth' && !getRssiBlockadded) {
         addBlock('bluetoothGeneric_get_signal_strength_wb', 'Properties');
         getRssiBlockadded = true;

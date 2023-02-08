@@ -46,7 +46,6 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
     }
   }
   if (td.events !== undefined) {
-    console.log(Blocks);
     Blocks[`things_${deviceName}`] = {
       /**
        * Block representing a consumed device.
@@ -241,7 +240,6 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
         i.toString(),
       ]);
     }
-    console.log(optionsArr);
 
     Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
       init: function () {
@@ -328,8 +326,7 @@ export function generateInvokeActionBlock(
         inputValueType = 'Array';
         break;
       case 'object':
-        //throwError('Objects are currently not supportet');
-        console.log('Objects are currently not supportet');
+        console.error('Objects are currently not supportet');
         break;
       default:
         inputValueType = null;

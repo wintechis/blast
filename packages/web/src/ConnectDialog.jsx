@@ -89,7 +89,6 @@ export default class ConnectDialog extends React.Component {
 
   // Save entered text in fetchUri state
   handleChange = function (e) {
-    console.log(isValidHttpUrl(e.target.value));
     this.setState({fetchUri: e.target.value});
   };
 
