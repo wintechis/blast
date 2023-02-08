@@ -2,15 +2,17 @@
  * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
-import {Content, ProtocolClient, createLoggers} from '@node-wot/core';
+import {
+  Content,
+  ProtocolClient,
+  ProtocolHelpers,
+  createLoggers,
+} from '@node-wot/core';
 import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {BluetoothForm} from './Bluetooth';
-import {
-  convertToNodeReadable,
-  readableStreamToBuffer,
-} from '../binding-helpers';
 import {BluetoothAdapter} from './BluetoothAdapter';
+import {Readable} from 'stream';
 
 const {debug, error, warn} = createLoggers(
   'binding-bluetooth',
@@ -43,13 +45,21 @@ export default class WebBluetoothClient implements ProtocolClient {
 
     const value = await characteristic.readValue();
 
-    const buff = new Uint8Array(value.buffer);
+    let buff;
+    if (form['bdo:signed']) {
+      buff = new Int8Array(value.buffer);
+    } else {
+      buff = new Uint8Array(value.buffer);
+    }
     // Convert to readable
-    const body = convertToNodeReadable(buff);
+    const body = Readable.from(buff);
 
     return {
       type: form.contentType || 'application/x.binary-data-stream',
       body: body,
+      toBuffer: () => {
+        return ProtocolHelpers.readStreamFully(body);
+      },
     };
   }
 
@@ -62,7 +72,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     let arrBuffer;
     //Convert readableStreamToBuffer
     if (typeof content !== 'undefined') {
-      const buffer = await readableStreamToBuffer(content.body);
+      const buffer = await content.toBuffer();
       arrBuffer = buffer.buffer.slice(
         buffer.byteOffset,
         buffer.byteOffset + buffer.byteLength
@@ -84,14 +94,14 @@ export default class WebBluetoothClient implements ProtocolClient {
         debug(
           `invoking "writeValueWithoutResponse" on characteristic ${deconstructedForm.characteristicId}`
         );
-        await characteristic.writeValueWithoutResponse(new DataView(arrBuffer));
+        await characteristic.writeValueWithoutResponse(arrBuffer);
         break;
 
       case 'sbo:write':
         debug(
           `invoking "writeValueWithResponse" on characteristic ${deconstructedForm.characteristicId}`
         );
-        await characteristic.writeValueWithResponse(new DataView(arrBuffer));
+        await characteristic.writeValueWithResponse(arrBuffer);
         break;
 
       default: {
@@ -111,7 +121,8 @@ export default class WebBluetoothClient implements ProtocolClient {
     return this.writeResource(form, content).then(() => {
       return {
         type: 'text/plain',
-        body: convertToNodeReadable(''),
+        body: Readable.from(''),
+        toBuffer: () => Promise.resolve(Buffer.from('')),
       };
     });
   }
@@ -143,10 +154,14 @@ export default class WebBluetoothClient implements ProtocolClient {
       const value = (event.target as BluetoothRemoteGATTCharacteristic)
         .value as DataView;
       const array = new Uint8Array(value.buffer);
+      const body = Readable.from(array);
       // Convert value a DataView to ReadableStream
       const content = {
         type: form.contentType || 'text/plain',
-        body: convertToNodeReadable(array),
+        body,
+        toBuffer: () => {
+          return ProtocolHelpers.readStreamFully(body);
+        },
       };
       next(content);
     };

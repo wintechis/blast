@@ -23,7 +23,8 @@
     "clean": "yarn rimraf dist",
     "lint": "eslint \"src/**\"",
     "fix": "eslint --fix \"src/** \"",
-    "test": "c8 mocha \"test/**/*.mocha.js\" --reporter-option maxDiffsize=0"
+    "test": "mocha \"test/**/*.mocha.js\" -O=0",
+    "test:coverage": "nyc mocha \"test/**/*.mocha.js\""
   },
   "type": "module",
   "main": "index.html",
@@ -40,28 +41,29 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "fs": "latest",
     "mocha": "^9.2.2",
     "node-polyfill-webpack-plugin": "^2.0.1",
+    "nyc": "^15.1.0",
     "pnp-webpack-plugin": "^1.7.0",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
     "sinon": "^13.0.1",
     "supports-color": "^9.2.3",
     "ts-loader": "^9.4.1",
-    "web-bluetooth-mock": "^1.1.0",
+    "web-bluetooth-mock": "https://github.com/derwehr/web-bluetooth-mock",
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "@node-wot/binding-http": "^0.8.2",
-    "@node-wot/core": "0.8.2",
-    "@node-wot/td-tools": "0.8.2",
+    "@node-wot/binding-http": "0.8.4",
+    "@node-wot/core": "0.8.4",
+    "@node-wot/td-tools": "0.8.4",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
     "joy-con-webhid": "^0.2.0",
     "node-ble": "https://github.com/derwehr/node-ble",
     "readable-stream": "^4.2.0",
     "rxjs": "5.5.11",
+    "stream": "^0.0.2",
     "typescript": "^4.7.4",
     "uritemplate": "^0.3.4",
     "webpack": "^5.74.0",
@@ -70,13 +72,13 @@
     "x11": "^2.3.0"
   },
   "packageManager": "yarn@3.3.0",
-  "c8": {
+  "nyc": {
     "all": true,
-    "src": [
-      "src/"
-    ],
-    "x": [
-      ".pnp*"
+    "exclude": [
+      ".pnp.*",
+      ".yarn/**",
+      "test/**",
+      "webpack.conf.cjs"
     ]
   }
 }

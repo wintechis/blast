@@ -7,7 +7,7 @@ import {
   getWorkspace,
   eventsInWorkspace,
   addCleanUpFunction,
-} from './interpreter.js';
+} from './interpreter.ts';
 
 export function generateThingBlock(deviceName, deviceDescription, td) {
   // Generate description depending on available information

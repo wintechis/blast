@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import useBlocklyWorkspace from './useBlocklyWorkspace';
+import useBlocklyWorkspace from './useBlocklyWorkspace.ts';
 
 import {currentToolbox} from '../assets/js/toolbox.js';
 

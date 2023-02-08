@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {getWorkspace} from './interpreter.js';
+import {getWorkspace} from './interpreter.ts';
 
 const defaultToolbox = {
   kind: 'categoryToolbox',

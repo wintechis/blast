@@ -10,9 +10,9 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.js';
+import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 import {connectWebHidDevice} from '../assets/js/things.js';
-import {getWorkspace} from '../assets/js/interpreter.js';
+import {getWorkspace} from '../assets/js/interpreter.ts';
 import {requestDevice} from '../assets/js/webBluetooth.js';
 
 export default class ReonnectDialog extends React.Component {

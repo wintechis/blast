@@ -1,17 +1,9 @@
 /**
  * @fileoverview JavaScript code generators for the Ruuvi Tag
  * (https://ruuvi.com/ruuvitag/).
- * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
 declare global {
-  function ruuvi_handleEvents(
-    ownId: string,
-    blockId: string,
-    id: BluetoothDevice['id'],
-    statements: string
-  ): Promise<void>;
-
   interface RAWv1 {
     accelerationX?: number;
     accelerationY?: number;
@@ -49,27 +41,37 @@ declare global {
   let mac: unknown;
 }
 
-import Blockly from 'blockly';
-const {JavaScript} = Blockly;
-import {getWorkspace, throwError} from '../../interpreter.js';
-import {LEScanResults, startLEScan} from '../../webBluetooth.js';
+import {Block} from 'blockly';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+import {LEScanResults} from '../../webBluetooth.js';
 
 /**
  * Generates JavaScript code for the things_ruuviTag block.
- * @param {Blockly.Block} block the things_ruuviTag block.
- * @returns {String} the generated code.
  */
-JavaScript['things_ruuviTag'] = function (block: Blockly.Block) {
+JavaScript['things_ruuviTag'] = function (block: Block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
+  const name = JavaScript.quote_(block.getFieldValue('name'));
+
+  JavaScript.imports_['core'] =
+    "const blastCore = await import('../../assets/blast/blast.web.js');";
+  JavaScript.imports_['tds'] =
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+
+  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
+
+  JavaScript.definitions_['RuuviTag'] = `const {RuuviTag} = blastTds;`;
+  JavaScript.definitions_['things'] = 'const things = new Map();';
+  JavaScript.definitions_[
+    'things' + block.id
+  ] = `things.set(${name}, await createThing(RuuviTag, ${id}));`;
+
   return [id, JavaScript.ORDER_NONE];
 };
 
 /**
- * Generates JavaScript code for the get_temperature block.
- * @param {Blockly.Block} block the get_temperature block.
- * @returns {String} the generated code.
+ * Generates JavaScript code for the ruuviTag_event block.
  */
-JavaScript['ruuviTag_event'] = function (block: Blockly.Block) {
+JavaScript['ruuviTag_event'] = function (block: Block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.quote_(
@@ -285,18 +287,15 @@ function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
 /**
  * Handles RuuviTag events.
  */
-globalThis['ruuvi_handleEvents'] = async function (
+(globalThis as any)['ruuvi_handleEvents'] = async function (
   ownId: string,
   blockId: string,
   id: BluetoothDevice['id'],
   statements: string
 ): Promise<void> {
   if (id === null) {
-    throwError('No thermometer is set');
+    console.error('No thermometer is set');
   }
-  const ws = getWorkspace();
-  const block = ws.getBlockById(blockId);
-  const thing = block.thing;
 
   /**
    * Tries getting the measurements from the RuuviTag, throws an error after 30 tries.
@@ -334,7 +333,7 @@ globalThis['ruuvi_handleEvents'] = async function (
         )
       );
     }
-    throwError('No measurements found after 30 seconds.');
+    console.error('No measurements found after 30 seconds.');
   };
 
   const parsedData = (await getAdvertisementData(0)) as RAWv1 | RAWv2;

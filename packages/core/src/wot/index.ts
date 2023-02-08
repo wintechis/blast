@@ -12,10 +12,13 @@ let wot: typeof WoT;
 
 declare const Wot: any;
 
-export const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
+export const getServient = function (
+  bluetoothAdapter: BluetoothAdapter
+): Servient {
   const httpConfig = {
     allowSelfSigned: true, // client configuration
   };
+
   if (!servient) {
     try {
       servient = new Servient();

@@ -5,12 +5,7 @@
 
 import 'buffer';
 import Blockly from 'blockly';
-import {
-  addCleanUpFunction,
-  getWorkspace,
-  onStatusChange,
-  throwError,
-} from './interpreter.js';
+import {addCleanUpFunction, getWorkspace} from './interpreter.ts';
 import {addWebBluetoothDevice, getThingsLog} from './things.js';
 
 const {dialog} = Blockly;
@@ -116,7 +111,7 @@ export const requestDevice = async function (thing) {
       getWorkspace().refreshToolboxSelection();
       return device;
     } catch (error) {
-      throwError(error);
+      console.error(error);
     }
   }
 };
@@ -133,7 +128,7 @@ export const getDeviceById = async function (id) {
       return device;
     }
   }
-  throwError(`Bluetooth device ${id} wasn't found in paired devices.`);
+  console.error(`Bluetooth device ${id} wasn't found in paired devices.`);
 };
 
 /**
@@ -153,7 +148,7 @@ const connect = async function (id) {
     thingsLog('Connected', 'Bluetooth', id);
     return request;
   } catch (error) {
-    throwError(`Error connecting to Bluetooth device ${id}`);
+    console.error(`Error connecting to Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -174,7 +169,7 @@ const disconnect = async function (id) {
     thingsLog(`Disconnected from <code>${id}</code>`, 'Bluetooth');
     return request;
   } catch (error) {
-    throwError(`Error disconnecting from Bluetooth device ${id}`);
+    console.error(`Error disconnecting from Bluetooth device ${id}`);
     console.error(error);
   }
 };
@@ -226,7 +221,7 @@ export const writeWithoutResponse = async function (
     const errorMsg =
       'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    throwError(errorMsg);
+    console.error(errorMsg);
   }
 };
 
@@ -277,7 +272,7 @@ export const writeWithResponse = async function (
     const errorMsg =
       'Error writing to Bluetooth device.\nMake sure the device is compatible with the connected block.';
     console.error(error);
-    throwError(errorMsg);
+    console.error(errorMsg);
   }
 };
 
@@ -309,7 +304,7 @@ const getPrimaryService = async function (id, serviceUUID) {
     );
   } catch (error) {
     console.error(error);
-    throwError(`No Services Matching UUID ${serviceUUID} found in Device.`);
+    console.error(`No Services Matching UUID ${serviceUUID} found in Device.`);
   }
   return service;
 };
@@ -348,7 +343,7 @@ export const getCharacteristic = async function (
     );
   } catch (error) {
     console.error(error);
-    throwError('The device is not compatible with the connected block.');
+    console.error('The device is not compatible with the connected block.');
   }
   return characteristic;
 };
@@ -388,7 +383,7 @@ export const read = async function (id, serviceUUID, characteristicUUID) {
     return value;
   } catch (error) {
     console.error(error);
-    throwError(`Error reading from Bluetooth device ${id}`);
+    console.error(`Error reading from Bluetooth device ${id}`);
   }
 };
 
@@ -486,7 +481,7 @@ export const subscribe = async function (id, serviceUUID, charUUID, handler) {
     );
   } catch (error) {
     console.error(error);
-    throwError(`Error subscribing to Bluetooth device ${id}`);
+    console.error(`Error subscribing to Bluetooth device ${id}`);
   }
 };
 
@@ -544,11 +539,6 @@ export const startLEScan = async function () {
   // Stop scan after 30 seconds.
   setTimeout(stopLEScan, 30000);
 };
-onStatusChange.running.push(() => {
-  if (blocksRequiringScan.length > 0) {
-    startLEScan();
-  }
-});
 
 /**
  * Stops the BLE Scan.

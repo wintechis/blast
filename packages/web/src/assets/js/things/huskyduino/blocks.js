@@ -8,24 +8,6 @@ import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {implementedThings} from '../../things.js';
 
-const {HuskyDuino} = tds;
-
-const huskyduinos = new Map();
-
-/**
- * Keeps singleton instances of HuskyDuinos instantiated by BLAST.
- * @param {string} id The id of the HuskyDuinos.
- */
-const getHuskyduino = async function (id) {
-  if (huskyduinos.has(id)) {
-    return huskyduinos.get(id);
-  } else {
-    const thing = await createThing(HuskyDuino, id);
-    huskyduinos.set(id, thing);
-    return thing;
-  }
-};
-
 Blocks['things_Huskylens'] = {
   /**
    * Block representing a HuskyDuino.
@@ -45,19 +27,9 @@ Blocks['things_Huskylens'] = {
     this.firstTime = true;
     this.thing = null;
   },
-  onchange: function () {
-    // on creating this block initialize new instance of HuskyDuino
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getHuskyduino(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
-  },
 };
 
-Blocks['huskylens_choose_algo'] = {
+Blocks['huskylens_write_algo_property'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
@@ -95,7 +67,7 @@ Blocks['huskylens_choose_algo'] = {
   },
 };
 
-Blocks['huskylens_write_id'] = {
+Blocks['huskylens_write_id_property'] = {
   init: function () {
     this.appendValueInput('id')
       .setCheck('Number')
@@ -135,7 +107,7 @@ const HUSKYLENS_WRITE_ID_XML = `
 </block>
 `;
 
-Blocks['huskylens_write_forget_flag'] = {
+Blocks['huskylens_forgetAll_action'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
@@ -160,7 +132,7 @@ Blocks['huskylens_write_forget_flag'] = {
   },
 };
 
-Blocks['huskylens_read_id'] = {
+Blocks['huskylens_read_id_propery'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')

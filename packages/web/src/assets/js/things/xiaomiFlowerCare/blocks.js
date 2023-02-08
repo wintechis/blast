@@ -3,28 +3,8 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
-const {Blocks, dialog, FieldTextInput} = Blockly;
+import {Blocks, dialog, FieldTextInput} from 'blockly';
 import {implementedThings} from '../../things.js';
-
-const {XiaomiFlowerCare} = tds;
-
-const xiaomiFlowerCareInstances = new Map();
-
-/**
- * Keeps singleton instances of XiaomiPlantSensor instantiated by BLAST.
- * @param {string} id the id of the XiaomiPlantSensor.
- * @return {XiaomiPlantSensor} the instance.
- */
-const getXiaomiFlowerCare = async function (id) {
-  if (xiaomiFlowerCareInstances.has(id)) {
-    return xiaomiFlowerCareInstances.get(id);
-  } else {
-    const thing = await createThing(XiaomiFlowerCare, id);
-    xiaomiFlowerCareInstances.set(id, thing);
-    return thing;
-  }
-};
 
 Blocks['things_xiaomiFlowerCare'] = {
   /**
@@ -45,18 +25,6 @@ Blocks['things_xiaomiFlowerCare'] = {
     this.setHelpUrl('');
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.thing = null;
-  },
-
-  onchange: function () {
-    // on creating this block initialize new instance of XiaomiPlantSensor
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getXiaomiFlowerCare(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
   },
 };
 

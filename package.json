@@ -25,8 +25,8 @@
         "node": "16.13.2"
     },
     "dependencies": {
-        "@types/node": "^18.11.10",
-        "@types/web-bluetooth": "^0.0.16",
+        "@types/node": "latest",
+        "@types/web-bluetooth": "latest",
         "@typescript-eslint/eslint-plugin": "latest",
         "@typescript-eslint/parser": "latest",
         "eslint": "latest",
@@ -34,6 +34,7 @@
         "eslint-config-prettier": "latest",
         "eslint-plugin-node": "latest",
         "eslint-plugin-react": "latest",
+        "license-checker-rseidelsohn": "^4.1.1",
         "prettier": "latest",
         "typescript": "latest"
     },

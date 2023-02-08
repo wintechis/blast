@@ -14,7 +14,7 @@ const {
   FieldTextInput,
 } = Blockly;
 
-import {eventsInWorkspace, getWorkspace} from '../../interpreter.js';
+import {eventsInWorkspace, getWorkspace} from '../../interpreter.ts';
 import {implementedThings, getWebHidDevice} from '../../things.js';
 import StreamDeck from '@elgato-stream-deck/webhid';
 

@@ -1,8 +1,6 @@
 import React from 'react';
 import propTypes from 'prop-types';
 
-import {throwError} from './assets/js/interpreter.js';
-
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -20,7 +18,7 @@ export default class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
-    throwError(error, errorInfo);
+    console.error(error, errorInfo);
   }
 
   render() {

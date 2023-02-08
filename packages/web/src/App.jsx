@@ -30,7 +30,7 @@ import PseudoCodeTab from './tabs/PseudoCodeTab.jsx';
 
 import './assets/js/things/index.js';
 
-import {getLatestCode, onStatusChange} from './assets/js/interpreter';
+import {getLatestCode, onStatusChange} from './assets/js/interpreter.ts';
 
 const theme = createTheme({
   palette: {

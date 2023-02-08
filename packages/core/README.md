@@ -28,13 +28,13 @@ await thing.writeProperty('colour', {R: 255, G: 0, B: 0});
 
 ### API
 #### createThing
-##### Definition
-Creates a [`consumedThing`](https://www.w3.org/TR/wot-scripting-api/#dom-consumedthing) from the provided **Thing description** and **id**
-
 ##### Syntax
 ```JavaScript
 await createThing(td, id)
 ```
+
+##### Definition
+Creates a [`consumedThing`](https://www.w3.org/TR/wot-scripting-api/#dom-consumedthing) from the provided **Thing description** and **id**
 
 ##### Parameters
 | Parameter | Description |
@@ -44,7 +44,9 @@ await createThing(td, id)
 
 ##### Import
 
-`import {createThing} from 'blast.node.js'`
+```JavaScript
+import {createThing} from 'blast.node.js'`
+```
 
 #### EddystoneHelpers
 Object containg helper methods for interacting with [Eddystone](https://github.com/google/eddystone) devices.
@@ -62,3 +64,20 @@ import {EddystoneHelpers} from 'blast.node.js'`
 | `parseCapabilities` | Parses the response of a `readProperty` operation on the capabilities property and returns an object with human-readable values. e.g `parseCapabilities(00040103000fe2ecf0f4f8fc0004)` returns <pre>{<br>&nbsp;&nbsp;specVersion: 0,<br>&nbsp;&nbsp;maxSlots: 4,<br>&nbsp;&nbsp;maxEidPerSlot: 1,<br>&nbsp;&nbsp;isVarriableAdvIntervalSupported: true,<br>&nbsp;&nbsp;isVariableTxPowerSupported: true,<br>&nbsp;&nbsp;isUidSupported: true,<br>&nbsp;&nbsp;isUrlSupported: true,<br>&nbsp;&nbsp;isTlmSupported: true,<br>&nbsp;&nbsp;isEidSupported: true,<br>&nbsp;&nbsp;supportedTxPowerLevels: [<br>&nbsp;&nbsp;&nbsp;&nbsp;-30, -20, -16, -12,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-8,&nbsp; -4,&nbsp;&nbsp; 0, &nbsp;&nbsp;4<br>&nbsp;&nbsp;]<br>}</pre> |
 | decodeAdvertisingData | Decodes the response of a `readProperty` operation on the `AdvertisingData` property and returns a human-readable string.
 | encodeAdvertisingData | Encodes a string using the [Eddystone protocol specification](https://github.com/google/eddystone/blob/master/protocol-specification.md) for writing it to the `AdvertisingData` property.
+
+#### BluetoothWrapper
+Wrapper for communicating with Bluetooth devices via [node-ble](https://github.com/chrvadala/node-ble) and [webBluetooth](https://github.com/WebBluetoothCG/web-bluetooth#web-bluetooth).
+
+##### Import
+```JavaScript
+import {BluetoothWrapper} from 'blast.node.js'`
+```
+
+##### Interface
+```Typescript
+public async getCharacteristic(
+  deviceId: string,
+  serviceId: BluetoothServiceUUID,
+  characteristicId: BluetoothCharacteristicUUID
+): Promise<BluetoothRemoteGATTCharacteristic>
+```

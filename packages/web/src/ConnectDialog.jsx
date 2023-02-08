@@ -27,7 +27,7 @@ import {
   setWebHidButtonHandler,
 } from './assets/js/things.js';
 
-import {getStdWarn} from './assets/js/interpreter.js';
+import {getStdWarn} from './assets/js/interpreter.ts';
 import {requestDevice} from './assets/js/webBluetooth.js';
 
 export default class ConnectDialog extends React.Component {
@@ -54,7 +54,6 @@ export default class ConnectDialog extends React.Component {
   componentDidMount() {
     setAudioSelectButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'audiooutput'});
-      console.log(this.state);
     });
     setVideoSelectButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'videoinput'});

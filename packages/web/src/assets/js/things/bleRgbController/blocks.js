@@ -7,24 +7,7 @@
 import Blockly from 'blockly';
 import {implementedThings} from '../../things.js';
 
-const {BleRgbController} = tds;
 const {Blocks, dialog, FieldTextInput} = Blockly;
-
-const bleRgbControllerInstances = new Map();
-
-/**
- * Keeps singleton instances of BleRgbControllers instantiated by BLAST.
- * @param {string} id The id of the BleRgbControllers.
- */
-const getBleRgbController = async function (id) {
-  if (bleRgbControllerInstances.has(id)) {
-    return bleRgbControllerInstances.get(id);
-  } else {
-    const thing = await createThing(BleRgbController, id);
-    bleRgbControllerInstances.set(id, thing);
-    return thing;
-  }
-};
 
 Blocks['things_bleLedController'] = {
   /**
@@ -47,16 +30,6 @@ Blocks['things_bleLedController'] = {
     this.getField('name').setEnabled(false);
     this.firstTime = true;
     this.thing = null;
-  },
-  onchange: function () {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      const webBluetoothId = this.getFieldValue('id');
-      this.firstTime = false;
-      getBleRgbController(webBluetoothId).then(thing => {
-        this.thing = thing;
-      });
-    }
   },
 };
 

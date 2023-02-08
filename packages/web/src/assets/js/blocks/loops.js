@@ -4,7 +4,7 @@
  */
 
 import {addBlock} from '../toolbox.js';
-import {eventsInWorkspace, getWorkspace} from '../interpreter.js';
+import {eventsInWorkspace, getWorkspace} from '../interpreter.ts';
 import Blockly from 'blockly';
 const {Blocks, Events, libraryBlocks, FieldDropdown} = Blockly;
 
@@ -16,9 +16,9 @@ Blocks['break_continue'] = Blocks['controls_flow_statements'];
 Blocks['conditional_statement'] = Blocks['controls_if'];
 
 // add changed names to Loops constant to ensure correct execution.
-libraryBlocks.loops.loopTypes.add('repeat');
-libraryBlocks.loops.loopTypes.add('while_until');
-libraryBlocks.loops.loopTypes.add('for');
+// libraryBlocks.loops.loopTypes.add('repeat');
+// libraryBlocks.loops.loopTypes.add('while_until');
+// libraryBlocks.loops.loopTypes.add('for');
 
 // Define inner block XML for the repeat block.
 const REPEAT_XML = `

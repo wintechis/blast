@@ -6,7 +6,7 @@ import * as RuuviTag from './RuuviTag.json';
 import * as XiaomiFlowerCare from './XiaomiFlowerCare.json';
 import * as XiaomiThermometer from './XiaomiThermometer.json';
 import * as PhilipsHue from './PhilipsHue.json';
-import * as GoveeLamp from './goveeLamp.json';
+import * as GoveeLamp from './GoveeLamp.json';
 
 export {
   BleRgbController,

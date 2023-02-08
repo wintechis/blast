@@ -3,17 +3,13 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript.js';
 import urdf from 'urdf';
-import {throwError} from '../../interpreter.js';
 
-const {JavaScript} = Blockly;
 globalThis['urdf'] = urdf;
 
 /**
  * Generates JavaScript code for the sparql_query block.
- * @param {Blockly.Block} block the sparql_query block.
- * @returns {String} the generated code.
  */
 JavaScript['sparql_query'] = function (block) {
   let query = block.getFieldValue('query');
@@ -30,8 +26,6 @@ JavaScript['sparql_query'] = function (block) {
 
 /**
  * Generates JavaScript code for the sparql_ask block.
- * @param {Blockly.Block} block the sparql_ask block.
- * @returns {String} the generated code.
  */
 JavaScript['sparql_ask'] = function (block) {
   let query = block.getFieldValue('query');
@@ -48,9 +42,6 @@ JavaScript['sparql_ask'] = function (block) {
 
 /**
  * Wrapper for urdf's query function.
- * @param {String} uri URI to query.
- * @param {String} format format of the resource to query
- * @param {String} query Query to execute.
  * @public
  */
 globalThis['urdfQueryWrapper'] = async function (uri, format, query) {
@@ -60,7 +51,7 @@ globalThis['urdfQueryWrapper'] = async function (uri, format, query) {
     res = await fetch(uri);
 
     if (!res.ok) {
-      throwError(
+      console.error(
         `Failed to get ${uri}, Error: ${res.status} ${res.statusText}`
       );
       return;
@@ -73,7 +64,7 @@ globalThis['urdfQueryWrapper'] = async function (uri, format, query) {
     await urdf.load(response, opts);
     res = await urdf.query(query);
   } catch (error) {
-    throwError(`Failed to get ${uri}, Error: ${error.message}`);
+    console.error(`Failed to get ${uri}, Error: ${error.message}`);
   }
 
   // if result is a boolean, return it.

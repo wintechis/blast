@@ -6,7 +6,7 @@
 import Blockly from 'blockly';
 const {Blocks, Events, FieldDropdown, FieldTextInput, JavaScript, Names} =
   Blockly;
-import {eventsInWorkspace, getWorkspace} from '../../interpreter.js';
+import {eventsInWorkspace, getWorkspace} from '../../interpreter.ts';
 import {implementedThings} from '../../things.js';
 
 Blocks['things_joycon'] = {
