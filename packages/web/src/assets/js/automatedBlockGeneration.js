@@ -1,8 +1,12 @@
-import Blockly from 'blockly';
-const {Blocks, FieldTextInput, FieldDropdown, Events, Names} = Blockly;
-const {JavaScript} = Blockly;
+import {
+  Blocks,
+  Events,
+  FieldTextInput,
+  FieldDropdown,
+  JavaScript,
+  Names,
+} from 'blockly';
 
-import {consumedThingInstances} from './things.js';
 import {
   getWorkspace,
   eventsInWorkspace,
@@ -65,7 +69,6 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
         this.setHelpUrl(td.support ?? '');
         this.getField('name').setEnabled(false);
         this.firstTime = true;
-        this.thing = null;
       },
 
       /**
@@ -80,13 +83,8 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
         );
       },
       onchange: function () {
-        // on creating this block initialize new instance of consumedThing
+        // on creating this block add event to events array
         if (!this.isInFlyout && this.firstTime && this.rendered) {
-          const deviceID = this.getFieldValue('id');
-          this.firstTime = false;
-          getConsumedThing(deviceID, td).then(thing => {
-            this.thing = thing;
-          });
           this.addEvent();
         }
       },
@@ -132,27 +130,25 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
         this.setTooltip(deviceDescription);
         this.setHelpUrl();
         this.getField('name').setEnabled(false);
-        this.firstTime = true;
-        this.thing = null;
-      },
-      onchange: function () {
-        // on creating this block initialize new instance of consumedThing
-        if (!this.isInFlyout && this.firstTime && this.rendered) {
-          const deviceID = this.getFieldValue('id');
-          this.firstTime = false;
-          getConsumedThing(deviceID, td).then(thing => {
-            this.thing = thing;
-          });
-        }
       },
     };
   }
 }
 
-export function generateThingCode(deviceName) {
+export function generateThingCode(deviceName, td) {
   JavaScript[`things_${deviceName}`] = function (block) {
-    const id = JavaScript.quote_(block.getFieldValue('id'));
-    return [id, JavaScript.ORDER_NONE];
+    const name = JavaScript.quote_(block.getFieldValue('name'));
+
+    JavaScript.imports_['core'] =
+      "const blastCore = await import('../../assets/blast/blast.web.js');";
+
+    JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
+    JavaScript.definitions_['things'] = 'const things = new Map();';
+    JavaScript.definitions_[
+      'things' + block.id
+    ] = `things.set(${name}, await createThing(${td}))`;
+
+    return [name, JavaScript.ORDER_NONE];
   };
 }
 
@@ -187,89 +183,54 @@ export function generateReadPropertyCode(propertyName, deviceName) {
   JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
     block
   ) {
-    const deviceId =
+    const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-    let blockId = "''"; //block id of thing block
-    if (block.getInputTargetBlock('thing')) {
-      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-    }
 
-    const functionReadGenericProperty = JavaScript.provideFunction_(
-      'readGenericProperty',
-      `
-      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, propertyName) {
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        return await (await thing.readProperty(propertyName)).value();
-      }`
-    );
-
-    const code = `await ${functionReadGenericProperty}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-      propertyName
-    )})`;
+    const code = `things.get(${name}).readProperty('${propertyName}')`;
     return [code, JavaScript.ORDER_NONE];
   };
 }
 
 export function generateWritePropertyBlock(propertyName, deviceName, td) {
-  // Without enum
-  if (td.properties[propertyName].enum === undefined) {
-    Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
-      init: function () {
+  Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
+    init: function () {
+      if (td.properties[propertyName].enum) {
+        const optionsArr = [];
+        for (let i = 0; i < td.properties[propertyName].enum.length; i++) {
+          optionsArr.push([
+            td.properties[propertyName].enum[i].toString(),
+            i.toString(),
+          ]);
+        }
+        this.appendValueInput('thing')
+          .setCheck('Thing')
+          .appendField('write value', 'label')
+          .appendField(new FieldDropdown(optionsArr), 'value')
+          .appendField(`to '${propertyName}' property of`, 'label');
+      } else {
         this.appendValueInput('value')
           .setCheck()
           .appendField('write value', 'label');
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField(`to '${propertyName}' property of`, 'label');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(255);
-        this.setTooltip(`Write the ${propertyName} property of ${deviceName}`);
-        this.setHelpUrl('');
-      },
-    };
-  }
-  // With enum
-  else {
-    const optionsArr = [];
-    for (let i = 0; i < td.properties[propertyName].enum.length; i++) {
-      optionsArr.push([
-        td.properties[propertyName].enum[i].toString(),
-        i.toString(),
-      ]);
-    }
-
-    Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
-      init: function () {
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField('write value', 'label')
-          .appendField(new FieldDropdown(optionsArr), 'value')
-          .appendField(`to '${propertyName}' property of`, 'label');
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(255);
-        this.setTooltip(
-          `Write the ${propertyName} property of a ${deviceName}`
-        );
-        this.setHelpUrl('');
-      },
-    };
-  }
+      }
+      this.setInputsInline(true);
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
+      this.setColour(255);
+      this.setTooltip(`Write the ${propertyName} property of ${deviceName}`);
+      this.setHelpUrl('');
+    },
+  };
 }
 
 export function generateWritePropertyCode(propertyName, deviceName, td) {
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
     block
   ) {
-    const deviceId =
+    const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-    let blockId = "''"; //block id of thing block
-    if (block.getInputTargetBlock('thing')) {
-      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-    }
 
     let value;
     // Without enum
@@ -283,19 +244,10 @@ export function generateWritePropertyCode(propertyName, deviceName, td) {
           parseInt(parseInt(valueIndex.split("'")[1]))
         ];
     }
-    const functionWriteGenericProperty = JavaScript.provideFunction_(
-      'writeGenericProperty',
-      `
-      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceID, propertyName, value) {
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        await thing.writeProperty(propertyName, value);
-      }`
-    );
 
-    const code = `await ${functionWriteGenericProperty}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-      propertyName
-    )}, ${JavaScript.quote_(value)});\n`;
+    value = JavaScript.quote_(value);
+
+    const code = `things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
 
     return code;
   };
@@ -333,80 +285,29 @@ export function generateInvokeActionBlock(
     }
   }
 
-  // Case no input, no output
-  if (typeof input === 'undefined' && typeof output === 'undefined') {
-    Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
-      init: function () {
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField(`invoke '${actionName}' action of`, 'label');
-        this.setInputsInline(true);
-        this.setPreviousStatement(true, null);
-        this.setNextStatement(true, null);
-        this.setColour(0);
-        this.setTooltip(`Invoke the ${actionName} action of`);
-        this.setHelpUrl('');
-      },
-    };
-  }
-  // Case input, no output
-  if (typeof input !== 'undefined' && typeof output === 'undefined') {
-    Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
-      init: function () {
+  Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
+    init: function () {
+      if (typeof input !== 'undefined') {
         this.appendValueInput('value')
           .setCheck(inputValueType)
           .appendField(`invoke action '${actionName}' with value`, 'label');
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField(` of`, 'label');
+      }
+      this.appendValueInput('thing')
+        .setCheck('Thing')
+        .appendField(`invoke '${actionName}' action of`, 'label');
+      this.setInputsInline(true);
+      if (typeof output !== 'undefined') {
+        this.setOutput(true, null);
         this.setInputsInline(true);
+      } else {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
-        this.setColour(0);
-        this.setTooltip(
-          `Incoke ${actionName} action of a ${deviceName} with a given value`
-        );
-        this.setHelpUrl('');
-      },
-    };
-  }
-  // Case no input, output
-  if (typeof input === 'undefined' && typeof output !== 'undefined') {
-    Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
-      init: function () {
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField(`invoke '${actionName}' action of`, 'label');
-        this.setOutput(true, null);
-        this.setInputsInline(true);
-        this.setColour(0);
-        this.setTooltip(
-          `Invoke ${actionName} action of a ${deviceName} with a given value`
-        );
-        this.setHelpUrl('');
-      },
-    };
-  }
-  // Case input, output
-  if (typeof input !== 'undefined' && typeof output !== 'undefined') {
-    Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
-      init: function () {
-        this.appendValueInput('value')
-          .setCheck(inputValueType)
-          .appendField(`invoke action '${actionName}' with value`, 'label');
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField(` of`, 'label');
-        this.setInputsInline(true);
-        this.setOutput(true, null);
-        this.setColour(0);
-        this.setTooltip(
-          `Incoke ${actionName} action of a ${deviceName} with a given value`
-        );
-        this.setHelpUrl('');
-      },
-    };
-  }
+      }
+      this.setColour(0);
+      this.setTooltip(`Invoke the ${actionName} action of`);
+      this.setHelpUrl('');
+    },
+  };
 }
 
 export function generateInvokeActionCode(
@@ -415,132 +316,28 @@ export function generateInvokeActionCode(
   input,
   output
 ) {
-  // Case no input no output
-  if (typeof input === 'undefined' && typeof output === 'undefined') {
-    JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-      block
-    ) {
-      const deviceId =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-      let blockId = "''"; //block id of thing block
-      if (block.getInputTargetBlock('thing')) {
-        blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-      }
+  JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
+    block
+  ) {
+    const name =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-      const functionInvokeGenericAction = JavaScript.provideFunction_(
-        'invokeGenericAction',
-        `
-      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, actionName, value) {
-        // make sure a device is connected.
+    let code = '';
+    if (typeof input === 'undefined') {
+      code = `await things.get(${name}).invokeAction('${actionName}')`;
+    } else {
+      const value =
+        JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
+      code = `await things.get(${name}).invokeAction('${actionName}', ${value})`;
+    }
 
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        await thing.invokeAction(actionName);
-      }`
-      );
+    if (typeof output !== 'undefined') {
+      code = `await ${code}.value()`;
+      code = [code, JavaScript.ORDER_NONE];
+    }
 
-      const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-        actionName
-      )});\n`;
-      return code;
-    };
-  }
-  // Case input, no output
-  if (typeof input !== 'undefined' && typeof output === 'undefined') {
-    JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-      block
-    ) {
-      const deviceId =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-      let blockId = "''"; //block id of thing block
-      if (block.getInputTargetBlock('thing')) {
-        blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-      }
-
-      const value = JavaScript.valueToCode(
-        block,
-        'value',
-        JavaScript.ORDER_NONE
-      );
-
-      const functionInvokeGenericAction = JavaScript.provideFunction_(
-        'invokeGenericAction',
-        `
-      async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, actionName, value) {
-        // make sure a device is connected.
-
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        await thing.invokeAction(actionName, value);
-      }`
-      );
-
-      const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-        actionName
-      )}, ${value});\n`;
-      return code;
-    };
-  }
-  // Case no input, output
-  if (typeof input === 'undefined' && typeof output !== 'undefined') {
-    JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-      block
-    ) {
-      const deviceId =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-      let blockId = "''"; //block id of thing block
-      if (block.getInputTargetBlock('thing')) {
-        blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-      }
-
-      const functionInvokeGenericAction = JavaScript.provideFunction_(
-        'invokeGenericAction',
-        `
-        async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, actionName) {
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        return await (await thing.invokeAction(actionName)).value();
-      }`
-      );
-
-      const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-        actionName
-      )})`;
-      return [code, JavaScript.ORDER_NONE];
-    };
-  }
-  // Case input, output
-  if (typeof input !== 'undefined' && typeof output !== 'undefined') {
-    JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-      block
-    ) {
-      const deviceId =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-      let blockId = "''"; //block id of thing block
-      if (block.getInputTargetBlock('thing')) {
-        blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-      }
-      const value = JavaScript.valueToCode(
-        block,
-        'value',
-        JavaScript.ORDER_NONE
-      );
-      const functionInvokeGenericAction = JavaScript.provideFunction_(
-        'invokeGenericAction',
-        `
-        async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(blockId, deviceId, actionName, value) {
-        const block = getWorkspace().getBlockById(blockId);
-        const thing = block.thing;
-        return await (await thing.invokeAction(actionName, value)).value();
-      }`
-      );
-
-      const code = `await ${functionInvokeGenericAction}(${blockId}, ${deviceId}, ${JavaScript.quote_(
-        actionName
-      )}, ${value})`;
-      return [code, JavaScript.ORDER_NONE];
-    };
-  }
+    return code;
+  };
 }
 
 export function generateSubscribeEventBlock(eventName, deviceName) {
@@ -683,7 +480,7 @@ globalThis['handleGenericEvent'] = async function (
 // TODO: Automaticall add string inputs
 // Generate only one block even if 2 Things with basic auth are connected
 export function generateSecurityBlock() {
-  Blocks[`SecurityBlock`] = {
+  Blocks['SecurityBlock'] = {
     init: function () {
       this.appendValueInput('username')
         .setCheck('String')
@@ -701,11 +498,7 @@ export function generateSecurityBlock() {
 }
 
 export function generateSecurityCode(td) {
-  JavaScript[`SecurityBlock`] = function (block) {
-    let blockId = "''"; //block id of thing block
-    if (block.getInputTargetBlock('thing')) {
-      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-    }
+  JavaScript['SecurityBlock'] = function (block) {
     const username = JavaScript.valueToCode(
       block,
       'username',
@@ -718,11 +511,15 @@ export function generateSecurityCode(td) {
     );
 
     const id = td.id;
+    JavaScript.imports_['core'] =
+      "const blastCore = await import('../../assets/blast/blast.web.js');";
+
+    JavaScript.definitions_['getServient'] = 'const {getServient} = blastCore;';
     const functionSetPassword = JavaScript.provideFunction_(
       'setCredentials',
       `
       function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}(id, user, pwd) {
-        const servient = getRunningServient();
+        const servient = getServient();
         const credentials = {};
         credentials[id] = {
           username: user,
@@ -738,25 +535,6 @@ export function generateSecurityCode(td) {
     return code;
   };
 }
-
-globalThis['getRunningServient'] = function () {
-  const servient = getServient();
-  return servient;
-};
-
-/**
- * Keeps singleton instances of a consumedThing instantiated by BLAST.
- * @param {string} id The id of the consumedThing.
- */
-const getConsumedThing = async function (id, td) {
-  if (consumedThingInstances.has(id)) {
-    return consumedThingInstances.get(id);
-  } else {
-    const thing = await consumeThingDescription(td);
-    consumedThingInstances.set(id, thing);
-    return thing;
-  }
-};
 
 const getLanguage = function () {
   // Get browser language tag -> currently de and en supported

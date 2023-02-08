@@ -59,11 +59,6 @@ const videoDevices = new Map();
 const consumedWebDevices = new Map();
 
 /**
- * Map of consumed devices.
- */
-export const consumedThingInstances = new Map();
-
-/**
  * Lists all things implemented by BLAST.
  */
 export const implementedThings = [];
@@ -613,7 +608,7 @@ export const addDevice = function (deviceName, deviceId, type, td) {
     } else {
       generateThingBlock(deviceName, td.description, td);
     }
-    generateThingCode(deviceName);
+    generateThingCode(deviceName, td);
 
     // Supported is only none_sc and basic_sc
     if (td.security === 'basic_sc') {
