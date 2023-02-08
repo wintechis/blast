@@ -49,7 +49,7 @@ export const createThing = async function (
   id: string | undefined
 ): Promise<WoT.ConsumedThing> {
   if (id) {
-    td = setIds(td);
+    td = setIds(td, id);
   }
   const wotServient = await getWot();
   return wotServient.consume(td);
