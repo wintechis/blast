@@ -1,4 +1,4 @@
-import {consumeThingDescription} from '../packages/core/dist/blast.node.js';
+import {createThing} from '../packages/core/dist/blast.node.js';
 const IP = "127.0.0.1:3001"
 const td = {
   '@context': [
@@ -34,5 +34,5 @@ const td = {
   },
 };
 
-let thing = await consumeThingDescription(td)
+let thing = await createThing(td)
 console.log(await (await thing.readProperty("stat")).value())
