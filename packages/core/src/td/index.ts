@@ -12,10 +12,10 @@ export {
   BleRgbController,
   BluetoothGeneric,
   EddystoneDevice,
+  GoveeLamp,
   HuskyDuino,
   PhilipsHue,
   RuuviTag,
   XiaomiFlowerCare,
   XiaomiThermometer,
-  GoveeLamp,
 };

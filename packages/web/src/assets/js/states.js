@@ -6,25 +6,6 @@
 import Blockly from 'blockly';
 const {Blocks, Msg, Names, utils} = Blockly;
 import {getCategory} from './toolbox.js';
-import {EventEmitter} from 'events';
-
-/**
- * State block type.
- * @typedef {{
- *    getStateName: function():string,
- *    renameState: function(string,string),
- *    getStateDef: function():!String
- * }}
- * @alias StateBlock
- */
-export let StateBlock;
-
-/**
- * Singleton intstance of BLAST's EventEmitter.
- * @type {EventEmitter}
- * @public
- */
-export const eventEmitter = new EventEmitter();
 
 /**
  * Find all user-created state definitions in a workspace.

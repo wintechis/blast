@@ -6,7 +6,7 @@
 /**
  * The Eddystone config service UUID
  */
-export const EDDYSTONE_CONFIG_SERVICE = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
+const EDDYSTONE_CONFIG_SERVICE = 'a3c87500-8ed3-4bdf-8a39-a01bebede295';
 
 const eddystoneCharacteristicUUIDs = [
   'a3c87501-8ed3-4bdf-8a39-a01bebede295',
@@ -129,7 +129,7 @@ const HexToSignedInt = function (num: string, numSize: number): number {
  * @param data the data received from the device.
  * @returns An object containing the capabilities.
  */
-const parseCapabilities = function (data: string): any {
+const parseCapabilities = function (data: string): Capabilities {
   const capabilitiesArray = [];
 
   for (let i = 0; i < data.length; i += 2) {
@@ -165,7 +165,9 @@ const parseCapabilities = function (data: string): any {
  * @param hexString The advertising data to decode.
  * @return The advertising data of the currently active slot.
  */
-export const decodeAdvertisingData = function (hexString: string) {
+const decodeAdvertisingData = function (
+  hexString: string
+): string | Uint8Array | number {
   const decodeEddystoneUid = function (advData: string) {
     // TX Power is the second byte of the advertised data.
     const txPower = parseInt(advData.substring(2, 4), 16);
@@ -305,7 +307,10 @@ type FrameType = 'UID' | 'URL' | 'TLM' | 'EID';
  * @param frameType The frame type to encode.
  * @returns The encoded data.
  */
-const encodeAdvertisingData = function (data: string, frameType: FrameType) {
+const encodeAdvertisingData = function (
+  data: string,
+  frameType: FrameType
+): string | Uint8Array {
   const encodeEddystoneUrl = function (url: string) {
     const URL_SCHEMES = ['http://www.', 'https://www.', 'http://', 'https://'];
 

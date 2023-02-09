@@ -11,8 +11,6 @@ let wot: typeof WoT;
 
 declare const Wot: any;
 
-export const BluetoothWrapper = ConcreteBluetoothAdapter;
-
 export const getServient = function (
   bluetoothAdapter: BluetoothAdapter
 ): Servient {

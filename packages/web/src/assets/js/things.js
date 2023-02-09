@@ -104,9 +104,6 @@ export const setDevMode = function (value) {
   devMode = value;
   reloadToolbox();
 };
-export const getDevMode = function () {
-  return devMode;
-};
 
 let webBluetoothButtonHandler = null;
 /**

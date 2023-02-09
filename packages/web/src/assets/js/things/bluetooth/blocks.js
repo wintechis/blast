@@ -28,7 +28,6 @@ Blocks['things_eddyStoneDevice'] = {
     );
     this.getField('name').setEnabled(false);
     this.firstTime = true;
-    this.thing = null;
   },
 };
 
@@ -48,9 +47,6 @@ Blocks['things_bluetoothGeneric'] = {
     this.setColour(60);
     this.setTooltip('A Generic Bluetooth device.');
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.firstTime = true;
-    this.thing = null;
   },
 };
 

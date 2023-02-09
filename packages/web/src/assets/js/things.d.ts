@@ -1,3 +1,5 @@
+import {WorkspaceSvg} from 'blockly';
+
 export interface implementedThing {
   id: string;
   name: string;
@@ -36,7 +38,7 @@ export const devCategories: [string, number, number][];
 /**
  * Wether development mode is turned on or off.
  */
-export let devMode: Boolean;
+export let setDevMode: (value: Boolean) => void;
 
 /**
  * Sets the 'pair via webBluetooth' button handler.
@@ -47,10 +49,31 @@ export function setWebBluetoothButtonHandler(
 ): void;
 
 /**
+ * Sets the 'connect via webHid' button handler.
+ */
+export function setWebHidButtonHandler(
+  handler: (options: Object, deviceName?: string) => void
+): void;
+
+/**
+ * Sets the 'select audio output' button handler.
+ */
+export function setAudioOutputButtonHandler(
+  handler: (options: Object, deviceName?: string) => void
+): void;
+
+/**
+ * Sets the 'select video input' button handler.
+ */
+export function setVideoInputButtonHandler(
+  handler: (options: Object, deviceName?: string) => void
+): void;
+
+/**
  * Getter for the thingsLog function.
  * @return {function} The thingsLog function.
  */
-export function getThingsLog(): function;
+export function getThingsLog(): Function;
 
 /**
  * Setter for the thingsLog function.
@@ -67,40 +90,32 @@ export function resetThings(): void;
 
 /**
  * Gets the webHID device with the given uid.
- * @param {string} deviceId The uid of the webHID device.
- * @returns {HIDDevice} The webHID device with the given uid.
  */
-export function getWebHidDevice(deviceId: HIDDevice.id): HIDDevice;
+export function getWebHidDevice(deviceId: string): HIDDevice;
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
  * things category.
- * @param {!Blockly.Workspace} workspace The workspace containing things.
- * @return {!Array.<!Element>} Array of XML elements.
  */
-export function thingsFlyoutCategory(workspace: Blockly.Workspace): Element[];
+export function thingsFlyoutCategory(workspace: WorkspaceSvg): Element[];
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
- * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export function getWebBluetoothDevices(): Array<string, BluetoothDevice.id>;
+export function getWebBluetoothDevices(): string[][];
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
- * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export function getWebHIDDevices(): Array<string, string>;
+export function getWebHIDDevices(): string[][];
 
 /**
  * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {string} deviceName User defined name for the device.
  */
 export function addWebBluetoothDevice(
-  webBluetoothId: BluetoothDevice.id,
+  webBluetoothId: string,
   deviceName: string
 ): void;
 
@@ -112,7 +127,7 @@ export function addWebBluetoothDevice(
  * @param {implementedThing} thing the thing to add.
  */
 export function addWebHidDevice(
-  uid: HIDDevice.id,
+  uid: string,
   deviceName: string,
   device: HIDDevice,
   thing: implementedThing
@@ -124,3 +139,12 @@ export function addWebHidDevice(
  * @returns {Promise<HIDDevice>} A promise that resolves to the connected WebHidDevice.
  */
 export function connectWebHidDevice(filters: HIDDeviceFilter): HIDDevice;
+
+/**
+ * Adds a device to BLAST
+ */
+export function addDevice(
+  deviceName: string,
+  deviceId: string,
+  type: string
+): void;
