@@ -24,8 +24,6 @@ Blocks['things_Huskylens'] = {
     this.setColour(60);
     this.setTooltip('A HuskyDuino.');
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.thing = null;
   },
 };
 

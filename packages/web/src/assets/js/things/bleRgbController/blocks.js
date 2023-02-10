@@ -28,8 +28,6 @@ Blocks['things_bleLedController'] = {
       'https://github.com/wintechis/blast/wiki/Bluetooth-LED-controller'
     );
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-    this.thing = null;
   },
 };
 

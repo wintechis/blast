@@ -359,7 +359,7 @@ export const addBlock = function (type, blockCategory, blockxml) {
 
 /**
  * Removes a block from the toolbox.
- * @param {string} type The type of block to add.
+ * @param {string} type The type of block to remove.
  * @param {string} blockCategory The category of the block.
  */
 export const removeBlock = function (type, blockCategory) {
