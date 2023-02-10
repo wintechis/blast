@@ -1,7 +1,7 @@
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {createLoggers} from '@node-wot/core';
 
-const {debug, error, warn} = createLoggers(
+const {debug} = createLoggers(
   'binding-bluetooth',
   'WebBluetoothAdapter'
 );

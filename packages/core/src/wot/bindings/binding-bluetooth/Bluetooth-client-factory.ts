@@ -11,7 +11,7 @@ import BluetoothClient from './Bluetooth-client';
 import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
 import {BluetoothAdapter} from './BluetoothAdapter';
 
-const {debug, error, warn} = createLoggers(
+const {debug} = createLoggers(
   'binding-bluetooth',
   'bluetooth-client-factory'
 );

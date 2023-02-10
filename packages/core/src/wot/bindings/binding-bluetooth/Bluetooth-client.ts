@@ -14,7 +14,7 @@ import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {Readable} from 'stream';
 
-const {debug, error, warn} = createLoggers(
+const {debug} = createLoggers(
   'binding-bluetooth',
   'bluetooth-client'
 );
@@ -172,14 +172,21 @@ export default class WebBluetoothClient implements ProtocolClient {
       characteristicId
     );
 
-    characteristic.addEventListener('characteristicvaluechanged', handler);
+    try {
+      characteristic.addEventListener('characteristicvaluechanged', handler);
 
-    await characteristic.startNotifications();
+      await characteristic.startNotifications();
 
-    return new Subscription(() => {
-      characteristic.removeEventListener('characteristicvaluechanged', handler);
-      characteristic.stopNotifications();
-    });
+      return new Subscription(() => {
+        characteristic.removeEventListener('characteristicvaluechanged', handler);
+        characteristic.stopNotifications();
+      });
+    } catch (err) {
+      if (error) {
+        error(err as Error);
+      }
+      throw new Error(`failed to subscribe to characteristic ${err}`);
+    }
   }
 
   public async start(): Promise<void> {

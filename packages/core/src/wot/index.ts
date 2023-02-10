@@ -9,17 +9,11 @@ export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 let servient: Servient;
 let wot: typeof WoT;
 
-declare const Wot: any;
-
 export const getServient = function (
   bluetoothAdapter: BluetoothAdapter
 ): Servient {
   if (!servient) {
-    try {
-      servient = new Servient();
-    } catch (e) {
-      servient = new Wot.Core.Servient();
-    }
+    servient = new Servient();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
   }
   return servient;

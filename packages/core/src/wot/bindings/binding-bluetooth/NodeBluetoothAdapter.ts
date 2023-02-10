@@ -2,7 +2,7 @@ import {BluetoothAdapter} from './BluetoothAdapter';
 import {Adapter, createBluetooth} from 'node-ble';
 import {createLoggers} from '@node-wot/core';
 
-const {debug, error, warn} = createLoggers(
+const {debug} = createLoggers(
   'binding-bluetooth',
   'NodeBluetoothAdapters'
 );

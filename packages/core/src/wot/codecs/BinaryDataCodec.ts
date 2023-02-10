@@ -77,7 +77,7 @@ export class BinaryDataStreamCodec implements ContentCodec {
    * @returns {Buffer} Encodec value.
    */
   valueToBytes(
-    dataValue: any,
+    dataValue: number | string | any,
     schema: DataSchema,
     parameters?: {[key: string]: string}
   ): Buffer {
