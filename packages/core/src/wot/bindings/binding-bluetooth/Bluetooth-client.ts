@@ -14,10 +14,7 @@ import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {Readable} from 'stream';
 
-const {debug} = createLoggers(
-  'binding-bluetooth',
-  'bluetooth-client'
-);
+const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
 
 export default class WebBluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
@@ -178,7 +175,10 @@ export default class WebBluetoothClient implements ProtocolClient {
       await characteristic.startNotifications();
 
       return new Subscription(() => {
-        characteristic.removeEventListener('characteristicvaluechanged', handler);
+        characteristic.removeEventListener(
+          'characteristicvaluechanged',
+          handler
+        );
         characteristic.stopNotifications();
       });
     } catch (err) {

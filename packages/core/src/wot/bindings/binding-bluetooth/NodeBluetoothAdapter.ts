@@ -2,10 +2,7 @@ import {BluetoothAdapter} from './BluetoothAdapter';
 import {Adapter, createBluetooth} from 'node-ble';
 import {createLoggers} from '@node-wot/core';
 
-const {debug} = createLoggers(
-  'binding-bluetooth',
-  'NodeBluetoothAdapters'
-);
+const {debug} = createLoggers('binding-bluetooth', 'NodeBluetoothAdapters');
 
 export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
   private adapter: Adapter | null = null;

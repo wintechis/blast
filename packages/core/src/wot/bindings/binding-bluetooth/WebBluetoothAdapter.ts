@@ -1,10 +1,7 @@
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {createLoggers} from '@node-wot/core';
 
-const {debug} = createLoggers(
-  'binding-bluetooth',
-  'WebBluetoothAdapter'
-);
+const {debug} = createLoggers('binding-bluetooth', 'WebBluetoothAdapter');
 
 export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
   public async getCharacteristic(
