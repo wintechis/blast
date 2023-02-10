@@ -1,5 +1,12 @@
 import React from 'react';
-import {ContextMenu, ContextMenuRegistry, getMainWorkspace, inject, WorkspaceSvg, Xml} from 'blockly';
+import {
+  ContextMenu,
+  ContextMenuRegistry,
+  getMainWorkspace,
+  inject,
+  WorkspaceSvg,
+  Xml,
+} from 'blockly';
 import {UseBlocklyProps} from './BlocklyWorkspaceProps';
 
 import debounce from './debounce';
@@ -141,9 +148,7 @@ const useBlocklyWorkspace = ({
       menuOptions.push(screenshotOption);
 
       // // Adds a default-sized workspace comment to the workspace.
-      menuOptions.push(
-        ContextMenu.workspaceCommentOption(newWorkspace, e)
-      );
+      menuOptions.push(ContextMenu.workspaceCommentOption(newWorkspace, e));
     }
     initInterpreter(newWorkspace);
 
@@ -207,9 +212,7 @@ const useBlocklyWorkspace = ({
     }
 
     const [callback, cancel] = debounce(() => {
-      const newXml = Xml.domToText(
-        Xml.workspaceToDom(workspace)
-      );
+      const newXml = Xml.domToText(Xml.workspaceToDom(workspace));
       if (newXml === xml) {
         return;
       }
@@ -228,7 +231,11 @@ const useBlocklyWorkspace = ({
   // Initial Xml Changes
   React.useEffect(() => {
     if (xml && workspace && !didInitialImport) {
-      const success = importFromXml(Xml.textToDom(xml), workspace, onImportXmlError);
+      const success = importFromXml(
+        Xml.textToDom(xml),
+        workspace,
+        onImportXmlError
+      );
       if (!success) {
         setXml(null);
       }

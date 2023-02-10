@@ -59,7 +59,7 @@ JavaScript['things_ruuviTag'] = function (block: Block) {
 
   JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
 
-  JavaScript.definitions_['RuuviTag'] = `const {RuuviTag} = blastTds;`;
+  JavaScript.definitions_['RuuviTag'] = 'const {RuuviTag} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
     'things' + block.id
