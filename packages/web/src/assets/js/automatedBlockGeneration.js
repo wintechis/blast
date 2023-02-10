@@ -1,11 +1,5 @@
-import {
-  Blocks,
-  Events,
-  FieldTextInput,
-  FieldDropdown,
-  JavaScript,
-  Names,
-} from 'blockly';
+import {Blocks, Events, FieldTextInput, FieldDropdown, Names} from 'blockly';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
 import {
   getWorkspace,
