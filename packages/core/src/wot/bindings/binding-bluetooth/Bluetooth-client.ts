@@ -134,13 +134,12 @@ export default class WebBluetoothClient implements ProtocolClient {
     error?: (error: Error) => void,
     complete?: () => void
   ): Promise<Subscription> {
-    const path = form.href.split('//')[1];
-    const deviceId = form['wbt:id'];
-    const deconstructedPath = this.deconstructPath(path);
-    const {serviceId, characteristicId, operation} = deconstructedPath;
+    // Extract information out of form
+    const {deviceId, serviceId, characteristicId, bleOperation} =
+      this.deconstructForm(form);
 
-    if (operation !== 'subscribe') {
-      throw new Error(`operation ${operation} is not supported`);
+    if (bleOperation !== 'subscribe') {
+      throw new Error(`operation ${bleOperation} is not supported`);
     }
 
     debug(
@@ -202,26 +201,6 @@ export default class WebBluetoothClient implements ProtocolClient {
     credentials?: unknown
   ): boolean {
     return false;
-  }
-
-  private deconstructPath(path: string) {
-    // path can either be device/service/characteristic/operation or device/service/operation or device/operation
-    let serviceId: BluetoothServiceUUID,
-      characteristicId: BluetoothCharacteristicUUID,
-      operation;
-    const pathArray = path.split('/');
-    if (pathArray.length === 3) {
-      // path is device/service/characteristic?{parameter1, parameter2}
-      [serviceId, characteristicId, operation] = pathArray;
-      return {
-        serviceId,
-        characteristicId,
-        operation,
-      };
-    } else {
-      // path is invalid
-      throw new Error('href is not valid');
-    }
   }
 
   /**

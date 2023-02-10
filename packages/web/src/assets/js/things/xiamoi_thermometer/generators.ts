@@ -37,11 +37,9 @@ JavaScript['things_xiaomiThermometer'] = function (
 JavaScript['xiaomiThermometer_event'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-  const tempVarName = JavaScript.quote_(block.getFieldValue('temperature'));
-  const humidityVarName = JavaScript.quote_(block.getFieldValue('humidity'));
+  const statements = JavaScript.statementToCode(block, 'statements');
+  const tempVarName = block.getFieldValue('temperature');
+  const humidityVarName = block.getFieldValue('humidity');
 
   const eventHandler = JavaScript.provideFunction_('xiaomiThermometerHandler', [
     'async function ' +
@@ -55,13 +53,16 @@ JavaScript['xiaomiThermometer_event'] = function (block: Block): string {
     '    if (sign) {',
     '      temp = temp - 32767;',
     '    }',
-    `    globalThis[${tempVarName}] = temp / 100;`,
-    `    globalThis[${humidityVarName}] = data.getUint8(2);`,
-    `    eval(\`(async () => {${statements})();\`);`,
-    '};',
+    `    ${tempVarName} = temp / 100;`,
+    `    ${humidityVarName} = data.getUint8(2);`,
+    '    eval(`(async () => {',
+    `      ${statements.replace(/`/g, '\\`')}`,
+    '    })()`);',
+    '  }',
+    '}',
   ]);
 
-  const handler = `await things.get(${thing}).subscribeEvent('temperature', ${eventHandler});`;
+  const handler = `await things.get(${thing}).subscribeEvent('measurements', ${eventHandler});`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;

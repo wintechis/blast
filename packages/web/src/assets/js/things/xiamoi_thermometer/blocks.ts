@@ -3,8 +3,9 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Blocks, Events, FieldTextInput, JavaScript, Names} from 'blockly';
-import {eventsInWorkspace, getWorkspace} from '../../interpreter.ts';
+import {Blocks, Events, FieldTextInput, Names} from 'blockly';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
 
 Blocks['things_xiaomiThermometer'] = {
@@ -35,28 +36,17 @@ Blocks['things_xiaomiThermometer'] = {
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
   },
-  onchange: function () {
+  onchange: function (event: Event) {
     // on creating this block initialize new instance of BleRgbController
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       this.addEvent();
     }
-  },
-  onDispose: function (event) {
     if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
+      // Block is being deleted
+      this.removeFromEvents();
+      getWorkspace()?.removeChangeListener(this.changeListener);
     }
   },
   /**
@@ -102,6 +92,8 @@ Blocks['xiaomiThermometer_event'] = {
     this.getField('eventType').setEnabled(false);
     this.getField('humidity').setEnabled(false);
     this.getField('temperature').setEnabled(false);
+    this.humidityName = '';
+    this.temperatureName = '';
   },
   /**
    * Add this block's id to the events array.
@@ -109,29 +101,18 @@ Blocks['xiaomiThermometer_event'] = {
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
   },
-  onchange: function () {
+  onchange: function (event: Event) {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
       this.addEvent();
       this.createVars();
     }
-  },
-  onDispose: function (event) {
     if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
+      // Block is being deleted
+      this.removeFromEvents();
+      getWorkspace()?.removeChangeListener(this.changeListener);
     }
   },
   /**
@@ -147,25 +128,37 @@ Blocks['xiaomiThermometer_event'] = {
   },
   createVars: function () {
     const ws = getWorkspace();
-    const varNames = ['humidity', 'temperature'];
-    for (const varName of varNames) {
-      // create legal variable name
-      let legalName = JavaScript.nameDB_.getName(
-        varName,
+    if (ws === null) {
+      return;
+    }
+    // create variable for humidity value
+    let humidityname = JavaScript.nameDB_.getName(
+      'humidity',
+      Names.NameType.VARIABLE
+    );
+    for (let i = 1; ws.getVariable(humidityname) !== null; i++) {
+      // if variable already exists, append a number to it.
+      humidityname = JavaScript.nameDB_.getName(
+        'humidity-' + i,
         Names.NameType.VARIABLE
       );
-      for (let i = 1; ws.getVariable(legalName) !== null; i++) {
-        // if name already exists, append a number
-        legalName = JavaScript.nameDB_.getName(
-          legalName + '-' + i,
-          Names.NameType.VARIABLE
-        );
-      }
-      // create variable
-      legalName = ws.createVariable(legalName).name;
-      // set field value
-      this.getField(varName).setValue(legalName);
     }
+    this.humidityName = ws.createVariable(humidityname).name;
+    this.getField('humidity').setValue(this.humidityName);
+    // create variable for temperature value
+    let temperaturename = JavaScript.nameDB_.getName(
+      'temperature',
+      Names.NameType.VARIABLE
+    );
+    for (let i = 1; ws.getVariable(temperaturename) !== null; i++) {
+      // if variable already exists, append a number to it.
+      temperaturename = JavaScript.nameDB_.getName(
+        'temperature-' + i,
+        Names.NameType.VARIABLE
+      );
+    }
+    this.temperatureName = ws.createVariable(temperaturename).name;
+    this.getField('temperature').setValue(this.temperatureName);
   },
 };
 

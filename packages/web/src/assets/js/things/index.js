@@ -43,7 +43,7 @@ import './video/generators.ts';
 import './webSpeech/blocks.js';
 import './webSpeech/generators.ts';
 
-import './xiamoi_thermometer/blocks.js';
+import './xiamoi_thermometer/blocks.ts';
 import './xiamoi_thermometer/generators.ts';
 
 import './xiaomiFlowerCare/blocks.js';
