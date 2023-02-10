@@ -29,9 +29,9 @@ export default class JavascriptTab extends React.Component {
 
     // remove highlightblock functions from the js code tab
     code = code.replace(/highlightBlock\('.*'\);\n/gm, '');
-    // remove 'if (interpreterExecutionExit === true) return();\n' from the js code tabs.
+    // remove 'if (interpreterExecutionExit === true) {return;}\n' from the js code tabs.
     code = code.replace(
-      /if \(interpreterExecutionExit === true\) return;\n/gm,
+      /if \(interpreterExecutionExit === true\) {return;}\n/gm,
       ''
     );
     return code;
