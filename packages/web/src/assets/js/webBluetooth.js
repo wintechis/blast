@@ -4,11 +4,9 @@
  */
 
 import 'buffer';
-import Blockly from 'blockly';
+import {dialog} from 'blockly';
 import {addCleanUpFunction, getWorkspace} from './interpreter.ts';
 import {addWebBluetoothDevice, getThingsLog} from './things.js';
-
-const {dialog} = Blockly;
 
 /**
  * Tracks blocks in the workspace requiring a LE Scan.
