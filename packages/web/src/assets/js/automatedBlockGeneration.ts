@@ -7,6 +7,7 @@ import {
   Names,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+// eslint-disable-next-line node/no-unpublished-import
 import * as WoT from 'wot-typescript-definitions';
 
 import {getWorkspace, eventsInWorkspace} from './interpreter';
