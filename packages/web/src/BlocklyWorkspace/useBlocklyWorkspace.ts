@@ -1,5 +1,12 @@
 import React from 'react';
-import Blockly, {Workspace, WorkspaceSvg} from 'blockly';
+import {
+  ContextMenu,
+  ContextMenuRegistry,
+  getMainWorkspace,
+  inject,
+  WorkspaceSvg,
+  Xml,
+} from 'blockly';
 import {UseBlocklyProps} from './BlocklyWorkspaceProps';
 
 import debounce from './debounce';
@@ -14,16 +21,16 @@ import {thingsFlyoutCategory} from '../assets/js/things.js';
 JavaScript.addReservedWords('highlightBlock');
 
 (globalThis as any)['highlightBlock'] = function (id: string) {
-  (Blockly.getMainWorkspace() as WorkspaceSvg).highlightBlock(id);
+  (getMainWorkspace() as WorkspaceSvg).highlightBlock(id);
 };
 
 export function importFromXml(
-  xml: string,
-  workspace: Workspace,
+  xml: Element,
+  workspace: WorkspaceSvg,
   onImportXmlError: (e: any) => void
 ) {
   try {
-    Blockly.Xml.domToWorkspace(Blockly.Xml.textToDom(xml), workspace);
+    Xml.clearWorkspaceAndLoadFromXml(xml, workspace);
     return true;
   } catch (e) {
     if (onImportXmlError) {
@@ -77,7 +84,7 @@ const useBlocklyWorkspace = ({
   }, [onDispose]);
 
   const handleWorkspaceChanged = React.useCallback(
-    (newWorkspace: Blockly.WorkspaceSvg) => {
+    (newWorkspace: WorkspaceSvg) => {
       if (onWorkspaceChange) {
         onWorkspaceChange(newWorkspace);
       }
@@ -90,7 +97,7 @@ const useBlocklyWorkspace = ({
     if (!ref.current) {
       return;
     }
-    const newWorkspace = Blockly.inject(ref.current, {
+    const newWorkspace = inject(ref.current, {
       ...workspaceConfigurationRef.current,
       comments: true,
       collapse: true,
@@ -126,7 +133,7 @@ const useBlocklyWorkspace = ({
      * @param {!Event} e The right-click mouse event.
      */
     function configureContextMenu(
-      menuOptions: Blockly.ContextMenuRegistry.ContextMenuOption[],
+      menuOptions: ContextMenuRegistry.ContextMenuOption[],
       e: Event
     ) {
       const screenshotOption = {
@@ -141,9 +148,7 @@ const useBlocklyWorkspace = ({
       menuOptions.push(screenshotOption);
 
       // // Adds a default-sized workspace comment to the workspace.
-      menuOptions.push(
-        Blockly.ContextMenu.workspaceCommentOption(newWorkspace, e)
-      );
+      menuOptions.push(ContextMenu.workspaceCommentOption(newWorkspace, e));
     }
     initInterpreter(newWorkspace);
 
@@ -207,9 +212,7 @@ const useBlocklyWorkspace = ({
     }
 
     const [callback, cancel] = debounce(() => {
-      const newXml = Blockly.Xml.domToText(
-        Blockly.Xml.workspaceToDom(workspace)
-      );
+      const newXml = Xml.domToText(Xml.workspaceToDom(workspace));
       if (newXml === xml) {
         return;
       }
@@ -228,7 +231,11 @@ const useBlocklyWorkspace = ({
   // Initial Xml Changes
   React.useEffect(() => {
     if (xml && workspace && !didInitialImport) {
-      const success = importFromXml(xml, workspace, onImportXmlError);
+      const success = importFromXml(
+        Xml.textToDom(xml),
+        workspace,
+        onImportXmlError
+      );
       if (!success) {
         setXml(null);
       }

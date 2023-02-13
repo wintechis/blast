@@ -1,11 +1,9 @@
 import FileSaver from 'file-saver';
-import Blockly from 'blockly';
+import {hideChaff, Xml} from 'blockly';
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 
 import {getWorkspace, resetInterpreter} from '../assets/js/interpreter.ts';
 import {implementedThings, resetThings} from '../assets/js/things.js';
-
-const {hideChaff, Xml} = Blockly;
 
 /**
  * Hash error message.

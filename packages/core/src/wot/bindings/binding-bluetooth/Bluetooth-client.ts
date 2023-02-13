@@ -14,10 +14,7 @@ import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {Readable} from 'stream';
 
-const {debug, error, warn} = createLoggers(
-  'binding-bluetooth',
-  'bluetooth-client'
-);
+const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
 
 export default class WebBluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
@@ -137,13 +134,12 @@ export default class WebBluetoothClient implements ProtocolClient {
     error?: (error: Error) => void,
     complete?: () => void
   ): Promise<Subscription> {
-    const path = form.href.split('//')[1];
-    const deviceId = form['wbt:id'];
-    const deconstructedPath = this.deconstructPath(path);
-    const {serviceId, characteristicId, operation} = deconstructedPath;
+    // Extract information out of form
+    const {deviceId, serviceId, characteristicId, bleOperation} =
+      this.deconstructForm(form);
 
-    if (operation !== 'subscribe') {
-      throw new Error(`operation ${operation} is not supported`);
+    if (bleOperation !== 'subscribe') {
+      throw new Error(`operation ${bleOperation} is not supported`);
     }
 
     debug(
@@ -172,14 +168,24 @@ export default class WebBluetoothClient implements ProtocolClient {
       characteristicId
     );
 
-    characteristic.addEventListener('characteristicvaluechanged', handler);
+    try {
+      characteristic.addEventListener('characteristicvaluechanged', handler);
 
-    await characteristic.startNotifications();
+      await characteristic.startNotifications();
 
-    return new Subscription(() => {
-      characteristic.removeEventListener('characteristicvaluechanged', handler);
-      characteristic.stopNotifications();
-    });
+      return new Subscription(() => {
+        characteristic.removeEventListener(
+          'characteristicvaluechanged',
+          handler
+        );
+        characteristic.stopNotifications();
+      });
+    } catch (err) {
+      if (error) {
+        error(err as Error);
+      }
+      throw new Error(`failed to subscribe to characteristic ${err}`);
+    }
   }
 
   public async start(): Promise<void> {
@@ -195,26 +201,6 @@ export default class WebBluetoothClient implements ProtocolClient {
     credentials?: unknown
   ): boolean {
     return false;
-  }
-
-  private deconstructPath(path: string) {
-    // path can either be device/service/characteristic/operation or device/service/operation or device/operation
-    let serviceId: BluetoothServiceUUID,
-      characteristicId: BluetoothCharacteristicUUID,
-      operation;
-    const pathArray = path.split('/');
-    if (pathArray.length === 3) {
-      // path is device/service/characteristic?{parameter1, parameter2}
-      [serviceId, characteristicId, operation] = pathArray;
-      return {
-        serviceId,
-        characteristicId,
-        operation,
-      };
-    } else {
-      // path is invalid
-      throw new Error('href is not valid');
-    }
   }
 
   /**

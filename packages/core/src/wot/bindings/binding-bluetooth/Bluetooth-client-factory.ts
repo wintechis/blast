@@ -11,10 +11,7 @@ import BluetoothClient from './Bluetooth-client';
 import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
 import {BluetoothAdapter} from './BluetoothAdapter';
 
-const {debug, error, warn} = createLoggers(
-  'binding-bluetooth',
-  'bluetooth-client-factory'
-);
+const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client-factory');
 
 export default class BluetoothClientFactory implements ProtocolClientFactory {
   public readonly scheme: string = 'gatt';

@@ -27,13 +27,13 @@ export default class JavascriptTab extends React.Component {
       "import * as blastTds from 'blast.tds.js';"
     );
 
-    // remove highlightblock functions from the js code tab
-    code = code.replace(/highlightBlock\('.*'\);\n/gm, '');
-    // remove 'if (interpreterExecutionExit === true) return();\n' from the js code tabs.
-    code = code.replace(
-      /if \(interpreterExecutionExit === true\) return;\n/gm,
-      ''
-    );
+    // // remove highlightblock functions from the js code tab
+    // code = code.replace(/highlightBlock\(\\*'.*\\*'\);\\*\n/gm, '');
+    // // remove 'if (interpreterExecutionExit === true) {return;}\n' from the js code tabs.
+    // code = code.replace(
+    //   /if \(interpreterExecutionExit === true\) {return;}\\*\n/gm,
+    //   ''
+    // );
     return code;
   };
 
