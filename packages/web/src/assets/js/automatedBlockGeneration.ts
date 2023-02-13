@@ -1,13 +1,21 @@
-import {Blocks, Events, FieldTextInput, FieldDropdown, Names} from 'blockly';
-import {javascriptGenerator as JavaScript} from 'blockly/javascript.js';
-
 import {
-  getWorkspace,
-  eventsInWorkspace,
-  addCleanUpFunction,
-} from './interpreter.ts';
+  Block,
+  Blocks,
+  Events,
+  FieldTextInput,
+  FieldDropdown,
+  Names,
+} from 'blockly';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+import * as WoT from 'wot-typescript-definitions';
 
-export function generateThingBlock(deviceName, deviceDescription, td) {
+import {getWorkspace, eventsInWorkspace} from './interpreter';
+
+export function generateThingBlock(
+  deviceName: string,
+  deviceDescription: string,
+  td: WoT.ThingDescription
+) {
   // Generate description depending on available information
   const langTag = getLanguage();
   let description = '';
@@ -43,94 +51,32 @@ export function generateThingBlock(deviceName, deviceDescription, td) {
         description += ` | modified on: ${td.modified}`;
     }
   }
-  if (td.events !== undefined) {
-    Blocks[`things_${deviceName}`] = {
-      /**
-       * Block representing a consumed device.
-       * @this {Blockly.Block}
-       */
-      init: function () {
-        this.appendDummyInput('name')
-          // If device name is available in browser language use that instead
-          .appendField(td.titles?.[langTag] ?? td.title, 'label')
-          .appendField(new FieldTextInput('Error getting name'), 'name');
-        this.appendDummyInput('id')
-          .appendField(new FieldTextInput('Error getting id'), 'id')
-          .setVisible(false);
-        this.setOutput(true, 'Thing');
-        this.setColour(60);
-        this.setTooltip(description);
-        this.setHelpUrl(td.support ?? '');
-        this.getField('name').setEnabled(false);
-        this.firstTime = true;
-      },
-
-      /**
-       * Add this block's id to the events array.
-       * @return {null}.
-       */
-      addEvent: async function () {
-        eventsInWorkspace.push(this.id);
-        // remove event if block is deleted
-        this.changeListener = getWorkspace().addChangeListener(event =>
-          this.onDispose(event)
-        );
-      },
-      onchange: function () {
-        // on creating this block add event to events array
-        if (!this.isInFlyout && this.firstTime && this.rendered) {
-          this.addEvent();
-        }
-      },
-      onDispose: function (event) {
-        if (event.type === Events.BLOCK_DELETE) {
-          if (
-            event.type === Events.BLOCK_DELETE &&
-            event.ids.indexOf(this.id) !== -1
-          ) {
-            // Block is being deleted
-            this.removeFromEvents();
-            getWorkspace().removeChangeListener(this.changeListener);
-          }
-        }
-      },
-      /**
-       * Remove this block's id from the events array.
-       * @return {null}.
-       */
-      removeFromEvents: function () {
-        // remove this block from the events array.
-        const index = eventsInWorkspace.indexOf(this.id);
-        if (index !== -1) {
-          eventsInWorkspace.splice(index, 1);
-        }
-      },
-    };
-  } else {
-    Blocks[`things_${deviceName}`] = {
-      /**
-       * Block representing a consumed device.
-       * @this {Blockly.Block}
-       */
-      init: function () {
-        this.appendDummyInput('name')
-          .appendField(deviceName, 'label')
-          .appendField(new FieldTextInput('Error getting name'), 'name');
-        this.appendDummyInput('id')
-          .appendField(new FieldTextInput('Error getting id'), 'id')
-          .setVisible(false);
-        this.setOutput(true, 'Thing');
-        this.setColour(60);
-        this.setTooltip(deviceDescription);
-        this.setHelpUrl();
-        this.getField('name').setEnabled(false);
-      },
-    };
-  }
+  Blocks[`things_${deviceName}`] = {
+    /**
+     * Block representing a consumed device.
+     * @this {Blockly.Block}
+     */
+    init: function () {
+      this.appendDummyInput('name')
+        .appendField(deviceName, 'label')
+        .appendField(new FieldTextInput('Error getting name'), 'name');
+      this.appendDummyInput('id')
+        .appendField(new FieldTextInput('Error getting id'), 'id')
+        .setVisible(false);
+      this.setOutput(true, 'Thing');
+      this.setColour(60);
+      this.setTooltip(description);
+      this.setHelpUrl();
+      this.getField('name').setEnabled(false);
+    },
+  };
 }
 
-export function generateThingCode(deviceName, td) {
-  JavaScript[`things_${deviceName}`] = function (block) {
+export function generateThingCode(
+  deviceName: string,
+  td: WoT.ThingDescription
+) {
+  JavaScript[`things_${deviceName}`] = function (block: Block) {
     const name = JavaScript.quote_(block.getFieldValue('name'));
 
     JavaScript.imports_['core'] =
@@ -139,14 +85,18 @@ export function generateThingCode(deviceName, td) {
     JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
     JavaScript.definitions_['things'] = 'const things = new Map();';
     JavaScript.definitions_[
-      'things' + block.id
-    ] = `things.set(${name}, await createThing(${td}))`;
+      'things_' + name
+    ] = `things.set(${name}, await createThing(${JSON.stringify(td)}))`;
 
     return [name, JavaScript.ORDER_NONE];
   };
 }
 
-export function generateReadPropertyBlock(propertyName, deviceName, td) {
+export function generateReadPropertyBlock(
+  propertyName: string,
+  deviceName: string,
+  td: WoT.ThingDescription
+) {
   const langTag = getLanguage();
   let blockName = '';
   if (td.titles && td.titles?.[langTag]) {
@@ -173,19 +123,26 @@ export function generateReadPropertyBlock(propertyName, deviceName, td) {
   };
 }
 
-export function generateReadPropertyCode(propertyName, deviceName) {
+export function generateReadPropertyCode(
+  propertyName: string,
+  deviceName: string
+) {
   JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
-    block
+    block: Block
   ) {
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    const code = `things.get(${name}).readProperty('${propertyName}')`;
+    const code = `await (await things.get(${name}).readProperty('${propertyName}')).value()`;
     return [code, JavaScript.ORDER_NONE];
   };
 }
 
-export function generateWritePropertyBlock(propertyName, deviceName, td) {
+export function generateWritePropertyBlock(
+  propertyName: string,
+  deviceName: string,
+  td: WoT.ThingDescription
+) {
   Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
     init: function () {
       if (td.properties[propertyName].enum) {
@@ -219,9 +176,13 @@ export function generateWritePropertyBlock(propertyName, deviceName, td) {
   };
 }
 
-export function generateWritePropertyCode(propertyName, deviceName, td) {
+export function generateWritePropertyCode(
+  propertyName: string,
+  deviceName: string,
+  td: WoT.ThingDescription
+) {
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
-    block
+    block: Block
   ) {
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
@@ -234,26 +195,24 @@ export function generateWritePropertyCode(propertyName, deviceName, td) {
       // With enum
       const valueIndex = JavaScript.quote_(block.getFieldValue('value'));
       value =
-        td.properties[propertyName].enum[
-          parseInt(parseInt(valueIndex.split("'")[1]))
-        ];
+        td.properties[propertyName].enum[parseInt(valueIndex.split("'")[1])];
     }
 
     value = JavaScript.quote_(value);
 
-    const code = `things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
+    const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
 
     return code;
   };
 }
 
 export function generateInvokeActionBlock(
-  actionName,
-  deviceName,
-  input,
-  output
+  actionName: string,
+  deviceName: string,
+  input: WoT.DataSchema,
+  output: WoT.DataSchema
 ) {
-  let inputValueType;
+  let inputValueType: string | null;
   if (typeof input !== 'undefined') {
     // Set correct input type check
 
@@ -305,18 +264,18 @@ export function generateInvokeActionBlock(
 }
 
 export function generateInvokeActionCode(
-  actionName,
-  deviceName,
-  input,
-  output
+  actionName: string,
+  deviceName: string,
+  input: WoT.DataSchema,
+  output: WoT.DataSchema
 ) {
   JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-    block
+    block: Block
   ) {
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    let code = '';
+    let code: string | string[] = '';
     if (typeof input === 'undefined') {
       code = `await things.get(${name}).invokeAction('${actionName}')`;
     } else {
@@ -326,15 +285,20 @@ export function generateInvokeActionCode(
     }
 
     if (typeof output !== 'undefined') {
-      code = `await ${code}.value()`;
+      code = `await (${code}).value()`;
       code = [code, JavaScript.ORDER_NONE];
+    } else {
+      code = `${code};\n`;
     }
 
     return code;
   };
 }
 
-export function generateSubscribeEventBlock(eventName, deviceName) {
+export function generateSubscribeEventBlock(
+  eventName: string,
+  deviceName: string
+) {
   Blocks[`${deviceName}_subscribeEventBlock_${eventName}`] = {
     /**
      * Block for reading a property of a Xiaomi Mijia thermometer.
@@ -362,29 +326,17 @@ export function generateSubscribeEventBlock(eventName, deviceName) {
      */
     addEvent: async function () {
       eventsInWorkspace.push(this.id);
-      // remove event if block is deleted
-      this.changeListener = getWorkspace().addChangeListener(event =>
-        this.onDispose(event)
-      );
     },
-    onchange: function () {
+    onchange: function (event: Event) {
       if (!this.isInFlyout && !this.requested && this.rendered) {
         // Block is newly created
         this.requested = true;
         this.addEvent();
         this.createVars();
       }
-    },
-    onDispose: function (event) {
       if (event.type === Events.BLOCK_DELETE) {
-        if (
-          event.type === Events.BLOCK_DELETE &&
-          event.ids.indexOf(this.id) !== -1
-        ) {
-          // Block is being deleted
-          this.removeFromEvents();
-          getWorkspace().removeChangeListener(this.changeListener);
-        }
+        // Block is being deleted
+        this.removeFromEvents();
       }
     },
     /**
@@ -400,6 +352,9 @@ export function generateSubscribeEventBlock(eventName, deviceName) {
     },
     createVars: function () {
       const ws = getWorkspace();
+      if (!ws) {
+        return;
+      }
       const varNames = ['eventVar'];
       for (const varName of varNames) {
         // create legal variable name
@@ -423,24 +378,28 @@ export function generateSubscribeEventBlock(eventName, deviceName) {
   };
 }
 
-export function generateSubscribeEventCode(eventName, deviceName) {
+export function generateSubscribeEventCode(
+  eventName: string,
+  deviceName: string
+) {
   JavaScript[`${deviceName}_subscribeEventBlock_${eventName}`] = function (
-    block
+    block: Block
   ) {
     const thing =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-    const statements = JavaScript.quote_(
-      JavaScript.statementToCode(block, 'statements')
-    );
-    let blockId = "''";
-    if (block.getInputTargetBlock('thing')) {
-      blockId = JavaScript.quote_(block.getInputTargetBlock('thing').id);
-    }
-    const ownId = JavaScript.quote_(block.id);
+    const statements = JavaScript.statementToCode(block, 'statements');
+    const eventVar = block.getFieldValue('eventVar');
 
-    const handler = `handleGenericEvent(${ownId}, ${blockId}, ${thing}, ${statements}, ${JavaScript.quote_(
-      eventName
-    )})\n`;
+    const eventHandler = JavaScript.provideFunction_('handleGenericEvent', [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      `  const ${eventVar} = await interactionOutput.value();`,
+      `  ${statements.replace(/`/g, '\\`')}`,
+      '}',
+    ]);
+
+    const handler = `await things.get(${thing}).subscribeEvent('${eventName}', ${eventHandler});\n`;
     const handlersList = JavaScript.definitions_['eventHandlers'] || '';
     // Event handlers need to be executed first, so they're added to JavaScript.definitions
     JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -448,28 +407,6 @@ export function generateSubscribeEventCode(eventName, deviceName) {
     return '';
   };
 }
-
-globalThis['handleGenericEvent'] = async function (
-  ownId,
-  blockId,
-  id,
-  statements,
-  eventName
-) {
-  const ws = getWorkspace();
-  const self = ws.getBlockById(ownId);
-  const eventVariable = self.getFieldValue('eventVar');
-
-  const block = ws.getBlockById(blockId);
-  const thing = block.thing;
-
-  const handler = async function (data) {
-    globalThis[eventVariable] = await data.value();
-    eval(`(async () => {${statements}})();`);
-  };
-  const sub = await thing.subscribeEvent(eventName, handler);
-  addCleanUpFunction(async () => sub.close());
-};
 
 // TODO: Automaticall add string inputs
 // Generate only one block even if 2 Things with basic auth are connected
@@ -491,8 +428,8 @@ export function generateSecurityBlock() {
   };
 }
 
-export function generateSecurityCode(td) {
-  JavaScript['SecurityBlock'] = function (block) {
+export function generateSecurityCode(td: WoT.ThingDescription) {
+  JavaScript['SecurityBlock'] = function (block: Block) {
     const username = JavaScript.valueToCode(
       block,
       'username',
@@ -532,24 +469,24 @@ export function generateSecurityCode(td) {
 
 const getLanguage = function () {
   // Get browser language tag -> currently de and en supported
-  const lang = navigator.language || navigator.userLanguage;
+  const lang = navigator.language || (navigator as any).userLanguage;
   const langTag = lang.split('-')[0];
   return langTag;
 };
 
-export async function crawl(startUri) {
+export async function crawl(startUri: string) {
   // Found Thing Descriptions
   const foundTDs = new Set();
   // Visited URIs
   const visited = new Set();
   // URIs to visit
-  const todo = new Set();
+  const todo = new Set<string>();
 
   // add start uri
   todo.add(startUri);
 
   // iterate over todo set until empty
-  for (const uriElement of todo) {
+  for (const uriElement = todo.values().next().value; todo.size > 0; ) {
     // If already visited delete
     if (visited.has(uriElement)) {
       todo.delete(uriElement);
@@ -577,17 +514,22 @@ export async function crawl(startUri) {
 }
 
 // Fetch Thing Description
-async function fetchTD(uri) {
+async function fetchTD(uri: string): Promise<[WoT.ThingDescription, string[]]> {
   const res = await fetch(uri);
 
   if (res.ok) {
-    const nextTDLinks = [];
+    const nextTDLinks: string[] = [];
     // Get TD
-    const td = await res.json();
+    const td: WoT.ThingDescription = await res.json();
 
     if (td.links) {
       // find type of link and get href
-      for (const [_, value] of Object.entries(td.links)) {
+      for (const [_, value] of Object.entries(td.links) as [
+        _: unknown,
+        value:
+          | WoT.ThingDescription['LinkElement']
+          | WoT.ThingDescription['IconLinkElement']
+      ][]) {
         if (value.rel === 'next') {
           nextTDLinks.push(value.href);
         }
@@ -595,5 +537,7 @@ async function fetchTD(uri) {
     }
 
     return [td, nextTDLinks];
+  } else {
+    throw new Error('Could not fetch TD');
   }
 }

@@ -110,6 +110,7 @@ export default class ConnectDialog extends React.Component {
               fullWidth
               variant="standard"
               onChange={this.handleChange}
+              onKeyDown={e => (e.key === 'Enter' ? this.handleFetch() : {})}
             />
           </DialogContent>
           <DialogActions>

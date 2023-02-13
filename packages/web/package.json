@@ -82,7 +82,8 @@
     "pnp-webpack-plugin": "^1.7.0",
     "prettier": "latest",
     "typescript": "latest",
-    "webpack": "5.74.0"
+    "webpack": "5.74.0",
+    "wot-typescript-definitions": "^0.8.0-SNAPSHOT.23"
   },
   "homepage": ".",
   "packageManager": "yarn@3.3.0"

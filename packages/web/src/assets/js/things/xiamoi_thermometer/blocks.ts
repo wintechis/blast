@@ -46,7 +46,6 @@ Blocks['things_xiaomiThermometer'] = {
     if (event.type === Events.BLOCK_DELETE) {
       // Block is being deleted
       this.removeFromEvents();
-      getWorkspace()?.removeChangeListener(this.changeListener);
     }
   },
   /**

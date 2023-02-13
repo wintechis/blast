@@ -26,7 +26,7 @@ import {
   generateSecurityBlock,
   generateSecurityCode,
   crawl,
-} from './automatedBlockGeneration.js';
+} from './automatedBlockGeneration.ts';
 
 /**
  * Maps device names to BluetoothDevice.id.

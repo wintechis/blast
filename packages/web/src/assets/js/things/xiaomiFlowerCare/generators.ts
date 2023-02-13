@@ -26,7 +26,7 @@ JavaScript['things_xiaomiFlowerCare'] = function (
     'const {XiaomiFlowerCare} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(XiaomiFlowerCare, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
