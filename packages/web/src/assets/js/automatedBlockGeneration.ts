@@ -12,6 +12,14 @@ import * as WoT from 'wot-typescript-definitions';
 
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 
+const dataTypeMapping: { [key: string]: string } = {
+  "integer": "Number",
+  "string": "String",
+  "number": "Number",
+  "boolean": "Boolean",
+  "array": "Array"
+}
+
 export function generateThingBlock(
   deviceName: string,
   deviceDescription: string,
@@ -100,10 +108,10 @@ export function generateReadPropertyBlock(
 ) {
   const langTag = getLanguage();
   let blockName = '';
-  if (td.titles && td.titles?.[langTag]) {
-    blockName = `read property '${td.titles?.[langTag]}' of`;
-  } else if (td.title) {
-    blockName = `read property '${td.title}' of`;
+  if (td?.properties?.titles?.[langTag]) {
+    blockName = `read property '${td?.properties?.titles?.[langTag]}' of`;
+  } else if (td?.properties?.title) {
+    blockName = `read property '${td?.properties?.title}' of`;
   } else {
     blockName = `read property '${propertyName}' of`;
   }
@@ -160,9 +168,17 @@ export function generateWritePropertyBlock(
           .appendField(new FieldDropdown(optionsArr), 'value')
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
-        this.appendValueInput('value')
+        if (td.properties[propertyName].type){
+          this.appendValueInput('value')
+          .setCheck(dataTypeMapping[td.properties[propertyName].type])
+          .appendField('write value', 'label');
+        }
+        else{
+          this.appendValueInput('value')
           .setCheck()
           .appendField('write value', 'label');
+        }
+
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField(`to '${propertyName}' property of`, 'label');
@@ -211,40 +227,22 @@ export function generateInvokeActionBlock(
   actionName: string,
   deviceName: string,
   input: WoT.DataSchema,
-  output: WoT.DataSchema
+  output: WoT.DataSchema,
+  td: WoT.ThingDescription
 ) {
-  let inputValueType: string | null;
-  if (typeof input !== 'undefined') {
-    // Set correct input type check
-
-    switch (input.type) {
-      case 'integer':
-      case 'number':
-        inputValueType = 'Number';
-        break;
-      case 'boolean':
-        inputValueType = 'Boolean';
-        break;
-      case 'string':
-        inputValueType = 'String';
-        break;
-      case 'array':
-        inputValueType = 'Array';
-        break;
-      case 'object':
-        console.error('Objects are currently not supportet');
-        break;
-      default:
-        inputValueType = null;
-    }
-  }
-
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
       if (typeof input !== 'undefined') {
-        this.appendValueInput('value')
-          .setCheck(inputValueType)
+        if (dataTypeMapping[td.actions[actionName].input.type]){
+          this.appendValueInput('value')
+          .setCheck(dataTypeMapping[td.actions[actionName].input.type])
           .appendField(`invoke action '${actionName}' with value`, 'label');
+        }
+        else{
+          this.appendValueInput('value')
+          .setCheck()
+          .appendField(`invoke action '${actionName}' with value`, 'label');
+        }
       }
       this.appendValueInput('thing')
         .setCheck('Thing')
@@ -475,53 +473,92 @@ const getLanguage = function () {
   return langTag;
 };
 
-export async function crawl(startUri: string) {
+export async function crawl(startUri: string, maxDepth: number) {
   // Found Thing Descriptions
-  const foundTDs = new Set();
+  const allCrawledTDs = new Set();
   // Visited URIs
-  const visited = new Set();
+  const allVisitedUris = new Set();
   // URIs to visit
-  const todo = new Set<string>();
+  const urisToVisit = [];
+
+  // Number of parallel connections
+  const parallelCount = 800;
 
   // add start uri
-  todo.add(startUri);
+  urisToVisit.push(startUri);
 
-  // iterate over todo set until empty
-  for (const uriElement = todo.values().next().value; todo.size > 0; ) {
-    // If already visited delete
-    if (visited.has(uriElement)) {
-      todo.delete(uriElement);
-      continue;
+  let depthCounter = 0;
+
+  let maxFetch = 0;
+  let maxPro = 0;
+
+  while (urisToVisit.length > 0) {
+    // Check depthCounter
+    if (depthCounter >= maxDepth) {
+      urisToVisit.length = 0;
+      break;
     }
-    // Fetch TD and extract links to linksets in TD
-    const [newTD, newURIs] = await fetchTD(uriElement);
 
-    // Add TD to found TDs
-    foundTDs.add(newTD);
+    const newlyFoundTDs = [];
+    const newlyFoundURIs = [];
+    // Visit all uris in uriToVisit
+    while (urisToVisit.length > 0) {
+      // Get URI to work on in parallel
+      const currentUrisToVisit:Array<string> = [];
+      for (let i = 0; i < parallelCount; i++) {
+        if (urisToVisit.length !== 0) {
+          const readUri:string = urisToVisit.pop();
+          currentUrisToVisit.push(readUri);
+        } else {
+          break;
+        }
+      }
+      const promiseArr = [];
+      // visit all uris in currentUrisToVisit
+      for (const uri of currentUrisToVisit) {
+        promiseArr.push(fetchTD(uri));
+      }
 
-    // Add TD uri to visited
-    visited.add(uriElement);
+      const resultArr:any = await Promise.all(promiseArr);
 
-    // Remove form todo set
-    todo.delete(uriElement);
+      // Extract TD and new found uris from resultArr
+      for (const result of resultArr) {
+        newlyFoundTDs.push(result[0]);
+        newlyFoundURIs.push(...result[1]);
+      }
 
-    // Add new found links in linkset to todos
-    for (const tmpUri of newURIs) {
-      todo.add(tmpUri);
+
+      // Add currentUrisToVisit to allVisitedUris
+      for (const uri in currentUrisToVisit){
+        allVisitedUris.add(uri);
+      }
     }
+
+    // Add all newly found elements to the total elements
+    for (const td of newlyFoundTDs) {
+      allCrawledTDs.add(td);
+    }
+    urisToVisit.push(...newlyFoundURIs);
+
+    // Increas depth counter
+    depthCounter++;
   }
-  // Return set of found TDs
-  return foundTDs;
+
+  return allCrawledTDs;
 }
 
 // Fetch Thing Description
 async function fetchTD(uri: string): Promise<[WoT.ThingDescription, string[]]> {
-  const res = await fetch(uri);
-
+  let res;
+  try {
+    res = await fetch(uri);
+  } catch (error) {
+    throw error;
+  }
   if (res.ok) {
-    const nextTDLinks: string[] = [];
+    const nextTDLinks = [];
     // Get TD
-    const td: WoT.ThingDescription = await res.json();
+    const td = await res.json();
 
     if (td.links) {
       // find type of link and get href
@@ -531,14 +568,28 @@ async function fetchTD(uri: string): Promise<[WoT.ThingDescription, string[]]> {
           | WoT.ThingDescription['LinkElement']
           | WoT.ThingDescription['IconLinkElement']
       ][]) {
-        if (value.rel === 'next') {
+        // If content type is application/td+json add td
+        if (value.type === "application/td+json") {
           nextTDLinks.push(value.href);
+          continue;
+        }
+
+        // Use head request to follow link and get content type
+        const response = await fetch(value.href, {
+          method: "HEAD",
+        });
+        const contentType: string | null = response.headers.get("Content-Type");
+
+        // Check if content type is application/td+json
+        if (contentType?.includes("application/td+json")) {
+          nextTDLinks.push(value.href);
+          continue;
         }
       }
     }
-
     return [td, nextTDLinks];
-  } else {
+  }
+  else {
     throw new Error('Could not fetch TD');
   }
 }

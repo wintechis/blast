@@ -2965,7 +2965,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["styled-components", "virtual:eb586aa4d36ae14ecf2e6885a2f5312fec43fb0d869fbf300a8fee396829f72f61c360b3d47ad89db711f1b7a0319a95db79af1914e1f73d9a08b876bf8eb222#npm:5.3.6"],\
             ["typescript", "patch:typescript@npm%3A4.9.3#~builtin<compat/typescript>::version=4.9.3&hash=d73830"],\
             ["urdf", "https://github.com/derwehr/uRDF.js.git#commit=b51057441beedf48fbffb821adeaa2906fa448e7"],\
-            ["webpack", "virtual:eb586aa4d36ae14ecf2e6885a2f5312fec43fb0d869fbf300a8fee396829f72f61c360b3d47ad89db711f1b7a0319a95db79af1914e1f73d9a08b876bf8eb222#npm:5.74.0"]\
+            ["webpack", "virtual:eb586aa4d36ae14ecf2e6885a2f5312fec43fb0d869fbf300a8fee396829f72f61c360b3d47ad89db711f1b7a0319a95db79af1914e1f73d9a08b876bf8eb222#npm:5.74.0"],\
+            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"]\
           ],\
           "linkType": "SOFT"\
         }]\

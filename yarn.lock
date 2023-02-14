@@ -1622,6 +1622,7 @@ __metadata:
     typescript: latest
     urdf: "https://github.com/derwehr/uRDF.js.git"
     webpack: 5.74.0
+    wot-typescript-definitions: ^0.8.0-SNAPSHOT.23
   languageName: unknown
   linkType: soft
 
@@ -20027,7 +20028,7 @@ styled-components@latest:
   languageName: node
   linkType: hard
 
-"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.23":
+"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.23, wot-typescript-definitions@npm:^0.8.0-SNAPSHOT.23":
   version: 0.8.0-SNAPSHOT.23
   resolution: "wot-typescript-definitions@npm:0.8.0-SNAPSHOT.23"
   checksum: 1043f2d7b9c70c5ebbd145500b7023ef47fb7b2b05cd77c0f2303f4058688c40c593a7d4cac96cba1628eff6ede476bf384e069fc943b8e74298a4ed1dd21420

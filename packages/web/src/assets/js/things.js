@@ -665,7 +665,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
           actionName,
           deviceName,
           inputObj[actionName],
-          outputObj[actionName]
+          outputObj[actionName],
+          td
         );
         generateInvokeActionCode(
           actionName,
