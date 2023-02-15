@@ -78,7 +78,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=0102e9"],\
             ["urdf", "https://github.com/derwehr/uRDF.js.git#commit=b51057441beedf48fbffb821adeaa2906fa448e7"],\
             ["webpack", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:5.74.0"],\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"]\
+            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -3018,7 +3018,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=0102e9"],\
             ["urdf", "https://github.com/derwehr/uRDF.js.git#commit=b51057441beedf48fbffb821adeaa2906fa448e7"],\
             ["webpack", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:5.74.0"],\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"]\
+            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -22863,11 +22863,11 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["wot-typescript-definitions", [\
-        ["npm:0.8.0-SNAPSHOT.23", {\
-          "packageLocation": "./.yarn/cache/wot-typescript-definitions-npm-0.8.0-SNAPSHOT.23-6abd6f27a6-1043f2d7b9.zip/node_modules/wot-typescript-definitions/",\
+      ["wot-thing-description-types", [\
+        ["npm:1.1.0-27-September-2021", {\
+          "packageLocation": "./.yarn/cache/wot-thing-description-types-npm-1.1.0-27-September-2021-80409e5033-805de1447f.zip/node_modules/wot-thing-description-types/",\
           "packageDependencies": [\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"]\
+            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
           ],\
           "linkType": "HARD"\
         }]\
