@@ -9,9 +9,7 @@ export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 let servient: Servient;
 let wot: typeof WoT;
 
-export const getServient = function (
-  bluetoothAdapter: BluetoothAdapter
-): Servient {
+const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
   if (!servient) {
     servient = new Servient();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
@@ -30,6 +28,16 @@ const getWot = async function (
     }
   }
   return wot;
+};
+
+export const resetServient = async function (): Promise<void> {
+  if (servient) {
+    const things = servient.getThings();
+    Object.entries(things).forEach(([id, td]) => {
+      servient.destroyThing(id);
+    });
+    await servient.shutdown();
+  }
 };
 
 export const createThing = async function (
