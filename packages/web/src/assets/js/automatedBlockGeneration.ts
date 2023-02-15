@@ -7,23 +7,22 @@ import {
   Names,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-// eslint-disable-next-line node/no-unpublished-import
-import * as WoT from 'wot-typescript-definitions';
+import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 
-const dataTypeMapping: { [key: string]: string } = {
-  "integer": "Number",
-  "string": "String",
-  "number": "Number",
-  "boolean": "Boolean",
-  "array": "Array"
-}
+const dataTypeMapping: Record<string, string> = {
+  integer: 'Number',
+  string: 'String',
+  number: 'Number',
+  boolean: 'Boolean',
+  array: 'Array',
+};
 
 export function generateThingBlock(
   deviceName: string,
   deviceDescription: string,
-  td: WoT.ThingDescription
+  td: ThingDescription
 ) {
   // Generate description depending on available information
   const langTag = getLanguage();
@@ -81,10 +80,7 @@ export function generateThingBlock(
   };
 }
 
-export function generateThingCode(
-  deviceName: string,
-  td: WoT.ThingDescription
-) {
+export function generateThingCode(deviceName: string, td: ThingDescription) {
   JavaScript[`things_${deviceName}`] = function (block: Block) {
     const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -104,7 +100,7 @@ export function generateThingCode(
 export function generateReadPropertyBlock(
   propertyName: string,
   deviceName: string,
-  td: WoT.ThingDescription
+  td: ThingDescription
 ) {
   const langTag = getLanguage();
   let blockName = '';
@@ -121,7 +117,7 @@ export function generateReadPropertyBlock(
       this.appendValueInput('thing')
         .setCheck('Thing')
         .appendField(blockName, 'label');
-      this.setOutput(true, td.properties.type ?? null);
+      this.setOutput(true, td.properties?.type ?? null);
       this.setColour(255);
       this.setTooltip(
         td.descriptions?.[langTag] ??
@@ -150,15 +146,15 @@ export function generateReadPropertyCode(
 export function generateWritePropertyBlock(
   propertyName: string,
   deviceName: string,
-  td: WoT.ThingDescription
+  td: ThingDescription
 ) {
   Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
     init: function () {
-      if (td.properties[propertyName].enum) {
+      if (td.properties?.propertyName.enum) {
         const optionsArr = [];
-        for (let i = 0; i < td.properties[propertyName].enum.length; i++) {
+        for (let i = 0; i < td.properties?.propertyName.enum.length; i++) {
           optionsArr.push([
-            td.properties[propertyName].enum[i].toString(),
+            (td.properties?.propertyName.enum[i] as string).toString(),
             i.toString(),
           ]);
         }
@@ -168,15 +164,14 @@ export function generateWritePropertyBlock(
           .appendField(new FieldDropdown(optionsArr), 'value')
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
-        if (td.properties[propertyName].type){
+        if (td.properties?.propertyName.type) {
           this.appendValueInput('value')
-          .setCheck(dataTypeMapping[td.properties[propertyName].type])
-          .appendField('write value', 'label');
-        }
-        else{
+            .setCheck(dataTypeMapping[td.properties?.propertyName.type])
+            .appendField('write value', 'label');
+        } else {
           this.appendValueInput('value')
-          .setCheck()
-          .appendField('write value', 'label');
+            .setCheck()
+            .appendField('write value', 'label');
         }
 
         this.appendValueInput('thing')
@@ -196,7 +191,7 @@ export function generateWritePropertyBlock(
 export function generateWritePropertyCode(
   propertyName: string,
   deviceName: string,
-  td: WoT.ThingDescription
+  td: ThingDescription
 ) {
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
     block: Block
@@ -206,13 +201,13 @@ export function generateWritePropertyCode(
 
     let value;
     // Without enum
-    if (td.properties[propertyName].enum === undefined) {
+    if (td.properties?.propertyName.enum === undefined) {
       value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
     } else {
       // With enum
       const valueIndex = JavaScript.quote_(block.getFieldValue('value'));
       value =
-        td.properties[propertyName].enum[parseInt(valueIndex.split("'")[1])];
+        td.properties?.propertyName.enum[parseInt(valueIndex.split("'")[1])];
     }
 
     value = JavaScript.quote_(value);
@@ -226,22 +221,24 @@ export function generateWritePropertyCode(
 export function generateInvokeActionBlock(
   actionName: string,
   deviceName: string,
-  input: WoT.DataSchema,
-  output: WoT.DataSchema,
-  td: WoT.ThingDescription
+  input: DataSchema,
+  output: DataSchema,
+  td: ThingDescription
 ) {
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
-      if (typeof input !== 'undefined') {
-        if (dataTypeMapping[td.actions[actionName].input.type]){
+      if (
+        typeof input !== 'undefined' &&
+        typeof td.actions?.actionName.input?.type !== 'undefined'
+      ) {
+        if (dataTypeMapping[td.actions.actionName.input.type]) {
           this.appendValueInput('value')
-          .setCheck(dataTypeMapping[td.actions[actionName].input.type])
-          .appendField(`invoke action '${actionName}' with value`, 'label');
-        }
-        else{
+            .setCheck(dataTypeMapping[td.actions.actionName.input.type])
+            .appendField(`invoke action '${actionName}' with value`, 'label');
+        } else {
           this.appendValueInput('value')
-          .setCheck()
-          .appendField(`invoke action '${actionName}' with value`, 'label');
+            .setCheck()
+            .appendField(`invoke action '${actionName}' with value`, 'label');
         }
       }
       this.appendValueInput('thing')
@@ -265,8 +262,8 @@ export function generateInvokeActionBlock(
 export function generateInvokeActionCode(
   actionName: string,
   deviceName: string,
-  input: WoT.DataSchema,
-  output: WoT.DataSchema
+  input: DataSchema,
+  output: DataSchema
 ) {
   JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
     block: Block
@@ -427,7 +424,7 @@ export function generateSecurityBlock() {
   };
 }
 
-export function generateSecurityCode(td: WoT.ThingDescription) {
+export function generateSecurityCode(td: ThingDescription) {
   JavaScript['SecurityBlock'] = function (block: Block) {
     const username = JavaScript.valueToCode(
       block,
@@ -489,9 +486,6 @@ export async function crawl(startUri: string, maxDepth: number) {
 
   let depthCounter = 0;
 
-  let maxFetch = 0;
-  let maxPro = 0;
-
   while (urisToVisit.length > 0) {
     // Check depthCounter
     if (depthCounter >= maxDepth) {
@@ -504,10 +498,10 @@ export async function crawl(startUri: string, maxDepth: number) {
     // Visit all uris in uriToVisit
     while (urisToVisit.length > 0) {
       // Get URI to work on in parallel
-      const currentUrisToVisit:Array<string> = [];
+      const currentUrisToVisit: Array<string> = [];
       for (let i = 0; i < parallelCount; i++) {
         if (urisToVisit.length !== 0) {
-          const readUri:string = urisToVisit.pop();
+          const readUri: string = urisToVisit.pop();
           currentUrisToVisit.push(readUri);
         } else {
           break;
@@ -519,7 +513,7 @@ export async function crawl(startUri: string, maxDepth: number) {
         promiseArr.push(fetchTD(uri));
       }
 
-      const resultArr:any = await Promise.all(promiseArr);
+      const resultArr: any = await Promise.all(promiseArr);
 
       // Extract TD and new found uris from resultArr
       for (const result of resultArr) {
@@ -527,9 +521,8 @@ export async function crawl(startUri: string, maxDepth: number) {
         newlyFoundURIs.push(...result[1]);
       }
 
-
       // Add currentUrisToVisit to allVisitedUris
-      for (const uri in currentUrisToVisit){
+      for (const uri in currentUrisToVisit) {
         allVisitedUris.add(uri);
       }
     }
@@ -547,49 +540,45 @@ export async function crawl(startUri: string, maxDepth: number) {
   return allCrawledTDs;
 }
 
-// Fetch Thing Description
-async function fetchTD(uri: string): Promise<[WoT.ThingDescription, string[]]> {
-  let res;
-  try {
-    res = await fetch(uri);
-  } catch (error) {
-    throw error;
-  }
+/**
+ * Fetches a Thing Description and all links to other TDs.
+ * @returns A tuple with the TD and an array of links to other TDs.
+ */
+async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
+  const res = await fetch(uri);
+
   if (res.ok) {
-    const nextTDLinks = [];
+    const nextTDLinks: string[] = [];
     // Get TD
-    const td = await res.json();
+    const td = (await res.json()) as ThingDescription;
 
     if (td.links) {
       // find type of link and get href
-      for (const [_, value] of Object.entries(td.links) as [
-        _: unknown,
-        value:
-          | WoT.ThingDescription['LinkElement']
-          | WoT.ThingDescription['IconLinkElement']
-      ][]) {
+      for (const [_, value] of Object.entries(td.links)) {
         // If content type is application/td+json add td
-        if (value.type === "application/td+json") {
+        if (
+          typeof value?.type !== 'undefined' &&
+          value.type === 'application/td+json'
+        ) {
           nextTDLinks.push(value.href);
           continue;
         }
 
         // Use head request to follow link and get content type
         const response = await fetch(value.href, {
-          method: "HEAD",
+          method: 'HEAD',
         });
-        const contentType: string | null = response.headers.get("Content-Type");
+        const contentType: string | null = response.headers.get('Content-Type');
 
         // Check if content type is application/td+json
-        if (contentType?.includes("application/td+json")) {
+        if (contentType?.includes('application/td+json')) {
           nextTDLinks.push(value.href);
           continue;
         }
       }
     }
     return [td, nextTDLinks];
-  }
-  else {
+  } else {
     throw new Error('Could not fetch TD');
   }
 }
