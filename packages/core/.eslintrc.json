@@ -14,18 +14,6 @@
     "node",
     "prettier"
   ],
-  "globals": {
-    // TODO find node alternatives for these
-    "Audio": "readonly",
-    "Blob": "readonly",
-    "document": "readonly",
-    "FileReader": "readonly",
-    "fetch": "readonly",
-    "Headers": "readonly",
-    "location": "readonly",
-    "navigator": "readonly",
-    "window": "readonly"
-  },
   "rules": {
     "block-scoped-var": "error",
     "camelcase": ["error", {
