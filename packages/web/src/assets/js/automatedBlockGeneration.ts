@@ -11,6 +11,10 @@ import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 
+interface NavigatorLanguage {
+  userLanguage?: string;
+}
+
 const dataTypeMapping: Record<string, string> = {
   integer: 'Number',
   string: 'String',
@@ -465,95 +469,57 @@ export function generateSecurityCode(td: ThingDescription) {
 
 const getLanguage = function () {
   // Get browser language tag -> currently de and en supported
-  const lang = navigator.language || (navigator as any).userLanguage;
-  const langTag = lang.split('-')[0];
+  const lang =
+    navigator.language || (navigator as NavigatorLanguage).userLanguage;
+  const langTag = lang?.split('-')[0];
   return langTag;
 };
 
+/**
+ * Parses a TD and its links, returning all links until maxDepth is reached
+ * @returns a Set of all TDs that have been found
+ */
 export async function crawl(startUri: string, maxDepth: number) {
-  // Found Thing Descriptions
-  const allCrawledTDs = new Set();
-  // Visited URIs
-  const allVisitedUris = new Set();
-  // URIs to visit
-  const urisToVisit = [];
-
-  // Number of parallel connections
-  const parallelCount = 800;
-
-  // add start uri
-  urisToVisit.push(startUri);
-
-  let depthCounter = 0;
-
-  while (urisToVisit.length > 0) {
-    // Check depthCounter
-    if (depthCounter >= maxDepth) {
-      urisToVisit.length = 0;
-      break;
-    }
-
-    const newlyFoundTDs = [];
-    const newlyFoundURIs = [];
-    // Visit all uris in uriToVisit
-    while (urisToVisit.length > 0) {
-      // Get URI to work on in parallel
-      const currentUrisToVisit: Array<string> = [];
-      for (let i = 0; i < parallelCount; i++) {
-        if (urisToVisit.length !== 0) {
-          const readUri: string = urisToVisit.pop();
-          currentUrisToVisit.push(readUri);
-        } else {
-          break;
-        }
+  // Contains all TDs that have been found
+  const TDs = new Set<ThingDescription>();
+  // Queue with Uris that have yet to be visited
+  const queue = new Set<string>();
+  // Uris that have been visited
+  const visited = new Set<string>();
+  let depth = 0;
+  // get start TD and its links
+  const [startTD, startTDLinks] = await fetchTD(startUri);
+  TDs.add(startTD);
+  startTDLinks.forEach(link => queue.add(link));
+  while (queue.size > 0 && depth < maxDepth) {
+    // Fetch all TDs in queue in parallel, if not already visited
+    const promises = Array.from(queue).map(async uri => {
+      if (!visited.has(uri)) {
+        const [td, tdLinks] = await fetchTD(uri);
+        TDs.add(td);
+        tdLinks.forEach(link => queue.add(link));
+        visited.add(uri);
       }
-      const promiseArr = [];
-      // visit all uris in currentUrisToVisit
-      for (const uri of currentUrisToVisit) {
-        promiseArr.push(fetchTD(uri));
-      }
-
-      const resultArr: any = await Promise.all(promiseArr);
-
-      // Extract TD and new found uris from resultArr
-      for (const result of resultArr) {
-        newlyFoundTDs.push(result[0]);
-        newlyFoundURIs.push(...result[1]);
-      }
-
-      // Add currentUrisToVisit to allVisitedUris
-      for (const uri in currentUrisToVisit) {
-        allVisitedUris.add(uri);
-      }
-    }
-
-    // Add all newly found elements to the total elements
-    for (const td of newlyFoundTDs) {
-      allCrawledTDs.add(td);
-    }
-    urisToVisit.push(...newlyFoundURIs);
-
-    // Increas depth counter
-    depthCounter++;
+    });
+    // Wait for all promises to finish
+    await Promise.all(promises);
+    depth++;
   }
-
-  return allCrawledTDs;
+  return TDs;
 }
-
 /**
  * Fetches a Thing Description and all links to other TDs.
  * @returns A tuple with the TD and an array of links to other TDs.
  */
 async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
   const res = await fetch(uri);
-
   if (res.ok) {
     const nextTDLinks: string[] = [];
     // Get TD
     const td = (await res.json()) as ThingDescription;
-
     if (td.links) {
       // find type of link and get href
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       for (const [_, value] of Object.entries(td.links)) {
         // If content type is application/td+json add td
         if (
@@ -563,14 +529,11 @@ async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
           nextTDLinks.push(value.href);
           continue;
         }
-
         // Use head request to follow link and get content type
         const response = await fetch(value.href, {
           method: 'HEAD',
         });
         const contentType: string | null = response.headers.get('Content-Type');
-
-        // Check if content type is application/td+json
         if (contentType?.includes('application/td+json')) {
           nextTDLinks.push(value.href);
           continue;
