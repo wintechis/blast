@@ -470,8 +470,8 @@ export function generateSecurityCode(td: ThingDescription) {
 const getLanguage = function () {
   // Get browser language tag -> currently de and en supported
   const lang =
-    navigator.language || (navigator as NavigatorLanguage).userLanguage;
-  const langTag = lang?.split('-')[0];
+    navigator.language || (navigator as NavigatorLanguage).userLanguage || 'en';
+  const langTag = lang.split('-')[0];
   return langTag;
 };
 
