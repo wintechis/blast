@@ -1628,6 +1628,7 @@ __metadata:
     typescript: latest
     urdf: "https://github.com/derwehr/uRDF.js.git"
     webpack: 5.74.0
+    wot-thing-description-types: ^1.1.0-13-October-2022
   languageName: unknown
   linkType: soft
 
@@ -17609,6 +17610,13 @@ typescript@latest:
     "@types/trusted-types": ^2.0.2
     workbox-core: 6.5.4
   checksum: bc43c8d31908ab564d740eb1041180c0b0ca4d1f0a3ccde59c5764a8f96d7b08edb7df975360fd37c2bec9f3f57ca9de6c7e34fd252aa1a4a075b5b002f74f60
+  languageName: node
+  linkType: hard
+
+"wot-thing-description-types@npm:^1.1.0-13-October-2022":
+  version: 1.1.0-27-September-2021
+  resolution: "wot-thing-description-types@npm:1.1.0-27-September-2021"
+  checksum: 805de1447f0ed9dde5f4e1b8725d5f0c6cb2aa6d5aa26a0368e2048987e733f90f1dc5faa6eb504c78df8b229f4cc84d1016319d288e49b26fb7f6b1bfe1449f
   languageName: node
   linkType: hard
 

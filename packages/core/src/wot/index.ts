@@ -1,6 +1,7 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
 import {Form} from '@node-wot/td-tools';
+import {HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
@@ -9,10 +10,17 @@ export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 let servient: Servient;
 let wot: typeof WoT;
 
-const getServient = function (bluetoothAdapter: BluetoothAdapter): Servient {
+export const getServient = function (
+  bluetoothAdapter: BluetoothAdapter
+): Servient {
+  const httpConfig = {
+    allowSelfSigned: true, // client configuration
+  };
+
   if (!servient) {
     servient = new Servient();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
+    servient.addClientFactory(new HttpsClientFactory(httpConfig));
   }
   return servient;
 };
@@ -42,9 +50,11 @@ export const resetServient = async function (): Promise<void> {
 
 export const createThing = async function (
   td: WoT.ThingDescription,
-  id: string
+  id: string | undefined
 ): Promise<WoT.ConsumedThing> {
-  td = setIds(td, id);
+  if (id) {
+    td = setIds(td, id);
+  }
   const wotServient = await getWot();
   return wotServient.consume(td);
 };

@@ -62,7 +62,7 @@ JavaScript['things_ruuviTag'] = function (block: Block) {
   JavaScript.definitions_['RuuviTag'] = 'const {RuuviTag} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(RuuviTag, ${id}));`;
 
   return [id, JavaScript.ORDER_NONE];

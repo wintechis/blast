@@ -25,7 +25,7 @@ JavaScript['things_xiaomiThermometer'] = function (
     'const {XiaomiThermometer} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(XiaomiThermometer, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
@@ -55,9 +55,7 @@ JavaScript['xiaomiThermometer_event'] = function (block: Block): string {
     '    }',
     `    ${tempVarName} = temp / 100;`,
     `    ${humidityVarName} = data.getUint8(2);`,
-    '    eval(`(async () => {',
-    `      ${statements.replace(/`/g, '\\`')}`,
-    '    })()`);',
+    `    ${statements.replace(/`/g, '\\`')}`,
     '  }',
     '}',
   ]);

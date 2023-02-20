@@ -12,6 +12,21 @@ import {
   removeCategory,
 } from './toolbox.js';
 import {getWorkspace} from './interpreter.ts';
+import {
+  generateThingBlock,
+  generateThingCode,
+  generateReadPropertyBlock,
+  generateReadPropertyCode,
+  generateWritePropertyBlock,
+  generateWritePropertyCode,
+  generateInvokeActionBlock,
+  generateInvokeActionCode,
+  generateSubscribeEventBlock,
+  generateSubscribeEventCode,
+  generateSecurityBlock,
+  generateSecurityCode,
+  crawl,
+} from './automatedBlockGeneration.ts';
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -37,6 +52,11 @@ const audioDevices = new Map();
  * Maps video device labels to video device ids.
  */
 const videoDevices = new Map();
+
+/**
+ * Maps consumed web device labels to video device ids.
+ */
+const consumedWebDevices = new Map();
 
 /**
  * Lists all things implemented by BLAST.
@@ -139,6 +159,15 @@ let videoSelectButtonHandler = null;
  */
 export const setVideoSelectButtonHandler = function (handler) {
   videoSelectButtonHandler = handler;
+};
+
+let consumeThingButtonHandler = null;
+/**
+ * Sets the 'select video input' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setConsumeThingButtonHandler = function (handler) {
+  consumeThingButtonHandler = handler;
 };
 
 let getRssiBlockadded = false;
@@ -271,7 +300,28 @@ export const thingsFlyoutCategory = function (workspace) {
 
   // Add connected blocks for connected video devices
   if (connectedThingBlocks.video.length > 0) {
+    console.log(...connectedThingBlocks.video);
     xmlList.push(...connectedThingBlocks.video);
+  }
+
+  // Create Consume Thing Label
+  const consumeThingLabel = document.createElement('label');
+  consumeThingLabel.setAttribute('text', 'Consume Thing Description');
+  xmlList.push(consumeThingLabel);
+
+  // Create Consume Thing button
+  const consumeThingButton = document.createElement('button');
+  consumeThingButton.setAttribute('text', 'consume Thing');
+  consumeThingButton.setAttribute('callbackKey', 'CONSUME_THING');
+  workspace.registerButtonCallback('CONSUME_THING', _button => {
+    consumeThingButtonHandler();
+  });
+  xmlList.push(consumeThingButton);
+
+  // Add connected blocks for connected consumed devices
+  if (connectedThingBlocks.consumedDevice.length > 0) {
+    console.log(...connectedThingBlocks.consumedDevice);
+    xmlList.push(...connectedThingBlocks.consumedDevice);
   }
 
   return xmlList;
@@ -282,7 +332,13 @@ export const thingsFlyoutCategory = function (workspace) {
  * @return {!Array.<!Element>} Array of XML block elements.
  */
 const flyoutCategoryBlocks = function () {
-  const xmlList = {bluetooth: [], hid: [], audio: [], video: []};
+  const xmlList = {
+    bluetooth: [],
+    hid: [],
+    audio: [],
+    video: [],
+    consumedDevice: [],
+  };
   // add connected things to xmlList
   if (connectedThings.size > 0) {
     for (const [key, thing] of connectedThings) {
@@ -308,6 +364,8 @@ const flyoutCategoryBlocks = function () {
         idField.textContent = audioDevices.get(key);
       } else if (thing.type === 'video') {
         idField.textContent = videoDevices.get(key);
+      } else if (thing.type === 'consumedDevice') {
+        idField.textContent = consumedWebDevices.get(key);
       }
       block.appendChild(idField);
       block.setAttribute('gap', 8);
@@ -491,23 +549,187 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
   promptAndCheckWithAlert(deviceName, uid);
 };
 
+export const handleAddConsumedThing = async function (uri) {
+  // TODO: Check if URI is valid
+
+  // Crawl all referenced Thing Description links
+  const foundTDs = await crawl(uri);
+
+  for (const td of foundTDs) {
+    // generate a unique id for the new device
+    const uid =
+      Date.now().toString(36) + Math.random().toString(36).substring(2);
+    // TODO: Check if ID is already used ??
+
+    // Set new ID
+    td.id = uid;
+
+    addDevice(
+      td.title,
+      td.id, // default ID
+      'consumedDevice',
+      td
+    );
+  }
+};
+
 /**
  * Adds a device to BLAST.
  * @param {string} deviceName Name of the device.
  * @param {string} deviceId Unique identifier of the device.
  */
-export const addDevice = function (deviceName, deviceId, type) {
+export const addDevice = function (deviceName, deviceId, type, td) {
   let thing;
-  for (const t of implementedThings) {
-    if (t.id === type) {
-      thing = t;
-      break;
+  if (type === 'consumedDevice') {
+    // generate a unique id for the new device
+
+    // Object to store property names and allowed ops
+    const propertiesObj = {};
+    // Object to store action names and allowed ops
+    const actionsObj = {};
+    // Store all inputs of actions
+    const inputObj = {};
+    // Store all outputs of actions
+    const outputObj = {};
+    // Object to store event names and allowed ops
+    const eventObj = {};
+    // Store "data" of events
+    const dataObj = {};
+
+    // List of all created Blocks
+    const implementedThingsBlockList = [];
+
+    // Generate Thing Block
+    if (typeof td.description === 'undefined') {
+      generateThingBlock(deviceName, deviceName, td);
+    } else {
+      generateThingBlock(deviceName, td.description, td);
+    }
+    generateThingCode(deviceName, td);
+
+    // Supported is only none_sc and basic_sc
+    if (td.security === 'basic_sc') {
+      generateSecurityBlock();
+      generateSecurityCode(td);
+
+      // Add to implementedThingsBlockList
+      implementedThingsBlockList.push({
+        type: `${deviceName}_SecurityBlock`,
+        category: 'Security',
+      });
+    }
+    // get property names and allowed operations
+    for (const [propertyName, property] of Object.entries(
+      td.properties ?? {}
+    )) {
+      propertiesObj[propertyName] = property.forms.map(form => form.op);
+    }
+
+    // Generate Property Blocks
+    for (const [propertyName, operations] of Object.entries(propertiesObj)) {
+      const op = new Set(operations.flat());
+
+      if (op.has('readproperty')) {
+        generateReadPropertyBlock(propertyName, deviceName, td);
+        generateReadPropertyCode(propertyName, deviceName);
+
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_readPropertyBlock_${propertyName}`,
+          category: 'Properties',
+        });
+      }
+      if (op.has('writeproperty')) {
+        generateWritePropertyBlock(propertyName, deviceName, td);
+        generateWritePropertyCode(propertyName, deviceName, td);
+
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_writePropertyBlock_${propertyName}`,
+          category: 'Properties',
+        });
+      }
+    }
+
+    for (const [actionName, action] of Object.entries(td.actions ?? {})) {
+      actionsObj[actionName] = action.forms.map(form => form.op);
+      inputObj[actionName] = action.input;
+      outputObj[actionName] = action.output;
+    }
+
+    // Generate Action Blocks
+    for (const [actionName, operations] of Object.entries(actionsObj)) {
+      const op = new Set(operations.flat());
+      if (op.has('invokeaction')) {
+        generateInvokeActionBlock(
+          actionName,
+          deviceName,
+          inputObj[actionName],
+          outputObj[actionName],
+          td
+        );
+        generateInvokeActionCode(
+          actionName,
+          deviceName,
+          inputObj[actionName],
+          outputObj[actionName]
+        );
+
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_invokeActionBlock_${actionName}`,
+          category: 'Actions',
+        });
+      }
+    }
+
+    for (const [eventName, event] of Object.entries(td.events ?? {})) {
+      eventObj[eventName] = event.forms.map(form => form.op);
+      dataObj[eventName] = event.data;
+    }
+
+    // Generate Event Blocks
+    for (const [eventName, operations] of Object.entries(eventObj)) {
+      const op = new Set(operations.flat());
+      if (op.has('subscribeevent')) {
+        generateSubscribeEventBlock(eventName, deviceName, dataObj[eventName]);
+        generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
+
+        // Add to implementedThingsBlockList
+        implementedThingsBlockList.push({
+          type: `${deviceName}_subscribeEventBlock_${eventName}`,
+          category: 'Events',
+        });
+      }
+    }
+
+    // Push thing and all created blocks to implemented Things
+    implementedThings.push({
+      id: deviceName,
+      name: deviceName,
+      type: type,
+      blocks: implementedThingsBlockList,
+    });
+
+    for (const implThing of implementedThings) {
+      if (implThing.id === deviceName) {
+        thing = implThing;
+        break;
+      }
+    }
+  } else {
+    // for video and audio devices
+    for (const implThing of implementedThings) {
+      if (implThing.id === type) {
+        thing = implThing;
+        break;
+      }
     }
   }
   if (typeof thing === 'undefined') {
     return;
   }
-  connectedThings.set(deviceName, thing);
+
   // add the devices blocks to the toolbox
   for (const block of thing.blocks) {
     if (block.XML) {
@@ -518,8 +740,41 @@ export const addDevice = function (deviceName, deviceId, type) {
   }
   if (type === 'audioOutput') {
     audioDevices.set(deviceName, deviceId);
+    connectedThings.set(deviceName, thing);
   } else if (type === 'videoInput') {
     videoDevices.set(deviceName, deviceId);
+    connectedThings.set(deviceName, thing);
+  } else if (type === 'consumedDevice') {
+    {
+      // This function needs to be named so it can be called recursively.
+      const promptAndCheckWithAlert = function (name, id) {
+        Blockly.Variables.promptName(
+          'Pair successful! Now give your device a name.',
+          name,
+          text => {
+            if (text) {
+              const existing = webBluetoothDevices.has(text);
+              if (existing) {
+                const msg = 'Name %1 already exists'.replace('%1', text);
+                Blockly.dialog.alert(msg, () => {
+                  promptAndCheckWithAlert(text, id); // Recurse
+                });
+              } else {
+                // No conflict
+                consumedWebDevices.set(deviceName, deviceId);
+                connectedThings.set(text, thing);
+              }
+            } else {
+              const msg = 'Name cannot be empty';
+              Blockly.dialog.alert(msg, () => {
+                promptAndCheckWithAlert(text, id); // Recuse
+              });
+            }
+          }
+        );
+      };
+      promptAndCheckWithAlert(deviceName, td.id);
+    }
   }
   reloadToolbox();
 };

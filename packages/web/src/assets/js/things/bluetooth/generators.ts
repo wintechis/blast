@@ -22,7 +22,7 @@ JavaScript['things_eddyStoneDevice'] = function (
     'const {EddystoneDevice} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(EddystoneDevice, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
@@ -44,7 +44,7 @@ JavaScript['things_bluetoothGeneric'] = function (
     'const {BluetoothGeneric} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(BluetoothGeneric, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];

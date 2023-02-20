@@ -23,7 +23,7 @@ JavaScript['things_Huskylens'] = function (block: Block): [string, number] {
   JavaScript.definitions_['HuskyDuino'] = 'const {HuskyDuino} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(HuskyDuino, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];

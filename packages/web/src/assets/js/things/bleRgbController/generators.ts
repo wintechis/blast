@@ -26,7 +26,7 @@ JavaScript['things_bleLedController'] = function (
     'const {BleRgbController} = blastTds;';
   JavaScript.definitions_['things'] = 'const things = new Map();';
   JavaScript.definitions_[
-    'things' + block.id
+    'things' + name
   ] = `things.set(${name}, await createThing(BleRgbController, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
