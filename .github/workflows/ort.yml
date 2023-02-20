@@ -12,4 +12,4 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
       - name: Run GitHub Action for ORT
-        uses: derwehr/ort-ci-github-action@92cb86378f108a663a3dbafd9ada0e84a881408f
+        uses: derwehr/ort-ci-github-action@101595f2693e67bf8132fec880554ae5d0ff1e22
