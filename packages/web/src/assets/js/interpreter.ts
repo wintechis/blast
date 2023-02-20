@@ -165,7 +165,8 @@ const clearIntervalEvents = function () {
 /**
  * Reset the JS Interpreter.
  */
-export const resetInterpreter = function () {
+export const resetInterpreter = async function () {
+  await (window as any).resetServient();
   removeDeviceHandlers();
   clearIntervalEvents();
   getWorkspace()?.highlightBlock(null);

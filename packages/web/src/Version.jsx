@@ -11,7 +11,7 @@ export default function Version() {
   });
 
   // This constant will be updated by gulp on build
-  const rev = '#8356ef4';
+  const rev = '#93c92f9';
 
   const {vertical, horizontal, open} = state;
 

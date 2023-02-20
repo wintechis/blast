@@ -38,6 +38,16 @@ const getWot = async function (
   return wot;
 };
 
+export const resetServient = async function (): Promise<void> {
+  if (servient) {
+    const things = servient.getThings();
+    Object.entries(things).forEach(([id, td]) => {
+      servient.destroyThing(id);
+    });
+    await servient.shutdown();
+  }
+};
+
 export const createThing = async function (
   td: WoT.ThingDescription,
   id: string | undefined
