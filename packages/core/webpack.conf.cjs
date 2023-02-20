@@ -1,4 +1,3 @@
-// run gulp add-drivers to complete this config first
 'use strict';
 
 const path = require('path');
@@ -54,10 +53,6 @@ const nodeConfig = {
     ],
   },
   target: 'node',
-  externals: {
-    coffeeScript: 'coffee-script',
-    vm2: 'vm2',
-  },
 };
 
 const webConfig = {
@@ -119,10 +114,6 @@ const webConfig = {
         exclude: /node_modules/,
       },
     ],
-  },
-  externals: {
-    coffeeScript: 'coffee-script',
-    vm2: 'vm2',
   },
 };
 
