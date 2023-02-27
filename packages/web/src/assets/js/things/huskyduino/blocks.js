@@ -95,8 +95,8 @@ Blocks['huskylens_write_id_property'] = {
 };
 
 // Define inner blocks XML for the huskylens_write_face_id block.
-const HUSKYLENS_WRITE_ID_XML = `
-<block type="huskylens_write_id">
+const HUSKYLENS_WRITE_ID_PROPERTY_XML = `
+<block type="huskylens_write_id_property">
   <value name="ID">
     <block type="math_number">
       <field name="NUM">1</field>
@@ -130,7 +130,7 @@ Blocks['huskylens_forgetAll_action'] = {
   },
 };
 
-Blocks['huskylens_read_id_propery'] = {
+Blocks['huskylens_read_id_property'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
@@ -156,7 +156,7 @@ Blocks['huskylens_read_id_propery'] = {
   },
 };
 
-Blocks['huskylens_read_coordinates'] = {
+Blocks['huskylens_read_coordinates_property'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
@@ -189,24 +189,24 @@ implementedThings.push({
   type: 'bluetooth',
   blocks: [
     {
-      type: 'huskylens_choose_algo',
+      type: 'huskylens_write_algo_property',
       category: 'Properties',
     },
     {
-      type: 'huskylens_write_id',
-      category: 'Actions',
-      XML: HUSKYLENS_WRITE_ID_XML,
+      type: 'huskylens_write_id_property',
+      category: 'Properties',
+      XML: HUSKYLENS_WRITE_ID_PROPERTY_XML,
     },
     {
-      type: 'huskylens_write_forget_flag',
+      type: 'huskylens_forgetAll_action',
       category: 'Actions',
     },
     {
-      type: 'huskylens_read_id',
+      type: 'huskylens_read_id_property',
       category: 'Properties',
     },
     {
-      type: 'huskylens_read_coordinates',
+      type: 'huskylens_read_coordinates_property',
       category: 'Properties',
     },
   ],
