@@ -11,7 +11,7 @@
     }
   ],
   "title": "GoveeLamp",
-  "base": "gatt://{{MacOrWebBluetoothId}}",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "A Govee smart light bulb.",
   "securityDefinitions": {
     "nosec_sc": {
@@ -48,7 +48,7 @@
       "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
       "forms": [
         {
-          "href": "/00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
+          "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
@@ -75,7 +75,7 @@
       "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
       "forms": [
         {
-          "href": "/00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
+          "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
@@ -118,7 +118,7 @@
       "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
       "forms": [
         {
-          "href": "/00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
+          "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"

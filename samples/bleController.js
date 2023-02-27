@@ -1,7 +1,7 @@
 import {createThing} from '../packages/core/dist/blast.node.js';
 import {BleRgbController} from '../packages/core/dist/blast.tds.js';
 
-const mac = 'BE586000C23B';
+const mac = 'BE5860018744';
 
 const thing = await createThing(BleRgbController, mac);
 

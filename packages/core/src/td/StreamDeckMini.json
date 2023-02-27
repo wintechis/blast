@@ -27,7 +27,7 @@
       "description": "The brightness value of the device",
       "forms": [
         {
-          "href": "/sendFeatureReport",
+          "href": "./sendFeatureReport",
           "hid:data": [
             5,
             85,
