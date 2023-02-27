@@ -10,7 +10,9 @@
     },
     {"@language": "en"}
   ],
+  "@type": ["tm:ThingModel"],
   "title": "BLE RGB Controller",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description":
     "A Bluetooth Low Energy (BLE) controller that can be used to control RGB LED lights.",
   "securityDefinitions": {
@@ -18,7 +20,6 @@
       "scheme": "nosec"
     }
   },
-  "@type": ["Thing", "sbo:BluetoothLEDevice"],
   "security": ["nosec_sc"],
   "sbo:hasGAPRole": "sbo:Peripheral",
   "sbo:isConnectable": true,
@@ -62,7 +63,7 @@
       },
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
@@ -88,7 +89,7 @@
       },
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
           "op": ["writeproperty"],
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
@@ -115,7 +116,7 @@
       },
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
           "op": ["writeproperty"],
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"

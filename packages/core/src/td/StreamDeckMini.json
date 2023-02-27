@@ -1,0 +1,56 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "Elgato Stream Deck Mini",
+  "base": "hid://{{HIDPATH}}",
+  "description": "The Stream Deck Mini is a small device that connects to your computer and lets you control your software with custom buttons. It's the perfect companion for your favorite games, productivity apps, and more.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": ["tm:ThingModel"],
+  "security": [
+    "nosec_sc"
+  ],
+  "properties": {
+    "brightness": {
+      "type": "number",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "description": "The brightness value of the device",
+      "forms": [
+        {
+          "href": "./sendFeatureReport",
+          "hid:data": [
+            5,
+            85,
+            170,
+            209,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "hid:valueIndex": 5,
+          "op": "writeproperty"
+        }
+      ]
+    }
+  }
+}

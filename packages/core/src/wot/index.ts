@@ -1,6 +1,6 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
-import {Form} from '@node-wot/td-tools';
+import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
@@ -53,42 +53,22 @@ export const createThing = async function (
   id: string | undefined
 ): Promise<WoT.ConsumedThing> {
   if (id) {
-    td = setIds(td, id);
+    const map = {
+      MacOrWebBluetoothId: id,
+    };
+    // deep copy td, because the original td is imported as module and can't be modified.
+    td = JSON.parse(JSON.stringify(td));
+    td = fillPlaceholder(td, map);
   }
   const wotServient = await getWot();
   return wotServient.consume(td);
 };
 
-const setIds = function (
-  td: WoT.ThingDescription,
-  id: string
+const fillPlaceholder = function (
+  data: Record<string, unknown>,
+  map: Record<string, unknown> = {}
 ): WoT.ThingDescription {
-  for (const key in td.properties) {
-    if (td.properties[key].forms) {
-      td.properties[key].forms.forEach((form: Form) => {
-        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
-      });
-    }
-  }
-  for (const key in td.actions) {
-    if (td.actions[key].forms) {
-      td.actions[key].forms.forEach((form: Form) => {
-        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
-      });
-    }
-  }
-  for (const key in td.events) {
-    if (td.events[key].forms) {
-      td.events[key].forms.forEach((form: Form) => {
-        form.href = form.href.replace('${MacOrWebBluetoothId}', id);
-        if (form['wbt:id'] !== undefined) {
-          form['wbt:id'] = (form['wbt:id'] as string)?.replace(
-            '${MacOrWebBluetoothId}',
-            id
-          );
-        }
-      });
-    }
-  }
-  return td;
+  const placeHolderReplacer = new JsonPlaceholderReplacer();
+  placeHolderReplacer.addVariableMap(map);
+  return placeHolderReplacer.replace(data) as WoT.ThingDescription;
 };

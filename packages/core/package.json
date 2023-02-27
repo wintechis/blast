@@ -60,6 +60,7 @@
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
     "joy-con-webhid": "^0.2.0",
+    "json-placeholder-replacer": "^1.0.35",
     "node-ble": "https://github.com/derwehr/node-ble",
     "readable-stream": "^4.2.0",
     "rxjs": "5.5.11",

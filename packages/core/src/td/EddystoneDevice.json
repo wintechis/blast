@@ -2,11 +2,10 @@
   "@context": [
     "https://www.w3.org/2019/wot/td/v1"
   ],
-  "@type": [
-    "Thing"
-  ],
+  "@type": ["tm:ThingModel"],
   "id": "blast:bluetooth:EddystoneDevice",
   "title": "Eddystone Device",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "A Bluetooth device implementing the Eddystone protocol",
   "securityDefinitions": {
     "nosec_sc": {
@@ -24,13 +23,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87502-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
@@ -47,13 +46,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87505-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
@@ -69,13 +68,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c8750a-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
@@ -92,13 +91,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87503-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
@@ -113,7 +112,7 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87501-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         }
@@ -129,13 +128,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87506-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
@@ -151,7 +150,7 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87508-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         }
@@ -168,13 +167,13 @@
       "forms": [
         {
           "op": "readproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
           "op": "writeproperty",
-          "href": "gatt://${MacOrWebBluetoothId}/a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
+          "href": "./a3c87500-8ed3-4bdf-8a39-a01bebede295/a3c87504-8ed3-4bdf-8a39-a01bebede295",
           "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
