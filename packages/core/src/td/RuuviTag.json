@@ -2,9 +2,7 @@
   "@context": [
     "https://www.w3.org/2019/wot/td/v1"
   ],
-  "@type": [
-    "Thing"
-  ],
+  "@type": ["tm:ThingModel"],
   "id": "blast:Bluetooth:RuuviTag",
   "title": "Ruuvi Tag",
   "description": "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",

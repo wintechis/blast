@@ -11,13 +11,14 @@
     }
   ],
   "title": "PhilipsHue",
+  "base": "gatt://{{MacOrWebBluetoothId}}",
   "description": "A PhilipsHue smart light bulb.",
   "securityDefinitions": {
     "nosec_sc": {
       "scheme": "nosec"
     }
   },
-  "@type": "Thing",
+  "@type": ["tm:ThingModel"],
   "security": [
     "nosec_sc"
   ],
@@ -36,13 +37,13 @@
       "description": "The current power status of the bulb",
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
+          "href": "/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
           "op": "readproperty",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
-          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
+          "href": "/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0002-47a2-835a-a8d455b859dd",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
@@ -60,13 +61,13 @@
       "description": "The current brightness value of the bulb",
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
+          "href": "/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
           "op": "readproperty",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
         },
         {
-          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
+          "href": "/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
@@ -109,7 +110,7 @@
       "tst:function": "const scale = 0xff; const adjustedArr = []; for (const chan of [buf[1], buf[2], buf[3]]) {adjustedArr.push(Math.max(1, chan));} const total = adjustedArr.reduce((partialSum, a) => partialSum + a, 0); const adjustedArrFinal = []; for (const chan of [buf[1], buf[2], buf[3]]) {let x = Math.round((chan / total) * scale); adjustedArrFinal.push(Math.max(1, x));} for (let i = 1; i < 4; i++) {buf[i] = adjustedArrFinal[i-1]} return buf;",
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0005-47a2-835a-a8d455b859dd",
+          "href": "/932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0005-47a2-835a-a8d455b859dd",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"

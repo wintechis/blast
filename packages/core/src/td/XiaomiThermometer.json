@@ -2,11 +2,10 @@
   "@context": [
     "https://www.w3.org/2019/wot/td/v1"
   ],
-  "@type": [
-    "Thing"
-  ],
+  "@type": ["tm:ThingModel"],
   "id": "blast:Bluetooth:xiamoiThermometer",
   "title": "Xiaomi Thermometer",
+  "base": "gatt://{{MacOrWebBluetoothId}}",
   "description": "The Xiaomi Thermometer is a temperature and humidity sensor with a Bluetooth Low Energy interface.",
   "securityDefinitions": {
     "nosec_sc": {
@@ -35,7 +34,7 @@
       },
       "forms": [
         {
-          "href": "gatt://${MacOrWebBluetoothId}/ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6/ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6",
+          "href": "/ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6/ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6",
           "sbo:methodName": "subscribe",
           "contentType": "application/x.binary-data-stream"
         }
