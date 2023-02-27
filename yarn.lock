@@ -1544,6 +1544,7 @@ __metadata:
     eslint-plugin-node: ^11.1.0
     eslint-plugin-prettier: ^4.2.1
     joy-con-webhid: ^0.2.0
+    json-placeholder-replacer: ^1.0.35
     mocha: ^9.2.2
     node-ble: "https://github.com/derwehr/node-ble"
     node-polyfill-webpack-plugin: ^2.0.1
