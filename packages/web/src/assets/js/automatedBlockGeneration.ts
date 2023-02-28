@@ -156,13 +156,13 @@ export function generateWritePropertyBlock(
     init: function () {
       if (
         td.properties === undefined ||
-        td.properties.propertyName === undefined
+        td.properties[propertyName] === undefined
       ) {
         return;
       }
-      if (td.properties.propertyName.enum !== undefined) {
+      if (td.properties[propertyName]['enum'] !== undefined) {
         const optionsArr: string[][] = [];
-        td.properties.propertyName.enum.forEach((value, i) => {
+        td.properties[propertyName]['enum']?.forEach((value, i) => {
           optionsArr.push([(value as string).toString(), i.toString()]);
         });
         this.appendValueInput('thing')
@@ -171,9 +171,11 @@ export function generateWritePropertyBlock(
           .appendField(new FieldDropdown(optionsArr), 'value')
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
-        if (td.properties.propertyName.type !== undefined) {
+        if (td.properties[propertyName].type !== undefined) {
           this.appendValueInput('value')
-            .setCheck(dataTypeMapping[td.properties.propertyName.type])
+            .setCheck(
+              dataTypeMapping[td.properties[propertyName].type as string]
+            )
             .appendField('write value', 'label');
         } else {
           this.appendValueInput('value')
@@ -205,7 +207,7 @@ export function generateWritePropertyCode(
   ) {
     if (
       td.properties === undefined ||
-      td.properties.propertyName === undefined
+      td.properties[propertyName] === undefined
     ) {
       return;
     }
@@ -213,13 +215,11 @@ export function generateWritePropertyCode(
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
     let value;
-    // Without enum
-    if (td.properties.propertyName.enum === undefined) {
-      value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
-    } else {
-      // With enum
+    if (td.properties[propertyName]['enum'] !== undefined) {
       const valueIndex = block.getFieldValue('value');
-      value = td.properties.propertyName.enum[valueIndex];
+      value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
+    } else {
+      value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
     }
 
     value = JavaScript.quote_(value);
