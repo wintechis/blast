@@ -57,7 +57,7 @@ export const createThing = async function (
       MacOrWebBluetoothId: id,
     };
     // deep copy td, because the original td is imported as module and can't be modified.
-    td = JSON.parse(JSON.stringify(td));
+    td = structuredClone(td);
     td = fillPlaceholder(td, map);
   }
   const wotServient = await getWot();
