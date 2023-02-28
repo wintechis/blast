@@ -154,23 +154,26 @@ export function generateWritePropertyBlock(
 ) {
   Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
     init: function () {
-      if (td.properties?.propertyName.enum) {
-        const optionsArr = [];
-        for (let i = 0; i < td.properties?.propertyName.enum.length; i++) {
-          optionsArr.push([
-            (td.properties?.propertyName.enum[i] as string).toString(),
-            i.toString(),
-          ]);
-        }
+      if (
+        td.properties === undefined ||
+        td.properties.propertyName === undefined
+      ) {
+        return;
+      }
+      if (td.properties.propertyName.enum !== undefined) {
+        const optionsArr: string[][] = [];
+        td.properties.propertyName.enum.forEach((value, i) => {
+          optionsArr.push([(value as string).toString(), i.toString()]);
+        });
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField('write value', 'label')
           .appendField(new FieldDropdown(optionsArr), 'value')
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
-        if (td.properties?.propertyName.type) {
+        if (td.properties.propertyName.type !== undefined) {
           this.appendValueInput('value')
-            .setCheck(dataTypeMapping[td.properties?.propertyName.type])
+            .setCheck(dataTypeMapping[td.properties.propertyName.type])
             .appendField('write value', 'label');
         } else {
           this.appendValueInput('value')
@@ -200,18 +203,23 @@ export function generateWritePropertyCode(
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
     block: Block
   ) {
+    if (
+      td.properties === undefined ||
+      td.properties.propertyName === undefined
+    ) {
+      return;
+    }
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
     let value;
     // Without enum
-    if (td.properties?.propertyName.enum === undefined) {
+    if (td.properties.propertyName.enum === undefined) {
       value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
     } else {
       // With enum
-      const valueIndex = JavaScript.quote_(block.getFieldValue('value'));
-      value =
-        td.properties?.propertyName.enum[parseInt(valueIndex.split("'")[1])];
+      const valueIndex = block.getFieldValue('value');
+      value = td.properties.propertyName.enum[valueIndex];
     }
 
     value = JavaScript.quote_(value);
@@ -231,9 +239,12 @@ export function generateInvokeActionBlock(
 ) {
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
+      if (td.actions === undefined || td.actions.actionName === undefined) {
+        return;
+      }
       if (
         typeof input !== 'undefined' &&
-        typeof td.actions?.actionName.input?.type !== 'undefined'
+        typeof td.actions.actionName.input?.type !== 'undefined'
       ) {
         if (dataTypeMapping[td.actions.actionName.input.type]) {
           this.appendValueInput('value')
