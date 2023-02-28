@@ -172,11 +172,29 @@ export function generateWritePropertyBlock(
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
         if (td.properties[propertyName].type !== undefined) {
-          this.appendValueInput('value')
-            .setCheck(
-              dataTypeMapping[td.properties[propertyName].type as string]
-            )
-            .appendField('write value', 'label');
+          if (
+            td.properties[propertyName].type?.toLocaleLowerCase() === 'object'
+          ) {
+            const objectProperties = td.properties[propertyName].properties;
+            if (objectProperties !== undefined) {
+              this.appendDummyInput(propertyName + 'label').appendField(
+                'write values'
+              );
+              Object.keys(objectProperties).forEach(key => {
+                this.appendValueInput(key)
+                  .setCheck(
+                    dataTypeMapping[objectProperties[key].type as string]
+                  )
+                  .appendField(key, 'label');
+              });
+            }
+          } else {
+            this.appendValueInput('value')
+              .setCheck(
+                dataTypeMapping[td.properties[propertyName].type as string]
+              )
+              .appendField('write value', 'label');
+          }
         } else {
           this.appendValueInput('value')
             .setCheck()
@@ -214,15 +232,42 @@ export function generateWritePropertyCode(
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    let value;
+    let value = '';
     if (td.properties[propertyName]['enum'] !== undefined) {
       const valueIndex = block.getFieldValue('value');
       value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
     } else {
-      value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+      if (td.properties[propertyName].type?.toLocaleLowerCase() === 'object') {
+        // iterate over inputs and create object
+        const objectProperties = td.properties[propertyName].properties;
+        if (objectProperties !== undefined) {
+          value = '{';
+          Object.keys(objectProperties).forEach(key => {
+            let inputValue =
+              JavaScript.valueToCode(block, key, JavaScript.ORDER_NONE) || null;
+            if (
+              td.properties?.[propertyName].properties?.[
+                key
+              ].type?.toLocaleLowerCase() === 'string'
+            ) {
+              inputValue = JavaScript.quote_(inputValue);
+            }
+            value += `"${key}": ${inputValue}`;
+            if (key !== Object.keys(objectProperties).pop()) {
+              value += ',';
+            }
+          });
+          value += '}';
+        }
+      } else {
+        value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+        if (
+          td.properties?.[propertyName].type?.toLocaleLowerCase() === 'string'
+        ) {
+          value = JavaScript.quote_(value);
+        }
+      }
     }
-
-    value = JavaScript.quote_(value);
 
     const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
 
