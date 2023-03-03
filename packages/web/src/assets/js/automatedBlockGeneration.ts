@@ -154,24 +154,47 @@ export function generateWritePropertyBlock(
 ) {
   Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
     init: function () {
-      if (td.properties?.propertyName.enum) {
-        const optionsArr = [];
-        for (let i = 0; i < td.properties?.propertyName.enum.length; i++) {
-          optionsArr.push([
-            (td.properties?.propertyName.enum[i] as string).toString(),
-            i.toString(),
-          ]);
-        }
+      if (
+        td.properties === undefined ||
+        td.properties[propertyName] === undefined
+      ) {
+        return;
+      }
+      if (td.properties[propertyName]['enum'] !== undefined) {
+        const optionsArr: string[][] = [];
+        td.properties[propertyName]['enum']?.forEach((value, i) => {
+          optionsArr.push([(value as string).toString(), i.toString()]);
+        });
         this.appendValueInput('thing')
           .setCheck('Thing')
           .appendField('write value', 'label')
           .appendField(new FieldDropdown(optionsArr), 'value')
           .appendField(`to '${propertyName}' property of`, 'label');
       } else {
-        if (td.properties?.propertyName.type) {
-          this.appendValueInput('value')
-            .setCheck(dataTypeMapping[td.properties?.propertyName.type])
-            .appendField('write value', 'label');
+        if (td.properties[propertyName].type !== undefined) {
+          if (
+            td.properties[propertyName].type?.toLocaleLowerCase() === 'object'
+          ) {
+            const objectProperties = td.properties[propertyName].properties;
+            if (objectProperties !== undefined) {
+              this.appendDummyInput(propertyName + 'label').appendField(
+                'write values'
+              );
+              Object.keys(objectProperties).forEach(key => {
+                this.appendValueInput(key)
+                  .setCheck(
+                    dataTypeMapping[objectProperties[key].type as string]
+                  )
+                  .appendField(key, 'label');
+              });
+            }
+          } else {
+            this.appendValueInput('value')
+              .setCheck(
+                dataTypeMapping[td.properties[propertyName].type as string]
+              )
+              .appendField('write value', 'label');
+          }
         } else {
           this.appendValueInput('value')
             .setCheck()
@@ -200,21 +223,51 @@ export function generateWritePropertyCode(
   JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
     block: Block
   ) {
+    if (
+      td.properties === undefined ||
+      td.properties[propertyName] === undefined
+    ) {
+      return;
+    }
     const name =
       JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    let value;
-    // Without enum
-    if (td.properties?.propertyName.enum === undefined) {
-      value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+    let value = '';
+    if (td.properties[propertyName]['enum'] !== undefined) {
+      const valueIndex = block.getFieldValue('value');
+      value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
     } else {
-      // With enum
-      const valueIndex = JavaScript.quote_(block.getFieldValue('value'));
-      value =
-        td.properties?.propertyName.enum[parseInt(valueIndex.split("'")[1])];
+      if (td.properties[propertyName].type?.toLocaleLowerCase() === 'object') {
+        // iterate over inputs and create object
+        const objectProperties = td.properties[propertyName].properties;
+        if (objectProperties !== undefined) {
+          value = '{';
+          Object.keys(objectProperties).forEach(key => {
+            let inputValue =
+              JavaScript.valueToCode(block, key, JavaScript.ORDER_NONE) || null;
+            if (
+              td.properties?.[propertyName].properties?.[
+                key
+              ].type?.toLocaleLowerCase() === 'string'
+            ) {
+              inputValue = JavaScript.quote_(inputValue);
+            }
+            value += `"${key}": ${inputValue}`;
+            if (key !== Object.keys(objectProperties).pop()) {
+              value += ',';
+            }
+          });
+          value += '}';
+        }
+      } else {
+        value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+        if (
+          td.properties?.[propertyName].type?.toLocaleLowerCase() === 'string'
+        ) {
+          value = JavaScript.quote_(value);
+        }
+      }
     }
-
-    value = JavaScript.quote_(value);
 
     const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
 
@@ -231,9 +284,12 @@ export function generateInvokeActionBlock(
 ) {
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
+      if (td.actions === undefined || td.actions.actionName === undefined) {
+        return;
+      }
       if (
         typeof input !== 'undefined' &&
-        typeof td.actions?.actionName.input?.type !== 'undefined'
+        typeof td.actions.actionName.input?.type !== 'undefined'
       ) {
         if (dataTypeMapping[td.actions.actionName.input.type]) {
           this.appendValueInput('value')
