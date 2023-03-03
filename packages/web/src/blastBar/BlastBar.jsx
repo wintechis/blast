@@ -24,6 +24,7 @@ import ReconnectDialog from './ReconnectDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';
 
 import {onStatusChange, runJS, stopJS} from '../assets/js/interpreter.ts';
+import {blocksRequiringScan, startLEScan} from '../assets/js/webBluetooth.js';
 import {setDevMode} from '../assets/js/things.js';
 
 const samples = [
@@ -226,6 +227,9 @@ export default class BlastBar extends React.Component {
                 if (this.state.status === 'running') {
                   stopJS();
                 } else {
+                  if (blocksRequiringScan.length > 0) {
+                    startLEScan();
+                  }
                   runJS();
                 }
               }}
