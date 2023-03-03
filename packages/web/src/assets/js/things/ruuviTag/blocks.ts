@@ -4,12 +4,9 @@
  */
 
 import Blockly from 'blockly';
-const {Blocks, Events, FieldTextInput, JavaScript, Names} = Blockly;
-import {
-  eventsInWorkspace,
-  getStdWarn,
-  getWorkspace,
-} from '../../interpreter.ts';
+import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+const {Blocks, Events, FieldTextInput, Names} = Blockly;
+import {eventsInWorkspace, getStdWarn, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
 import {blocksRequiringScan} from '../../webBluetooth.js';
 
@@ -87,7 +84,7 @@ Blocks['ruuviTag_event'] = {
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
     // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
+    this.changeListener = getWorkspace()?.addChangeListener((event: Event) =>
       this.onDispose(event)
     );
   },
@@ -112,15 +109,15 @@ Blocks['ruuviTag_event'] = {
       );
     }
   },
-  onDispose: function (event) {
+  onDispose: function (event: Event) {
     if (event.type === Events.BLOCK_DELETE) {
       if (
         event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
+        (event as any).ids.indexOf(this.id) !== -1
       ) {
         // Block is being deleted
         this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
+        getWorkspace()?.removeChangeListener(this.changeListener);
       }
     }
   },
@@ -136,6 +133,9 @@ Blocks['ruuviTag_event'] = {
   },
   createVars: function () {
     const ws = getWorkspace();
+    if (ws === null) {
+      return;
+    }
     const varNames = [
       'temperature',
       'humidity',
