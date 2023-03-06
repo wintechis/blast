@@ -134,7 +134,7 @@
         {
           "href": "./932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
           "op": "invokeaction",
-          "sbo:methodName": "sbo:read",
+          "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
         }
       ]
