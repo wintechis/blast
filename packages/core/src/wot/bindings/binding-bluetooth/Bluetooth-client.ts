@@ -147,18 +147,22 @@ export default class WebBluetoothClient implements ProtocolClient {
     );
 
     const handler = (event: Event) => {
+      debug(`Received "characteristicvaluechanged" event: ${event}`);
       const value = (event.target as BluetoothRemoteGATTCharacteristic)
         .value as DataView;
-      const array = new Uint8Array(value.buffer);
-      const body = Readable.from(array);
-      // Convert value a DataView to ReadableStream
-      const content = {
-        type: form.contentType || 'text/plain',
-        body,
-        toBuffer: () => {
-          return ProtocolHelpers.readStreamFully(body);
-        },
-      };
+      let buff;
+      if (form['bdo:signed']) {
+        buff = new Int8Array(value.buffer);
+      } else {
+        buff = new Uint8Array(value.buffer);
+      }
+      // Convert to readable
+      const body = Readable.from(buff);
+
+      const content = new Content(
+        form.contentType || 'application/x.binary-data-stream',
+        body
+      );
       next(content);
     };
 
@@ -179,6 +183,10 @@ export default class WebBluetoothClient implements ProtocolClient {
           handler
         );
         characteristic.stopNotifications();
+        characteristic.removeEventListener(
+          'characteristicvaluechanged',
+          handler
+        );
       });
     } catch (err) {
       if (error) {

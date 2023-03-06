@@ -63,7 +63,7 @@ export class BinaryDataStreamCodec implements ContentCodec {
           parsed = byte2object(schema, bytes);
           break;
         default:
-          throw new Error('Datatype not supported by codec');
+          throw new Error(`Datatype ${schema.type} not supported by codec`);
       }
     }
     return parsed;

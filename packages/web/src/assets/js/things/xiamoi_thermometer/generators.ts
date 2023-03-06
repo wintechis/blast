@@ -45,18 +45,10 @@ JavaScript['xiaomiThermometer_event'] = function (block: Block): string {
     'async function ' +
       JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
       '(interactionOutput) {',
-    '  const arr = await interactionOutput.arrayBuffer();',
-    '  const data = new DataView(arr.buffer)',
-    '  if (data) {',
-    '    const sign = data.getUint8(1) & (1 << 7);',
-    '    let temp = ((data.getUint8(1) & 0x7f) << 8) + data.getUint8(0);',
-    '    if (sign) {',
-    '      temp = temp - 32767;',
-    '    }',
-    `    ${tempVarName} = temp / 100;`,
-    `    ${humidityVarName} = data.getUint8(2);`,
-    `    ${statements.replace(/`/g, '\\`')}`,
-    '  }',
+    '  const responseArr = await interactionOutput.value();',
+    `  ${tempVarName} = responseArr[0];`,
+    `  ${humidityVarName} = responseArr[1];`,
+    `  ${statements.replace(/`/g, '\\`')}`,
     '}',
   ]);
 

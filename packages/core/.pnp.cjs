@@ -47,7 +47,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["joy-con-webhid", "npm:0.2.0"],\
             ["json-placeholder-replacer", "npm:1.0.35"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["nyc", "npm:15.1.0"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
@@ -392,7 +392,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["joy-con-webhid", "npm:0.2.0"],\
             ["json-placeholder-replacer", "npm:1.0.35"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["nyc", "npm:15.1.0"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
@@ -1643,7 +1643,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["are-we-there-yet", "npm:1.1.7"],\
             ["delegates", "npm:1.0.0"],\
-            ["readable-stream", "npm:2.3.7"]\
+            ["readable-stream", "npm:2.3.8"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -5187,11 +5187,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:4.0.0", {\
-          "packageLocation": "./.yarn/cache/minipass-npm-4.0.0-2520d5ae3c-7a609afbf3.zip/node_modules/minipass/",\
+        ["npm:4.2.4", {\
+          "packageLocation": "./.yarn/cache/minipass-npm-4.2.4-20f938f2dd-c664f2ae44.zip/node_modules/minipass/",\
           "packageDependencies": [\
-            ["minipass", "npm:4.0.0"],\
-            ["yallist", "npm:4.0.0"]\
+            ["minipass", "npm:4.2.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5379,10 +5378,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["node-ble", [\
-        ["https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98", {\
-          "packageLocation": "./.yarn/cache/node-ble-https-3574168a89-6c75de26a4.zip/node_modules/node-ble/",\
+        ["https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233", {\
+          "packageLocation": "./.yarn/cache/node-ble-https-22a3a130a9-00001a7da2.zip/node_modules/node-ble/",\
           "packageDependencies": [\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["dbus-next", "npm:0.10.2"]\
           ],\
           "linkType": "HARD"\
@@ -6318,10 +6317,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["readable-stream", [\
-        ["npm:2.3.7", {\
-          "packageLocation": "./.yarn/cache/readable-stream-npm-2.3.7-77b22a9818-e4920cf754.zip/node_modules/readable-stream/",\
+        ["npm:2.3.8", {\
+          "packageLocation": "./.yarn/cache/readable-stream-npm-2.3.8-67a94c2cb1-6564546703.zip/node_modules/readable-stream/",\
           "packageDependencies": [\
-            ["readable-stream", "npm:2.3.7"],\
+            ["readable-stream", "npm:2.3.8"],\
             ["core-util-is", "npm:1.0.3"],\
             ["inherits", "npm:2.0.4"],\
             ["isarray", "npm:1.0.0"],\
@@ -7157,7 +7156,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tar", "npm:6.1.13"],\
             ["chownr", "npm:2.0.0"],\
             ["fs-minipass", "npm:2.1.0"],\
-            ["minipass", "npm:4.0.0"],\
+            ["minipass", "npm:4.2.4"],\
             ["minizlib", "npm:2.1.2"],\
             ["mkdirp", "npm:1.0.4"],\
             ["yallist", "npm:4.0.0"]\

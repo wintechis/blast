@@ -4376,11 +4376,9 @@ __metadata:
   linkType: hard
 
 "minipass@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "minipass@npm:4.0.0"
-  dependencies:
-    yallist: ^4.0.0
-  checksum: 7a609afbf394abfcf9c48e6c90226f471676c8f2a67f07f6838871afb03215ede431d1433feffe1b855455bcb13ef0eb89162841b9796109d6fed8d89790f381
+  version: 4.2.4
+  resolution: "minipass@npm:4.2.4"
+  checksum: c664f2ae4401408d1e7a6e4f50aca45f87b1b0634bc9261136df5c378e313e77355765f73f59c4a5abcadcdf43d83fcd3eb14e4a7cdcce8e36508e2290345753
   languageName: node
   linkType: hard
 
@@ -4506,10 +4504,10 @@ __metadata:
 
 "node-ble@https://github.com/derwehr/node-ble":
   version: 1.9.0
-  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"
+  resolution: "node-ble@https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"
   dependencies:
     dbus-next: ^0.10.2
-  checksum: 6c75de26a4932df66c70f7ac0fd3762339eb61a96eeefdee021010ae5b1190446dd6c2726d096baa578c55056c547478aa7eef5e68b896a745da0cd8dd79be00
+  checksum: 00001a7da240f0dfd6e31404f79d1e50de2c2c56874a93be23249810ae76339597f12448d2c94966cd5e26de6ce774790fa877370fd840cff2f75aac86d44611
   languageName: node
   linkType: hard
 
@@ -5254,8 +5252,8 @@ __metadata:
   linkType: hard
 
 "readable-stream@npm:^2.0.6":
-  version: 2.3.7
-  resolution: "readable-stream@npm:2.3.7"
+  version: 2.3.8
+  resolution: "readable-stream@npm:2.3.8"
   dependencies:
     core-util-is: ~1.0.0
     inherits: ~2.0.3
@@ -5264,7 +5262,7 @@ __metadata:
     safe-buffer: ~5.1.1
     string_decoder: ~1.1.1
     util-deprecate: ~1.0.1
-  checksum: e4920cf7549a60f8aaf694d483a0e61b2a878b969d224f89b3bc788b8d920075132c4b55a7494ee944c7b6a9a0eada28a7f6220d80b0312ece70bbf08eeca755
+  checksum: 65645467038704f0c8aaf026a72fbb588a9e2ef7a75cd57a01702ee9db1c4a1e4b03aaad36861a6a0926546a74d174149c8c207527963e0c2d3eee2f37678a42
   languageName: node
   linkType: hard
 
