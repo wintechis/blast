@@ -65,11 +65,17 @@
           "op": "readproperty",
           "sbo:methodName": "sbo:read",
           "contentType": "application/x.binary-data-stream"
+        },
+        {
+          "href": "./932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     },
     "colour": {
-      "type": "string",
+      "type": "object",
       "format": "hex",
 
       "observable": false,
@@ -113,7 +119,7 @@
     }
   },
   "actions":{
-    "brightness": {
+    "dim": {
       "input":{
         "type": "integer",
         "observable": false,
@@ -123,7 +129,7 @@
         "maximum": 255,
         "bdo:bytelength": 1
       },
-      "description": "Change the brightness value of the bulb",
+      "description": "Reduce the brightness value of the bulb",
       "forms": [
         {
           "href": "./932c32bd-0000-47a2-835a-a8d455b859dd/932c32bd-0003-47a2-835a-a8d455b859dd",
