@@ -17,19 +17,22 @@
     "measurements": {
       "title": "Temperature and humidity measurements",
       "description": "The temperature and humidity values measured by the thermometer.",
-      "type": "object",
-      "properties": {
-        "temperature": {
-          "title": "temperature value measured by the thermometer.",
-          "description": "The temperature value measured by the thermometer.",
-          "unit": "°C",
-          "type": "number"
-        },
-        "humidity": {
-          "title": "humidity",
-          "description": "The relative humidity measured by the thermometer.",
-          "unit": "%",
-          "type": "number"
+      "data": {
+        "type": "array",
+        "bdo:pattern": "{temp}{hum}2011",
+        "bdo:variables": {
+          "temp": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:scale": 0.01,
+            "bdo:byteorder": "bdo:bigEndian",
+            "unit": "qudtUnit:DEG_C"
+          },
+          "hum": {
+            "type": "number",
+            "bdo:bytelength": 1,
+            "unit": "qudtUnit:PERCENT"
+          }
         }
       },
       "forms": [
