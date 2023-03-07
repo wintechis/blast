@@ -373,7 +373,6 @@ export function generateSubscribeEventBlock(
       this.setColour(180);
       this.setTooltip('');
       this.setHelpUrl('');
-      this.changeListener = null;
       this.getField('eventVar').setEnabled(false);
     },
     /**
@@ -390,10 +389,9 @@ export function generateSubscribeEventBlock(
         this.addEvent();
         this.createVars();
       }
-      if (event.type === Events.BLOCK_DELETE) {
-        // Block is being deleted
-        this.removeFromEvents();
-      }
+    },
+    destroy: function () {
+      this.removeFromEvents();
     },
     /**
      * Remove this block's id from the events array.

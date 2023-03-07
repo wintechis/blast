@@ -117,9 +117,11 @@ JavaScript['streamdeck_button_event'] = function (block: Block): string {
   });
 
   addCleanUpFunction(() => {
-    thingsLog('Removing all listeners', 'hid', device.productName);
-    streamdeck.close();
-    streamdeck.removeAllListeners();
+    if (streamdeck?.device?.device?.device?.opened) {
+      thingsLog('Removing all listeners', 'hid', device.productName);
+      streamdeck.close();
+      streamdeck.removeAllListeners();
+    }
   });
 };
 

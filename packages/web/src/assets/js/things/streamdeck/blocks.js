@@ -162,10 +162,6 @@ Blocks['streamdeck_button_event'] = {
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -173,17 +169,9 @@ Blocks['streamdeck_button_event'] = {
       this.addEvent();
     }
   },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
-    }
+  destroy: function () {
+    // block is being deleted
+    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.

@@ -65,7 +65,6 @@ Blocks['ruuviTag_event'] = {
       "Handles 'advertisementreceived' events of a Xiaomi Thermometer."
     );
     this.setHelpUrl('');
-    this.changeListener = null;
     this.getField('eventType').setEnabled(false);
     this.getField('temperature').setEnabled(false);
     this.getField('humidity').setEnabled(false);
@@ -83,10 +82,6 @@ Blocks['ruuviTag_event'] = {
    */
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace()?.addChangeListener((event: Event) =>
-      this.onDispose(event)
-    );
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -109,17 +104,8 @@ Blocks['ruuviTag_event'] = {
       );
     }
   },
-  onDispose: function (event: Event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        (event as any).ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace()?.removeChangeListener(this.changeListener);
-      }
-    }
+  destroy: function () {
+    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.

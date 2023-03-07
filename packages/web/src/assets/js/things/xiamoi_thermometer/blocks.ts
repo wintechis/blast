@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Blocks, Events, FieldTextInput, Names} from 'blockly';
+import {Blocks, FieldTextInput, Names} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
@@ -28,36 +28,6 @@ Blocks['things_xiaomiThermometer'] = {
       'https://github.com/wintechis/blast/wiki/Xiaomi-Thermometer'
     );
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-  },
-  /**
-   * Add this block's id to the events array.
-   * @return {null}.
-   */
-  addEvent: async function () {
-    eventsInWorkspace.push(this.id);
-  },
-  onchange: function (event: Event) {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      this.addEvent();
-    }
-    if (event.type === Events.BLOCK_DELETE) {
-      // Block is being deleted
-      this.removeFromEvents();
-    }
-  },
-  /**
-   * Remove this block's id from the events array.
-   * @return {null}.
-   */
-  removeFromEvents: function () {
-    // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
-    if (index !== -1) {
-      eventsInWorkspace.splice(index, 1);
-    }
   },
 };
 
@@ -87,7 +57,6 @@ Blocks['xiaomiThermometer_event'] = {
       "Handles 'characteristicvaluechanged' events of a Xiaomi Thermometer."
     );
     this.setHelpUrl('');
-    this.changeListener = null;
     this.getField('eventType').setEnabled(false);
     this.getField('humidity').setEnabled(false);
     this.getField('temperature').setEnabled(false);
@@ -101,18 +70,16 @@ Blocks['xiaomiThermometer_event'] = {
   addEvent: async function () {
     eventsInWorkspace.push(this.id);
   },
-  onchange: function (event: Event) {
+  onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
       this.addEvent();
       this.createVars();
     }
-    if (event.type === Events.BLOCK_DELETE) {
-      // Block is being deleted
-      this.removeFromEvents();
-      getWorkspace()?.removeChangeListener(this.changeListener);
-    }
+  },
+  destroy: function () {
+    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.

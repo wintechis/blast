@@ -174,7 +174,6 @@ export const resetInterpreter = async function () {
   for (const func of cleanUpFunctions) {
     func();
   }
-  cleanUpFunctions.length = 0;
 };
 
 /**
@@ -284,6 +283,7 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
  * Execute the user's code.
  */
 export const runJS = async function () {
+  console.log(eventsInWorkspace);
   (globalThis as any)['interpreterExecutionExit'] = false;
   setStatus('running');
   stdInfo('execution started');
