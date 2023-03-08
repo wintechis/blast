@@ -105,21 +105,25 @@ Blocks['every_seconds'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.addEvent();
     }
-  },
-  destroy: function () {
-    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.

@@ -44,6 +44,7 @@ declare global {
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {LEScanResults} from '../../webBluetooth.js';
+import {getStatus} from '../../interpreter';
 
 /**
  * Generates JavaScript code for the things_ruuviTag block.
@@ -305,35 +306,37 @@ function arrayBufferToHex(arrayBuffer: ArrayBuffer) {
   const getAdvertisementData = async function (
     tries: number
   ): Promise<void | RAWv2 | RAWv1> {
-    // try to get the measurements from the cache once per second for 10 seconds
-    if (tries < 30) {
-      const events = LEScanResults[id];
-      if (events) {
-        for (const event of events) {
-          const data = event.manufacturerData.get(0x0499);
-          if (data) {
-            const buffer = data.buffer;
-            const dataFormat = data.getUint8(0);
-            if (dataFormat === 3) {
-              return new Promise(resolve => resolve(parseRawV1(buffer)));
-            } else if (dataFormat === 5) {
-              return new Promise(resolve => resolve(parseRawV2(buffer)));
+    if (getStatus() === 'running') {
+      // try to get the measurements from the cache once per second for 10 seconds
+      if (tries < 30) {
+        const events = LEScanResults[id];
+        if (events) {
+          for (const event of events) {
+            const data = event.manufacturerData.get(0x0499);
+            if (data) {
+              const buffer = data.buffer;
+              const dataFormat = data.getUint8(0);
+              if (dataFormat === 3) {
+                return new Promise(resolve => resolve(parseRawV1(buffer)));
+              } else if (dataFormat === 5) {
+                return new Promise(resolve => resolve(parseRawV2(buffer)));
+              }
             }
           }
         }
+        // no measurements found, try again in 1 second
+        return new Promise(resolve =>
+          setTimeout(
+            () =>
+              resolve(
+                getAdvertisementData(tries + 1) as unknown as RAWv1 | RAWv2
+              ),
+            1000
+          )
+        );
       }
-      // no measurements found, try again in 1 second
-      return new Promise(resolve =>
-        setTimeout(
-          () =>
-            resolve(
-              getAdvertisementData(tries + 1) as unknown as RAWv1 | RAWv2
-            ),
-          1000
-        )
-      );
+      console.error('No measurements found after 30 seconds.');
     }
-    console.error('No measurements found after 30 seconds.');
   };
 
   const parsedData = (await getAdvertisementData(0)) as RAWv1 | RAWv2;

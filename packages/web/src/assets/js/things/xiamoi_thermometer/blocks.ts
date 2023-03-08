@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Blocks, FieldTextInput, Names} from 'blockly';
+import {Blocks, Events, FieldTextInput, Names} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
@@ -62,13 +62,19 @@ Blocks['xiaomiThermometer_event'] = {
     this.getField('temperature').setEnabled(false);
     this.humidityName = '';
     this.temperatureName = '';
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
-   * @return {null}.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
+      if (e.type === Events.BLOCK_DELETE && (e as any).ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -78,12 +84,8 @@ Blocks['xiaomiThermometer_event'] = {
       this.createVars();
     }
   },
-  destroy: function () {
-    this.removeFromEvents();
-  },
   /**
    * Remove this block's id from the events array.
-   * @return {null}.
    */
   removeFromEvents: function () {
     // remove this block from the events array.

@@ -374,15 +374,24 @@ export function generateSubscribeEventBlock(
       this.setTooltip('');
       this.setHelpUrl('');
       this.getField('eventVar').setEnabled(false);
+      this.changeListener = null;
     },
     /**
      * Add this block's id to the events array.
-     * @return {null}.
      */
-    addEvent: async function () {
+    addEvent: function () {
       eventsInWorkspace.push(this.id);
+      // add change listener to remove block from events array when deleted.
+      this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
+        if (
+          e.type === Events.BLOCK_DELETE &&
+          (e as any).ids.includes(this.id)
+        ) {
+          this.removeFromEvents();
+        }
+      });
     },
-    onchange: function (event: Event) {
+    onchange: function () {
       if (!this.isInFlyout && !this.requested && this.rendered) {
         // Block is newly created
         this.requested = true;
@@ -390,12 +399,8 @@ export function generateSubscribeEventBlock(
         this.createVars();
       }
     },
-    destroy: function () {
-      this.removeFromEvents();
-    },
     /**
      * Remove this block's id from the events array.
-     * @return {null}.
      */
     removeFromEvents: function () {
       // remove this block from the events array.
@@ -419,7 +424,7 @@ export function generateSubscribeEventBlock(
         for (let i = 1; ws.getVariable(legalName) !== null; i++) {
           // if name already exists, append a number
           legalName = JavaScript.nameDB_.getName(
-            legalName + '-' + i,
+            varName + '-' + i,
             Names.NameType.VARIABLE
           );
         }

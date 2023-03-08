@@ -76,12 +76,19 @@ Blocks['ruuviTag_event'] = {
     this.getField('movementCounter').setEnabled(false);
     this.getField('measurementSequenceNumber').setEnabled(false);
     this.getField('txPower').setEnabled(false);
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
+      if (e.type === Events.BLOCK_DELETE && (e as any).ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -104,17 +111,19 @@ Blocks['ruuviTag_event'] = {
       );
     }
   },
-  destroy: function () {
-    this.removeFromEvents();
-  },
   /**
    * Remove this block's id from the events array.
    */
   removeFromEvents: function () {
     // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
+    let index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
       eventsInWorkspace.splice(index, 1);
+    }
+    // remove this block from the blocks requiring scan array.
+    index = blocksRequiringScan.indexOf(this.id);
+    if (index !== -1) {
+      blocksRequiringScan.splice(index, 1);
     }
   },
   createVars: function () {
@@ -143,7 +152,7 @@ Blocks['ruuviTag_event'] = {
       for (let i = 1; ws.getVariable(legalName) !== null; i++) {
         // if name already exists, append a number
         legalName = JavaScript.nameDB_.getName(
-          legalName + '-' + i,
+          varName + '-' + i,
           Names.NameType.VARIABLE
         );
       }

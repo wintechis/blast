@@ -178,13 +178,18 @@ export const startLEScan = async function () {
   isLEScanRunning = true;
   const thingsLog = getThingsLog();
   thingsLog('Requesting LE Scan', 'Bluetooth');
-  dialog.alert(
-    'Please click allow on the LE Scan prompt now, then close this dialog.',
-    navigator.bluetooth.requestLEScan({
-      acceptAllAdvertisements: true,
-      keepRepeatedDevices: true,
-    })
-  );
+  try {
+    dialog.alert(
+      'Please click allow on the LE Scan prompt now, then close this dialog.',
+      navigator.bluetooth.requestLEScan({
+        acceptAllAdvertisements: true,
+        keepRepeatedDevices: true,
+      })
+    );
+  } catch (TypeError) {
+    // expected
+  }
+
   // Stop scan after 30 seconds.
   setTimeout(stopLEScan, 30000);
 };
@@ -195,9 +200,6 @@ export const startLEScan = async function () {
  */
 export const stopLEScan = function () {
   if (isLEScanRunning) {
-    const thingsLog = getThingsLog();
-    thingsLog('Stopping LE Scan', 'Bluetooth');
-    navigator.bluetooth.stopLEScan();
     isLEScanRunning = false;
   }
 };
@@ -249,6 +251,8 @@ const removeEventListener = function (event, listener) {
  * Removes webBluetooth eventListeners and deletes cached advertisements.
  */
 const tearDown = async function () {
+  // stop LE Scan.
+  stopLEScan();
   // disconnect all bt devices.
   const devices = await navigator.bluetooth.getDevices();
   for (const device of devices) {

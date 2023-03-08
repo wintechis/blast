@@ -28,6 +28,13 @@ export const onStatusChange: Record<statusValues, Function[]> = {
 };
 
 /**
+ * Getter for status.
+ */
+export const getStatus = function (): statusValues {
+  return status;
+};
+
+/**
  * Sets the current status of the interpreter.
  */
 export const setStatus = function (newStatus: statusValues) {
@@ -283,7 +290,6 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
  * Execute the user's code.
  */
 export const runJS = async function () {
-  console.log(eventsInWorkspace);
   (globalThis as any)['interpreterExecutionExit'] = false;
   setStatus('running');
   stdInfo('execution started');

@@ -278,12 +278,19 @@ Blocks['joycon_button_events'] = {
     this.setTooltip('');
     this.setHelpUrl('');
     this.requested = false;
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -291,9 +298,6 @@ Blocks['joycon_button_events'] = {
       this.requested = true;
       this.addEvent();
     }
-  },
-  destroy: function () {
-    this.removeFromEvents();
   },
   /**
    * Displays the pressed/released dropdown if on is selected.
@@ -402,12 +406,19 @@ Blocks['gamepad_pro_joystick'] = {
     this.xName = '';
     this.yName = '';
     this.angleName = '';
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -416,9 +427,6 @@ Blocks['gamepad_pro_joystick'] = {
       this.addEvent();
       this.createVars();
     }
-  },
-  destroy: function () {
-    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.
@@ -500,12 +508,19 @@ Blocks['gamepad_pro_button'] = {
     this.setTooltip('');
     this.setHelpUrl('');
     this.requested = false;
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -513,9 +528,6 @@ Blocks['gamepad_pro_button'] = {
       this.requested = true;
       this.addEvent();
     }
-  },
-  destroy: function () {
-    this.removeFromEvents();
   },
   /**
    * Remove this block's id from the events array.
