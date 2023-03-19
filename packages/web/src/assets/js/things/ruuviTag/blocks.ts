@@ -6,9 +6,8 @@
 import Blockly from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 const {Blocks, Events, FieldTextInput, Names} = Blockly;
-import {eventsInWorkspace, getStdWarn, getWorkspace} from '../../interpreter';
+import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
-import {blocksRequiringScan} from '../../webBluetooth.js';
 
 Blocks['things_ruuviTag'] = {
   /**
