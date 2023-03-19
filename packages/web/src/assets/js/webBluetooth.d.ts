@@ -10,7 +10,6 @@ export const optionalServices: BluetoothServiceUUID[];
  */
 export const blocksRequiringScan: Array<Blockly.Block.id>;
 
-
 /**
  * Pairs a Bluetooth device.
  */
@@ -23,4 +22,3 @@ export function requestDevice(
  * Returns a paired bluetooth device by their id.
  */
 export function getDeviceById(id: string): Promise<BluetoothDevice>;
-
