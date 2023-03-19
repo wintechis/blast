@@ -10,4 +10,4 @@ const handler = async (data) => {
   console.log(value);
 };
 
-thing.subscribeEvent('manufacturerData', handler);
+thing.subscribeEvent('UART data', handler);

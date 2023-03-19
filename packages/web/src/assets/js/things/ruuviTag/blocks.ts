@@ -39,7 +39,10 @@ Blocks['ruuviTag_event'] = {
     this.appendValueInput('thing')
       .setCheck('Thing')
       .appendField('on')
-      .appendField(new FieldTextInput('advertisementreceived'), 'eventType')
+      .appendField(
+        new FieldTextInput('characteristicvaluechanged'),
+        'eventType'
+      )
       .appendField('events of Ruuvi Tag');
     this.appendDummyInput()
       .appendField('uses variables')
@@ -93,22 +96,9 @@ Blocks['ruuviTag_event'] = {
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
-      this.checkCompatibility();
       this.requested = true;
       this.addEvent();
-      blocksRequiringScan.push(this.id);
       this.createVars();
-    }
-  },
-  checkCompatibility: function () {
-    const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
-    const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
-
-    if (!isWindows && !isAndroid) {
-      const stdWarn = getStdWarn();
-      stdWarn(
-        'Reading from the Ruuvi Tag is only supported on Windows and Android'
-      );
     }
   },
   /**
@@ -116,14 +106,9 @@ Blocks['ruuviTag_event'] = {
    */
   removeFromEvents: function () {
     // remove this block from the events array.
-    let index = eventsInWorkspace.indexOf(this.id);
+    const index = eventsInWorkspace.indexOf(this.id);
     if (index !== -1) {
       eventsInWorkspace.splice(index, 1);
-    }
-    // remove this block from the blocks requiring scan array.
-    index = blocksRequiringScan.indexOf(this.id);
-    if (index !== -1) {
-      blocksRequiringScan.splice(index, 1);
     }
   },
   createVars: function () {
@@ -175,10 +160,11 @@ implementedThings.push({
       category: 'Events',
     },
   ],
-  infoUrl: 'https://github.com/wintechis/blast/wiki/RuuviTag',
   filters: [
     {
       manufacturerData: [{companyIdentifier: 1177}],
     },
   ],
+  optionalServices: ['6e400001-b5a3-f393-e0a9-e50e24dcca9e'],
+  infoUrl: 'https://github.com/wintechis/blast/wiki/RuuviTag',
 });
