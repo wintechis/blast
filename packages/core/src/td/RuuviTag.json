@@ -62,7 +62,7 @@
             "bdo:signed": true,
             "bdo:byteOrder": "big",
             "bdo:scale": 0.001,
-            "unit": "qudtUnit:mG"
+            "unit": "qudtUnit:G"
           },
           "acc-y": {
             "type": "number",
