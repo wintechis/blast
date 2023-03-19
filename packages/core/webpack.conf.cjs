@@ -18,11 +18,11 @@ const nodeConfig = {
       type: 'module',
     },
   },
-  devtool: 'source-map',
+  devtool: 'eval-source-map',
   experiments: {
     outputModule: true,
   },
-  mode: 'production',
+  mode: 'development',
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
