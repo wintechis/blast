@@ -16,23 +16,29 @@ JavaScript['state_definition'] = function (block: Block): string {
     JavaScript.ORDER_NONE
   );
 
+  const id = JavaScript.quote_(block.id);
+
+  JavaScript.definitions_['customEvents'] = `
+const customEvents = new Map();
+const eventTargets = new Map();
+const eventValues = new Map();`;
+
   JavaScript.definitions_[
-    block.id
-  ] = `const stateEvent = new CustomEvent("${stateName}");`;
-  JavaScript.definitions_['eventTargets'] = 'const eventTargets = new Map()';
+    'customEvents-' + block.id
+  ] = `customEvents.set(${id}, new CustomEvent("${stateName}"));`;
 
   const functionName = JavaScript.provideFunction_(
     stateName,
     `
 eventTargets.set("${stateName}", new EventTarget());
-let prevValue = ${stateCondition};
+eventValues.set(${id}, ${stateCondition});
 async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
     while (true) {
         const value = ${stateCondition};
-        if (!prevValue && value) {
-          eventTargets.get("${stateName}").dispatchEvent(stateEvent);
+        if (!eventValues.get(${stateName}) && value) {
+          eventTargets.get("${stateName}").dispatchEvent(customEvents.get(${id}));
         }
-        prevValue = value;
+        eventValues.set(${stateName}, value);
         await new Promise(resolve => setTimeout(resolve, 5));
     }
 }`
