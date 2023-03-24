@@ -1,4 +1,3 @@
-const PnpWebpackPlugin = require('pnp-webpack-plugin');
 const {ProvidePlugin} = require('webpack');
 
 module.exports = {
@@ -12,10 +11,6 @@ module.exports = {
         '@mui/styled-engine': '@mui/styled-engine-sc',
       },
       extensions: ['.js', '.ts'],
-      plugins: [PnpWebpackPlugin],
-    },
-    resolveLoader: {
-      plugins: [PnpWebpackPlugin.moduleLoader(module)],
     },
     plugins: [
       new ProvidePlugin({
