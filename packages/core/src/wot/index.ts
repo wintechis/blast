@@ -41,7 +41,7 @@ const getWot = async function (
 export const resetServient = async function (): Promise<void> {
   if (servient) {
     const things = servient.getThings();
-    Object.entries(things).forEach(([id, td]) => {
+    Object.entries(things).forEach(([id]) => {
       servient.destroyThing(id);
     });
     await servient.shutdown();

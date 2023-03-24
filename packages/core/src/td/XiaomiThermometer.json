@@ -1,6 +1,16 @@
 {
   "@context": [
-    "https://www.w3.org/2019/wot/td/v1"
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
   ],
   "@type": ["tm:ThingModel"],
   "id": "blast:Bluetooth:xiamoiThermometer",
@@ -25,7 +35,6 @@
             "type": "number",
             "bdo:bytelength": 2,
             "bdo:scale": 0.01,
-            "bdo:byteorder": "bdo:bigEndian",
             "unit": "qudtUnit:DEG_C"
           },
           "hum": {

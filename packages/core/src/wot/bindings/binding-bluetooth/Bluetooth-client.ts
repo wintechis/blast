@@ -8,7 +8,6 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {Form, SecurityScheme} from '@node-wot/td-tools';
 import {Subscription} from 'rxjs';
 import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
@@ -124,15 +123,14 @@ export default class WebBluetoothClient implements ProtocolClient {
     });
   }
 
-  public unlinkResource(form: Form): Promise<void> {
+  public unlinkResource(): Promise<void> {
     throw new Error('not implemented');
   }
 
   public async subscribeResource(
     form: BluetoothForm,
     next: (content: Content) => void,
-    error?: (error: Error) => void,
-    complete?: () => void
+    error?: (error: Error) => void
   ): Promise<Subscription> {
     // Extract information out of form
     const {deviceId, serviceId, characteristicId, bleOperation} =
@@ -204,10 +202,7 @@ export default class WebBluetoothClient implements ProtocolClient {
     // do nothing
   }
 
-  public setSecurity(
-    metadata: SecurityScheme[],
-    credentials?: unknown
-  ): boolean {
+  public setSecurity(): boolean {
     return false;
   }
 

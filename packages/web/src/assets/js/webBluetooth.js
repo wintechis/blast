@@ -1,4 +1,4 @@
-/**LEScanResults
+/**
  * @fileoverview implements Bluetooth-Operations using webBluetooth
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
@@ -13,16 +13,6 @@ import {addWebBluetoothDevice, getThingsLog} from './things.js';
  * @type {!Array<!Blockly.Block.id>}
  */
 export const blocksRequiringScan = [];
-
-/**
- * Contains the results of a LE Scan.
- */
-export let LEScanResults = {};
-
-/**
- * Indicates whether the LE Scan is running.
- */
-let isLEScanRunning = false;
 
 /**
  * Stores all navigator.blueooth event handlers for the LE Scan as tuples of event and handler.
@@ -166,62 +156,6 @@ const disconnect = async function (id) {
 };
 
 /**
- * Starts an LE Scan for 30 seconds.
- */
-export const startLEScan = async function () {
-  // If the LE Scan is already running, do nothing.
-  if (isLEScanRunning) {
-    return;
-  }
-  // If the LE Scan is not running, register the cache handler and start it.
-  cacheLEScanResults();
-  isLEScanRunning = true;
-  const thingsLog = getThingsLog();
-  thingsLog('Requesting LE Scan', 'Bluetooth');
-  try {
-    dialog.alert(
-      'Please click allow on the LE Scan prompt now, then close this dialog.',
-      navigator.bluetooth.requestLEScan({
-        acceptAllAdvertisements: true,
-        keepRepeatedDevices: true,
-      })
-    );
-  } catch (TypeError) {
-    // expected
-  }
-
-  // Stop scan after 30 seconds.
-  setTimeout(stopLEScan, 30000);
-};
-
-/**
- * Stops the BLE Scan.
- * @public
- */
-export const stopLEScan = function () {
-  if (isLEScanRunning) {
-    isLEScanRunning = false;
-  }
-};
-
-/**
- * Caches the results of a LE Scan.
- */
-const cacheLEScanResults = function () {
-  // Cache the results of the scan.
-  const handler = function (event) {
-    const device = event.device;
-    const deviceId = device.id;
-    if (!LEScanResults[deviceId]) {
-      LEScanResults[deviceId] = [];
-    }
-    LEScanResults[deviceId].unshift(event);
-  };
-  // Register the event handler.
-  addEventListener('advertisementreceived', handler);
-};
-
-/**
  * Adds a webBluetooth eventListener.
  * @param {string} event the event to add the listener to.
  * @param {Function} listener the listener to add.
@@ -251,17 +185,10 @@ const removeEventListener = function (event, listener) {
  * Removes webBluetooth eventListeners and deletes cached advertisements.
  */
 const tearDown = async function () {
-  // stop LE Scan.
-  stopLEScan();
   // disconnect all bt devices.
   const devices = await navigator.bluetooth.getDevices();
   for (const device of devices) {
     await disconnect(device.id);
-  }
-
-  // Reset running scan flag
-  if (isLEScanRunning) {
-    isLEScanRunning = false;
   }
   // Remove all event handlers.
   if (eventListeners) {
@@ -283,7 +210,5 @@ const tearDown = async function () {
     // Reset event listeners.
     charEventListeners = {};
   }
-  // Clear cached advertisements.
-  LEScanResults = {};
 };
 addCleanUpFunction(tearDown);

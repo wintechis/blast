@@ -1,10 +1,21 @@
 {
   "@context": [
-    "https://www.w3.org/2019/wot/td/v1"
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
   ],
   "@type": ["tm:ThingModel"],
   "id": "blast:Bluetooth:RuuviTag",
   "title": "Ruuvi Tag",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
   "securityDefinitions": {
     "nosec_sc": {
@@ -13,103 +24,84 @@
   },
   "security": "nosec_sc",
   "events": {
-    "manufacturerData": {
-      "title": "Ruuvi Data V5",
-      "description": "The RuuviTag data in version 5 format",
+    "UART data": {
+      "title": "Ruuvi Data data",
+      "description": "The RuuviTag data received over UART, see https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-5-rawv2",
       "data": {
-        "type": "object",
-        "properties": {
-          "accelerationX": {
-            "description": "Acceleration in X axis",
+        "type": "array",
+        "bdo:pattern": "{format}{temp}{humidity}{pressure}{acc-x}{acc-y}{acc-z}{power-info}{movement-counter}{measurement-sequence-number}",
+        "bdo:variables": {
+          "format": {
             "type": "number",
-            "readOnly": true,
-            "unit": "g",
-            "multipleOf": 0.1
+            "bdo:bytelength": 1
           },
-          "accelerationY": {
-            "description": "Acceleration in Y axis",
+          "temp": {
             "type": "number",
-            "readOnly": true,
-            "unit": "g",
-            "multipleOf": 0.1
-          },
-          "accelerationZ": {
-            "description": "Acceleration in Z axis",
-            "type": "number",
-            "readOnly": true,
-            "unit": "g",
-            "multipleOf": 0.1
-          },
-          "battery": {
-            "description": "Battery level in %",
-            "type": "number",
-            "readOnly": true,
-            "unit": "%",
-            "minimum": 0,
-            "maximum": 100,
-            "multipleOf": 0.1
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.005,
+            "unit": "qudtUnit:DEG_C"
           },
           "humidity": {
-            "description": "Relative humidity in %",
             "type": "number",
-            "readOnly": true,
-            "unit": "%",
-            "minimum": 0,
-            "maximum": 100,
-            "multipleOf": 0.1
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.0025,
+            "unit": "qudtUnit:PERCENT"
           },
           "pressure": {
-            "description": "Air pressure in hPa",
             "type": "number",
-            "readOnly": true,
-            "unit": "hPa",
-            "minimum": 300,
-            "maximum": 1100,
-            "multipleOf": 0.1
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big",
+            "unit": "qudt:PA"
           },
-          "temperature": {
-            "description": "Temperature in Celsius",
+          "acc-x": {
             "type": "number",
-            "readOnly": true,
-            "unit": "°C",
-            "minimum": -40,
-            "maximum": 80,
-            "multipleOf": 0.1
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:G"
           },
-          "txPower": {
-            "description": "Transmission power in dBm",
+          "acc-y": {
             "type": "number",
-            "readOnly": true,
-            "unit": "dBm",
-            "minimum": -100,
-            "maximum": 20,
-            "multipleOf": 0.1
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:mG"
           },
-          "movementCounter": {
-            "description": "Movement counter",
+          "acc-z": {
             "type": "number",
-            "readOnly": true,
-            "minimum": 0,
-            "multipleOf": 1
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:mG"
           },
-          "measurementSequenceNumber": {
-            "description": "Measurement sequence number",
+          "power-info":
+          {
             "type": "number",
-            "readOnly": true,
-            "minimum": 0,
-            "multipleOf": 1
+            "bdo:bytelength": 2
           },
-          "mac": {
-            "description": "MAC address",
-            "type": "string",
-            "readOnly": true
+          "movement-counter": {
+            "type": "number",
+            "bdo:bytelength": 1,
+            "bdo:byteOrder": "big"
+          },
+          "measurement-sequence-number": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big"
           }
         }
       },
       "forms": [
         {
-          "href": "gatt://startLEScan",
-          "wbt:id": "webBluetoothId"
+          "href": "./6e400001-b5a3-f393-e0a9-e50e24dcca9e/6e400003-b5a3-f393-e0a9-e50e24dcca9e",
+          "sbo:methodName": "subscribe",
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     }

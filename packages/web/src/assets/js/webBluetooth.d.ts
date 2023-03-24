@@ -11,13 +11,6 @@ export const optionalServices: BluetoothServiceUUID[];
 export const blocksRequiringScan: Array<Blockly.Block.id>;
 
 /**
- * Contains the results of a LE Scan.
- */
-export let LEScanResults: {
-  [key: string]: Array<BluetoothAdvertisingEvent>;
-};
-
-/**
  * Pairs a Bluetooth device.
  */
 export function requestDevice(
@@ -29,13 +22,3 @@ export function requestDevice(
  * Returns a paired bluetooth device by their id.
  */
 export function getDeviceById(id: string): Promise<BluetoothDevice>;
-
-/**
- * Starts an LE Scan for 30 seconds.
- */
-export function startLEScan(): Promise<void>;
-
-/**
- * Stops the LE Scan
- */
-export function stopLEScan(): void;
