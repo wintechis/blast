@@ -277,36 +277,26 @@ Blocks['joycon_button_events'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.changeListener = null;
     this.requested = false;
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
       this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
     }
   },
   /**
@@ -410,23 +400,25 @@ Blocks['gamepad_pro_joystick'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.changeListener = null;
     this.getField('gp-x').setEnabled(false);
     this.getField('gp-y').setEnabled(false);
     this.getField('gp-angle').setEnabled(false);
     this.xName = '';
     this.yName = '';
     this.angleName = '';
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
@@ -434,18 +426,6 @@ Blocks['gamepad_pro_joystick'] = {
       this.requested = true;
       this.addEvent();
       this.createVars();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
     }
   },
   /**
@@ -533,30 +513,20 @@ Blocks['gamepad_pro_button'] = {
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
       this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
     }
   },
   /**

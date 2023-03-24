@@ -28,36 +28,6 @@ Blocks['things_xiaomiThermometer'] = {
       'https://github.com/wintechis/blast/wiki/Xiaomi-Thermometer'
     );
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-  },
-  /**
-   * Add this block's id to the events array.
-   * @return {null}.
-   */
-  addEvent: async function () {
-    eventsInWorkspace.push(this.id);
-  },
-  onchange: function (event: Event) {
-    // on creating this block initialize new instance of BleRgbController
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      this.addEvent();
-    }
-    if (event.type === Events.BLOCK_DELETE) {
-      // Block is being deleted
-      this.removeFromEvents();
-    }
-  },
-  /**
-   * Remove this block's id from the events array.
-   * @return {null}.
-   */
-  removeFromEvents: function () {
-    // remove this block from the events array.
-    const index = eventsInWorkspace.indexOf(this.id);
-    if (index !== -1) {
-      eventsInWorkspace.splice(index, 1);
-    }
   },
 };
 
@@ -87,36 +57,35 @@ Blocks['xiaomiThermometer_event'] = {
       "Handles 'characteristicvaluechanged' events of a Xiaomi Thermometer."
     );
     this.setHelpUrl('');
-    this.changeListener = null;
     this.getField('eventType').setEnabled(false);
     this.getField('humidity').setEnabled(false);
     this.getField('temperature').setEnabled(false);
     this.humidityName = '';
     this.temperatureName = '';
+    this.changeListener = null;
   },
   /**
    * Add this block's id to the events array.
-   * @return {null}.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
+      if (e.type === Events.BLOCK_DELETE && (e as any).ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
-  onchange: function (event: Event) {
+  onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
       this.addEvent();
       this.createVars();
     }
-    if (event.type === Events.BLOCK_DELETE) {
-      // Block is being deleted
-      this.removeFromEvents();
-      getWorkspace()?.removeChangeListener(this.changeListener);
-    }
   },
   /**
    * Remove this block's id from the events array.
-   * @return {null}.
    */
   removeFromEvents: function () {
     // remove this block from the events array.

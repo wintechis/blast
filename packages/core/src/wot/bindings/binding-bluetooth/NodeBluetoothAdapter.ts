@@ -26,7 +26,7 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     }
 
     debug(`Looking for device ${formattedDeviceId}`);
-    const device = await this.adapter.waitDevice(formattedDeviceId);
+    const device = await this.adapter.waitDevice(formattedDeviceId, 10000);
     if (!device) {
       throw new Error(`Device with id ${formattedDeviceId} not found`);
     }

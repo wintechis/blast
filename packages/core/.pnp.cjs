@@ -49,8 +49,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["joy-con-webhid", "npm:0.2.0"],\
             ["json-placeholder-replacer", "npm:1.0.35"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
-            ["node-hid", "npm:2.1.2"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["nyc", "npm:15.1.0"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
@@ -65,7 +64,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
             ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
             ["wot-thing-description-types", "npm:1.1.0-27-September-2021"],\
             ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"],\
@@ -397,8 +396,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["joy-con-webhid", "npm:0.2.0"],\
             ["json-placeholder-replacer", "npm:1.0.35"],\
             ["mocha", "npm:9.2.2"],\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
-            ["node-hid", "npm:2.1.2"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["node-polyfill-webpack-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:2.0.1"],\
             ["nyc", "npm:15.1.0"],\
             ["pnp-webpack-plugin", "npm:1.7.0"],\
@@ -413,7 +411,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
             ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
             ["wot-thing-description-types", "npm:1.1.0-27-September-2021"],\
             ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.23"],\
@@ -1300,7 +1298,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@webpack-cli/configtest", "virtual:8f85667d94ab11ec925fc83c3de888f7451c7450684e7ec1fc8cb9260acbdb54bf15e61a41bab012d4e4fac61233cc42a96a15e2c30e47234699b7a331bcbc60#npm:1.2.0"],\
             ["@types/webpack", null],\
             ["@types/webpack-cli", null],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"]\
           ],\
           "packagePeers": [\
@@ -1431,10 +1429,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:1.8.0", {\
-          "packageLocation": "./.yarn/__virtual__/acorn-import-assertions-virtual-31a571ba68/0/cache/acorn-import-assertions-npm-1.8.0-e9a9d57e27-5c4cf7c850.zip/node_modules/acorn-import-assertions/",\
+        ["virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:1.8.0", {\
+          "packageLocation": "./.yarn/__virtual__/acorn-import-assertions-virtual-b08fb4baef/0/cache/acorn-import-assertions-npm-1.8.0-e9a9d57e27-5c4cf7c850.zip/node_modules/acorn-import-assertions/",\
           "packageDependencies": [\
-            ["acorn-import-assertions", "virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:1.8.0"],\
+            ["acorn-import-assertions", "virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:1.8.0"],\
             ["@types/acorn", null],\
             ["acorn", "npm:8.8.1"]\
           ],\
@@ -1668,7 +1666,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["are-we-there-yet", "npm:1.1.7"],\
             ["delegates", "npm:1.0.0"],\
-            ["readable-stream", "npm:2.3.7"]\
+            ["readable-stream", "npm:2.3.8"]\
           ],\
           "linkType": "HARD"\
         }],\
@@ -5332,11 +5330,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "HARD"\
         }],\
-        ["npm:4.0.0", {\
-          "packageLocation": "./.yarn/cache/minipass-npm-4.0.0-2520d5ae3c-7a609afbf3.zip/node_modules/minipass/",\
+        ["npm:4.2.4", {\
+          "packageLocation": "./.yarn/cache/minipass-npm-4.2.4-20f938f2dd-c664f2ae44.zip/node_modules/minipass/",\
           "packageDependencies": [\
-            ["minipass", "npm:4.0.0"],\
-            ["yallist", "npm:4.0.0"]\
+            ["minipass", "npm:4.2.4"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -5562,10 +5559,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["node-ble", [\
-        ["https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98", {\
-          "packageLocation": "./.yarn/cache/node-ble-https-3574168a89-6c75de26a4.zip/node_modules/node-ble/",\
+        ["https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233", {\
+          "packageLocation": "./.yarn/cache/node-ble-https-22a3a130a9-00001a7da2.zip/node_modules/node-ble/",\
           "packageDependencies": [\
-            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=feab3c5210e1e63cfcc73d266ac667fd7fb68d98"],\
+            ["node-ble", "https://github.com/derwehr/node-ble.git#commit=aae1b2b6e169062d3266ab6b7ac07631eed0c233"],\
             ["dbus-next", "npm:0.10.2"]\
           ],\
           "linkType": "HARD"\
@@ -5681,7 +5678,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["url", "npm:0.11.0"],\
             ["util", "npm:0.12.5"],\
             ["vm-browserify", "npm:1.1.2"],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"]\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"]\
           ],\
           "packagePeers": [\
             "@types/webpack",\
@@ -6559,10 +6556,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["readable-stream", [\
-        ["npm:2.3.7", {\
-          "packageLocation": "./.yarn/cache/readable-stream-npm-2.3.7-77b22a9818-e4920cf754.zip/node_modules/readable-stream/",\
+        ["npm:2.3.8", {\
+          "packageLocation": "./.yarn/cache/readable-stream-npm-2.3.8-67a94c2cb1-6564546703.zip/node_modules/readable-stream/",\
           "packageDependencies": [\
-            ["readable-stream", "npm:2.3.7"],\
+            ["readable-stream", "npm:2.3.8"],\
             ["core-util-is", "npm:1.0.3"],\
             ["inherits", "npm:2.0.4"],\
             ["isarray", "npm:1.0.0"],\
@@ -7436,7 +7433,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["tar", "npm:6.1.13"],\
             ["chownr", "npm:2.0.0"],\
             ["fs-minipass", "npm:2.1.0"],\
-            ["minipass", "npm:4.0.0"],\
+            ["minipass", "npm:4.2.4"],\
             ["minizlib", "npm:2.1.2"],\
             ["mkdirp", "npm:1.0.4"],\
             ["yallist", "npm:4.0.0"]\
@@ -7492,10 +7489,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:5.3.6", {\
-          "packageLocation": "./.yarn/__virtual__/terser-webpack-plugin-virtual-31fcb3bc6c/0/cache/terser-webpack-plugin-npm-5.3.6-27ed5132ff-8f3448d7fd.zip/node_modules/terser-webpack-plugin/",\
+        ["virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:5.3.6", {\
+          "packageLocation": "./.yarn/__virtual__/terser-webpack-plugin-virtual-45650a7d53/0/cache/terser-webpack-plugin-npm-5.3.6-27ed5132ff-8f3448d7fd.zip/node_modules/terser-webpack-plugin/",\
           "packageDependencies": [\
-            ["terser-webpack-plugin", "virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:5.3.6"],\
+            ["terser-webpack-plugin", "virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:5.3.6"],\
             ["@jridgewell/trace-mapping", "npm:0.3.17"],\
             ["@swc/core", null],\
             ["@types/esbuild", null],\
@@ -7508,7 +7505,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["serialize-javascript", "npm:6.0.0"],\
             ["terser", "npm:5.15.1"],\
             ["uglify-js", null],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"]\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"]\
           ],\
           "packagePeers": [\
             "@swc/core",\
@@ -7649,7 +7646,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["micromatch", "npm:4.0.5"],\
             ["semver", "npm:7.3.8"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"]\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"]\
           ],\
           "packagePeers": [\
             "@types/typescript",\
@@ -8054,17 +8051,17 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["webpack", [\
-        ["npm:5.74.0", {\
-          "packageLocation": "./.yarn/cache/webpack-npm-5.74.0-f5b838a00d-320c41369a.zip/node_modules/webpack/",\
+        ["npm:5.76.3", {\
+          "packageLocation": "./.yarn/cache/webpack-npm-5.76.3-f5ec1219a3-363f536b56.zip/node_modules/webpack/",\
           "packageDependencies": [\
-            ["webpack", "npm:5.74.0"]\
+            ["webpack", "npm:5.76.3"]\
           ],\
           "linkType": "SOFT"\
         }],\
-        ["virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0", {\
-          "packageLocation": "./.yarn/__virtual__/webpack-virtual-109ec5895d/0/cache/webpack-npm-5.74.0-f5b838a00d-320c41369a.zip/node_modules/webpack/",\
+        ["virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3", {\
+          "packageLocation": "./.yarn/__virtual__/webpack-virtual-e403722c94/0/cache/webpack-npm-5.76.3-f5ec1219a3-363f536b56.zip/node_modules/webpack/",\
           "packageDependencies": [\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["@types/eslint-scope", "npm:3.7.4"],\
             ["@types/estree", "npm:0.0.51"],\
             ["@types/webpack-cli", null],\
@@ -8072,7 +8069,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@webassemblyjs/wasm-edit", "npm:1.11.1"],\
             ["@webassemblyjs/wasm-parser", "npm:1.11.1"],\
             ["acorn", "npm:8.8.1"],\
-            ["acorn-import-assertions", "virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:1.8.0"],\
+            ["acorn-import-assertions", "virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:1.8.0"],\
             ["browserslist", "npm:4.21.4"],\
             ["chrome-trace-event", "npm:1.0.3"],\
             ["enhanced-resolve", "npm:5.10.0"],\
@@ -8087,7 +8084,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["neo-async", "npm:2.6.2"],\
             ["schema-utils", "npm:3.1.1"],\
             ["tapable", "npm:2.2.1"],\
-            ["terser-webpack-plugin", "virtual:109ec5895d72dacb8a19a64e44b9814220029f2bb1de9853183d6b8bab917b94829cb6d3251dfbb9a6b42d38047b82c87026779d030aaa8703f7338328ac7917#npm:5.3.6"],\
+            ["terser-webpack-plugin", "virtual:e403722c942c0ffeab053acbddaadf2553ff538f87f414933c18360c876adc23ae4b5c2422d2ef4f630de69899c47511f2cebc0d229347510d99bc00b7951703#npm:5.3.6"],\
             ["watchpack", "npm:2.4.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
             ["webpack-sources", "npm:3.2.3"]\
@@ -8129,7 +8126,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["import-local", "npm:3.1.0"],\
             ["interpret", "npm:2.2.0"],\
             ["rechoir", "npm:0.7.1"],\
-            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.74.0"],\
+            ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-bundle-analyzer", null],\
             ["webpack-dev-server", null],\
             ["webpack-merge", "npm:5.8.0"]\

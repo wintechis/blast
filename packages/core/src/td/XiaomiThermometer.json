@@ -1,6 +1,16 @@
 {
   "@context": [
-    "https://www.w3.org/2019/wot/td/v1"
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
   ],
   "@type": ["tm:ThingModel"],
   "id": "blast:Bluetooth:xiamoiThermometer",
@@ -17,19 +27,21 @@
     "measurements": {
       "title": "Temperature and humidity measurements",
       "description": "The temperature and humidity values measured by the thermometer.",
-      "type": "object",
-      "properties": {
-        "temperature": {
-          "title": "temperature value measured by the thermometer.",
-          "description": "The temperature value measured by the thermometer.",
-          "unit": "°C",
-          "type": "number"
-        },
-        "humidity": {
-          "title": "humidity",
-          "description": "The relative humidity measured by the thermometer.",
-          "unit": "%",
-          "type": "number"
+      "data": {
+        "type": "array",
+        "bdo:pattern": "{temp}{hum}2011",
+        "bdo:variables": {
+          "temp": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:scale": 0.01,
+            "unit": "qudtUnit:DEG_C"
+          },
+          "hum": {
+            "type": "number",
+            "bdo:bytelength": 1,
+            "unit": "qudtUnit:PERCENT"
+          }
         }
       },
       "forms": [

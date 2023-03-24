@@ -54,7 +54,7 @@ export default class Output extends React.Component {
     };
     // overwrite console.error
     const oldError = console.error;
-    console.error = (msg, type = 'text') => {
+    console.error = msg => {
       oldError(msg);
       globalThis['interpreterExecutionExit'] = true;
       resetInterpreter();
@@ -64,7 +64,7 @@ export default class Output extends React.Component {
           messages: state.messages.concat({
             text: msg.toString(),
             time: new Date().toLocaleTimeString(),
-            type: type,
+            type: 'error',
           }),
         };
       });

@@ -5,7 +5,6 @@
 
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-import {getWorkspace} from '../../interpreter';
 
 /**
  * Generates JavaScript code for the things_xiaomiFlowerCare block.

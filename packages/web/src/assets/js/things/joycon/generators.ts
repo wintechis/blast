@@ -298,7 +298,9 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
   switchPro.addListener(handleJoystick);
 
   addCleanUpFunction(() => {
-    clearInterval((switchPro as any).interval);
+    if ((switchPro as any).interval) {
+      clearInterval((switchPro as any).interval);
+    }
   });
 };
 
@@ -354,6 +356,8 @@ JavaScript['gamepad_pro_button'] = function (block: Block): string {
   switchPro.addListener(handleButton);
 
   addCleanUpFunction(() => {
-    clearInterval((switchPro as any).interval);
+    if ((switchPro as any).interval) {
+      clearInterval((switchPro as any).interval);
+    }
   });
 };

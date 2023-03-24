@@ -28,6 +28,13 @@ export const onStatusChange: Record<statusValues, Function[]> = {
 };
 
 /**
+ * Getter for status.
+ */
+export const getStatus = function (): statusValues {
+  return status;
+};
+
+/**
  * Sets the current status of the interpreter.
  */
 export const setStatus = function (newStatus: statusValues) {
@@ -174,7 +181,6 @@ export const resetInterpreter = async function () {
   for (const func of cleanUpFunctions) {
     func();
   }
-  cleanUpFunctions.length = 0;
 };
 
 /**

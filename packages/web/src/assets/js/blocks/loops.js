@@ -110,29 +110,19 @@ Blocks['every_seconds'] = {
   /**
    * Add this block's id to the events array.
    */
-  addEvent: async function () {
+  addEvent: function () {
     eventsInWorkspace.push(this.id);
-    // remove event if block is deleted
-    this.changeListener = getWorkspace().addChangeListener(event =>
-      this.onDispose(event)
-    );
+    // add change listener to remove block from events array when deleted.
+    this.changeListener = getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_DELETE && e.ids.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   onchange: function () {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.addEvent();
-    }
-  },
-  onDispose: function (event) {
-    if (event.type === Events.BLOCK_DELETE) {
-      if (
-        event.type === Events.BLOCK_DELETE &&
-        event.ids.indexOf(this.id) !== -1
-      ) {
-        // Block is being deleted
-        this.removeFromEvents();
-        getWorkspace().removeChangeListener(this.changeListener);
-      }
     }
   },
   /**

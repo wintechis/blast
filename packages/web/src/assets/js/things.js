@@ -300,7 +300,6 @@ export const thingsFlyoutCategory = function (workspace) {
 
   // Add connected blocks for connected video devices
   if (connectedThingBlocks.video.length > 0) {
-    console.log(...connectedThingBlocks.video);
     xmlList.push(...connectedThingBlocks.video);
   }
 
@@ -320,7 +319,6 @@ export const thingsFlyoutCategory = function (workspace) {
 
   // Add connected blocks for connected consumed devices
   if (connectedThingBlocks.consumedDevice.length > 0) {
-    console.log(...connectedThingBlocks.consumedDevice);
     xmlList.push(...connectedThingBlocks.consumedDevice);
   }
 

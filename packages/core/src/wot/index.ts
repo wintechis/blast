@@ -1,6 +1,6 @@
 import * as WoT from 'wot-typescript-definitions';
 import {Servient} from '@node-wot/core';
-import {JsonPlaceholderReplacer} from "json-placeholder-replacer";
+import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
@@ -41,7 +41,7 @@ const getWot = async function (
 export const resetServient = async function (): Promise<void> {
   if (servient) {
     const things = servient.getThings();
-    Object.entries(things).forEach(([id, td]) => {
+    Object.entries(things).forEach(([id]) => {
       servient.destroyThing(id);
     });
     await servient.shutdown();
@@ -58,7 +58,7 @@ export const createThing = async function (
       'Hid:path': id,
     };
     // deep copy td, because the original td is imported as module and can't be modified.
-    td = JSON.parse(JSON.stringify(td));
+    td = structuredClone(td);
     td = fillPlaceholder(td, map);
   }
   const wotServient = await getWot();

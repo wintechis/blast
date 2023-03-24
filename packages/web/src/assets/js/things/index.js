@@ -16,7 +16,7 @@ import './huskyduino/generators.ts';
 import './joycon/blocks.js';
 import './joycon/generators.ts';
 
-import './ruuviTag/blocks.js';
+import './ruuviTag/blocks.ts';
 import './ruuviTag/generators.ts';
 
 import './server_connector/blocks.js';

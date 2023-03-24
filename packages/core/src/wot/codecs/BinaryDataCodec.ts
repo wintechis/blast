@@ -9,16 +9,11 @@ export class BinaryDataStreamCodec implements ContentCodec {
 
   /**
    * Convert received bytes to concrete value.
-   * @param {Buffer} bytes The received binary buffer.
-   * @param {DataSchema} schema The schema information of the Thing Description for decoding.
-   * @param {[key: string]: string} parameters Additonal parameters; not used in this codec.
-   * @returns {DataSchemaValue} Decoded value.
+   * @param bytes The received binary buffer.
+   * @param schema The schema information of the Thing Description for decoding.
+   * @returns Decoded value.
    */
-  bytesToValue(
-    bytes: Buffer,
-    schema: DataSchema,
-    parameters?: {[key: string]: string}
-  ): DataSchemaValue {
+  bytesToValue(bytes: Buffer, schema: DataSchema): DataSchemaValue {
     let parsed: DataSchemaValue = null;
     let nameList;
     let valueList;
@@ -63,7 +58,7 @@ export class BinaryDataStreamCodec implements ContentCodec {
           parsed = byte2object(schema, bytes);
           break;
         default:
-          throw new Error('Datatype not supported by codec');
+          throw new Error(`Datatype ${schema.type} not supported by codec`);
       }
     }
     return parsed;
@@ -71,23 +66,17 @@ export class BinaryDataStreamCodec implements ContentCodec {
 
   /**
    * Convert concrete value to bytes.
-   * @param {any} dataValue The data to be encoded.
-   * @param {DataSchema} schema The schema information of the Thing Description for encoding.
-   * @param {[key: string]: string} parameters Additonal parameters; not used in this codec.
-   * @returns {Buffer} Encodec value.
-   */
-  valueToBytes(
-    dataValue: number | string | any,
-    schema: DataSchema,
-    parameters?: {[key: string]: string}
-  ): Buffer {
+   * @param dataValue The data to be encoded.
+   * @param schema The schema information of the Thing Description for encoding.
+   * @returns Encodec value.   */
+  valueToBytes(dataValue: unknown, schema: DataSchema): Buffer {
     let buf: Buffer = Buffer.alloc(1);
     let hexString: string;
 
     // Check if pattern is provieded and fill in
     if (typeof schema['bdo:pattern'] !== 'undefined') {
       // String Pattern
-      hexString = fillStringPattern(schema, dataValue);
+      hexString = fillStringPattern(schema, dataValue as string);
       buf = string2byte(schema, hexString);
     }
     // Else create buffer without pattern
@@ -96,10 +85,10 @@ export class BinaryDataStreamCodec implements ContentCodec {
       switch (schema.type) {
         case 'number':
         case 'integer':
-          buf = int2byte(schema, dataValue);
+          buf = int2byte(schema, dataValue as number);
           break;
         case 'string':
-          buf = string2byte(schema, dataValue);
+          buf = string2byte(schema, dataValue as string);
           break;
         case 'object':
           buf = object2byte(schema, dataValue);
@@ -120,9 +109,9 @@ export class BinaryDataStreamCodec implements ContentCodec {
 
 /**
  * Converts bytes to integer.
- * @param {DataSchema} schema schema of executed property, action or event.
- * @param {Buffer} bytes received byte value.
- * @returns {Integer} converted byte value.
+ * @param schema schema of executed property, action or event.
+ * @param bytes received byte value.
+ * @returns converted byte value.
  */
 function byte2int(schema: DataSchema, bytes: Buffer) {
   const bytelength = schema['bdo:bytelength'] || bytes.byteLength;
@@ -161,9 +150,9 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
 
 /**
  * Converts integer to bytes.
- * @param {DataSchema} schema schema of executed property, action or event.
- * @param {Buffer} bytes received byte value.
- * @returns {Integer} converted byte value.
+ * @param schema schema of executed property, action or event.
+ * @param bytes received byte value.
+ * @returns converted byte value.
  */
 function int2byte(schema: DataSchema, dataValue: number) {
   const bytelength = schema['bdo:bytelength'];
@@ -199,9 +188,9 @@ function int2byte(schema: DataSchema, dataValue: number) {
 
 /**
  * Reads binary buffer based on provided pattern.
- * @param {DataSchema} schema schema of executed property, action or event.
- * @param {Buffer} bytes received byte value.
- * @returns {Array} Array containing bytes in the order of the provided variables.
+ * @param schema schema of executed property, action or event.
+ * @param bytes received byte value.
+ * @returns Array containing bytes in the order of the provided variables.
  */
 function readPattern(schema: DataSchema, bytes: Buffer) {
   // Get name of variables in template
@@ -243,18 +232,18 @@ function readPattern(schema: DataSchema, bytes: Buffer) {
 
 /**
  * Fills in the desired pattern.
- * @param {DataSchema} schema schema of executed property, action or event.
- * @param {any} dataValue values to fill in.
- * @returns {String} Filled in hexString.
+ * @param schema schema of executed property, action or event.
+ * @param dataValue values to fill in.
+ * @returns Filled in hexString.
  */
 function fillStringPattern(schema: DataSchema, dataValue: any) {
-  let key: string;
-  let params: any;
+  let key: number | string;
+  let params: unknown;
   // Iterate over provided parameters and convert to hex string
   for ([key, params] of Object.entries(schema['bdo:variables'])) {
     // Convert integer values to hex string
-    if (params.type === 'integer') {
-      const buf = int2byte(params, dataValue[key]);
+    if ((params as DataSchema).type === 'integer') {
+      const buf = int2byte(params as DataSchema, dataValue[key]);
       // Convert Buffer back to hex
       dataValue[key] = buf.toString('hex');
     }
@@ -276,9 +265,9 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
 
 /**
  * Convert string to buffer.
- * @param {DataSchema} schema schema of executed property, action or event.
- * @param {String} dataValue values to convert.
- * @returns {String} Value converted to hexString.
+ * @param schema schema of executed property, action or event.
+ * @param dataValue values to convert.
+ * @returns Value converted to hexString.
  */
 function string2byte(schema: DataSchema, dataValue: string) {
   let buf: Buffer;
@@ -329,7 +318,7 @@ function byte2object(schema: DataSchema, bytes: Buffer): Object {
  * @param dataValue values to convert.
  * @returns converted buffer.
  */
-function object2byte(schema: DataSchema, dataValue: any): Buffer {
+function object2byte(schema: DataSchema, dataValue: unknown): Buffer {
   const value = JSON.stringify(dataValue);
   return Buffer.from(value, 'utf-8');
 }
