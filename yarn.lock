@@ -1531,7 +1531,9 @@ __metadata:
     "@node-wot/core": 0.8.4
     "@node-wot/td-tools": 0.8.4
     "@types/node": latest
+    "@types/node-hid": ^1.3.1
     "@types/uritemplate": ^0.3.4
+    "@types/w3c-web-hid": ^1.0.3
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
     "@typescript-eslint/parser": ^5.14.0
@@ -3663,6 +3665,15 @@ __metadata:
     "@types/node": "*"
     form-data: ^3.0.0
   checksum: 6f73b1470000d303d25a6fb92875ea837a216656cb7474f66cdd67bb014aa81a5a11e7ac9c21fe19bee9ecb2ef87c1962bceeaec31386119d1ac86e4c30ad7a6
+  languageName: node
+  linkType: hard
+
+"@types/node-hid@npm:^1.3.1":
+  version: 1.3.1
+  resolution: "@types/node-hid@npm:1.3.1"
+  dependencies:
+    "@types/node": "*"
+  checksum: 30a01c916ed345ad4bd65d6c7983473df7daa8676e85a0ce56e18cccad908d5941fc261d39047a1995b5d9b9a5e351a625a708d9d58eb59921a0e495b178242c
   languageName: node
   linkType: hard
 

@@ -5,13 +5,17 @@ import {HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
+import {HidClientFactory} from './bindings/binding-hid/Hid';
+import {HidAdapter} from './bindings/binding-hid/HidAdapter';
+import ConcreteHidAdapter from 'HidAdapter';
 export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 
 let servient: Servient;
 let wot: typeof WoT;
 
 export const getServient = function (
-  bluetoothAdapter: BluetoothAdapter
+  bluetoothAdapter: BluetoothAdapter,
+  hidAdapter: HidAdapter
 ): Servient {
   const httpConfig = {
     allowSelfSigned: true, // client configuration
@@ -21,19 +25,17 @@ export const getServient = function (
     servient = new Servient();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
     servient.addClientFactory(new HttpsClientFactory(httpConfig));
+    servient.addClientFactory(new HidClientFactory(hidAdapter));
   }
   return servient;
 };
 
 const getWot = async function (
-  bluetoothAdapter?: BluetoothAdapter
+  bluetoothAdapter: BluetoothAdapter = new ConcreteBluetoothAdapter(),
+  hidAdapter: HidAdapter = new ConcreteHidAdapter()
 ): Promise<typeof WoT> {
   if (!wot) {
-    if (bluetoothAdapter) {
-      wot = await getServient(bluetoothAdapter).start();
-    } else {
-      wot = await getServient(new ConcreteBluetoothAdapter()).start();
-    }
+    wot = await getServient(bluetoothAdapter, hidAdapter).start();
   }
   return wot;
 };
@@ -55,7 +57,7 @@ export const createThing = async function (
   if (id) {
     const map = {
       MacOrWebBluetoothId: id,
-      'Hid:path': id,
+      HIDPATH: id,
     };
     // deep copy td, because the original td is imported as module and can't be modified.
     td = structuredClone(td);

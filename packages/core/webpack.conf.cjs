@@ -4,15 +4,15 @@ const path = require('path');
 const {ProvidePlugin} = require('webpack');
 const {DefinePlugin} = require('webpack');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
-const PnpWebpackPlugin = require('pnp-webpack-plugin');
 
 const nodeConfig = {
   entry: {
-    index: './src/wot/index.ts',
+    node: './src/wot/index.ts',
+    hidHelpers: './src/wot/bindings/binding-hid/hidHelpers/index.ts',
   },
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.node.js',
+    filename: 'blast.[name].js',
     chunkFormat: 'module',
     library: {
       type: 'module',
@@ -30,11 +30,11 @@ const nodeConfig = {
         __dirname,
         './src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter.ts'
       ),
+      HidAdapter$: path.resolve(
+        __dirname,
+        './src/wot/bindings/binding-hid/NodeHidAdapter.ts'
+      ),
     },
-    plugins: [PnpWebpackPlugin],
-  },
-  resolveLoader: {
-    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   module: {
     rules: [
@@ -53,6 +53,7 @@ const nodeConfig = {
     ],
   },
   target: 'node',
+  externals: ['node-hid'],
 };
 
 const webConfig = {
@@ -89,15 +90,15 @@ const webConfig = {
         __dirname,
         './src/wot/bindings/binding-bluetooth/WebBluetoothAdapter.ts'
       ),
+      HidAdapter$: path.resolve(
+        __dirname,
+        './src/wot/bindings/binding-hid/WebHidAdapter.ts'
+      ),
       stream: require.resolve('readable-stream/lib/stream'),
     },
     fallback: {
       fs: false,
     },
-    plugins: [PnpWebpackPlugin],
-  },
-  resolveLoader: {
-    plugins: [PnpWebpackPlugin.moduleLoader(module)],
   },
   module: {
     rules: [

@@ -2873,7 +2873,9 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@node-wot/core", "npm:0.8.4"],\
             ["@node-wot/td-tools", "npm:0.8.4"],\
             ["@types/node", "npm:18.11.9"],\
+            ["@types/node-hid", "npm:1.3.1"],\
             ["@types/uritemplate", "npm:0.3.4"],\
+            ["@types/w3c-web-hid", "npm:1.0.3"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
             ["@typescript-eslint/eslint-plugin", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:5.44.0"],\
             ["@typescript-eslint/parser", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:5.44.0"],\
@@ -5687,6 +5689,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node-fetch", "npm:2.6.2"],\
             ["@types/node", "npm:18.11.10"],\
             ["form-data", "npm:3.0.1"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/node-hid", [\
+        ["npm:1.3.1", {\
+          "packageLocation": "./.yarn/cache/@types-node-hid-npm-1.3.1-b216f72882-30a01c916e.zip/node_modules/@types/node-hid/",\
+          "packageDependencies": [\
+            ["@types/node-hid", "npm:1.3.1"],\
+            ["@types/node", "npm:18.11.10"]\
           ],\
           "linkType": "HARD"\
         }]\

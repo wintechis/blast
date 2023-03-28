@@ -3,6 +3,7 @@
   "compilerOptions": {
     "paths": {
       "BluetoothAdapter": ["./src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter.js"],
+      "HidAdapter": ["./src/wot/bindings/binding-hid/NodeHidAdapter.js"],
     }
   }
 }
