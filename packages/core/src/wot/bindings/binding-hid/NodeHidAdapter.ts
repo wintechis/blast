@@ -27,7 +27,7 @@ export default class ConcreteHidAdapter implements HidAdapter {
 
   // Wrap node-hid to implement HIDDevice interface.
   static wrap(device: Device, hid: HID): HIDDevice {
-    return {
+    const hidDevice: HIDDevice = {
       open: async () => {
         new HID(device.path as string);
       },
@@ -53,22 +53,83 @@ export default class ConcreteHidAdapter implements HidAdapter {
       productId: device.productId,
       productName: device.product || '',
       collections: [],
-      oninputreport: (event: HIDInputReportEvent) => {
-        // TODO
+      oninputreport: null,
+      addEventListener: (
+        type: 'inputreport' | string,
+        listener:
+          | EventListenerOrEventListenerObject
+          | null
+          | ((this: HIDDevice, ev: HIDInputReportEvent) => any),
+        options?: boolean | AddEventListenerOptions
+      ) => {
+        // Not implemented in node-hid
       },
-      addEventListener: (type, listener) => {
-        if (type === 'inputreport') {
-          hid.on('data', listener as EventListener);
-        }
+      removeEventListener: (
+        type: 'inputreport' | string,
+        listener:
+          | EventListenerOrEventListenerObject
+          | null
+          | ((this: HIDDevice, ev: HIDInputReportEvent) => any)
+      ) => {
+        // Not implemented in node-hid
+        // will be overwritten after creating the HIDDevice,
+        // because it needs a reference to the HIDDevice.
       },
-      removeEventListener: (type, listener) => {
-        // Not implemented in node-hid, readme says:
-        // To remove an event handler, close the device with device.close()
-      },
-      dispatchEvent: event => {
+      dispatchEvent: (event: HIDInputReportEvent) => {
         // Not implemented in node-hid
         return true;
       },
     };
+    hidDevice.addEventListener = (type, listener) => {
+      if (type === 'inputreport') {
+        hid.on('data', (data: Buffer) => {
+          // convert to HIDInputReportEvent
+          const event: HIDInputReportEvent = {
+            type: 'inputreport',
+            device: hidDevice,
+            reportId: data[0],
+            data: new DataView(data.buffer, 1),
+            // Hid-client needs data only, so below properties are not implemented
+            bubbles: false,
+            cancelBubble: false,
+            cancelable: false,
+            composed: false,
+            currentTarget: null,
+            defaultPrevented: false,
+            eventPhase: 0,
+            isTrusted: false,
+            returnValue: false,
+            srcElement: null,
+            target: null,
+            timeStamp: 0,
+            composedPath: function (): EventTarget[] {
+              throw new Error('Function not implemented.');
+            },
+            initEvent: function (
+              type: string,
+              bubbles?: boolean | undefined,
+              cancelable?: boolean | undefined
+            ): void {
+              throw new Error('Function not implemented.');
+            },
+            preventDefault: function (): void {
+              throw new Error('Function not implemented.');
+            },
+            stopImmediatePropagation: function (): void {
+              throw new Error('Function not implemented.');
+            },
+            stopPropagation: function (): void {
+              throw new Error('Function not implemented.');
+            },
+            AT_TARGET: 0,
+            BUBBLING_PHASE: 0,
+            CAPTURING_PHASE: 0,
+            NONE: 0,
+          };
+          (listener as EventListener)(event);
+        });
+      }
+    };
+    return hidDevice;
   }
 }

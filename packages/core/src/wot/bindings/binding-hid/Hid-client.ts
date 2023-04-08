@@ -1,5 +1,5 @@
 /**
- * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
+ * @fileoverview Hid bindings for eclipse/thingweb.node-wot
  */
 
 import {
@@ -14,9 +14,9 @@ import {Subscription} from 'rxjs';
 import {HidAdapter} from './HidAdapter';
 import {Readable} from 'stream';
 
-const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
+const {debug} = createLoggers('binding-hid', 'hid-client');
 
-export default class WebBluetoothClient implements ProtocolClient {
+export default class HidClient implements ProtocolClient {
   hidAdapter: HidAdapter;
 
   constructor(hidAdapter: HidAdapter) {
@@ -25,16 +25,12 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public toString(): string {
-    return '[WebBluetoothClient]';
+    return '[Hid Client]';
   }
   public async readResource(form: HidForm): Promise<Content> {
-    const {operation} = this.deconstructForm(form.href);
     const id = form['hid:path'];
     if (id === undefined) {
       throw new Error('hid:path cannot be undefined');
-    }
-    if (operation !== 'getFeatureReport') {
-      throw new Error(`Cannot read from ${form.href}`);
     }
     const device = await this.hidAdapter.getDevice(id);
     if (!device) {
@@ -72,13 +68,9 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public async writeResource(form: HidForm, content: Content): Promise<void> {
-    const {operation} = this.deconstructForm(form.href);
     const id = form['hid:path'];
     if (id === undefined) {
       throw new Error('hid:path cannot be undefined');
-    }
-    if (operation !== 'sendFeatureReport') {
-      throw new Error(`Cannot write to ${form.href}`);
     }
     const device = await this.hidAdapter.getDevice(id);
     if (!device) {
@@ -104,6 +96,7 @@ export default class WebBluetoothClient implements ProtocolClient {
 
     const reportId = form['hid:reportId'] || data[0];
 
+    debug(`Sending feature report: ${reportId} ${data}`);
     device.sendFeatureReport(reportId, Buffer.from(data));
   }
 
@@ -116,12 +109,46 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public async subscribeResource(
-    form: Form,
+    form: HidForm,
     next: (content: Content) => void,
     error?: (error: Error) => void,
     complete?: () => void
   ): Promise<Subscription> {
-    throw new Error('not implemented');
+    const id = form['hid:path'];
+    if (id === undefined) {
+      throw new Error('hid:path cannot be undefined');
+    }
+    const device = await this.hidAdapter.getDevice(id);
+    if (!device) {
+      throw new Error(`Device ${id} not found`);
+    }
+
+    debug(`Subscribing to device:  ${id}`);
+
+    const handler = (event: HIDInputReportEvent) => {
+      debug(
+        `Received "inputreport" event with report id: ${event.reportId} and data: ${event.data.buffer}`
+      );
+      let buff;
+      if (form['signed']) {
+        buff = new Int8Array(event.data.buffer);
+      } else {
+        buff = new Uint8Array(event.data.buffer);
+      }
+      const body = Readable.from(buff);
+
+      const content = new Content(
+        form.contentType || 'application/x.binary-data-stream',
+        body
+      );
+      next(content);
+    };
+
+    device.addEventListener('inputreport', handler);
+
+    return new Subscription(() => {
+      device.removeEventListener('inputreport', handler);
+    });
   }
 
   public async start(): Promise<void> {
@@ -137,11 +164,5 @@ export default class WebBluetoothClient implements ProtocolClient {
     credentials?: unknown
   ): boolean {
     return false;
-  }
-
-  private deconstructForm(href: string): {path: string; operation: string} {
-    const path = href.split('/').slice(0, -1).join('/');
-    const operation = href.split('/').pop() || '';
-    return {path, operation};
   }
 }
