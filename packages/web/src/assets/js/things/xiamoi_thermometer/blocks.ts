@@ -4,7 +4,7 @@
  */
 
 import {Blocks, Events, FieldTextInput, Names} from 'blockly';
-import { BlockBase } from 'blockly/core/events/events_block_base';
+import {BlockBase} from 'blockly/core/events/events_block_base';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';

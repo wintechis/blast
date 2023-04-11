@@ -236,6 +236,7 @@ function readPattern(schema: DataSchema, bytes: Buffer) {
  * @param dataValue values to fill in.
  * @returns Filled in hexString.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function fillStringPattern(schema: DataSchema, dataValue: any) {
   let key: number | string;
   let params: unknown;
