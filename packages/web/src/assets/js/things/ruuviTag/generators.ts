@@ -67,7 +67,7 @@ JavaScript['ruuviTag_event'] = function (block: Block) {
     '}',
   ]);
 
-  const handler = `await things.get(${thing}).subscribeEvent('UART data', ${eventHandler});`;
+  const handler = `await things.get(${thing}).subscribeEvent('UART data', ${eventHandler});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;

@@ -5,6 +5,8 @@ import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
 const device = await HidHelpers.selectDevice();
 const thing = await createThing(StreamDeckMini, device.path);
 
+console.log("Device connected. Input events will be logged here.")
+
 thing.writeProperty('brightness', 100);
 
 // Array of booleans to track the state of each key

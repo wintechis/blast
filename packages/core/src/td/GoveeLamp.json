@@ -18,7 +18,7 @@
       "scheme": "nosec"
     }
   },
-  "@type": ["tm:ThingModel"],
+  "@type": "",
   "security": [
     "nosec_sc"
   ],

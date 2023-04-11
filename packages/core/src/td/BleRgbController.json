@@ -10,7 +10,7 @@
     },
     {"@language": "en"}
   ],
-  "@type": ["tm:ThingModel"],
+  "@type": "",
   "title": "BLE RGB Controller",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description":

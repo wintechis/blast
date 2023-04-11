@@ -15,6 +15,7 @@ const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client-factory');
 
 export default class BluetoothClientFactory implements ProtocolClientFactory {
   public readonly scheme: string = 'gatt';
+  private readonly clients: Set<ProtocolClient> = new Set();
   public contentSerdes: ContentSerdes = ContentSerdes.get();
   adapter: BluetoothAdapter;
 
@@ -25,9 +26,16 @@ export default class BluetoothClientFactory implements ProtocolClientFactory {
 
   public getClient(): ProtocolClient {
     debug(`Creating client for ${this.scheme}`);
-    return new BluetoothClient(this.adapter);
+    const client = new BluetoothClient(this.adapter);
+    this.clients.add(client);
+    return client;
+  }
+
+  public destroy(): boolean {
+    debug(`stopping all clients for '${this.scheme}'`);
+    this.clients.forEach(client => client.stop());
+    return true;
   }
 
   public init = (): boolean => true;
-  public destroy = (): boolean => true;
 }

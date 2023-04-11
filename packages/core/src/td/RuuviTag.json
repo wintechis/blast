@@ -12,7 +12,7 @@
       "@language": "en"
     }
   ],
-  "@type": ["tm:ThingModel"],
+  "@type": "",
   "id": "blast:Bluetooth:RuuviTag",
   "title": "Ruuvi Tag",
   "base": "gatt://{{MacOrWebBluetoothId}}/",

@@ -7,7 +7,7 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {StreamDeckWeb as StreamDeck} from '@elgato-stream-deck/webhid';
-import {addCleanUpFunction, getWorkspace} from '../../interpreter';
+import {getWorkspace} from '../../interpreter';
 import {getThingsLog, getWebHidDevice} from '../../things.js';
 
 const thingsLog = getThingsLog();
@@ -19,110 +19,59 @@ const thingsLog = getThingsLog();
  */
 JavaScript['things_streamdeck'] = function (block: Block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
+  const name = JavaScript.quote_(block.getFieldValue('name'));
+
+  JavaScript.imports_['core'] =
+    "const blastCore = await import('../../assets/blast/blast.web.js');";
+  JavaScript.imports_['tds'] =
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+
+  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.definitions_['StreamDeckMini'] =
+    'const {StreamDeckMini} = blastTds;';
+  JavaScript.definitions_['things'] = 'const things = new Map();';
+  JavaScript.definitions_[
+    'things' + name
+  ] = `things.set(${name}, await createThing(StreamDeckMini, ${id}));`;
+
+  return [name, JavaScript.ORDER_NONE];
 };
 
 /**
  * Generates JavaScript code for the streamdeck_button_event block.
  */
 JavaScript['streamdeck_button_event'] = function (block: Block): string {
-  const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
-  const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
-  const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
-  const button4 = block.getFieldValue('button4') === 'TRUE' ? 1 : 0;
-  const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
-  const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
-  const upDown = JavaScript.quote_(block.getFieldValue('upDown'));
-  const id =
+  const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.statementToCode(block, 'statements');
+  const button1Name = block.getFieldValue('button1');
+  const button2Name = block.getFieldValue('button2');
+  const button3Name = block.getFieldValue('button3');
+  const button4Name = block.getFieldValue('button4');
+  const button5Name = block.getFieldValue('button5');
+  const button6Name = block.getFieldValue('button6');
 
-  const buttons = JavaScript.quote_(
-    `${button1}${button2}${button3}${button4}${button5}${button6}`
-  );
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
+  const eventHandler = JavaScript.provideFunction_('streamdeckHandler', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(interactionOutput) {',
+    '    const keyData = await interactionOutput.value();',
+    `    ${button1Name} = keyData[0];`,
+    `    ${button2Name} = keyData[1];`,
+    `    ${button3Name} = keyData[2];`,
+    `    ${button4Name} = keyData[3];`,
+    `    ${button5Name} = keyData[4];`,
+    `    ${button6Name} = keyData[5];`,
+    `    ${statements.replace(/`/g, '\\`')}`,
+    '}',
+  ]);
 
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-
-  const handler = `handleStreamdeck(${blockId}, ${id}, ${buttons}, ${upDown}, ${statements});\n`;
+  const handler = `await things.get(${thing}).subscribeEvent('inputreport', ${eventHandler});\n`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
   return '';
-};
-
-/**
- * Handles button pushes on an elGato Stream Deck
- */
-(globalThis as any)['handleStreamdeck'] = async function (
-  blockId: string,
-  id: string,
-  buttons: string,
-  upDown: string,
-  statements: string
-) {
-  // If no things block is attached, return.
-  if (id === null) {
-    console.error('No streamdeck block set.');
-    return;
-  }
-
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    console.error(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    return;
-  }
-
-  const block = getWorkspace()?.getBlockById(blockId);
-  const streamdeck = (block as any).thing;
-
-  if (!streamdeck) {
-    console.error('Streamdeck not connected.');
-    return;
-  }
-
-  if (!streamdeck.device.device.device.opened) {
-    await streamdeck.device.device.device.open();
-  }
-
-  let button: number | undefined = undefined;
-  for (let i = 0; i < buttons.length; i++) {
-    if (buttons.charAt(i) === '1') {
-      button = i;
-      break;
-    }
-  }
-
-  if (button === undefined) {
-    return;
-  }
-
-  streamdeck.on(upDown, async (keyIndex: number) => {
-    thingsLog(
-      `Received <code>${upDown}</code> event on button <code>${keyIndex}</code>`,
-      'hid',
-      device.productName
-    );
-    if (keyIndex === button) {
-      eval(`(async () => {${statements}})();`);
-    }
-  });
-
-  addCleanUpFunction(() => {
-    if (streamdeck?.device?.device?.device?.opened) {
-      thingsLog('Removing all listeners', 'hid', device.productName);
-      streamdeck.close();
-      streamdeck.removeAllListeners();
-    }
-  });
 };
 
 /**

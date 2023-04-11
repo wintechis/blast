@@ -17,10 +17,12 @@ const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
 
 export default class WebBluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
+  subscriptions: Subscription[];
 
   constructor(bluetoothAdapter: BluetoothAdapter) {
     debug('created client');
     this.bluetoothAdapter = bluetoothAdapter;
+    this.subscriptions = [];
   }
 
   public toString(): string {
@@ -175,7 +177,7 @@ export default class WebBluetoothClient implements ProtocolClient {
 
       await characteristic.startNotifications();
 
-      return new Subscription(() => {
+      const subscription = new Subscription(() => {
         characteristic.removeEventListener(
           'characteristicvaluechanged',
           handler
@@ -186,6 +188,8 @@ export default class WebBluetoothClient implements ProtocolClient {
           handler
         );
       });
+      this.subscriptions.push(subscription);
+      return subscription;
     } catch (err) {
       if (error) {
         error(err as Error);
@@ -199,7 +203,9 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public async stop(): Promise<void> {
-    // do nothing
+    debug('Stopping client');
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions = [];
   }
 
   public setSecurity(): boolean {

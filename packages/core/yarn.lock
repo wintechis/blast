@@ -274,6 +274,7 @@ __metadata:
     "@types/node": latest
     "@types/node-hid": ^1.3.1
     "@types/uritemplate": ^0.3.4
+    "@types/uuid": ^9.0.1
     "@types/w3c-web-hid": ^1.0.3
     "@types/web-bluetooth": ^0.0.14
     "@typescript-eslint/eslint-plugin": ^5.14.0
@@ -305,6 +306,7 @@ __metadata:
     ts-loader: ^9.4.1
     typescript: ^4.7.4
     uritemplate: ^0.3.4
+    uuid: ^9.0.0
     web-bluetooth-mock: "https://github.com/derwehr/web-bluetooth-mock"
     webpack: ^5.76.3
     webpack-cli: ^4.10.0
@@ -726,6 +728,13 @@ __metadata:
   version: 0.3.4
   resolution: "@types/uritemplate@npm:0.3.4"
   checksum: 558be9b39a9c902d98f16694cb46b7b98e9544fc175de49b52431a5805e586134e170ec8561a8444a75334c25bb3388ecd23b64874676f80d4b9d6cdca0f45b7
+  languageName: node
+  linkType: hard
+
+"@types/uuid@npm:^9.0.1":
+  version: 9.0.1
+  resolution: "@types/uuid@npm:9.0.1"
+  checksum: c472b8a77cbeded4bc529220b8611afa39bd64677f507838f8083d8aac8033b1f88cb9ddaa2f8589e0dcd2317291d0f6e1379f82d5ceebd6f74f3b4825288e00
   languageName: node
   linkType: hard
 
@@ -7047,6 +7056,15 @@ __metadata:
   bin:
     uuid: dist/bin/uuid
   checksum: 5575a8a75c13120e2f10e6ddc801b2c7ed7d8f3c8ac22c7ed0c7b2ba6383ec0abda88c905085d630e251719e0777045ae3236f04c812184b7c765f63a70e58df
+  languageName: node
+  linkType: hard
+
+"uuid@npm:^9.0.0":
+  version: 9.0.0
+  resolution: "uuid@npm:9.0.0"
+  bin:
+    uuid: dist/bin/uuid
+  checksum: 8dd2c83c43ddc7e1c71e36b60aea40030a6505139af6bee0f382ebcd1a56f6cd3028f7f06ffb07f8cf6ced320b76aea275284b224b002b289f89fe89c389b028
   languageName: node
   linkType: hard
 

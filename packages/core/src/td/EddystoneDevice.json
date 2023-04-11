@@ -2,7 +2,7 @@
   "@context": [
     "https://www.w3.org/2019/wot/td/v1"
   ],
-  "@type": ["tm:ThingModel"],
+  "@type": "",
   "id": "blast:bluetooth:EddystoneDevice",
   "title": "Eddystone Device",
   "base": "gatt://{{MacOrWebBluetoothId}}/",

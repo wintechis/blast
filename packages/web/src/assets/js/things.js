@@ -484,18 +484,17 @@ export const connectWebHidDevice = async function (thing) {
   if (thing.filters) {
     filters = thing.filters;
   }
-  const device = await navigator.hid.requestDevice({filters: filters});
+  const device = await navigator.hid.requestDeviceAndAddId({
+    filters: filters,
+  });
   if (device.length === 0) {
     console.error('Connection failed or cancelled by User.');
     return;
   }
-  // generate a unique id for the new device
-  const uid = Date.now().toString(36) + Math.random().toString(36).substring(2);
-  // add device to the device map with its uid
-  addWebHidDevice(uid, device[0].productName, device[0], thing);
+  // add device to the device map
+  addWebHidDevice(device[0].id, device[0].productName, device[0], thing);
   workspace.refreshToolboxSelection();
   thingsLog('Connected', 'HID', device[0].productName);
-  device.id = uid;
   return device;
 };
 

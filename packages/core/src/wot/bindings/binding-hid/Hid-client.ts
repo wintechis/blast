@@ -18,10 +18,12 @@ const {debug} = createLoggers('binding-hid', 'hid-client');
 
 export default class HidClient implements ProtocolClient {
   hidAdapter: HidAdapter;
+  subscriptions: Subscription[];
 
   constructor(hidAdapter: HidAdapter) {
     debug('created client');
     this.hidAdapter = hidAdapter;
+    this.subscriptions = [];
   }
 
   public toString(): string {
@@ -146,9 +148,12 @@ export default class HidClient implements ProtocolClient {
 
     device.addEventListener('inputreport', handler);
 
-    return new Subscription(() => {
+    const subscription = new Subscription(() => {
+      debug("Removing 'inputreport' listener from device: ${id}");
       device.removeEventListener('inputreport', handler);
     });
+    this.subscriptions.push(subscription);
+    return subscription;
   }
 
   public async start(): Promise<void> {
@@ -156,7 +161,9 @@ export default class HidClient implements ProtocolClient {
   }
 
   public async stop(): Promise<void> {
-    // do nothing
+    debug('Stopping client');
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
+    this.subscriptions = [];
   }
 
   public setSecurity(

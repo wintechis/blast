@@ -4,7 +4,6 @@
  */
 
 import 'buffer';
-import {dialog} from 'blockly';
 import {addCleanUpFunction, getWorkspace} from './interpreter.ts';
 import {addWebBluetoothDevice, getThingsLog} from './things.js';
 
@@ -19,48 +18,6 @@ export const blocksRequiringScan = [];
  * @private
  */
 const eventListeners = [];
-
-/**
- * Stores all characteristic event listeners, so they can be removed later.
- * Events are stores in an object with the characteristic UUID as key,
- * and a triple of characteristic, event and handler as value.
- * @private
- */
-let charEventListeners = {};
-
-/**
- * Convert a hex string to an ArrayBuffer.
- *
- * @param {string} hexString - hex representation of bytes
- * @return {ArrayBuffer} - The bytes in an ArrayBuffer.
- */
-const hexStringToArrayBuffer = function (hexString) {
-  // remove the leading 0x
-  hexString = hexString.replace(/^0x/, '');
-
-  // ensure even number of characters
-  if (hexString.length % 2 !== 0) {
-    hexString = '0' + hexString;
-  }
-
-  // check for some non-hex characters
-  const bad = hexString.match(/[G-Z\s]/i);
-  if (bad) {
-    console.log('WARNING: found non-hex characters', bad);
-  }
-
-  // split the string into pairs of octets
-  const pairs = hexString.match(/[\dA-F]{2}/gi);
-
-  // convert the octets to integers
-  const integers = pairs.map(s => {
-    return parseInt(s, 16);
-  });
-
-  const array = new Uint8Array(integers);
-
-  return array.buffer;
-};
 
 /**
  * Pairs a Bluetooth device.
@@ -197,18 +154,6 @@ const tearDown = async function () {
     }
     // Reset event listeners.
     eventListeners.length = 0;
-  }
-  if (charEventListeners) {
-    for (const characteristicUUID of Object.keys(charEventListeners)) {
-      const triple = charEventListeners[characteristicUUID];
-      const characteristic = triple[0];
-      const event = triple[1];
-      const handler = triple[2];
-      characteristic.stopNotifications();
-      characteristic.removeEventListener(event, handler);
-    }
-    // Reset event listeners.
-    charEventListeners = {};
   }
 };
 addCleanUpFunction(tearDown);

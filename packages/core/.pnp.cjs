@@ -35,6 +35,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.9"],\
             ["@types/node-hid", "npm:1.3.1"],\
             ["@types/uritemplate", "npm:0.3.4"],\
+            ["@types/uuid", "npm:9.0.1"],\
             ["@types/w3c-web-hid", "npm:1.0.3"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
             ["@typescript-eslint/eslint-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.31.0"],\
@@ -66,6 +67,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-loader", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:9.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
+            ["uuid", "npm:9.0.0"],\
             ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
@@ -385,6 +387,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.9"],\
             ["@types/node-hid", "npm:1.3.1"],\
             ["@types/uritemplate", "npm:0.3.4"],\
+            ["@types/uuid", "npm:9.0.1"],\
             ["@types/w3c-web-hid", "npm:1.0.3"],\
             ["@types/web-bluetooth", "npm:0.0.14"],\
             ["@typescript-eslint/eslint-plugin", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.31.0"],\
@@ -416,6 +419,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["ts-loader", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:9.4.1"],\
             ["typescript", "patch:typescript@npm%3A4.7.4#~builtin<compat/typescript>::version=4.7.4&hash=65a307"],\
             ["uritemplate", "npm:0.3.4"],\
+            ["uuid", "npm:9.0.0"],\
             ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.76.3"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:4.10.0"],\
@@ -896,6 +900,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-uritemplate-npm-0.3.4-98d5fa3dcb-558be9b39a.zip/node_modules/@types/uritemplate/",\
           "packageDependencies": [\
             ["@types/uritemplate", "npm:0.3.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/uuid", [\
+        ["npm:9.0.1", {\
+          "packageLocation": "./.yarn/cache/@types-uuid-npm-9.0.1-b44e45eb8a-c472b8a77c.zip/node_modules/@types/uuid/",\
+          "packageDependencies": [\
+            ["@types/uuid", "npm:9.0.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -8335,6 +8348,13 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/uuid-npm-8.3.2-eca0baba53-5575a8a75c.zip/node_modules/uuid/",\
           "packageDependencies": [\
             ["uuid", "npm:8.3.2"]\
+          ],\
+          "linkType": "HARD"\
+        }],\
+        ["npm:9.0.0", {\
+          "packageLocation": "./.yarn/cache/uuid-npm-9.0.0-46c41e3e43-8dd2c83c43.zip/node_modules/uuid/",\
+          "packageDependencies": [\
+            ["uuid", "npm:9.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\

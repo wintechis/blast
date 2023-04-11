@@ -28,7 +28,7 @@ import './solid/generators.ts';
 import './sphero/blocks.js';
 import './sphero/generators.ts';
 
-import './streamdeck/blocks.js';
+import './streamdeck/blocks.ts';
 import './streamdeck/generators.ts';
 
 import './text2code/blocks.js';

@@ -10,7 +10,7 @@
       "@language": "en"
     }
   ],
-  "@type": ["tm:ThingModel"],
+  "@type": "",
   "id": "blast:bluetooth:BluetoothGeneric",
   "title": "Genereic Bluetooth device",
   "base": "gatt://{{MacOrWebBluetoothId}}/",

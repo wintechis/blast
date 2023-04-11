@@ -42,9 +42,13 @@ const getWot = async function (
 
 export const resetServient = async function (): Promise<void> {
   if (servient) {
+    // destroy exposed things
     const things = servient.getThings();
-    Object.entries(things).forEach(([id]) => {
-      servient.destroyThing(id);
+    Object.entries(things).forEach(async ([id]) => {
+      const thing = servient.getThing(id);
+      if (thing) {
+        await thing.destroy();
+      }
     });
     await servient.shutdown();
   }
@@ -64,7 +68,12 @@ export const createThing = async function (
     td = fillPlaceholder(td, map);
   }
   const wotServient = await getWot();
-  return wotServient.consume(td);
+  const exposedThing = await wotServient.produce(td);
+  await exposedThing.expose();
+  const consumedThing = await wotServient.consume(
+    exposedThing.getThingDescription()
+  );
+  return consumedThing;
 };
 
 const fillPlaceholder = function (
