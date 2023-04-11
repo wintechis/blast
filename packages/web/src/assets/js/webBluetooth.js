@@ -70,28 +70,6 @@ export const getDeviceById = async function (id) {
 };
 
 /**
- * Sends a connect command.
- * @param {BluetoothDevice.id} id identifier of the device to connect to.
- * @return {Promise<Object>} representation of the complete request with response.
- */
-const connect = async function (id) {
-  try {
-    const device = await getDeviceById(id);
-    if (!device) {
-      return;
-    }
-    const thingsLog = getThingsLog();
-    thingsLog(`Connecting to <code>${id}</code>`, 'Bluetooth');
-    const request = await device.gatt.connect();
-    thingsLog('Connected', 'Bluetooth', id);
-    return request;
-  } catch (error) {
-    console.error(`Error connecting to Bluetooth device ${id}`);
-    console.error(error);
-  }
-};
-
-/**
  * Sends a disconnect command.
  * @param {BluetoothDevice.id} id identifier of the device to disconnect from.
  * @param {number} sleep time in ms to wait after command, defaults to 0.
@@ -110,16 +88,6 @@ const disconnect = async function (id) {
     console.error(`Error disconnecting from Bluetooth device ${id}`);
     console.error(error);
   }
-};
-
-/**
- * Adds a webBluetooth eventListener.
- * @param {string} event the event to add the listener to.
- * @param {Function} listener the listener to add.
- */
-const addEventListener = function (event, listener) {
-  eventListeners.push([event, listener]);
-  navigator.bluetooth.addEventListener(event, listener);
 };
 
 /**

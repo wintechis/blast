@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {HidAdapter} from './HidAdapter';
 import {Device, devices, HID} from 'node-hid';
 import {createLoggers} from '@node-wot/core';
@@ -59,7 +60,7 @@ export default class ConcreteHidAdapter implements HidAdapter {
         listener:
           | EventListenerOrEventListenerObject
           | null
-          | ((this: HIDDevice, ev: HIDInputReportEvent) => any),
+          | ((this: HIDDevice, ev: HIDInputReportEvent) => unknown),
         options?: boolean | AddEventListenerOptions
       ) => {
         // Not implemented in node-hid
@@ -69,7 +70,7 @@ export default class ConcreteHidAdapter implements HidAdapter {
         listener:
           | EventListenerOrEventListenerObject
           | null
-          | ((this: HIDDevice, ev: HIDInputReportEvent) => any)
+          | ((this: HIDDevice, ev: HIDInputReportEvent) => unknown)
       ) => {
         // Not implemented in node-hid
         // will be overwritten after creating the HIDDevice,

@@ -4,6 +4,8 @@
  */
 
 import {Blocks, Events, FieldTextInput, Names} from 'blockly';
+import { BlockBase } from 'blockly/core/events/events_block_base';
+import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
@@ -70,8 +72,11 @@ Blocks['xiaomiThermometer_event'] = {
   addEvent: function () {
     eventsInWorkspace.push(this.id);
     // add change listener to remove block from events array when deleted.
-    this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
-      if (e.type === Events.BLOCK_DELETE && (e as any).ids.includes(this.id)) {
+    this.changeListener = getWorkspace()?.addChangeListener((e: BlockBase) => {
+      if (
+        e.type === Events.BLOCK_DELETE &&
+        (e as BlockDelete).ids?.includes(this.id)
+      ) {
         this.removeFromEvents();
       }
     });

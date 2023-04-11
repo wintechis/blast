@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /**
  * @fileoverview Hid bindings for eclipse/thingweb.node-wot
  */

@@ -258,9 +258,7 @@ function fillStringPattern(schema: DataSchema, dataValue: any) {
   //Fill in pattern
   const template = UriTemplate.parse(schema['bdo:pattern']);
   // replace dataValue object with filled in pattern
-  dataValue = template.expand(dataValue);
-
-  return dataValue;
+  return template.expand(dataValue);
 }
 
 /**
