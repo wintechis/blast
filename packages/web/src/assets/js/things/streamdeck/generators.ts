@@ -84,22 +84,106 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
   const button4 = block.getFieldValue('button4') === 'TRUE' ? 1 : 0;
   const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
   const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
-  const color =
+  const colour =
     JavaScript.valueToCode(block, 'color', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');
-  const id =
+  const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
   const buttons = JavaScript.quote_(
     `${button1}${button2}${button3}${button4}${button5}${button6}`
   );
 
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
+  JavaScript.provideFunction_('writeBMPHeader', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(dataView, iconSize, iconBytes, imagePPM) {',
+    '  dataView.setUint8(0, 66); // BM',
+    '  dataView.setUint8(1, 77); // BM',
+    '  dataView.setUint32(2, 54 + iconBytes, true);',
+    '  dataView.setUint32(6, 0, true);',
+    '  dataView.setUint32(8, 0, true);',
+    '  dataView.setUint32(10, 54, true);',
+    '  // DIB header BITMAPINFOHEADER',
+    '  dataView.setUint32(14, 40, true); // DIB header size:',
+    '  dataView.setInt32(18, iconSize, true);',
+    '  dataView.setInt32(22, iconSize, true);',
+    '  dataView.setInt16(26, 1, true); // Color planes',
+    '  dataView.setInt16(28, 24, true); // Bit depth',
+    '  dataView.setInt32(30, 0, true); // Compression',
+    '  dataView.setInt32(34, iconBytes, true); // Image size',
+    '  dataView.setInt32(38, imagePPM, true); // Horizontal resolution ppm',
+    '  dataView.setInt32(42, imagePPM, true); // Vertical resolution ppm',
+    '  dataView.setInt32(46, 0, true); // Colour pallette size',
+    '  dataView.setInt32(50, 0, true); // "Important" Colour count',
+    '  return dataView;',
+    '}',
+  ]);
 
-  const code = `await streamdeckColorButtons(${blockId}, ${id}, ${buttons}, ${color});\n`;
+  JavaScript.provideFunction_('generateWrites', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(keyIndex, dataView) {',
+    '  const MAX_PACKET_SIZE = 1024;',
+    '  const PACKET_HEADER_LENGTH = 16;',
+    '  const MAX_PAYLOAD_SIZE = MAX_PACKET_SIZE - PACKET_HEADER_LENGTH;',
+    '',
+    '  const result = [];',
+    '',
+    '  let remainingBytes = dataView.byteLength;',
+    '  for (let part = 0; remainingBytes > 0; part++) {',
+    '    const packet = new DataView(new ArrayBuffer(MAX_PACKET_SIZE));',
+    '',
+    '    const byteCount = remainingBytes < MAX_PAYLOAD_SIZE ? remainingBytes : MAX_PAYLOAD_SIZE;',
+    '    writeCommandHeader(packet, keyIndex, part, remainingBytes <= MAX_PAYLOAD_SIZE, byteCount);',
+    '',
+    '    const byteOffset = dataView.byteLength - remainingBytes;',
+    '    remainingBytes -= byteCount;',
+    '    for (let i = 0; i < byteCount; i++) {',
+    '      packet.setUint8(i + PACKET_HEADER_LENGTH, dataView.getUint8(byteOffset + i));',
+    '    }',
+    '',
+    '    result.push(packet);',
+    '  }',
+    '',
+    '  return result;',
+    '}',
+  ]);
+
+  JavaScript.provideFunction_('writeCommandHeader', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(dataView, keyIndex, partIndex, isLast) {',
+    '  dataView.setUint8(0, 2);',
+    '  dataView.setUint8(1, 1);',
+    '  dataView.setUint16(2, partIndex, true);',
+    '  // 3 = 0x00',
+    '  dataView.setUint8(4, isLast ? 1 : 0);',
+    '  dataView.setUint8(5, keyIndex + 1);',
+    '}',
+  ]);
+
+  const r = parseInt(colour.slice(2, 4), 16);
+  const g = parseInt(colour.slice(4, 6), 16);
+  const b = parseInt(colour.slice(6, 8), 16);
+
+  let code =
+    'const pixels = new DataView(new ArrayBuffer(54 + 80 * 80 * 3));\n';
+  code += 'for (let i = 0; i < 54 + 80 * 80 * 3; i += 3) {\n';
+  code += `  pixels.setUint8(i, ${b});\n`;
+  code += `  pixels.setUint8(i + 1, ${g});\n`;
+  code += `  pixels.setUint8(i + 2, ${r});\n`;
+  code += '}\n';
+
+  code += 'let data = writeBMPHeader(pixels, 80, 80, 2835);\n';
+  for (let i = 0; i < 6; i++) {
+    if (buttons[i] === '1') {
+      code += `const buffers = generateWrites(${i}, data);\n`;
+      code += 'for (const data of buffers) {\n';
+      code += `  await things.get(${name}).invokeAction('sendReport', new Uint8Array(data.buffer));\n`;
+      code += '}\n';
+    }
+  }
   return code;
 };
 

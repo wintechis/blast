@@ -119,11 +119,10 @@
   },
   "actions": {
     "sendReport": {
-      "type": "array",
+      "type": "null",
       "description": "Sends an output report to the HID device.",
       "input": {
-        "type": "string",
-        "format": "hex"
+        "type": "array"
       },
       "forms": [
         {
