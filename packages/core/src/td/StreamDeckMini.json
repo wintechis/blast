@@ -116,5 +116,22 @@
         }
       ]
     }
+  },
+  "actions": {
+    "sendReport": {
+      "type": "array",
+      "description": "Sends an output report to the HID device.",
+      "input": {
+        "type": "string",
+        "format": "hex"
+      },
+      "forms": [
+        {
+          "href": "hid://sendReport",
+          "hid:path": "{{HIDPATH}}",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    }
   }
 }

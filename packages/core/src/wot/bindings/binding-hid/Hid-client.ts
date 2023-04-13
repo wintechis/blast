@@ -80,31 +80,52 @@ export default class HidClient implements ProtocolClient {
       throw new Error(`Device ${id} not found`);
     }
 
+    const methodName = form.href.split('://')[1].split('/')[0];
+
     const buf = await content.toBuffer();
 
-    let value;
-    if (form['signed']) {
-      value = new Int8Array(buf)[buf.length - 1];
-    } else {
-      value = new Uint8Array(buf)[buf.length - 1];
-    }
-
-    let data: number[] = [];
+    let data;
     if (form['hid:data'] !== undefined) {
       data = form['hid:data'];
+      let value: number;
+      if (form['signed']) {
+        value = new Int8Array(buf)[buf.length - 1];
+      } else {
+        value = new Uint8Array(buf)[buf.length - 1];
+      }
       if (form['hid:valueIndex'] !== undefined) {
         data[form['hid:valueIndex']] = value;
       }
+    } else {
+      data = buf;
     }
 
     const reportId = form['hid:reportId'] || data[0];
 
-    debug(`Sending feature report: ${reportId} ${data}`);
-    device.sendFeatureReport(reportId, Buffer.from(data));
+    if (methodName === 'sendFeatureReport') {
+      debug(`Sending feature report: ${reportId} ${data}`);
+      device.sendFeatureReport(reportId, Buffer.from(data));
+    } else if (methodName === 'sendReport') {
+      debug(`Sending report: ${reportId} ${data}`);
+      device.sendReport(reportId, Buffer.from(data));
+    } else {
+      throw new Error(`Method ${methodName} is not supported`);
+    }
   }
 
-  public invokeResource(form: Form, content: Content): Promise<Content> {
-    throw new Error('not implemented');
+  public async invokeResource(
+    form: HidForm,
+    content: Content
+  ): Promise<Content> {
+    await this.writeResource(form, content);
+    return new Promise((resolve, reject) => {
+      resolve(
+        new Content(
+          form.contentType || 'application/octet-stream',
+          Readable.from([])
+        )
+      );
+    });
   }
 
   public unlinkResource(form: Form): Promise<void> {
