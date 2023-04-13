@@ -38,7 +38,6 @@ thing.subscribeEvent('inputreport', handleInputBuffer);
 
 
 
-// Set the color of a key
 const writeBMPHeader = function (buf, iconSize, iconBytes, imagePPM) {
   buf.write('BM');
   buf.writeUInt32LE(54 + iconBytes, 2);
@@ -101,10 +100,10 @@ const keyIndex = 0;
 const r = 255;
 const g = 0;
 const b = 0;
-const pixels = Buffer.alloc(54 * 80 * 80 * 3, Buffer.from([r, g, b]));
+const pixels = Buffer.alloc(54 + 80 * 80 * 3, Buffer.from([b, g, r]));
 writeBMPHeader(pixels, 80, 80, 2835);
 
-const buffers = generateWrites(keyIndex, byteBuffer);
+const buffers = generateWrites(keyIndex, pixels);
 
 for (const data of buffers) {
   await thing.invokeAction('sendReport', data.toString('hex'));
