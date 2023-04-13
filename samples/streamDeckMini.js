@@ -38,32 +38,7 @@ thing.subscribeEvent('inputreport', handleInputBuffer);
 
 
 
-
-const convertFillImage = async function (sourceBuffer, sourceOptions) {
-  const padding = 54;
-  const imageHeight = 80;
-
-  const byteBuffer = Buffer.alloc(padding + imageHeight * imageHeight * 3);
-
-  for (let y = 0; y < imageHeight; y++) {
-    const rowOffset = padding + y * imageHeight * 3;
-    for (let x = 0; x < imageHeight; x++) {
-      const srcOffset = y * sourceOptions.stride + sourceOptions.offset + x * 3;
-
-      const red = sourceBuffer.readUInt8(srcOffset);
-      const green = sourceBuffer.readUInt8(srcOffset + 1);
-      const blue = sourceBuffer.readUInt8(srcOffset + 2);
-
-      const targetOffset = rowOffset + x * 3;
-      byteBuffer.writeUInt8(blue, targetOffset);
-      byteBuffer.writeUInt8(green, targetOffset + 1);
-      byteBuffer.writeUInt8(red, targetOffset + 2);
-    }
-  }
-  writeBMPHeader(byteBuffer, 80, 80, 2835);
-  return Promise.resolve(byteBuffer);
-};
-
+// Set the color of a key
 const writeBMPHeader = function (buf, iconSize, iconBytes, imagePPM) {
   buf.write('BM');
   buf.writeUInt32LE(54 + iconBytes, 2);
@@ -126,14 +101,8 @@ const keyIndex = 0;
 const r = 255;
 const g = 0;
 const b = 0;
-const pixels = Buffer.alloc(3 * 80 * 80, Buffer.from([r, g, b]));
-
-const sourceOptions = {
-  format: 'rgb',
-  offset: 0,
-  stride: 80 * 3,
-};
-const byteBuffer = await convertFillImage(pixels, sourceOptions);
+const pixels = Buffer.alloc(54 * 80 * 80 * 3, Buffer.from([r, g, b]));
+writeBMPHeader(pixels, 80, 80, 2835);
 
 const buffers = generateWrites(keyIndex, byteBuffer);
 
