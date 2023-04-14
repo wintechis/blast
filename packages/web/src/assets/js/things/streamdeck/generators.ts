@@ -92,7 +92,7 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
 
   const buttons = [button1, button2, button3, button4, button5, button6];
 
-  JavaScript.provideFunction_('writeBMPHeader', [
+  const writeBMPHeader = JavaScript.provideFunction_('writeBMPHeader', [
     'function ' +
       JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
       '(dataView, iconSize, iconBytes, imagePPM) {',
@@ -115,10 +115,23 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
     '  dataView.setInt32(46, 0, true); // Colour pallette size',
     '  dataView.setInt32(50, 0, true); // "Important" Colour count',
     '  return dataView;',
-    '}',
+    '}\n',
   ]);
 
-  JavaScript.provideFunction_('generateWrites', [
+  const writeCommandHeader = JavaScript.provideFunction_('writeCommandHeader', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(dataView, keyIndex, partIndex, isLast) {',
+    '  dataView.setUint8(0, 2);',
+    '  dataView.setUint8(1, 1);',
+    '  dataView.setUint16(2, partIndex, true);',
+    '  // 3 = 0x00',
+    '  dataView.setUint8(4, isLast ? 1 : 0);',
+    '  dataView.setUint8(5, keyIndex + 1);',
+    '}\n',
+  ]);
+
+  const generateWrites = JavaScript.provideFunction_('generateWrites', [
     'function ' +
       JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
       '(keyIndex, dataView) {',
@@ -133,7 +146,7 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
     '    const packet = new DataView(new ArrayBuffer(MAX_PACKET_SIZE));',
     '',
     '    const byteCount = remainingBytes < MAX_PAYLOAD_SIZE ? remainingBytes : MAX_PAYLOAD_SIZE;',
-    '    writeCommandHeader(packet, keyIndex, part, remainingBytes <= MAX_PAYLOAD_SIZE, byteCount);',
+    `    ${writeCommandHeader}(packet, keyIndex, part, remainingBytes <= MAX_PAYLOAD_SIZE, byteCount);`,
     '',
     '    const byteOffset = dataView.byteLength - remainingBytes;',
     '    remainingBytes -= byteCount;',
@@ -145,20 +158,7 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
     '  }',
     '',
     '  return result;',
-    '}',
-  ]);
-
-  JavaScript.provideFunction_('writeCommandHeader', [
-    'function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(dataView, keyIndex, partIndex, isLast) {',
-    '  dataView.setUint8(0, 2);',
-    '  dataView.setUint8(1, 1);',
-    '  dataView.setUint16(2, partIndex, true);',
-    '  // 3 = 0x00',
-    '  dataView.setUint8(4, isLast ? 1 : 0);',
-    '  dataView.setUint8(5, keyIndex + 1);',
-    '}',
+    '}\n',
   ]);
 
   const r = parseInt(colour.slice(2, 4), 16);
@@ -173,10 +173,10 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
   code += `  pixels.setUint8(i + 2, ${r});\n`;
   code += '}\n';
 
-  code += 'let data = writeBMPHeader(pixels, 80, 80, 2835);\n';
+  code += `let data = ${writeBMPHeader}(pixels, 80, 80, 2835);\n`;
   for (let i = 0; i < 6; i++) {
     if (buttons[i] === 1) {
-      code += `const buffers = generateWrites(${i}, data);\n`;
+      code += `const buffers = ${generateWrites}(${i}, data);\n`;
       code += 'for (const data of buffers) {\n';
       code += '  const buf = [...new Uint8Array(data.buffer)]\n';
       code +=
@@ -186,61 +186,6 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
     }
   }
   return code;
-};
-
-/**
- * Fills the buttons of a Stream Deck with a color.
- */
-(globalThis as any)['streamdeckColorButtons'] = async function (
-  blockId: string,
-  id: string,
-  buttons: string,
-  color: string
-) {
-  // If no things block is attached, return.
-  if (id === null) {
-    console.error('No streamdeck block set.');
-    return;
-  }
-
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    console.error(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    return;
-  }
-
-  const block = getWorkspace()?.getBlockById(blockId);
-  const streamdeck = (block as any).thing;
-
-  // convert color to rgb
-  const red = parseInt(color.substring(1, 3), 16);
-  const green = parseInt(color.substring(3, 5), 16);
-  const blue = parseInt(color.substring(5, 7), 16);
-
-  // fill selected buttons with color
-  for (let i = 0; i < buttons.length; i++) {
-    if (buttons.charAt(i) === '1') {
-      thingsLog(
-        `Invoke <code>fillKeyColor</code> with value <code>${[
-          i,
-          red,
-          green,
-          blue,
-        ].toString()}</code>`,
-        'hid',
-        device.productName
-      );
-      await streamdeck.fillKeyColor(i, red, green, blue);
-      thingsLog(
-        'Finished <code>fillKeyColor</code>',
-        'hid',
-        device.productName
-      );
-    }
-  }
 };
 
 /**
@@ -254,144 +199,151 @@ JavaScript['streamdeck_write_on_buttons'] = function (block: Block): string {
   const button5 = block.getFieldValue('button5') === 'TRUE' ? 1 : 0;
   const button6 = block.getFieldValue('button6') === 'TRUE' ? 1 : 0;
   const value =
-    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
-    JavaScript.quote_('');
-  const id =
+    JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || '';
+  const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-  const buttons = JavaScript.quote_(
-    `${button1}${button2}${button3}${button4}${button5}${button6}`
-  );
+  const buttons = [button1, button2, button3, button4, button5, button6];
 
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
+  const writeBMPHeader = JavaScript.provideFunction_('writeBMPHeader', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(dataView, iconSize, iconBytes, imagePPM) {',
+    '  dataView.setUint8(0, 66); // BM',
+    '  dataView.setUint8(1, 77); // BM',
+    '  dataView.setUint32(2, 54 + iconBytes, true);',
+    '  dataView.setUint32(6, 0, true);',
+    '  dataView.setUint32(8, 0, true);',
+    '  dataView.setUint32(10, 54, true);',
+    '  // DIB header BITMAPINFOHEADER',
+    '  dataView.setUint32(14, 40, true); // DIB header size:',
+    '  dataView.setInt32(18, iconSize, true);',
+    '  dataView.setInt32(22, iconSize, true);',
+    '  dataView.setInt16(26, 1, true); // Color planes',
+    '  dataView.setInt16(28, 24, true); // Bit depth',
+    '  dataView.setInt32(30, 0, true); // Compression',
+    '  dataView.setInt32(34, iconBytes, true); // Image size',
+    '  dataView.setInt32(38, imagePPM, true); // Horizontal resolution ppm',
+    '  dataView.setInt32(42, imagePPM, true); // Vertical resolution ppm',
+    '  dataView.setInt32(46, 0, true); // Colour pallette size',
+    '  dataView.setInt32(50, 0, true); // "Important" Colour count',
+    '  return dataView;',
+    '}\n',
+  ]);
 
-  const code = `await streamdeckWriteOnButtons(${blockId}, ${id}, ${buttons}, ${value});\n`;
-  return code;
-};
+  const writeCommandHeader = JavaScript.provideFunction_('writeCommandHeader', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(dataView, keyIndex, partIndex, isLast) {',
+    '  dataView.setUint8(0, 2);',
+    '  dataView.setUint8(1, 1);',
+    '  dataView.setUint16(2, partIndex, true);',
+    '  // 3 = 0x00',
+    '  dataView.setUint8(4, isLast ? 1 : 0);',
+    '  dataView.setUint8(5, keyIndex + 1);',
+    '}\n',
+  ]);
 
-/**
- * Displays a value on a Stream Deck's buttons.
- */
-(globalThis as any)['streamdeckWriteOnButtons'] = async function (
-  blockId: string,
-  id: string,
-  buttons: string,
-  value: string
-) {
-  // If no things block is attached, return.
-  if (id === null) {
-    console.error('No streamdeck block set.');
-    return;
-  }
+  const generateWrites = JavaScript.provideFunction_('generateWrites', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(keyIndex, dataView) {',
+    '  const MAX_PACKET_SIZE = 1024;',
+    '  const PACKET_HEADER_LENGTH = 16;',
+    '  const MAX_PAYLOAD_SIZE = MAX_PACKET_SIZE - PACKET_HEADER_LENGTH;',
+    '  const result = [];',
+    '  let remainingBytes = dataView.byteLength;',
+    '  for (let part = 0; remainingBytes > 0; part++) {',
+    '    const packet = new DataView(new ArrayBuffer(MAX_PACKET_SIZE));',
+    '    const byteCount = remainingBytes < MAX_PAYLOAD_SIZE ? remainingBytes : MAX_PAYLOAD_SIZE;',
+    `    ${writeCommandHeader}(packet, keyIndex, part, remainingBytes <= MAX_PAYLOAD_SIZE, byteCount);`,
+    '    const byteOffset = dataView.byteLength - remainingBytes;',
+    '    remainingBytes -= byteCount;',
+    '    for (let i = 0; i < byteCount; i++) {',
+    '      packet.setUint8(i + PACKET_HEADER_LENGTH, dataView.getUint8(byteOffset + i));',
+    '    }',
+    '    result.push(packet);',
+    '  }',
+    '  return result;',
+    '}\n',
+  ]);
 
-  const device = getWebHidDevice(id);
+  const convertFillImage = JavaScript.provideFunction_('convertFillImage', [
+    'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(dataView) {',
+    '  const byteBuffer = new ArrayBuffer(54 + 80 * 80 * 3);',
+    '  let targetBuffer = new DataView(byteBuffer);',
+    '  for (let y = 0; y < 80; y++) {',
+    '    const rowOffset = 54 + y * 80 * 3;',
+    '    for (let x = 0; x < 80; x++) {',
+    '      y2 = 79 - y;',
+    '      x2 = y2;',
+    '      y2 = x;',
+    '      const srcOffset = y2 * 80 * 4 + x2 * 4;',
+    '      const targetOffset = rowOffset + x * 3;',
+    '      targetBuffer.setUint8(targetOffset, dataView.getUint8(srcOffset+2));',
+    '      targetBuffer.setUint8(targetOffset + 1, dataView.getUint8(srcOffset + 1));',
+    '      targetBuffer.setUint8(targetOffset + 2, dataView.getUint8(srcOffset));',
+    '    }',
+    '  }',
+    `  targetBuffer = ${writeBMPHeader}(targetBuffer, 80, 80 * 80 * 3, 2835);`,
+    '  return targetBuffer;',
+    '}\n',
+  ]);
 
-  if (!device) {
-    console.error(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    return;
-  }
+  const fillImageRange = JavaScript.provideFunction_('fillImageRange', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(keyIndex, dataView) {',
+    `  const byteBuffer = ${convertFillImage}(dataView);`,
+    `  const packets = ${generateWrites}(keyIndex, byteBuffer);`,
+    '  for (const packet of packets) {',
+    '    const buf = [...new Uint8Array(packet.buffer)]',
+    "    const str = buf.map(x => x.toString(16).padStart(2, '0')).join('');",
+    `    await things.get(${name}).invokeAction('sendReport', str);`,
+    '  }',
+    '}',
+  ]);
 
-  const block = getWorkspace()?.getBlockById(blockId);
-  const streamdeck = (block as any).thing;
+  const generateImageData = JavaScript.provideFunction_('generateImageData', [
+    'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(value) {',
+    'const canvas = document.createElement("canvas");\n',
+    'canvas.width = 80;\n',
+    'canvas.height = 80;\n',
+    'const ctx = canvas.getContext("2d");\n',
+    'ctx.save();\n',
+    'ctx.clearRect(0, 0, canvas.width, canvas.height);\n',
+    'ctx.font = canvas.height * 0.8 + "px Arial";\n',
+    'ctx.strokeStyle = "blue";\n',
+    'ctx.lineWidth = 1;\n',
+    'ctx.strokeText(value, 8, 60, canvas.width * 0.8);\n',
+    'ctx.fillStyle = "white";\n',
+    'ctx.fillText(value, 8, 60, canvas.width * 0.8);\n',
+    'const imageData = ctx.getImageData(0, 0, 80, 80);\n',
+    'ctx.restore();\n',
+    'return imageData;\n',
+  ]);
 
-  const ps = [];
+  let code = 'const ps = [];\n';
+  code += `const imageData = ${generateImageData}(${value});\n`;
 
-  const canvas = document.createElement('canvas');
-  canvas.width = streamdeck.ICON_SIZE;
-  canvas.height = streamdeck.ICON_SIZE;
-
-  const ctx = canvas.getContext('2d');
-  if (ctx === null) {
-    return;
-  }
-  ctx.save();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.font = canvas.height * 0.8 + 'px Arial';
-  ctx.strokeStyle = 'blue';
-  ctx.lineWidth = 1;
-  ctx.strokeText(value.toString(), 8, 60, canvas.width * 0.8);
-  ctx.fillStyle = 'white';
-  ctx.fillText(value.toString(), 8, 60, canvas.width * 0.8);
-
-  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-  for (let i = 0; i < buttons.length; i++) {
-    if (buttons.charAt(i) === '1') {
-      thingsLog(
-        `Invoke <code>fillKeyImageData</code> with value <code>${[
-          i,
-          imageData,
-        ].toString()}</code>`,
-        'hid',
-        device.productName
-      );
-      ps.push(
-        streamdeck.fillKeyBuffer(i, Buffer.from(imageData.data), {
-          format: 'rgba',
-        })
-      );
-      thingsLog(
-        'Finished <code>fillKeyImageData</code>',
-        'hid',
-        device.productName
-      );
+  for (let i = 0; i < 6; i++) {
+    if (buttons[i] === 1) {
+      code += `ps.push(${fillImageRange}(${i}, new DataView(imageData.data.buffer)));\n`;
     }
   }
+  code += 'await Promise.all(ps);\n';
 
-  ctx.restore();
-
-  await Promise.all(ps);
+  return code;
 };
 
 JavaScript['streamdeck_set_brightness'] = function (block: Block) {
   const value =
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('100');
-  const id =
+  const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
+  const code = `await things.get(${name}).writeProperty('brightness', ${value});\n`;
 
-  const code = `await streamdeckSetBrightness(${blockId}, ${id}, ${value});\n`;
   return code;
-};
-
-(globalThis as any)['streamdeckSetBrightness'] = async function (
-  blockId: string,
-  id: string,
-  value: string
-) {
-  // If no things block is attached, return.
-  if (id === null) {
-    console.error('No streamdeck block set.');
-    return;
-  }
-
-  const device = getWebHidDevice(id);
-
-  if (!device) {
-    console.error(
-      'Connected device is not a HID device.\nMake sure you are connecting the Streamdeck via webHID'
-    );
-    return;
-  }
-
-  const block = getWorkspace()?.getBlockById(blockId);
-  const streamdeck = (block as any).thing;
-
-  thingsLog(
-    `Invoke <code>setBrightness</code> with value <code>${value}</code>`,
-    'hid',
-    device.productName
-  );
-  await streamdeck.setBrightness(value);
-  thingsLog('Finished <code>setBrightness</code>', 'hid', device.productName);
 };

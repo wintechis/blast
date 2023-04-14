@@ -96,7 +96,7 @@ const writeCommandHeader = function (buffer, keyIndex, partIndex, isLast) {
 
 
 // Set the color of a key
-const keyIndex = 0;
+let keyIndex = 0;
 const r = 255;
 const g = 0;
 const b = 0;
