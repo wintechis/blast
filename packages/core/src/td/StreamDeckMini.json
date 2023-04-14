@@ -122,7 +122,8 @@
       "type": "null",
       "description": "Sends an output report to the HID device.",
       "input": {
-        "type": "array"
+        "type": "string",
+        "format": "hex"
       },
       "forms": [
         {

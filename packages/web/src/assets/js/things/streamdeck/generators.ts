@@ -90,9 +90,7 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-  const buttons = JavaScript.quote_(
-    `${button1}${button2}${button3}${button4}${button5}${button6}`
-  );
+  const buttons = [button1, button2, button3, button4, button5, button6];
 
   JavaScript.provideFunction_('writeBMPHeader', [
     'function ' +
@@ -177,10 +175,13 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
 
   code += 'let data = writeBMPHeader(pixels, 80, 80, 2835);\n';
   for (let i = 0; i < 6; i++) {
-    if (buttons[i] === '1') {
+    if (buttons[i] === 1) {
       code += `const buffers = generateWrites(${i}, data);\n`;
       code += 'for (const data of buffers) {\n';
-      code += `  await things.get(${name}).invokeAction('sendReport', new Uint8Array(data.buffer));\n`;
+      code += '  const buf = [...new Uint8Array(data.buffer)]\n';
+      code +=
+        "  const str = buf.map(x => x.toString(16).padStart(2, '0')).join('')\n";
+      code += `  await things.get(${name}).invokeAction('sendReport', str);\n`;
       code += '}\n';
     }
   }

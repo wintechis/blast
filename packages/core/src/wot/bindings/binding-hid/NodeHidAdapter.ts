@@ -39,7 +39,12 @@ export default class ConcreteHidAdapter implements HidAdapter {
         hid.close();
       },
       sendReport: async (reportId: number, data: BufferSource) => {
-        hid.write(data as Buffer);
+        // create Buffer with reportId as first byte
+        const buffer = Buffer.concat([
+          Buffer.from([reportId]),
+          Buffer.from(data as ArrayBuffer),
+        ]);
+        hid.write(buffer);
       },
       sendFeatureReport: async (reportId: number, data: BufferSource) => {
         // use hid.sendFeatureReport() with reportId as first byte
