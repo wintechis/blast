@@ -18,7 +18,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import {loadFromFile, loadSample, save} from './load.js';
+import {loadFromFile, loadSample, save} from './load.ts';
 import logo from '../assets/logo.png';
 import ReconnectDialog from './ReconnectDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';

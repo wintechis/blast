@@ -43,6 +43,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/jest-dom", "npm:5.16.5"],\
             ["@testing-library/react", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:14.4.3"],\
+            ["@types/file-saver", "npm:2.0.5"],\
             ["@types/node", "npm:18.11.10"],\
             ["@types/react", "npm:18.0.21"],\
             ["@types/react-dom", "npm:18.0.6"],\
@@ -2997,6 +2998,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@testing-library/jest-dom", "npm:5.16.5"],\
             ["@testing-library/react", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:13.4.0"],\
             ["@testing-library/user-event", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:14.4.3"],\
+            ["@types/file-saver", "npm:2.0.5"],\
             ["@types/node", "npm:18.11.10"],\
             ["@types/react", "npm:18.0.21"],\
             ["@types/react-dom", "npm:18.0.6"],\
@@ -5396,6 +5398,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/node", "npm:18.11.0"],\
             ["@types/qs", "npm:6.9.7"],\
             ["@types/range-parser", "npm:1.2.4"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@types/file-saver", [\
+        ["npm:2.0.5", {\
+          "packageLocation": "./.yarn/cache/@types-file-saver-npm-2.0.5-b1e5b3252c-a31d6ee2ab.zip/node_modules/@types/file-saver/",\
+          "packageDependencies": [\
+            ["@types/file-saver", "npm:2.0.5"]\
           ],\
           "linkType": "HARD"\
         }]\

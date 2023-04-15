@@ -8,6 +8,7 @@ export interface implementedThing {
   filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[];
   optionalServices?: string[];
   infoUrl?: string;
+  connected?: boolean;
 }
 
 interface connectedThing {

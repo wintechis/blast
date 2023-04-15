@@ -20,7 +20,7 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
 import {BlocklyWorkspace} from './BlocklyWorkspace';
-import BlastBar from './blastBar/BlastBar.jsx';
+import BlastBar from './toolbar/Toolbar.jsx';
 import ConnectDialog from './ConnectDialog.jsx';
 import Controls from './Controls.jsx';
 import DeviceLogTab from './tabs/DeviceLogTab.jsx';

@@ -17,6 +17,7 @@
     "@testing-library/jest-dom": "latest",
     "@testing-library/react": "latest",
     "@testing-library/user-event": "latest",
+    "@types/file-saver": "^2.0.5",
     "blockly": "9.3.2",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
