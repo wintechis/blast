@@ -5,6 +5,7 @@ import {
   FieldTextInput,
   FieldDropdown,
   Names,
+  MenuOption,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
@@ -161,7 +162,7 @@ export function generateWritePropertyBlock(
         return;
       }
       if (td.properties[propertyName]['enum'] !== undefined) {
-        const optionsArr: string[][] = [];
+        const optionsArr: MenuOption[] = [];
         td.properties[propertyName]['enum']?.forEach((value, i) => {
           optionsArr.push([(value as string).toString(), i.toString()]);
         });
