@@ -8,7 +8,6 @@ import {Events, Workspace, WorkspaceSvg} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import './blocks/index.js';
 import './generators/index.ts';
-import {getThingsLog} from './things.js';
 
 export type statusValues = 'ready' | 'running' | 'stopped' | 'error';
 
@@ -89,15 +88,6 @@ export const intervalEvents: string[] = [];
 export const eventsInWorkspace: string[] = [];
 
 /**
- * Stores event handlers of webHID devices, in order to remove them on code completion.
- */
-export const deviceEventHandlers: {
-  device: HIDDevice;
-  type: string;
-  fn: (this: HIDDevice, ev: HIDInputReportEvent) => any;
-}[] = [];
-
-/**
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
 const cleanUpFunctions: Function[] = [];
@@ -148,18 +138,6 @@ JavaScript.STATEMENT_PREFIX =
   'if (interpreterExecutionExit === true) {return;}\nhighlightBlock(%1);\n';
 
 /**
- * removes all event handlers of webHID devices from {@link deviceEventHandlers}
- */
-const removeDeviceHandlers = function () {
-  for (const handler of deviceEventHandlers) {
-    const device = handler.device;
-    getThingsLog()('Removing listener', handler.type, device.productName);
-    device.removeEventListener('inputreport', handler.fn);
-  }
-  deviceEventHandlers.length = 0;
-};
-
-/**
  * Clears all interval events.
  */
 const clearIntervalEvents = function () {
@@ -174,7 +152,6 @@ const clearIntervalEvents = function () {
  */
 export const resetInterpreter = async function () {
   await (window as any).resetServient();
-  removeDeviceHandlers();
   clearIntervalEvents();
   getWorkspace()?.highlightBlock(null);
 

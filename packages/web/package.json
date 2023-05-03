@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@elgato-stream-deck/webhid": "^5.2.0",
     "@fontsource/roboto": "^4.5.8",
     "@fseehawer/react-circular-slider": "^2.5.16",
     "@inrupt/solid-client": "latest",

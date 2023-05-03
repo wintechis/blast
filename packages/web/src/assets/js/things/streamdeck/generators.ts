@@ -6,13 +6,6 @@
 
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-import {StreamDeckWeb as StreamDeck} from '@elgato-stream-deck/webhid';
-import {getWorkspace} from '../../interpreter';
-import {getThingsLog, getWebHidDevice} from '../../things.js';
-
-const thingsLog = getThingsLog();
-// Add StreamDeck lib to the global scope
-(globalThis as any)['StreamDeck'] = StreamDeck;
 
 /**
  * Generates JavaScript code for the things_streamdeck block.
