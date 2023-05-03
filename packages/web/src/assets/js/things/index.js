@@ -4,7 +4,7 @@ import './audio/generators.ts';
 import './bleRgbController/blocks.js';
 import './bleRgbController/generators.ts';
 
-import './blinkstick/blocks.js';
+import './blinkstick/blocks.ts';
 import './blinkstick/generators.ts';
 
 import './bluetooth/blocks.js';

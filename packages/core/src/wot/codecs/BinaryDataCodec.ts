@@ -93,6 +93,9 @@ export class BinaryDataStreamCodec implements ContentCodec {
         case 'object':
           buf = object2byte(schema, dataValue);
           break;
+        case 'array':
+          buf = array2byte(schema, dataValue as Array<unknown>);
+          break;
       }
     }
 
@@ -320,4 +323,16 @@ function byte2object(schema: DataSchema, bytes: Buffer): Object {
 function object2byte(schema: DataSchema, dataValue: unknown): Buffer {
   const value = JSON.stringify(dataValue);
   return Buffer.from(value, 'utf-8');
+}
+
+/**
+ * Converts an array to buffer.
+ * @param schema schema of executed property, action or event.
+ * @param dataValue values to convert.
+ * @returns converted buffer.
+ */
+function array2byte(schema: DataSchema, dataValue: unknown): Buffer {
+  const value = JSON.stringify(dataValue);
+  const arr = JSON.parse(value);
+  return Buffer.from(arr);
 }

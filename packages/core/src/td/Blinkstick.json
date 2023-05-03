@@ -1,0 +1,37 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "tulogic Blinkstick",
+  "description": "the tulogic Blinkstick is a Smart LED controller with integrated USB firmware.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": "",
+  "security": [
+    "nosec_sc"
+  ],
+  "properties": {
+    "color": {
+      "type": "array",
+      "description": "RGB color value",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "forms": [
+        {
+          "href": "hid://sendFeatureReport",
+          "hid:path": "{{HIDPATH}}",
+          "contentType": "application/x.binary-data-stream",
+          "hid:reportId": 5
+        }
+      ]
+    }
+  }
+}

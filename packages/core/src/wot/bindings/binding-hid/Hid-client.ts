@@ -97,22 +97,18 @@ export default class HidClient implements ProtocolClient {
         data[form['hid:valueIndex']] = value;
       }
     } else {
-      data = buf;
+      data = new Uint8Array(buf);
     }
 
     const reportId = form['hid:reportId'] || data[0];
-    if (Array.isArray(data)) {
-      data = Buffer.from(data);
-    } else {
-      data = Buffer.from(data.subarray(1));
-    }
+    data = Buffer.from(data);
 
     if (methodName === 'sendFeatureReport') {
       debug(`Sending feature report: ${reportId} ${data}`);
       device.sendFeatureReport(reportId, data);
     } else if (methodName === 'sendReport') {
       debug(`Sending report: ${reportId} ${data}`);
-      device.sendReport(reportId, data);
+      device.sendReport(reportId, Buffer.from(data.subarray(1)));
     } else {
       throw new Error(`Method ${methodName} is not supported`);
     }
