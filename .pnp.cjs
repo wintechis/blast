@@ -2925,7 +2925,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["@blast/web", "workspace:packages/web"],\
             ["@craco/craco", "virtual:eb586aa4d36ae14ecf2e6885a2f5312fec43fb0d869fbf300a8fee396829f72f61c360b3d47ad89db711f1b7a0319a95db79af1914e1f73d9a08b876bf8eb222#npm:7.0.0"],\
-            ["@elgato-stream-deck/webhid", "npm:5.7.0"],\
             ["@fontsource/roboto", "npm:4.5.8"],\
             ["@fseehawer/react-circular-slider", "virtual:eb586aa4d36ae14ecf2e6885a2f5312fec43fb0d869fbf300a8fee396829f72f61c360b3d47ad89db711f1b7a0319a95db79af1914e1f73d9a08b876bf8eb222#npm:2.5.16"],\
             ["@inrupt/solid-client", "npm:1.23.3"],\
@@ -3396,30 +3395,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@discoveryjs-json-ext-npm-0.5.7-fe04af1f31-2176d301cc.zip/node_modules/@discoveryjs/json-ext/",\
           "packageDependencies": [\
             ["@discoveryjs/json-ext", "npm:0.5.7"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@elgato-stream-deck/core", [\
-        ["npm:5.7.0", {\
-          "packageLocation": "./.yarn/cache/@elgato-stream-deck-core-npm-5.7.0-f80876d138-3895582a24.zip/node_modules/@elgato-stream-deck/core/",\
-          "packageDependencies": [\
-            ["@elgato-stream-deck/core", "npm:5.7.0"],\
-            ["eventemitter3", "npm:4.0.7"],\
-            ["tslib", "npm:2.4.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["@elgato-stream-deck/webhid", [\
-        ["npm:5.7.0", {\
-          "packageLocation": "./.yarn/cache/@elgato-stream-deck-webhid-npm-5.7.0-f3eece34e2-45ff607932.zip/node_modules/@elgato-stream-deck/webhid/",\
-          "packageDependencies": [\
-            ["@elgato-stream-deck/webhid", "npm:5.7.0"],\
-            ["@elgato-stream-deck/core", "npm:5.7.0"],\
-            ["@types/w3c-web-hid", "npm:1.0.3"],\
-            ["p-queue", "npm:6.6.2"],\
-            ["tslib", "npm:2.4.1"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -18709,15 +18684,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["p-finally", [\
-        ["npm:1.0.0", {\
-          "packageLocation": "./.yarn/cache/p-finally-npm-1.0.0-35fbaa57c6-93a654c53d.zip/node_modules/p-finally/",\
-          "packageDependencies": [\
-            ["p-finally", "npm:1.0.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["p-limit", [\
         ["npm:2.3.0", {\
           "packageLocation": "./.yarn/cache/p-limit-npm-2.3.0-94a0310039-84ff17f1a3.zip/node_modules/p-limit/",\
@@ -18780,17 +18746,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["p-queue", [\
-        ["npm:6.6.2", {\
-          "packageLocation": "./.yarn/cache/p-queue-npm-6.6.2-b173c5bfa8-832642fcc4.zip/node_modules/p-queue/",\
-          "packageDependencies": [\
-            ["p-queue", "npm:6.6.2"],\
-            ["eventemitter3", "npm:4.0.7"],\
-            ["p-timeout", "npm:3.2.0"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["p-retry", [\
         ["npm:4.6.2", {\
           "packageLocation": "./.yarn/cache/p-retry-npm-4.6.2-9f871cfc9b-45c270bfdd.zip/node_modules/p-retry/",\
@@ -18798,16 +18753,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["p-retry", "npm:4.6.2"],\
             ["@types/retry", "npm:0.12.0"],\
             ["retry", "npm:0.13.1"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["p-timeout", [\
-        ["npm:3.2.0", {\
-          "packageLocation": "./.yarn/cache/p-timeout-npm-3.2.0-7fdb33f733-3dd0eaa048.zip/node_modules/p-timeout/",\
-          "packageDependencies": [\
-            ["p-timeout", "npm:3.2.0"],\
-            ["p-finally", "npm:1.0.0"]\
           ],\
           "linkType": "HARD"\
         }]\
