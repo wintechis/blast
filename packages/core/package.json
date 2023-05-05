@@ -79,6 +79,9 @@
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.23",
     "x11": "^2.3.0"
   },
+  "lint-staged": {
+      "src/**": "eslint"
+  },
   "packageManager": "yarn@3.3.0",
   "nyc": {
     "all": true,

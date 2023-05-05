@@ -15,7 +15,9 @@
         "lint": "yarn workspaces foreach run lint",
         "test": "yarn workspaces foreach run test",
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
-        "start": "yarn workspace @blast/web run start"
+        "start": "yarn workspace @blast/web run start",
+        "postinstall": "husky install",
+        "prepare": "husky install"
     },
     "type": "module",
     "workspaces": [
@@ -34,22 +36,16 @@
         "eslint-config-prettier": "latest",
         "eslint-plugin-node": "latest",
         "eslint-plugin-react": "latest",
+        "husky": "^8.0.3",
         "license-checker-rseidelsohn": "^4.1.1",
+        "lint-staged": "^13.2.2",
         "prettier": "latest",
         "typescript": "latest"
     },
-    "devDependencies": {
-        "husky": "^8.0.3",
-        "lint-staged": "^13.2.2"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged && yarn build"
-        }
-    },
     "lint-staged": {
-        "*.{js,jsx,ts,tsx}": [
-            "eslint --fix"
-        ]
+        "packages/*/src/**": "eslint"
+    },
+    "devDependencies": {
+        "husky": "^8.0.0"
     }
 }
