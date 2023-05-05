@@ -1620,6 +1620,7 @@ __metadata:
   resolution: "@blast/web@workspace:."
   dependencies:
     "@craco/craco": latest
+    "@elgato-stream-deck/webhid": ^5.2.0
     "@fontsource/roboto": ^4.5.8
     "@fseehawer/react-circular-slider": ^2.5.16
     "@inrupt/solid-client": latest
@@ -1880,6 +1881,28 @@ __metadata:
     ky: ^0.25.1
     ky-universal: ^0.8.2
   checksum: 24e2ebec5189a8a406fbe56731a456f6eb731cbb7f30dce945f3685f9b462b6660ee9181b195714d4f586f62243b995f61b78092c9a15e0d188745e39504eaa5
+  languageName: node
+  linkType: hard
+
+"@elgato-stream-deck/core@npm:5.6.0":
+  version: 5.6.0
+  resolution: "@elgato-stream-deck/core@npm:5.6.0"
+  dependencies:
+    eventemitter3: ^4.0.7
+    tslib: ^2.4.0
+  checksum: 12b2ec63ad0b024aa433bb71f15bc4073f08846dc2dd36616c19c64b8dc8886dd348bde3cbb4b80b9096629ea8be7679bd6528cb893d7b6718de05a1d3164f97
+  languageName: node
+  linkType: hard
+
+"@elgato-stream-deck/webhid@npm:^5.2.0":
+  version: 5.6.0
+  resolution: "@elgato-stream-deck/webhid@npm:5.6.0"
+  dependencies:
+    "@elgato-stream-deck/core": 5.6.0
+    "@types/w3c-web-hid": ^1.0.3
+    p-queue: ^6.6.2
+    tslib: ^2.4.0
+  checksum: 21b84af22d3aecd09ae80f95974028b659a420100563695bf9dc48425ee5ee2bbfaf866f6a064302e7bee091e2b9252bd3c345e46d92cfee6b73fcf60815c23c
   languageName: node
   linkType: hard
 
@@ -3789,6 +3812,13 @@ __metadata:
     "@types/expect": ^1.20.4
     "@types/node": "*"
   checksum: 5012fb61e3a29e7deaac7e66b6d8cb73d87d15965c8a38cb69277c2beb851a9a8ec09d4a1b07a3151e143afc2e3a102ca368b9a0e08f2f29de9183c97f9c7d85
+  languageName: node
+  linkType: hard
+
+"@types/w3c-web-hid@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@types/w3c-web-hid@npm:1.0.3"
+  checksum: 90ee1eeb2acf5d5ddf0b7acefd4f8aaa7d0175d991c3606a9ad62bdfa7a8de93665f5f6218dc4ecb34ea1d2f3e357813b315f46c1ea6b8aa1693e217e436c9b2
   languageName: node
   linkType: hard
 
@@ -8204,7 +8234,7 @@ eslint@latest:
   languageName: node
   linkType: hard
 
-"eventemitter3@npm:^4.0.0":
+"eventemitter3@npm:^4.0.0, eventemitter3@npm:^4.0.4, eventemitter3@npm:^4.0.7":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
@@ -13124,6 +13154,13 @@ eslint@latest:
   languageName: node
   linkType: hard
 
+"p-finally@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "p-finally@npm:1.0.0"
+  checksum: 93a654c53dc805dd5b5891bab16eb0ea46db8f66c4bfd99336ae929323b1af2b70a8b0654f8f1eae924b2b73d037031366d645f1fd18b3d30cbd15950cc4b1d4
+  languageName: node
+  linkType: hard
+
 "p-limit@npm:^2.0.0, p-limit@npm:^2.2.0":
   version: 2.3.0
   resolution: "p-limit@npm:2.3.0"
@@ -13178,6 +13215,16 @@ eslint@latest:
   languageName: node
   linkType: hard
 
+"p-queue@npm:^6.6.2":
+  version: 6.6.2
+  resolution: "p-queue@npm:6.6.2"
+  dependencies:
+    eventemitter3: ^4.0.4
+    p-timeout: ^3.2.0
+  checksum: 832642fcc4ab6477b43e6d7c30209ab10952969ed211c6d6f2931be8a4f9935e3578c72e8cce053dc34f2eb6941a408a2c516a54904e989851a1a209cf19761c
+  languageName: node
+  linkType: hard
+
 "p-retry@npm:^4.5.0":
   version: 4.6.2
   resolution: "p-retry@npm:4.6.2"
@@ -13185,6 +13232,15 @@ eslint@latest:
     "@types/retry": 0.12.0
     retry: ^0.13.1
   checksum: 45c270bfddaffb4a895cea16cb760dcc72bdecb6cb45fef1971fa6ea2e91ddeafddefe01e444ac73e33b1b3d5d29fb0dd18a7effb294262437221ddc03ce0f2e
+  languageName: node
+  linkType: hard
+
+"p-timeout@npm:^3.2.0":
+  version: 3.2.0
+  resolution: "p-timeout@npm:3.2.0"
+  dependencies:
+    p-finally: ^1.0.0
+  checksum: 3dd0eaa048780a6f23e5855df3dd45c7beacff1f820476c1d0d1bcd6648e3298752ba2c877aa1c92f6453c7dd23faaf13d9f5149fc14c0598a142e2c5e8d649c
   languageName: node
   linkType: hard
 
@@ -17098,6 +17154,13 @@ styled-components@latest:
   version: 2.5.0
   resolution: "tslib@npm:2.5.0"
   checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+  languageName: node
+  linkType: hard
+
+"tslib@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "tslib@npm:2.4.0"
+  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
