@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
+    "allowJs": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "node",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
@@ -15,5 +15,7 @@
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",
+    "moduleResolution": "node",
+    "isolatedModules": true,
   },
 }

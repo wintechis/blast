@@ -63,10 +63,10 @@
       },
       "forms": [
         {
-          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
           "op": "writeproperty",
-          "sbo:methodName": "sbo:write-without-response",
-          "contentType": "application/x.binary-data-stream"
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "contentType": "application/x.binary-data-stream",
+          "sbo:methodName": "sbo:write-without-response"
         }
       ]
     },
@@ -77,7 +77,6 @@
       "readOnly": false,
       "writeOnly": true,
       "description": "The power switch of the controller.",
-
       "bdo:pattern": "7e0004{is_on}00000000ef",
       "bdo:variables": {
         "is_on": {
@@ -90,7 +89,7 @@
       "forms": [
         {
           "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
-          "op": ["writeproperty"],
+          "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
         }
@@ -99,15 +98,13 @@
     "effect": {
       "type": "string",
       "format": "hex",
-
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
       "description": "The effect of the LED light.",
-
-      "bdo:pattern": "7e0003{type}03000000ef",
+      "bdo:pattern": "7e0003{effect}03000000ef",
       "bdo:variables": {
-        "type": {
+        "effect": {
           "type": "integer",
           "minimum": 128,
           "maximum": 156,
@@ -117,7 +114,7 @@
       "forms": [
         {
           "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
-          "op": ["writeproperty"],
+          "op": "writeproperty",
           "sbo:methodName": "sbo:write",
           "contentType": "application/x.binary-data-stream"
         }

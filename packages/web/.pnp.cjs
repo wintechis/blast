@@ -77,7 +77,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=1a91c8"],\
             ["urdf", "https://github.com/derwehr/uRDF.js.git#commit=b51057441beedf48fbffb821adeaa2906fa448e7"],\
             ["webpack", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:5.76.3"],\
-            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
+            ["wot-thing-description-types", "npm:1.1.0-23-March-2023"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -3031,7 +3031,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A4.8.4#~builtin<compat/typescript>::version=4.8.4&hash=1a91c8"],\
             ["urdf", "https://github.com/derwehr/uRDF.js.git#commit=b51057441beedf48fbffb821adeaa2906fa448e7"],\
             ["webpack", "virtual:49e292d603f9ebdc9342f5315c817dbb5ca989573b7bb49de840d9a0f268b81adb91988a7f09aa8cf3f38d7766b6dbe09099aedb1471a627aa254eaa363fac61#npm:5.76.3"],\
-            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
+            ["wot-thing-description-types", "npm:1.1.0-23-March-2023"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -23486,10 +23486,10 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["wot-thing-description-types", [\
-        ["npm:1.1.0-27-September-2021", {\
-          "packageLocation": "./.yarn/cache/wot-thing-description-types-npm-1.1.0-27-September-2021-80409e5033-805de1447f.zip/node_modules/wot-thing-description-types/",\
+        ["npm:1.1.0-23-March-2023", {\
+          "packageLocation": "./.yarn/cache/wot-thing-description-types-npm-1.1.0-23-March-2023-ce5898053f-da46133183.zip/node_modules/wot-thing-description-types/",\
           "packageDependencies": [\
-            ["wot-thing-description-types", "npm:1.1.0-27-September-2021"]\
+            ["wot-thing-description-types", "npm:1.1.0-23-March-2023"]\
           ],\
           "linkType": "HARD"\
         }]\

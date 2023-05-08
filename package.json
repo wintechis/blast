@@ -16,8 +16,6 @@
         "test": "yarn workspaces foreach run test",
         "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
         "start": "yarn workspace @blast/web run start",
-        "postinstall": "husky install",
-        "prepare": "husky install"
     },
     "type": "module",
     "workspaces": [
@@ -36,7 +34,6 @@
         "eslint-config-prettier": "latest",
         "eslint-plugin-node": "latest",
         "eslint-plugin-react": "latest",
-        "husky": "latest",
         "lint-staged": "latest",
         "prettier": "latest",
         "typescript": "latest"

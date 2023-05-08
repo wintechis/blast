@@ -21,7 +21,8 @@ const eddystoneCharacteristicUUIDs = [
   'a3c8750a-8ed3-4bdf-8a39-a01bebede295',
   'a3c8750b-8ed3-4bdf-8a39-a01bebede295',
 ];
-type EddystoneCharacteristicUUID = typeof eddystoneCharacteristicUUIDs[number];
+type EddystoneCharacteristicUUID =
+  (typeof eddystoneCharacteristicUUIDs)[number];
 
 type EddystoneCharacteristicName =
   | 'Capabilities'

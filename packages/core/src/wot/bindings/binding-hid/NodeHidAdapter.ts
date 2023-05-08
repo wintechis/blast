@@ -127,9 +127,9 @@ export default class ConcreteHidAdapter implements HidAdapter {
             stopPropagation: function (): void {
               throw new Error('Function not implemented.');
             },
-            AT_TARGET: 0,
-            BUBBLING_PHASE: 0,
-            CAPTURING_PHASE: 0,
+            AT_TARGET: 2,
+            BUBBLING_PHASE: 3,
+            CAPTURING_PHASE: 1,
             NONE: 0,
           };
           (listener as EventListener)(event);
