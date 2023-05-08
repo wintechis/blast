@@ -456,6 +456,7 @@ __metadata:
     webpack-cli: ^5.1.0
     wot-thing-description-types: 1.1.0-23-March-2023
     wot-typescript-definitions: 0.8.0-SNAPSHOT.25
+    x11: ^2.3.0
   languageName: unknown
   linkType: soft
 
@@ -6161,6 +6162,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"os-homedir@npm:^1.0.1":
+  version: 1.0.2
+  resolution: "os-homedir@npm:1.0.2"
+  checksum: af609f5a7ab72de2f6ca9be6d6b91a599777afc122ac5cad47e126c1f67c176fe9b52516b9eeca1ff6ca0ab8587fe66208bc85e40a3940125f03cdb91408e9d2
+  languageName: node
+  linkType: hard
+
 "os-tmpdir@npm:~1.0.2":
   version: 1.0.2
   resolution: "os-tmpdir@npm:1.0.2"
@@ -8448,6 +8456,15 @@ __metadata:
     imurmurhash: ^0.1.4
     signal-exit: ^3.0.7
   checksum: 5da60bd4eeeb935eec97ead3df6e28e5917a6bd317478e4a85a5285e8480b8ed96032bbcc6ecd07b236142a24f3ca871c924ec4a6575e623ec1b11bf8c1c253c
+  languageName: node
+  linkType: hard
+
+"x11@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "x11@npm:2.3.0"
+  dependencies:
+    os-homedir: ^1.0.1
+  checksum: 1a6def8334c93f279b5fc1e56f1515e24884e6e24caab48b147d5975d4eb7ab9a70c68584cc00ec3af5d6b3b97946dabaae93a9e551c2b81460e30a3959df821
   languageName: node
   linkType: hard
 

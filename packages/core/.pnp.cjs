@@ -69,7 +69,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.82.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.1.0"],\
             ["wot-thing-description-types", "npm:1.1.0-23-March-2023"],\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"]\
+            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"],\
+            ["x11", "npm:2.3.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -903,7 +904,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.82.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.1.0"],\
             ["wot-thing-description-types", "npm:1.1.0-23-March-2023"],\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"]\
+            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"],\
+            ["x11", "npm:2.3.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -7679,6 +7681,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["os-homedir", [\
+        ["npm:1.0.2", {\
+          "packageLocation": "./.yarn/cache/os-homedir-npm-1.0.2-01f82faa88-af609f5a7a.zip/node_modules/os-homedir/",\
+          "packageDependencies": [\
+            ["os-homedir", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["os-tmpdir", [\
         ["npm:1.0.2", {\
           "packageLocation": "./.yarn/cache/os-tmpdir-npm-1.0.2-e305b0689b-5666560f7b.zip/node_modules/os-tmpdir/",\
@@ -10349,6 +10360,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["write-file-atomic", "npm:4.0.2"],\
             ["imurmurhash", "npm:0.1.4"],\
             ["signal-exit", "npm:3.0.7"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["x11", [\
+        ["npm:2.3.0", {\
+          "packageLocation": "./.yarn/cache/x11-npm-2.3.0-1c71897797-1a6def8334.zip/node_modules/x11/",\
+          "packageDependencies": [\
+            ["x11", "npm:2.3.0"],\
+            ["os-homedir", "npm:1.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
