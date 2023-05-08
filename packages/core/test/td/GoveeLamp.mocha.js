@@ -1,7 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import {GoveeLamp as td} from '../../dist/blast.tds.js';
-import {createThing} from '../../dist/blast.web.js';
+import {createThing} from '../../dist/blast.node.js';
 import {getWebBluetoothMock} from '../helpers/devices/webBluetooth/webBluetoothMock.js';
 import {mockGoveeLamp} from '../helpers/devices/webBluetooth/GoveeLamp.js';
 

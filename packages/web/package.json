@@ -85,8 +85,8 @@
     "webpack": "5.76.3"
   },
   "lint-staged": {
-      "src/**": "eslint"
+    "src/**": "eslint"
   },
   "homepage": ".",
-  "packageManager": "yarn@3.3.0"
+  "packageManager": "yarn@3.5.1"
 }
