@@ -22,7 +22,7 @@
         "./packages/*"
     ],
     "engines": {
-        "node": "^16.0.0"
+        "node": ">=16.0.0"
     },
     "dependencies": {
         "@types/node": "latest",

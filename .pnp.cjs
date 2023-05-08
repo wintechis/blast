@@ -3461,7 +3461,8 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["webpack", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:5.82.0"],\
             ["webpack-cli", "virtual:9b931824ea9aee975283291ba68f3599d33f17110089a363e5e488a71ed62604bb68be74506de7aa9b6bac945f33f500f100ed53e7a2e776b4dbbde5590decd6#npm:5.1.0"],\
             ["wot-thing-description-types", "npm:1.1.0-23-March-2023"],\
-            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"]\
+            ["wot-typescript-definitions", "npm:0.8.0-SNAPSHOT.25"],\
+            ["x11", "npm:2.3.0"]\
           ],\
           "linkType": "SOFT"\
         }]\
@@ -20048,6 +20049,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["os-homedir", [\
+        ["npm:1.0.2", {\
+          "packageLocation": "./.yarn/cache/os-homedir-npm-1.0.2-01f82faa88-af609f5a7a.zip/node_modules/os-homedir/",\
+          "packageDependencies": [\
+            ["os-homedir", "npm:1.0.2"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["os-locale", [\
         ["npm:1.4.0", {\
           "packageLocation": "./.yarn/cache/os-locale-npm-1.4.0-924760b837-0161a1b6b5.zip/node_modules/os-locale/",\
@@ -28101,6 +28111,16 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/utf-8-validate",\
             "bufferutil",\
             "utf-8-validate"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["x11", [\
+        ["npm:2.3.0", {\
+          "packageLocation": "./.yarn/cache/x11-npm-2.3.0-1c71897797-1a6def8334.zip/node_modules/x11/",\
+          "packageDependencies": [\
+            ["x11", "npm:2.3.0"],\
+            ["os-homedir", "npm:1.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\
