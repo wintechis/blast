@@ -71,16 +71,17 @@
       "readOnly": false,
       "writeOnly": false,
       "forms": [
-        {
-          "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb",
-          "op": "writeproperty",
-          "sbo:methodName": "sbo:write-without-response",
-          "contentType": "application/x.binary-data-stream"
-        },
+
         {
           "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb",
           "op": "readproperty",
           "sbo:methodName": "sbo:read",
+          "contentType": "application/x.binary-data-stream"
+        },
+        {
+          "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write-without-response",
           "contentType": "application/x.binary-data-stream"
         }
       ]
@@ -199,7 +200,7 @@
     },
     "modelNumber": {
       "title": "Model number",
-      "type": "number",
+      "type": "string",
       "observable": false,
       "readOnly": true,
       "writeOnly": false,
