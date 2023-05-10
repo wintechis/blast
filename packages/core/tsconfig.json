@@ -18,4 +18,5 @@
     "moduleResolution": "node",
     "isolatedModules": true,
   },
+  "exclude": ["node_modules", "dist", "coverage", "test", "*.cjs"]
 }
