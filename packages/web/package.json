@@ -42,6 +42,7 @@
     "build": "yarn run copy-blast && gulp update-version && craco build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "test": "echo \"Error: no test for @blast/web specified yet\"",
+    "test:coverage": "echo \"Error: no test for @blast/web specified yet\"",
     "eject": "react-scripts eject"
   },
   "type": "module",

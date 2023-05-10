@@ -23,7 +23,8 @@
     "clean": "yarn rimraf dist",
     "lint": "eslint \"src/**\"",
     "fix": "eslint --fix \"src/** \"",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "type": "module",
   "main": "index.html",
