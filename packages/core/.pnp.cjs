@@ -66,7 +66,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"],\
             ["uritemplate", "npm:0.3.4"],\
             ["uuid", "npm:9.0.0"],\
-            ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.82.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.1.0"],\
             ["wot-thing-description-types", "npm:1.1.0-23-March-2023"],\
@@ -902,7 +901,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["typescript", "patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"],\
             ["uritemplate", "npm:0.3.4"],\
             ["uuid", "npm:9.0.0"],\
-            ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
             ["webpack", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.82.0"],\
             ["webpack-cli", "virtual:eabf5cb1c7411d4d361488f1d756ea46da104039744d00f8c6a45a7240ae54dd104f5adf5cc3de289766ceabd5e77522a3c26811d3082f366d660f2dfc5195f2#npm:5.1.0"],\
             ["wot-thing-description-types", "npm:1.1.0-23-March-2023"],\
@@ -1898,13 +1896,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/@types-web-bluetooth-npm-0.0.17-d325201882-8c72ba8cd1.zip/node_modules/@types/web-bluetooth/",\
           "packageDependencies": [\
             ["@types/web-bluetooth", "npm:0.0.17"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
-        ["npm:0.0.3", {\
-          "packageLocation": "./.yarn/cache/@types-web-bluetooth-npm-0.0.3-296c78c658-684fa2264e.zip/node_modules/@types/web-bluetooth/",\
-          "packageDependencies": [\
-            ["@types/web-bluetooth", "npm:0.0.3"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -4617,13 +4608,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
         }]\
       ]],\
       ["event-target-shim", [\
-        ["npm:3.0.2", {\
-          "packageLocation": "./.yarn/cache/event-target-shim-npm-3.0.2-8b0abe4113-9ed8f5109c.zip/node_modules/event-target-shim/",\
-          "packageDependencies": [\
-            ["event-target-shim", "npm:3.0.2"]\
-          ],\
-          "linkType": "HARD"\
-        }],\
         ["npm:5.0.1", {\
           "packageLocation": "./.yarn/cache/event-target-shim-npm-5.0.1-cb48709025-1ffe3bb22a.zip/node_modules/event-target-shim/",\
           "packageDependencies": [\
@@ -10083,17 +10067,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["wcwidth", "npm:1.0.1"],\
             ["defaults", "npm:1.0.4"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["web-bluetooth-mock", [\
-        ["https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2", {\
-          "packageLocation": "./.yarn/cache/web-bluetooth-mock-https-06403b1d55-6396c97948.zip/node_modules/web-bluetooth-mock/",\
-          "packageDependencies": [\
-            ["web-bluetooth-mock", "https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"],\
-            ["@types/web-bluetooth", "npm:0.0.3"],\
-            ["event-target-shim", "npm:3.0.2"]\
           ],\
           "linkType": "HARD"\
         }]\

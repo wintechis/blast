@@ -425,14 +425,14 @@ __metadata:
     "@types/uuid": ^9.0.1
     "@types/w3c-web-hid": ^1.0.3
     "@types/web-bluetooth": ^0.0.17
-    "@typescript-eslint/eslint-plugin": ^5.59.5
-    "@typescript-eslint/parser": ^5.59.5
+    "@typescript-eslint/eslint-plugin": latest
+    "@typescript-eslint/parser": latest
     debug: ^4.3.4
-    eslint: ^8.40.0
-    eslint-config-google: ^0.14.0
-    eslint-config-prettier: ^8.8.0
-    eslint-plugin-node: ^11.1.0
-    eslint-plugin-prettier: ^4.2.1
+    eslint: latest
+    eslint-config-google: latest
+    eslint-config-prettier: latest
+    eslint-plugin-node: latest
+    eslint-plugin-prettier: latest
     inquirer: ^9.2.2
     jest: ^29.5.0
     json-placeholder-replacer: ^1.0.35
@@ -449,10 +449,9 @@ __metadata:
     ts-jest: ^29.1.0
     ts-loader: ^9.4.2
     ts-node: ^10.9.1
-    typescript: ^5.0.4
+    typescript: latest
     uritemplate: ^0.3.4
     uuid: ^9.0.0
-    web-bluetooth-mock: "https://github.com/derwehr/web-bluetooth-mock"
     webpack: ^5.82.0
     webpack-cli: ^5.1.0
     wot-thing-description-types: 1.1.0-23-March-2023
@@ -1306,13 +1305,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/web-bluetooth@npm:^0.0.3":
-  version: 0.0.3
-  resolution: "@types/web-bluetooth@npm:0.0.3"
-  checksum: 684fa2264e2967261b397ea853e2a92e2f916df1cdf9ef9e4626bac33f4b477acd44c9a24990c812a1f7d7b65d8b77c4fac7ab47b5d27f1a727d0cb88d57c9b2
-  languageName: node
-  linkType: hard
-
 "@types/yargs-parser@npm:*":
   version: 21.0.0
   resolution: "@types/yargs-parser@npm:21.0.0"
@@ -1329,7 +1321,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/eslint-plugin@npm:^5.59.5":
+"@typescript-eslint/eslint-plugin@npm:latest":
   version: 5.59.5
   resolution: "@typescript-eslint/eslint-plugin@npm:5.59.5"
   dependencies:
@@ -1353,7 +1345,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/parser@npm:^5.59.5":
+"@typescript-eslint/parser@npm:latest":
   version: 5.59.5
   resolution: "@typescript-eslint/parser@npm:5.59.5"
   dependencies:
@@ -3231,7 +3223,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-google@npm:^0.14.0":
+"eslint-config-google@npm:latest":
   version: 0.14.0
   resolution: "eslint-config-google@npm:0.14.0"
   peerDependencies:
@@ -3240,7 +3232,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-prettier@npm:^8.8.0":
+"eslint-config-prettier@npm:latest":
   version: 8.8.0
   resolution: "eslint-config-prettier@npm:8.8.0"
   peerDependencies:
@@ -3263,7 +3255,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-node@npm:^11.1.0":
+"eslint-plugin-node@npm:latest":
   version: 11.1.0
   resolution: "eslint-plugin-node@npm:11.1.0"
   dependencies:
@@ -3279,7 +3271,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-prettier@npm:^4.2.1":
+"eslint-plugin-prettier@npm:latest":
   version: 4.2.1
   resolution: "eslint-plugin-prettier@npm:4.2.1"
   dependencies:
@@ -3344,7 +3336,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^8.40.0":
+"eslint@npm:latest":
   version: 8.40.0
   resolution: "eslint@npm:8.40.0"
   dependencies:
@@ -3466,13 +3458,6 @@ __metadata:
     stream-combiner: ~0.0.4
     through: ~2.3.1
   checksum: 80b467820b6daf824d9fb4345d2daf115a056e5c104463f2e98534e92d196a27f2df5ea2aa085624db26f4c45698905499e881d13bc7c01f7a13eac85be72a22
-  languageName: node
-  linkType: hard
-
-"event-target-shim@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "event-target-shim@npm:3.0.2"
-  checksum: 9ed8f5109c494a2a4c2f33e0676ad6b300831863df3387037387e5df3ad0ef24a3b7ba38bcbf02398ff5406b7a24f48dad9fb448868b8b90102a95bf23d7ed8b
   languageName: node
   linkType: hard
 
@@ -7980,7 +7965,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@npm:^5.0.4":
+"typescript@npm:latest":
   version: 5.0.4
   resolution: "typescript@npm:5.0.4"
   bin:
@@ -7990,7 +7975,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^5.0.4#~builtin<compat/typescript>":
+"typescript@patch:typescript@latest#~builtin<compat/typescript>":
   version: 5.0.4
   resolution: "typescript@patch:typescript@npm%3A5.0.4#~builtin<compat/typescript>::version=5.0.4&hash=b5f058"
   bin:
@@ -8210,16 +8195,6 @@ __metadata:
   dependencies:
     defaults: ^1.0.3
   checksum: 814e9d1ddcc9798f7377ffa448a5a3892232b9275ebb30a41b529607691c0491de47cba426e917a4d08ded3ee7e9ba2f3fe32e62ee3cd9c7d3bafb7754bd553c
-  languageName: node
-  linkType: hard
-
-"web-bluetooth-mock@https://github.com/derwehr/web-bluetooth-mock":
-  version: 1.1.0
-  resolution: "web-bluetooth-mock@https://github.com/derwehr/web-bluetooth-mock.git#commit=485ef307cfa3b6097f9bd1de642229828db99ed2"
-  dependencies:
-    "@types/web-bluetooth": ^0.0.3
-    event-target-shim: ^3.0.0
-  checksum: 6396c979486ebdd9a8c8429b202c55df9ff3366fe5b0841bdad86bc126d1cfc4a10c22379915829253dd9c28227b536d66ee71afe820cc75dcbc2084d44fe119
   languageName: node
   linkType: hard
 

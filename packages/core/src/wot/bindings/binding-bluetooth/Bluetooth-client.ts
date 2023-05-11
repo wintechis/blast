@@ -123,7 +123,7 @@ export default class WebBluetoothClient implements ProtocolClient {
         toBuffer: async () => {
           /* istanbul ignore next */
           return Buffer.from([]);
-        }
+        },
       });
     });
   }
@@ -170,7 +170,7 @@ export default class WebBluetoothClient implements ProtocolClient {
         body: body,
         toBuffer: () => {
           return ProtocolHelpers.readStreamFully(body);
-        }
+        },
       });
     };
 

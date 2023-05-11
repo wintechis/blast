@@ -85,9 +85,6 @@
     "typescript": "latest",
     "webpack": "5.76.3"
   },
-  "lint-staged": {
-    "src/**": "eslint"
-  },
   "homepage": ".",
   "packageManager": "yarn@3.5.1"
 }
