@@ -17,12 +17,12 @@ const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
 
 export default class WebBluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
-  subscriptions: Subscription[];
+  subscriptions: Map<string, Subscription>;
 
   constructor(bluetoothAdapter: BluetoothAdapter) {
     debug('created client');
     this.bluetoothAdapter = bluetoothAdapter;
-    this.subscriptions = [];
+    this.subscriptions = new Map();
   }
 
   public toString(): string {
@@ -117,22 +117,29 @@ export default class WebBluetoothClient implements ProtocolClient {
     // TODO check if href is service/char/operation, then write,
     // might also be gatt://operation, i.e watchAdvertisements
     return this.writeResource(form, content).then(() => {
-      return {
-        type: 'text/plain',
-        body: Readable.from(''),
-        toBuffer: () => Promise.resolve(Buffer.from('')),
-      };
+      return Promise.resolve({
+        type: 'application/json',
+        body: new Readable(),
+        toBuffer: async () => {
+          /* istanbul ignore next */
+          return Buffer.from([]);
+        }
+      });
     });
   }
 
-  public unlinkResource(): Promise<void> {
-    throw new Error('not implemented');
+  public unlinkResource(form: BluetoothForm): Promise<void> {
+    const subscription = this.subscriptions.get(form.href);
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+    return Promise.resolve();
   }
 
   public async subscribeResource(
     form: BluetoothForm,
     next: (content: Content) => void,
-    error?: (error: Error) => void
+    _error?: (error: Error) => void
   ): Promise<Subscription> {
     // Extract information out of form
     const {deviceId, serviceId, characteristicId, bleOperation} =
@@ -158,12 +165,13 @@ export default class WebBluetoothClient implements ProtocolClient {
       }
       // Convert to readable
       const body = Readable.from(buff);
-
-      const content = new Content(
-        form.contentType || 'application/x.binary-data-stream',
-        body
-      );
-      next(content);
+      next({
+        type: form.contentType || 'application/x.binary-data-stream',
+        body: body,
+        toBuffer: () => {
+          return ProtocolHelpers.readStreamFully(body);
+        }
+      });
     };
 
     const characteristic = await this.bluetoothAdapter.getCharacteristic(
@@ -172,30 +180,16 @@ export default class WebBluetoothClient implements ProtocolClient {
       characteristicId
     );
 
-    try {
-      characteristic.addEventListener('characteristicvaluechanged', handler);
+    characteristic.addEventListener('characteristicvaluechanged', handler);
 
-      await characteristic.startNotifications();
+    await characteristic.startNotifications();
 
-      const subscription = new Subscription(() => {
-        characteristic.removeEventListener(
-          'characteristicvaluechanged',
-          handler
-        );
-        characteristic.stopNotifications();
-        characteristic.removeEventListener(
-          'characteristicvaluechanged',
-          handler
-        );
-      });
-      this.subscriptions.push(subscription);
-      return subscription;
-    } catch (err) {
-      if (error) {
-        error(err as Error);
-      }
-      throw new Error(`failed to subscribe to characteristic ${err}`);
-    }
+    const subscription = new Subscription(() => {
+      characteristic.stopNotifications();
+      characteristic.removeEventListener('characteristicvaluechanged', handler);
+    });
+    this.subscriptions.set(form.href, subscription);
+    return subscription;
   }
 
   public async start(): Promise<void> {
@@ -204,8 +198,10 @@ export default class WebBluetoothClient implements ProtocolClient {
 
   public async stop(): Promise<void> {
     debug('Stopping client');
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions = [];
+    for (const subscription of this.subscriptions.values()) {
+      await subscription.unsubscribe();
+    }
+    this.subscriptions.clear();
   }
 
   public setSecurity(): boolean {
@@ -224,14 +220,12 @@ export default class WebBluetoothClient implements ProtocolClient {
     deconstructedForm.path = form.href.split('//')[1];
 
     // If deviceID contains '/' it gets also split.
-    // path string is check if it is a UUID; everything else is added together to deviceID
+    // path string is checked it is a UUID; everything else is added together to deviceID
     const pathElements = deconstructedForm.path.split('/');
 
     if (pathElements.length !== 3) {
-      const regex = new RegExp(
-        '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
-      );
-
+      const regex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
       let deviceId = pathElements[0];
 
       for (let i = 1; i < pathElements.length; i++) {
