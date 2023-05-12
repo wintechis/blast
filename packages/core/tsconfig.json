@@ -15,5 +15,5 @@
     "module": "ESNext",
     "moduleResolution": "node"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*"]
 }

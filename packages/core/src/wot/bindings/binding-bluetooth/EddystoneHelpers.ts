@@ -177,7 +177,7 @@ const decodeAdvertisingData = function (
     const namespace = advData.substring(4, 24);
 
     // Instance is the next 6 bytes.
-    const instance = advData.substring(25, 37);
+    const instance = advData.substring(24, 36);
 
     return {
       frameType: 'UID',
@@ -387,7 +387,7 @@ const encodeAdvertisingData = function (
 
   if (frameType === 'URL') {
     encodedData = encodeEddystoneUrl(data);
-  } else if (frameType === 'UID') {
+  } else {
     // Checks if the UID is 32 hex chars.
     if (!/^[0-9A-Fa-f]{32}$/.test(data)) {
       throw new Error('Eddystone UID must be 32 hexadecimal characters.');
@@ -395,8 +395,6 @@ const encodeAdvertisingData = function (
 
     // prefix the frame type
     encodedData = '00' + data;
-  } else {
-    throw new Error('Unsupported frametype! Only "URL and "UID" are writeable');
   }
 
   return encodedData;
