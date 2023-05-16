@@ -13,6 +13,7 @@ jobs:
         with:
           node-version: 19
           cache: 'yarn'
+      - run: yarn set version berry
       - run: yarn lint
       - run: yarn install
       - run: yarn build
