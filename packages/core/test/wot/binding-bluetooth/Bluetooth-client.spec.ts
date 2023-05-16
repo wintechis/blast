@@ -16,7 +16,7 @@ describe('Bluetooth client', () => {
   const client = new BluetoothClient(adapter as BluetoothAdapter);
 
   test('toString', () => {
-    expect(client.toString()).toEqual('[WebBluetoothClient]');
+    expect(client.toString()).toEqual('[BluetoothClient]');
   });
 
   describe('readResource', () => {

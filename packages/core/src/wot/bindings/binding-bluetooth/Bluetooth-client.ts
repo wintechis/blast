@@ -1,5 +1,5 @@
 /**
- * @fileoverview WebBluetooth protocol binding for eclipse/thingweb.node-wot
+ * @fileoverview Bluetooth protocol binding for eclipse/thingweb.node-wot
  */
 
 import {
@@ -15,7 +15,7 @@ import {Readable} from 'stream';
 
 const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
 
-export default class WebBluetoothClient implements ProtocolClient {
+export default class BluetoothClient implements ProtocolClient {
   bluetoothAdapter: BluetoothAdapter;
   subscriptions: Map<string, Subscription>;
 
@@ -26,7 +26,7 @@ export default class WebBluetoothClient implements ProtocolClient {
   }
 
   public toString(): string {
-    return '[WebBluetoothClient]';
+    return '[BluetoothClient]';
   }
   public async readResource(form: BluetoothForm): Promise<Content> {
     const deconstructedForm = this.deconstructForm(form);

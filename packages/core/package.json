@@ -45,6 +45,7 @@
     "eslint-plugin-node": "latest",
     "eslint-plugin-prettier": "latest",
     "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "pnp-webpack-plugin": "^1.7.0",
     "prettier": "^2.8.8",
