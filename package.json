@@ -23,7 +23,8 @@
         "./packages/*"
     ],
     "engines": {
-        "node": ">=16.0.0"
+        "node": ">=16.0.0",
+        "yarn": ">=3.5.1"
     },
     "dependencies": {
         "@types/node": "latest",

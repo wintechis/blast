@@ -47,7 +47,8 @@
   },
   "type": "module",
   "engines": {
-    "node": ">=18.12.0"
+    "node": ">=16.0.0",
+    "yarn": ">=3.5.1"
   },
   "browserslist": {
     "production": [
