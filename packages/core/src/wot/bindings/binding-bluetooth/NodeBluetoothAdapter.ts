@@ -46,9 +46,7 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     debug(`Getting service ${serviceID} on device ${deviceId}`);
     const service = await gattServer.getPrimaryService(serviceID);
 
-    debug(
-      `Getting characteristic ${characteristicId} on device ${deviceId}`
-    );
+    debug(`Getting characteristic ${characteristicId} on device ${deviceId}`);
     return service.getCharacteristic(
       characteristicId
     ) as unknown as Promise<BluetoothRemoteGATTCharacteristic>;
