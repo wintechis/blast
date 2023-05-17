@@ -1,7 +1,5 @@
 **/.yarn/*
-!**/.yarn/cache
-!**/.yarn/plugins
-!**/.yarn/sdks
+.yarnrc.yml
 **/dist
 **/build
 **/coverage

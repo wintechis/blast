@@ -11,10 +11,11 @@
     },
     "license": "AGPL-3.0",
     "scripts": {
-        "build": "yarn workspaces foreach run build",
-        "lint": "yarn workspaces foreach run lint",
-        "test": "yarn workspaces foreach run test",
-        "test:coverage": "yarn workspaces foreach run test:coverage",
+        "install": "yarn workspace @blast/core install && yarn workspace @blast/web install",
+        "build": "yarn workspace @blast/core run build && yarn workspace @blast/web run build",
+        "lint": "yarn workspace @blast/core run lint && yarn workspace @blast/web run lint",
+        "test": "yarn workspace @blast/core run test && yarn workspace @blast/web run test",
+        "test:coverage": "yarn workspace @blast/core run test:coverage && yarn workspace @blast/web run test:coverage",
         "start": "yarn workspace @blast/web run start"
     },
     "type": "module",
