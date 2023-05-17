@@ -8,9 +8,11 @@ This is a monorepo with two installable packages:
 ## Quick start
 In order to use the BLAST web demo open a Terminal and enter the following commands:
 1. Clone this repository with `git clone https://github.com/wintechis/blast`
-2. Install dependencies: `yarn install` (`yarn install --ignore-engines` on node v17+)
-3. Build BLAST: `yarn build`
-4. Start BLAST web: `yarn start`
-5. Open your Browser and navigate to `https://localhost:3000`
+2. Install dependencies: `yarn install`
+4. Build BLAST: `yarn build`
+5. Start BLAST web: `yarn start`
+6. Open your Browser and navigate to `https://localhost:3000`
+
+> :warning: You might have to set yarn version using `yarn set version berry` before installing
 
 For more detailed descriptions navigate to one of the packages ([`@blast/core`](./packages/core/) or [`@blast/web`](./packages/web/))
