@@ -209,13 +209,3 @@ export default class ConnectDialog extends React.Component {
     }
   }
 }
-
-function isValidHttpUrl(string) {
-  let url;
-  try {
-    url = new URL(string);
-  } catch (_) {
-    return false;
-  }
-  return url.protocol === 'https:';
-}

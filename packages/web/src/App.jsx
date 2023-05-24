@@ -144,7 +144,7 @@ export default function App() {
                             zIndex: 99999,
                             top: '112px',
                             left: '24px',
-                            'background-color': 'rgba(0,0,0,0.1)',
+                            backgroundColor: 'rgba(0,0,0,0.1)',
                           }}
                         >
                           Workspace is disabled while running...

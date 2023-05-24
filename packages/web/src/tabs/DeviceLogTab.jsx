@@ -9,26 +9,26 @@ import {setThingsLog} from '../assets/js/things.js';
 let logId = 0;
 
 const logCss = {
-  'font-family': 'monospace',
-  'line-height': '16px',
+  fontFamily: 'monospace',
+  lineHeight: '16px',
   margin: '2px',
 };
 
 const logTimeClass = {
-  'white-space': 'nowrap',
+  whiteSpace: 'nowrap',
   color: 'gray',
 };
 
 const logIdentifierClass = {
-  'font-size': '12px',
+  fontSize: '12px',
   border: '1px solid',
-  'border-radius': '2px',
-  'font-weight': 'bold',
+  borderRadius: '2px',
+  fontWeight: 'bold',
   height: '16px',
-  'margin-inline-end': '5px',
-  'margin-top': '2px',
+  marginInlineEnd: '5px',
+  marginTop: '2px',
   padding: '0 2px 0 2px',
-  'white-space': 'nowrap',
+  whiteSpace: 'nowrap',
   ...logCss,
 };
 
@@ -38,13 +38,13 @@ const logAdapterClass = {
 };
 
 const logMessageCodeClass = {
-  'font-family':
+  fontFamily:
     'ui-monospace,SFMono-Regular,SF Mono,Menlo,Consolas,Liberation Mono,monospace',
   padding: '0.2em 0.4em',
   margin: 0,
-  'font-size': '85%',
-  'background-color': 'rgb(175 184 193 / 20%)',
-  'border-radius': '6px',
+  fontSize: '85%',
+  backgroundColor: 'rgb(175 184 193 / 20%)',
+  borderRadius: '6px',
 };
 
 export default class DeviceLogTab extends React.Component {

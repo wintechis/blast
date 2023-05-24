@@ -19,9 +19,6 @@ module.exports = {
       ],
     },
     resolve: {
-      alias: {
-        '@mui/styled-engine': '@mui/styled-engine-sc',
-      },
       extensions: ['.js', '.ts'],
     },
     plugins: [

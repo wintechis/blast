@@ -55,7 +55,8 @@ export default class Output extends React.Component {
     // overwrite console.error
     const oldError = console.error;
     console.error = msg => {
-      oldError(msg);
+      const args = Array.from(arguments);
+      oldError.apply(console, args);
       globalThis['interpreterExecutionExit'] = true;
       resetInterpreter();
       setStatus('error');

@@ -15,8 +15,7 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "engines": {
-    "node": ">=16.0.0",
-    "yarn": ">=3.5.1"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "build": "yarn run clean && yarn run bundle",
@@ -54,7 +53,7 @@
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "webpack-cli": "^5.1.0"
+    "webpack-cli": "latest"
   },
   "dependencies": {
     "@node-wot/binding-http": "0.8.6",
@@ -73,12 +72,11 @@
     "typescript": "latest",
     "uritemplate": "^0.3.4",
     "uuid": "^9.0.0",
-    "webpack": "^5.82.0",
+    "webpack": "latest",
     "wot-thing-description-types": "1.1.0-23-March-2023",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.25",
     "x11": "^2.3.0"
   },
-  "packageManager": "yarn@3.5.1",
   "jest": {
     "coveragePathIgnorePatterns": [
       "/node_modules/",

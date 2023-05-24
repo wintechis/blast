@@ -7,7 +7,7 @@
 import {Events, Workspace, WorkspaceSvg} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import './blocks/index.js';
-import './generators/index.ts';
+import './generators/index';
 
 export type statusValues = 'ready' | 'running' | 'stopped' | 'error';
 
