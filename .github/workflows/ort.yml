@@ -12,4 +12,4 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v3
       - name: Run GitHub Action for ORT
-        uses: oss-review-toolkit/ort-ci-github-action@15297c37f35256c0e3a977c30771761ff51235d7
+        uses: oss-review-toolkit/ort-ci-github-action@v1
