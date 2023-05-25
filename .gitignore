@@ -1,6 +1,5 @@
 **/.yarn/*
 !**/.yarn/plugins
-.yarnrc.yml
 **/dist
 **/build
 **/coverage
