@@ -1,10 +1,8 @@
 {
   "name": "@blast/core",
   "version": "0.0.1",
+  "main": "dist/index.js",
   "description": "Block Applications for Things",
-  "directories": {
-    "doc": "docs"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wintechis/blast.git"
@@ -27,7 +25,6 @@
     "test:coverage": "jest --coverage"
   },
   "type": "module",
-  "main": "index.html",
   "license": "AGPL-3.0",
   "devDependencies": {
     "@jest/globals": "^29.5.0",

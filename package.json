@@ -37,5 +37,6 @@
         "lint-staged": "latest",
         "prettier": "latest",
         "typescript": "latest"
-    }
+    },
+    "packageManager": "yarn@3.5.1"
 }
