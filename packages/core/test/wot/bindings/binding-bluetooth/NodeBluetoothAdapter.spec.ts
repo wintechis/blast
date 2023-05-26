@@ -46,7 +46,7 @@ jest.mock('node-ble', () => {
 // eslint-disable-next-line node/no-unpublished-import
 import {beforeAll, describe, expect, jest, test} from '@jest/globals';
 import {createBluetooth} from 'node-ble';
-import ConcreteBluetoothAdapter from '../../../src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter';
+import ConcreteBluetoothAdapter from '../../../../src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter';
 
 describe('NodeBluetoothAdapter', () => {
   const adapter = new ConcreteBluetoothAdapter();

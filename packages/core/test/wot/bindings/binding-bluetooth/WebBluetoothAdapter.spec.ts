@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-unpublished-import
 import {describe, expect, jest, test} from '@jest/globals';
-import ConcreteBluetoothAdapter from '../../../src/wot/bindings/binding-bluetooth/WebBluetoothAdapter';
+import ConcreteBluetoothAdapter from '../../../../src/wot/bindings/binding-bluetooth/WebBluetoothAdapter';
 
 describe('WebBluetoothAdapter', () => {
   const adapter = new ConcreteBluetoothAdapter();

@@ -1,8 +1,8 @@
 // eslint-disable-next-line node/no-unpublished-import
 import {describe, expect, jest, test} from '@jest/globals';
-import BluetoothClientFactory from '../../../src/wot/bindings/binding-bluetooth/Bluetooth-client-factory';
-import ConcreteBluetoothAdapter from '../../../src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter';
-import BluetoothClient from '../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
+import BluetoothClientFactory from '../../../../src/wot/bindings/binding-bluetooth/Bluetooth-client-factory';
+import ConcreteBluetoothAdapter from '../../../../src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter';
+import BluetoothClient from '../../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
 
 describe('BluetoothClientFactory', () => {
   describe('getClient', () => {

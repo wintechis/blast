@@ -3,9 +3,9 @@ import {describe, expect, jest, test} from '@jest/globals';
 import {Content} from '@node-wot/core';
 import {Readable} from 'node:stream';
 
-import BluetoothClient from '../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
-import {BluetoothAdapter} from '../../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
-import {BluetoothAdapterMock} from '../../helpers/BluetoothAdapterMock';
+import BluetoothClient from '../../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
+import {BluetoothAdapter} from '../../../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
+import {BluetoothAdapterMock} from '../../../test-helpers/BluetoothAdapterMock';
 
 describe('Bluetooth client', () => {
   const adapter = new BluetoothAdapterMock();

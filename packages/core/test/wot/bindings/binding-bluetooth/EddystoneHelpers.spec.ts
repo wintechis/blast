@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
 import {describe, expect, test} from '@jest/globals';
 
-import {EddystoneHelpers} from '../../../src/wot/bindings/binding-bluetooth/EddystoneHelpers';
+import {EddystoneHelpers} from '../../../../src/wot/bindings/binding-bluetooth/EddystoneHelpers';
 
 const {parseCapabilities, decodeAdvertisingData, encodeAdvertisingData} =
   EddystoneHelpers;
