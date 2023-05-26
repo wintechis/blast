@@ -30,13 +30,13 @@ export const requestDevice = async function (thing) {
   if (navigator.bluetooth) {
     let options = {};
     // if no filters are given, accept all devices
-    if (!thing || !thing.filters) {
+    if (!thing?.filters) {
       options = {};
       options.acceptAllDevices = true;
     } else {
       options.filters = thing.filters;
     }
-    if (thing && thing.optionalServices) {
+    if (thing?.optionalServices) {
       options.optionalServices = thing.optionalServices;
     }
 
