@@ -47,7 +47,7 @@ export default class Output extends React.Component {
           messages: state.messages.concat({
             text: msg.toString(),
             time: new Date().toLocaleTimeString(),
-            type: type || 'text',
+            type: type ?? 'text',
           }),
         };
       });

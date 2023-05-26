@@ -117,12 +117,12 @@ export class BinaryDataStreamCodec implements ContentCodec {
  * @returns converted byte value.
  */
 function byte2int(schema: DataSchema, bytes: Buffer) {
-  const bytelength = schema['bdo:bytelength'] || bytes.byteLength;
-  const signed = schema['bdo:signed'] || false;
-  const byteOrder = schema['bdo:byteOrder'] || 'little';
-  const scale = schema['bdo:scale'] || 1;
-  const offset = schema['bdo:offset'] || 0;
-  const precision = schema['bdo:precision'] || 2;
+  const bytelength = schema['bdo:bytelength'] ?? bytes.byteLength;
+  const signed = schema['bdo:signed'] ?? false;
+  const byteOrder = schema['bdo:byteOrder'] ?? 'little';
+  const scale = schema['bdo:scale'] ?? 1;
+  const offset = schema['bdo:offset'] ?? 0;
+  const precision = schema['bdo:precision'] ?? 2;
 
   if (typeof bytelength === 'undefined') {
     throw new Error('Not all parameters are provided!');
@@ -159,10 +159,10 @@ function byte2int(schema: DataSchema, bytes: Buffer) {
  */
 function int2byte(schema: DataSchema, dataValue: number) {
   const bytelength = schema['bdo:bytelength'];
-  const signed = schema['bdo:signed'] || false;
-  const byteOrder = schema['bdo:byteOrder'] || 'little';
-  const scale = schema['bdo:scale'] || 1;
-  const offset = schema['bdo:offset'] || 0;
+  const signed = schema['bdo:signed'] ?? false;
+  const byteOrder = schema['bdo:byteOrder'] ?? 'little';
+  const scale = schema['bdo:scale'] ?? 1;
+  const offset = schema['bdo:offset'] ?? 0;
 
   if (typeof bytelength === 'undefined') {
     throw new Error('Not all parameters are provided!');

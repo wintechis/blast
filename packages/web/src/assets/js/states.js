@@ -31,7 +31,7 @@ export const findLegalName = function (name, block) {
   if (block.isInFlyout) {
     return name;
   }
-  name = name || Msg['UNNAMED_KEY'] || 'unnamed';
+  name = name ?? Msg['UNNAMED_KEY'] ?? 'unnamed';
   while (!isLegalName_(name, block.workspace, block)) {
     // Collision with another state.
     const r = name.match(/^(.*?)(\d+)$/);

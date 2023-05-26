@@ -23,7 +23,7 @@ class CharacteristicMock
     value?: DataView
   ) {
     super();
-    this.value = value || new DataView(new ArrayBuffer(0));
+    this.value = value ?? new DataView(new ArrayBuffer(0));
   }
 
   public startNotifications(): Promise<BluetoothRemoteGATTCharacteristic> {

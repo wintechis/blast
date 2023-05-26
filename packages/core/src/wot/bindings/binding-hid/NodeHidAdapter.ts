@@ -57,7 +57,7 @@ export default class ConcreteHidAdapter implements HidAdapter {
       opened: true,
       vendorId: device.vendorId,
       productId: device.productId,
-      productName: device.product || '',
+      productName: device.product ?? '',
       collections: [],
       oninputreport: null,
       addEventListener: (

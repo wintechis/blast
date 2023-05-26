@@ -53,7 +53,7 @@ export default class BluetoothClient implements ProtocolClient {
     const body = Readable.from(buff);
 
     return {
-      type: form.contentType || 'application/x.binary-data-stream',
+      type: form.contentType ?? 'application/x.binary-data-stream',
       body: body,
       toBuffer: () => {
         return ProtocolHelpers.readStreamFully(body);
@@ -166,7 +166,7 @@ export default class BluetoothClient implements ProtocolClient {
       // Convert to readable
       const body = Readable.from(buff);
       next({
-        type: form.contentType || 'application/x.binary-data-stream',
+        type: form.contentType ?? 'application/x.binary-data-stream',
         body: body,
         toBuffer: () => {
           return ProtocolHelpers.readStreamFully(body);
@@ -256,7 +256,7 @@ export default class BluetoothClient implements ProtocolClient {
     }
 
     // Extract operation -> e.g. readproperty; writeproperty
-    deconstructedForm.operation = form.op?.toString() || '';
+    deconstructedForm.operation = form.op?.toString() ?? '';
 
     // Get BLE operation type
     deconstructedForm.bleOperation = form['sbo:methodName'];
