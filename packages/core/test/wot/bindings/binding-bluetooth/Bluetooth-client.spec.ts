@@ -5,7 +5,7 @@ import {Readable} from 'node:stream';
 
 import BluetoothClient from '../../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
 import {BluetoothAdapter} from '../../../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
-import {BluetoothAdapterMock} from '../../../test-helpers/BluetoothAdapterMock';
+import BluetoothAdapterMock from '../../../test-helpers/BluetoothAdapterMock';
 
 describe('Bluetooth client', () => {
   const adapter = new BluetoothAdapterMock();
@@ -15,8 +15,10 @@ describe('Bluetooth client', () => {
   );
   const client = new BluetoothClient(adapter as BluetoothAdapter);
 
-  test('toString', () => {
-    expect(client.toString()).toEqual('[BluetoothClient]');
+  describe('toString', () => {
+    test('should return [BluetoothClient]', () => {
+      expect(client.toString()).toEqual('[BluetoothClient]');
+    });
   });
 
   describe('readResource', () => {

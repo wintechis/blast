@@ -36,9 +36,6 @@ export default class HidClient implements ProtocolClient {
       throw new Error('hid:path cannot be undefined');
     }
     const device = await this.hidAdapter.getDevice(id);
-    if (!device) {
-      throw new Error(`Device ${id} not found`);
-    }
     const reportId = form['hid:reportId'];
     const reportLength = form['hid:reportLength'];
 
@@ -76,12 +73,7 @@ export default class HidClient implements ProtocolClient {
       throw new Error('hid:path cannot be undefined');
     }
     const device = await this.hidAdapter.getDevice(id);
-    if (!device) {
-      throw new Error(`Device ${id} not found`);
-    }
-
     const methodName = form.href.split('://')[1].split('/')[0];
-
     const buf = await content.toBuffer();
 
     let data;
@@ -105,10 +97,10 @@ export default class HidClient implements ProtocolClient {
 
     if (methodName === 'sendFeatureReport') {
       debug(`Sending feature report: ${reportId} ${data}`);
-      device.sendFeatureReport(reportId, data);
+      await device.sendFeatureReport(reportId, data);
     } else if (methodName === 'sendReport') {
       debug(`Sending report: ${reportId} ${data}`);
-      device.sendReport(reportId, Buffer.from(data.subarray(1)));
+      await device.sendReport(reportId, Buffer.from(data.subarray(1)));
     } else {
       throw new Error(`Method ${methodName} is not supported`);
     }

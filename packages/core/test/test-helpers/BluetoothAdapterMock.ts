@@ -1,6 +1,9 @@
-import {BluetoothAdapter} from "../../src/wot/bindings/binding-bluetooth/BluetoothAdapter";
+import {BluetoothAdapter} from '../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
 
-class CharacteristicMock extends EventTarget implements BluetoothRemoteGATTCharacteristic {
+class CharacteristicMock
+  extends EventTarget
+  implements BluetoothRemoteGATTCharacteristic
+{
   public value: DataView;
   public properties = {
     authenticatedSignedWrites: false,
@@ -14,7 +17,11 @@ class CharacteristicMock extends EventTarget implements BluetoothRemoteGATTChara
     writeWithoutResponse: false,
   };
 
-  constructor(public service: BluetoothRemoteGATTService, public uuid: string, value?: DataView) {
+  constructor(
+    public service: BluetoothRemoteGATTService,
+    public uuid: string,
+    value?: DataView
+  ) {
     super();
     this.value = value || new DataView(new ArrayBuffer(0));
   }
@@ -45,40 +52,53 @@ class CharacteristicMock extends EventTarget implements BluetoothRemoteGATTChara
   }
 
   public getDescriptor() {
-    return Promise.reject(new Error("Not implemented"));
+    return Promise.reject(new Error('Not implemented'));
   }
 
   public getDescriptors() {
-    return Promise.reject(new Error("Not implemented"));
+    return Promise.reject(new Error('Not implemented'));
   }
 
-  public oncharacteristicvaluechanged(this: BluetoothRemoteGATTCharacteristic, ev: Event) {
+  public oncharacteristicvaluechanged(
+    this: BluetoothRemoteGATTCharacteristic,
+    ev: Event
+  ) {
     return null;
   }
 }
 
-export class BluetoothAdapterMock implements BluetoothAdapter {
+export default class BluetoothAdapterMock implements BluetoothAdapter {
   private characteristics: BluetoothRemoteGATTCharacteristic[] = [];
 
   public addCharacteristic(characteristicId: string, value?: DataView) {
-    const char = new CharacteristicMock((null as unknown as BluetoothRemoteGATTService), characteristicId, value)
+    const char = new CharacteristicMock(
+      null as unknown as BluetoothRemoteGATTService,
+      characteristicId,
+      value
+    );
     this.characteristics.push(char);
     return char;
   }
 
-  public getCharacteristic(deviceId: string, serviceID: BluetoothServiceUUID, characteristicId: BluetoothCharacteristicUUID): Promise<BluetoothRemoteGATTCharacteristic> {
-    const characteristic = this.characteristics.find((c) => c.uuid === characteristicId);
+  public getCharacteristic(
+    deviceId: string,
+    serviceID: BluetoothServiceUUID,
+    characteristicId: BluetoothCharacteristicUUID
+  ): Promise<BluetoothRemoteGATTCharacteristic> {
+    const characteristic = this.characteristics.find(
+      c => c.uuid === characteristicId
+    );
     if (characteristic) {
-        return Promise.resolve(characteristic);
+      return Promise.resolve(characteristic);
     } else {
-        return Promise.reject(new Error("Characteristic not found"));
+      return Promise.reject(new Error('Characteristic not found'));
     }
   }
 
   public setCharacteristicValue(uuid: string, value: ArrayBuffer) {
-    const characteristic = this.characteristics.find((c) => c.uuid === uuid);
+    const characteristic = this.characteristics.find(c => c.uuid === uuid);
     if (characteristic) {
-        (characteristic as CharacteristicMock).value = new DataView(value);
+      (characteristic as CharacteristicMock).value = new DataView(value);
     }
   }
 }
