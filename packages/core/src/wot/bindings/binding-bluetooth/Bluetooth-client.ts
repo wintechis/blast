@@ -199,7 +199,7 @@ export default class BluetoothClient implements ProtocolClient {
   public async stop(): Promise<void> {
     debug('Stopping client');
     for (const subscription of this.subscriptions.values()) {
-      await subscription.unsubscribe();
+      subscription.unsubscribe();
     }
     this.subscriptions.clear();
   }

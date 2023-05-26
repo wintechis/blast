@@ -3,7 +3,6 @@ import {describe, expect, jest, test} from '@jest/globals';
 import {Readable} from 'node:stream';
 
 import HidClient from '../../../../src/wot/bindings/binding-hid/Hid-client';
-import {HidAdapter} from '../../../../src/wot/bindings/binding-hid/HidAdapter';
 import HidAdapterMock from '../../../test-helpers/HidAdapterMock';
 
 describe('HidClient', () => {
@@ -27,12 +26,6 @@ describe('HidClient', () => {
       'hid:reportId': 1,
       'hid:reportLength': 8,
     };
-    test('should throw error if hid:path is undefined', async () => {
-      form['hid:path'] = undefined as unknown as string;
-      await expect(client.readResource(form)).rejects.toThrow(
-        'hid:path cannot be undefined'
-      );
-    });
     test('should throw error if device is not found', async () => {
       form['hid:path'] = 'not-found';
       await expect(client.readResource(form)).rejects.toThrow(
@@ -91,14 +84,6 @@ describe('HidClient', () => {
         return Promise.resolve(Buffer.from(new Uint8Array([99])));
       },
     };
-    test('should throw error if hid:path is undefined', async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (form as any)['hid:path'] = undefined;
-      await expect(client.writeResource(form, content)).rejects.toThrow(
-        'hid:path cannot be undefined'
-      );
-      form['hid:path'] = 'test-device';
-    });
     test('should throw error if device is not found', async () => {
       form['hid:path'] = 'not-found';
       await expect(client.writeResource(form, content)).rejects.toThrow(
@@ -128,6 +113,13 @@ describe('HidClient', () => {
       );
       form.href = 'hid://sendFeatureReport';
     });
+    test('throws for unsupported method name', async () => {
+      form.href = 'hid://unsupported';
+      await expect(client.writeResource(form, content)).rejects.toThrow(
+        'Method unsupported is not supported'
+      );
+      form.href = 'hid://sendFeatureReport';
+    });
     test('writing unsigned integer in a report array', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (form as any)['hid:data'] = [0, 1, 2, 3, 4, 5, 6, 7];
@@ -142,7 +134,7 @@ describe('HidClient', () => {
         Buffer.from(new Uint8Array([0, 1, 2, 99, 4, 5, 6, 7]))
       );
     });
-    test('writing signed integer', async () => {
+    test('writing signed integer in a report array', async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (form as any)['signed'] = true;
       jest.spyOn(device, 'sendFeatureReport');
@@ -152,6 +144,45 @@ describe('HidClient', () => {
       expect(device.sendFeatureReport).toHaveBeenCalledWith(
         1,
         Buffer.from(new Int8Array([0, 1, 2, 99, 4, 5, 6, 7]))
+      );
+    });
+  });
+  describe('invokeResource', () => {
+    const content = {
+      type: 'application/octet-stream',
+      body: Readable.from(new Uint8Array([99])),
+      toBuffer: () => {
+        return Promise.resolve(Buffer.from(new Uint8Array([99])));
+      },
+    };
+    test('calls writeResource', async () => {
+      const form = {
+        href: 'hid://sendFeatureReport',
+        'hid:path': 'test-device',
+        'hid:reportId': 1,
+        'hid:reportLength': 8,
+      };
+      jest.spyOn(client, 'writeResource');
+      await client.invokeResource(form, content);
+      expect(client.writeResource).toHaveBeenCalled();
+    });
+  });
+
+  describe('unlinkResource', () => {
+    const form = {
+      href: 'hid://receiveInputReport',
+      'hid:path': 'test-device',
+      contentType: 'application/x.binary-data-stream',
+    };
+    const handler = () => {};
+
+    test('unsubscribes from input reports', async () => {
+      jest.spyOn(device, 'removeEventListener');
+      await client.subscribeResource(form, handler);
+      await client.unlinkResource(form);
+      expect(device.removeEventListener).toHaveBeenCalledWith(
+        'inputreport',
+        expect.any(Function)
       );
     });
   });

@@ -9,7 +9,7 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {Form, SecurityScheme} from '@node-wot/td-tools';
+import {SecurityScheme} from '@node-wot/td-tools';
 import {HidForm} from './Hid';
 import {Subscription} from 'rxjs';
 import {HidAdapter} from './HidAdapter';
@@ -19,12 +19,12 @@ const {debug} = createLoggers('binding-hid', 'hid-client');
 
 export default class HidClient implements ProtocolClient {
   hidAdapter: HidAdapter;
-  subscriptions: Subscription[];
+  subscriptions: Map<string, Subscription>;
 
   constructor(hidAdapter: HidAdapter) {
     debug('created client');
     this.hidAdapter = hidAdapter;
-    this.subscriptions = [];
+    this.subscriptions = new Map();
   }
 
   public toString(): string {
@@ -32,9 +32,6 @@ export default class HidClient implements ProtocolClient {
   }
   public async readResource(form: HidForm): Promise<Content> {
     const id = form['hid:path'];
-    if (id === undefined) {
-      throw new Error('hid:path cannot be undefined');
-    }
     const device = await this.hidAdapter.getDevice(id);
     const reportId = form['hid:reportId'];
     const reportLength = form['hid:reportLength'];
@@ -111,18 +108,20 @@ export default class HidClient implements ProtocolClient {
     content: Content
   ): Promise<Content> {
     await this.writeResource(form, content);
-    return new Promise((resolve, reject) => {
-      resolve(
-        new Content(
-          form.contentType || 'application/octet-stream',
-          Readable.from([])
-        )
-      );
-    });
+    return Promise.resolve(
+      new Content(
+        form.contentType ?? 'application/octet-stream',
+        Readable.from([])
+      )
+    );
   }
 
-  public unlinkResource(form: Form): Promise<void> {
-    throw new Error('not implemented');
+  public unlinkResource(form: HidForm): Promise<void> {
+    const subscription = this.subscriptions.get(form['hid:path']);
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+    return Promise.resolve();
   }
 
   public async subscribeResource(
@@ -132,9 +131,6 @@ export default class HidClient implements ProtocolClient {
     complete?: () => void
   ): Promise<Subscription> {
     const id = form['hid:path'];
-    if (id === undefined) {
-      throw new Error('hid:path cannot be undefined');
-    }
     const device = await this.hidAdapter.getDevice(id);
     if (!device) {
       throw new Error(`Device ${id} not found`);
@@ -167,7 +163,7 @@ export default class HidClient implements ProtocolClient {
       debug("Removing 'inputreport' listener from device: ${id}");
       device.removeEventListener('inputreport', handler);
     });
-    this.subscriptions.push(subscription);
+    this.subscriptions.set(id, subscription);
     return subscription;
   }
 
@@ -177,8 +173,10 @@ export default class HidClient implements ProtocolClient {
 
   public async stop(): Promise<void> {
     debug('Stopping client');
-    this.subscriptions.forEach(subscription => subscription.unsubscribe());
-    this.subscriptions = [];
+    for (const subscription of this.subscriptions.values()) {
+      subscription.unsubscribe();
+    }
+    this.subscriptions.clear();
   }
 
   public setSecurity(
