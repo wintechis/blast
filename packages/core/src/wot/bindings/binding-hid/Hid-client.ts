@@ -173,10 +173,7 @@ export default class HidClient implements ProtocolClient {
     this.subscriptions.clear();
   }
 
-  public setSecurity(
-    metadata: SecurityScheme[],
-    credentials?: unknown
-  ): boolean {
+  public setSecurity(): boolean {
     return false;
   }
 }

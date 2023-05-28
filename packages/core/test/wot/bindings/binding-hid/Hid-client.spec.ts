@@ -4,8 +4,8 @@ import {Readable} from 'node:stream';
 
 import HidClient from '../../../../src/wot/bindings/binding-hid/Hid-client';
 import HidAdapterMock from '../../../test-helpers/HidAdapterMock';
-import { InteractionOutput } from 'wot-typescript-definitions';
-import { Content } from '@node-wot/core';
+import {InteractionOutput} from 'wot-typescript-definitions';
+import {Content} from '@node-wot/core';
 
 describe('HidClient', () => {
   const adapter = new HidAdapterMock();
@@ -235,6 +235,42 @@ describe('HidClient', () => {
       sub.unsubscribe();
       device.dispatchEvent(event);
       expect(handler).toHaveBeenCalledTimes(1);
+    });
+
+    test('calls the handler', async () => {
+      const handler = jest.fn();
+      await client.subscribeResource(form, handler);
+      device.dispatchEvent(event);
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'application/x.binary-data-stream',
+          body: expect.any(Readable),
+        })
+      );
+    });
+  });
+
+  describe('stop', () => {
+    const event = new Event('inputreport');
+    // convert to HIDInputReportEvent
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event as any).data = Buffer.from(new Uint8Array([99]));
+    test('stops all subscriptions', async () => {
+      const form = {
+        href: 'hid://receiveInputReport',
+        'hid:path': 'test-device',
+      };
+      const handler = jest.fn();
+      await client.subscribeResource(form, handler);
+      await client.stop();
+      device.dispatchEvent(event);
+      expect(handler).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('setSecurity', () => {
+    test('returns false', async () => {
+      expect(client.setSecurity()).toBeFalsy();
     });
   });
 });
