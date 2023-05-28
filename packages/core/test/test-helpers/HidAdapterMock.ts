@@ -80,7 +80,7 @@ class HIDDeviceMock extends EventTarget implements HIDDevice {
       | null,
     options?: boolean | AddEventListenerOptions
   ): void {
-    return;
+    super.addEventListener(type, listener as EventListener, options);
   }
 
   public removeEventListener(
@@ -91,7 +91,7 @@ class HIDDeviceMock extends EventTarget implements HIDDevice {
       | null,
     options?: boolean | EventListenerOptions | undefined
   ): void {
-    return;
+    super.removeEventListener(type, callback as EventListener, options);
   }
 }
 

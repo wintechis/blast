@@ -4,6 +4,8 @@ import {Readable} from 'node:stream';
 
 import HidClient from '../../../../src/wot/bindings/binding-hid/Hid-client';
 import HidAdapterMock from '../../../test-helpers/HidAdapterMock';
+import { InteractionOutput } from 'wot-typescript-definitions';
+import { Content } from '@node-wot/core';
 
 describe('HidClient', () => {
   const adapter = new HidAdapterMock();
@@ -184,6 +186,55 @@ describe('HidClient', () => {
         'inputreport',
         expect.any(Function)
       );
+    });
+  });
+
+  describe('subscribeResource', () => {
+    const form = {
+      href: 'hid://receiveInputReport',
+      'hid:path': 'test-device',
+      contentType: 'application/x.binary-data-stream',
+    };
+    const event = new Event('inputreport');
+    // convert to HIDInputReportEvent
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (event as any).data = Buffer.from(new Uint8Array([99]));
+
+    test('subscribes to input reports', async () => {
+      const handler = () => {};
+      jest.spyOn(device, 'addEventListener');
+      await client.subscribeResource(form, handler);
+      expect(device.addEventListener).toHaveBeenCalledWith(
+        'inputreport',
+        expect.any(Function)
+      );
+    });
+
+    test('calls handler on input report', async () => {
+      const handler = jest.fn();
+      await client.subscribeResource(form, handler);
+      device.dispatchEvent(event);
+      expect(handler).toHaveBeenCalled();
+      device.dispatchEvent(event);
+      expect(handler).toHaveBeenCalledTimes(2);
+    });
+
+    test('throws error if device is not found', async () => {
+      const handler = () => {};
+      form['hid:path'] = 'not-found';
+      await expect(client.subscribeResource(form, handler)).rejects.toThrow(
+        'Device not-found not found'
+      );
+      form['hid:path'] = 'test-device';
+    });
+
+    test('unsubscribes from input reports', async () => {
+      const handler = jest.fn();
+      const sub = await client.subscribeResource(form, handler);
+      device.dispatchEvent(event);
+      sub.unsubscribe();
+      device.dispatchEvent(event);
+      expect(handler).toHaveBeenCalledTimes(1);
     });
   });
 });

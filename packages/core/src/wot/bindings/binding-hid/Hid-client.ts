@@ -66,9 +66,6 @@ export default class HidClient implements ProtocolClient {
 
   public async writeResource(form: HidForm, content: Content): Promise<void> {
     const id = form['hid:path'];
-    if (id === undefined) {
-      throw new Error('hid:path cannot be undefined');
-    }
     const device = await this.hidAdapter.getDevice(id);
     const methodName = form.href.split('://')[1].split('/')[0];
     const buf = await content.toBuffer();
@@ -132,9 +129,6 @@ export default class HidClient implements ProtocolClient {
   ): Promise<Subscription> {
     const id = form['hid:path'];
     const device = await this.hidAdapter.getDevice(id);
-    if (!device) {
-      throw new Error(`Device ${id} not found`);
-    }
 
     debug(`Subscribing to device:  ${id}`);
 
