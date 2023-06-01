@@ -214,7 +214,12 @@ describe('HidClient', () => {
       const handler = jest.fn();
       await client.subscribeResource(form, handler);
       device.dispatchEvent(event);
-      expect(handler).toHaveBeenCalled();
+      expect(handler).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'application/x.binary-data-stream',
+          body: expect.any(Readable),
+        })
+      );
       device.dispatchEvent(event);
       expect(handler).toHaveBeenCalledTimes(2);
     });
@@ -235,18 +240,6 @@ describe('HidClient', () => {
       sub.unsubscribe();
       device.dispatchEvent(event);
       expect(handler).toHaveBeenCalledTimes(1);
-    });
-
-    test('calls the handler', async () => {
-      const handler = jest.fn();
-      await client.subscribeResource(form, handler);
-      device.dispatchEvent(event);
-      expect(handler).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: 'application/x.binary-data-stream',
-          body: expect.any(Readable),
-        })
-      );
     });
   });
 
