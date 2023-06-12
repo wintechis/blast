@@ -34,10 +34,9 @@ jest.mock('node-hid', () => {
 });
 
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, jest, test} from '@jest/globals';
+import {beforeEach, describe, expect, jest, test} from '@jest/globals';
 import {Device, devices, HID} from 'node-hid';
 import ConcreteHidAdapter from '../../../../src/wot/bindings/binding-hid/NodeHidAdapter';
-import {beforeEach} from '@jest/globals';
 
 describe('NodeHidAdapter', () => {
   const adapter = new ConcreteHidAdapter();

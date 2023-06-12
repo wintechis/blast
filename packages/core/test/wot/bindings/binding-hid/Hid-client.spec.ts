@@ -4,8 +4,6 @@ import {Readable} from 'node:stream';
 
 import HidClient from '../../../../src/wot/bindings/binding-hid/Hid-client';
 import HidAdapterMock from '../../../test-helpers/HidAdapterMock';
-import {InteractionOutput} from 'wot-typescript-definitions';
-import {Content} from '@node-wot/core';
 
 describe('HidClient', () => {
   const adapter = new HidAdapterMock();
