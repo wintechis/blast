@@ -35,10 +35,10 @@ eventValues.set(${id}, ${stateCondition});
 async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
     while (true) {
         const value = ${stateCondition};
-        if (!eventValues.get(${stateName}) && value) {
+        if (!eventValues.get("${stateName}") && value) {
           eventTargets.get("${stateName}").dispatchEvent(customEvents.get(${id}));
         }
-        eventValues.set(${stateName}, value);
+        eventValues.set("${stateName}", value);
         await new Promise(resolve => setTimeout(resolve, 5));
     }
 }`
@@ -54,7 +54,7 @@ JavaScript['event'] = function (block: Block): string {
   const stateName = block.getFieldValue('NAME');
   const statements = JavaScript.statementToCode(block, 'statements');
 
-  const code = `eventTargets.get("${stateName}").addEventListener("${stateName}", () => {\n${statements}});\n`;
+  const code = `eventTargets.get("${stateName}").addEventListener("${stateName}", async () => {\n${statements}});\n`;
 
   return code;
 };
