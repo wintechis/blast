@@ -35,15 +35,15 @@ export const loadSample = async function (
     console.error(NOT_FOUND_ERROR.replace('%1', path));
     return;
   }
-  loadXml(xml, reconnectDialogRef);
+  await loadXml(xml, reconnectDialogRef);
 };
 
-const loadXml = function (
+const loadXml = async function (
   xmlString: string,
   reconnectDialogRef: React.RefObject<ReconnectDialog>
 ) {
   hideChaff();
-  resetInterpreter();
+  await resetInterpreter();
   resetThings();
 
   const workspace = getWorkspace();
@@ -85,14 +85,14 @@ const loadXml = function (
   }
 };
 
-export const loadFromFile = function asnyc(
+export const loadFromFile = function (
   event: React.ChangeEvent<HTMLInputElement>,
   reconnectDialogRef: React.RefObject<ReconnectDialog>
 ) {
   const fileReader = new FileReader();
-  fileReader.onload = function (event) {
+  fileReader.onload = async function (event) {
     const xml = event.target?.result as string;
-    loadXml(xml, reconnectDialogRef);
+    await loadXml(xml, reconnectDialogRef);
   };
   if (event.target?.files) {
     fileReader.readAsText(event.target?.files[0]);

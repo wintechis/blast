@@ -495,7 +495,7 @@ export const connectWebHidDevice = async function (thing) {
   addWebHidDevice(device[0].id, device[0].productName, device[0], thing);
   workspace.refreshToolboxSelection();
   thingsLog('Connected', 'HID', device[0].productName);
-  return device;
+  return device[0];
 };
 
 /**
