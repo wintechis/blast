@@ -125,6 +125,10 @@ export const setDevMode = function (value) {
   reloadToolbox();
 };
 
+export const getDevMode = function () {
+  return devMode;
+};
+
 let webBluetoothButtonHandler = null;
 /**
  * Sets the 'pair via webBluetooth' button handler.

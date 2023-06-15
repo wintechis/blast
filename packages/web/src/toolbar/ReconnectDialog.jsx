@@ -16,6 +16,7 @@ import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 import {connectWebHidDevice} from '../assets/js/things.js';
 import {getWorkspace} from '../assets/js/interpreter.ts';
 import {requestDevice} from '../assets/js/webBluetooth.js';
+import {getDevMode} from '../assets/js/things.js';
 
 export default class ReonnectDialog extends React.Component {
   constructor(props) {
@@ -38,7 +39,7 @@ export default class ReonnectDialog extends React.Component {
   };
 
   handleClose() {
-    if (this.allConnected()) {
+    if (this.allConnected() || getDevMode()) {
       this.setState({open: false});
       const workspace = getWorkspace();
       workspace.clear();
