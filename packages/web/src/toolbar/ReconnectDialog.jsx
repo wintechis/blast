@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import AddIcon from '@mui/icons-material/Add';
+import Button from '@mui/material/Button';
 import CheckIcon from '@mui/icons-material/Check';
 import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -106,6 +108,9 @@ export default class ReonnectDialog extends React.Component {
             );
           })}
         </List>
+        <DialogActions>
+          <Button onClick={this.handleClose}>Continue</Button>
+        </DialogActions>
       </Dialog>
     );
   }
