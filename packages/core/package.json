@@ -53,9 +53,9 @@
     "webpack-cli": "latest"
   },
   "dependencies": {
-    "@node-wot/binding-http": "0.8.6",
-    "@node-wot/core": "0.8.6",
-    "@node-wot/td-tools": "0.8.6",
+    "@node-wot/binding-http": "0.8.7",
+    "@node-wot/core": "0.8.7",
+    "@node-wot/td-tools": "0.8.7",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
     "inquirer": "^9.2.2",
@@ -70,8 +70,8 @@
     "uritemplate": "^0.3.4",
     "uuid": "^9.0.0",
     "webpack": "latest",
-    "wot-thing-description-types": "1.1.0-23-March-2023",
-    "wot-typescript-definitions": "0.8.0-SNAPSHOT.25",
+    "wot-thing-description-types": "1.1.0-24-May-2023",
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.26",
     "x11": "^2.3.0"
   },
   "jest": {
