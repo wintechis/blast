@@ -56,7 +56,8 @@ export const resetServient = async function (): Promise<void> {
 
 export const createThing = async function (
   td: WoT.ThingDescription,
-  id: string | undefined
+  id: string | undefined,
+  addHandlers?: ((thing: WoT.ExposedThing) => void) | undefined
 ): Promise<WoT.ConsumedThing> {
   if (id) {
     const map = {
@@ -69,6 +70,9 @@ export const createThing = async function (
   }
   const wotServient = await getWot();
   const exposedThing = await wotServient.produce(td);
+  if (addHandlers) {
+    addHandlers(exposedThing);
+  }
   await exposedThing.expose();
   const consumedThing = await wotServient.consume(
     exposedThing.getThingDescription()
