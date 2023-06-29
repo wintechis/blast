@@ -5,8 +5,8 @@
     {
       "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
       "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
-      "qudt": "",
-      "qudtUnit": ""
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
     },
     {"@language": "en"}
   ],
