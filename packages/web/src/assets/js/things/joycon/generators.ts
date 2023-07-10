@@ -5,12 +5,19 @@
 
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+import * as WoT from 'wot-typescript-definitions';
 import {addCleanUpFunction, getWorkspace} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
 
 JavaScript['things_joycon'] = function (block: Block): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
+};
+
+type Joystick = {
+  x: number;
+  y: number;
+  angle: number;
 };
 
 /**
@@ -229,7 +236,22 @@ JavaScript['joycon_button_events'] = function (block: Block): string {
 
 JavaScript['things_gamepad_pro'] = function (block: Block): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
+  const name = JavaScript.quote_(block.getFieldValue('name'));
+
+  JavaScript.imports_['core'] =
+    "const blastCore = await import('../../assets/blast/blast.web.js');";
+  JavaScript.imports_['tds'] =
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+
+  JavaScript.definitions_['createThingWithHandlers'] =
+    'const {createThingWithHandlers} = blastCore;';
+  JavaScript.definitions_['GamepadPro'] = 'const {GamepadPro} = blastTds;';
+  JavaScript.definitions_['things'] = 'const things = new Map();';
+  JavaScript.definitions_[
+    'things' + name
+  ] = `things.set(${name}, await createThingWithHandlers(GamepadPro, ${id}, addGamepadHandlers));`;
+
+  return [name, JavaScript.ORDER_NONE];
 };
 
 /**
@@ -238,70 +260,29 @@ JavaScript['things_gamepad_pro'] = function (block: Block): [string, number] {
 JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-  const ownId = JavaScript.quote_(block.id);
+  const statements = JavaScript.statementToCode(block, 'statements');
+  const xName = block.getFieldValue('gp-xName');
+  const yName = block.getFieldValue('gp-yName');
+  const angleName = block.getFieldValue('gp-angleName');
 
-  const handler = `gamepad_handleJoystick(${ownId}, ${blockId}, ${thing}, ${statements});\n`;
+  const eventHandler = JavaScript.provideFunction_('gamepad_joystickHandler', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(interactionOutput) {',
+    '  const joystick = await interactionOutput.value();',
+    `  ${xName} = joystick['x'] || 0;`,
+    `  ${yName} = joystick['y'] || 0;`,
+    `  ${angleName} = joystick['angle'] || 0;`,
+    `${statements.replace(/`/g, '\\`')}`,
+    '}',
+  ]);
+
+  const handler = `await things.get(${thing}).subscribeEvent('joystick', ${eventHandler});`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
   return '';
-};
-
-/**
- * Handles gamepad joystick events.
- */
-(globalThis as any)['gamepad_handleJoystick'] = function (
-  ownId: string,
-  blockId: string,
-  id: string,
-  statements: string
-) {
-  const switchPro = new SwitchPro();
-  (switchPro as any).interval = setInterval(
-    switchPro.pollGamepads.bind(switchPro),
-    200
-  );
-
-  const ws = getWorkspace();
-  const self = ws?.getBlockById(ownId);
-  if (self === null || self === undefined) {
-    return;
-  }
-  const xName = (self as any).xName;
-  const yName = (self as any).yName;
-  const angleName = (self as any).angleName;
-
-  (globalThis as any)[xName] = 0;
-  (globalThis as any)[yName] = 0;
-  (globalThis as any)[angleName] = 0;
-
-  const handleJoystick = function (joystick: any) {
-    (globalThis as any)[xName] = joystick['x'] || 0;
-    (globalThis as any)[yName] = joystick['y'] || 0;
-    (globalThis as any)[angleName] = joystick['angle'] || 0;
-
-    try {
-      eval(`(async () => {${statements}})();`);
-    } catch (e: any) {
-      console.error(e);
-    }
-  };
-
-  switchPro.addListener(handleJoystick);
-
-  addCleanUpFunction(() => {
-    if ((switchPro as any).interval) {
-      clearInterval((switchPro as any).interval);
-    }
-  });
 };
 
 /**
@@ -310,16 +291,21 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
 JavaScript['gamepad_pro_button'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.statementToCode(block, 'statements');
   const button = JavaScript.quote_(block.getFieldValue('button'));
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
 
-  const handler = `gamepad_handleButton(${blockId}, ${thing}, ${button}, ${statements});\n`;
+  const eventHandler = JavaScript.provideFunction_('gamepad_buttonHandler', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(interactionOutput) {',
+    '  const pressed = await interactionOutput.value();',
+    `  if (pressed[${button}]) {`,
+    `${statements.replace(/`/g, '\\`')}`,
+    '  }',
+    '}',
+  ]);
+
+  const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -328,14 +314,10 @@ JavaScript['gamepad_pro_button'] = function (block: Block): string {
 };
 
 /**
- * Handles gamepad button events.
- * @param {Blockly.Block.id} blockId the things_joycon block's id.
+ * Adds WoT event handlers to the gamepad's ExposedThing instance.
  */
-(globalThis as any)['gamepad_handleButton'] = async function (
-  blockId: string,
-  id: string,
-  button: number,
-  statements: string
+(globalThis as any)['addGamepadHandlers'] = function (
+  gamepad: WoT.ExposedThing
 ) {
   const switchPro = new SwitchPro();
   (switchPro as any).interval = setInterval(
@@ -343,16 +325,15 @@ JavaScript['gamepad_pro_button'] = function (block: Block): string {
     200
   );
 
-  const handleButton = async function (pressed: string[]) {
-    if (pressed[button]) {
-      try {
-        eval(`(async () => {${statements}})();`);
-      } catch (e: any) {
-        console.error(e);
-      }
-    }
+  const handleJoystick = function (joystick: Joystick) {
+    gamepad.emitEvent('joystick', joystick);
   };
 
+  const handleButton = function (pressed: string[]) {
+    gamepad.emitEvent('button', pressed);
+  };
+
+  switchPro.addListener(handleJoystick);
   switchPro.addListener(handleButton);
 
   addCleanUpFunction(() => {

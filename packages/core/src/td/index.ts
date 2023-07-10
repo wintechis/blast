@@ -2,6 +2,7 @@ import * as BleRgbController from './BleRgbController.json';
 import * as Blinkstick from './Blinkstick.json';
 import * as BluetoothGeneric from './BluetoothGeneric.json';
 import * as EddystoneDevice from './EddystoneDevice.json';
+import * as GamepadPro from './GamepadPro.json';
 import * as GoveeLamp from './GoveeLamp.json';
 import * as HuskyDuino from './HuskyDuino.json';
 import * as PhilipsHue from './PhilipsHue.json';
@@ -15,6 +16,7 @@ export {
   Blinkstick,
   BluetoothGeneric,
   EddystoneDevice,
+  GamepadPro,
   GoveeLamp,
   HuskyDuino,
   PhilipsHue,

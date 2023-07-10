@@ -43,6 +43,9 @@ export default class Output extends React.Component {
     console.log = (msg, type) => {
       oldLog(msg);
       this.setState(state => {
+        if (typeof msg === 'undefined') {
+          return;
+        }
         return {
           messages: state.messages.concat({
             text: msg.toString(),

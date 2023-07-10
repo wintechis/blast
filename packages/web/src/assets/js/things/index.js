@@ -13,7 +13,7 @@ import './bluetooth/generators.ts';
 import './huskyduino/blocks.js';
 import './huskyduino/generators.ts';
 
-import './joycon/blocks.js';
+import './joycon/blocks.ts';
 import './joycon/generators.ts';
 
 import './ruuviTag/blocks.ts';
