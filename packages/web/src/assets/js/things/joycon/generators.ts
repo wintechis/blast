@@ -14,6 +14,12 @@ JavaScript['things_joycon'] = function (block: Block): [string, number] {
   return [id, JavaScript.ORDER_NONE];
 };
 
+type Joystick = {
+  x: number;
+  y: number;
+  angle: number;
+};
+
 /**
  * Generates JavaScript code for the joycon_read_property block.
  */
@@ -280,6 +286,34 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
 };
 
 /**
+ * Generates JavaScript code for the gamepad_pro_button block.
+ */
+JavaScript['gamepad_pro_button'] = function (block: Block): string {
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.statementToCode(block, 'statements');
+  const button = JavaScript.quote_(block.getFieldValue('button'));
+
+  const eventHandler = JavaScript.provideFunction_('gamepad_buttonHandler', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(interactionOutput) {',
+    '  const pressed = await interactionOutput.value();',
+    `  if (pressed[${button}]) {`,
+    `${statements.replace(/`/g, '\\`')}`,
+    '  }',
+    '}',
+  ]);
+
+  const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
+  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+  // Event handlers need to be executed first, so they're added to JavaScript.definitions
+  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+
+  return '';
+};
+
+/**
  * Adds WoT event handlers to the gamepad's ExposedThing instance.
  */
 (globalThis as any)['addGamepadHandlers'] = function (
@@ -291,7 +325,7 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
     200
   );
 
-  const handleJoystick = function (joystick: any) {
+  const handleJoystick = function (joystick: Joystick) {
     gamepad.emitEvent('joystick', joystick);
   };
 
@@ -307,27 +341,4 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
       clearInterval((switchPro as any).interval);
     }
   });
-};
-
-/**
- * Generates JavaScript code for the gamepad_pro_button block.
- */
-JavaScript['gamepad_pro_button'] = function (block: Block): string {
-  const thing =
-    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-  const button = JavaScript.quote_(block.getFieldValue('button'));
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-
-  const handler = `gamepad_handleButton(${blockId}, ${thing}, ${button}, ${statements});\n`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
-
-  return '';
 };
