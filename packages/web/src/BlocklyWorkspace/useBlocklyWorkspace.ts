@@ -4,6 +4,7 @@ import {
   ContextMenuRegistry,
   getMainWorkspace,
   inject,
+  utils,
   WorkspaceSvg,
   Xml,
 } from 'blockly';
@@ -232,7 +233,7 @@ const useBlocklyWorkspace = ({
   React.useEffect(() => {
     if (xml && workspace && !didInitialImport) {
       const success = importFromXml(
-        Xml.textToDom(xml),
+        utils.xml.textToDom(xml),
         workspace,
         onImportXmlError
       );

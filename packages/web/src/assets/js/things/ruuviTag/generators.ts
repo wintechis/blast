@@ -9,7 +9,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_ruuviTag block.
  */
-JavaScript['things_ruuviTag'] = function (block: Block) {
+JavaScript.forBlock['things_ruuviTag'] = function (block: Block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -31,7 +31,7 @@ JavaScript['things_ruuviTag'] = function (block: Block) {
 /**
  * Generates JavaScript code for the ruuviTag_event block.
  */
-JavaScript['ruuviTag_event'] = function (block: Block) {
+JavaScript.forBlock['ruuviTag_event'] = function (block: Block) {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.statementToCode(block, 'statements');

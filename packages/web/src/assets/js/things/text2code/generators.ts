@@ -10,7 +10,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the text_to_code block.
  */
-JavaScript['text_to_code'] = function (block: Block): [string, number] {
+JavaScript.forBlock['text_to_code'] = function (
+  block: Block
+): [string, number] {
   const text = JavaScript.valueToCode(block, 'text', JavaScript.ORDER_ATOMIC);
 
   const code = `await textToCode(${text})`;

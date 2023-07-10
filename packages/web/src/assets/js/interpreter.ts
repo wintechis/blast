@@ -256,7 +256,7 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
   // Load the interpreter now, and upon future changes.
   generateCode();
   workspace.addChangeListener((e: any) => {
-    if (!(e instanceof Events.Ui)) {
+    if (!(e instanceof Events.UiBase)) {
       // Something changed. Parser needs to be reloaded.
       generateCode();
     }
@@ -297,19 +297,12 @@ export const runJS = async function () {
  * Overwrite JavaScript generator to add imports.
  */
 JavaScript.imports_ = Object.create(null);
+JavaScript.functionNames_ = Object.create(null);
+const origFinish = JavaScript.finish;
 JavaScript.finish = function (code: string) {
-  // Convert the imports and definitions dictionary into a list.
-  const imports = Object.values(this.imports_);
-  const definitions = Object.values(this.definitions_);
+  // Convert the imports dictionary into a list.
+  const imports = Object.values(JavaScript.imports_);
   // Call Blockly.CodeGenerator's finish.
-  code = Object.getPrototypeOf(this).finish.call(this, code);
-  this.isInitialized = false;
-
-  this.nameDB_.reset();
-  return imports.join('\n') + '\n\n' + definitions.join('\n') + '\n\n' + code;
-};
-Object.getPrototypeOf(JavaScript).init = function (_workspace: Workspace) {
-  this.definitions_ = Object.create(null);
-  this.imports_ = Object.create(null);
-  this.functionNames_ = Object.create(null);
+  code = origFinish.apply(JavaScript, [code]);
+  return imports.join('\n') + '\n\n' + code;
 };

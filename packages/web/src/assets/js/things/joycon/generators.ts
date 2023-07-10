@@ -9,7 +9,9 @@ import * as WoT from 'wot-typescript-definitions';
 import {addCleanUpFunction, getWorkspace} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
 
-JavaScript['things_joycon'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_joycon'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
@@ -23,7 +25,9 @@ type Joystick = {
 /**
  * Generates JavaScript code for the joycon_read_property block.
  */
-JavaScript['joycon_read_property'] = function (block: Block): [string, number] {
+JavaScript.forBlock['joycon_read_property'] = function (
+  block: Block
+): [string, number] {
   const property = JavaScript.quote_(block.getFieldValue('property'));
   const sub = JavaScript.quote_(block.getFieldValue('propertySubValue') || '');
   const sub2 = JavaScript.quote_(
@@ -79,7 +83,7 @@ JavaScript['joycon_read_property'] = function (block: Block): [string, number] {
 /**
  * Generates JavaScript code for the joycon_button_events block.
  */
-JavaScript['joycon_button_events'] = function (block: Block): string {
+JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
   const onWhile = JavaScript.quote_(block.getFieldValue('onWhile'));
@@ -234,7 +238,9 @@ JavaScript['joycon_button_events'] = function (block: Block): string {
   });
 };
 
-JavaScript['things_gamepad_pro'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_gamepad_pro'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -257,7 +263,7 @@ JavaScript['things_gamepad_pro'] = function (block: Block): [string, number] {
 /**
  * Generates JavaScript code for the gamepad_pro_joystick block.
  */
-JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
+JavaScript.forBlock['gamepad_pro_joystick'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.statementToCode(block, 'statements');
@@ -288,7 +294,7 @@ JavaScript['gamepad_pro_joystick'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the gamepad_pro_button block.
  */
-JavaScript['gamepad_pro_button'] = function (block: Block): string {
+JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.statementToCode(block, 'statements');

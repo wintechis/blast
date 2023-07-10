@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Blockly from 'blockly';
+import {utils, Xml} from 'blockly';
 import PropTypes from 'prop-types';
 import './App.css';
 import {TabContext, TabList, useTabContext} from '@mui/lab';
@@ -43,8 +43,6 @@ const theme = createTheme({
     },
   },
 });
-
-const {Xml} = Blockly;
 
 function TabPanel(props) {
   const {children, className, style, value: id, ...other} = props;
@@ -172,7 +170,8 @@ export default function App() {
                       showLineNumbers={true}
                       customStyle={{margin: 0, width: '100%'}}
                     >
-                      {xml !== '' && Xml.domToPrettyText(Xml.textToDom(xml))}
+                      {xml !== '' &&
+                        Xml.domToPrettyText(utils.xml.textToDom(xml))}
                     </SyntaxHighlighter>
                   </TabPanel>
                   <TabPanel value="log">

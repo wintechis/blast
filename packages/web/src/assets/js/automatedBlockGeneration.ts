@@ -11,6 +11,8 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 
 import {getWorkspace, eventsInWorkspace} from './interpreter';
+import {BlockDelete} from 'blockly/core/events/events_block_delete';
+import {Abstract} from 'blockly/core/events/events_abstract';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -86,7 +88,7 @@ export function generateThingBlock(
 }
 
 export function generateThingCode(deviceName: string, td: ThingDescription) {
-  JavaScript[`things_${deviceName}`] = function (block: Block) {
+  JavaScript.forBlock[`things_${deviceName}`] = function (block: Block) {
     const name = JavaScript.quote_(block.getFieldValue('name'));
 
     JavaScript.imports_['core'] =
@@ -137,15 +139,14 @@ export function generateReadPropertyCode(
   propertyName: string,
   deviceName: string
 ) {
-  JavaScript[`${deviceName}_readPropertyBlock_${propertyName}`] = function (
-    block: Block
-  ) {
-    const name =
-      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  JavaScript.forBlock[`${deviceName}_readPropertyBlock_${propertyName}`] =
+    function (block: Block) {
+      const name =
+        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    const code = `await (await things.get(${name}).readProperty('${propertyName}')).value()`;
-    return [code, JavaScript.ORDER_NONE];
-  };
+      const code = `await (await things.get(${name}).readProperty('${propertyName}')).value()`;
+      return [code, JavaScript.ORDER_NONE];
+    };
 }
 
 export function generateWritePropertyBlock(
@@ -221,59 +222,61 @@ export function generateWritePropertyCode(
   deviceName: string,
   td: ThingDescription
 ) {
-  JavaScript[`${deviceName}_writePropertyBlock_${propertyName}`] = function (
-    block: Block
-  ) {
-    if (
-      td.properties === undefined ||
-      td.properties[propertyName] === undefined
-    ) {
-      return;
-    }
-    const name =
-      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  JavaScript.forBlock[`${deviceName}_writePropertyBlock_${propertyName}`] =
+    function (block: Block) {
+      if (
+        td.properties === undefined ||
+        td.properties[propertyName] === undefined
+      ) {
+        return;
+      }
+      const name =
+        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    let value = '';
-    if (td.properties[propertyName]['enum'] !== undefined) {
-      const valueIndex = block.getFieldValue('value');
-      value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
-    } else {
-      if (td.properties[propertyName].type?.toLocaleLowerCase() === 'object') {
-        // iterate over inputs and create object
-        const objectProperties = td.properties[propertyName].properties;
-        if (objectProperties !== undefined) {
-          value = '{';
-          Object.keys(objectProperties).forEach(key => {
-            let inputValue =
-              JavaScript.valueToCode(block, key, JavaScript.ORDER_NONE) || null;
-            if (
-              td.properties?.[propertyName].properties?.[
-                key
-              ].type?.toLocaleLowerCase() === 'string'
-            ) {
-              inputValue = JavaScript.quote_(inputValue);
-            }
-            value += `"${key}": ${inputValue}`;
-            if (key !== Object.keys(objectProperties).pop()) {
-              value += ',';
-            }
-          });
-          value += '}';
-        }
+      let value = '';
+      if (td.properties[propertyName]['enum'] !== undefined) {
+        const valueIndex = block.getFieldValue('value');
+        value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
       } else {
-        value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
         if (
-          td.properties?.[propertyName].type?.toLocaleLowerCase() === 'string'
+          td.properties[propertyName].type?.toLocaleLowerCase() === 'object'
         ) {
-          value = JavaScript.quote_(value);
+          // iterate over inputs and create object
+          const objectProperties = td.properties[propertyName].properties;
+          if (objectProperties !== undefined) {
+            value = '{';
+            Object.keys(objectProperties).forEach(key => {
+              let inputValue =
+                JavaScript.valueToCode(block, key, JavaScript.ORDER_NONE) ||
+                null;
+              if (
+                td.properties?.[propertyName].properties?.[
+                  key
+                ].type?.toLocaleLowerCase() === 'string'
+              ) {
+                inputValue = JavaScript.quote_(inputValue);
+              }
+              value += `"${key}": ${inputValue}`;
+              if (key !== Object.keys(objectProperties).pop()) {
+                value += ',';
+              }
+            });
+            value += '}';
+          }
+        } else {
+          value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
+          if (
+            td.properties?.[propertyName].type?.toLocaleLowerCase() === 'string'
+          ) {
+            value = JavaScript.quote_(value);
+          }
         }
       }
-    }
 
-    const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
+      const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
 
-    return code;
-  };
+      return code;
+    };
 }
 
 export function generateInvokeActionBlock(
@@ -326,30 +329,29 @@ export function generateInvokeActionCode(
   input: DataSchema,
   output: DataSchema
 ) {
-  JavaScript[`${deviceName}_invokeActionBlock_${actionName}`] = function (
-    block: Block
-  ) {
-    const name =
-      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  JavaScript.forBlock[`${deviceName}_invokeActionBlock_${actionName}`] =
+    function (block: Block) {
+      const name =
+        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-    let code: string | string[] = '';
-    if (typeof input === 'undefined') {
-      code = `await things.get(${name}).invokeAction('${actionName}')`;
-    } else {
-      const value =
-        JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
-      code = `await things.get(${name}).invokeAction('${actionName}', ${value})`;
-    }
+      let code: string | string[] = '';
+      if (typeof input === 'undefined') {
+        code = `await things.get(${name}).invokeAction('${actionName}')`;
+      } else {
+        const value =
+          JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
+        code = `await things.get(${name}).invokeAction('${actionName}', ${value})`;
+      }
 
-    if (typeof output !== 'undefined') {
-      code = `await (${code}).value()`;
-      code = [code, JavaScript.ORDER_NONE];
-    } else {
-      code = `${code};\n`;
-    }
+      if (typeof output !== 'undefined') {
+        code = `await (${code}).value()`;
+        code = [code, JavaScript.ORDER_NONE];
+      } else {
+        code = `${code};\n`;
+      }
 
-    return code;
-  };
+      return code;
+    };
 }
 
 export function generateSubscribeEventBlock(
@@ -383,10 +385,10 @@ export function generateSubscribeEventBlock(
     addEvent: function () {
       eventsInWorkspace.push(this.id);
       // add change listener to remove block from events array when deleted.
-      this.changeListener = getWorkspace()?.addChangeListener((e: Event) => {
+      this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
         if (
           e.type === Events.BLOCK_DELETE &&
-          (e as any).ids.includes(this.id)
+          (e as BlockDelete).ids?.includes(this.id)
         ) {
           this.removeFromEvents();
         }
@@ -442,30 +444,29 @@ export function generateSubscribeEventCode(
   eventName: string,
   deviceName: string
 ) {
-  JavaScript[`${deviceName}_subscribeEventBlock_${eventName}`] = function (
-    block: Block
-  ) {
-    const thing =
-      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-    const statements = JavaScript.statementToCode(block, 'statements');
-    const eventVar = block.getFieldValue('eventVar');
+  JavaScript.forBlock[`${deviceName}_subscribeEventBlock_${eventName}`] =
+    function (block: Block) {
+      const thing =
+        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+      const statements = JavaScript.statementToCode(block, 'statements');
+      const eventVar = block.getFieldValue('eventVar');
 
-    const eventHandler = JavaScript.provideFunction_('handleGenericEvent', [
-      'async function ' +
-        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-        '(interactionOutput) {',
-      `  const ${eventVar} = await interactionOutput.value();`,
-      `  ${statements.replace(/`/g, '\\`')}`,
-      '}',
-    ]);
+      const eventHandler = JavaScript.provideFunction_('handleGenericEvent', [
+        'async function ' +
+          JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+          '(interactionOutput) {',
+        `  const ${eventVar} = await interactionOutput.value();`,
+        `  ${statements.replace(/`/g, '\\`')}`,
+        '}',
+      ]);
 
-    const handler = `await things.get(${thing}).subscribeEvent('${eventName}', ${eventHandler});\n`;
-    const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-    // Event handlers need to be executed first, so they're added to JavaScript.definitions
-    JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+      const handler = `await things.get(${thing}).subscribeEvent('${eventName}', ${eventHandler});\n`;
+      const handlersList = JavaScript.definitions_['eventHandlers'] || '';
+      // Event handlers need to be executed first, so they're added to JavaScript.definitions
+      JavaScript.definitions_['eventHandlers'] = handlersList + handler;
 
-    return '';
-  };
+      return '';
+    };
 }
 
 // TODO: Automaticall add string inputs
@@ -489,7 +490,7 @@ export function generateSecurityBlock() {
 }
 
 export function generateSecurityCode(td: ThingDescription) {
-  JavaScript['SecurityBlock'] = function (block: Block) {
+  JavaScript.forBlock['SecurityBlock'] = function (block: Block) {
     const username = JavaScript.valueToCode(
       block,
       'username',

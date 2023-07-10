@@ -9,7 +9,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_audioOutput block.
  */
-JavaScript['things_audioOutput'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_audioOutput'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
@@ -17,7 +19,9 @@ JavaScript['things_audioOutput'] = function (block: Block): [string, number] {
 /**
  * Generates JavaScript code for the play_audio block.
  */
-JavaScript['audioOutput_playFileFromUrl'] = function (block: Block): string {
+JavaScript.forBlock['audioOutput_playFileFromUrl'] = function (
+  block: Block
+): string {
   const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
   const deviceId =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) ||

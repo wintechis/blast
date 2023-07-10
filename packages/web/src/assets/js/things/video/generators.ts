@@ -9,7 +9,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_videoInput block.
  */
-JavaScript['things_videoInput'] = function (block: Block) {
+JavaScript.forBlock['things_videoInput'] = function (block: Block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
@@ -17,7 +17,7 @@ JavaScript['things_videoInput'] = function (block: Block) {
 /**
  * Generates JavaScript code for the videoInput_getFrame block.
  */
-JavaScript['videoInput_getFrame'] = function (block: Block) {
+JavaScript.forBlock['videoInput_getFrame'] = function (block: Block) {
   const deviceId = JavaScript.valueToCode(
     block,
     'thing',

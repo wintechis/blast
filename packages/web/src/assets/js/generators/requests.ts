@@ -9,7 +9,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the http_request block.
  */
-JavaScript['http_request'] = function (block: Block): [string, number] {
+JavaScript.forBlock['http_request'] = function (
+  block: Block
+): [string, number] {
   const uri =
     JavaScript.valueToCode(block, 'uri', JavaScript.ORDER_NONE) || null;
   const method = block.getFieldValue('METHOD');

@@ -10,7 +10,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_blinkstick block.
  */
-JavaScript['things_blinkstick'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_blinkstick'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -34,7 +36,7 @@ JavaScript['things_blinkstick'] = function (block: Block): [string, number] {
  * @param block The block to generate code for
  * @returns The generated code
  */
-JavaScript['blinkstick_set_colors'] = function (block: Block): string {
+JavaScript.forBlock['blinkstick_set_colors'] = function (block: Block): string {
   const colour =
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');

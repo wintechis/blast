@@ -8,16 +8,18 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {stopJS} from '../interpreter';
 
 // Remap blockly blocks to improve naming in xml.
-JavaScript['repeat'] = JavaScript['controls_repeat_ext'];
-JavaScript['while_until'] = JavaScript['controls_whileUntil'];
-JavaScript['for'] = JavaScript['controls_for'];
-JavaScript['break_continue'] = JavaScript['controls_flow_statements'];
-JavaScript['conditional_statement'] = JavaScript['controls_if'];
+JavaScript.forBlock['repeat'] = JavaScript.forBlock['controls_repeat_ext'];
+JavaScript.forBlock['while_until'] = JavaScript.forBlock['controls_whileUntil'];
+JavaScript.forBlock['for'] = JavaScript.forBlock['controls_for'];
+JavaScript.forBlock['break_continue'] =
+  JavaScript.forBlock['controls_flow_statements'];
+JavaScript.forBlock['conditional_statement'] =
+  JavaScript.forBlock['controls_if'];
 
 /**
  * Generates JavaScript code for the wait_seconds block.
  */
-JavaScript['wait_seconds'] = function (block: Block): string {
+JavaScript.forBlock['wait_seconds'] = function (block: Block): string {
   const seconds =
     JavaScript.valueToCode(block, 'SECONDS', JavaScript.ORDER_ATOMIC) || 0;
 
@@ -33,7 +35,7 @@ JavaScript['wait_seconds'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the every_seconds block.
  */
-JavaScript['every_seconds'] = function (block: Block): string {
+JavaScript.forBlock['every_seconds'] = function (block: Block): string {
   // read block inputs
   const value =
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || 1;
@@ -71,7 +73,7 @@ intervalEvents.push(everySecondsIntervals['${block.id}']);\n`;
  * @param {Blockly.Block} block the terminate block.
  * @returns {String} the generated code.
  */
-JavaScript['terminate'] = function (block: Block): string {
+JavaScript.forBlock['terminate'] = function (block: Block): string {
   const code = 'process.exit();\n';
 
   return code;

@@ -10,7 +10,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the play_audio block.
  */
-JavaScript['text_to_speech'] = function (block: Block): string {
+JavaScript.forBlock['text_to_speech'] = function (block: Block): string {
   const text =
     JavaScript.valueToCode(block, 'text', JavaScript.ORDER_ATOMIC) ||
     JavaScript.quote_('');
@@ -44,7 +44,7 @@ JavaScript['text_to_speech'] = function (block: Block): string {
  * Generates Javascript code for the web_speech block.
  * Outputs speech command from microphone as a string.
  */
-JavaScript['web_speech'] = function (block: Block): [string, number] {
+JavaScript.forBlock['web_speech'] = function (block: Block): [string, number] {
   let lang = block.getFieldValue('language');
   if (lang.length < 4) {
     lang = block.getFieldValue(lang);

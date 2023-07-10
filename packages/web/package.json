@@ -16,7 +16,7 @@
     "@rdfjs/data-model": "^2.0.1",
     "@tensorflow/tfjs": "^4.6.0",
     "@types/file-saver": "^2.0.5",
-    "blockly": "^9.3.3",
+    "blockly": "10.0.0",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
     "file-saver": "^2.0.5",

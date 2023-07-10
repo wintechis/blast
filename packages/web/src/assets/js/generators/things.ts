@@ -7,6 +7,8 @@ import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
 // eslint-disable-next-line no-unused-vars
-JavaScript['generic_thing'] = function (block: Block): [string, number] {
+JavaScript.forBlock['generic_thing'] = function (
+  block: Block
+): [string, number] {
   return ['deadbeef', JavaScript.ORDER_NONE];
 };

@@ -7,21 +7,25 @@ import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
 // Remap blockly blocks to improve naming in xml.
-JavaScript['string'] = JavaScript['text'];
-JavaScript['string_multiline'] = JavaScript['text_multiline'];
-JavaScript['string_join'] = JavaScript['text_join'];
-JavaScript['string_length'] = JavaScript['text_length'];
-JavaScript['string_isEmpty'] = JavaScript['text_isEmpty'];
-JavaScript['string_indexOf'] = JavaScript['text_indexOf'];
-JavaScript['string_charAt'] = JavaScript['text_charAt'];
-JavaScript['string_getSubstring'] = JavaScript['text_getSubstring'];
-JavaScript['string_changeCase'] = JavaScript['text_changeCase'];
-JavaScript['string_trim'] = JavaScript['text_trim'];
-JavaScript['string_count'] = JavaScript['text_count'];
-JavaScript['string_replace'] = JavaScript['text_replace'];
-JavaScript['string_reverse'] = JavaScript['text_reverse'];
+JavaScript.forBlock['string'] = JavaScript.forBlock['text'];
+JavaScript.forBlock['string_multiline'] = JavaScript.forBlock['text_multiline'];
+JavaScript.forBlock['string_join'] = JavaScript.forBlock['text_join'];
+JavaScript.forBlock['string_length'] = JavaScript.forBlock['text_length'];
+JavaScript.forBlock['string_isEmpty'] = JavaScript.forBlock['text_isEmpty'];
+JavaScript.forBlock['string_indexOf'] = JavaScript.forBlock['text_indexOf'];
+JavaScript.forBlock['string_charAt'] = JavaScript.forBlock['text_charAt'];
+JavaScript.forBlock['string_getSubstring'] =
+  JavaScript.forBlock['text_getSubstring'];
+JavaScript.forBlock['string_changeCase'] =
+  JavaScript.forBlock['text_changeCase'];
+JavaScript.forBlock['string_trim'] = JavaScript.forBlock['text_trim'];
+JavaScript.forBlock['string_count'] = JavaScript.forBlock['text_count'];
+JavaScript.forBlock['string_replace'] = JavaScript.forBlock['text_replace'];
+JavaScript.forBlock['string_reverse'] = JavaScript.forBlock['text_reverse'];
 
-JavaScript['string_showPrompt'] = function (block: Block): [string, number] {
+JavaScript.forBlock['string_showPrompt'] = function (
+  block: Block
+): [string, number] {
   let msg;
   if (block.getField('TEXT')) {
     // Internal message.

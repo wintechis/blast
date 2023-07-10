@@ -12,7 +12,7 @@ import {saveFileInContainer} from '@inrupt/solid-client';
  * @param {Blockly.Block} block the solid_upload_image block.
  * @returns {String} the generated code.
  */
-JavaScript['solid_upload_image'] = function (block: Block): string {
+JavaScript.forBlock['solid_upload_image'] = function (block: Block): string {
   const image = JavaScript.valueToCode(block, 'image', JavaScript.ORDER_NONE);
   const url = JavaScript.valueToCode(block, 'url', JavaScript.ORDER_NONE);
 

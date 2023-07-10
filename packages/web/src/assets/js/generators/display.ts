@@ -9,7 +9,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the display_text block.
  */
-JavaScript['display_text'] = function (block: Block): string {
+JavaScript.forBlock['display_text'] = function (block: Block): string {
   const message =
     JavaScript.valueToCode(block, 'text', JavaScript.ORDER_NONE) || "''";
 
@@ -20,7 +20,7 @@ JavaScript['display_text'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the capture_image block.
  */
-JavaScript['display_image'] = function (block: Block): string {
+JavaScript.forBlock['display_image'] = function (block: Block): string {
   const image = JavaScript.valueToCode(block, 'image', JavaScript.ORDER_NONE);
 
   const code = `console.log(${image}, 'image');\n`;
@@ -30,7 +30,7 @@ JavaScript['display_image'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the display_table block.
  */
-JavaScript['display_table'] = function (block: Block): string {
+JavaScript.forBlock['display_table'] = function (block: Block): string {
   const table = JavaScript.valueToCode(block, 'table', JavaScript.ORDER_NONE);
 
   const code = `console.log(${table}, 'table');\n`;

@@ -10,7 +10,9 @@ import {getWorkspace} from '../../interpreter';
 /**
  * Generates JavaScript code for the things_bleLedController block.
  */
-JavaScript['things_spheroMini'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_spheroMini'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   return [id, JavaScript.ORDER_NONE];
 };
@@ -18,7 +20,7 @@ JavaScript['things_spheroMini'] = function (block: Block): [string, number] {
 /**
  * Generates JavaScript code for the spheroMini_roll block.
  */
-JavaScript['spheroMini_roll'] = function (block: Block): string {
+JavaScript.forBlock['spheroMini_roll'] = function (block: Block): string {
   const speed = JavaScript.valueToCode(block, 'speed', JavaScript.ORDER_ATOMIC);
   const heading = JavaScript.valueToCode(
     block,
@@ -36,7 +38,7 @@ JavaScript['spheroMini_roll'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the spheroMini_roll block.
  */
-JavaScript['spheroMini_stop'] = function (block: Block): string {
+JavaScript.forBlock['spheroMini_stop'] = function (block: Block): string {
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {
     blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
@@ -48,7 +50,7 @@ JavaScript['spheroMini_stop'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the spheroMini_color block.
  */
-JavaScript['spheroMini_color'] = function (block: Block) {
+JavaScript.forBlock['spheroMini_color'] = function (block: Block) {
   const color = JavaScript.valueToCode(block, 'color', JavaScript.ORDER_ATOMIC);
   let blockId = "''";
   if (block.getInputTargetBlock('thing')) {

@@ -10,7 +10,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_bleLedController block.
  */
-JavaScript['things_bleLedController'] = function (
+JavaScript.forBlock['things_bleLedController'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -35,7 +35,9 @@ JavaScript['things_bleLedController'] = function (
 /**
  * Generates JavaScript code for the bleLedController_switch_lights block.
  */
-JavaScript['bleLedController_switch_lights'] = function (block: Block): string {
+JavaScript.forBlock['bleLedController_switch_lights'] = function (
+  block: Block
+): string {
   const colour =
     JavaScript.valueToCode(block, 'colour', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('#000000');

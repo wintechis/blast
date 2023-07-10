@@ -6,12 +6,12 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
-JavaScript['uri'] = function (block: Block): [string, number] {
+JavaScript.forBlock['uri'] = function (block: Block): [string, number] {
   const uri = JavaScript.quote_(block.getFieldValue('URI'));
   return [uri, JavaScript.ORDER_NONE];
 };
 
-JavaScript['uri_from_string'] = function (block: Block) {
+JavaScript.forBlock['uri_from_string'] = function (block: Block) {
   const uri = JavaScript.valueToCode(block, 'URI', JavaScript.ORDER_NONE);
 
   const functionName = JavaScript.provideFunction_('convertToUri', [
@@ -31,7 +31,7 @@ JavaScript['uri_from_string'] = function (block: Block) {
   return [code, JavaScript.ORDER_NONE];
 };
 
-JavaScript['mac'] = function (block: Block): [string, number] {
+JavaScript.forBlock['mac'] = function (block: Block): [string, number] {
   const mac = JavaScript.quote_(block.getFieldValue('MAC'));
   return [mac, JavaScript.ORDER_NONE];
 };

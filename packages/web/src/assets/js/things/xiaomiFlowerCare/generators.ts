@@ -9,7 +9,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_xiaomiFlowerCare block.
  */
-JavaScript['things_xiaomiFlowerCare'] = function (
+JavaScript.forBlock['things_xiaomiFlowerCare'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -31,7 +31,7 @@ JavaScript['things_xiaomiFlowerCare'] = function (
   return [name, JavaScript.ORDER_NONE];
 };
 
-JavaScript['xiaomiFlowerCare_read'] = function (block: Block) {
+JavaScript.forBlock['xiaomiFlowerCare_read'] = function (block: Block) {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 

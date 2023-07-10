@@ -6,7 +6,9 @@
 import {Block, Names} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
-JavaScript['procedures_defeval'] = function (block: Block): string | void {
+JavaScript.forBlock['procedures_defeval'] = function (
+  block: Block
+): string | void {
   const funcName = JavaScript.variableDB_.getName(
     block.getFieldValue('NAME'),
     Names.NameType.PROCEDURE
@@ -52,9 +54,12 @@ JavaScript['procedures_defeval'] = function (block: Block): string | void {
   JavaScript.definitions_['%' + funcName] = code;
 };
 
-JavaScript['procedures_defnoreturn'] = JavaScript['procedures_defreturn'];
+JavaScript.forBlock['procedures_defnoreturn'] =
+  JavaScript.forBlock['procedures_defreturn'];
 
-JavaScript['procedures_calleval'] = function (block: Block): [string, number] {
+JavaScript.forBlock['procedures_calleval'] = function (
+  block: Block
+): [string, number] {
   // Call a procedure with a return value.
   const funcName = JavaScript.variableDB_.getName(
     block.getFieldValue('NAME'),

@@ -6,7 +6,7 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
-JavaScript['things_eddyStoneDevice'] = function (
+JavaScript.forBlock['things_eddyStoneDevice'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -28,7 +28,7 @@ JavaScript['things_eddyStoneDevice'] = function (
   return [name, JavaScript.ORDER_NONE];
 };
 
-JavaScript['things_bluetoothGeneric'] = function (
+JavaScript.forBlock['things_bluetoothGeneric'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -53,7 +53,7 @@ JavaScript['things_bluetoothGeneric'] = function (
 /**
  * Generates JavaScript code for the get_signal_strength block.
  */
-JavaScript['bluetoothGeneric_get_signal_strength_wb'] = function (
+JavaScript.forBlock['bluetoothGeneric_get_signal_strength_wb'] = function (
   block: Block
 ): [string, number] {
   const id =
@@ -92,7 +92,7 @@ JavaScript['bluetoothGeneric_get_signal_strength_wb'] = function (
 /**
  * Generates JavaScript code for the eddyStoneDevice_write_eddystone_property block.
  */
-JavaScript['eddyStoneDevice_write_eddystone_property'] = function (
+JavaScript.forBlock['eddyStoneDevice_write_eddystone_property'] = function (
   block: Block
 ): string {
   const name =
@@ -123,7 +123,7 @@ await things.get(${name}).writeProperty(${property}, data);
 /**
  * Generates JavaScript code for the read_eddystone_property block.
  */
-JavaScript['read_eddystone_property'] = function (
+JavaScript.forBlock['read_eddystone_property'] = function (
   block: Block
 ): [string, number] {
   const name =
@@ -149,7 +149,7 @@ EddystoneHelpers.decodeAdvertisingData(await (await things.get(${name}).readProp
 /**
  * Generates JavaScript code for the read_gatt_characteristic block.
  */
-JavaScript['read_gatt_characteristic'] = function (
+JavaScript.forBlock['read_gatt_characteristic'] = function (
   block: Block
 ): [string, number] {
   const name =
@@ -162,7 +162,9 @@ JavaScript['read_gatt_characteristic'] = function (
   return [code, JavaScript.ORDER_NONE];
 };
 
-JavaScript['write_gatt_characteristic'] = function (block: Block): string {
+JavaScript.forBlock['write_gatt_characteristic'] = function (
+  block: Block
+): string {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const characteristic = JavaScript.quote_(
@@ -175,7 +177,9 @@ JavaScript['write_gatt_characteristic'] = function (block: Block): string {
   return code;
 };
 
-JavaScript['read_characteristic'] = function (block: Block): [string, number] {
+JavaScript.forBlock['read_characteristic'] = function (
+  block: Block
+): [string, number] {
   const id =
     JavaScript.quote_(
       block.getInputTargetBlock('thing')?.getFieldValue('id')
@@ -251,7 +255,7 @@ JavaScript['read_characteristic'] = function (block: Block): [string, number] {
   return [code, JavaScript.ORDER_NONE];
 };
 
-JavaScript['write_characteristic'] = function (block: Block): string {
+JavaScript.forBlock['write_characteristic'] = function (block: Block): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const characteristic =

@@ -9,7 +9,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_xiaomiThermometer block.
  */
-JavaScript['things_xiaomiThermometer'] = function (
+JavaScript.forBlock['things_xiaomiThermometer'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
@@ -34,7 +34,9 @@ JavaScript['things_xiaomiThermometer'] = function (
 /**
  * Generates JavaScript code for the get_mijia_property block.
  */
-JavaScript['xiaomiThermometer_event'] = function (block: Block): string {
+JavaScript.forBlock['xiaomiThermometer_event'] = function (
+  block: Block
+): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.statementToCode(block, 'statements');

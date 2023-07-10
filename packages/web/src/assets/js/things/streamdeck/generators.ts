@@ -10,7 +10,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_streamdeck block.
  */
-JavaScript['things_streamdeck'] = function (block: Block) {
+JavaScript.forBlock['things_streamdeck'] = function (block: Block) {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -33,7 +33,9 @@ JavaScript['things_streamdeck'] = function (block: Block) {
 /**
  * Generates JavaScript code for the streamdeck_button_event block.
  */
-JavaScript['streamdeck_button_event'] = function (block: Block): string {
+JavaScript.forBlock['streamdeck_button_event'] = function (
+  block: Block
+): string {
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const statements = JavaScript.statementToCode(block, 'statements');
@@ -70,7 +72,9 @@ JavaScript['streamdeck_button_event'] = function (block: Block): string {
 /**
  * Generates JavaScript code for the streamdeck_color_buttons block.
  */
-JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
+JavaScript.forBlock['streamdeck_color_buttons'] = function (
+  block: Block
+): string {
   const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
   const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
   const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
@@ -184,7 +188,9 @@ JavaScript['streamdeck_color_buttons'] = function (block: Block): string {
 /**
  * Displays a value on a Stream Deck's buttons.
  */
-JavaScript['streamdeck_write_on_buttons'] = function (block: Block): string {
+JavaScript.forBlock['streamdeck_write_on_buttons'] = function (
+  block: Block
+): string {
   const button1 = block.getFieldValue('button1') === 'TRUE' ? 1 : 0;
   const button2 = block.getFieldValue('button2') === 'TRUE' ? 1 : 0;
   const button3 = block.getFieldValue('button3') === 'TRUE' ? 1 : 0;
@@ -329,7 +335,7 @@ JavaScript['streamdeck_write_on_buttons'] = function (block: Block): string {
   return code;
 };
 
-JavaScript['streamdeck_set_brightness'] = function (block: Block) {
+JavaScript.forBlock['streamdeck_set_brightness'] = function (block: Block) {
   const value =
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('100');

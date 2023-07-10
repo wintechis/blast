@@ -11,7 +11,7 @@ globalThis['urdf'] = urdf;
 /**
  * Generates JavaScript code for the sparql_query block.
  */
-JavaScript['sparql_query'] = function (block) {
+JavaScript.forBlock['sparql_query'] = function (block) {
   let query = block.getFieldValue('query');
   const uri = JavaScript.valueToCode(block, 'uri', JavaScript.ORDER_NONE);
   const format = JavaScript.quote_(block.getFieldValue('format')) || '';
@@ -27,7 +27,7 @@ JavaScript['sparql_query'] = function (block) {
 /**
  * Generates JavaScript code for the sparql_ask block.
  */
-JavaScript['sparql_ask'] = function (block) {
+JavaScript.forBlock['sparql_ask'] = function (block) {
   let query = block.getFieldValue('query');
   const format = JavaScript.quote_(block.getFieldValue('format')) || '';
   const uri = JavaScript.valueToCode(block, 'uri', JavaScript.ORDER_NONE);

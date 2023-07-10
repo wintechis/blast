@@ -10,7 +10,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 /**
  * Generates JavaScript code for the things_Huskylens block.
  */
-JavaScript['things_Huskylens'] = function (block: Block): [string, number] {
+JavaScript.forBlock['things_Huskylens'] = function (
+  block: Block
+): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
@@ -32,7 +34,9 @@ JavaScript['things_Huskylens'] = function (block: Block): [string, number] {
 /**
  * Generate JavaScript code of the huskylens_write_algo_property block.
  */
-JavaScript['huskylens_write_algo_property'] = function (block: Block): string {
+JavaScript.forBlock['huskylens_write_algo_property'] = function (
+  block: Block
+): string {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const algorithm = JavaScript.quote_(block.getFieldValue('algorithm'));
@@ -44,7 +48,9 @@ JavaScript['huskylens_write_algo_property'] = function (block: Block): string {
 /**
  * Generate JavaScript code for the huskylens_write_id_property block.
  */
-JavaScript['huskylens_write_id_property'] = function (block: Block): string {
+JavaScript.forBlock['huskylens_write_id_property'] = function (
+  block: Block
+): string {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
   const id =
@@ -59,7 +65,9 @@ JavaScript['huskylens_write_id_property'] = function (block: Block): string {
 /**
  * Generate JavaScript code for the huskylens_forgetAll_action block.
  */
-JavaScript['huskylens_forgetAll_action'] = function (block: Block): string {
+JavaScript.forBlock['huskylens_forgetAll_action'] = function (
+  block: Block
+): string {
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
@@ -70,7 +78,7 @@ JavaScript['huskylens_forgetAll_action'] = function (block: Block): string {
 /**
  * Generate JavaScript code for the huskylens_read_id_propery block.
  */
-JavaScript['huskylens_read_id_propery'] = function (
+JavaScript.forBlock['huskylens_read_id_propery'] = function (
   block: Block
 ): [string, number] {
   const name =
@@ -83,7 +91,7 @@ JavaScript['huskylens_read_id_propery'] = function (
 /**
  * Generate JavaScript code for the huskylens_read_location_property block.
  */
-JavaScript['huskylens_read_location_property'] = function (
+JavaScript.forBlock['huskylens_read_location_property'] = function (
   block: Block
 ): [string, number] {
   const name =

@@ -8,7 +8,7 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
-import {BlockBase} from 'blockly/core/events/events_block_base';
+import {Abstract} from 'blockly/core/events/events_abstract';
 
 Blocks['things_joycon'] = {
   /**
@@ -286,7 +286,7 @@ Blocks['joycon_button_events'] = {
   addEvent: function () {
     eventsInWorkspace.push(this.id);
     // add change listener to remove block from events array when deleted.
-    this.changeListener = getWorkspace()?.addChangeListener((e: BlockBase) => {
+    this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
       if (
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)
@@ -415,7 +415,7 @@ Blocks['gamepad_pro_joystick'] = {
   addEvent: function () {
     eventsInWorkspace.push(this.id);
     // add change listener to remove block from events array when deleted.
-    this.changeListener = getWorkspace()?.addChangeListener((e: BlockBase) => {
+    this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
       if (
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)
@@ -523,7 +523,7 @@ Blocks['gamepad_pro_button'] = {
   addEvent: function () {
     eventsInWorkspace.push(this.id);
     // add change listener to remove block from events array when deleted.
-    this.changeListener = getWorkspace()?.addChangeListener((e: BlockBase) => {
+    this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
       if (
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)
