@@ -71,9 +71,17 @@ export default class ConnectDialog extends React.Component {
   }
 
   async getDevices() {
-    await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-    const devices = await navigator.mediaDevices.enumerateDevices();
-    this.setState({videoAudioDevices: devices});
+    try {
+      await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      this.setState({videoAudioDevices: devices});
+    } catch (e) {
+      // ignore DOMException: Requested device not found
+      // This happens when the user has no camera or microphone
+      if (e.name !== 'NotFoundError') {
+        console.error(e);
+      }
+    }
   }
 
   handleClose() {
