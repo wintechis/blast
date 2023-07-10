@@ -70,7 +70,7 @@ import {EddystoneHelpers} from 'blast.node.js'`
 #### BluetoothWrapper
 Wrapper for communicating with Bluetooth devices via [node-ble](https://github.com/chrvadala/node-ble) and [webBluetooth](https://github.com/WebBluetoothCG/web-bluetooth#web-bluetooth.
 
-The Wrapper provides a `getCharacteristic` method returning a [`BluetoothRemoveGattCharacteristic`](https://webbluetoothcg.github.io/web-bluetooth/#bluetoothgattcharacteristic-interface), which can be used to interact with the device via, i.e. `readValue`, `writeValue`, `startNotifications`, `stopNotifications`, etc. see [here](https://webbluetoothcg.github.io/web-bluetooth/#bluetoothgattcharacteristic-interface) for the interface description.
+The Wrapper provides a `getCharacteristic` method returning a [`BluetoothRemoveGattCharacteristic`](https://webbluetoothcg.github.io/web-bluetooth/#bluetoothgattcharacteristic-interface), which can be used to interact with the device via for example `readValue`, `writeValue`, `startNotifications`, `stopNotifications`, etc. See [here](https://webbluetoothcg.github.io/web-bluetooth/#bluetoothgattcharacteristic-interface) for the interface description.
 
 ##### Import
 ```JavaScript
