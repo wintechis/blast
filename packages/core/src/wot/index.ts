@@ -12,6 +12,7 @@ import ConcreteHidAdapter from 'HidAdapter';
 import {ErrorListener} from 'wot-typescript-definitions';
 import {FormElementBase} from 'wot-thing-description-types';
 export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
+export {ConcreteBluetoothAdapter as BluetoothWrapper};
 
 let servient: Servient;
 let wot: typeof WoT;
