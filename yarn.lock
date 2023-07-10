@@ -1537,7 +1537,6 @@ __metadata:
     "@types/web-bluetooth": ^0.0.17
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
-    ajv: ^8.12.0
     debug: ^4.3.4
     eslint: latest
     eslint-config-google: latest
@@ -1563,7 +1562,6 @@ __metadata:
     ts-node: ^10.9.1
     typescript: latest
     uritemplate: ^0.3.4
-    util: ^0.12.5
     uuid: ^9.0.0
     webpack: latest
     webpack-cli: latest
@@ -4761,7 +4759,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ajv@npm:^8.0.0, ajv@npm:^8.11.0, ajv@npm:^8.12.0, ajv@npm:^8.6.0, ajv@npm:^8.9.0":
+"ajv@npm:^8.0.0, ajv@npm:^8.11.0, ajv@npm:^8.6.0, ajv@npm:^8.9.0":
   version: 8.12.0
   resolution: "ajv@npm:8.12.0"
   dependencies:
@@ -19748,7 +19746,7 @@ __metadata:
     n3: 1.13.x
     node-fetch: 2.6.x
     sparqljs: 2.x.x
-  checksum: e59ba86d1cebb6bc14c31310ab92a9deb6cdc8f643d9a648a6fafce93eb914401bb9fc0bc555a8e647c25c3d2a7cc39b3ea46d86d2157fbdbde114591d0215c6
+  checksum: 741003dcdf72c5c8e05882cce56c0ce2f85115a638298186265c07a5414abdcc239f97af418a4c61d48328e43a0cdf625bf136c996e79501dbbdf4bf4570d453
   languageName: node
   linkType: hard
 
@@ -19839,7 +19837,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"util@npm:^0.12.0, util@npm:^0.12.4, util@npm:^0.12.5":
+"util@npm:^0.12.0, util@npm:^0.12.4":
   version: 0.12.5
   resolution: "util@npm:0.12.5"
   dependencies:
