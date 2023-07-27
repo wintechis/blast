@@ -7,6 +7,7 @@ import * as GoveeLamp from './GoveeLamp.json';
 import * as HuskyDuino from './HuskyDuino.json';
 import * as PhilipsHue from './PhilipsHue.json';
 import * as RuuviTag from './RuuviTag.json';
+import * as SpheroMini from './SpheroMini.json';
 import * as StreamDeckMini from './StreamDeckMini.json';
 import * as XiaomiFlowerCare from './XiaomiFlowerCare.json';
 import * as XiaomiThermometer from './XiaomiThermometer.json';
@@ -21,6 +22,7 @@ export {
   HuskyDuino,
   PhilipsHue,
   RuuviTag,
+  SpheroMini,
   StreamDeckMini,
   XiaomiFlowerCare,
   XiaomiThermometer,

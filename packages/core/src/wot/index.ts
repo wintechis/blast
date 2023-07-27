@@ -1,5 +1,11 @@
 import * as WoT from 'wot-typescript-definitions';
-import {ConsumedThing, Content, Servient, ExposedThing} from '@node-wot/core';
+import {
+  ConsumedThing,
+  Content,
+  Servient,
+  ExposedThing,
+  ProtocolHelpers,
+} from '@node-wot/core';
 import {InteractionOutput} from '@node-wot/core/dist/interaction-output';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpsClientFactory} from '@node-wot/binding-http';
@@ -10,9 +16,11 @@ import {HidClientFactory} from './bindings/binding-hid/Hid';
 import {HidAdapter} from './bindings/binding-hid/HidAdapter';
 import ConcreteHidAdapter from 'HidAdapter';
 import {ErrorListener} from 'wot-typescript-definitions';
-import {FormElementBase} from 'wot-thing-description-types';
+import {DataSchemaType, FormElementBase} from 'wot-thing-description-types';
 export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 export {ConcreteBluetoothAdapter as BluetoothWrapper};
+import {Readable} from 'stream';
+import {ReadableStream as PolyfillStream} from 'web-streams-polyfill/ponyfill/es2018';
 
 let servient: Servient;
 let wot: typeof WoT;
@@ -96,6 +104,7 @@ export const createThingWithHandlers = async function (
   }
   const wotServient = await getWot();
   const exposedThing = await wotServient.produce(td);
+  (exposedThing as any).id = id;
   addHandlers(exposedThing);
   const consumedThing = ownConsume(exposedThing as ExposedThing);
   return consumedThing;
@@ -123,9 +132,8 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
     _errorListener: ErrorListener,
     _options?: WoT.InteractionOptions
   ): Promise<WoT.Subscription> {
-    if (exposedThing.events[name]) {
-      const eventElement = exposedThing.events[name];
-
+    const eventElement = exposedThing.events[name];
+    if (eventElement) {
       // add a dummy form to by-pass protocol-listener-registry check
       const form = {
         op: 'subscribeEvent',
@@ -156,5 +164,67 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
     }
   };
 
+  consumedThing.invokeAction = async function (
+    actionName: string,
+    params?: WoT.InteractionInput,
+    options: WoT.InteractionOptions = {}
+  ): Promise<InteractionOutput> {
+    // add a dummy form to by-pass protocol-listener-registry check
+    const form = {
+      op: 'invokeAction',
+    } as FormElementBase;
+    exposedThing.actions[actionName].forms = [form];
+
+    let readable = new Readable();
+    if (params) {
+      readable = interactionInputToReadable(params);
+    }
+
+    let type = exposedThing.actions[actionName].input?.type as string;
+    if (!type) {
+      throw new Error(`Action '${actionName}' has no input type`);
+    }
+    switch (type) {
+      case 'string':
+      case 'boolean':
+      case 'number':
+        type = 'text/plain';
+        break;
+      default:
+        type = 'application/json';
+    }
+
+    const content = new Content(type, readable);
+    let outputContent = await exposedThing.handleInvokeAction(
+      actionName,
+      content,
+      {formIndex: 0, ...options}
+    );
+    if (outputContent === undefined) {
+      outputContent = new Content(type, new Readable());
+    }
+    const output = new InteractionOutput(outputContent);
+    return output;
+  };
+
   return consumedThing;
+};
+
+const interactionInputToReadable = function (
+  input: WoT.InteractionInput
+): Readable {
+  let body;
+  if (
+    typeof ReadableStream !== 'undefined' &&
+    input instanceof ReadableStream
+  ) {
+    body = ProtocolHelpers.toNodeStream(input);
+  } else if (input instanceof PolyfillStream) {
+    body = ProtocolHelpers.toNodeStream(input);
+  } else if (Array.isArray(input) || typeof input === 'object') {
+    body = Readable.from(Buffer.from(JSON.stringify(input), 'utf-8'));
+  } else {
+    body = Readable.from(Buffer.from(input.toString(), 'utf-8'));
+  }
+  return body;
 };

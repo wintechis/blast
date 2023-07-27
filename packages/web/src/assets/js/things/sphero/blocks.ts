@@ -3,12 +3,12 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {implementedThings} from '../../things.js';
+import {implementedThings} from '../../things';
 import {
   UUID_SPHERO_SERVICE,
   UUID_SPHERO_SERVICE_INITIALIZE,
-} from './lib/spheroBolt.js';
-import SpheroBolt from './lib/spheroBolt.js';
+} from './lib/spheroBolt';
+import SpheroBolt from './lib/spheroBolt';
 
 import Blockly from 'blockly';
 const {Blocks, FieldTextInput} = Blockly;
@@ -18,9 +18,9 @@ export const spheroIds = new Map();
 
 /**
  * Keeps singleton instances of SpheroMinis instantiated by BLAST.
- * @param {string} id The id of the SpheroMini.
+ * @param id The id of the SpheroMini.
  */
-const getSpheroMini = function (id) {
+export const getSpheroMini = function (id: string): SpheroBolt {
   if (spheroInstances.has(id)) {
     return spheroInstances.get(id);
   } else {
@@ -32,8 +32,8 @@ const getSpheroMini = function (id) {
 
 /**
  * Generates JavaScript code for the things_spheroMini block.
- * @param {Blockly.Block} block the things_spheroMini block.
- * @returns {String} the generated code.
+ * @param block the things_spheroMini block.
+ * @returns the generated code.
  */
 Blocks['things_spheroMini'] = {
   /**

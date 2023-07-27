@@ -1,0 +1,39 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "Sphero Mini",
+  "description": "The Sphero Mini is a small robot ball that can be controlled via Bluetooth.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": "",
+  "security": [
+    "nosec_sc"
+  ],
+  "actions": {
+    "roll": {
+      "input": {
+        "type": "object",
+        "properties": {
+          "speed": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "heading": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 359
+          }
+        }
+      }
+    }
+  }
+}

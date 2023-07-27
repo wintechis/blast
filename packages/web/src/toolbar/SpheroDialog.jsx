@@ -11,7 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import CircularSlider from '@fseehawer/react-circular-slider';
-import {spheroIds, spheroInstances} from '../assets/js/things/sphero/blocks.js';
+import {spheroIds, spheroInstances} from '../assets/js/things/sphero/blocks.ts';
 
 export default class SpheroDialog extends React.Component {
   constructor(props) {

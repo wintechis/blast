@@ -1563,6 +1563,7 @@ __metadata:
     typescript: latest
     uritemplate: ^0.3.4
     uuid: ^9.0.0
+    web-streams-polyfill: ^3.2.1
     webpack: latest
     webpack-cli: latest
     wot-thing-description-types: 1.1.0-24-May-2023
@@ -20102,7 +20103,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-streams-polyfill@npm:^3.0.1":
+"web-streams-polyfill@npm:^3.0.1, web-streams-polyfill@npm:^3.2.1":
   version: 3.2.1
   resolution: "web-streams-polyfill@npm:3.2.1"
   checksum: b119c78574b6d65935e35098c2afdcd752b84268e18746606af149e3c424e15621b6f1ff0b42b2676dc012fc4f0d313f964b41a4b5031e525faa03997457da02

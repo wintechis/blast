@@ -5,7 +5,7 @@
 
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-import {getWorkspace} from '../../interpreter';
+import {getSpheroMini} from './blocks';
 
 /**
  * Generates JavaScript code for the things_bleLedController block.
@@ -14,24 +14,37 @@ JavaScript.forBlock['things_spheroMini'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
+  const name = JavaScript.quote_(block.getFieldValue('name'));
+
+  JavaScript.imports_['core'] =
+    "const blastCore = await import('../../assets/blast/blast.web.js');";
+  JavaScript.imports_['tds'] =
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+
+  JavaScript.definitions_['createThingWithHandlers'] =
+    'const {createThingWithHandlers} = blastCore;';
+  JavaScript.definitions_['SpheroMini'] = 'const {SpheroMini} = blastTds;';
+  JavaScript.definitions_['things'] = 'const things = new Map();';
+  JavaScript.definitions_[
+    'things' + name
+  ] = `things.set(${name}, await createThingWithHandlers(SpheroMini, ${id}, addSpheroHandlers));
+  things.get(${name}).id = ${id};`;
+
+  return [name, JavaScript.ORDER_NONE];
 };
 
 /**
  * Generates JavaScript code for the spheroMini_roll block.
  */
 JavaScript.forBlock['spheroMini_roll'] = function (block: Block): string {
-  const speed = JavaScript.valueToCode(block, 'speed', JavaScript.ORDER_ATOMIC);
-  const heading = JavaScript.valueToCode(
-    block,
-    'heading',
-    JavaScript.ORDER_ATOMIC
-  );
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-  const code = `spheroRoll(${blockId}, ${speed}, ${heading});\n`;
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_ATOMIC) || null;
+  const speed =
+    JavaScript.valueToCode(block, 'speed', JavaScript.ORDER_ATOMIC) || 100;
+  const heading =
+    JavaScript.valueToCode(block, 'heading', JavaScript.ORDER_ATOMIC) || 0;
+
+  const code = `await things.get(${thing}).invokeAction('roll', {speed: ${speed}, heading: ${heading}});\n`;
   return code;
 };
 
@@ -39,70 +52,29 @@ JavaScript.forBlock['spheroMini_roll'] = function (block: Block): string {
  * Generates JavaScript code for the spheroMini_roll block.
  */
 JavaScript.forBlock['spheroMini_stop'] = function (block: Block): string {
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-  const code = `spheroStop(${blockId});\n`;
+  const thing =
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_ATOMIC) || null;
+
+  const code = `await things.get(${thing}).invokeAction('roll', {speed: 0, heading: 0});\n`;
   return code;
 };
 
 /**
- * Generates JavaScript code for the spheroMini_color block.
+ * Adds WoT interaction handlers to the Sphero Mini ExposedThing instance.
  */
-JavaScript.forBlock['spheroMini_color'] = function (block: Block) {
-  const color = JavaScript.valueToCode(block, 'color', JavaScript.ORDER_ATOMIC);
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
-  const code = `await spheroColor(${blockId}, ${color});\n`;
-  return code;
-};
+(globalThis as any)['addSpheroHandlers'] = function (sphero: WoT.ExposedThing) {
+  const mini = getSpheroMini((sphero as any).id);
+  sphero.setActionHandler('roll', async (params: WoT.InteractionOutput) => {
+    const values = (await params.value()) as {speed: number; heading: number};
+    let speed = values.speed;
+    const heading = values.heading;
 
-/**
- * Sends a roll command to the Sphero Mini.
- */
-(globalThis as any)['spheroRoll'] = function (
-  blockId: string,
-  speed: number,
-  heading: number
-) {
-  if (speed > 255) {
-    speed = 255;
-  }
-  // get thing instance of block
-  const block = getWorkspace()?.getBlockById(blockId);
-  const bolt = (block as any).thing;
-  bolt.roll(speed, heading, []);
-};
+    if (speed > 255) {
+      speed = 255;
+    }
 
-/**
- * Sends a stop command to the Sphero Mini.
- */
-(globalThis as any)['spheroStop'] = function (blockId: string) {
-  // get thing instance of block
-  const block = getWorkspace()?.getBlockById(blockId);
-  const bolt = (block as any).thing;
-  bolt.queue.clear();
-  bolt.roll(0, 0, []);
-};
+    mini.roll(speed, heading, []);
 
-/**
- * Sets the color of the Sphero Mini.
- */
-(globalThis as any)['spheroColor'] = async function (
-  blockId: string,
-  color: string
-) {
-  // get thing instance of block
-  const block = getWorkspace()?.getBlockById(blockId);
-  const bolt = (block as any).thing;
-
-  // convert color to rgb
-  const red = parseInt(color.substring(1, 3), 16);
-  const green = parseInt(color.substring(3, 5), 16);
-  const blue = parseInt(color.substring(5, 7), 16);
-
-  await bolt.setAllLeds(red, green, blue);
+    return undefined;
+  });
 };
