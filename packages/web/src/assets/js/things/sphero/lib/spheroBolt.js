@@ -174,7 +174,6 @@ export default class SpheroBolt {
         });
       });
       device.addEventListener('gattserverdisconnected', () => {
-        console.log('Disconnected');
         this.connected = false;
       });
     });
@@ -208,7 +207,6 @@ export default class SpheroBolt {
           }
         }
       }
-      console.log('Connected !');
       await this.init();
     } catch (error) {
       console.log(error.message);
