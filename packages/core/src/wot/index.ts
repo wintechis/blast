@@ -221,7 +221,7 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
       formIndex: 0,
       ...options,
     });
-    const output = new InteractionOutput(outputContent);
+    const output = new InteractionOutput(outputContent, form);
     return output;
   };
 
