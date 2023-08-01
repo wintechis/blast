@@ -207,6 +207,24 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
     return output;
   };
 
+  consumedThing.readProperty = async function (
+    propertyName: string,
+    options: WoT.InteractionOptions = {}
+  ): Promise<InteractionOutput> {
+    // add a dummy form to by-pass protocol-listener-registry check
+    const form = {
+      op: 'readProperty',
+    } as FormElementBase;
+    exposedThing.properties[propertyName].forms = [form];
+
+    const outputContent = await exposedThing.handleReadProperty(propertyName, {
+      formIndex: 0,
+      ...options,
+    });
+    const output = new InteractionOutput(outputContent);
+    return output;
+  };
+
   return consumedThing;
 };
 
