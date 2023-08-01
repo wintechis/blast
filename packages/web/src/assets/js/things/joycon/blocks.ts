@@ -68,18 +68,15 @@ Blocks['joycon_read_property'] = {
       .setCheck('Thing')
       .appendField('read')
       .appendField(
-        new FieldDropdown(
-          [
-            ['accelerometers', 'accelerometers'],
-            ['actual accelerometer', 'actualAccelerometer'],
-            ['actual gyroscope', 'actualGyroscope'],
-            ['actual orientation', 'actualOrientation'],
-            ['actual orientation quaternion', 'actualOrientationQuaternion'],
-            ['gyroscopes', 'gyroscopes'],
-            ['quaternion', 'quaternion'],
-          ],
-          this.propertyValidator
-        ),
+        new FieldDropdown([
+          ['accelerometers', 'accelerometers'],
+          ['actual accelerometer', 'actualAccelerometer'],
+          ['actual gyroscope', 'actualGyroscope'],
+          ['actual orientation', 'actualOrientation'],
+          ['actual orientation quaternion', 'actualOrientationQuaternion'],
+          ['gyroscopes', 'gyroscopes'],
+          ['quaternion', 'quaternion'],
+        ]),
         'property'
       )
       .appendField('property of Nintendo JoyCon');
@@ -187,7 +184,6 @@ Blocks['joycon_read_property'] = {
     this.setColour(255);
     this.setTooltip('Reads a property of a Nintendo JoyCon controller.');
     this.setHelpUrl('');
-    this.firstTime = true;
   },
 };
 
@@ -249,29 +245,6 @@ Blocks['joycon_button_events'] = {
       this.requested = true;
       this.addEvent();
     }
-  },
-  /**
-   * Displays the pressed/released dropdown if on is selected.
-   */
-  onWhileValidator: function (onWhile: string): string {
-    const input = this.sourceBlock_.getInput('dropdowns');
-    if (input) {
-      // remove the pressed/released dropdown
-      input.removeField('buttonEvent');
-    }
-    if (onWhile === 'on') {
-      // add the pressed/released dropdown
-      input.appendField(
-        new FieldDropdown([
-          ['pressed', 'pressed'],
-          ['released', 'released'],
-        ]),
-        'buttonEvent'
-      );
-    } else {
-      input.appendField('pressed', 'buttonEvent');
-    }
-    return onWhile;
   },
   /**
    * Remove this block's id from the events array.
