@@ -48,7 +48,7 @@ JavaScript.forBlock['joycon_read_property'] = function (
   const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-  const code = `await things.get(${thing}).readProperty(${property})`;
+  const code = `await (await things.get(${thing}).readProperty(${property})).value()`;
   return [code, JavaScript.ORDER_NONE];
 };
 
@@ -98,6 +98,10 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     if ((joyCon as any).interval) {
       clearInterval((joyCon as any).interval);
     }
+  });
+
+  exposedThing.setPropertyReadHandler('accelerometers', async () => {
+    return 'eest';
   });
 };
 
