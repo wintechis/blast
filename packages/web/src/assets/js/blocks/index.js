@@ -10,6 +10,7 @@ import './functions.js';
 import './lists.js';
 import './loops.js';
 import './numbers.js';
+import './objects.js';
 import './requests.js';
 import './resources.js';
 import './strings.js';

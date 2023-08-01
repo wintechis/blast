@@ -9,6 +9,7 @@ import './functions';
 import './identifiers';
 import './loops';
 import './numbers';
+import './objects';
 import './requests';
 import './strings';
 import './things';

@@ -280,6 +280,18 @@ const defaultToolbox = {
       name: 'Colours',
       colour: '20',
     },
+    {
+      kind: 'CATEGORY',
+      contents: [
+        {kind: 'BLOCK', type: 'object_create'},
+        {kind: 'BLOCK', type: 'object_from_json'},
+        {kind: 'BLOCK', type: 'object_to_json'},
+        {kind: 'BLOCK', type: 'object_keys'},
+        {kind: 'BLOCK', type: 'object_get'},
+      ],
+      name: 'Objects',
+      colour: '#F99EA3',
+    },
   ],
 };
 
