@@ -125,184 +125,217 @@
         }
       }
     },
-    "actualGyroscpe": {
+    "actualGyroscope": {
       "title": "Actual Gyroscope",
       "description": "The actual gyroscope of the Joy-Con.",
       "type": "object",
       "properties": {
         "rps": {
-          "x": {
-            "title": "X-Axis",
-            "description": "The X-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "rad/s"
-          },
-          "y": {
-            "title": "Y-Axis",
-            "description": "The Y-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "rad/s"
-          },
-          "z": {
-            "title": "Z-Axis",
-            "description": "The Z-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "rad/s"
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            }
           }
         },
         "dps": {
-          "x": {
-            "title": "X-Axis",
-            "description": "The X-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "deg/s"
-          },
-          "y": {
-            "title": "Y-Axis",
-            "description": "The Y-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "deg/s"
-          },
-          "z": {
-            "title": "Z-Axis",
-            "description": "The Z-Axis of the gyroscope.",
-            "type": "number",
-            "unit": "deg/s"
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            }
           }
         }
       }
     },
     "actualOrientation": {
-      "alpha": {
-        "title": "Alpha",
-        "description": "The alpha value of the orientation.",
-        "type": "number",
-        "unit": "deg"
-      },
-      "beta": {
-        "title": "Beta",
-        "description": "The beta value of the orientation.",
-        "type": "number",
-        "unit": "deg"
-      },
-      "gamma": {
-        "title": "Gamma",
-        "description": "The gamma value of the orientation.",
-        "type": "number",
-        "unit": "deg"
+      "title": "Actual Orientation",
+      "description": "The actual orientation of the Joy-Con.",
+      "type": "object",
+      "properties":{
+        "alpha": {
+          "title": "Alpha",
+          "description": "The alpha value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "beta": {
+          "title": "Beta",
+          "description": "The beta value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "gamma": {
+          "title": "Gamma",
+          "description": "The gamma value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        }
       }
     },
     "actualOrientationQuaternion": {
-      "alpha": {
-        "title": "Alpha",
-        "description": "The alpha value of the orientation.",
-        "type": "number",
-        "unit": "deg"
-      },
-      "beta": {
-        "title": "Beta",
-        "description": "The beta value of the orientation.",
-        "type": "number",
-        "unit": "deg"
-      },
-      "gamma": {
-        "title": "Gamma",
-        "description": "The gamma value of the orientation.",
-        "type": "number",
-        "unit": "deg"
+      "title": "Actual Orientation Quaternion",
+      "description": "The actual orientation quaternion of the Joy-Con.",
+      "type": "object",
+      "properties":{
+        "alpha": {
+          "title": "Alpha",
+          "description": "The alpha value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "beta": {
+          "title": "Beta",
+          "description": "The beta value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "gamma": {
+          "title": "Gamma",
+          "description": "The gamma value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        }
       }
     },
     "gyroscopes": {
-      "0": {
-        "title": "Gyroscope 0",
-        "description": "The first gyroscope of the Joy-Con.",
-        "type": "object",
-        "properties": {
-          "rps": {
-            "x": {
-              "title": "X-Axis",
-              "description": "The X-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
+      "title": "Gyroscopes",
+      "description": "The gyroscopes of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "0": {
+          "title": "Gyroscope 0",
+          "description": "The first gyroscope of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "rps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
+              }
             },
-            "y": {
-              "title": "Y-Axis",
-              "description": "The Y-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
-            },
-            "z": {
-              "title": "Z-Axis",
-              "description": "The Z-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
-            }
-          },
-          "dps": {
-            "x": {
-              "title": "X-Axis",
-              "description": "The X-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
-            },
-            "y": {
-              "title": "Y-Axis",
-              "description": "The Y-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
-            },
-            "z": {
-              "title": "Z-Axis",
-              "description": "The Z-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
+            "dps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
+              }
             }
           }
-        }
-      },
-      "1": {
-        "title": "Gyroscope 1",
-        "description": "The second gyroscope of the Joy-Con.",
-        "type": "object",
-        "properties": {
-          "rps": {
-            "x": {
-              "title": "X-Axis",
-              "description": "The X-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
+        },
+        "1": {
+          "title": "Gyroscope 1",
+          "description": "The second gyroscope of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "rps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
+              }
             },
-            "y": {
-              "title": "Y-Axis",
-              "description": "The Y-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
-            },
-            "z": {
-              "title": "Z-Axis",
-              "description": "The Z-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "rad/s"
-            }
-          },
-          "dps": {
-            "x": {
-              "title": "X-Axis",
-              "description": "The X-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
-            },
-            "y": {
-              "title": "Y-Axis",
-              "description": "The Y-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
-            },
-            "z": {
-              "title": "Z-Axis",
-              "description": "The Z-Axis of the gyroscope.",
-              "type": "number",
-              "unit": "deg/s"
+            "dps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
+              }
             }
           }
         },
@@ -312,43 +345,49 @@
           "type": "object",
           "properties": {
             "rps": {
-              "x": {
-                "title": "X-Axis",
-                "description": "The X-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "rad/s"
-              },
-              "y": {
-                "title": "Y-Axis",
-                "description": "The Y-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "rad/s"
-              },
-              "z": {
-                "title": "Z-Axis",
-                "description": "The Z-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "rad/s"
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
               }
             },
             "dps": {
-              "x": {
-                "title": "X-Axis",
-                "description": "The X-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "deg/s"
-              },
-              "y": {
-                "title": "Y-Axis",
-                "description": "The Y-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "deg/s"
-              },
-              "z": {
-                "title": "Z-Axis",
-                "description": "The Z-Axis of the gyroscope.",
-                "type": "number",
-                "unit": "deg/s"
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
               }
             }
           }
@@ -356,25 +395,30 @@
       }
     },
     "quaternion": {
-      "w": {
-        "title": "W",
-        "description": "The W value of the quaternion.",
-        "type": "number"
-      },
-      "x": {
-        "title": "X",
-        "description": "The X value of the quaternion.",
-        "type": "number"
-      },
-      "y": {
-        "title": "Y",
-        "description": "The Y value of the quaternion.",
-        "type": "number"
-      },
-      "z": {
-        "title": "Z",
-        "description": "The Z value of the quaternion.",
-        "type": "number"
+      "title": "Quaternion",
+      "description": "The quaternion of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "w": {
+          "title": "W",
+          "description": "The W value of the quaternion.",
+          "type": "number"
+        },
+        "x": {
+          "title": "X",
+          "description": "The X value of the quaternion.",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "description": "The Y value of the quaternion.",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "description": "The Z value of the quaternion.",
+          "type": "number"
+        }
       }
     }
   },
