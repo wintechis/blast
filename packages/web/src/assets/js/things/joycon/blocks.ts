@@ -195,23 +195,23 @@ Blocks['joycon_button_events'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('Nintendo JoyCon');
+      .appendField('button events of Nintendo JoyCon');
     this.appendDummyInput('dropdowns')
       .appendField('on button')
       .appendField(
         new FieldDropdown([
-          ['A', 'A'],
-          ['B', 'B'],
-          ['X', 'X'],
-          ['Y', 'Y'],
-          ['up', 'UP'],
-          ['left', 'LEFT'],
-          ['down', 'DOWN'],
-          ['right', 'RIGHT'],
-          ['R', 'R'],
-          ['L', 'L'],
-          ['RT', 'RT'],
-          ['LT', 'LT'],
+          ['A', 'a'],
+          ['B', 'b'],
+          ['X', 'x'],
+          ['Y', 'y'],
+          ['up', 'up'],
+          ['left', 'left'],
+          ['down', 'down'],
+          ['right', 'right'],
+          ['R', 'r'],
+          ['L', 'r'],
+          ['RT', 'rt'],
+          ['LT', 'lt'],
         ]),
         'button'
       )

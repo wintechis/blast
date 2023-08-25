@@ -211,11 +211,15 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
     propertyName: string,
     options: WoT.InteractionOptions = {}
   ): Promise<InteractionOutput> {
+    const propertyElement = exposedThing.properties[propertyName];
+    if (!propertyElement) {
+      throw new Error(`Property '${propertyName}' not found`);
+    }
     // add a dummy form to by-pass protocol-listener-registry check
     const form = {
       op: 'readProperty',
     } as FormElementBase;
-    exposedThing.properties[propertyName].forms = [form];
+    propertyElement.forms = [form];
 
     const outputContent = await exposedThing.handleReadProperty(propertyName, {
       formIndex: 0,

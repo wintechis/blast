@@ -8,7 +8,9 @@ import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import * as WoT from 'wot-typescript-definitions';
 import {addCleanUpFunction} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
-import JoyCon from './switchPro/JoyCon';
+import {JoyConLeft, JoyConRight, GeneralController} from './switchPro/JoyCon';
+import {JoyConPacket} from './switchPro/types';
+import {getWebHidDevice} from '../../things';
 
 JavaScript.forBlock['things_joycon'] = function (
   block: Block
@@ -65,8 +67,8 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     'async function ' +
       JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
       '(interactionOutput) {',
-    '  const pressed = await interactionOutput.value();',
-    `  if (pressed[${button}]) {`,
+    '  const buttonStatus = await interactionOutput.value();',
+    `  if (buttonStatus[${button}]) {`,
     `${statements.replace(/`/g, '\\`')}`,
     '  }',
     '}',
@@ -85,14 +87,102 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
 (globalThis as any)['addJoyConHandlers'] = function (
   exposedThing: WoT.ExposedThing
 ) {
-  const joyCon = new JoyCon();
-  (joyCon as any).interval = setInterval(joyCon.pollGamepads.bind(joyCon), 200);
+  const id = (exposedThing as any).id;
+  const device = getWebHidDevice(id);
+  if (!device) {
+    throw new Error(`No device with id ${id} found.`);
+  }
+  let joyCon: JoyConLeft | JoyConRight | GeneralController | null = null;
+  if (device.productId === 0x2006) {
+    joyCon = new JoyConLeft(device);
+  } else if (device.productId === 0x2007) {
+    joyCon = new JoyConRight(device);
+  } else {
+    joyCon = new GeneralController(device);
+  }
+  if (joyCon === null) {
+    throw new Error(`No JoyCon with id ${id} found.`);
+  }
 
-  const handleButton = function (pressed: string[]) {
-    exposedThing.emitEvent('button', pressed);
+  Object.assign(joyCon, {
+    pressed: {},
+    prevPressed: {},
+    accelerometers: {},
+    gyroscopes: {},
+    actualAccelerometer: {},
+    actualGyroscope: {},
+    actualOrientation: {},
+    actualOrientationQuaternion: {},
+    quaternion: {},
+  });
+
+  function _shallowEqual(object1: any, object2: any) {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+
+    for (const key of keys1) {
+      if (object1[key] !== object2[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  const handleInput = function (packet: JoyConPacket) {
+    if (!packet || !packet.actualOrientation) {
+      return;
+    }
+    const {
+      buttonStatus,
+      accelerometers,
+      gyroscopes,
+      actualAccelerometer,
+      actualGyroscope,
+      actualOrientation,
+      actualOrientationQuaternion,
+      quaternion,
+    } = packet;
+    // write all buttons with buttonStatus true to pressed array
+    const pressed: string[] = [];
+    if (buttonStatus) {
+      for (const button of Object.keys(buttonStatus)) {
+        if (buttonStatus[button as keyof typeof buttonStatus]) {
+          pressed.push(button);
+        }
+      }
+    }
+
+    // write values to JoyCon
+    Object.assign(joyCon as any, {
+      pressed,
+      accelerometers,
+      gyroscopes,
+      actualAccelerometer,
+      actualGyroscope,
+      actualOrientation,
+      actualOrientationQuaternion,
+      quaternion,
+    });
+
+    if (!_shallowEqual(pressed, (joyCon as any).prevPressed)) {
+      (joyCon as any).prevPressed = pressed;
+      exposedThing.emitEvent('button', buttonStatus);
+    }
   };
 
-  joyCon.addListener(handleButton);
+  joyCon.open();
+  (joyCon as any).interval = setInterval(async () => {
+    if (!(joyCon as any).eventListenerAttached === true) {
+      (joyCon as any).addEventListener('hidinput', (event: any) => {
+        handleInput((event as any).detail);
+      });
+      (joyCon as any).eventListenerAttached = true;
+    }
+  }, 2000);
 
   addCleanUpFunction(() => {
     if ((joyCon as any).interval) {
@@ -101,8 +191,36 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   });
 
   exposedThing.setPropertyReadHandler('accelerometers', async () => {
-    return 'eest';
+    return waitForProperty('accelerometers');
   });
+  exposedThing.setPropertyReadHandler('gyroscopes', async () => {
+    return waitForProperty('gyroscopes');
+  });
+  exposedThing.setPropertyReadHandler('actualAccelerometer', async () => {
+    return waitForProperty('actualAccelerometer');
+  });
+  exposedThing.setPropertyReadHandler('actualGyroscope', async () => {
+    return waitForProperty('actualGyroscope');
+  });
+  exposedThing.setPropertyReadHandler('actualOrientation', async () => {
+    return waitForProperty('actualOrientation');
+  });
+  exposedThing.setPropertyReadHandler(
+    'actualOrientationQuaternion',
+    async () => {
+      return waitForProperty('actualOrientationQuaternion');
+    }
+  );
+  exposedThing.setPropertyReadHandler('quaternion', async () => {
+    return waitForProperty('quaternion');
+  });
+
+  const waitForProperty = async function (property: string) {
+    while (Object.keys((joyCon as any)[property]).length === 0) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return (joyCon as any)[property];
+  };
 };
 
 JavaScript.forBlock['things_gamepad_pro'] = function (
