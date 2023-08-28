@@ -68,163 +68,122 @@ Blocks['joycon_read_property'] = {
       .setCheck('Thing')
       .appendField('read')
       .appendField(
-        new FieldDropdown(
-          [
-            ['accelerometers', 'accelerometers'],
-            ['actual accelerometer', 'actualAccelerometer'],
-            ['actual gyroscope', 'actualGyroscope'],
-            ['actual orientation', 'actualOrientation'],
-            ['actual orientation quaternion', 'actualOrientationQuaternion'],
-            ['gyroscopes', 'gyroscopes'],
-            ['quaternion', 'quaternion'],
-          ],
-          this.propertyValidator
-        ),
+        new FieldDropdown([
+          ['accelerometers', 'accelerometers'],
+          ['actual accelerometer', 'actualAccelerometer'],
+          ['actual gyroscope', 'actualGyroscope'],
+          ['actual orientation', 'actualOrientation'],
+          ['actual orientation quaternion', 'actualOrientationQuaternion'],
+          ['gyroscopes', 'gyroscopes'],
+          ['quaternion', 'quaternion'],
+        ]),
         'property'
       )
       .appendField('property of Nintendo JoyCon');
     this.setInputsInline(false);
     this.setOutput(true, ['String', 'Number']);
+    this.setCommentText(
+      'Structure of returned value:\n' +
+        '{\n' +
+        '  "accelerometers": [\n' +
+        '    {\n' +
+        '      "x": number,\n' +
+        '      "y": number,\n' +
+        '      "z": number\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "x": number,\n' +
+        '      "y": number,\n' +
+        '      "z": number\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "x": number,\n' +
+        '      "y": number,\n' +
+        '      "z": number\n' +
+        '    }\n' +
+        '  ],\n' +
+        '  "actualAccelerometer": {\n' +
+        '    "x": number,\n' +
+        '    "y": number,\n' +
+        '    "z": number\n' +
+        '  },\n' +
+        '  "actualGyroscope": {\n' +
+        '    "rps": {\n' +
+        '      "x": number,\n' +
+        '      "y": number,\n' +
+        '      "z": number\n' +
+        '    },\n' +
+        '    "dps": {\n' +
+        '      "x": number,\n' +
+        '      "y": number,\n' +
+        '      "z": number\n' +
+        '    },\n' +
+        '  },\n' +
+        '  "actualOrientation": {\n' +
+        '    "alpha": number,\n' +
+        '    "beta": number,\n' +
+        '    "gamma": number\n' +
+        '  },\n' +
+        '  "actualOrientationQuaternion": {\n' +
+        '    "alpha": number,\n' +
+        '    "beta": number,\n' +
+        '    "gamma": number\n' +
+        '  },\n' +
+        '  "gyroscopes": [\n' +
+        '    {\n' +
+        '      "x": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "y": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "z": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "x": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "y": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "z": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      }\n' +
+        '    },\n' +
+        '    {\n' +
+        '      "x": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "y": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      },\n' +
+        '      "z": {\n' +
+        '        "dps": number,\n' +
+        '        "rps": number\n' +
+        '      }\n' +
+        '    },\n' +
+        '  ],\n' +
+        '  "quaternion": {\n' +
+        '    "w": number,\n' +
+        '    "x": number,\n' +
+        '    "y": number,\n' +
+        '    "z": number\n' +
+        '  }\n' +
+        '}'
+    );
     this.setColour(255);
     this.setTooltip('Reads a property of a Nintendo JoyCon controller.');
     this.setHelpUrl('');
-    this.firstTime = true;
-  },
-  propertyValidator: function (option: string) {
-    this.getSourceBlock().updateInputs(option);
-    return option;
-  },
-  /**
-   * Adds dropdowns for property sub values based on the selected property.
-   */
-  updateInputs: function (property: string) {
-    this.removeInput('propertySubValue', true);
-    this.removeInput('propertySubValue2', true);
-    this.removeInput('propertySubValue3', true);
-
-    if (property === 'accelerometers') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('accelerometer')
-        .appendField(
-          new FieldDropdown([
-            ['0', '0'],
-            ['1', '1'],
-            ['2', '2'],
-          ]),
-          'propertySubValue'
-        );
-      this.appendDummyInput('propertySubValue2')
-        .appendField('axis')
-        .appendField(
-          new FieldDropdown([
-            ['x', 'x'],
-            ['y', 'y'],
-            ['z', 'z'],
-          ]),
-          'propertySubValue2'
-        );
-    }
-    if (property === 'actualAccelerometer') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('axis')
-        .appendField(
-          new FieldDropdown([
-            ['x', 'x'],
-            ['y', 'y'],
-            ['z', 'z'],
-          ]),
-          'propertySubValue'
-        );
-    }
-    if (property === 'actualGyroscope') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('unit')
-        .appendField(
-          new FieldDropdown([
-            ['rps', 'rps'],
-            ['dps', 'dps'],
-          ]),
-          'propertySubValue'
-        );
-      this.appendDummyInput('propertySubValue2')
-        .appendField('axis')
-        .appendField(
-          new FieldDropdown([
-            ['x', 'x'],
-            ['y', 'y'],
-            ['z', 'z'],
-          ]),
-          'propertySubValue2'
-        );
-    }
-    if (property === 'actualOrientation') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('degrees')
-        .appendField(
-          new FieldDropdown([
-            ['alpa', 'alpha'],
-            ['beta', 'beta'],
-            ['gamma', 'gamma'],
-          ]),
-          'propertySubValue'
-        );
-    }
-    if (property === 'actualOrientationQuaternion') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('degrees')
-        .appendField(
-          new FieldDropdown([
-            ['alpa', 'alpha'],
-            ['beta', 'beta'],
-            ['gamma', 'gamma'],
-          ]),
-          'propertySubValue'
-        );
-    }
-    if (property === 'gyroscopes') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('gyroscope')
-        .appendField(
-          new FieldDropdown([
-            ['0', '0'],
-            ['1', '1'],
-            ['2', '2'],
-          ]),
-          'propertySubValue'
-        );
-      this.appendDummyInput('propertySubValue2')
-        .appendField('axis')
-        .appendField(
-          new FieldDropdown([
-            ['x', '0'],
-            ['y', '1'],
-            ['z', '2'],
-          ]),
-          'propertySubValue2'
-        );
-      this.appendDummyInput('propertySubValue3')
-        .appendField('unit')
-        .appendField(
-          new FieldDropdown([
-            ['dps', 'dps'],
-            ['rps', 'rps'],
-          ]),
-          'propertySubValue3'
-        );
-    }
-    if (property === 'quaternion') {
-      this.appendDummyInput('propertySubValue')
-        .appendField('axis')
-        .appendField(
-          new FieldDropdown([
-            ['w', 'w'],
-            ['x', 'x'],
-            ['y', 'y'],
-            ['z', 'z'],
-          ]),
-          'propertySubValue'
-        );
-    }
   },
 };
 
@@ -236,43 +195,28 @@ Blocks['joycon_button_events'] = {
   init: function () {
     this.appendValueInput('thing')
       .setCheck('Thing')
-      .appendField('Nintendo JoyCon');
+      .appendField('button events of Nintendo JoyCon');
     this.appendDummyInput('dropdowns')
-      .appendField(
-        new FieldDropdown(
-          [
-            ['on', 'on'],
-            ['while', 'while'],
-          ],
-          this.onWhileValidator
-        ),
-        'onWhile'
-      )
+      .appendField('on button')
       .appendField(
         new FieldDropdown([
-          ['A', 'A'],
-          ['B', 'B'],
-          ['X', 'X'],
-          ['Y', 'Y'],
-          ['up', 'UP'],
-          ['left', 'LEFT'],
-          ['down', 'DOWN'],
-          ['right', 'RIGHT'],
-          ['R', 'R'],
-          ['L', 'L'],
-          ['RT', 'RT'],
-          ['LT', 'LT'],
+          ['A', 'a'],
+          ['B', 'b'],
+          ['X', 'x'],
+          ['Y', 'y'],
+          ['up', 'up'],
+          ['left', 'left'],
+          ['down', 'down'],
+          ['right', 'right'],
+          ['R', 'r'],
+          ['L', 'r'],
+          ['RT', 'rt'],
+          ['LT', 'lt'],
         ]),
         'button'
       )
-      .appendField(
-        new FieldDropdown([
-          ['pressed', 'pressed'],
-          ['released', 'released'],
-        ]),
-        'buttonEvent'
-      );
-    this.appendStatementInput('statements').appendField('do').setCheck(null);
+      .appendField('pressed');
+    this.appendStatementInput('statements').appendField('do');
     this.setInputsInline(false);
     this.setColour(180);
     this.setTooltip('');
@@ -301,29 +245,6 @@ Blocks['joycon_button_events'] = {
       this.requested = true;
       this.addEvent();
     }
-  },
-  /**
-   * Displays the pressed/released dropdown if on is selected.
-   */
-  onWhileValidator: function (onWhile: string): string {
-    const input = this.sourceBlock_.getInput('dropdowns');
-    if (input) {
-      // remove the pressed/released dropdown
-      input.removeField('buttonEvent');
-    }
-    if (onWhile === 'on') {
-      // add the pressed/released dropdown
-      input.appendField(
-        new FieldDropdown([
-          ['pressed', 'pressed'],
-          ['released', 'released'],
-        ]),
-        'buttonEvent'
-      );
-    } else {
-      input.appendField('pressed', 'buttonEvent');
-    }
-    return onWhile;
   },
   /**
    * Remove this block's id from the events array.

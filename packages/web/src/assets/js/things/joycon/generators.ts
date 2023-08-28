@@ -6,14 +6,32 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import * as WoT from 'wot-typescript-definitions';
-import {addCleanUpFunction, getWorkspace} from '../../interpreter';
+import {addCleanUpFunction} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
+import {JoyConLeft, JoyConRight, GeneralController} from './switchPro/JoyCon';
+import {JoyConPacket} from './switchPro/types';
+import {getWebHidDevice} from '../../things';
 
 JavaScript.forBlock['things_joycon'] = function (
   block: Block
 ): [string, number] {
   const id = JavaScript.quote_(block.getFieldValue('id'));
-  return [id, JavaScript.ORDER_NONE];
+  const name = JavaScript.quote_(block.getFieldValue('name'));
+
+  JavaScript.imports_['core'] =
+    "const blastCore = await import('../../assets/blast/blast.web.js');";
+  JavaScript.imports_['tds'] =
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+
+  JavaScript.definitions_['createThingWithHandlers'] =
+    'const {createThingWithHandlers} = blastCore;';
+  JavaScript.definitions_['JoyCon'] = 'const {JoyCon} = blastTds;';
+  JavaScript.definitions_['things'] = 'const things = new Map();';
+  JavaScript.definitions_[
+    'things' + name
+  ] = `things.set(${name}, await createThingWithHandlers(JoyCon, ${id}, addJoyConHandlers));`;
+
+  return [name, JavaScript.ORDER_NONE];
 };
 
 type Joystick = {
@@ -29,55 +47,11 @@ JavaScript.forBlock['joycon_read_property'] = function (
   block: Block
 ): [string, number] {
   const property = JavaScript.quote_(block.getFieldValue('property'));
-  const sub = JavaScript.quote_(block.getFieldValue('propertySubValue') || '');
-  const sub2 = JavaScript.quote_(
-    block.getFieldValue('propertySubValue2') || ''
-  );
-  const sub3 = JavaScript.quote_(
-    block.getFieldValue('propertySubValue3') || ''
-  );
-  const id =
+  const thing =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
-  let blockId = "''";
-  if (block.getInputTargetBlock('thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('thing')?.id);
-  }
 
-  const code = `joyCon_readProperty(${blockId}, ${id}, ${property}, ${sub}, ${sub2}, ${sub3})`;
+  const code = `await (await things.get(${thing}).readProperty(${property})).value()`;
   return [code, JavaScript.ORDER_NONE];
-};
-
-/**
- * Reads a property of a Joy-Con.
- */
-(globalThis as any)['joyCon_readProperty'] = async function (
-  blockId: string,
-  id: string,
-  property: string,
-  subValue: string,
-  subValue2: string,
-  subValue3: string
-) {
-  // If no things block is attached, return.
-  if (!id) {
-    console.error('No Joy-Con block set.');
-    return;
-  }
-
-  const block = getWorkspace()?.getBlockById(blockId);
-  const thing = (block as any).thing;
-  const packet = await thing.readProperty(property);
-  if (subValue2 !== '') {
-    if (property === 'accelerometers') {
-      return packet[subValue][subValue2]['acc'];
-    } else if (property === 'gyroscopes') {
-      return packet[subValue][subValue2][subValue3];
-    } else {
-      return packet[subValue][subValue2];
-    }
-  } else {
-    return packet[subValue];
-  }
 };
 
 /**
@@ -85,19 +59,21 @@ JavaScript.forBlock['joycon_read_property'] = function (
  */
 JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   const thing =
-    JavaScript.valueToCode(block, 'Thing', JavaScript.ORDER_NONE) || null;
-  const onWhile = JavaScript.quote_(block.getFieldValue('onWhile'));
+    JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+  const statements = JavaScript.statementToCode(block, 'statements');
   const button = JavaScript.quote_(block.getFieldValue('button'));
-  const statements = JavaScript.quote_(
-    JavaScript.statementToCode(block, 'statements')
-  );
-  const released = block.getFieldValue('released') === 'released';
-  let blockId = "''";
-  if (block.getInputTargetBlock('Thing')) {
-    blockId = JavaScript.quote_(block.getInputTargetBlock('Thing')?.id);
-  }
 
-  const handler = `joyCon_handleButtons(${blockId}, ${thing}, ${onWhile}, ${button}, ${released}, ${statements});\n`;
+  const eventHandler = JavaScript.provideFunction_('joycon_buttonHandler', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+      '(interactionOutput) {',
+    '  const buttonStatus = await interactionOutput.value();',
+    `  if (buttonStatus[${button}]) {`,
+    `${statements.replace(/`/g, '\\`')}`,
+    '  }',
+    '}',
+  ]);
+  const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
   const handlersList = JavaScript.definitions_['eventHandlers'] || '';
   // Event handlers need to be executed first, so they're added to JavaScript.definitions
   JavaScript.definitions_['eventHandlers'] = handlersList + handler;
@@ -106,136 +82,145 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
 };
 
 /**
- * Handles button pushed on a Nintendo JoyCon.
+ * Adds WoT event handlers to the JoyCon's ExposedThing instance.
  */
-(globalThis as any)['joyCon_handleButtons'] = async function (
-  blockId: string,
-  id: string,
-  onWhile: string,
-  button: string,
-  released: string,
-  statements: string
+(globalThis as any)['addJoyConHandlers'] = function (
+  exposedThing: WoT.ExposedThing
 ) {
-  let interval: NodeJS.Timer;
-
-  // Mapping button index to each button
-  // Each joycon contains 16 buttons indexed
-  const buttonMappingSingle = {
-    0: 'A',
-    1: 'X',
-    2: 'B',
-    3: 'Y',
-    4: 'RSL',
-    5: 'RSR',
-    9: 'PLUS',
-    11: 'RA',
-    12: 'HOME',
-    14: 'R',
-    15: 'RT',
-    16: 'LEFT',
-    17: 'DOWN',
-    18: 'UP',
-    19: 'RIGHT',
-    20: 'LSL',
-    21: 'LSR',
-    24: 'MINUS',
-    26: 'LA',
-    29: 'CAPTURE',
-    30: 'L',
-    31: 'LT',
-  };
-
-  const buttonMappingDual = {
-    4: 'RSL',
-    5: 'RSR',
-    6: 'B',
-    7: 'A',
-    8: 'Y',
-    9: 'X',
-    10: 'L',
-    11: 'R',
-    12: 'LT',
-    13: 'RT',
-    14: 'MINUS',
-    15: 'PLUS',
-    16: 'LA',
-    17: 'RA',
-    18: 'UP',
-    19: 'DOWN',
-    20: 'LEFT',
-    21: 'RIGHT',
-    23: 'HOME',
-    24: 'LSL',
-    25: 'LSR',
-  };
-
-  if (!('ongamepadconnected' in window)) {
-    // No gamepad events available, poll instead.
-    interval = setInterval(pollGamepads, 100);
+  const id = (exposedThing as any).id;
+  const device = getWebHidDevice(id);
+  if (!device) {
+    throw new Error(`No device with id ${id} found.`);
+  }
+  let joyCon: JoyConLeft | JoyConRight | GeneralController | null = null;
+  if (device.productId === 0x2006) {
+    joyCon = new JoyConLeft(device);
+  } else if (device.productId === 0x2007) {
+    joyCon = new JoyConRight(device);
+  } else {
+    joyCon = new GeneralController(device);
+  }
+  if (joyCon === null) {
+    throw new Error(`No JoyCon with id ${id} found.`);
   }
 
-  let lastPressed = [];
-  let pressed: string[] = [];
+  Object.assign(joyCon, {
+    pressed: {},
+    prevPressed: {},
+    accelerometers: {},
+    gyroscopes: {},
+    actualAccelerometer: {},
+    actualGyroscope: {},
+    actualOrientation: {},
+    actualOrientationQuaternion: {},
+    quaternion: {},
+  });
 
-  async function pollGamepads() {
-    const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
-    const gamepadArray = [];
-    for (const gamepad of gamepads) {
-      gamepadArray.push(gamepad);
+  function _shallowEqual(object1: any, object2: any) {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+
+    if (keys1.length !== keys2.length) {
+      return false;
     }
-    const orderedGamepads = [];
-    orderedGamepads.push(
-      gamepadArray.find(g => g && g.id.indexOf('Joy-Con') > -1)
-    );
 
-    let type = (orderedGamepads[0] as any).id.indexOf('L+R') > -1 ? 'L+R' : 'L';
-    type = (orderedGamepads[0] as any).id.indexOf('(R)') > -1 ? 'R' : type;
+    for (const key of keys1) {
+      if (object1[key] !== object2[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
 
-    lastPressed = pressed;
-    pressed = [];
-
-    for (const gamepad of orderedGamepads) {
-      if (gamepad) {
-        for (let i = 0; i < gamepad.buttons.length; i++) {
-          if (gamepad.buttons[i].pressed) {
-            let id, button;
-            if (type === 'R') {
-              id = i;
-              button = (buttonMappingSingle as any)[id] || id;
-            } else if (type === 'L') {
-              id = i + 16;
-              button = (buttonMappingSingle as any)[id] || id;
-            } else if (type === 'L+R') {
-              id = i + 6;
-              button = (buttonMappingSingle as any)[id] || id;
-            }
-            pressed.push(button);
-          }
+  const handleInput = function (packet: JoyConPacket) {
+    if (!packet || !packet.actualOrientation) {
+      return;
+    }
+    const {
+      buttonStatus,
+      accelerometers,
+      gyroscopes,
+      actualAccelerometer,
+      actualGyroscope,
+      actualOrientation,
+      actualOrientationQuaternion,
+      quaternion,
+    } = packet;
+    // write all buttons with buttonStatus true to pressed array
+    const pressed: string[] = [];
+    if (buttonStatus) {
+      for (const button of Object.keys(buttonStatus)) {
+        if (buttonStatus[button as keyof typeof buttonStatus]) {
+          pressed.push(button);
         }
       }
     }
 
-    if (
-      (!released &&
-        pressed.indexOf(button) > -1 && // button is pressed
-        (onWhile === 'while' || lastPressed.indexOf(button) === -1)) || // while selected or button was not pressed before
-      (released && // release selected
-        pressed.indexOf(button) === -1 && // button is not pressed
-        lastPressed.indexOf(button) > -1) // and was pressed before
-    ) {
-      try {
-        eval(`(async () => {${statements}})();`);
-      } catch (e: any) {
-        console.error(e);
-      }
+    // write values to JoyCon
+    Object.assign(joyCon as any, {
+      pressed,
+      accelerometers,
+      gyroscopes,
+      actualAccelerometer,
+      actualGyroscope,
+      actualOrientation,
+      actualOrientationQuaternion,
+      quaternion,
+    });
+
+    if (!_shallowEqual(pressed, (joyCon as any).prevPressed)) {
+      (joyCon as any).prevPressed = pressed;
+      exposedThing.emitEvent('button', buttonStatus);
     }
-  }
+  };
+
+  joyCon.open();
+  (joyCon as any).interval = setInterval(async () => {
+    if (!(joyCon as any).eventListenerAttached === true) {
+      (joyCon as any).addEventListener('hidinput', (event: any) => {
+        handleInput((event as any).detail);
+      });
+      (joyCon as any).eventListenerAttached = true;
+    }
+  }, 2000);
 
   addCleanUpFunction(() => {
-    if (interval) {
-      clearInterval(interval);
+    if ((joyCon as any).interval) {
+      clearInterval((joyCon as any).interval);
     }
   });
+
+  exposedThing.setPropertyReadHandler('accelerometers', async () => {
+    return waitForProperty('accelerometers');
+  });
+  exposedThing.setPropertyReadHandler('gyroscopes', async () => {
+    return waitForProperty('gyroscopes');
+  });
+  exposedThing.setPropertyReadHandler('actualAccelerometer', async () => {
+    return waitForProperty('actualAccelerometer');
+  });
+  exposedThing.setPropertyReadHandler('actualGyroscope', async () => {
+    return waitForProperty('actualGyroscope');
+  });
+  exposedThing.setPropertyReadHandler('actualOrientation', async () => {
+    return waitForProperty('actualOrientation');
+  });
+  exposedThing.setPropertyReadHandler(
+    'actualOrientationQuaternion',
+    async () => {
+      return waitForProperty('actualOrientationQuaternion');
+    }
+  );
+  exposedThing.setPropertyReadHandler('quaternion', async () => {
+    return waitForProperty('quaternion');
+  });
+
+  const waitForProperty = async function (property: string) {
+    while (Object.keys((joyCon as any)[property]).length === 0) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    return (joyCon as any)[property];
+  };
 };
 
 JavaScript.forBlock['things_gamepad_pro'] = function (

@@ -42,7 +42,7 @@ export default class SwitchPro {
       return;
     }
 
-    // keep track of previous teration to know if we need to emit changes
+    // keep track of previous iteration to know if we need to emit changes
     this.prevPressed = this.pressed;
     this.pressed = {};
 
