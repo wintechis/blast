@@ -62,7 +62,9 @@ Blocks['timestamp'] = {
     this.setOutput(true, 'Number');
     this.setColour(230);
     this.setTooltip('Returns the current timestamp.');
-    this.setHelpUrl('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now');
+    this.setHelpUrl(
+      'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now'
+    );
   },
 };
 
