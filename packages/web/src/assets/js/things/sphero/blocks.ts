@@ -66,8 +66,10 @@ Blocks['things_spheroMini'] = {
           this.dispose();
           return;
         }
-        this.thing = getSpheroMini(this.getFieldValue('id'));
-        spheroIds.set(this.getFieldValue('name'), this.getFieldValue('id'));
+        if (this.getFieldValue('id') !== null) {
+          this.thing = getSpheroMini(this.getFieldValue('id'));
+          spheroIds.set(this.getFieldValue('name'), this.getFieldValue('id'));
+        }
       }
     });
   },
