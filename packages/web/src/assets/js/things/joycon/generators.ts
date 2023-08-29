@@ -23,11 +23,10 @@ JavaScript.forBlock['things_joycon'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThingWithHandlers'] =
+  JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
-  JavaScript.definitions_['JoyCon'] = 'const {JoyCon} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.priority_['JoyCon'] = 'const {JoyCon} = blastTds;';
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThingWithHandlers(JoyCon, ${id}, addJoyConHandlers));`;
 
@@ -74,9 +73,7 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     '}',
   ]);
   const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };
@@ -234,11 +231,10 @@ JavaScript.forBlock['things_gamepad_pro'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThingWithHandlers'] =
+  JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
-  JavaScript.definitions_['GamepadPro'] = 'const {GamepadPro} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.priority_['GamepadPro'] = 'const {GamepadPro} = blastTds;';
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThingWithHandlers(GamepadPro, ${id}, addGamepadHandlers));`;
 
@@ -256,22 +252,23 @@ JavaScript.forBlock['gamepad_pro_joystick'] = function (block: Block): string {
   const yName = block.getFieldValue('gp-yName');
   const angleName = block.getFieldValue('gp-angleName');
 
-  const eventHandler = JavaScript.provideFunction_('gamepad_joystickHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '  const joystick = await interactionOutput.value();',
-    `  ${xName} = joystick['x'] || 0;`,
-    `  ${yName} = joystick['y'] || 0;`,
-    `  ${angleName} = joystick['angle'] || 0;`,
-    `${statements.replace(/`/g, '\\`')}`,
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'gamepad_joystickHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '  const joystick = await interactionOutput.value();',
+      `  ${xName} = joystick['x'] || 0;`,
+      `  ${yName} = joystick['y'] || 0;`,
+      `  ${angleName} = joystick['angle'] || 0;`,
+      `${statements.replace(/`/g, '\\`')}`,
+      '}',
+    ]
+  );
 
   const handler = `await things.get(${thing}).subscribeEvent('joystick', ${eventHandler});`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };
@@ -285,21 +282,22 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
   const statements = JavaScript.statementToCode(block, 'statements');
   const button = JavaScript.quote_(block.getFieldValue('button'));
 
-  const eventHandler = JavaScript.provideFunction_('gamepad_buttonHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '  const pressed = await interactionOutput.value();',
-    `  if (pressed[${button}]) {`,
-    `${statements.replace(/`/g, '\\`')}`,
-    '  }',
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'gamepad_buttonHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '  const pressed = await interactionOutput.value();',
+      `  if (pressed[${button}]) {`,
+      `${statements.replace(/`/g, '\\`')}`,
+      '  }',
+      '}',
+    ]
+  );
 
   const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };

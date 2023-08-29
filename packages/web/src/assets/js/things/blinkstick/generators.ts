@@ -21,10 +21,9 @@ JavaScript.forBlock['things_blinkstick'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['Blinkstick'] = 'const {Blinkstick} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['Blinkstick'] = 'const {Blinkstick} = blastTds;';
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(Blinkstick, ${id}));`;
 

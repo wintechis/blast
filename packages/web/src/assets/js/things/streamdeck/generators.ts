@@ -19,11 +19,9 @@ JavaScript.forBlock['things_streamdeck'] = function (block: Block) {
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['StreamDeckMini'] =
-    'const {StreamDeckMini} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['StreamDeckMini'] = 'const {StreamDeckMini} = blastTds;';
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(StreamDeckMini, ${id}));`;
 
@@ -62,9 +60,7 @@ JavaScript.forBlock['streamdeck_button_event'] = function (
   ]);
 
   const handler = `await things.get(${thing}).subscribeEvent('inputreport', ${eventHandler});\n`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };

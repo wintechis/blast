@@ -21,6 +21,8 @@ const BUTTON_MAPPING = {
   17: 'CAPTURE',
 };
 
+const connectedGamepads = [];
+
 export default class SwitchPro {
   constructor() {
     this.prevPressed = {};
@@ -79,11 +81,16 @@ export default class SwitchPro {
     //   0: Pro Controller (STANDARD GAMEPAD)
     //   1: Pro Controller (STANDARD GAMEPAD Vendor: 057e Product: 2009)
     // we want the one with more buttons mapped
-    return Array.from(gps).find(gp => {
+    const gamepad = Array.from(gps).find(gp => {
+      if (gp === null) {
+        return false;
+      }
       if (gp.buttons) {
-        return gp.buttons.length === 18;
+        return gp.buttons.length === 18 && connectedGamepads.indexOf(gp) === -1;
       }
     });
+    connectedGamepads.push(gamepad);
+    return gamepad;
   }
 
   _shallowEqual(object1, object2) {

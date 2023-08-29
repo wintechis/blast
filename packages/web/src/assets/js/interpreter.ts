@@ -196,6 +196,11 @@ const workspaceToCode = function (ws?: WorkspaceSvg): string {
   }
   const code: string[] = [];
   JavaScript.init(ws);
+  JavaScript.imports_ = Object.create(null);
+  JavaScript.functionNames_ = Object.create(null);
+  JavaScript.priority_ = Object.create(null);
+  JavaScript.things_ = Object.create(null);
+  JavaScript.handlers = Object.create(null);
   const blocks = ws.getTopBlocks(true);
   // Generate code for state_definition, event and every_seconds blocks first.
   for (const block of blocks) {
@@ -298,11 +303,30 @@ export const runJS = async function () {
  */
 JavaScript.imports_ = Object.create(null);
 JavaScript.functionNames_ = Object.create(null);
+JavaScript.priority_ = Object.create(null);
+JavaScript.things_ = Object.create(null);
+JavaScript.handlers = Object.create(null);
 const origFinish = JavaScript.finish;
 JavaScript.finish = function (code: string) {
   // Convert the imports dictionary into a list.
   const imports = Object.values(JavaScript.imports_);
+  const priority = Object.values(JavaScript.priority_);
+  const things = Object.values(JavaScript.things_);
+  if (things.length > 0) {
+    things.unshift('const things = new Map();');
+  }
+  const handlers = Object.values(JavaScript.handlers);
   // Call Blockly.CodeGenerator's finish.
   code = origFinish.apply(JavaScript, [code]);
-  return imports.join('\n') + '\n\n' + code;
+  return (
+    imports.join('\n') +
+    '\n\n' +
+    priority.join('\n') +
+    '\n' +
+    things.join('\n') +
+    '\n' +
+    handlers.join('\n') +
+    '\n' +
+    code
+  );
 };

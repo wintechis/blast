@@ -21,11 +21,10 @@ JavaScript.forBlock['things_bleLedController'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['BleRgbController'] =
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['BleRgbController'] =
     'const {BleRgbController} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(BleRgbController, ${id}));`;
 

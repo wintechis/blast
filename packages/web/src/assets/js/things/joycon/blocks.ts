@@ -393,6 +393,12 @@ Blocks['gamepad_pro_joystick'] = {
         }
         this.addEvent();
         this.createVars();
+      } else if (
+        e.type === Events.BLOCK_DELETE &&
+        (e as BlockDelete).ids?.includes(this.id)
+      ) {
+        this.deleteVars();
+        JavaScript.handlers['things' + this.id] = undefined;
       }
     });
   },
@@ -457,6 +463,15 @@ Blocks['gamepad_pro_joystick'] = {
     this.angleName = ws.createVariable(angleName).name;
     this.getField('gp-angleName')?.setValue(this.angleName);
   },
+  deleteVars: function () {
+    const ws = getWorkspace();
+    if (ws === null) {
+      return;
+    }
+    ws.deleteVariableById(this.xName);
+    ws.deleteVariableById(this.yName);
+    ws.deleteVariableById(this.angleName);
+  }
 };
 
 Blocks['gamepad_pro_button'] = {

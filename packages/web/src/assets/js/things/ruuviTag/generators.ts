@@ -18,10 +18,9 @@ JavaScript.forBlock['things_ruuviTag'] = function (block: Block) {
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['RuuviTag'] = 'const {RuuviTag} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['RuuviTag'] = 'const {RuuviTag} = blastTds;';
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(RuuviTag, ${id}));`;
 
@@ -68,9 +67,7 @@ JavaScript.forBlock['ruuviTag_event'] = function (block: Block) {
   ]);
 
   const handler = `await things.get(${thing}).subscribeEvent('UART data', ${eventHandler});\n`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };

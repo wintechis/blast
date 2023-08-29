@@ -17,11 +17,10 @@ JavaScript.forBlock['things_eddyStoneDevice'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['EddystoneDevice'] =
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['EddystoneDevice'] =
     'const {EddystoneDevice} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(EddystoneDevice, ${id}));`;
 
@@ -39,11 +38,10 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['BluetoothGeneric'] =
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['BluetoothGeneric'] =
     'const {BluetoothGeneric} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(BluetoothGeneric, ${id}));`;
 

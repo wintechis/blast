@@ -20,11 +20,10 @@ JavaScript.forBlock['things_xiaomiThermometer'] = function (
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
-  JavaScript.definitions_['createThing'] = 'const {createThing} = blastCore;';
-  JavaScript.definitions_['XiaomiThermometer'] =
+  JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
+  JavaScript.priority_['XiaomiThermometer'] =
     'const {XiaomiThermometer} = blastTds;';
-  JavaScript.definitions_['things'] = 'const things = new Map();';
-  JavaScript.definitions_[
+  JavaScript.things_[
     'things' + name
   ] = `things.set(${name}, await createThing(XiaomiThermometer, ${id}));`;
 
@@ -55,9 +54,7 @@ JavaScript.forBlock['xiaomiThermometer_event'] = function (
   ]);
 
   const handler = `await things.get(${thing}).subscribeEvent('measurements', ${eventHandler});`;
-  const handlersList = JavaScript.definitions_['eventHandlers'] || '';
-  // Event handlers need to be executed first, so they're added to JavaScript.definitions
-  JavaScript.definitions_['eventHandlers'] = handlersList + handler;
+  JavaScript.handlers['things' + block.id] = handler;
 
   return '';
 };
