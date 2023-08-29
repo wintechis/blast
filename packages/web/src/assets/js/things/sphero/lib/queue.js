@@ -19,6 +19,8 @@ export default class Queue {
   }
 
   enqueueCommand(data) {
+    // empty queue and add new command
+    this.clear();
     this.tasks.push(data);
   }
 
