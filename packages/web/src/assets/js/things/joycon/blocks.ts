@@ -433,7 +433,7 @@ Blocks['gamepad_pro_joystick'] = {
       xName = JavaScript.nameDB_.getName('gp-x-' + i, Names.NameType.VARIABLE);
     }
     this.xName = ws.createVariable(xName).name;
-    this.getField('gp-xName').setValue(this.xName);
+    this.getField('gp-xName')?.setValue(this.xName);
     // Create variable for y coordinate.
     let yName = JavaScript.nameDB_.getName('gp-y', Names.NameType.VARIABLE);
     for (let i = 1; ws.getVariable(yName) !== null; i++) {
@@ -441,7 +441,7 @@ Blocks['gamepad_pro_joystick'] = {
       yName = JavaScript.nameDB_.getName('gp-y-' + i, Names.NameType.VARIABLE);
     }
     this.yName = ws.createVariable(yName).name;
-    this.getField('gp-yName').setValue(this.yName);
+    this.getField('gp-yName')?.setValue(this.yName);
     // Create variable for joystick angle.
     let angleName = JavaScript.nameDB_.getName(
       'gp-angle',
@@ -455,7 +455,7 @@ Blocks['gamepad_pro_joystick'] = {
       );
     }
     this.angleName = ws.createVariable(angleName).name;
-    this.getField('gp-angleName').setValue(this.angleName);
+    this.getField('gp-angleName')?.setValue(this.angleName);
   },
 };
 
