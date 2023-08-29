@@ -68,7 +68,8 @@ const loadXml = async function (
       const name = thingBlock.firstElementChild.textContent;
       if (name) {
         const blockName = thingBlock.getAttribute('type');
-        const type = blockName?.split('_')[1];
+        // type should be everything after first underscord
+        const type = blockName?.substring(blockName.indexOf('_') + 1);
         const thing = implementedThings.find(thing => thing.id === type);
         if (thing) {
           thing.connected = false;
