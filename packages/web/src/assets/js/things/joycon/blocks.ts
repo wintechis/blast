@@ -16,6 +16,7 @@ import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_joycon'] = {
   /**
@@ -34,17 +35,19 @@ Blocks['things_joycon'] = {
     this.setTooltip('A Nintendo Joy-Con.');
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/Nintendo-JoyCon');
     this.getField('name').setEnabled(false);
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -202,17 +205,19 @@ Blocks['joycon_read_property'] = {
     this.setColour(255);
     this.setTooltip('Reads a property of a Nintendo JoyCon controller.');
     this.setHelpUrl('');
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -250,8 +255,20 @@ Blocks['joycon_button_events'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.requested = false;
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
+        this.addEvent();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.
@@ -267,20 +284,6 @@ Blocks['joycon_button_events'] = {
         this.removeFromEvents();
       }
     });
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      this.requested = true;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
-        return;
-      }
-      // Block is newly created
-      this.requested = true;
-      this.addEvent();
-    }
   },
   /**
    * Remove this block's id from the events array.
@@ -311,17 +314,19 @@ Blocks['things_gamepad_pro'] = {
     this.setTooltip('A Nintendo Switch Gamepad Pro.');
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/Nintendo-JoyCon');
     this.getField('name').setEnabled(false);
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -375,7 +380,21 @@ Blocks['gamepad_pro_joystick'] = {
     this.xName = '';
     this.yName = '';
     this.angleName = '';
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
+        this.addEvent();
+        this.createVars();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.
@@ -391,20 +410,6 @@ Blocks['gamepad_pro_joystick'] = {
         this.removeFromEvents();
       }
     });
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.requested = true;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
-        return;
-      }
-      this.addEvent();
-      this.createVars();
-    }
   },
   /**
    * Remove this block's id from the events array.
@@ -488,8 +493,20 @@ Blocks['gamepad_pro_button'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.requested = false;
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
+        this.addEvent();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.

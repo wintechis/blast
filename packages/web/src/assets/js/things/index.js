@@ -1,16 +1,16 @@
 import './audio/blocks.js';
 import './audio/generators.ts';
 
-import './bleRgbController/blocks.js';
+import './bleRgbController/blocks.ts';
 import './bleRgbController/generators.ts';
 
 import './blinkstick/blocks.ts';
 import './blinkstick/generators.ts';
 
-import './bluetooth/blocks.js';
+import './bluetooth/blocks.ts';
 import './bluetooth/generators.ts';
 
-import './huskyduino/blocks.js';
+import './huskyduino/blocks.ts';
 import './huskyduino/generators.ts';
 
 import './joycon/blocks.ts';
@@ -46,5 +46,5 @@ import './webSpeech/generators.ts';
 import './xiamoi_thermometer/blocks.ts';
 import './xiamoi_thermometer/generators.ts';
 
-import './xiaomiFlowerCare/blocks.js';
+import './xiaomiFlowerCare/blocks.ts';
 import './xiaomiFlowerCare/generators.ts';

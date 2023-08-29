@@ -4,10 +4,11 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
+import {Blocks, dialog, Events, FieldTextInput} from 'blockly';
+import {getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
-
-const {Blocks, dialog, FieldTextInput} = Blockly;
+import {Abstract} from 'blockly/core/events/events_abstract';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_bleLedController'] = {
   /**
@@ -28,17 +29,19 @@ Blocks['things_bleLedController'] = {
       'https://github.com/wintechis/blast/wiki/Bluetooth-LED-controller'
     );
     this.getField('name').setEnabled(false);
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -60,18 +63,19 @@ Blocks['bleLedController_switch_lights'] = {
     this.setColour(255);
     this.setTooltip('Switches checked lights on and unchecked ones off.');
     this.setHelpUrl('');
-    this.firstTime = true;
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 

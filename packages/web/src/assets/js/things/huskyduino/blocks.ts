@@ -4,9 +4,11 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
-const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
+import {Blocks, dialog, Events, FieldDropdown, FieldTextInput} from 'blockly';
+import {getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
+import {Abstract} from 'blockly/core/events/events_abstract';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_Huskylens'] = {
   /**
@@ -24,17 +26,19 @@ Blocks['things_Huskylens'] = {
     this.setColour(60);
     this.setTooltip('A HuskyDuino.');
     this.getField('name').setEnabled(false);
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-          Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -61,18 +65,19 @@ Blocks['huskylens_write_algo_property'] = {
     this.setColour(255);
     this.setTooltip('Choose the algorithm of a HuskyDuino');
     this.setHelpUrl('');
-  },
-
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-          Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -90,18 +95,19 @@ Blocks['huskylens_write_id_property'] = {
       'Sets the ID of the object currently on camera. ID shoud be a value between 1 and 255'
     );
     this.setHelpUrl('');
-  },
-
-  onchange: function () {
-    // on creating this block check webBluetooth availability.
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -126,18 +132,19 @@ Blocks['huskylens_forgetAll_action'] = {
     this.setColour(0);
     this.setTooltip('Forget all values of the currently selected algorithm');
     this.setHelpUrl('');
-  },
-
-  onchange: function () {
-    // on creating this block check webBluetooth availability.
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -152,18 +159,19 @@ Blocks['huskylens_read_id_property'] = {
       'returns up to 5 IDs of the objects currently visible to the HuskyLens'
     );
     this.setHelpUrl('');
-  },
-
-  onchange: function () {
-    // on creating this block check webBluetooth availability.
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -178,18 +186,19 @@ Blocks['huskylens_read_coordinates_property'] = {
       'returns ID and coordinates of one object visible to the HuskyLens'
     );
     this.setHelpUrl('');
-  },
-
-  onchange: function () {
-    // on creating this block check webBluetooth availability.
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 

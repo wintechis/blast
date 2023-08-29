@@ -3,8 +3,11 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Blocks, dialog, FieldTextInput} from 'blockly';
+import {Blocks, dialog, Events, FieldTextInput} from 'blockly';
+import {getWorkspace} from '../../interpreter.js';
 import {implementedThings} from '../../things.js';
+import {Abstract} from 'blockly/core/events/events_abstract';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_xiaomiFlowerCare'] = {
   /**
@@ -24,18 +27,19 @@ Blocks['things_xiaomiFlowerCare'] = {
     this.setTooltip('A Xiaomi Flower Care plant sensor.');
     this.setHelpUrl('');
     this.getField('name').setEnabled(false);
-    this.firstTime = true;
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -53,17 +57,19 @@ Blocks['xiaomiFlowerCare_read'] = {
     this.setColour(260);
     this.setTooltip('');
     this.setHelpUrl('');
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability.
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 

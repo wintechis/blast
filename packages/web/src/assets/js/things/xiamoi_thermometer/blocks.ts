@@ -9,6 +9,7 @@ import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_xiaomiThermometer'] = {
   /**
@@ -30,17 +31,19 @@ Blocks['things_xiaomiThermometer'] = {
       'https://github.com/wintechis/blast/wiki/Xiaomi-Thermometer'
     );
     this.getField('name').setEnabled(false);
-  },
-  onchange: function () {
-    // on creating this block check webBluetooth availability
-    if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.firstTime = false;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
       }
-    }
+    });
   },
 };
 
@@ -75,7 +78,21 @@ Blocks['xiaomiThermometer_event'] = {
     this.getField('temperature').setEnabled(false);
     this.humidityName = '';
     this.temperatureName = '';
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        if (!navigator.bluetooth) {
+          dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+          this.dispose();
+          return;
+        }
+        this.addEvent();
+        this.createVars();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.
@@ -91,20 +108,6 @@ Blocks['xiaomiThermometer_event'] = {
         this.removeFromEvents();
       }
     });
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.requested = true;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
-        return;
-      }
-      this.addEvent();
-      this.createVars();
-    }
   },
   /**
    * Remove this block's id from the events array.
