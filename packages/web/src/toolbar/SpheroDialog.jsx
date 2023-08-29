@@ -35,7 +35,7 @@ export default class SpheroDialog extends React.Component {
 
   setHeading(angle) {
     // only set heading every 100ms
-    if (Date.now() - this.state.lastSetHeading > 250) {
+    if (Date.now() - this.state.lastSetHeading > 100) {
       this.setState({lastSetHeading: Date.now()});
       const sphero = spheroInstances.get(this.state.spheroId);
       sphero.setHeading(angle);
