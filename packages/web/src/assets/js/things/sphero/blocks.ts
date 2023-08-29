@@ -11,7 +11,7 @@ import {
 import SpheroBolt from './lib/spheroBolt';
 
 import Blockly from 'blockly';
-const {Blocks, FieldTextInput} = Blockly;
+const {Blocks, dialog, FieldTextInput} = Blockly;
 
 export const spheroInstances = new Map();
 export const spheroIds = new Map();
@@ -59,6 +59,12 @@ Blocks['things_spheroMini'] = {
     // on creating this block initialize new instance of SpheroMini
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+        return;
+      }
       this.thing = getSpheroMini(this.getFieldValue('id'));
       spheroIds.set(this.getFieldValue('name'), this.getFieldValue('id'));
     }
@@ -84,6 +90,17 @@ Blocks['spheroMini_roll'] = {
     this.setColour(0);
     this.setTooltip('Rolls the Sphero Mini.');
     this.setHelpUrl('');
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+      }
+    }
   },
 };
 
@@ -117,6 +134,17 @@ Blocks['spheroMini_stop'] = {
     this.setTooltip('Stops the Sphero Mini.');
     this.setHelpUrl('');
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 Blocks['spheroMini_color'] = {
@@ -134,6 +162,17 @@ Blocks['spheroMini_color'] = {
     this.setColour(255);
     this.setTooltip('Sets the LED color of the Sphero Mini.');
     this.setHelpUrl('');
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+      }
+    }
   },
 };
 

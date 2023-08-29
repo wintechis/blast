@@ -25,6 +25,17 @@ Blocks['things_Huskylens'] = {
     this.setTooltip('A HuskyDuino.');
     this.getField('name').setEnabled(false);
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 Blocks['huskylens_write_algo_property'] = {
@@ -53,12 +64,12 @@ Blocks['huskylens_write_algo_property'] = {
   },
 
   onchange: function () {
-    // on creating this block check webBluetooth availability.
+    // on creating this block check webBluetooth availability
     if (!this.isInFlyout && this.firstTime && this.rendered) {
       this.firstTime = false;
       if (!navigator.bluetooth) {
         dialog.alert(`Webbluetooth is not supported by this browser.\n
-                Upgrade to Chrome version 85 or later.`);
+          Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
     }

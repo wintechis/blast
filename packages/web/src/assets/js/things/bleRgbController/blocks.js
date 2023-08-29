@@ -29,6 +29,17 @@ Blocks['things_bleLedController'] = {
     );
     this.getField('name').setEnabled(false);
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 Blocks['bleLedController_switch_lights'] = {

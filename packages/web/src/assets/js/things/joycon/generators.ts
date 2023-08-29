@@ -313,7 +313,7 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
   const switchPro = new SwitchPro();
   (switchPro as any).interval = setInterval(
     switchPro.pollGamepads.bind(switchPro),
-    200
+    50
   );
 
   const handleJoystick = function (joystick: Joystick) {

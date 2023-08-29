@@ -3,7 +3,7 @@
  * (https://ruuvi.com/ruuvitag/).
  */
 
-import {Blocks, Events, FieldTextInput, Names} from 'blockly';
+import {Blocks, dialog, Events, FieldTextInput, Names} from 'blockly';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
@@ -27,6 +27,17 @@ Blocks['things_ruuviTag'] = {
     this.setTooltip('A Ruuvi Tag');
     this.setHelpUrl('https://github.com/wintechis/blast/wiki/RuuviTag');
     this.getField('name').setEnabled(false);
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+      }
+    }
   },
 };
 
@@ -100,6 +111,12 @@ Blocks['ruuviTag_event'] = {
     if (!this.isInFlyout && !this.requested && this.rendered) {
       // Block is newly created
       this.requested = true;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
+        this.dispose();
+        return;
+      }
       this.addEvent();
       this.createVars();
     }
