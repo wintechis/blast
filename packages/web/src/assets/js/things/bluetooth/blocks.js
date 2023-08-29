@@ -6,7 +6,6 @@
 import Blockly from 'blockly';
 const {Blocks, dialog, FieldDropdown, FieldTextInput} = Blockly;
 import {implementedThings} from '../../things.js';
-import {getStdWarn} from '../../interpreter.ts';
 
 Blocks['things_eddyStoneDevice'] = {
   /**
@@ -28,6 +27,17 @@ Blocks['things_eddyStoneDevice'] = {
     );
     this.getField('name').setEnabled(false);
     this.firstTime = true;
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
   },
 };
 
@@ -72,24 +82,12 @@ Blocks['bluetoothGeneric_get_signal_strength_wb'] = {
   onchange: function () {
     // on creating this block check webBluetooth availability
     if (!this.isInFlyout && this.firstTime && this.rendered) {
-      this.checkCompatibility();
       this.firstTime = false;
       if (!navigator.bluetooth) {
         dialog.alert(`Webbluetooth is not supported by this browser.\n
           Upgrade to Chrome version 85 or later.`);
         this.dispose();
       }
-    }
-  },
-  checkCompatibility: function () {
-    const isWindows = navigator.platform.toLowerCase().indexOf('win') >= 0;
-    const isAndroid = navigator.userAgent.toLowerCase().indexOf('android') >= 0;
-
-    if (!isWindows && !isAndroid) {
-      const stdWarn = getStdWarn();
-      stdWarn(
-        'reading signal strength is only supported on Windows and Android'
-      );
     }
   },
 };
@@ -143,6 +141,17 @@ Blocks['eddyStoneDevice_write_eddystone_property'] = {
     this.setHelpUrl(
       'https://github.com/google/eddystone/tree/master/configuration-service'
     );
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
   },
   propertyValidator: function (property) {
     const block = this.getSourceBlock();
@@ -208,6 +217,17 @@ Blocks['read_eddystone_property'] = {
       'https://github.com/google/eddystone/tree/master/configuration-service'
     );
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 // Define inner block XML for the read_eddystone_property block.
@@ -259,6 +279,17 @@ Blocks['read_gatt_characteristic'] = {
     this.setColour(255);
     this.setTooltip('Reads a property from a Bluetooth device.');
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 Blocks['write_gatt_characteristic'] = {
@@ -281,6 +312,17 @@ Blocks['write_gatt_characteristic'] = {
     this.setNextStatement(true);
     this.setColour(255);
     this.setTooltip('Writes a property to a Bluetooth device.');
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
   },
 };
 
@@ -313,6 +355,17 @@ Blocks['read_characteristic'] = {
     this.setColour(255);
     this.setTooltip('Reads a characteristic from a Bluetooth device.');
   },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
+  },
 };
 
 Blocks['write_characteristic'] = {
@@ -337,6 +390,17 @@ Blocks['write_characteristic'] = {
     this.setNextStatement(true);
     this.setColour(255);
     this.setTooltip('Writes a property to a Bluetooth device.');
+  },
+  onchange: function () {
+    // on creating this block check webBluetooth availability
+    if (!this.isInFlyout && this.firstTime && this.rendered) {
+      this.firstTime = false;
+      if (!navigator.bluetooth) {
+        dialog.alert(`Webbluetooth is not supported by this browser.\n
+          Upgrade to Chrome version 85 or later.`);
+        this.dispose();
+      }
+    }
   },
 };
 
