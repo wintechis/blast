@@ -137,7 +137,7 @@ Blocks['xiaomiThermometer_event'] = {
       );
     }
     this.humidityName = ws.createVariable(humidityname).name;
-    this.getField('humidity').setValue(this.humidityName);
+    this.getField('humidity')?.setValue(this.humidityName);
     // create variable for temperature value
     let temperaturename = JavaScript.nameDB_.getName(
       'temperature',
@@ -151,7 +151,7 @@ Blocks['xiaomiThermometer_event'] = {
       );
     }
     this.temperatureName = ws.createVariable(temperaturename).name;
-    this.getField('temperature').setValue(this.temperatureName);
+    this.getField('temperature')?.setValue(this.temperatureName);
   },
 };
 

@@ -40,7 +40,7 @@ import './urdf/generators.js';
 import './video/blocks.js';
 import './video/generators.ts';
 
-import './webSpeech/blocks.js';
+import './webSpeech/blocks.ts';
 import './webSpeech/generators.ts';
 
 import './xiamoi_thermometer/blocks.ts';

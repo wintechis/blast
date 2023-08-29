@@ -168,7 +168,7 @@ Blocks['ruuviTag_event'] = {
       // create variable
       legalName = ws.createVariable(legalName).name;
       // set field value
-      this.getField(varName).setValue(legalName);
+      this.getField(varName)?.setValue(legalName);
     }
   },
 };

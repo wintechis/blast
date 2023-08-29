@@ -7,6 +7,7 @@
 import {
   ALIGN_CENTRE,
   Blocks,
+  dialog,
   Events,
   FieldCheckbox,
   FieldTextInput,
@@ -18,6 +19,7 @@ import {eventsInWorkspace, getWorkspace} from '../../interpreter';
 import {implementedThings} from '../../things.js';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_streamdeck'] = {
   /**
@@ -71,7 +73,15 @@ Blocks['streamdeck_button_event'] = {
     this.getField('button4').setEnabled(false);
     this.getField('button5').setEnabled(false);
     this.getField('button6').setEnabled(false);
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener((e: Abstract) => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        (e as BlockCreate).ids?.includes(this.id)
+      ) {
+        this.addEvent();
+        this.createVars();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.
@@ -87,14 +97,6 @@ Blocks['streamdeck_button_event'] = {
         this.removeFromEvents();
       }
     });
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.requested = true;
-      this.addEvent();
-      this.createVars();
-    }
   },
   /**
    * Remove this block's id from the events array.
@@ -134,7 +136,7 @@ Blocks['streamdeck_button_event'] = {
       // create variable
       legalName = ws.createVariable(legalName).name;
       // set variable name in block
-      this.getField(varName).setValue(legalName);
+      this.getField(varName)?.setValue(legalName);
     }
   },
 };

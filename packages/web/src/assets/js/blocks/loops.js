@@ -5,8 +5,7 @@
 
 import {addBlock} from '../toolbox.js';
 import {eventsInWorkspace, getWorkspace} from '../interpreter.ts';
-import Blockly from 'blockly';
-const {Blocks, Events, libraryBlocks, FieldDropdown} = Blockly;
+import {Blocks, Events, FieldDropdown} from 'blockly';
 
 // Remap blockly blocks to improve naming in xml.
 Blocks['repeat'] = Blocks['controls_repeat_ext'];
@@ -105,7 +104,11 @@ Blocks['every_seconds'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    this.changeListener = null;
+    getWorkspace()?.addChangeListener(e => {
+      if (e.type === Events.BLOCK_CREATE && e.ids?.includes(this.id)) {
+        this.addEvent();
+      }
+    });
   },
   /**
    * Add this block's id to the events array.
@@ -118,12 +121,6 @@ Blocks['every_seconds'] = {
         this.removeFromEvents();
       }
     });
-  },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.addEvent();
-    }
   },
   /**
    * Remove this block's id from the events array.

@@ -523,19 +523,6 @@ Blocks['gamepad_pro_button'] = {
       }
     });
   },
-  onchange: function () {
-    if (!this.isInFlyout && !this.requested && this.rendered) {
-      // Block is newly created
-      this.requested = true;
-      if (!navigator.bluetooth) {
-        dialog.alert(`Webbluetooth is not supported by this browser.\n
-        Upgrade to Chrome version 85 or later and enable Experimental Web Platform features.`);
-        this.dispose();
-        return;
-      }
-      this.addEvent();
-    }
-  },
   /**
    * Remove this block's id from the events array.
    */
