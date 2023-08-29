@@ -52,7 +52,7 @@ export default class SpheroDialog extends React.Component {
         <Container>
           <FormControl fullWidth>
             <Typography variant="body1">
-              (Only Spheros in the workspace are selectible)
+              (Only Spheros in the workspace are selectable)
             </Typography>
             <InputLabel id="sphero-select-label">Sphero</InputLabel>
             <Select
