@@ -51,3 +51,19 @@ const PARSE_INT_XML = `
 `;
 
 addBlock('parse_int', 'Numbers', PARSE_INT_XML);
+
+Blocks['timestamp'] = {
+  /**
+   * Block for getting the current timestamp.
+   * @this Blockly.Block
+   */
+  init: function () {
+    this.appendDummyInput().appendField('current timestamp');
+    this.setOutput(true, 'Number');
+    this.setColour(230);
+    this.setTooltip('Returns the current timestamp.');
+    this.setHelpUrl('https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/now');
+  },
+};
+
+addBlock('timestamp', 'Numbers');
