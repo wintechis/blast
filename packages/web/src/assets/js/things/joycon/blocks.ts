@@ -9,7 +9,7 @@ import {
   Events,
   FieldDropdown,
   FieldTextInput,
-  Names,
+  Variables,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
@@ -408,6 +408,9 @@ Blocks['gamepad_pro_joystick'] = {
     getWorkspace()?.addChangeListener((e: Abstract) => {
       if (
         e.type === Events.BLOCK_CREATE &&
+        this.isInFlyout === false &&
+        this.rendered === true &&
+        this.childBlocks_.length === 0 &&
         (e as BlockCreate).ids?.includes(this.id)
       ) {
         if (!navigator.bluetooth) {
@@ -424,6 +427,7 @@ Blocks['gamepad_pro_joystick'] = {
       ) {
         this.deleteVars();
         JavaScript.handlers['things' + this.id] = undefined;
+        this.removeFromEvents();
       }
     });
   },
@@ -432,15 +436,6 @@ Blocks['gamepad_pro_joystick'] = {
    */
   addEvent: function () {
     eventsInWorkspace.push(this.id);
-    // add change listener to remove block from events array when deleted.
-    this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
-      if (
-        e.type === Events.BLOCK_DELETE &&
-        (e as BlockDelete).ids?.includes(this.id)
-      ) {
-        this.removeFromEvents();
-      }
-    });
   },
   /**
    * Remove this block's id from the events array.
@@ -457,43 +452,59 @@ Blocks['gamepad_pro_joystick'] = {
     if (ws === null) {
       return;
     }
+
     // Create variable for x coordinate.
-    let xName = JavaScript.nameDB_.getName('gp-x', Names.NameType.VARIABLE);
-    for (let i = 1; ws.getVariable(xName) !== null; i++) {
-      // if variable already exists, append a number.
-      xName = JavaScript.nameDB_.getName('gp-x-' + i, Names.NameType.VARIABLE);
+    let xName = 'gp_x';
+    for (let i = 1; Variables.nameUsedWithAnyType(xName, ws) !== null; i++) {
+      xName = 'gp_x_' + i;
     }
-    this.xName = ws.createVariable(xName).name;
-    this.getField('gp-xName')?.setValue(this.xName);
+    this.xName = Variables.getOrCreateVariablePackage(
+      ws,
+      null,
+      xName as string,
+      ''
+    ).name;
+    this.getField('gp-xName').setValue(this.xName);
+
     // Create variable for y coordinate.
-    let yName = JavaScript.nameDB_.getName('gp-y', Names.NameType.VARIABLE);
-    for (let i = 1; ws.getVariable(yName) !== null; i++) {
-      // if variable already exists, append a number.
-      yName = JavaScript.nameDB_.getName('gp-y-' + i, Names.NameType.VARIABLE);
+    let yName = 'gp_y';
+    for (let i = 1; Variables.nameUsedWithAnyType(yName, ws) !== null; i++) {
+      yName = 'gp_y_' + i;
     }
-    this.yName = ws.createVariable(yName).name;
-    this.getField('gp-yName')?.setValue(this.yName);
-    // Create variable for joystick angle.
-    let angleName = JavaScript.nameDB_.getName(
-      'gp-angle',
-      Names.NameType.VARIABLE
-    );
-    for (let i = 1; ws.getVariable(angleName) !== null; i++) {
-      // if variable already exists, append a number.
-      angleName = JavaScript.nameDB_.getName(
-        'gp-angle-' + i,
-        Names.NameType.VARIABLE
-      );
+    this.yName = Variables.getOrCreateVariablePackage(
+      ws,
+      null,
+      yName as string,
+      ''
+    ).name;
+    this.getField('gp-yName').setValue(this.yName);
+
+    // Create variable for angle.
+    let angleName = 'gp_angle';
+    for (
+      let i = 1;
+      Variables.nameUsedWithAnyType(angleName, ws) !== null;
+      i++
+    ) {
+      angleName = 'gp_angle_' + i;
     }
-    this.angleName = ws.createVariable(angleName).name;
-    this.getField('gp-angleName')?.setValue(this.angleName);
+    this.angleName = Variables.getOrCreateVariablePackage(
+      ws,
+      null,
+      angleName as string,
+      ''
+    ).name;
+    this.getField('gp-angleName').setValue(this.angleName);
   },
   deleteVars: function () {
     const ws = getWorkspace();
     if (ws === null) {
       return;
     }
-    ws.deleteVariableById(this.xName);
+    const xId = Variables.getVariable(ws, null, this.xName, '')?.getId();
+    if (xId) {
+      ws.deleteVariableById(xId);
+    }
     ws.deleteVariableById(this.yName);
     ws.deleteVariableById(this.angleName);
   },

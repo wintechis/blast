@@ -13,6 +13,7 @@ import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
+import { BlockCreate } from 'blockly/core/events/events_block_create';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -376,30 +377,31 @@ export function generateSubscribeEventBlock(
       this.setTooltip('');
       this.setHelpUrl('');
       this.getField('eventVar').setEnabled(false);
-      this.changeListener = null;
+      getWorkspace()?.addChangeListener((e: Abstract) => {
+        if (
+          e.type === Events.BLOCK_CREATE &&
+          this.isInFlyout === false &&
+          this.rendered === true &&
+          this.childBlocks_.length === 0 &&
+          (e as BlockCreate).ids?.includes(this.id)
+        ) {
+          this.addEvent();
+          this.createVars();
+        } else if (
+          e.type === Events.BLOCK_DELETE &&
+          (e as BlockDelete).ids?.includes(this.id)
+        ) {
+          this.deleteVars();
+          JavaScript.handlers['things' + this.id] = undefined;
+          this.removeFromEvents();
+        }
+      });
     },
     /**
      * Add this block's id to the events array.
      */
     addEvent: function () {
       eventsInWorkspace.push(this.id);
-      // add change listener to remove block from events array when deleted.
-      this.changeListener = getWorkspace()?.addChangeListener((e: Abstract) => {
-        if (
-          e.type === Events.BLOCK_DELETE &&
-          (e as BlockDelete).ids?.includes(this.id)
-        ) {
-          this.removeFromEvents();
-        }
-      });
-    },
-    onchange: function () {
-      if (!this.isInFlyout && !this.requested && this.rendered) {
-        // Block is newly created
-        this.requested = true;
-        this.addEvent();
-        this.createVars();
-      }
     },
     /**
      * Remove this block's id from the events array.

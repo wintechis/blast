@@ -681,7 +681,9 @@ export const connectGamepad = async function (thing) {
   });
 
   if (devices.length === 0) {
-    console.error('No gamepads connected.');
+    console.error(
+      'No gamepads connected. Try waking them up, by pressing a button.'
+    );
     return;
   }
 

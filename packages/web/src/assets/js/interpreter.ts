@@ -4,7 +4,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Events, Workspace, WorkspaceSvg} from 'blockly';
+import {Events, WorkspaceSvg} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import './blocks/index.js';
 import './generators/index';
