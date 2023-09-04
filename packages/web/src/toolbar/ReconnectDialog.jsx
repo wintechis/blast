@@ -28,6 +28,7 @@ export default class ReonnectDialog extends React.Component {
       onclose: null,
       open: false,
       things: {},
+      connected: {},
       xml: {},
     };
     this.handleClose = this.handleClose.bind(this);
@@ -54,7 +55,12 @@ export default class ReonnectDialog extends React.Component {
   }
 
   allConnected() {
-    return Object.values(this.state.things).every(thing => thing.connected);
+    for (const thingName of Object.keys(this.state.things)) {
+      if (!this.state.connected[thingName]) {
+        return false;
+      }
+    }
+    return true;
   }
 
   async open(things, xml) {
@@ -86,7 +92,6 @@ export default class ReonnectDialog extends React.Component {
                       if (thing.id === 'spheroMini') {
                         this.props.setSpheroConnected(true);
                       }
-                      thing.connected = true;
                       // set the device id in the xml
                       const xml = this.state.xml;
                       const blocks = xml.querySelectorAll(
@@ -98,13 +103,19 @@ export default class ReonnectDialog extends React.Component {
                             thing.type === 'gamepad' ? device.index : device.id;
                         }
                       }
-                      this.setState({xml, things: this.state.things});
+                      const connected = this.state.connected;
+                      connected[thingName] = true;
+                      this.setState({
+                        xml,
+                        things: this.state.things,
+                        connected,
+                      });
                     }
                   }}
                 >
                   {thingName}
                   <IconButton edge="end" aria-label="connect">
-                    {thing.connected ? (
+                    {this.state.connected[thingName] ? (
                       <CheckIcon sx={{color: 'green'}} />
                     ) : (
                       <AddIcon />
