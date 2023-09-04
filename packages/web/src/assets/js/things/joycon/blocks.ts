@@ -330,11 +330,35 @@ Blocks['things_gamepad_pro'] = {
   },
 };
 
+/**
+ * gamepad pro buttons are:
+ * const BUTTON_MAPPING = {
+  0: 'B',
+  1: 'A',
+  2: 'Y',
+  3: 'X',
+  4: 'L',
+  5: 'R',
+  6: 'ZL',
+  7: 'ZR',
+  8: 'MINUS',
+  9: 'PLUS',
+  10: 'LS',
+  11: 'RS',
+  12: 'UP',
+  13: 'DOWN',
+  14: 'LEFT',
+  15: 'RIGHT',
+  16: 'HOME',
+  17: 'CAPTURE',
+};
+*/
+
 // Add Joy-Con block to list of implemented things.
 implementedThings.push({
   id: 'gamepad_pro',
   name: 'Nintendo Switch Gamepad Pro',
-  type: 'hid',
+  type: 'gamepad',
   blocks: [
     {
       type: 'gamepad_pro_joystick',
@@ -348,8 +372,9 @@ implementedThings.push({
   infoUrl: 'https://github.com/wintechis/blast/wiki/Nintendo-JoyCon',
   filters: [
     {
-      vendorId: 0x057e,
-      productId: 0x2009,
+      buttons: {
+        length: 18,
+      },
     },
   ],
 });
@@ -471,7 +496,7 @@ Blocks['gamepad_pro_joystick'] = {
     ws.deleteVariableById(this.xName);
     ws.deleteVariableById(this.yName);
     ws.deleteVariableById(this.angleName);
-  }
+  },
 };
 
 Blocks['gamepad_pro_button'] = {

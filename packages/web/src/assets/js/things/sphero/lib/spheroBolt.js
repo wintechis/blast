@@ -175,6 +175,7 @@ export default class SpheroBolt {
       });
       device.addEventListener('gattserverdisconnected', () => {
         this.connected = false;
+        this.connect();
       });
     });
   }
@@ -216,11 +217,11 @@ export default class SpheroBolt {
   /* Disconnect from Sphero */
   async disconnect() {
     if (this.connected) {
-      await this.device.gatt.disconnect();
+      this.device.gatt.disconnect();
       this.connected = false;
       this.device = null;
     } else {
-      throw 'Device is not connected';
+      throw new Error('Device is not connected');
     }
   }
 

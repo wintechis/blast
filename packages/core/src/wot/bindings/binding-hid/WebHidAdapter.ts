@@ -37,7 +37,9 @@ export default class ConcreteHidAdapter implements HidAdapter {
     const id = v4();
     const hidAdapterDevice = device as HIDAdapterDevice;
     hidAdapterDevice.id = id;
-    await device.open();
+    if (!device.opened) {
+      await device.open();
+    }
     hidAdapterDevices.push(hidAdapterDevice);
   }
   return hidAdapterDevices;

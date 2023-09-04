@@ -13,7 +13,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
-import {connectWebHidDevice, getDevMode} from '../assets/js/things.js';
+import {
+  connectWebHidDevice,
+  connectGamepad,
+  getDevMode,
+} from '../assets/js/things.js';
 import {getWorkspace} from '../assets/js/interpreter.ts';
 import {requestDevice} from '../assets/js/webBluetooth.js';
 
@@ -75,6 +79,8 @@ export default class ReonnectDialog extends React.Component {
                       device = await requestDevice(thing);
                     } else if (thing.type === 'hid') {
                       device = await connectWebHidDevice(thing);
+                    } else if (thing.type === 'gamepad') {
+                      device = await connectGamepad(thing);
                     }
                     if (device) {
                       if (thing.id === 'spheroMini') {
@@ -88,7 +94,8 @@ export default class ReonnectDialog extends React.Component {
                       );
                       for (const block of blocks) {
                         if (block.firstElementChild.textContent === thingName) {
-                          block.lastElementChild.textContent = device.id;
+                          block.lastElementChild.textContent =
+                            thing.type === 'gamepad' ? device.index : device.id;
                         }
                       }
                       this.setState({xml, things: this.state.things});

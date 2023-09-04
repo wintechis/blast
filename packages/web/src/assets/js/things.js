@@ -44,6 +44,80 @@ const webHidNames = new Map();
 const webHidDevices = new Map();
 
 /**
+ * Array of all connected Gamepads.
+ */
+export const gamepads = [];
+/**
+ * Adds all connected Gamepads to the {@link gamepads} array.
+ */
+export const addGamepads = function () {
+  const gps = navigator.getGamepads ? navigator.getGamepads() : [];
+  if (gps.length === 0 || !Array.from(gps).some(gp => !!gp)) {
+    return;
+  }
+  for (const gp of gps) {
+    if (gp) {
+      gamepads[gp.index] = gp;
+    }
+  }
+  window.addEventListener('gamepadconnected', e => {
+    const gp = e.gamepad;
+    gamepads[gp.index] = gp;
+    console.log(
+      'Gamepad connected at index %d: %s. %d buttons, %d axes.',
+      gp.index,
+      gp.id,
+      gp.buttons.length,
+      gp.axes.length
+    );
+  });
+  window.addEventListener('gamepaddisconnected', e => {
+    const gp = e.gamepad;
+    delete gamepads[gp.index];
+  });
+};
+
+const _shallowEqual = function (object1, object2) {
+  const keys1 = Object.keys(object1);
+  const keys2 = Object.keys(object2);
+
+  if (keys1.length !== keys2.length) {
+    return false;
+  }
+
+  for (const key of keys1) {
+    if (object1[key] !== object2[key]) {
+      return false;
+    }
+  }
+  return true;
+};
+const connectedGamepads = [];
+
+export const pollGamepads = () => {
+  const gps = navigator.getGamepads();
+  for (const gamepad of gps) {
+    // Disregard empty slots.
+    if (!gamepad) {
+      continue;
+    }
+    // Update the gamepad state.
+    gamepads[gamepad.index] = gamepad;
+  }
+  // Call yourself upon the next animation frame.
+  // (Typically this happens every 60 times per second.)
+  window.requestAnimationFrame(pollGamepads);
+};
+
+addGamepads();
+pollGamepads();
+
+/**
+ * Maps user defined names to gamepad indices.
+ */
+const gamepadNames = new Map();
+
+/**
  * Maps audio device labels to audio device ids.
  */
 const audioDevices = new Map();
@@ -145,6 +219,15 @@ let webHidButtonHandler = null;
  */
 export const setWebHidButtonHandler = function (handler) {
   webHidButtonHandler = handler;
+};
+
+let gamepadButtonHandler = null;
+/**
+ * Sets the 'connect gamepad' button handler.
+ * @param {function} handler The handler to set.
+ */
+export const setGamepadButtonHandler = function (handler) {
+  gamepadButtonHandler = handler;
 };
 
 let audioSelectButtonHandler = null;
@@ -251,7 +334,7 @@ export const thingsFlyoutCategory = function (workspace) {
     xmlList.push(...connectedThingBlocks.bluetooth);
   }
 
-  // Create WebBluetooth Label
+  // Create WebHID Label
   const webHIDLabel = document.createElement('label');
   webHIDLabel.setAttribute('text', 'WebHID Blocks');
   xmlList.push(webHIDLabel);
@@ -267,6 +350,24 @@ export const thingsFlyoutCategory = function (workspace) {
   // Add connected blocks for connected webHID devices
   if (connectedThingBlocks.hid.length > 0) {
     xmlList.push(...connectedThingBlocks.hid);
+  }
+
+  // Create Gamepad Label
+  const gamepadLabel = document.createElement('label');
+  gamepadLabel.setAttribute('text', 'Gamepad Blocks');
+  xmlList.push(gamepadLabel);
+
+  // Create Gamepad add device button
+  const gamepadButton = document.createElement('button');
+  gamepadButton.setAttribute('text', 'connect gamepad');
+  gamepadButton.setAttribute('callbackKey', 'CREATE_GAMEPAD');
+  workspace.registerButtonCallback('CREATE_GAMEPAD', _button => {
+    gamepadButtonHandler();
+  });
+  xmlList.push(gamepadButton);
+  // Add connected blocks for connected gamepads
+  if (connectedThingBlocks.gamepad.length > 0) {
+    xmlList.push(...connectedThingBlocks.gamepad);
   }
 
   // Create Audio Label
@@ -337,6 +438,7 @@ const flyoutCategoryBlocks = function () {
   const xmlList = {
     bluetooth: [],
     hid: [],
+    gamepad: [],
     audio: [],
     video: [],
     consumedDevice: [],
@@ -362,6 +464,8 @@ const flyoutCategoryBlocks = function () {
         idField.textContent = webBluetoothDevices.get(key);
       } else if (thing.type === 'hid') {
         idField.textContent = webHidNames.get(key);
+      } else if (thing.type === 'gamepad') {
+        idField.textContent = gamepadNames.get(key);
       } else if (thing.type === 'audio') {
         idField.textContent = audioDevices.get(key);
       } else if (thing.type === 'video') {
@@ -541,13 +645,99 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
         } else {
           const msg = 'Name cannot be empty';
           Blockly.dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text, id); // Recuse
+            promptAndCheckWithAlert(text, id); // Recurse
           });
         }
       }
     );
   };
   promptAndCheckWithAlert(deviceName, uid);
+};
+
+/**
+ * Connects all GamePads matching the filter criteria in thing.
+ * @param thing information about the device to connect
+ * @returns A promise that resolves to the connected GamePads.
+ */
+export const connectGamepad = async function (thing) {
+  const workspace = getWorkspace();
+  let devices = gamepads;
+
+  devices = devices.filter(device => {
+    if (device !== null) {
+      if (thing.filters) {
+        for (const filter of thing.filters) {
+          // apply each filter
+          Object.keys(filter).forEach(key => {
+            if (device[key] !== filter[key]) {
+              return false;
+            }
+          });
+        }
+      }
+      return true;
+    }
+    return false;
+  });
+
+  if (devices.length === 0) {
+    console.error('No gamepads connected.');
+    return;
+  }
+
+  // get first device not already connected
+  const device = devices.find(device => {
+    if (device !== null) {
+      return !connectedGamepads.includes(device.index);
+    }
+    return false;
+  });
+  connectedGamepads.push(device.index);
+
+  addGamepad(device.index, device.id, device, thing);
+  thingsLog('Connected', 'Gamepad', device.id);
+  workspace.refreshToolboxSelection();
+  return device;
+};
+
+export const addGamepad = function (index, deviceName, device, thing) {
+  // This function needs to be named so it can be called recursively.
+  const promptAndCheckWithAlert = function (name, id) {
+    Blockly.Variables.promptName(
+      'Connection established! Now give your device a name.',
+      name,
+      text => {
+        if (text) {
+          const existing = gamepadNames.has(text);
+          if (existing) {
+            const msg = 'Name %1 already exists'.replace('%1', text);
+            Blockly.dialog.alert(msg, () => {
+              promptAndCheckWithAlert(text, id); // Recurse
+            });
+          } else {
+            // No conflict
+            gamepadNames.set(text, id);
+            connectedThings.set(text, thing);
+            // add the devices blocks to the toolbox
+            for (const block of thing.blocks) {
+              if (block.XML) {
+                addBlock(block.type, block.category, block.XML);
+              } else {
+                addBlock(block.type, block.category);
+              }
+            }
+            reloadToolbox();
+          }
+        } else {
+          const msg = 'Name cannot be empty';
+          Blockly.dialog.alert(msg, () => {
+            promptAndCheckWithAlert(text, id); // Recuse
+          });
+        }
+      }
+    );
+  };
+  promptAndCheckWithAlert(deviceName, index);
 };
 
 export const handleAddConsumedThing = async function (uri) {

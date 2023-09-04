@@ -19,8 +19,10 @@ import {
   addDevice,
   handleAddConsumedThing,
   connectWebHidDevice,
+  connectGamepad,
   implementedThings,
   setAudioSelectButtonHandler,
+  setGamepadButtonHandler,
   setVideoSelectButtonHandler,
   setWebBluetoothButtonHandler,
   setConsumeThingButtonHandler,
@@ -63,6 +65,9 @@ export default class ConnectDialog extends React.Component {
     });
     setWebHidButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'hid'});
+    });
+    setGamepadButtonHandler(() => {
+      this.setState({open: true, selectedAdapter: 'gamepad'});
     });
     setConsumeThingButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'consumeThing'});
@@ -133,7 +138,8 @@ export default class ConnectDialog extends React.Component {
           <DialogTitle>Please select a device from the list below</DialogTitle>
           <List dense>
             {((this.state.selectedAdapter === 'bluetooth' ||
-              this.state.selectedAdapter === 'hid') &&
+              this.state.selectedAdapter === 'hid' ||
+              this.state.selectedAdapter === 'gamepad') &&
               implementedThings.map(thing => {
                 if (thing.type === this.state.selectedAdapter) {
                   return (
@@ -169,6 +175,9 @@ export default class ConnectDialog extends React.Component {
                             this.handleClose();
                           } else if (this.state.selectedAdapter === 'hid') {
                             await connectWebHidDevice(thing);
+                            this.handleClose();
+                          } else if (this.state.selectedAdapter === 'gamepad') {
+                            await connectGamepad(thing);
                             this.handleClose();
                           }
                         }}

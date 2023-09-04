@@ -308,7 +308,7 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
 (globalThis as any)['addGamepadHandlers'] = function (
   gamepad: WoT.ExposedThing
 ) {
-  const switchPro = new SwitchPro();
+  const switchPro = new SwitchPro((gamepad as any).id);
   (switchPro as any).interval = setInterval(
     switchPro.pollGamepads.bind(switchPro),
     50

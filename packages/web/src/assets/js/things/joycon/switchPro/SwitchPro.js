@@ -1,4 +1,5 @@
 import JoyStick from './JoyStick.js';
+import {gamepads} from '../../../things.js';
 
 const BUTTON_MAPPING = {
   0: 'B',
@@ -21,10 +22,9 @@ const BUTTON_MAPPING = {
   17: 'CAPTURE',
 };
 
-const connectedGamepads = [];
-
 export default class SwitchPro {
-  constructor() {
+  constructor(id) {
+    this.id = id;
     this.prevPressed = {};
     this.pressed = {};
     this.listeners = [];
@@ -72,25 +72,7 @@ export default class SwitchPro {
 
   // get reference to the gamepad
   _getGamepad() {
-    const gps = navigator.getGamepads ? navigator.getGamepads() : [];
-    if (gps.length === 0 || !Array.from(gps).some(gp => !!gp)) {
-      return;
-    }
-
-    // the gamepad shows up twice when connected via bluetooth
-    //   0: Pro Controller (STANDARD GAMEPAD)
-    //   1: Pro Controller (STANDARD GAMEPAD Vendor: 057e Product: 2009)
-    // we want the one with more buttons mapped
-    const gamepad = Array.from(gps).find(gp => {
-      if (gp === null) {
-        return false;
-      }
-      if (gp.buttons) {
-        return gp.buttons.length === 18 && connectedGamepads.indexOf(gp) === -1;
-      }
-    });
-    connectedGamepads.push(gamepad);
-    return gamepad;
+    return gamepads[this.id];
   }
 
   _shallowEqual(object1, object2) {

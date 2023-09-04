@@ -1,11 +1,21 @@
 import {WorkspaceSvg} from 'blockly';
 
+interface GamepadFilter {
+  index?: number;
+  id?: string;
+  connected?: boolean;
+  mapping?: string;
+  timestamp?: number;
+  axes?: number[];
+  buttons?: {length: number};
+}
+
 export interface implementedThing {
   id: string;
   name: string;
   type: string;
   blocks: {type: string; category: string; XML?: string}[];
-  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[];
+  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[] | GamepadFilter[];
   optionalServices?: string[];
   infoUrl?: string;
   connected?: boolean;
