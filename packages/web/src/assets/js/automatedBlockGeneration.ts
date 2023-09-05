@@ -386,7 +386,9 @@ export function generateSubscribeEventBlock(
           (e as BlockCreate).ids?.includes(this.id)
         ) {
           this.addEvent();
-          this.createVars();
+          if (this.childBlocks_.length === 0) {
+            this.createVars();
+          }
         } else if (
           e.type === Events.BLOCK_DELETE &&
           (e as BlockDelete).ids?.includes(this.id)

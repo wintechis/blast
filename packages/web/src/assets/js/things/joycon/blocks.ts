@@ -410,7 +410,6 @@ Blocks['gamepad_pro_joystick'] = {
         e.type === Events.BLOCK_CREATE &&
         this.isInFlyout === false &&
         this.rendered === true &&
-        this.childBlocks_.length === 0 &&
         (e as BlockCreate).ids?.includes(this.id)
       ) {
         if (!navigator.bluetooth) {
@@ -420,7 +419,11 @@ Blocks['gamepad_pro_joystick'] = {
           return;
         }
         this.addEvent();
-        this.createVars();
+        if (this.childBlocks_.length === 0) {
+          if (this.childBlocks_.length === 0) {
+            this.createVars();
+          }
+        }
       } else if (
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)

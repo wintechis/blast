@@ -109,7 +109,9 @@ Blocks['ruuviTag_event'] = {
           return;
         }
         this.addEvent();
-        this.createVars();
+        if (this.childBlocks_.length === 0) {
+          this.createVars();
+        }
       } else if (
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)
