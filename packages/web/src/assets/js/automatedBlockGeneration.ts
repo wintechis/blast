@@ -13,7 +13,7 @@ import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
-import { BlockCreate } from 'blockly/core/events/events_block_create';
+import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 interface NavigatorLanguage {
   userLanguage?: string;
