@@ -32,6 +32,7 @@ const samples = [
   './samples/everyMinutes.xml',
   './samples/gamble.xml',
   './samples/helloWorld.xml',
+  './samples/lNdW.xml',
   './samples/objects.xml',
   './samples/playAudio.xml',
   './samples/requests.xml',
