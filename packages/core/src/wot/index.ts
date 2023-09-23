@@ -16,7 +16,7 @@ import {HidClientFactory} from './bindings/binding-hid/Hid';
 import {HidAdapter} from './bindings/binding-hid/HidAdapter';
 import ConcreteHidAdapter from 'HidAdapter';
 import {ErrorListener} from 'wot-typescript-definitions';
-import {DataSchemaType, FormElementBase} from 'wot-thing-description-types';
+import {FormElementBase} from 'wot-thing-description-types';
 export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
 export {ConcreteBluetoothAdapter as BluetoothWrapper};
 import {Readable} from 'stream';
@@ -104,6 +104,7 @@ export const createThingWithHandlers = async function (
   }
   const wotServient = await getWot();
   const exposedThing = await wotServient.produce(td);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (exposedThing as any).id = id;
   addHandlers(exposedThing);
   const consumedThing = ownConsume(exposedThing as ExposedThing);

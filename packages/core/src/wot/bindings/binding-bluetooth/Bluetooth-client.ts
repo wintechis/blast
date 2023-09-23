@@ -145,7 +145,8 @@ export default class BluetoothClient implements ProtocolClient {
     const {deviceId, serviceId, characteristicId, bleOperation} =
       this.deconstructForm(form);
 
-    if (bleOperation !== 'subscribe') {
+    // if ble operation is not sbo:notify or subscribe, throw error
+    if (bleOperation !== 'sbo:notify' && bleOperation !== 'sbo:subscribe') {
       throw new Error(`operation ${bleOperation} is not supported`);
     }
 
