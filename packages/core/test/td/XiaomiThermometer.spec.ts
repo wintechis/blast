@@ -29,7 +29,7 @@ describe('Xiaomi Thermometer Thing Description', () => {
         1
       );
       expect(measurements.forms).toHaveLength(1);
-      expect(measurements.forms[0]['sbo:methodName']).toEqual('subscribe');
+      expect(measurements.forms[0]['sbo:methodName']).toEqual('sbo:subscribe');
       expect(measurements.forms[0].contentType).toEqual(
         'application/x.binary-data-stream'
       );

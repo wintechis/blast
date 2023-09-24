@@ -214,7 +214,7 @@ describe('Bluetooth client', () => {
     const form = {
       href: 'gatt://id/00000000-0000-1000-8000-00001234abcd/00000000-0000-1000-8000-00001234abce',
       op: ['observeproperty'],
-      'sbo:methodName': 'subscribe',
+      'sbo:methodName': 'sbo:subscribe',
     };
     const handler = jest.fn().mockName('handler');
 
@@ -231,7 +231,7 @@ describe('Bluetooth client', () => {
     const subscribeForm = {
       href: 'gatt://id/00000000-0000-1000-8000-00001234abcd/00000000-0000-1000-8000-00001234abce',
       op: ['observeproperty'],
-      'sbo:methodName': 'subscribe',
+      'sbo:methodName': 'sbo:subscribe',
       'sbo:signed': true,
     };
     const writeForm = {
@@ -259,7 +259,7 @@ describe('Bluetooth client', () => {
       const form = {
         href: 'gatt://id/service/1234-5679',
         op: ['observeproperty'],
-        'sbo:methodName': 'subscribe',
+        'sbo:methodName': 'sbo:subscribe',
       };
 
       const handler = () => {
@@ -320,7 +320,7 @@ describe('Bluetooth client', () => {
       const subscribeForm = {
         href: 'gatt://id/00000000-0000-1000-8000-00001234abcd/00000000-0000-1000-8000-00001234abce',
         op: ['observeproperty'],
-        'sbo:methodName': 'subscribe',
+        'sbo:methodName': 'sbo:subscribe',
         'bdo:signed': true,
       };
       const content = {
@@ -348,7 +348,7 @@ describe('Bluetooth client', () => {
       const subscribeForm = {
         href: 'gatt://id/00000000-0000-1000-8000-00001234abcd/00000000-0000-1000-8000-00001234abce',
         op: ['observeproperty'],
-        'sbo:methodName': 'subscribe',
+        'sbo:methodName': 'sbo:subscribe',
       };
       const handler = jest.fn().mockName('handler');
       await client.subscribeResource(subscribeForm, handler);

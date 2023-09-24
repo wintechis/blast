@@ -85,7 +85,7 @@ describe('RuuviTag Thing Description', () => {
         ]
       ).toEqual('big');
       expect(uart.forms).toHaveLength(1);
-      expect(uart.forms[0]['sbo:methodName']).toEqual('subscribe');
+      expect(uart.forms[0]['sbo:methodName']).toEqual('sbo:subscribe');
       expect(uart.forms[0].contentType).toEqual(
         'application/x.binary-data-stream'
       );
