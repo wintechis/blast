@@ -1,7 +1,10 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
     <variable id="F8w++;C~UyVYbMwABpw^">maxA</variable>
+    <variable id="EJCp?n3P#d@+Yf:{gdEh">started</variable>
     <variable id="t_X~Q7Pt^`uK5mI6H]@h">maxB</variable>
+    <variable id="D}*1~=$c[^(IR^9lSYzD">button1</variable>
+    <variable id="lp=Nw8RvIQ~kwyP}]LnR">button2</variable>
     <variable id="Cam@mJVrp[!%-~`2DaAZ">gp_x</variable>
     <variable id="aqK=|b|}.XH1JCn3#6bd">gp_y</variable>
     <variable id="6ftX78]}{q($Q]!7x{Ks">gp_angle</variable>
@@ -9,103 +12,79 @@
     <variable id="mMDfFH6l4[4Cs6Ta6-eW">gp_y_1</variable>
     <variable id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</variable>
   </variables>
-  <block type="gamepad_pro_joystick" x="263" y="38">
-    <field name="gp-xName">gp_x</field>
-    <field name="gp-yName">gp_y</field>
-    <field name="gp-angleName">gp_angle</field>
+  <block type="streamdeck_button_event" x="262" y="-287">
+    <field name="eventType">inputreport</field>
+    <field name="button1">button1</field>
+    <field name="button2">button2</field>
+    <field name="button3">button3</field>
+    <field name="button4">button4</field>
+    <field name="button5">button5</field>
+    <field name="button6">button6</field>
     <value name="thing">
-      <block type="things_gamepad_pro">
-        <field name="name">a</field>
-        <field name="id">0</field>
+      <block type="things_streamdeck">
+        <field name="name">StreamDeck Mini</field>
+        <field name="id">6c088b4e-5109-4aca-8618-2c2c59c071d4</field>
       </block>
     </value>
     <statement name="statements">
-      <block type="variables_set">
-        <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
-        <value name="VALUE">
-          <block type="number_on_list">
-            <mutation op="MAX"></mutation>
-            <field name="OP">MAX</field>
-            <value name="LIST">
-              <block type="lists_create_with">
-                <mutation items="2"></mutation>
-                <value name="ADD0">
-                  <block type="number_single">
-                    <field name="OP">ABS</field>
-                    <value name="NUM">
-                      <block type="variables_get">
-                        <field name="VAR" id="Cam@mJVrp[!%-~`2DaAZ">gp_x</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="ADD1">
-                  <block type="number_single">
-                    <field name="OP">ABS</field>
-                    <value name="NUM">
-                      <block type="variables_get">
-                        <field name="VAR" id="aqK=|b|}.XH1JCn3#6bd">gp_y</field>
-                      </block>
-                    </value>
+      <block type="conditional_statement">
+        <value name="IF0">
+          <block type="variables_get">
+            <field name="VAR" id="D}*1~=$c[^(IR^9lSYzD">button1</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="audioOutput_playFileFromUrl">
+            <field name="sync">async</field>
+            <value name="URI">
+              <block type="uri_from_string">
+                <value name="URI">
+                  <block type="string">
+                    <field name="TEXT">https://www.myinstants.com/media/sounds/mariostart.mp3</field>
                   </block>
                 </value>
               </block>
             </value>
+            <value name="thing">
+              <block type="things_audioOutput">
+                <field name="name">Default</field>
+                <field name="id">default</field>
+              </block>
+            </value>
+            <next>
+              <block type="wait_seconds">
+                <value name="SECONDS">
+                  <block type="math_number">
+                    <field name="NUM">3</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="variables_set">
+                    <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
+                    <value name="VALUE">
+                      <block type="logic_boolean">
+                        <field name="BOOL">TRUE</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
           </block>
-        </value>
+        </statement>
         <next>
           <block type="conditional_statement">
             <value name="IF0">
-              <block type="logic_compare">
-                <field name="OP">GTE</field>
-                <value name="A">
-                  <block type="variables_get">
-                    <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
-                  </block>
-                </value>
-                <value name="B">
-                  <block type="number_value">
-                    <field name="NUM">0.2</field>
-                  </block>
-                </value>
+              <block type="variables_get">
+                <field name="VAR" id="lp=Nw8RvIQ~kwyP}]LnR">button2</field>
               </block>
             </value>
             <statement name="DO0">
-              <block type="spheroMini_roll">
-                <value name="speed">
-                  <block type="number_round">
-                    <field name="OP">ROUND</field>
-                    <value name="NUM">
-                      <block type="number_arithmetic">
-                        <field name="OP">MULTIPLY</field>
-                        <value name="A">
-                          <block type="variables_get">
-                            <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
-                          </block>
-                        </value>
-                        <value name="B">
-                          <block type="number_value">
-                            <field name="NUM">200</field>
-                          </block>
-                        </value>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="heading">
-                  <block type="number_round">
-                    <field name="OP">ROUND</field>
-                    <value name="NUM">
-                      <block type="variables_get">
-                        <field name="VAR" id="6ftX78]}{q($Q]!7x{Ks">gp_angle</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="thing">
-                  <block type="things_spheroMini">
-                    <field name="name">SM-9365</field>
-                    <field name="id">r2M32W7+Ya51oMHyJNtGjA==</field>
+              <block type="variables_set">
+                <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
+                <value name="VALUE">
+                  <block type="logic_boolean">
+                    <field name="BOOL">FALSE</field>
                   </block>
                 </value>
               </block>
@@ -115,109 +94,233 @@
       </block>
     </statement>
   </block>
-  <block type="gamepad_pro_joystick" x="262" y="363">
+  <block type="gamepad_pro_joystick" x="263" y="38">
+    <field name="gp-xName">gp_x</field>
+    <field name="gp-yName">gp_y</field>
+    <field name="gp-angleName">gp_angle</field>
+    <value name="thing">
+      <block type="things_gamepad_pro">
+        <field name="name">gamepad 1</field>
+        <field name="id">0</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="conditional_statement">
+        <value name="IF0">
+          <block type="variables_get">
+            <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
+          </block>
+        </value>
+        <statement name="DO0">
+          <block type="variables_set">
+            <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
+            <value name="VALUE">
+              <block type="number_on_list">
+                <mutation op="MAX"></mutation>
+                <field name="OP">MAX</field>
+                <value name="LIST">
+                  <block type="lists_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="number_single">
+                        <field name="OP">ABS</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="Cam@mJVrp[!%-~`2DaAZ">gp_x</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="number_single">
+                        <field name="OP">ABS</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="aqK=|b|}.XH1JCn3#6bd">gp_y</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="conditional_statement">
+                <value name="IF0">
+                  <block type="logic_compare">
+                    <field name="OP">GTE</field>
+                    <value name="A">
+                      <block type="variables_get">
+                        <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="number_value">
+                        <field name="NUM">0.2</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <statement name="DO0">
+                  <block type="spheroMini_roll">
+                    <value name="speed">
+                      <block type="number_round">
+                        <field name="OP">ROUND</field>
+                        <value name="NUM">
+                          <block type="number_arithmetic">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <block type="variables_get">
+                                <field name="VAR" id="F8w++;C~UyVYbMwABpw^">maxA</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="number_value">
+                                <field name="NUM">200</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="heading">
+                      <block type="number_round">
+                        <field name="OP">ROUND</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="6ftX78]}{q($Q]!7x{Ks">gp_angle</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_spheroMini">
+                        <field name="name">SM-9365</field>
+                        <field name="id">b2lNfqiJcNxlPxos3nqGUw==</field>
+                      </block>
+                    </value>
+                  </block>
+                </statement>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </statement>
+  </block>
+  <block type="gamepad_pro_joystick" x="263" y="388">
     <field name="gp-xName">gp_x_1</field>
     <field name="gp-yName">gp_y_1</field>
     <field name="gp-angleName">gp_angle_1</field>
     <value name="thing">
       <block type="things_gamepad_pro">
-        <field name="name">b</field>
+        <field name="name">gamepad 2</field>
         <field name="id">1</field>
       </block>
     </value>
     <statement name="statements">
-      <block type="variables_set">
-        <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
-        <value name="VALUE">
-          <block type="number_on_list">
-            <mutation op="MAX"></mutation>
-            <field name="OP">MAX</field>
-            <value name="LIST">
-              <block type="lists_create_with">
-                <mutation items="2"></mutation>
-                <value name="ADD0">
-                  <block type="number_single">
-                    <field name="OP">ABS</field>
-                    <value name="NUM">
-                      <block type="variables_get">
-                        <field name="VAR" id="I]cjWCVz8}[jDF#MZgg~">gp_x_1</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="ADD1">
-                  <block type="number_single">
-                    <field name="OP">ABS</field>
-                    <value name="NUM">
-                      <block type="variables_get">
-                        <field name="VAR" id="mMDfFH6l4[4Cs6Ta6-eW">gp_y_1</field>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-              </block>
-            </value>
+      <block type="conditional_statement">
+        <value name="IF0">
+          <block type="variables_get">
+            <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
           </block>
         </value>
-        <next>
-          <block type="conditional_statement">
-            <value name="IF0">
-              <block type="logic_compare">
-                <field name="OP">GTE</field>
-                <value name="A">
-                  <block type="variables_get">
-                    <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
-                  </block>
-                </value>
-                <value name="B">
-                  <block type="number_value">
-                    <field name="NUM">0.2</field>
+        <statement name="DO0">
+          <block type="variables_set">
+            <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
+            <value name="VALUE">
+              <block type="number_on_list">
+                <mutation op="MAX"></mutation>
+                <field name="OP">MAX</field>
+                <value name="LIST">
+                  <block type="lists_create_with">
+                    <mutation items="2"></mutation>
+                    <value name="ADD0">
+                      <block type="number_single">
+                        <field name="OP">ABS</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="I]cjWCVz8}[jDF#MZgg~">gp_x_1</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="ADD1">
+                      <block type="number_single">
+                        <field name="OP">ABS</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="mMDfFH6l4[4Cs6Ta6-eW">gp_y_1</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
                   </block>
                 </value>
               </block>
             </value>
-            <statement name="DO0">
-              <block type="spheroMini_roll">
-                <value name="speed">
-                  <block type="number_round">
-                    <field name="OP">ROUND</field>
-                    <value name="NUM">
-                      <block type="number_arithmetic">
-                        <field name="OP">MULTIPLY</field>
-                        <value name="A">
-                          <block type="variables_get">
-                            <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
-                          </block>
-                        </value>
-                        <value name="B">
-                          <block type="number_value">
-                            <field name="NUM">200</field>
-                          </block>
-                        </value>
-                      </block>
-                    </value>
-                  </block>
-                </value>
-                <value name="heading">
-                  <block type="number_round">
-                    <field name="OP">ROUND</field>
-                    <value name="NUM">
+            <next>
+              <block type="conditional_statement">
+                <value name="IF0">
+                  <block type="logic_compare">
+                    <field name="OP">GTE</field>
+                    <value name="A">
                       <block type="variables_get">
-                        <field name="VAR" id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</field>
+                        <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="number_value">
+                        <field name="NUM">0.2</field>
                       </block>
                     </value>
                   </block>
                 </value>
-                <value name="thing">
-                  <block type="things_spheroMini">
-                    <field name="name">SM-85E3</field>
-                    <field name="id">F0D7OKgRZnDZQp/tuqqX+Q==</field>
+                <statement name="DO0">
+                  <block type="spheroMini_roll">
+                    <value name="speed">
+                      <block type="number_round">
+                        <field name="OP">ROUND</field>
+                        <value name="NUM">
+                          <block type="number_arithmetic">
+                            <field name="OP">MULTIPLY</field>
+                            <value name="A">
+                              <block type="variables_get">
+                                <field name="VAR" id="t_X~Q7Pt^`uK5mI6H]@h">maxB</field>
+                              </block>
+                            </value>
+                            <value name="B">
+                              <block type="number_value">
+                                <field name="NUM">200</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="heading">
+                      <block type="number_round">
+                        <field name="OP">ROUND</field>
+                        <value name="NUM">
+                          <block type="variables_get">
+                            <field name="VAR" id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_spheroMini">
+                        <field name="name">SM-85E3</field>
+                        <field name="id">25orIwrjKcr5liZ9Etp9cA==</field>
+                      </block>
+                    </value>
                   </block>
-                </value>
+                </statement>
               </block>
-            </statement>
+            </next>
           </block>
-        </next>
+        </statement>
       </block>
     </statement>
   </block>
