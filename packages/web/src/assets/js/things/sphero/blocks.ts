@@ -4,31 +4,31 @@
  */
 
 import {implementedThings} from '../../things';
-import {
+import SpheroBolt, {
   UUID_SPHERO_SERVICE,
   UUID_SPHERO_SERVICE_INITIALIZE,
 } from './lib/spheroBolt';
-import SpheroBolt from './lib/spheroBolt';
 
 import {Blocks, dialog, Events, FieldTextInput} from 'blockly';
 import {getWorkspace} from '../../interpreter';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 
-export const spheroInstances = new Map();
-export const spheroIds = new Map();
+export const spheroInstances = new Map<string, SpheroBolt>();
+export const spheroIds = new Map<string, string>();
 
 /**
  * Keeps singleton instances of SpheroMinis instantiated by BLAST.
  * @param id The id of the SpheroMini.
  */
 export const getSpheroMini = function (id: string): SpheroBolt {
-  if (spheroInstances.has(id)) {
-    return spheroInstances.get(id);
+  const instance = spheroInstances.get(id);
+  if (instance !== undefined) {
+    return instance;
   } else {
     const thing = new SpheroBolt(id);
     spheroInstances.set(id, thing);
-    return thing;
+    return thing as SpheroBolt;
   }
 };
 
