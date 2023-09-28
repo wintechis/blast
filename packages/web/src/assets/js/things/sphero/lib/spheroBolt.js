@@ -499,8 +499,6 @@ export default class SpheroBolt {
       heading += 360;
     }
     this.roll(0, heading, []);
-    await wait(1000);
-    this.resetYaw();
   }
 
   /* Function triggered by the event characteristicvaluechanged */
