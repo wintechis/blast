@@ -12,6 +12,7 @@ import {
   FieldCheckbox,
   FieldTextInput,
   Names,
+  Variables,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
@@ -73,6 +74,12 @@ Blocks['streamdeck_button_event'] = {
     this.getField('button4').setEnabled(false);
     this.getField('button5').setEnabled(false);
     this.getField('button6').setEnabled(false);
+    this.button1 = '';
+    this.button2 = '';
+    this.button3 = '';
+    this.button4 = '';
+    this.button5 = '';
+    this.button6 = '';
     getWorkspace()?.addChangeListener((e: Abstract) => {
       if (
         e.type === Events.BLOCK_CREATE &&
@@ -89,7 +96,7 @@ Blocks['streamdeck_button_event'] = {
         e.type === Events.BLOCK_DELETE &&
         (e as BlockDelete).ids?.includes(this.id)
       ) {
-        this.deleteVars();
+        // this.deleteVars();
         JavaScript.handlers['things' + this.id] = undefined;
         this.removeFromEvents();
       }
@@ -125,23 +132,48 @@ Blocks['streamdeck_button_event'] = {
       'button6',
     ];
     for (const varName of varNames) {
-      // create legal variable name
-      let legalName = JavaScript.nameDB_.getName(
-        varName,
-        Names.NameType.VARIABLE
-      );
-      for (let i = 1; ws.getVariable(legalName) !== null; i++) {
-        legalName = JavaScript.nameDB_.getName(
-          varName + '-' + i,
-          Names.NameType.VARIABLE
-        );
+      let name = varName;
+      for (
+        let i = 1;
+        Variables.nameUsedWithAnyType(varName, ws) !== null;
+        i++
+      ) {
+        name = varName + '_' + i;
       }
-      // create variable
-      legalName = ws.createVariable(legalName).name;
-      // set variable name in block
-      this.getField(varName)?.setValue(legalName);
+      this.varName = Variables.getOrCreateVariablePackage(
+        ws,
+        null,
+        name,
+        ''
+      ).name;
+      this.getField(varName).setValue(this.varName);
     }
   },
+  // deleteVars: function () {
+  //   const ws = getWorkspace();
+  //   if (ws === null) {
+  //     return;
+  //   }
+  //   const varNames = [
+  //     'button1',
+  //     'button2',
+  //     'button3',
+  //     'button4',
+  //     'button5',
+  //     'button6',
+  //   ];
+  //   for (const varName of varNames) {
+  //     const varId = Variables.getVariable(
+  //       ws,
+  //       null,
+  //       this.getFieldValue(varName),
+  //       ''
+  //     )?.getId();
+  //     if (varId !== undefined) {
+  //       ws.deleteVariableById(varId);
+  //     }
+  //   }
+  // },
 };
 
 Blocks['streamdeck_color_buttons'] = {

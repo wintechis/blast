@@ -1,18 +1,18 @@
 <xml xmlns="https://developers.google.com/blockly/xml">
   <variables>
-    <variable id="F8w++;C~UyVYbMwABpw^">maxA</variable>
-    <variable id="EJCp?n3P#d@+Yf:{gdEh">started</variable>
-    <variable id="t_X~Q7Pt^`uK5mI6H]@h">maxB</variable>
     <variable id="D}*1~=$c[^(IR^9lSYzD">button1</variable>
+    <variable id="EJCp?n3P#d@+Yf:{gdEh">started</variable>
+    <variable id="F8w++;C~UyVYbMwABpw^">maxA</variable>
+    <variable id="t_X~Q7Pt^`uK5mI6H]@h">maxB</variable>
     <variable id="lp=Nw8RvIQ~kwyP}]LnR">button2</variable>
+    <variable id="6ftX78]}{q($Q]!7x{Ks">gp_angle</variable>
+    <variable id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</variable>
     <variable id="Cam@mJVrp[!%-~`2DaAZ">gp_x</variable>
     <variable id="aqK=|b|}.XH1JCn3#6bd">gp_y</variable>
-    <variable id="6ftX78]}{q($Q]!7x{Ks">gp_angle</variable>
     <variable id="I]cjWCVz8}[jDF#MZgg~">gp_x_1</variable>
     <variable id="mMDfFH6l4[4Cs6Ta6-eW">gp_y_1</variable>
-    <variable id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</variable>
   </variables>
-  <block type="streamdeck_button_event" x="262" y="-287">
+  <block type="streamdeck_button_event" x="263" y="-337">
     <field name="eventType">inputreport</field>
     <field name="button1">button1</field>
     <field name="button2">button2</field>
@@ -23,7 +23,7 @@
     <value name="thing">
       <block type="things_streamdeck">
         <field name="name">StreamDeck Mini</field>
-        <field name="id">6c088b4e-5109-4aca-8618-2c2c59c071d4</field>
+        <field name="id">8c2bad83-3bfa-48b9-a6b0-bd03c13581fe</field>
       </block>
     </value>
     <statement name="statements">
@@ -47,8 +47,8 @@
             </value>
             <value name="thing">
               <block type="things_audioOutput">
-                <field name="name">Default</field>
-                <field name="id">default</field>
+                <field name="name">audio</field>
+                <field name="id"></field>
               </block>
             </value>
             <next>
@@ -66,6 +66,26 @@
                         <field name="BOOL">TRUE</field>
                       </block>
                     </value>
+                    <next>
+                      <block type="variables_set">
+                        <field name="VAR" id="6ftX78]}{q($Q]!7x{Ks">gp_angle</field>
+                        <value name="VALUE">
+                          <block type="number_value">
+                            <field name="NUM">0</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="variables_set">
+                            <field name="VAR" id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</field>
+                            <value name="VALUE">
+                              <block type="number_value">
+                                <field name="NUM">0</field>
+                              </block>
+                            </value>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
                   </block>
                 </next>
               </block>

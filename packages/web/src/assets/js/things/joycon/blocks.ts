@@ -420,9 +420,7 @@ Blocks['gamepad_pro_joystick'] = {
         }
         this.addEvent();
         if (this.childBlocks_.length === 0) {
-          if (this.childBlocks_.length === 0) {
-            this.createVars();
-          }
+          this.createVars();
         }
       } else if (
         e.type === Events.BLOCK_DELETE &&
