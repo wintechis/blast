@@ -26,6 +26,7 @@ JavaScript.forBlock['audioOutput_playFileFromUrl'] = function (
   const deviceId =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) ||
     JavaScript.quote_('default');
+  const sync = block.getFieldValue('sync') === 'sync';
 
   const playAudio = JavaScript.provideFunction_('audioOutput_playFileFromUrl', [
     'async function ' +
@@ -51,6 +52,6 @@ JavaScript.forBlock['audioOutput_playFileFromUrl'] = function (
     '}',
   ]);
 
-  const code = `await ${playAudio}(${deviceId}, ${uri});\n`;
+  const code = `${sync ? 'await ' : ''}${playAudio}(${deviceId}, ${uri});\n`;
   return code;
 };

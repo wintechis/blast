@@ -3,10 +3,10 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
+import Blockly, {Field} from 'blockly';
 import {implementedThings} from '../../things.js';
 
-const {Blocks, FieldTextInput} = Blockly;
+const {Blocks, FieldDropdown, FieldTextInput} = Blockly;
 
 Blocks['things_audioOutput'] = {
   /**
@@ -36,6 +36,13 @@ Blocks['audioOutput_playFileFromUrl'] = {
     this.appendValueInput('URI')
       .appendField('play audio from URI')
       .setCheck('URI');
+    this.appendDummyInput('sync').appendField(
+      new FieldDropdown([
+        ['synchronously', 'sync'],
+        ['asynchronously', 'async'],
+      ]),
+      'sync'
+    );
     this.appendValueInput('thing')
       .appendField('on audio output')
       .setCheck('Thing');
