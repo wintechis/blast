@@ -5,13 +5,10 @@
  */
 
 import {
-  ALIGN_CENTRE,
   Blocks,
-  dialog,
   Events,
   FieldCheckbox,
   FieldTextInput,
-  Names,
   Variables,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
@@ -133,11 +130,7 @@ Blocks['streamdeck_button_event'] = {
     ];
     for (const varName of varNames) {
       let name = varName;
-      for (
-        let i = 1;
-        Variables.nameUsedWithAnyType(varName, ws) !== null;
-        i++
-      ) {
+      for (let i = 1; Variables.nameUsedWithAnyType(name, ws) !== null; i++) {
         name = varName + '_' + i;
       }
       this.varName = Variables.getOrCreateVariablePackage(
@@ -149,31 +142,31 @@ Blocks['streamdeck_button_event'] = {
       this.getField(varName).setValue(this.varName);
     }
   },
-  // deleteVars: function () {
-  //   const ws = getWorkspace();
-  //   if (ws === null) {
-  //     return;
-  //   }
-  //   const varNames = [
-  //     'button1',
-  //     'button2',
-  //     'button3',
-  //     'button4',
-  //     'button5',
-  //     'button6',
-  //   ];
-  //   for (const varName of varNames) {
-  //     const varId = Variables.getVariable(
-  //       ws,
-  //       null,
-  //       this.getFieldValue(varName),
-  //       ''
-  //     )?.getId();
-  //     if (varId !== undefined) {
-  //       ws.deleteVariableById(varId);
-  //     }
-  //   }
-  // },
+  deleteVars: function () {
+    const ws = getWorkspace();
+    if (ws === null) {
+      return;
+    }
+    const varNames = [
+      'button1',
+      'button2',
+      'button3',
+      'button4',
+      'button5',
+      'button6',
+    ];
+    for (const varName of varNames) {
+      const varId = Variables.getVariable(
+        ws,
+        null,
+        this.getFieldValue(varName),
+        ''
+      )?.getId();
+      if (varId !== undefined) {
+        ws.deleteVariableById(varId);
+      }
+    }
+  },
 };
 
 Blocks['streamdeck_color_buttons'] = {
@@ -187,12 +180,10 @@ Blocks['streamdeck_color_buttons'] = {
       .appendField('write color');
     this.appendDummyInput().appendField('to display property of button(s)');
     this.appendDummyInput()
-      .setAlign(ALIGN_CENTRE)
       .appendField(new FieldCheckbox('FALSE'), 'button1')
       .appendField(new FieldCheckbox('FALSE'), 'button2')
       .appendField(new FieldCheckbox('FALSE'), 'button3');
     this.appendDummyInput()
-      .setAlign(ALIGN_CENTRE)
       .appendField(new FieldCheckbox('FALSE'), 'button4')
       .appendField(new FieldCheckbox('FALSE'), 'button5')
       .appendField(new FieldCheckbox('FALSE'), 'button6');
@@ -231,12 +222,10 @@ Blocks['streamdeck_write_on_buttons'] = {
       .appendField('write Number/String/Boolean');
     this.appendDummyInput().appendField('to display property of button(s)');
     this.appendDummyInput()
-      .setAlign(ALIGN_CENTRE)
       .appendField(new FieldCheckbox('FALSE'), 'button1')
       .appendField(new FieldCheckbox('FALSE'), 'button2')
       .appendField(new FieldCheckbox('FALSE'), 'button3');
     this.appendDummyInput()
-      .setAlign(ALIGN_CENTRE)
       .appendField(new FieldCheckbox('FALSE'), 'button4')
       .appendField(new FieldCheckbox('FALSE'), 'button5')
       .appendField(new FieldCheckbox('FALSE'), 'button6');

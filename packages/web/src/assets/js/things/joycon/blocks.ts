@@ -459,12 +459,7 @@ Blocks['gamepad_pro_joystick'] = {
     for (let i = 1; Variables.nameUsedWithAnyType(xName, ws) !== null; i++) {
       xName = 'gp_x_' + i;
     }
-    this.xName = Variables.getOrCreateVariablePackage(
-      ws,
-      null,
-      xName as string,
-      ''
-    ).name;
+    this.xName = Variables.getOrCreateVariablePackage(ws, null, xName, '').name;
     this.getField('gp-xName').setValue(this.xName);
 
     // Create variable for y coordinate.
@@ -472,12 +467,7 @@ Blocks['gamepad_pro_joystick'] = {
     for (let i = 1; Variables.nameUsedWithAnyType(yName, ws) !== null; i++) {
       yName = 'gp_y_' + i;
     }
-    this.yName = Variables.getOrCreateVariablePackage(
-      ws,
-      null,
-      yName as string,
-      ''
-    ).name;
+    this.yName = Variables.getOrCreateVariablePackage(ws, null, yName, '').name;
     this.getField('gp-yName').setValue(this.yName);
 
     // Create variable for angle.
@@ -492,7 +482,7 @@ Blocks['gamepad_pro_joystick'] = {
     this.angleName = Variables.getOrCreateVariablePackage(
       ws,
       null,
-      angleName as string,
+      angleName,
       ''
     ).name;
     this.getField('gp-angleName').setValue(this.angleName);
