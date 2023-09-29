@@ -4,19 +4,19 @@
 [Building](#install--build) this library produces 3 files inside the `dist` directory:
   * `blast.tds.js` contains pre-defined [Thing Descriptions](https://www.w3.org/2019/wot/td) of Bluetooth devices
   * `blast.node.js` enables [WoT interactions](https://www.w3.org/TR/wot-architecture/#sec-interaction-model) for Bluetooth devices in [Node.js](https://nodejs.org/), by extending [@node-wot/core](https://github.com/eclipse/thingweb.node-wot) with [node-ble](https://github.com/chrvadala/node-ble).
-  * `blast.web.js` enables [WoT interactions](https://www.w3.org/TR/wot-architecture/#sec-interaction-model) for Bluetooth devices in the web, by extending [@node-wot/core](https://github.com/eclipse/thingweb.node-wot) with [Web Bluetooth](https://webbluetoothcg.github.io/web-bluetooth/).
+  * `blast.browser.js` enables [WoT interactions](https://www.w3.org/TR/wot-architecture/#sec-interaction-model) for Bluetooth devices in the web, by extending [@node-wot/core](https://github.com/eclipse/thingweb.node-wot) with [Web Bluetooth](https://webbluetoothcg.github.io/web-bluetooth/).
 
 ## Install & build
 To install and build `@blast/core`, open a terminal and execute the following commands from withing this directory.
   1. install the dependencies `yarn install`
   2. run the build script `yarn build`
 
-Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:web` to only build the respective file.
+Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:browser` to only build the respective file.
 
 > :warning: You might have to set yarn version using `yarn set version berry` before installing
 
 ## Usage
-This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/td) (of `dist/blast.tds.js`) with [Node.js](https://nodejs.org/) using `dist/blast.node.js`. For an example on how to use `blast.web.js` see [`packages/web/`](../web/). If you don't have a `dist` folder make sure to [install & build](#install--build) first.
+This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/td) (of `dist/blast.tds.js`) with [Node.js](https://nodejs.org/) using `dist/blast.node.js`. For an example on how to use `blast.browser.js` see [`packages/web/`](../web/). If you don't have a `dist` folder make sure to [install & build](#install--build) first.
 
 ### Example
 ```JavaScript
