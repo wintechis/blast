@@ -11,6 +11,8 @@ To install and build `@blast/core`, open a terminal and execute the following co
   1. install the dependencies `yarn install`
   2. run the build script `yarn build`
 
+Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:web` to only build the respective file.
+
 > :warning: You might have to set yarn version using `yarn set version berry` before installing
 
 ## Usage
