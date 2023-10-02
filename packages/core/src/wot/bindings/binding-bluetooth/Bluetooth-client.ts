@@ -218,7 +218,7 @@ export default class BluetoothClient implements ProtocolClient {
     const deconstructedForm: Record<string, string> = {};
 
     // Remove gatt://
-    deconstructedForm.path = form.href.split('//')[1];
+    deconstructedForm.path = form.href.split('://')[1];
 
     // If deviceID contains '/' it gets also split.
     // path string is checked it is a UUID; everything else is added together to deviceID
