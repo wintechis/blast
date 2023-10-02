@@ -155,21 +155,23 @@ JavaScript.forBlock['streamdeck_color_buttons'] = function (
   ]);
 
   const generatePixels = JavaScript.provideFunction_('generatePixels', [
-    'function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b) {',
-      '  const pixels = new DataView(new ArrayBuffer(54 + 80 * 80 * 3));',
-      '    for (let i = 0; i < 54 + 80 * 80 * 3; i += 3) {',
-      `      pixels.setUint8(i, b);`,
-      `      pixels.setUint8(i + 1, g);`,
-      `      pixels.setUint8(i + 2, r);`,
-      '    }',
-      '    return pixels;',
-      '}\n',
+    'function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b) {',
+    '  const pixels = new DataView(new ArrayBuffer(54 + 80 * 80 * 3));',
+    '    for (let i = 0; i < 54 + 80 * 80 * 3; i += 3) {',
+    '      pixels.setUint8(i, b);',
+    '      pixels.setUint8(i + 1, g);',
+    '      pixels.setUint8(i + 2, r);',
+    '    }',
+    '    return pixels;',
+    '}\n',
   ]);
 
-  const writeStreamDeckData = JavaScript.provideFunction_('writeStreamDeckData', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b, buttons) {',
+  const writeStreamDeckData = JavaScript.provideFunction_(
+    'writeStreamDeckData',
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(r, g, b, buttons) {',
       `  const data = ${writeBMPHeader}(${generatePixels}(r, g, b), 80, 80, 2835)`,
       '  for (let i = 0; i < 6; i++) {',
       '    if (buttons[i] === 1) {',
@@ -182,10 +184,8 @@ JavaScript.forBlock['streamdeck_color_buttons'] = function (
       '    }',
       '  }',
       '}',
-  ]);
-
-
-
+    ]
+  );
 
   const r = parseInt(colour.slice(2, 4), 16);
   const g = parseInt(colour.slice(4, 6), 16);

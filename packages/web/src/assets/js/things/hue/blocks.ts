@@ -173,7 +173,6 @@ const BRIGHTNESS_XML = `
   </value>
 </block>`;
 
-
 // Add LED Controller block to the list of implemented things.
 implementedThings.push({
   id: 'hue',

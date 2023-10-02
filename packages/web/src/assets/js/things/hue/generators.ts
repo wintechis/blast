@@ -56,7 +56,7 @@ JavaScript.forBlock['hue_power'] = function (block: Block): string {
   const code = `
 await things.get(${name}).writeProperty('power', ${power});\n`;
   return code;
-}
+};
 
 /**
  * Generates JavaScript code for the hue_brightness block.
@@ -65,7 +65,7 @@ JavaScript.forBlock['hue_brightness'] = function (block: Block): string {
   const brightness =
     JavaScript.valueToCode(block, 'brightness', JavaScript.ORDER_NONE) || 0;
   if (brightness < 0 || brightness > 254) {
-    console.error('Brightness must be between 0 and 254.')
+    console.error('Brightness must be between 0 and 254.');
     if (brightness < 0) {
       block.getInput('brightness')?.connection?.disconnect();
     } else {
@@ -77,4 +77,4 @@ JavaScript.forBlock['hue_brightness'] = function (block: Block): string {
   const code = `
 await things.get(${name}).writeProperty('brightness', ${brightness});\n`;
   return code;
-}
+};
