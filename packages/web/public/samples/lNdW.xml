@@ -5,14 +5,93 @@
     <variable id="F8w++;C~UyVYbMwABpw^">maxA</variable>
     <variable id="t_X~Q7Pt^`uK5mI6H]@h">maxB</variable>
     <variable id="lp=Nw8RvIQ~kwyP}]LnR">button2</variable>
-    <variable id="6ftX78]}{q($Q]!7x{Ks">gp_angle</variable>
-    <variable id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</variable>
     <variable id="Cam@mJVrp[!%-~`2DaAZ">gp_x</variable>
     <variable id="aqK=|b|}.XH1JCn3#6bd">gp_y</variable>
+    <variable id="6ftX78]}{q($Q]!7x{Ks">gp_angle</variable>
     <variable id="I]cjWCVz8}[jDF#MZgg~">gp_x_1</variable>
     <variable id="mMDfFH6l4[4Cs6Ta6-eW">gp_y_1</variable>
+    <variable id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</variable>
   </variables>
-  <block type="streamdeck_button_event" x="263" y="-337">
+  <block type="streamdeck_color_buttons" x="262" y="-1362">
+    <field name="button1">TRUE</field>
+    <field name="button2">FALSE</field>
+    <field name="button3">FALSE</field>
+    <field name="button4">FALSE</field>
+    <field name="button5">FALSE</field>
+    <field name="button6">FALSE</field>
+    <value name="color">
+      <block type="colour_picker">
+        <field name="COLOUR">#33ff33</field>
+      </block>
+    </value>
+    <value name="thing">
+      <block type="things_streamdeck">
+        <field name="name">StreamDeck Mini</field>
+        <field name="id">ccdb9bcf-f118-43d6-9489-fec05a49153d</field>
+      </block>
+    </value>
+    <next>
+      <block type="wait_seconds">
+        <value name="SECONDS">
+          <block type="math_number">
+            <field name="NUM">0.5</field>
+          </block>
+        </value>
+        <next>
+          <block type="streamdeck_color_buttons">
+            <field name="button1">FALSE</field>
+            <field name="button2">TRUE</field>
+            <field name="button3">FALSE</field>
+            <field name="button4">FALSE</field>
+            <field name="button5">FALSE</field>
+            <field name="button6">FALSE</field>
+            <value name="color">
+              <block type="colour_picker">
+                <field name="COLOUR">#ff0000</field>
+              </block>
+            </value>
+            <value name="thing">
+              <block type="things_streamdeck">
+                <field name="name">StreamDeck Mini</field>
+                <field name="id">ccdb9bcf-f118-43d6-9489-fec05a49153d</field>
+              </block>
+            </value>
+            <next>
+              <block type="hue_colour">
+                <value name="colour">
+                  <block type="colour_picker">
+                    <field name="COLOUR">#ff0000</field>
+                  </block>
+                </value>
+                <value name="thing">
+                  <block type="things_hue">
+                    <field name="name">Hue color lamp</field>
+                    <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="hue_power">
+                    <value name="power">
+                      <block type="logic_boolean">
+                        <field name="BOOL">FALSE</field>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_hue">
+                        <field name="name">Hue color lamp</field>
+                        <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+  <block type="streamdeck_button_event" x="263" y="-987">
     <field name="eventType">inputreport</field>
     <field name="button1">button1</field>
     <field name="button2">button2</field>
@@ -23,7 +102,7 @@
     <value name="thing">
       <block type="things_streamdeck">
         <field name="name">StreamDeck Mini</field>
-        <field name="id">8c2bad83-3bfa-48b9-a6b0-bd03c13581fe</field>
+        <field name="id">ccdb9bcf-f118-43d6-9489-fec05a49153d</field>
       </block>
     </value>
     <statement name="statements">
@@ -55,33 +134,246 @@
               <block type="wait_seconds">
                 <value name="SECONDS">
                   <block type="math_number">
-                    <field name="NUM">3</field>
+                    <field name="NUM">0.2</field>
                   </block>
                 </value>
                 <next>
-                  <block type="variables_set">
-                    <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
-                    <value name="VALUE">
-                      <block type="logic_boolean">
-                        <field name="BOOL">TRUE</field>
+                  <block type="hue_colour">
+                    <value name="colour">
+                      <block type="colour_picker">
+                        <field name="COLOUR">#ff0000</field>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_hue">
+                        <field name="name">Hue color lamp</field>
+                        <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
                       </block>
                     </value>
                     <next>
-                      <block type="variables_set">
-                        <field name="VAR" id="6ftX78]}{q($Q]!7x{Ks">gp_angle</field>
-                        <value name="VALUE">
-                          <block type="number_value">
-                            <field name="NUM">0</field>
+                      <block type="hue_power">
+                        <value name="power">
+                          <block type="logic_boolean">
+                            <field name="BOOL">TRUE</field>
+                          </block>
+                        </value>
+                        <value name="thing">
+                          <block type="things_hue">
+                            <field name="name">Hue color lamp</field>
+                            <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
                           </block>
                         </value>
                         <next>
-                          <block type="variables_set">
-                            <field name="VAR" id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</field>
-                            <value name="VALUE">
-                              <block type="number_value">
-                                <field name="NUM">0</field>
+                          <block type="wait_seconds">
+                            <value name="SECONDS">
+                              <block type="math_number">
+                                <field name="NUM">0.3</field>
                               </block>
                             </value>
+                            <next>
+                              <block type="hue_power">
+                                <value name="power">
+                                  <block type="logic_boolean">
+                                    <field name="BOOL">FALSE</field>
+                                  </block>
+                                </value>
+                                <value name="thing">
+                                  <block type="things_hue">
+                                    <field name="name">Hue color lamp</field>
+                                    <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="wait_seconds">
+                                    <value name="SECONDS">
+                                      <block type="math_number">
+                                        <field name="NUM">0.5</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="hue_power">
+                                        <value name="power">
+                                          <block type="logic_boolean">
+                                            <field name="BOOL">TRUE</field>
+                                          </block>
+                                        </value>
+                                        <value name="thing">
+                                          <block type="things_hue">
+                                            <field name="name">Hue color lamp</field>
+                                            <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="wait_seconds">
+                                            <value name="SECONDS">
+                                              <block type="math_number">
+                                                <field name="NUM">0.3</field>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="hue_power">
+                                                <value name="power">
+                                                  <block type="logic_boolean">
+                                                    <field name="BOOL">FALSE</field>
+                                                  </block>
+                                                </value>
+                                                <value name="thing">
+                                                  <block type="things_hue">
+                                                    <field name="name">Hue color lamp</field>
+                                                    <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="wait_seconds">
+                                                    <value name="SECONDS">
+                                                      <block type="math_number">
+                                                        <field name="NUM">0.5</field>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="hue_power">
+                                                        <value name="power">
+                                                          <block type="logic_boolean">
+                                                            <field name="BOOL">TRUE</field>
+                                                          </block>
+                                                        </value>
+                                                        <value name="thing">
+                                                          <block type="things_hue">
+                                                            <field name="name">Hue color lamp</field>
+                                                            <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="wait_seconds">
+                                                            <value name="SECONDS">
+                                                              <block type="math_number">
+                                                                <field name="NUM">0.3</field>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="hue_power">
+                                                                <value name="power">
+                                                                  <block type="logic_boolean">
+                                                                    <field name="BOOL">FALSE</field>
+                                                                  </block>
+                                                                </value>
+                                                                <value name="thing">
+                                                                  <block type="things_hue">
+                                                                    <field name="name">Hue color lamp</field>
+                                                                    <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                                  </block>
+                                                                </value>
+                                                                <next>
+                                                                  <block type="wait_seconds">
+                                                                    <value name="SECONDS">
+                                                                      <block type="math_number">
+                                                                        <field name="NUM">0.5</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <next>
+                                                                      <block type="hue_colour">
+                                                                        <value name="colour">
+                                                                          <block type="colour_picker">
+                                                                            <field name="COLOUR">#33ff33</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <value name="thing">
+                                                                          <block type="things_hue">
+                                                                            <field name="name">Hue color lamp</field>
+                                                                            <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <next>
+                                                                          <block type="hue_power">
+                                                                            <value name="power">
+                                                                              <block type="logic_boolean">
+                                                                                <field name="BOOL">TRUE</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="thing">
+                                                                              <block type="things_hue">
+                                                                                <field name="name">Hue color lamp</field>
+                                                                                <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <next>
+                                                                              <block type="wait_seconds">
+                                                                                <value name="SECONDS">
+                                                                                  <block type="math_number">
+                                                                                    <field name="NUM">0.5</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <next>
+                                                                                  <block type="hue_power">
+                                                                                    <value name="power">
+                                                                                      <block type="logic_boolean">
+                                                                                        <field name="BOOL">FALSE</field>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <value name="thing">
+                                                                                      <block type="things_hue">
+                                                                                        <field name="name">Hue color lamp</field>
+                                                                                        <field name="id">aL/9gbKpt//lCzsZ3sKOkw==</field>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <next>
+                                                                                      <block type="variables_set">
+                                                                                        <field name="VAR" id="EJCp?n3P#d@+Yf:{gdEh">started</field>
+                                                                                        <value name="VALUE">
+                                                                                          <block type="logic_boolean">
+                                                                                            <field name="BOOL">TRUE</field>
+                                                                                          </block>
+                                                                                        </value>
+                                                                                        <next>
+                                                                                          <block type="variables_set">
+                                                                                            <field name="VAR" id="6ftX78]}{q($Q]!7x{Ks">gp_angle</field>
+                                                                                            <value name="VALUE">
+                                                                                              <block type="number_value">
+                                                                                                <field name="NUM">0</field>
+                                                                                              </block>
+                                                                                            </value>
+                                                                                            <next>
+                                                                                              <block type="variables_set">
+                                                                                                <field name="VAR" id="n)+a8l*R-IN.lL,}%|QQ">gp_angle_1</field>
+                                                                                                <value name="VALUE">
+                                                                                                  <block type="number_value">
+                                                                                                    <field name="NUM">0</field>
+                                                                                                  </block>
+                                                                                                </value>
+                                                                                              </block>
+                                                                                            </next>
+                                                                                          </block>
+                                                                                        </next>
+                                                                                      </block>
+                                                                                    </next>
+                                                                                  </block>
+                                                                                </next>
+                                                                              </block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
                           </block>
                         </next>
                       </block>
@@ -217,7 +509,7 @@
                     <value name="thing">
                       <block type="things_spheroMini">
                         <field name="name">SM-9365</field>
-                        <field name="id">b2lNfqiJcNxlPxos3nqGUw==</field>
+                        <field name="id">9TC1r03LewVrHTtbGGteqQ==</field>
                       </block>
                     </value>
                   </block>
@@ -332,7 +624,7 @@
                     <value name="thing">
                       <block type="things_spheroMini">
                         <field name="name">SM-85E3</field>
-                        <field name="id">25orIwrjKcr5liZ9Etp9cA==</field>
+                        <field name="id">V+G2zVSf9IURgL8PCBWtFg==</field>
                       </block>
                     </value>
                   </block>
