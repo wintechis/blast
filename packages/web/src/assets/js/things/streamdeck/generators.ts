@@ -154,30 +154,44 @@ JavaScript.forBlock['streamdeck_color_buttons'] = function (
     '}\n',
   ]);
 
+  const generatePixels = JavaScript.provideFunction_('generatePixels', [
+    'function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b) {',
+      '  const pixels = new DataView(new ArrayBuffer(54 + 80 * 80 * 3));',
+      '    for (let i = 0; i < 54 + 80 * 80 * 3; i += 3) {',
+      `      pixels.setUint8(i, b);`,
+      `      pixels.setUint8(i + 1, g);`,
+      `      pixels.setUint8(i + 2, r);`,
+      '    }',
+      '    return pixels;',
+      '}\n',
+  ]);
+
+  const writeStreamDeckData = JavaScript.provideFunction_('writeStreamDeckData', [
+    'async function ' +
+      JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(r, g, b, buttons) {',
+      `  const data = ${writeBMPHeader}(${generatePixels}(r, g, b), 80, 80, 2835)`,
+      '  for (let i = 0; i < 6; i++) {',
+      '    if (buttons[i] === 1) {',
+      `      const buffers = ${generateWrites}(i, data);`,
+      '      for (const data of buffers) {',
+      '        const buf = [...new Uint8Array(data.buffer)]',
+      "        const str = buf.map(x => x.toString(16).padStart(2, '0')).join('')",
+      `        await things.get(${name}).invokeAction('sendReport', str);`,
+      '      }',
+      '    }',
+      '  }',
+      '}',
+  ]);
+
+
+
+
   const r = parseInt(colour.slice(2, 4), 16);
   const g = parseInt(colour.slice(4, 6), 16);
   const b = parseInt(colour.slice(6, 8), 16);
 
-  let code =
-    'const pixels = new DataView(new ArrayBuffer(54 + 80 * 80 * 3));\n';
-  code += 'for (let i = 0; i < 54 + 80 * 80 * 3; i += 3) {\n';
-  code += `  pixels.setUint8(i, ${b});\n`;
-  code += `  pixels.setUint8(i + 1, ${g});\n`;
-  code += `  pixels.setUint8(i + 2, ${r});\n`;
-  code += '}\n';
-
-  code += `let data = ${writeBMPHeader}(pixels, 80, 80, 2835);\n`;
-  for (let i = 0; i < 6; i++) {
-    if (buttons[i] === 1) {
-      code += `const buffers = ${generateWrites}(${i}, data);\n`;
-      code += 'for (const data of buffers) {\n';
-      code += '  const buf = [...new Uint8Array(data.buffer)]\n';
-      code +=
-        "  const str = buf.map(x => x.toString(16).padStart(2, '0')).join('')\n";
-      code += `  await things.get(${name}).invokeAction('sendReport', str);\n`;
-      code += '}\n';
-    }
-  }
+  const code = `${writeStreamDeckData}(${r}, ${g}, ${b}, [${buttons}]);\n`;
   return code;
 };
 
