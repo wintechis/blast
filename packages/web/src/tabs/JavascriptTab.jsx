@@ -13,10 +13,10 @@ export default class JavascriptTab extends React.Component {
   };
 
   cleanUpCode = code => {
-    // replace 'const blastCore = await import('../../assets/blast/blast.web.js');'
+    // replace 'const blastCore = await import('../../assets/blast/blast.browser.js');'
     // with 'import * as blastCore from 'blast.node.js';'
     code = code.replace(
-      /const blastCore = await import\('..\/..\/assets\/blast\/blast.web.js'\);/gm,
+      /const blastCore = await import\('..\/..\/assets\/blast\/blast.browser.js'\);/gm,
       "import * as blastCore from 'blast.node.js';"
     );
 

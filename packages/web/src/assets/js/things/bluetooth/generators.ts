@@ -13,7 +13,7 @@ JavaScript.forBlock['things_eddyStoneDevice'] = function (
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
   JavaScript.imports_['core'] =
-    "const blastCore = await import('../../assets/blast/blast.web.js');";
+    "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
@@ -34,7 +34,7 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
   JavaScript.imports_['core'] =
-    "const blastCore = await import('../../assets/blast/blast.web.js');";
+    "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
@@ -104,7 +104,7 @@ JavaScript.forBlock['eddyStoneDevice_write_eddystone_property'] = function (
   if (property === 'advertisedData') {
     property = JavaScript.quote_(property);
     JavaScript.imports_['core'] =
-      "const blastCore = await import('../../assets/blast/blast.web.js');";
+      "const blastCore = await import('../../assets/blast/blast.browser.js');";
     JavaScript.definitions_['EddystoneHelpers'] =
       'const {EddystoneHelpers} = blastCore;';
     code = `
@@ -132,7 +132,7 @@ JavaScript.forBlock['read_eddystone_property'] = function (
   if (property === 'advertisedData') {
     property = JavaScript.quote_(property);
     JavaScript.imports_['core'] =
-      "const blastCore = await import('../../assets/blast/blast.web.js');";
+      "const blastCore = await import('../../assets/blast/blast.browser.js');";
     JavaScript.definitions_['EddystoneHelpers'] =
       'const {EddystoneHelpers} = blastCore;';
     code = `

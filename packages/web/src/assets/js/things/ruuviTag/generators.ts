@@ -14,7 +14,7 @@ JavaScript.forBlock['things_ruuviTag'] = function (block: Block) {
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
   JavaScript.imports_['core'] =
-    "const blastCore = await import('../../assets/blast/blast.web.js');";
+    "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
     "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
