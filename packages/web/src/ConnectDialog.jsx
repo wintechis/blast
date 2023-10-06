@@ -194,6 +194,7 @@ export default class ConnectDialog extends React.Component {
               })) ||
               ((this.state.selectedAdapter === 'videoinput' ||
                 this.state.selectedAdapter === 'audiooutput') &&
+                this.state.videoAudioDevices?.length > 0 &&
                 this.state.videoAudioDevices.map(device => {
                   if (device.kind === this.state.selectedAdapter) {
                     return (
