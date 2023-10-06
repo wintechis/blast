@@ -289,6 +289,8 @@ export default class SpheroBolt {
 
   /* Put a command on the queue */
   queueCommand(command) {
+    // Clear the queue to invoke write immediately after current operation
+    bleQueue.clear();
     bleQueue.add(async () => {
       await this.write({
         charac: this.characs.get(APIV2_CHARACTERISTIC),
