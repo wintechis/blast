@@ -1,11 +1,11 @@
-import Queue from './queue.js';
+import PQueue from 'p-queue';
 import {getDeviceById} from '../../../webBluetooth.js';
 
 export const UUID_SPHERO_SERVICE = '00010001-574f-4f20-5370-6865726f2121';
 export const UUID_SPHERO_SERVICE_INITIALIZE =
   '00020001-574f-4f20-5370-6865726f2121';
 
-let bolt = null;
+const bleQueue = new PQueue({concurrency: 1});
 
 const APIV2_CHARACTERISTIC = '00010002-574f-4f20-5370-6865726f2121';
 const ANTIDOS_CHARACTERISTIC = '00020005-574f-4f20-5370-6865726f2121';
@@ -158,8 +158,6 @@ export default class SpheroBolt {
     this.characs = new Map();
     this.eventListeners = {};
     this.device = null;
-    this.queue = new Queue(this.write);
-    bolt = this;
     getDeviceById(webBluetoothId).then(device => {
       this.device = device;
       this.connect().then(() => {
@@ -245,8 +243,8 @@ export default class SpheroBolt {
 
   /*  Write a command on a specific characteristic*/
   async write(data) {
-    if (!bolt.connected) {
-      await bolt.connect();
+    if (!this.device.gatt.connected) {
+      await this.connect();
     }
     try {
       await data.charac.writeValue(new Uint8Array(data.command));
@@ -290,9 +288,11 @@ export default class SpheroBolt {
 
   /* Put a command on the queue */
   queueCommand(command) {
-    this.queue.queue({
-      charac: this.characs.get(APIV2_CHARACTERISTIC),
-      command: command,
+    bleQueue.add(async () => {
+      await this.write({
+        charac: this.characs.get(APIV2_CHARACTERISTIC),
+        command: command,
+      });
     });
   }
 
@@ -502,11 +502,15 @@ export default class SpheroBolt {
   }
 
   /* Function triggered by the event characteristicvaluechanged */
-  onDataChange(event) {
-    this.init = function () {
-      this.packet = [];
-      this.sum = 0;
-      this.escaped = false;
+  onDataChange = function (event) {
+    let packet = [];
+    let sum = 0;
+    let escaped = false;
+
+    const init = function () {
+      packet = [];
+      sum = 0;
+      escaped = false;
     };
 
     const len = event.target.value.byteLength;
@@ -515,51 +519,50 @@ export default class SpheroBolt {
       let value = event.target.value.getUint8(i);
       switch (value) {
         case APIConstants.startOfPacket:
-          if (this.packet === undefined || this.packet.length !== 0) {
-            this.init();
+          if (packet === undefined || packet.length !== 0) {
+            init();
           }
-          this.packet.push(value);
+          packet.push(value);
           break;
         case APIConstants.endOfPacket:
-          this.sum -= this.packet[this.packet.length - 1];
-          if (this.packet.length < 6) {
-            console.log('Packet is too small');
-            this.init();
+          sum -= packet[packet.length - 1];
+          if (packet.length < 6) {
+            init();
 
             break;
           }
-          if (this.packet[this.packet.length - 1] !== (~this.sum & 0xff)) {
+          if (packet[packet.length - 1] !== (~sum & 0xff)) {
             console.log('Bad checksum');
-            this.init();
+            init();
             break;
           }
-          this.packet.push(value);
-          bolt.decode(this.packet);
-          this.init();
+          packet.push(value);
+          this.decode(packet);
+          init();
           break;
         case APIConstants.escape:
-          this.escaped = true;
+          escaped = true;
           break;
         case APIConstants.escapedEscape:
         case APIConstants.escapedStartOfPacket:
         case APIConstants.escapedEndOfPacket:
-          if (this.escaped) {
+          if (escaped) {
             value = value | APIConstants.escapeMask;
-            this.escaped = false;
+            escaped = false;
           }
-          this.packet.push(value);
-          this.sum += value;
+          packet.push(value);
+          sum += value;
           break;
         default:
-          if (this.escaped) {
+          if (escaped) {
             console.log('No escaped char...');
           } else {
-            this.packet.push(value);
-            this.sum += value;
+            packet.push(value);
+            sum += value;
           }
       }
     }
-  }
+  };
 
   /* If the packet is a notification , calls the right handler, else print the command status*/
   readCommand(command) {
