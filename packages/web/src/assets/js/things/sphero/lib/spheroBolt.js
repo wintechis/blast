@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-missing-import
 import PQueue from 'p-queue';
 import {getDeviceById} from '../../../webBluetooth.js';
 
@@ -228,8 +229,8 @@ export default class SpheroBolt {
     await this.characs.get(ANTIDOS_CHARACTERISTIC).writeValue(useTheForce);
     this.connected = true;
     this.wake();
-    this.resetYaw();
-    this.resetLocator();
+    // this.resetYaw();
+    // this.resetLocator();
     this.setAllLeds(255, 255, 255);
   }
 
