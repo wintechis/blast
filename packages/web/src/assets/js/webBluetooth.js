@@ -111,10 +111,10 @@ const removeEventListener = function (event, listener) {
  */
 const tearDown = async function () {
   // disconnect all bt devices.
-  const devices = await navigator.bluetooth.getDevices();
-  for (const device of devices) {
-    await disconnect(device.id);
-  }
+  // const devices = await navigator.bluetooth.getDevices();
+  // for (const device of devices) {
+  //   await disconnect(device.id);
+  // }
   // Remove all event handlers.
   if (eventListeners) {
     for (const event of eventListeners) {
