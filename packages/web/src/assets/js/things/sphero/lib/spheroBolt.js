@@ -504,8 +504,34 @@ export default class SpheroBolt {
     this.roll(0, heading, []);
   }
 
+  /* Packet decoder */
+  decode(packet) {
+    console.log('decode');
+    const command = {};
+    command.packet = [...packet];
+    command.startOfPacket = packet.shift();
+    command.flags = decodeFlags(packet.shift());
+    if (command.flags.hasTargetId) {
+      command.targetId = packet.shift();
+    }
+    if (command.flags.hasSourceId) {
+      command.sourceId = packet.shift();
+    }
+    command.deviceId = packet.shift();
+    command.commandId = packet.shift();
+    command.seqNumber = packet.shift();
+    command.data = [];
+    const dataLen = packet.length - 2;
+    for (let i = 0; i < dataLen; i++) {
+      command.data.push(packet.shift());
+    }
+    command.checksum = packet.shift();
+    command.endOfPacket = packet.shift();
+    this.readCommand(command);
+  }
+
   /* Function triggered by the event characteristicvaluechanged */
-  onDataChange = function (event) {
+  onDataChange(event) {
     let packet = [];
     let sum = 0;
     let escaped = false;
@@ -744,31 +770,6 @@ export default class SpheroBolt {
       default:
         console.log('Error: Unknown error');
     }
-  }
-
-  /* Packet decoder */
-  decode(packet) {
-    const command = {};
-    command.packet = [...packet];
-    command.startOfPacket = packet.shift();
-    command.flags = decodeFlags(packet.shift());
-    if (command.flags.hasTargetId) {
-      command.targetId = packet.shift();
-    }
-    if (command.flags.hasSourceId) {
-      command.sourceId = packet.shift();
-    }
-    command.deviceId = packet.shift();
-    command.commandId = packet.shift();
-    command.seqNumber = packet.shift();
-    command.data = [];
-    const dataLen = packet.length - 2;
-    for (let i = 0; i < dataLen; i++) {
-      command.data.push(packet.shift());
-    }
-    command.checksum = packet.shift();
-    command.endOfPacket = packet.shift();
-    this.readCommand(command);
   }
 }
 
