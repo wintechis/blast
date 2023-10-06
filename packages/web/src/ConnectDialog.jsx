@@ -220,7 +220,17 @@ export default class ConnectDialog extends React.Component {
                       </ListItem>
                     );
                   }
-                }))}
+                })) ||
+              ((this.state.selectedAdapter === 'videoinput' ||
+                this.state.selectedAdapter === 'audiooutput') &&
+                (!this.state.videoAudioDevices ||
+                  this.state.videoAudioDevices?.length === 0) && (
+                  <ListItem>
+                    <ListItemButton>
+                      No {this.state.selectedAdapter} devices found
+                    </ListItemButton>
+                  </ListItem>
+                ))}
           </List>
         </Dialog>
       );
