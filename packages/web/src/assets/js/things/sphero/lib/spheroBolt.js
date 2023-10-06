@@ -591,7 +591,7 @@ export default class SpheroBolt {
           }
       }
     }
-  };
+  }
 
   /* If the packet is a notification , calls the right handler, else print the command status*/
   readCommand(command) {
