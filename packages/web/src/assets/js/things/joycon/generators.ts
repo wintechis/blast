@@ -10,7 +10,7 @@ import {addCleanUpFunction} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
 import {JoyConLeft, JoyConRight, GeneralController} from './switchPro/JoyCon';
 import {JoyConPacket} from './switchPro/types';
-import {getWebHidDevice} from '../../things';
+import {getWebHidDevice} from '../../../../tabs/Devices/things';
 
 JavaScript.forBlock['things_joycon'] = function (
   block: Block

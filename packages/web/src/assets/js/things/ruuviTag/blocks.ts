@@ -9,7 +9,7 @@ import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
-import {implementedThings} from '../../things.js';
+import {implementedThings} from '../../../../tabs/Devices/things';
 
 Blocks['things_ruuviTag'] = {
   /**

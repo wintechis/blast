@@ -27,10 +27,9 @@ import {
   setWebBluetoothButtonHandler,
   setConsumeThingButtonHandler,
   setWebHidButtonHandler,
-} from './assets/js/things.js';
-
+} from './tabs/Devices/things.ts';
 import {getStdWarn} from './assets/js/interpreter.ts';
-import {requestDevice} from './assets/js/webBluetooth.js';
+import {requestDevice} from './tabs/Devices/webBluetoothDevices.ts';
 
 export default class ConnectDialog extends React.Component {
   constructor(props) {
@@ -165,7 +164,6 @@ export default class ConnectDialog extends React.Component {
                               );
                               this.handleClose();
                             }
-
                             await requestDevice(thing);
                             if (thing.id === 'spheroMini') {
                               this.props.blastBarRef.current.setSpheroConnected(

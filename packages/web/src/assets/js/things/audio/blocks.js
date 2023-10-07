@@ -3,10 +3,8 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly, {Field} from 'blockly';
-import {implementedThings} from '../../things.js';
-
-const {Blocks, FieldDropdown, FieldTextInput} = Blockly;
+import {Blocks, FieldDropdown, FieldTextInput} from 'blockly';
+import {implementedThings} from '../../../../tabs/Devices/things.ts';
 
 Blocks['things_audioOutput'] = {
   /**

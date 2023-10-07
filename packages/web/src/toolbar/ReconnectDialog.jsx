@@ -19,9 +19,9 @@ import {
   connectWebHidDevice,
   connectGamepad,
   getDevMode,
-} from '../assets/js/things.js';
+} from '../tabs/Devices/things.ts';
 import {getWorkspace} from '../assets/js/interpreter.ts';
-import {requestDevice} from '../assets/js/webBluetooth.js';
+import {requestDevice} from '../tabs/Devices/webBluetoothDevices.ts';
 
 export default class ReonnectDialog extends React.Component {
   constructor(props) {

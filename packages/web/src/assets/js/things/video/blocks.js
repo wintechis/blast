@@ -4,7 +4,7 @@
  */
 
 import Blockly from 'blockly';
-import {implementedThings} from '../../things.js';
+import {implementedThings} from '../../../../tabs/Devices/things.ts';
 
 const {Blocks, FieldTextInput} = Blockly;
 

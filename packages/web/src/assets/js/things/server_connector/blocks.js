@@ -4,7 +4,7 @@
  */
 
 import Blockly from 'blockly';
-import {devBlocks, devCategories} from '../../things.js';
+import {devBlocks, devCategories} from '../../../../tabs/Devices/things.ts';
 const {Blocks} = Blockly;
 
 devCategories.push(['Server Connector', 230, 6]);

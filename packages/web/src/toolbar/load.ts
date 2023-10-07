@@ -7,7 +7,7 @@ import {
   implementedThing,
   implementedThings,
   resetThings,
-} from '../assets/js/things.js';
+} from '../tabs/Devices/things';
 import ReconnectDialog from './ReconnectDialog';
 import React from 'react';
 

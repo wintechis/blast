@@ -3,15 +3,15 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
+import {dialog, utils, Variables, WorkspaceSvg} from 'blockly';
 import {
   addBlock,
   addCategoryAt,
   reloadToolbox,
   removeBlock,
   removeCategory,
-} from './toolbox.js';
-import {getWorkspace} from './interpreter.ts';
+} from '../../assets/js/toolbox';
+import {getWorkspace} from '../../assets/js/interpreter';
 import {
   generateThingBlock,
   generateThingCode,
@@ -26,31 +26,61 @@ import {
   generateSecurityBlock,
   generateSecurityCode,
   crawl,
-} from './automatedBlockGeneration.ts';
+} from '../../assets/js/automatedBlockGeneration';
+import {DataSchema, ThingDescription} from 'wot-thing-description-types';
+
+export type thingType =
+  | 'audio'
+  | 'bluetooth'
+  | 'hid'
+  | 'gamepad'
+  | 'video'
+  | 'consumedDevice';
+
+interface GamepadFilter {
+  index?: number;
+  id?: string;
+  connected?: boolean;
+  mapping?: string;
+  timestamp?: number;
+  axes?: number[];
+  buttons?: {length: number};
+}
+
+export interface implementedThing {
+  id: string;
+  name: string;
+  type: thingType;
+  blocks: {type: string; category: string; XML?: string}[];
+  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[] | GamepadFilter[];
+  optionalServices?: string[];
+  infoUrl?: string;
+  connected?: boolean;
+}
 
 /**
  * Maps device names to BluetoothDevice.id.
  */
-const webBluetoothDevices = new Map();
+export const webBluetoothDevices = new Map<string, string>();
 
 /**
  * Maps user defined names to webHID identifiers.
  */
-const webHidNames = new Map();
+const webHidNames = new Map<string, string>();
 
 /**
  * Maps webHID identifiers to webHID devices.
  */
-const webHidDevices = new Map();
+const webHidDevices = new Map<string, HIDDevice>();
 
 /**
  * Array of all connected Gamepads.
  */
-export const gamepads = [];
+export let gamepads: Array<Gamepad> = [];
 /**
  * Adds all connected Gamepads to the {@link gamepads} array.
  */
-export const addGamepads = function () {
+export const addGamepads = function (): void {
   const gps = navigator.getGamepads ? navigator.getGamepads() : [];
   if (gps.length === 0 || !Array.from(gps).some(gp => !!gp)) {
     return;
@@ -73,28 +103,13 @@ export const addGamepads = function () {
   });
   window.addEventListener('gamepaddisconnected', e => {
     const gp = e.gamepad;
-    delete gamepads[gp.index];
+    gamepads = gamepads.filter(gamepad => gamepad.index !== gp.index);
   });
 };
 
-const _shallowEqual = function (object1, object2) {
-  const keys1 = Object.keys(object1);
-  const keys2 = Object.keys(object2);
+const connectedGamepads: Array<number> = [];
 
-  if (keys1.length !== keys2.length) {
-    return false;
-  }
-
-  for (const key of keys1) {
-    if (object1[key] !== object2[key]) {
-      return false;
-    }
-  }
-  return true;
-};
-const connectedGamepads = [];
-
-export const pollGamepads = () => {
+export const pollGamepads = function (): void {
   const gps = navigator.getGamepads();
   for (const gamepad of gps) {
     // Disregard empty slots.
@@ -115,50 +130,48 @@ pollGamepads();
 /**
  * Maps user defined names to gamepad indices.
  */
-const gamepadNames = new Map();
+const gamepadNames = new Map<string, number>();
 
 /**
  * Maps audio device labels to audio device ids.
  */
-const audioDevices = new Map();
+const audioDevices = new Map<string, string>();
 
 /**
  * Maps video device labels to video device ids.
  */
-const videoDevices = new Map();
+const videoDevices = new Map<string, string>();
 
 /**
  * Maps consumed web device labels to video device ids.
  */
-const consumedWebDevices = new Map();
+const consumedWebDevices = new Map<string, string>();
 
 /**
  * Lists all things implemented by BLAST.
  */
-export const implementedThings = [];
+export const implementedThings: Array<implementedThing> = [];
 
 /**
  * Lists all things connected to BLAST identified by their user defined name.
  */
-export const connectedThings = new Map();
+export const connectedThings = new Map<string, implementedThing>();
 
 /**
  * Lists all blocks exclusively available in dev mode, as tuples of [blockName, category].
- * @type {!Array.<!Array<string>>}
  */
-export const devBlocks = [];
+export const devBlocks: [string, string][] = [];
 
 /**
  * Lists all categories exclusively available in dev mode, as triples of [categoryName, colour, index].
- * @type {!Array.<!Array<string>>}
  */
-export const devCategories = [];
+export const devCategories: [string, number, number][] = [];
 
 /**
  * Wether development mode is turned on or off.
  */
 let devMode = false;
-export const setDevMode = function (value) {
+export const setDevMode = function (value: boolean): void {
   if (value === true) {
     // add all thing blocks to the toolbox
     for (const thing of implementedThings) {
@@ -191,7 +204,7 @@ export const setDevMode = function (value) {
     }
 
     // empty workspace
-    getWorkspace().clear();
+    getWorkspace()?.clear();
 
     resetThings();
   }
@@ -199,61 +212,55 @@ export const setDevMode = function (value) {
   reloadToolbox();
 };
 
-export const getDevMode = function () {
+export const getDevMode = function (): boolean {
   return devMode;
 };
 
-let webBluetoothButtonHandler = null;
+let webBluetoothButtonHandler: Function | null = null;
 /**
  * Sets the 'pair via webBluetooth' button handler.
- * @param {function} handler The handler to set.
  */
-export const setWebBluetoothButtonHandler = function (handler) {
+export const setWebBluetoothButtonHandler = function (handler: Function) {
   webBluetoothButtonHandler = handler;
 };
 
-let webHidButtonHandler = null;
+let webHidButtonHandler: Function | null = null;
 /**
  * Sets the 'connect via webHid' button handler.
- * @param {function} handler The handler to set.
  */
-export const setWebHidButtonHandler = function (handler) {
+export const setWebHidButtonHandler = function (handler: Function) {
   webHidButtonHandler = handler;
 };
 
-let gamepadButtonHandler = null;
+let gamepadButtonHandler: Function | null = null;
 /**
  * Sets the 'connect gamepad' button handler.
- * @param {function} handler The handler to set.
  */
-export const setGamepadButtonHandler = function (handler) {
+export const setGamepadButtonHandler = function (handler: Function) {
   gamepadButtonHandler = handler;
 };
 
-let audioSelectButtonHandler = null;
+let audioSelectButtonHandler: Function | null = null;
 /**
  * Sets the 'select audio output' button handler.
- * @param {function} handler The handler to set.
  */
-export const setAudioSelectButtonHandler = function (handler) {
+export const setAudioSelectButtonHandler = function (handler: Function) {
   audioSelectButtonHandler = handler;
 };
 
-let videoSelectButtonHandler = null;
+let videoSelectButtonHandler: Function | null = null;
 /**
  * Sets the 'select video input' button handler.
- * @param {function} handler The handler to set.
  */
-export const setVideoSelectButtonHandler = function (handler) {
+export const setVideoSelectButtonHandler = function (handler: Function) {
   videoSelectButtonHandler = handler;
 };
 
-let consumeThingButtonHandler = null;
+let consumeThingButtonHandler: Function | null = null;
 /**
  * Sets the 'select video input' button handler.
- * @param {function} handler The handler to set.
  */
-export const setConsumeThingButtonHandler = function (handler) {
+export const setConsumeThingButtonHandler = function (handler: Function) {
   consumeThingButtonHandler = handler;
 };
 
@@ -261,34 +268,34 @@ let getRssiBlockadded = false;
 
 /**
  * Default method for logging device interaction.
- * @param {string} message The message to log.
- * @param {string=} adapter The name of the adapter that generated the message.
- * @param {string=} device The name of the device that generated the message.
  */
-let thingsLog = function (message, adapter, device) {
-  console.log({adapter}, {device}, message);
+let thingsLog: Function = function (
+  message: string,
+  adapter?: string,
+  name?: string,
+  deviceId?: string
+) {
+  console.log({adapter}, {name}, {deviceId}, message);
 };
 
 /**
  * Getter for the thingsLog function.
- * @return {function} The thingsLog function.
  */
-export const getThingsLog = function () {
+export const getThingsLog = function (): Function {
   return thingsLog;
 };
 
 /**
  * Setter for the thingsLog function.
- * @param {Function} logFunc The function to use for logging.
  */
-export const setThingsLog = function (logFunc) {
+export const setThingsLog = function (logFunc: Function): void {
   thingsLog = logFunc;
 };
 
 /**
  * Resets all device maps.
  */
-export const resetThings = function () {
+export const resetThings = function (): void {
   webBluetoothDevices.clear();
   webHidNames.clear();
   webHidDevices.clear();
@@ -297,20 +304,22 @@ export const resetThings = function () {
 
 /**
  * Gets the webHID device with the given uid.
- * @param {string} deviceId The uid of the webHID device.
- * @returns {HIDDevice} The webHID device with the given uid.
  */
-export const getWebHidDevice = function (deviceId) {
-  return webHidDevices.get(deviceId);
+export const getWebHidDevice = function (deviceId: string): HIDDevice {
+  const device = webHidDevices.get(deviceId);
+  if (typeof device === 'undefined') {
+    throw new Error('No device with id ' + deviceId + ' found.');
+  }
+  return device;
 };
 
 /**
  * Construct the elements (blocks and buttons) required by the flyout for the
  * things category.
- * @param {!Blockly.Workspace} workspace The workspace containing things.
- * @return {!Array.<!Element>} Array of XML elements.
  */
-export const thingsFlyoutCategory = function (workspace) {
+export const thingsFlyoutCategory = function (
+  workspace: WorkspaceSvg
+): Element[] {
   const xmlList = [];
 
   // get connected things
@@ -326,7 +335,9 @@ export const thingsFlyoutCategory = function (workspace) {
   webBluetoothButton.setAttribute('text', 'pair via webBluetooth');
   webBluetoothButton.setAttribute('callbackKey', 'CREATE_WEBBLUETOOTH');
   workspace.registerButtonCallback('CREATE_WEBBLUETOOTH', _button => {
-    webBluetoothButtonHandler();
+    if (webBluetoothButtonHandler) {
+      webBluetoothButtonHandler();
+    }
   });
   xmlList.push(webBluetoothButton);
   // Add connected blocks for connected blueooth devices
@@ -344,7 +355,9 @@ export const thingsFlyoutCategory = function (workspace) {
   webHidbutton.setAttribute('text', 'connect via webHID');
   webHidbutton.setAttribute('callbackKey', 'CREATE_WEBHID');
   workspace.registerButtonCallback('CREATE_WEBHID', _button => {
-    webHidButtonHandler();
+    if (webHidButtonHandler) {
+      webHidButtonHandler();
+    }
   });
   xmlList.push(webHidbutton);
   // Add connected blocks for connected webHID devices
@@ -362,7 +375,9 @@ export const thingsFlyoutCategory = function (workspace) {
   gamepadButton.setAttribute('text', 'connect gamepad');
   gamepadButton.setAttribute('callbackKey', 'CREATE_GAMEPAD');
   workspace.registerButtonCallback('CREATE_GAMEPAD', _button => {
-    gamepadButtonHandler();
+    if (gamepadButtonHandler) {
+      gamepadButtonHandler();
+    }
   });
   xmlList.push(gamepadButton);
   // Add connected blocks for connected gamepads
@@ -380,7 +395,9 @@ export const thingsFlyoutCategory = function (workspace) {
   audioButton.setAttribute('text', 'add audio output');
   audioButton.setAttribute('callbackKey', 'CREATE_AUDIO');
   workspace.registerButtonCallback('CREATE_AUDIO', _button => {
-    audioSelectButtonHandler();
+    if (audioSelectButtonHandler) {
+      audioSelectButtonHandler();
+    }
   });
   xmlList.push(audioButton);
 
@@ -399,7 +416,9 @@ export const thingsFlyoutCategory = function (workspace) {
   videoButton.setAttribute('text', 'add video input');
   videoButton.setAttribute('callbackKey', 'CREATE_VIDEO');
   workspace.registerButtonCallback('CREATE_VIDEO', _button => {
-    videoSelectButtonHandler();
+    if (videoSelectButtonHandler) {
+      videoSelectButtonHandler();
+    }
   });
   xmlList.push(videoButton);
 
@@ -418,7 +437,9 @@ export const thingsFlyoutCategory = function (workspace) {
   consumeThingButton.setAttribute('text', 'consume Thing');
   consumeThingButton.setAttribute('callbackKey', 'CONSUME_THING');
   workspace.registerButtonCallback('CONSUME_THING', _button => {
-    consumeThingButtonHandler();
+    if (consumeThingButtonHandler) {
+      consumeThingButtonHandler();
+    }
   });
   xmlList.push(consumeThingButton);
 
@@ -432,10 +453,9 @@ export const thingsFlyoutCategory = function (workspace) {
 
 /**
  * Construct the webBluetooth blocks required by the flyout for the things category.
- * @return {!Array.<!Element>} Array of XML block elements.
  */
-const flyoutCategoryBlocks = function () {
-  const xmlList = {
+const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
+  const xmlList: {[key: string]: Element[]} = {
     bluetooth: [],
     hid: [],
     gamepad: [],
@@ -452,29 +472,29 @@ const flyoutCategoryBlocks = function () {
         reloadToolbox();
       }
       const id = thing.id;
-      const block = Blockly.utils.xml.createElement('block');
+      const block = utils.xml.createElement('block');
       block.setAttribute('type', 'things_' + id);
-      const fieldName = Blockly.utils.xml.createElement('field');
+      const fieldName = utils.xml.createElement('field');
       fieldName.setAttribute('name', 'name');
       fieldName.textContent = key;
       block.appendChild(fieldName);
-      const idField = Blockly.utils.xml.createElement('field');
+      const idField = utils.xml.createElement('field');
       idField.setAttribute('name', 'id');
       if (thing.type === 'bluetooth') {
-        idField.textContent = webBluetoothDevices.get(key);
+        idField.textContent = webBluetoothDevices.get(key) as string;
       } else if (thing.type === 'hid') {
-        idField.textContent = webHidNames.get(key);
+        idField.textContent = webHidNames.get(key) as string;
       } else if (thing.type === 'gamepad') {
-        idField.textContent = gamepadNames.get(key);
+        idField.textContent = (gamepadNames.get(key) as number).toString();
       } else if (thing.type === 'audio') {
-        idField.textContent = audioDevices.get(key);
+        idField.textContent = audioDevices.get(key) as string;
       } else if (thing.type === 'video') {
-        idField.textContent = videoDevices.get(key);
+        idField.textContent = videoDevices.get(key) as string;
       } else if (thing.type === 'consumedDevice') {
-        idField.textContent = consumedWebDevices.get(key);
+        idField.textContent = consumedWebDevices.get(key) as string;
       }
       block.appendChild(idField);
-      block.setAttribute('gap', 8);
+      block.setAttribute('gap', '8');
       xmlList[thing.type].push(block);
     }
   }
@@ -483,22 +503,21 @@ const flyoutCategoryBlocks = function () {
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
- * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export const getWebBluetoothDevices = function () {
+export const getWebBluetoothDevices = function (): string[][] {
   const keysArray = [...webBluetoothDevices.keys()];
-  const keysSorted = keysArray.sort();
+  keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) {
+  if (keysArray.length === 0) {
     return [];
   }
 
   // build options array
-  const options = [];
-  for (const deviceName of keysSorted) {
-    const deviceId = webBluetoothDevices.get(deviceName);
+  const options: string[][] = [];
+  for (const deviceName of keysArray) {
+    const deviceId = webBluetoothDevices.get(deviceName) as string;
     options.push([deviceName, deviceId]);
   }
 
@@ -507,22 +526,21 @@ export const getWebBluetoothDevices = function () {
 
 /**
  * Returns an Array containing tuples of device names and their identifier.
- * @returns {Array.<string, string>} Array containing tuples of device names and their identifier.
  * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
  */
-export const getWebHIDDevices = function () {
+export const getWebHIDDevices = function (): string[][] {
   const keysArray = [...webHidNames.keys()];
-  const keysSorted = keysArray.sort();
+  keysArray.sort();
 
   // if no devices connected, return empty array
-  if (keysSorted.legnth === 0) {
+  if (keysArray.length === 0) {
     return [];
   }
 
   // build options array
-  const options = [];
-  for (const deviceName of keysSorted) {
-    const deviceId = webHidNames.get(deviceName);
+  const options: string[][] = [];
+  for (const deviceName of keysArray) {
+    const deviceId = webHidNames.get(deviceName) as string;
     options.push([deviceName, deviceId]);
   }
 
@@ -530,69 +548,20 @@ export const getWebHIDDevices = function () {
 };
 
 /**
- * Adds a WebBluetooth device to the {@link webBluetoothDevices} map.
- * @param {BluetoothDevice.id} webBluetoothId A DOMString that uniquely identifies a device.
- * @param {string} deviceName User defined name for the device.
- * @param thing information about the device to pair.
- * @return {string} The device name.
- */
-export const addWebBluetoothDevice = function (
-  webBluetoothId,
-  deviceName,
-  thing
-) {
-  // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function (name, id) {
-    Blockly.Variables.promptName(
-      'Pair successful! Now give your device a name.',
-      name,
-      text => {
-        if (text) {
-          const existing = webBluetoothDevices.has(text);
-          if (existing) {
-            const msg = 'Name %1 already exists'.replace('%1', text);
-            Blockly.dialog.alert(msg, () => {
-              promptAndCheckWithAlert(text, id); // Recurse
-            });
-          } else {
-            // No conflict
-            webBluetoothDevices.set(text, id);
-            connectedThings.set(text, thing);
-            // add the devices blocks to the toolbox
-            for (const block of thing.blocks) {
-              if (block.XML) {
-                addBlock(block.type, block.category, block.XML);
-              } else {
-                addBlock(block.type, block.category);
-              }
-            }
-            reloadToolbox();
-          }
-        } else {
-          const msg = 'Name cannot be empty';
-          Blockly.dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text, id); // Recuse
-          });
-        }
-      }
-    );
-  };
-  return promptAndCheckWithAlert(deviceName, webBluetoothId);
-};
-
-/**
  * Connects a WebHidDevice.
- * @param thing information about the device to pair.
- * @returns {Promise<HIDDevice>} A promise that resolves to the connected WebHidDevice.
  */
-export const connectWebHidDevice = async function (thing) {
+export const connectWebHidDevice = async function (
+  thing: implementedThing
+): Promise<HIDDevice | void> {
   const workspace = getWorkspace();
   thingsLog('Requesting webHID device...', 'HID');
-  let filters = [];
+  let filters: HIDDeviceFilter[] = [];
   if (thing.filters) {
-    filters = thing.filters;
+    filters = thing.filters as HIDDeviceFilter[];
   }
-  const device = await navigator.hid.requestDeviceAndAddId({
+  // requestDeviceAndAddId is added to navigator.hid in @blast:core
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const device = await (navigator.hid as any).requestDeviceAndAddId({
     filters: filters,
   });
   if (device.length === 0) {
@@ -601,22 +570,24 @@ export const connectWebHidDevice = async function (thing) {
   }
   // add device to the device map
   addWebHidDevice(device[0].id, device[0].productName, device[0], thing);
-  workspace.refreshToolboxSelection();
+  workspace?.refreshToolboxSelection();
   thingsLog('Connected', 'HID', device[0].productName);
   return device[0];
 };
 
 /**
  * Creates user defined identifier to get devices from {@link webHidDevices}.
- * @param {string} uid identifier of the device in {@link webHidDevices}.
- * @param {string} deviceName default name for the device.
- * @param {HIDDevice} device the device to add.
  * @param thing information about the device to pair.
  */
-export const addWebHidDevice = function (uid, deviceName, device, thing) {
+export const addWebHidDevice = function (
+  uid: string,
+  deviceName: string,
+  device: HIDDevice,
+  thing: implementedThing
+): void {
   // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function (name, id) {
-    Blockly.Variables.promptName(
+  const promptAndCheckWithAlert = function (name: string, id: string): void {
+    Variables.promptName(
       'Connection established! Now give your device a name.',
       name,
       text => {
@@ -624,7 +595,7 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
           const existing = webHidNames.has(text);
           if (existing) {
             const msg = 'Name %1 already exists'.replace('%1', text);
-            Blockly.dialog.alert(msg, () => {
+            dialog.alert(msg, () => {
               promptAndCheckWithAlert(text, id); // Recurse
             });
           } else {
@@ -644,22 +615,22 @@ export const addWebHidDevice = function (uid, deviceName, device, thing) {
           }
         } else {
           const msg = 'Name cannot be empty';
-          Blockly.dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text, id); // Recurse
+          dialog.alert(msg, () => {
+            promptAndCheckWithAlert(text ?? '', id); // Recurse
           });
         }
       }
     );
   };
-  promptAndCheckWithAlert(deviceName, uid);
+  return promptAndCheckWithAlert(deviceName, uid);
 };
 
 /**
  * Connects all GamePads matching the filter criteria in thing.
- * @param thing information about the device to connect
- * @returns A promise that resolves to the connected GamePads.
  */
-export const connectGamepad = async function (thing) {
+export const connectGamepad = async function (
+  thing: implementedThing
+): Promise<Gamepad | void> {
   const workspace = getWorkspace();
   let devices = gamepads;
 
@@ -669,7 +640,8 @@ export const connectGamepad = async function (thing) {
         for (const filter of thing.filters) {
           // apply each filter
           Object.keys(filter).forEach(key => {
-            if (device[key] !== filter[key]) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            if ((device as any)[key] !== (filter as any)[key]) {
               return false;
             }
           });
@@ -694,18 +666,27 @@ export const connectGamepad = async function (thing) {
     }
     return false;
   });
+  if (typeof device === 'undefined') {
+    console.error('No unconnected gamepads found.');
+    return;
+  }
   connectedGamepads.push(device.index);
 
   addGamepad(device.index, device.id, device, thing);
   thingsLog('Connected', 'Gamepad', device.id);
-  workspace.refreshToolboxSelection();
+  workspace?.refreshToolboxSelection();
   return device;
 };
 
-export const addGamepad = function (index, deviceName, device, thing) {
+export const addGamepad = function (
+  index: number,
+  deviceName: string,
+  device: Gamepad,
+  thing: implementedThing
+): void {
   // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function (name, id) {
-    Blockly.Variables.promptName(
+  const promptAndCheckWithAlert = function (name: string, id: number): void {
+    Variables.promptName(
       'Connection established! Now give your device a name.',
       name,
       text => {
@@ -713,7 +694,7 @@ export const addGamepad = function (index, deviceName, device, thing) {
           const existing = gamepadNames.has(text);
           if (existing) {
             const msg = 'Name %1 already exists'.replace('%1', text);
-            Blockly.dialog.alert(msg, () => {
+            dialog.alert(msg, () => {
               promptAndCheckWithAlert(text, id); // Recurse
             });
           } else {
@@ -732,8 +713,8 @@ export const addGamepad = function (index, deviceName, device, thing) {
           }
         } else {
           const msg = 'Name cannot be empty';
-          Blockly.dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text, id); // Recuse
+          dialog.alert(msg, () => {
+            promptAndCheckWithAlert(text ?? '', id); // Recuse
           });
         }
       }
@@ -742,11 +723,11 @@ export const addGamepad = function (index, deviceName, device, thing) {
   promptAndCheckWithAlert(deviceName, index);
 };
 
-export const handleAddConsumedThing = async function (uri) {
+export const handleAddConsumedThing = async function (uri: string) {
   // TODO: Check if URI is valid
 
   // Crawl all referenced Thing Description links
-  const foundTDs = await crawl(uri);
+  const foundTDs = await crawl(uri, 3);
 
   for (const td of foundTDs) {
     // generate a unique id for the new device
@@ -768,26 +749,35 @@ export const handleAddConsumedThing = async function (uri) {
 
 /**
  * Adds a device to BLAST.
- * @param {string} deviceName Name of the device.
- * @param {string} deviceId Unique identifier of the device.
  */
-export const addDevice = function (deviceName, deviceId, type, td) {
-  let thing;
+export const addDevice = function (
+  deviceName: string,
+  deviceId: string,
+  type: thingType,
+  td: ThingDescription
+) {
+  let thing: implementedThing | undefined;
   if (type === 'consumedDevice') {
     // generate a unique id for the new device
 
     // Object to store property names and allowed ops
-    const propertiesObj = {};
+    const propertiesObj: {
+      [key: string]: (string | string[] | undefined)[];
+    } = {};
     // Object to store action names and allowed ops
-    const actionsObj = {};
+    const actionsObj: {
+      [key: string]: (string | string[] | undefined)[];
+    } = {};
     // Store all inputs of actions
-    const inputObj = {};
+    const inputObj: {[key: string]: DataSchema} = {};
     // Store all outputs of actions
-    const outputObj = {};
+    const outputObj: {[key: string]: DataSchema} = {};
     // Object to store event names and allowed ops
-    const eventObj = {};
+    const eventObj: {
+      [key: string]: (string | string[] | undefined)[];
+    } = {};
     // Store "data" of events
-    const dataObj = {};
+    const dataObj: {[key: string]: DataSchema} = {};
 
     // List of all created Blocks
     const implementedThingsBlockList = [];
@@ -846,8 +836,8 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     for (const [actionName, action] of Object.entries(td.actions ?? {})) {
       actionsObj[actionName] = action.forms.map(form => form.op);
-      inputObj[actionName] = action.input;
-      outputObj[actionName] = action.output;
+      inputObj[actionName] = action.input as DataSchema;
+      outputObj[actionName] = action.output as DataSchema;
     }
 
     // Generate Action Blocks
@@ -878,15 +868,15 @@ export const addDevice = function (deviceName, deviceId, type, td) {
 
     for (const [eventName, event] of Object.entries(td.events ?? {})) {
       eventObj[eventName] = event.forms.map(form => form.op);
-      dataObj[eventName] = event.data;
+      dataObj[eventName] = event.data as DataSchema;
     }
 
     // Generate Event Blocks
     for (const [eventName, operations] of Object.entries(eventObj)) {
       const op = new Set(operations.flat());
       if (op.has('subscribeevent')) {
-        generateSubscribeEventBlock(eventName, deviceName, dataObj[eventName]);
-        generateSubscribeEventCode(eventName, deviceName, dataObj[eventName]);
+        generateSubscribeEventBlock(eventName, deviceName);
+        generateSubscribeEventCode(eventName, deviceName);
 
         // Add to implementedThingsBlockList
         implementedThingsBlockList.push({
@@ -931,17 +921,20 @@ export const addDevice = function (deviceName, deviceId, type, td) {
       addBlock(block.type, block.category);
     }
   }
-  if (type === 'audioOutput') {
+  if (type === 'audio') {
     audioDevices.set(deviceName, deviceId);
     connectedThings.set(deviceName, thing);
-  } else if (type === 'videoInput') {
+  } else if (type === 'video') {
     videoDevices.set(deviceName, deviceId);
     connectedThings.set(deviceName, thing);
   } else if (type === 'consumedDevice') {
     {
       // This function needs to be named so it can be called recursively.
-      const promptAndCheckWithAlert = function (name, id) {
-        Blockly.Variables.promptName(
+      const promptAndCheckWithAlert = function (
+        name: string,
+        id: string
+      ): void {
+        Variables.promptName(
           'Pair successful! Now give your device a name.',
           name,
           text => {
@@ -949,24 +942,24 @@ export const addDevice = function (deviceName, deviceId, type, td) {
               const existing = webBluetoothDevices.has(text);
               if (existing) {
                 const msg = 'Name %1 already exists'.replace('%1', text);
-                Blockly.dialog.alert(msg, () => {
+                dialog.alert(msg, () => {
                   promptAndCheckWithAlert(text, id); // Recurse
                 });
               } else {
                 // No conflict
                 consumedWebDevices.set(deviceName, deviceId);
-                connectedThings.set(text, thing);
+                connectedThings.set(text, thing as implementedThing);
               }
             } else {
               const msg = 'Name cannot be empty';
-              Blockly.dialog.alert(msg, () => {
-                promptAndCheckWithAlert(text, id); // Recuse
+              dialog.alert(msg, () => {
+                promptAndCheckWithAlert(text ?? '', id); // Recuse
               });
             }
           }
         );
       };
-      promptAndCheckWithAlert(deviceName, td.id);
+      promptAndCheckWithAlert(deviceName, td.id ?? '');
     }
   }
   reloadToolbox();

@@ -1,5 +1,3 @@
-import {implementedThing} from './things';
-
 /**
  * Optional serviceUUIDs to scan for.
  */
