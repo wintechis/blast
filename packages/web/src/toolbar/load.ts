@@ -3,11 +3,8 @@ import {hideChaff, utils, Xml} from 'blockly';
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace';
 
 import {getWorkspace, resetInterpreter} from '../assets/js/interpreter';
-import {
-  implementedThing,
-  implementedThings,
-  resetThings,
-} from '../tabs/Devices/things';
+import {implementedThings, resetThings} from '../tabs/Devices/things';
+import {implementedThing} from '../ThingsStore/types';
 import ReconnectDialog from './ReconnectDialog';
 import React from 'react';
 

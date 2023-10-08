@@ -1,33 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
-
-export type thingType =
-  | 'audio'
-  | 'bluetooth'
-  | 'hid'
-  | 'gamepad'
-  | 'video'
-  | 'consumedDevice';
-
-interface GamepadFilter {
-  index?: number;
-  id?: string;
-  connected?: boolean;
-  mapping?: string;
-  timestamp?: number;
-  axes?: number[];
-  buttons?: {length: number};
-}
-
-export interface implementedThing {
-  id: string;
-  name: string;
-  type: thingType;
-  blocks: {type: string; category: string; XML?: string}[];
-  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[] | GamepadFilter[];
-  optionalServices?: string[];
-  infoUrl?: string;
-  connected?: boolean;
-}
+import {implementedThing} from './types';
 
 const initialState: {id: string; connectedThing: implementedThing}[] = [];
 
@@ -48,6 +20,7 @@ export const connectedThingsSlice = createSlice({
         state.splice(index, 1);
       }
     },
+    clear: () => initialState,
   },
 });
 

@@ -1,5 +1,4 @@
 import {configureStore} from '@reduxjs/toolkit';
-
 import connectedReducer from './connectedThingsReducers';
 
 interface ThingsStoreState {

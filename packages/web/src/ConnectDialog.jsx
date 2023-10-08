@@ -18,7 +18,6 @@ import TextField from '@mui/material/TextField';
 import {
   addDevice,
   handleAddConsumedThing,
-  connectWebHidDevice,
   connectGamepad,
   implementedThings,
   setAudioSelectButtonHandler,
@@ -30,6 +29,7 @@ import {
 } from './tabs/Devices/things.ts';
 import {getStdWarn} from './assets/js/interpreter.ts';
 import {requestDevice} from './tabs/Devices/webBluetoothDevices.ts';
+import {connectWebHidDevice} from './tabs/Devices/hidDevices.ts';
 
 export default class ConnectDialog extends React.Component {
   constructor(props) {

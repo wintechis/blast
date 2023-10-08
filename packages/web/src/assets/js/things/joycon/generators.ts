@@ -10,7 +10,7 @@ import {addCleanUpFunction} from '../../interpreter';
 import SwitchPro from './switchPro/SwitchPro.js';
 import {JoyConLeft, JoyConRight, GeneralController} from './switchPro/JoyCon';
 import {JoyConPacket} from './switchPro/types';
-import {getWebHidDevice} from '../../../../tabs/Devices/things';
+import {getDeviceById} from '../../../../tabs/Devices/hidDevices';
 
 JavaScript.forBlock['things_joycon'] = function (
   block: Block
@@ -85,17 +85,17 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   exposedThing: WoT.ExposedThing
 ) {
   const id = (exposedThing as any).id;
-  const device = getWebHidDevice(id);
+  const device = getDeviceById(id);
   if (!device) {
     throw new Error(`No device with id ${id} found.`);
   }
   let joyCon: JoyConLeft | JoyConRight | GeneralController | null = null;
   if (device.productId === 0x2006) {
-    joyCon = new JoyConLeft(device);
+    joyCon = new JoyConLeft(device as HIDDevice);
   } else if (device.productId === 0x2007) {
-    joyCon = new JoyConRight(device);
+    joyCon = new JoyConRight(device as HIDDevice);
   } else {
-    joyCon = new GeneralController(device);
+    joyCon = new GeneralController(device as HIDDevice);
   }
   if (joyCon === null) {
     throw new Error(`No JoyCon with id ${id} found.`);

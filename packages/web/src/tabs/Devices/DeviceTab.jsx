@@ -21,6 +21,7 @@ import {
   connectedBluetoothDevices,
   pingDevice,
 } from './webBluetoothDevices.ts';
+import {connectedHidDevices} from './hidDevices.ts';
 
 let logId = 0;
 
@@ -202,8 +203,8 @@ class DeviceTab extends React.Component {
                 <TableRow>
                   <TableCell>Thing</TableCell>
                   <TableCell>Adapter</TableCell>
-                  <TableCell>internal id</TableCell>
-                  <TableCell>connected</TableCell>
+                  <TableCell>Internal ID</TableCell>
+                  <TableCell>Connected</TableCell>
                   <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -249,6 +250,16 @@ class DeviceTab extends React.Component {
                               reconnect
                             </LoadingButton>
                           </TableCell>
+                        </TableRow>
+                      );
+                    } else if (thing.type === 'hid') {
+                      const device = connectedHidDevices.get(key);
+                      return (
+                        <TableRow key={key}>
+                          <TableCell>{key}</TableCell>
+                          <TableCell>{thing.type}</TableCell>
+                          <TableCell>{device.id}</TableCell>
+                          <TableCell>{device.opened ? 'yes' : 'no'}</TableCell>
                         </TableRow>
                       );
                     }

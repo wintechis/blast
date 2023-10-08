@@ -1,11 +1,10 @@
 import {dialog, Variables} from 'blockly';
+
 import {addBlock, reloadToolbox} from '../../assets/js/toolbox';
-import {connectedThings, getThingsLog, webBluetoothDevices} from './things';
-import {
-  connectedThingsSlice,
-  implementedThing,
-} from '../../ThingsStore/connectedThingsReducers';
+import {connectedThings, getThingsLog} from './things';
+import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
 import {thingsStore} from '../../ThingsStore/ThingsStore';
+import {implementedThing} from '../../ThingsStore/types';
 
 const BROWSER_SUPPORT = 'bluetooth' in navigator;
 export const connectedBluetoothDevices = new Map<string, BluetoothDevice>();
@@ -18,26 +17,29 @@ export const getDeviceById = async function (
     if (connectedBluetoothDevices.has(id)) {
       return connectedBluetoothDevices.get(id);
     }
-    thingsLog('Getting existing devices...', 'Bluetooth');
+    thingsLog(`Getting Bluetooth device <code>${id}</code>`, 'Bluetooth');
     const devices = await navigator.bluetooth.getDevices();
     for (const device of devices) {
       if (device.id === id) {
         return device;
       }
     }
-    console.error(
-      `Bluetooth device <code>${id}</code> wasn't found in paired devices.`
-    );
+    console.error(`Bluetooth device ${id} wasn't found in paired devices.`);
   } else {
     console.error('Web Bluetooth is not supported.');
   }
 };
 
-export const pingDevice = async function (id: string) {
+/**
+ * Pings a device to check if it is connected.
+ * @param id the id of the device to ping
+ * @returns true if the device is connected, false otherwise
+ */
+export const pingDevice = async function (id: string): Promise<boolean> {
   const device = await getDeviceById(id);
   if (device) {
     const thingsLog = getThingsLog();
-    const connected = device.gatt?.connected;
+    const connected = device.gatt?.connected === true;
     if (connected) {
       thingsLog(`Device <code>${id}</code> is connected`, 'Bluetooth', id);
     } else {
@@ -107,25 +109,24 @@ export const addWebBluetoothDevice = async function (
     Variables.promptName(
       'Pair successful! Now give your device a name.',
       name,
-      text => {
-        if (text) {
+      newName => {
+        if (newName) {
           const existing = thingsStore
             .getState()
-            .connectedThings.some(thing => thing.id === text);
+            .connectedThings.some(thing => thing.id === newName);
           if (existing) {
-            const msg = `Name ${text} already exists.`;
-            dialog.alert(msg, () => promptAndCheckWithAlert(text, id));
+            const msg = `Name ${newName} already exists.`;
+            dialog.alert(msg, () => promptAndCheckWithAlert(newName, id));
           } else {
             // No conflict
             thingsStore.dispatch(
               connectedThingsSlice.actions.add({
-                name: text,
+                name: newName,
                 thing,
               })
             );
-            connectedBluetoothDevices.set(text, device);
-            connectedThings.set(text, thing);
-            webBluetoothDevices.set(text, device.id);
+            connectedBluetoothDevices.set(newName, device);
+            connectedThings.set(newName, thing);
             // Add blocks to toolbox
             for (const block of thing.blocks) {
               addBlock(block.type, block.category, block.XML);

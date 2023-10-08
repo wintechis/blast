@@ -28,35 +28,11 @@ import {
   crawl,
 } from '../../assets/js/automatedBlockGeneration';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
-
-export type thingType =
-  | 'audio'
-  | 'bluetooth'
-  | 'hid'
-  | 'gamepad'
-  | 'video'
-  | 'consumedDevice';
-
-interface GamepadFilter {
-  index?: number;
-  id?: string;
-  connected?: boolean;
-  mapping?: string;
-  timestamp?: number;
-  axes?: number[];
-  buttons?: {length: number};
-}
-
-export interface implementedThing {
-  id: string;
-  name: string;
-  type: thingType;
-  blocks: {type: string; category: string; XML?: string}[];
-  filters?: BluetoothLEScanFilter[] | HIDDeviceFilter[] | GamepadFilter[];
-  optionalServices?: string[];
-  infoUrl?: string;
-  connected?: boolean;
-}
+import {implementedThing, thingType} from '../../ThingsStore/types';
+import {thingsStore} from '../../ThingsStore/ThingsStore';
+import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
+import {connectedBluetoothDevices} from './webBluetoothDevices';
+import {connectedHidDevices} from './hidDevices';
 
 /**
  * Maps device names to BluetoothDevice.id.
@@ -67,11 +43,6 @@ export const webBluetoothDevices = new Map<string, string>();
  * Maps user defined names to webHID identifiers.
  */
 const webHidNames = new Map<string, string>();
-
-/**
- * Maps webHID identifiers to webHID devices.
- */
-const webHidDevices = new Map<string, HIDDevice>();
 
 /**
  * Array of all connected Gamepads.
@@ -298,19 +269,8 @@ export const setThingsLog = function (logFunc: Function): void {
 export const resetThings = function (): void {
   webBluetoothDevices.clear();
   webHidNames.clear();
-  webHidDevices.clear();
   connectedThings.clear();
-};
-
-/**
- * Gets the webHID device with the given uid.
- */
-export const getWebHidDevice = function (deviceId: string): HIDDevice {
-  const device = webHidDevices.get(deviceId);
-  if (typeof device === 'undefined') {
-    throw new Error('No device with id ' + deviceId + ' found.');
-  }
-  return device;
+  thingsStore.dispatch(connectedThingsSlice.actions.clear());
 };
 
 /**
@@ -481,9 +441,9 @@ const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
       const idField = utils.xml.createElement('field');
       idField.setAttribute('name', 'id');
       if (thing.type === 'bluetooth') {
-        idField.textContent = webBluetoothDevices.get(key) as string;
+        idField.textContent = connectedBluetoothDevices.get(key)?.id || '';
       } else if (thing.type === 'hid') {
-        idField.textContent = webHidNames.get(key) as string;
+        idField.textContent = connectedHidDevices.get(key)?.id || '';
       } else if (thing.type === 'gamepad') {
         idField.textContent = (gamepadNames.get(key) as number).toString();
       } else if (thing.type === 'audio') {
@@ -499,130 +459,6 @@ const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
     }
   }
   return xmlList;
-};
-
-/**
- * Returns an Array containing tuples of device names and their identifier.
- * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
- */
-export const getWebBluetoothDevices = function (): string[][] {
-  const keysArray = [...webBluetoothDevices.keys()];
-  keysArray.sort();
-
-  // if no devices connected, return empty array
-  if (keysArray.length === 0) {
-    return [];
-  }
-
-  // build options array
-  const options: string[][] = [];
-  for (const deviceName of keysArray) {
-    const deviceId = webBluetoothDevices.get(deviceName) as string;
-    options.push([deviceName, deviceId]);
-  }
-
-  return options;
-};
-
-/**
- * Returns an Array containing tuples of device names and their identifier.
- * @example [['beacon', 'm+JZZGVo+aDUb0a4NOpQWw==']]
- */
-export const getWebHIDDevices = function (): string[][] {
-  const keysArray = [...webHidNames.keys()];
-  keysArray.sort();
-
-  // if no devices connected, return empty array
-  if (keysArray.length === 0) {
-    return [];
-  }
-
-  // build options array
-  const options: string[][] = [];
-  for (const deviceName of keysArray) {
-    const deviceId = webHidNames.get(deviceName) as string;
-    options.push([deviceName, deviceId]);
-  }
-
-  return options;
-};
-
-/**
- * Connects a WebHidDevice.
- */
-export const connectWebHidDevice = async function (
-  thing: implementedThing
-): Promise<HIDDevice | void> {
-  const workspace = getWorkspace();
-  thingsLog('Requesting webHID device...', 'HID');
-  let filters: HIDDeviceFilter[] = [];
-  if (thing.filters) {
-    filters = thing.filters as HIDDeviceFilter[];
-  }
-  // requestDeviceAndAddId is added to navigator.hid in @blast:core
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const device = await (navigator.hid as any).requestDeviceAndAddId({
-    filters: filters,
-  });
-  if (device.length === 0) {
-    console.error('Connection failed or cancelled by User.');
-    return;
-  }
-  // add device to the device map
-  addWebHidDevice(device[0].id, device[0].productName, device[0], thing);
-  workspace?.refreshToolboxSelection();
-  thingsLog('Connected', 'HID', device[0].productName);
-  return device[0];
-};
-
-/**
- * Creates user defined identifier to get devices from {@link webHidDevices}.
- * @param thing information about the device to pair.
- */
-export const addWebHidDevice = function (
-  uid: string,
-  deviceName: string,
-  device: HIDDevice,
-  thing: implementedThing
-): void {
-  // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function (name: string, id: string): void {
-    Variables.promptName(
-      'Connection established! Now give your device a name.',
-      name,
-      text => {
-        if (text) {
-          const existing = webHidNames.has(text);
-          if (existing) {
-            const msg = 'Name %1 already exists'.replace('%1', text);
-            dialog.alert(msg, () => {
-              promptAndCheckWithAlert(text, id); // Recurse
-            });
-          } else {
-            // No conflict
-            webHidDevices.set(id, device);
-            webHidNames.set(text, id);
-            connectedThings.set(text, thing);
-            // add the devices blocks to the toolbox
-            for (const block of thing.blocks) {
-              if (block.XML) {
-                addBlock(block.type, block.category, block.XML);
-              } else {
-                addBlock(block.type, block.category);
-              }
-            }
-            reloadToolbox();
-          }
-        } else {
-          const msg = 'Name cannot be empty';
-          dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text ?? '', id); // Recurse
-          });
-        }
-      }
-    );
-  };
-  return promptAndCheckWithAlert(deviceName, uid);
 };
 
 /**
@@ -673,7 +509,7 @@ export const connectGamepad = async function (
   connectedGamepads.push(device.index);
 
   addGamepad(device.index, device.id, device, thing);
-  thingsLog('Connected', 'Gamepad', device.id);
+  thingsLog(`Gamepad <code>${device.id}</code>Connected`, 'Gamepad', device.id);
   workspace?.refreshToolboxSelection();
   return device;
 };
