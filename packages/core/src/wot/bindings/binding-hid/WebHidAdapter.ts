@@ -4,7 +4,7 @@ import {v4} from 'uuid';
 
 const {debug} = createLoggers('binding-hid', 'WebHidAdapter');
 
-interface hidAdapter extends HID {
+interface HIDAdapter extends HID {
   requestDeviceAndAddId: (
     options: HIDDeviceRequestOptions
   ) => Promise<HIDAdapterDevice[]>;
@@ -27,7 +27,7 @@ export default class ConcreteHidAdapter implements HidAdapter {
   }
 }
 
-(navigator.hid as hidAdapter).requestDeviceAndAddId = async function (
+(navigator.hid as HIDAdapter).requestDeviceAndAddId = async function (
   options: HIDDeviceRequestOptions
 ) {
   const devices = await navigator.hid.requestDevice(options);

@@ -4,7 +4,11 @@ import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
 import {connectedThings, getThingsLog} from './things';
 import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
 import {thingsStore} from '../../ThingsStore/ThingsStore';
-import {HIDAdapterDevice, implementedThing} from '../../ThingsStore/types';
+import {
+  HIDAdapter,
+  HIDAdapterDevice,
+  implementedThing,
+} from '../../ThingsStore/types';
 
 export const connectedHidDevices = new Map<string, HIDAdapterDevice>();
 
@@ -40,7 +44,7 @@ export const connectWebHidDevice = async function (
   // requestDeviceAndAddId is added to navigator.hid in @blast:core
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const device: HIDAdapterDevice[] = await (
-    navigator.hid as any
+    navigator.hid as HIDAdapter
   ).requestDeviceAndAddId({
     filters: filters,
   });

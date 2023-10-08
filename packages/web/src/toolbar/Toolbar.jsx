@@ -128,7 +128,7 @@ export default class BlastBar extends React.Component {
                 options={samples}
                 sx={{width: 300}}
                 renderInput={params => {
-                  const {InputLabelProps, InputProps, ...other} = params;
+                  const {...other} = params;
                   return (
                     <StyledInputBase
                       {...params.InputProps}

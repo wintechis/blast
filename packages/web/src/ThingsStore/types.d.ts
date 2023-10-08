@@ -27,6 +27,12 @@ export interface implementedThing {
   connected?: boolean;
 }
 
+interface HIDAdapter extends HID {
+  requestDeviceAndAddId: (
+    options: HIDDeviceRequestOptions
+  ) => Promise<HIDAdapterDevice[]>;
+}
+
 export interface HIDAdapterDevice extends HIDDevice {
   id: string;
 }
