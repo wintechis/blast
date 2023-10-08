@@ -5,7 +5,7 @@
 
 import Blockly from 'blockly';
 const {Blocks, Msg, Names, utils} = Blockly;
-import {getCategory} from './toolbox.js';
+import {getCategory} from '../../BlocklyWorkspace/toolbox.ts';
 
 /**
  * Find all user-created state definitions in a workspace.

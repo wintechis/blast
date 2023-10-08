@@ -6,7 +6,7 @@
 
 import {ALIGN_RIGHT, Blocks, dialog, Events, FieldDropdown} from 'blockly';
 import {getWorkspace} from '../../interpreter';
-import {addBlock} from '../../toolbox.js';
+import {addBlock} from '../../../../BlocklyWorkspace/toolbox';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 

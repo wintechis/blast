@@ -5,7 +5,7 @@
 
 import Blockly from 'blockly';
 const {Blocks, FieldDropdown, FieldMultilineInput} = Blockly;
-import {addBlock} from '../../toolbox.js';
+import {addBlock} from '../../../../BlocklyWorkspace/toolbox.ts';
 
 Blocks['sparql_query'] = {
   /**

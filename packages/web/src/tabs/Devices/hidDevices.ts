@@ -1,6 +1,6 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../../assets/js/toolbox';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
 import {connectedThings, getThingsLog} from './things';
 import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
 import {thingsStore} from '../../ThingsStore/ThingsStore';

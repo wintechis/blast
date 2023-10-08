@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {addBlock} from '../toolbox.js';
+import {addBlock} from '../../../BlocklyWorkspace/toolbox.ts';
 import {eventsInWorkspace, getWorkspace} from '../interpreter.ts';
 import {Blocks, Events, FieldDropdown} from 'blockly';
 

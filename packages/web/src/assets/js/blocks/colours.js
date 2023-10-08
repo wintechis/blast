@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {addBlock} from '../toolbox.js';
+import {addBlock} from '../../../BlocklyWorkspace/toolbox.ts';
 
 // Define inner block XML for the colour_rgb block.
 const COLOUR_RGB_XML = `

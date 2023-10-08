@@ -1,5 +1,5 @@
 import Blockly from 'blockly';
-import {addBlock} from '../../toolbox.js';
+import {addBlock} from '../../../../BlocklyWorkspace/toolbox.ts';
 
 const {Blocks} = Blockly;
 

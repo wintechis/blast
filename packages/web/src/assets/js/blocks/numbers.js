@@ -5,7 +5,7 @@
 
 import Blockly from 'blockly';
 const {Blocks} = Blockly;
-import {addBlock} from '../toolbox.js';
+import {addBlock} from '../../../BlocklyWorkspace/toolbox.ts';
 
 // Remap blockly blocks to improve naming in xml.
 Blocks['number_value'] = Blocks['math_number'];

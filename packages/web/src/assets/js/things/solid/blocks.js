@@ -5,7 +5,7 @@
 
 import Blockly from 'blockly';
 const {Blocks} = Blockly;
-import {addBlock} from '../../toolbox.js';
+import {addBlock} from '../../../../BlocklyWorkspace/toolbox.ts';
 
 Blocks['solid_upload_image'] = {
   /**

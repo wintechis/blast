@@ -10,7 +10,7 @@ import {
   reloadToolbox,
   removeBlock,
   removeCategory,
-} from '../../assets/js/toolbox';
+} from '../../BlocklyWorkspace/toolbox';
 import {getWorkspace} from '../../assets/js/interpreter';
 import {
   generateThingBlock,

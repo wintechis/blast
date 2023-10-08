@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import useBlocklyWorkspace from './useBlocklyWorkspace.ts';
 
-import {currentToolbox} from '../assets/js/toolbox.js';
+import {currentToolbox} from './toolbox.ts';
 
 const propTypes = {
   initialXml: PropTypes.string,

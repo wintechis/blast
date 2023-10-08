@@ -3,9 +3,15 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {getWorkspace} from './interpreter.ts';
+import {getWorkspace} from '../assets/js/interpreter';
+import {
+  BlockInfo,
+  StaticCategoryInfo,
+  ToolboxInfo,
+  ToolboxItemInfo,
+} from 'blockly/core/utils/toolbox';
 
-const defaultToolbox = {
+const defaultToolbox: ToolboxInfo = {
   kind: 'categoryToolbox',
   contents: [
     {
@@ -297,33 +303,40 @@ const defaultToolbox = {
 
 /**
  * The currently used toolbox.
- * @type {Blockly.toolbox}
  * @public
  */
 export const currentToolbox = defaultToolbox;
 
 /**
  * Get category by name.
- * @param {string} name The name of the category.
- * @returns {Object} the category
+ * @param name The name of the category.
+ * @returns the category
  * */
-export const getCategory = function (name) {
-  return currentToolbox.contents.find(category => {
-    if (category.name) {
-      return category.name.toLowerCase() === name.toLowerCase();
+export const getCategory = function (name: string): ToolboxInfo | undefined {
+  const category = currentToolbox.contents.find(
+    (item): item is ToolboxItemInfo => {
+      if ((item as StaticCategoryInfo).name) {
+        return (
+          (item as StaticCategoryInfo).name.toLowerCase() === name.toLowerCase()
+        );
+      }
+      return false;
     }
-    return false;
-  });
+  );
+  return category as ToolboxInfo | undefined;
 };
 
 /**
  * Adds a categroy at index to the toolbox.
- * @param {string} categoryName The category to add.
- * @param {number} colour The colour of the category.
- * @param {number} index The index of the category.
- * @returns {null} nothing
+ * @param categoryName The category to add.
+ * @param colour The colour of the category.
+ * @param index The index of the category.
  */
-export const addCategoryAt = function (categoryName, colour, index) {
+export const addCategoryAt = function (
+  categoryName: string,
+  colour: number,
+  index: number
+) {
   if (getCategory(categoryName)) {
     return;
   }
@@ -338,13 +351,13 @@ export const addCategoryAt = function (categoryName, colour, index) {
 
 /**
  * Removes a category from the toolbox.
- * @param {string} name The name of the category.
+ * @param name The name of the category.
  */
-export const removeCategory = function (name) {
+export const removeCategory = function (name: string) {
   const category = getCategory(name);
   if (category) {
     currentToolbox.contents.splice(
-      currentToolbox.contents.indexOf(category),
+      currentToolbox.contents.indexOf(category as StaticCategoryInfo),
       1
     );
   }
@@ -352,11 +365,15 @@ export const removeCategory = function (name) {
 
 /**
  * Adds a block to the toolbox.
- * @param {string} type The type of block to add.
- * @param {string} blockCategory The category of the block.
- * @param {string=} blockxml optional, the xml of the block.
+ * @param type The type of block to add.
+ * @param blockCategory The category of the block.
+ * @param blockxml optional, the xml of the block.
  */
-export const addBlock = function (type, blockCategory, blockxml) {
+export const addBlock = function (
+  type: string,
+  blockCategory: string,
+  blockxml?: string
+) {
   const block = {
     kind: 'BLOCK',
     type: type,
@@ -371,15 +388,15 @@ export const addBlock = function (type, blockCategory, blockxml) {
 
 /**
  * Removes a block from the toolbox.
- * @param {string} type The type of block to remove.
- * @param {string} blockCategory The category of the block.
+ * @param type The type of block to remove.
+ * @param blockCategory The category of the block.
  */
-export const removeBlock = function (type, blockCategory) {
+export const removeBlock = function (type: string, blockCategory: string) {
   // Find the category and remove the block from it.
   const category = getCategory(blockCategory);
   if (category) {
     category.contents = category.contents.filter(block => {
-      return block.type !== type;
+      return (block as BlockInfo).type !== type;
     });
   }
 };
@@ -388,7 +405,7 @@ export const removeBlock = function (type, blockCategory) {
  * Reloads the toolbox
  */
 export const reloadToolbox = function () {
-  getWorkspace().updateToolbox(currentToolbox);
+  getWorkspace()?.updateToolbox(currentToolbox);
   // close flyout
-  getWorkspace().getFlyout().hide();
+  getWorkspace()?.getFlyout()?.hide();
 };
