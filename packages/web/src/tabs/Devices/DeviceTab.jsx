@@ -190,7 +190,7 @@ class DeviceTab extends React.Component {
         }}
       >
         <Box sx={{height: '50%', padding: '25px', overflow: 'auto'}}>
-          <Typography variant="h6">Connected Bluetooth Devices</Typography>
+          <Typography variant="h6">Connected Devices</Typography>
           <TableContainer component={Paper}>
             <Table
               sx={{
