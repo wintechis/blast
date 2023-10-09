@@ -14,11 +14,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
-import {addDevice, getDevMode} from '../ThingsStore/things.ts';
+import {getDevMode} from '../ThingsStore/things.ts';
 import {getWorkspace} from '../assets/js/interpreter.ts';
 import {requestDevice} from '../ThingsStore/webBluetoothDevices.ts';
 import {connectWebHidDevice} from '../ThingsStore/hidDevices.ts';
 import {connectGamepad} from '../ThingsStore/gamepadDevices.ts';
+import {addMediaDevice} from '../ThingsStore/MediaDevices.ts';
 
 export default class ReonnectDialog extends React.Component {
   constructor(props) {
@@ -32,11 +33,13 @@ export default class ReonnectDialog extends React.Component {
       selectedThing: null,
       selectedThingName: null,
       things: {},
-      videoAudioDevices: null,
+      mediaDevices: null,
       xml: {},
     };
     this.handleClose = this.handleClose.bind(this);
     this.handleAVDialogClose = this.handleAVDialogClose.bind(this);
+    this.getDevices = this.getDevices.bind(this);
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   static propTypes = {
@@ -49,7 +52,7 @@ export default class ReonnectDialog extends React.Component {
     selectedThingName: PropTypes.string,
     setSpheroConnected: PropTypes.func,
     things: PropTypes.object,
-    videoAudioDevices: PropTypes.object,
+    mediaDevices: PropTypes.object,
     xml: PropTypes.object,
   };
 
@@ -57,7 +60,7 @@ export default class ReonnectDialog extends React.Component {
     try {
       await navigator.mediaDevices.getUserMedia({audio: true, video: true});
       const devices = await navigator.mediaDevices.enumerateDevices();
-      this.setState({videoAudioDevices: devices});
+      this.setState({mediaDevices: devices});
     } catch (e) {
       // ignore DOMException: Requested device not found
       // This happens when the user has no camera or microphone
@@ -65,6 +68,10 @@ export default class ReonnectDialog extends React.Component {
         console.error(e);
       }
     }
+  }
+
+  componentDidMount() {
+    this.getDevices();
   }
 
   handleClose() {
@@ -135,16 +142,12 @@ export default class ReonnectDialog extends React.Component {
                       } else if (thing.type === 'gamepad') {
                         device = await connectGamepad(thing);
                       } else if (
-                        thing.type === 'audio' ||
-                        thing.type === 'video'
+                        thing.type === 'audiooutput' ||
+                        thing.type === 'videoinput'
                       ) {
-                        await this.getDevices();
                         this.setState({
                           aVDialogopen: true,
-                          selectedAdapter:
-                            thing.type === 'audio'
-                              ? 'audioinput'
-                              : 'videoinput',
+                          selectedAdapter: thing.type,
                           selectedThing: thing,
                           selectedThingName: thingName,
                         });
@@ -195,7 +198,7 @@ export default class ReonnectDialog extends React.Component {
             <Button onClick={this.handleClose}>Continue</Button>
           </DialogActions>
         </Dialog>
-        {this.state.videoAudioDevices && (
+        {this.state.mediaDevices && (
           <Dialog
             open={this.state.aVDialogopen}
             onClose={this.handleAVDialogClose}
@@ -204,19 +207,14 @@ export default class ReonnectDialog extends React.Component {
               Please select a device from the list below
             </DialogTitle>
             <List dense>
-              {this.state.videoAudioDevices.map(device => {
+              {this.state.mediaDevices.map(device => {
                 if (device.kind === this.state.selectedAdapter) {
+                  const thing = this.state.selectedThing;
                   return (
                     <ListItem key={device.label}>
                       <ListItemButton
                         onClick={() => {
-                          addDevice(
-                            device.label,
-                            device.deviceId,
-                            this.state.selectedAdapter === 'videoinput'
-                              ? 'videoInput'
-                              : 'audioOutput'
-                          );
+                          addMediaDevice(device, thing);
                           this.handleAVDialogClose(device);
                         }}
                       >

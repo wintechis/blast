@@ -16,12 +16,9 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 
 import {
-  addDevice,
   handleAddConsumedThing,
   implementedThings,
-  setAudioSelectButtonHandler,
   setGamepadButtonHandler,
-  setVideoSelectButtonHandler,
   setWebBluetoothButtonHandler,
   setConsumeThingButtonHandler,
   setWebHidButtonHandler,
@@ -53,12 +50,6 @@ export default class ConnectDialog extends React.Component {
   };
 
   componentDidMount() {
-    setAudioSelectButtonHandler(() => {
-      this.setState({open: true, selectedAdapter: 'audiooutput'});
-    });
-    setVideoSelectButtonHandler(() => {
-      this.setState({open: true, selectedAdapter: 'videoinput'});
-    });
     setWebBluetoothButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'bluetooth'});
     });
@@ -71,21 +62,6 @@ export default class ConnectDialog extends React.Component {
     setConsumeThingButtonHandler(() => {
       this.setState({open: true, selectedAdapter: 'consumeThing'});
     });
-    this.getDevices();
-  }
-
-  async getDevices() {
-    try {
-      await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      this.setState({videoAudioDevices: devices});
-    } catch (e) {
-      // ignore DOMException: Requested device not found
-      // This happens when the user has no camera or microphone
-      if (e.name !== 'NotFoundError') {
-        console.error(e);
-      }
-    }
   }
 
   handleClose() {
@@ -136,9 +112,11 @@ export default class ConnectDialog extends React.Component {
         <Dialog open={this.state.open} onClose={this.handleClose}>
           <DialogTitle>Please select a device from the list below</DialogTitle>
           <List dense>
-            {((this.state.selectedAdapter === 'bluetooth' ||
+            {(this.state.selectedAdapter === 'bluetooth' ||
               this.state.selectedAdapter === 'hid' ||
-              this.state.selectedAdapter === 'gamepad') &&
+              this.state.selectedAdapter === 'gamepad' ||
+              this.state.selectedAdapter === 'audio' ||
+              this.state.selectedAdapter === 'video') &&
               implementedThings.map(thing => {
                 if (thing.type === this.state.selectedAdapter) {
                   return (
@@ -189,46 +167,7 @@ export default class ConnectDialog extends React.Component {
                     </ListItem>
                   );
                 }
-              })) ||
-              ((this.state.selectedAdapter === 'videoinput' ||
-                this.state.selectedAdapter === 'audiooutput') &&
-                this.state.videoAudioDevices?.length > 0 &&
-                this.state.videoAudioDevices.map(device => {
-                  if (device.kind === this.state.selectedAdapter) {
-                    return (
-                      <ListItem key={device.label}>
-                        <ListItemButton
-                          onClick={() => {
-                            addDevice(
-                              device.label,
-                              device.deviceId,
-                              this.state.selectedAdapter === 'videoinput'
-                                ? 'videoInput'
-                                : 'audioOutput'
-                            );
-                            this.handleClose();
-                          }}
-                        >
-                          {device.label}
-                          <Box sx={{flexGrow: 1}} />
-                          <IconButton edge="end" aria-label="connect">
-                            <AddIcon />
-                          </IconButton>
-                        </ListItemButton>
-                      </ListItem>
-                    );
-                  }
-                })) ||
-              ((this.state.selectedAdapter === 'videoinput' ||
-                this.state.selectedAdapter === 'audiooutput') &&
-                (!this.state.videoAudioDevices ||
-                  this.state.videoAudioDevices?.length === 0) && (
-                  <ListItem>
-                    <ListItemButton>
-                      No {this.state.selectedAdapter} devices found
-                    </ListItemButton>
-                  </ListItem>
-                ))}
+              })}
           </List>
         </Dialog>
       );

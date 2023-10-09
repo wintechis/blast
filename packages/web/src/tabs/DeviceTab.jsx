@@ -23,6 +23,7 @@ import {
 } from '../ThingsStore/webBluetoothDevices.ts';
 import {connectedHidDevices} from '../ThingsStore/hidDevices.ts';
 import {connectedGamepads} from '../ThingsStore/gamepadDevices.ts';
+import {connectedMediaDevices} from '../ThingsStore/MediaDevices.ts';
 
 let logId = 0;
 
@@ -51,7 +52,7 @@ const logIdentifierClass = {
 };
 
 const logAdapterClass = {
-  width: '72px',
+  width: 'auto',
   ...logIdentifierClass,
 };
 
@@ -73,6 +74,7 @@ class DeviceTab extends React.Component {
       connectedThings: new Map(),
       connectingBluetooth: false,
     };
+    this.listRef = React.createRef();
   }
 
   componentDidMount() {
@@ -96,11 +98,23 @@ class DeviceTab extends React.Component {
       });
       this.setState({connectedThings: connectedThings});
     });
+    this.scrollToBottom();
+  }
+
+  componentDidUpdate() {
+    this.scrollToBottom();
   }
 
   componentWillUnmount() {
     // Unsubscribe from the thingsStore
     this.unsubscribe();
+  }
+
+  scrollToBottom() {
+    const list = this.listRef.current;
+    if (list) {
+      list.scrollTop = list.scrollHeight;
+    }
   }
 
   getAdapterColor(adapter) {
@@ -111,6 +125,10 @@ class DeviceTab extends React.Component {
         return 'blueviolet';
       case 'gamepad':
         return 'green';
+      case 'audiooutput':
+        return 'orange';
+      case 'videoinput':
+        return 'red';
       default:
         return 'black';
     }
@@ -268,13 +286,25 @@ class DeviceTab extends React.Component {
                     } else if (thing.type === 'gamepad') {
                       const device = connectedGamepads.get(key);
                       return (
-                        <TableRow key={'gamepad-' + key}>
+                        <TableRow key={key}>
                           <TableCell>{key}</TableCell>
                           <TableCell>{thing.type}</TableCell>
                           <TableCell>{device.index}</TableCell>
                           <TableCell>
                             {device.connected ? 'yes' : 'no'}
                           </TableCell>
+                        </TableRow>
+                      );
+                    } else if (
+                      thing.type === 'audiooutput' ||
+                      thing.type === 'videoinput'
+                    ) {
+                      const device = connectedMediaDevices.get(key);
+                      return (
+                        <TableRow key={key}>
+                          <TableCell>{key}</TableCell>
+                          <TableCell>{thing.type}</TableCell>
+                          <TableCell>{device.deviceId}</TableCell>
                         </TableRow>
                       );
                     }
@@ -289,9 +319,11 @@ class DeviceTab extends React.Component {
             </Table>
           </TableContainer>
         </Box>
-        <Box sx={{height: '50%', padding: '25px', overflow: 'auto'}}>
+        <Box sx={{height: '50%', padding: '25px', overflow: 'none'}}>
           <List
+            ref={this.listRef}
             sx={{
+              height: '100%',
               width: '100%',
               bgcolor: 'background.paper',
               overflow: 'auto',

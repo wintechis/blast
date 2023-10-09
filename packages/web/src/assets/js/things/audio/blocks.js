@@ -55,7 +55,7 @@ Blocks['audioOutput_playFileFromUrl'] = {
 implementedThings.push({
   id: 'audioOutput',
   name: 'Audio Output Device',
-  type: 'audio',
+  type: 'audiooutput',
   blocks: [
     {
       type: 'audioOutput_playFileFromUrl',

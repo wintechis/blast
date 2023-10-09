@@ -1,9 +1,9 @@
 export type thingType =
-  | 'audio'
+  | 'audiooutput'
   | 'bluetooth'
   | 'hid'
   | 'gamepad'
-  | 'video'
+  | 'videoinput'
   | 'consumedDevice';
 
 interface GamepadFilter {

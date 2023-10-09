@@ -29,6 +29,7 @@ import DeviceTab from './tabs/DeviceTab.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import JavascriptTab from './tabs/JavascriptTab.jsx';
 import PseudoCodeTab from './tabs/PseudoCodeTab.jsx';
+import ShowMediaDevicesDialog from './ShowMediaDevicesDialog.jsx';
 
 import './assets/js/things/index.js';
 
@@ -122,6 +123,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <Provider store={thingsStore}>
           <ConnectDialog blastBarRef={blastBarRef} />
+          <ShowMediaDevicesDialog />
           <BlastBar ref={blastBarRef} />
           <Container maxWidth={false} sx={{height: '100vh', pt: '64px'}}>
             <Paper sx={{height: '100%'}}>

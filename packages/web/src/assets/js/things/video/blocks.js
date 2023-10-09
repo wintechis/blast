@@ -46,7 +46,7 @@ Blocks['videoInput_getFrame'] = {
 implementedThings.push({
   id: 'videoInput',
   name: 'Video Input Device',
-  type: 'video',
+  type: 'videoinput',
   blocks: [
     {
       type: 'videoInput_getFrame',
