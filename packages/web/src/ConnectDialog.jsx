@@ -16,7 +16,6 @@ import AddIcon from '@mui/icons-material/Add';
 import TextField from '@mui/material/TextField';
 
 import {
-  handleAddConsumedThing,
   implementedThings,
   setGamepadButtonHandler,
   setWebBluetoothButtonHandler,
@@ -24,9 +23,8 @@ import {
   setWebHidButtonHandler,
 } from './ThingsStore/things.ts';
 import {getStdWarn} from './assets/js/interpreter.ts';
-import {requestDevice} from './ThingsStore/webBluetoothDevices.ts';
-import {connectWebHidDevice} from './ThingsStore/hidDevices.ts';
-import {connectGamepad} from './ThingsStore/gamepadDevices.ts';
+import {connectDevice} from './ThingsStore/devices/index.ts';
+import {handleAddConsumedThing} from './ThingsStore/devices/consumedDevices.ts';
 
 export default class ConnectDialog extends React.Component {
   constructor(props) {
@@ -114,9 +112,7 @@ export default class ConnectDialog extends React.Component {
           <List dense>
             {(this.state.selectedAdapter === 'bluetooth' ||
               this.state.selectedAdapter === 'hid' ||
-              this.state.selectedAdapter === 'gamepad' ||
-              this.state.selectedAdapter === 'audio' ||
-              this.state.selectedAdapter === 'video') &&
+              this.state.selectedAdapter === 'gamepad') &&
               implementedThings.map(thing => {
                 if (thing.type === this.state.selectedAdapter) {
                   return (
@@ -142,19 +138,13 @@ export default class ConnectDialog extends React.Component {
                               );
                               this.handleClose();
                             }
-                            await requestDevice(thing);
-                            if (thing.id === 'spheroMini') {
-                              this.props.blastBarRef.current.setSpheroConnected(
-                                true
-                              );
-                            }
-                            this.handleClose();
-                          } else if (this.state.selectedAdapter === 'hid') {
-                            await connectWebHidDevice(thing);
-                            this.handleClose();
-                          } else if (this.state.selectedAdapter === 'gamepad') {
-                            await connectGamepad(thing);
-                            this.handleClose();
+                          }
+                          this.handleClose();
+                          connectDevice(thing);
+                          if (thing.id === 'spheroMini') {
+                            this.props.blastBarRef.current.setSpheroConnected(
+                              true
+                            );
                           }
                         }}
                       >

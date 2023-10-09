@@ -1,10 +1,11 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
-import {connectedThings, getThingsLog} from './things';
-import {connectedThingsSlice} from './connectedThingsReducers';
-import {thingsStore} from './ThingsStore';
-import {implementedThing} from './types';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {connectedThings} from './../things';
+import {connectedThingsSlice} from './../connectedThingsReducers';
+import {thingsStore} from './../ThingsStore';
+import {implementedThing} from './../types';
+import {getThingsLog} from '../../tabs/DeviceTab';
 
 const BROWSER_SUPPORT = 'bluetooth' in navigator;
 export const connectedBluetoothDevices = new Map<string, BluetoothDevice>();
@@ -50,7 +51,7 @@ export const pingDevice = async function (id: string): Promise<boolean> {
   return false;
 };
 
-export const connect = async function (id: string) {
+export const connectBluetoothDevice = async function (id: string) {
   const thingsLog = getThingsLog();
   const device = await getDeviceById(id);
   thingsLog(`Connecting to device <code>${id}</code>`, 'Bluetooth', device?.id);
@@ -89,7 +90,7 @@ export const requestDevice = async function (thing: implementedThing) {
       thingsLog(`Requesting device <code>${thing.name}</code>`, 'Bluetooth');
       const device = await navigator.bluetooth.requestDevice(options);
       thingsLog(`Device <code>${thing.name}</code> paired`, 'Bluetooth');
-      connect(device.id);
+      connectBluetoothDevice(device.id);
       addWebBluetoothDevice(device, thing);
       return device;
     } catch (error) {

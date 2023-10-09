@@ -1,9 +1,10 @@
 import {Variables, dialog} from 'blockly';
-import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
-import {implementedThing} from './types';
-import {thingsStore} from './ThingsStore';
-import {connectedThingsSlice} from './connectedThingsReducers';
-import {connectedThings, getThingsLog} from './things';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {implementedThing} from './../types';
+import {thingsStore} from './../ThingsStore';
+import {connectedThingsSlice} from './../connectedThingsReducers';
+import {connectedThings} from './../things';
+import {getThingsLog} from '../../tabs/DeviceTab';
 
 export const connectedMediaDevices: Map<string, MediaDeviceInfo> = new Map();
 

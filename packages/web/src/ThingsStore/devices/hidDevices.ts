@@ -1,10 +1,11 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
-import {connectedThings, getThingsLog} from './things';
-import {connectedThingsSlice} from './connectedThingsReducers';
-import {thingsStore} from './ThingsStore';
-import {HIDAdapter, HIDAdapterDevice, implementedThing} from './types';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {connectedThingsSlice} from './../connectedThingsReducers';
+import {thingsStore} from './../ThingsStore';
+import {HIDAdapter, HIDAdapterDevice, implementedThing} from './../types';
+import {getThingsLog} from '../../tabs/DeviceTab';
+import {connectedThings} from '../things';
 
 export const connectedHidDevices = new Map<string, HIDAdapterDevice>();
 

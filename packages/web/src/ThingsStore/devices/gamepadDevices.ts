@@ -1,10 +1,11 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
-import {connectedThingsSlice} from './connectedThingsReducers';
-import {thingsStore} from './ThingsStore';
-import {implementedThing} from './types';
-import {connectedThings, getThingsLog} from './things';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {connectedThingsSlice} from './../connectedThingsReducers';
+import {thingsStore} from './../ThingsStore';
+import {implementedThing} from './../types';
+import {connectedThings} from './../things';
+import {getThingsLog} from '../../tabs/DeviceTab';
 
 /**
  * Array of all connected Gamepads, populated by the {@link pollGamepads} function.

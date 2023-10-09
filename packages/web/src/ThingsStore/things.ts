@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {dialog, utils, Variables, WorkspaceSvg} from 'blockly';
+import {utils, WorkspaceSvg} from 'blockly';
 import {
   addBlock,
   addCategoryAt,
@@ -12,34 +12,15 @@ import {
   removeCategory,
 } from '../BlocklyWorkspace/toolbox';
 import {getWorkspace} from '../assets/js/interpreter';
-import {
-  generateThingBlock,
-  generateThingCode,
-  generateReadPropertyBlock,
-  generateReadPropertyCode,
-  generateWritePropertyBlock,
-  generateWritePropertyCode,
-  generateInvokeActionBlock,
-  generateInvokeActionCode,
-  generateSubscribeEventBlock,
-  generateSubscribeEventCode,
-  generateSecurityBlock,
-  generateSecurityCode,
-  crawl,
-} from '../assets/js/automatedBlockGeneration';
-import {DataSchema, ThingDescription} from 'wot-thing-description-types';
-import {implementedThing, thingType} from './types';
 import {thingsStore} from './ThingsStore';
 import {connectedThingsSlice} from './connectedThingsReducers';
-import {connectedBluetoothDevices} from './webBluetoothDevices';
-import {connectedHidDevices} from './hidDevices';
-import {connectedGamepads} from './gamepadDevices';
-import {connectedMediaDevices} from './MediaDevices';
-
-/**
- * Maps consumed web device labels to device ids.
- */
-const consumedWebDevices = new Map<string, string>();
+import {connectDevice} from './devices';
+import {implementedThing} from './types';
+import {connectedBluetoothDevices} from './devices/webBluetoothDevices';
+import {connectedHidDevices} from './devices/hidDevices';
+import {connectedGamepads} from './devices/gamepadDevices';
+import {connectedMediaDevices} from './devices/MediaDevices';
+import {connectedConsumedDevices} from './devices/consumedDevices';
 
 /**
  * Lists all things implemented by BLAST.
@@ -134,7 +115,7 @@ export const setGamepadButtonHandler = function (handler: Function) {
   gamepadButtonHandler = handler;
 };
 
-let audioSelectButtonHandler: Function | null = null;
+export let audioSelectButtonHandler: Function | null = null;
 /**
  * Sets the 'select audio output' button handler.
  */
@@ -142,7 +123,7 @@ export const setAudioSelectButtonHandler = function (handler: Function) {
   audioSelectButtonHandler = handler;
 };
 
-let videoSelectButtonHandler: Function | null = null;
+export let videoSelectButtonHandler: Function | null = null;
 /**
  * Sets the 'select video input' button handler.
  */
@@ -159,32 +140,6 @@ export const setConsumeThingButtonHandler = function (handler: Function) {
 };
 
 let getRssiBlockadded = false;
-
-/**
- * Default method for logging device interaction.
- */
-let thingsLog: Function = function (
-  message: string,
-  adapter?: string,
-  name?: string,
-  deviceId?: string
-) {
-  console.log({adapter}, {name}, {deviceId}, message);
-};
-
-/**
- * Getter for the thingsLog function.
- */
-export const getThingsLog = function (): Function {
-  return thingsLog;
-};
-
-/**
- * Setter for the thingsLog function.
- */
-export const setThingsLog = function (logFunc: Function): void {
-  thingsLog = logFunc;
-};
 
 /**
  * Resets all device maps.
@@ -370,7 +325,7 @@ const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
       } else if (thing.type === 'audiooutput' || thing.type === 'videoinput') {
         idField.textContent = connectedMediaDevices.get(key)?.deviceId || '';
       } else if (thing.type === 'consumedDevice') {
-        idField.textContent = consumedWebDevices.get(key) as string;
+        idField.textContent = connectedConsumedDevices.get(key) as string;
       }
       block.appendChild(idField);
       block.setAttribute('gap', '8');
@@ -378,206 +333,4 @@ const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
     }
   }
   return xmlList;
-};
-
-export const handleAddConsumedThing = async function (uri: string) {
-  // TODO: Check if URI is valid
-
-  // Crawl all referenced Thing Description links
-  const foundTDs = await crawl(uri, 3);
-
-  for (const td of foundTDs) {
-    // generate a unique id for the new device
-    const uid =
-      Date.now().toString(36) + Math.random().toString(36).substring(2);
-    // TODO: Check if ID is already used ??
-
-    // Set new ID
-    td.id = uid;
-
-    addConsumedDevice(
-      td.title,
-      td.id, // default ID
-      'consumedDevice',
-      td
-    );
-  }
-};
-
-/**
- * Adds a device to BLAST.
- */
-export const addConsumedDevice = function (
-  deviceName: string,
-  deviceId: string,
-  type: thingType,
-  td: ThingDescription
-) {
-  // Object to store property names and allowed ops
-  const propertiesObj: {
-    [key: string]: (string | string[] | undefined)[];
-  } = {};
-  // Object to store action names and allowed ops
-  const actionsObj: {
-    [key: string]: (string | string[] | undefined)[];
-  } = {};
-  // Store all inputs of actions
-  const inputObj: {[key: string]: DataSchema} = {};
-  // Store all outputs of actions
-  const outputObj: {[key: string]: DataSchema} = {};
-  // Object to store event names and allowed ops
-  const eventObj: {
-    [key: string]: (string | string[] | undefined)[];
-  } = {};
-  // Store "data" of events
-  const dataObj: {[key: string]: DataSchema} = {};
-
-  // List of all created Blocks
-  const implementedThingsBlockList = [];
-
-  // Generate Thing Block
-  if (typeof td.description === 'undefined') {
-    generateThingBlock(deviceName, deviceName, td);
-  } else {
-    generateThingBlock(deviceName, td.description, td);
-  }
-  generateThingCode(deviceName, td);
-
-  // Supported is only none_sc and basic_sc
-  if (td.security === 'basic_sc') {
-    generateSecurityBlock();
-    generateSecurityCode(td);
-
-    // Add to implementedThingsBlockList
-    implementedThingsBlockList.push({
-      type: `${deviceName}_SecurityBlock`,
-      category: 'Security',
-    });
-  }
-  // get property names and allowed operations
-  for (const [propertyName, property] of Object.entries(td.properties ?? {})) {
-    propertiesObj[propertyName] = property.forms.map(form => form.op);
-  }
-
-  // Generate Property Blocks
-  for (const [propertyName, operations] of Object.entries(propertiesObj)) {
-    const op = new Set(operations.flat());
-
-    if (op.has('readproperty')) {
-      generateReadPropertyBlock(propertyName, deviceName, td);
-      generateReadPropertyCode(propertyName, deviceName);
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_readPropertyBlock_${propertyName}`,
-        category: 'Properties',
-      });
-    }
-    if (op.has('writeproperty')) {
-      generateWritePropertyBlock(propertyName, deviceName, td);
-      generateWritePropertyCode(propertyName, deviceName, td);
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_writePropertyBlock_${propertyName}`,
-        category: 'Properties',
-      });
-    }
-  }
-
-  for (const [actionName, action] of Object.entries(td.actions ?? {})) {
-    actionsObj[actionName] = action.forms.map(form => form.op);
-    inputObj[actionName] = action.input as DataSchema;
-    outputObj[actionName] = action.output as DataSchema;
-  }
-
-  // Generate Action Blocks
-  for (const [actionName, operations] of Object.entries(actionsObj)) {
-    const op = new Set(operations.flat());
-    if (op.has('invokeaction')) {
-      generateInvokeActionBlock(
-        actionName,
-        deviceName,
-        inputObj[actionName],
-        outputObj[actionName],
-        td
-      );
-      generateInvokeActionCode(
-        actionName,
-        deviceName,
-        inputObj[actionName],
-        outputObj[actionName]
-      );
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_invokeActionBlock_${actionName}`,
-        category: 'Actions',
-      });
-    }
-  }
-
-  for (const [eventName, event] of Object.entries(td.events ?? {})) {
-    eventObj[eventName] = event.forms.map(form => form.op);
-    dataObj[eventName] = event.data as DataSchema;
-  }
-
-  // Generate Event Blocks
-  for (const [eventName, operations] of Object.entries(eventObj)) {
-    const op = new Set(operations.flat());
-    if (op.has('subscribeevent')) {
-      generateSubscribeEventBlock(eventName, deviceName);
-      generateSubscribeEventCode(eventName, deviceName);
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_subscribeEventBlock_${eventName}`,
-        category: 'Events',
-      });
-    }
-  }
-
-  // Push thing and all created blocks to implemented Things
-  const thing: implementedThing = {
-    id: deviceName,
-    name: deviceName,
-    type: type,
-    blocks: implementedThingsBlockList,
-  };
-
-  // add the devices blocks to the toolbox
-  for (const block of thing.blocks) {
-    addBlock(block.type, block.category, block.XML);
-  }
-  // This function needs to be named so it can be called recursively.
-  const promptAndCheckWithAlert = function (name: string, id: string): void {
-    Variables.promptName(
-      'Pair successful! Now give your device a name.',
-      name,
-      text => {
-        if (text) {
-          const existing = thingsStore
-            .getState()
-            .connectedThings.some(thing => thing.id === text);
-          if (existing) {
-            const msg = `Name ${text} already exists.`;
-            dialog.alert(msg, () => {
-              promptAndCheckWithAlert(text, id); // Recurse
-            });
-          } else {
-            // No conflict
-            consumedWebDevices.set(deviceName, deviceId);
-            connectedThings.set(text, thing as implementedThing);
-          }
-        } else {
-          const msg = 'Name cannot be empty';
-          dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text ?? '', id); // Recuse
-          });
-        }
-      }
-    );
-  };
-  promptAndCheckWithAlert(deviceName, td.id ?? '');
-  reloadToolbox();
 };

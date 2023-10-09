@@ -16,10 +16,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 import {getDevMode} from '../ThingsStore/things.ts';
 import {getWorkspace} from '../assets/js/interpreter.ts';
-import {requestDevice} from '../ThingsStore/webBluetoothDevices.ts';
-import {connectWebHidDevice} from '../ThingsStore/hidDevices.ts';
-import {connectGamepad} from '../ThingsStore/gamepadDevices.ts';
-import {addMediaDevice} from '../ThingsStore/MediaDevices.ts';
+import {requestDevice} from '../ThingsStore/devices/webBluetoothDevices.ts';
+import {connectWebHidDevice} from '../ThingsStore/devices/hidDevices.ts';
+import {connectGamepad} from '../ThingsStore/devices/gamepadDevices.ts';
+import {addMediaDevice} from '../ThingsStore/devices/MediaDevices.ts';
 
 export default class ReonnectDialog extends React.Component {
   constructor(props) {

@@ -1,6 +1,6 @@
 // eslint-disable-next-line node/no-missing-import
 import PQueue from 'p-queue';
-import {getDeviceById} from '../../../../../ThingsStore/webBluetoothDevices.ts';
+import {getDeviceById} from '../../../../../ThingsStore/devices/webBluetoothDevices.ts';
 
 export const UUID_SPHERO_SERVICE = '00010001-574f-4f20-5370-6865726f2121';
 export const UUID_SPHERO_SERVICE_INITIALIZE =

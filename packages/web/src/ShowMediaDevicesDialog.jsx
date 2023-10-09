@@ -9,7 +9,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
-import {addMediaDevice} from './ThingsStore/MediaDevices.ts';
+import {addMediaDevice} from './ThingsStore/devices/MediaDevices.ts';
 import {
   implementedThings,
   setAudioSelectButtonHandler,

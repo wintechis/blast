@@ -14,16 +14,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import {setThingsLog} from '../ThingsStore/things.ts';
 import {thingsStore} from '../ThingsStore/ThingsStore.ts';
 import {
-  connect,
-  connectedBluetoothDevices,
+  connectBluetoothDevice,
   pingDevice,
-} from '../ThingsStore/webBluetoothDevices.ts';
-import {connectedHidDevices} from '../ThingsStore/hidDevices.ts';
-import {connectedGamepads} from '../ThingsStore/gamepadDevices.ts';
-import {connectedMediaDevices} from '../ThingsStore/MediaDevices.ts';
+} from '../ThingsStore/devices/webBluetoothDevices.ts';
+import {connectedBluetoothDevices} from '../ThingsStore/devices/webBluetoothDevices.ts';
+import {connectedHidDevices} from '../ThingsStore/devices/hidDevices.ts';
+import {connectedMediaDevices} from '../ThingsStore/devices/MediaDevices.ts';
+import {connectedGamepads} from '../ThingsStore/devices/gamepadDevices.ts';
 
 let logId = 0;
 
@@ -66,6 +65,17 @@ const logMessageCodeClass = {
   borderRadius: '6px',
 };
 
+/**
+ * Default method for logging device interaction.
+ */
+let thingsLog = function (message, adapter, name, deviceId) {
+  console.log({adapter}, {name}, {deviceId}, message);
+};
+
+export const getThingsLog = function () {
+  return thingsLog;
+};
+
 class DeviceTab extends React.Component {
   constructor(props) {
     super(props);
@@ -78,7 +88,7 @@ class DeviceTab extends React.Component {
   }
 
   componentDidMount() {
-    setThingsLog((msg, adapter, device) => {
+    thingsLog = (msg, adapter, device) => {
       const rows = this.state.rows;
       rows.push({
         id: logId++,
@@ -88,7 +98,7 @@ class DeviceTab extends React.Component {
         message: msg,
       });
       this.setState({rows: rows});
-    });
+    };
     this.unsubscribe = thingsStore.subscribe(() => {
       const connectedThings = new Map();
       thingsStore.getState().connectedThings.forEach(thing => {
@@ -210,9 +220,9 @@ class DeviceTab extends React.Component {
           flexDirection: 'column',
         }}
       >
-        <Box sx={{height: '50%', padding: '25px', overflow: 'auto'}}>
+        <Box sx={{height: '50%', padding: '25px', overflow: 'hidden'}}>
           <Typography variant="h6">Connected Devices</Typography>
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} sx={{height: '100%'}}>
             <Table
               sx={{
                 width: '100%',
@@ -263,7 +273,7 @@ class DeviceTab extends React.Component {
                               loading={this.state.connectingBluetooth}
                               onClick={() => {
                                 this.setState({connectingBluetooth: true});
-                                connect(device.id).then(() => {
+                                connectBluetoothDevice(device.id).then(() => {
                                   this.setState({connectingBluetooth: false});
                                 });
                               }}
@@ -320,9 +330,11 @@ class DeviceTab extends React.Component {
           </TableContainer>
         </Box>
         <Box sx={{height: '50%', padding: '25px', overflow: 'none'}}>
+          <Typography variant="h6">Log</Typography>
           <List
             ref={this.listRef}
             sx={{
+              border: '1px solid',
               height: '100%',
               width: '100%',
               bgcolor: 'background.paper',
