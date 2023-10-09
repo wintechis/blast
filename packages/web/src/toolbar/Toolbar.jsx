@@ -24,7 +24,7 @@ import ReconnectDialog from './ReconnectDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';
 
 import {onStatusChange, runJS, stopJS} from '../assets/js/interpreter.ts';
-import {setDevMode} from '../tabs/Devices/things.ts';
+import {setDevMode} from '../ThingsStore/things.ts';
 
 const samples = [
   './samples/eval.xml',

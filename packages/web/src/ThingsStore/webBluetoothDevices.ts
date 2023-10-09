@@ -1,10 +1,10 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
 import {connectedThings, getThingsLog} from './things';
-import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
-import {thingsStore} from '../../ThingsStore/ThingsStore';
-import {implementedThing} from '../../ThingsStore/types';
+import {connectedThingsSlice} from './connectedThingsReducers';
+import {thingsStore} from './ThingsStore';
+import {implementedThing} from './types';
 
 const BROWSER_SUPPORT = 'bluetooth' in navigator;
 export const connectedBluetoothDevices = new Map<string, BluetoothDevice>();

@@ -25,7 +25,7 @@ import {BlocklyWorkspace} from './BlocklyWorkspace';
 import BlastBar from './toolbar/Toolbar.jsx';
 import ConnectDialog from './ConnectDialog.jsx';
 import Controls from './Controls.jsx';
-import DeviceTab from './tabs/Devices/DeviceTab.jsx';
+import DeviceTab from './tabs/DeviceTab.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import JavascriptTab from './tabs/JavascriptTab.jsx';
 import PseudoCodeTab from './tabs/PseudoCodeTab.jsx';

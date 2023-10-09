@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {implementedThings} from '../../../../tabs/Devices/things';
+import {implementedThings} from '../../../../ThingsStore/things';
 import SpheroBolt, {
   UUID_SPHERO_SERVICE,
   UUID_SPHERO_SERVICE_INITIALIZE,

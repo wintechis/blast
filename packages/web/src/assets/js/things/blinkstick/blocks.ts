@@ -5,7 +5,7 @@
  */
 
 import {Blocks, FieldTextInput} from 'blockly';
-import {implementedThings} from '../../../../tabs/Devices/things';
+import {implementedThings} from '../../../../ThingsStore/things';
 
 Blocks['things_blinkstick'] = {
   /**

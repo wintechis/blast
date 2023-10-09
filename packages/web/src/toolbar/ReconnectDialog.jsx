@@ -14,10 +14,11 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
-import {addDevice, connectGamepad, getDevMode} from '../tabs/Devices/things.ts';
+import {addDevice, getDevMode} from '../ThingsStore/things.ts';
 import {getWorkspace} from '../assets/js/interpreter.ts';
-import {requestDevice} from '../tabs/Devices/webBluetoothDevices.ts';
-import {connectWebHidDevice} from '../tabs/Devices/hidDevices.ts';
+import {requestDevice} from '../ThingsStore/webBluetoothDevices.ts';
+import {connectWebHidDevice} from '../ThingsStore/hidDevices.ts';
+import {connectGamepad} from '../ThingsStore/gamepadDevices.ts';
 
 export default class ReonnectDialog extends React.Component {
   constructor(props) {

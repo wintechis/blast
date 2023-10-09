@@ -4,7 +4,7 @@
  */
 
 import {Blocks, FieldDropdown, FieldTextInput} from 'blockly';
-import {implementedThings} from '../../../../tabs/Devices/things.ts';
+import {implementedThings} from '../../../../ThingsStore/things.ts';
 
 Blocks['things_audioOutput'] = {
   /**

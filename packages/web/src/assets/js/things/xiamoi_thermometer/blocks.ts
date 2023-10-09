@@ -8,7 +8,7 @@ import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {eventsInWorkspace, getWorkspace} from '../../interpreter';
-import {implementedThings} from '../../../../tabs/Devices/things';
+import {implementedThings} from '../../../../ThingsStore/things';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 
 Blocks['things_xiaomiThermometer'] = {

@@ -6,7 +6,7 @@
 
 import {Blocks, dialog, Events, FieldTextInput} from 'blockly';
 import {getWorkspace} from '../../interpreter';
-import {implementedThings} from '../../../../tabs/Devices/things';
+import {implementedThings} from '../../../../ThingsStore/things';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 

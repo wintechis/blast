@@ -1,14 +1,10 @@
 import {dialog, Variables} from 'blockly';
 
-import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {addBlock, reloadToolbox} from '../BlocklyWorkspace/toolbox';
 import {connectedThings, getThingsLog} from './things';
-import {connectedThingsSlice} from '../../ThingsStore/connectedThingsReducers';
-import {thingsStore} from '../../ThingsStore/ThingsStore';
-import {
-  HIDAdapter,
-  HIDAdapterDevice,
-  implementedThing,
-} from '../../ThingsStore/types';
+import {connectedThingsSlice} from './connectedThingsReducers';
+import {thingsStore} from './ThingsStore';
+import {HIDAdapter, HIDAdapterDevice, implementedThing} from './types';
 
 export const connectedHidDevices = new Map<string, HIDAdapterDevice>();
 
@@ -55,7 +51,11 @@ export const connectWebHidDevice = async function (
   // add device to the device map
   addWebHidDevice(device[0], thing);
   reloadToolbox();
-  thingsLog(`Device <code>${thing.name}</code> connected`, 'HID', device[0].id);
+  thingsLog(
+    `HID Device <code>${thing.name}</code> connected`,
+    'HID',
+    device[0].id
+  );
   return device[0];
 };
 

@@ -1,5 +1,5 @@
 import JoyStick from './JoyStick.js';
-import {gamepads} from '../../../../../tabs/Devices/things.ts';
+import {gamepads} from '../../../../../ThingsStore/gamepadDevices.ts';
 
 const BUTTON_MAPPING = {
   0: 'B',

@@ -14,14 +14,15 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-import {setThingsLog} from './things.ts';
-import {thingsStore} from '../../ThingsStore/ThingsStore.ts';
+import {setThingsLog} from '../ThingsStore/things.ts';
+import {thingsStore} from '../ThingsStore/ThingsStore.ts';
 import {
   connect,
   connectedBluetoothDevices,
   pingDevice,
-} from './webBluetoothDevices.ts';
-import {connectedHidDevices} from './hidDevices.ts';
+} from '../ThingsStore/webBluetoothDevices.ts';
+import {connectedHidDevices} from '../ThingsStore/hidDevices.ts';
+import {connectedGamepads} from '../ThingsStore/gamepadDevices.ts';
 
 let logId = 0;
 
@@ -108,6 +109,8 @@ class DeviceTab extends React.Component {
         return 'blue';
       case 'hid':
         return 'blueviolet';
+      case 'gamepad':
+        return 'green';
       default:
         return 'black';
     }
@@ -260,6 +263,18 @@ class DeviceTab extends React.Component {
                           <TableCell>{thing.type}</TableCell>
                           <TableCell>{device.id}</TableCell>
                           <TableCell>{device.opened ? 'yes' : 'no'}</TableCell>
+                        </TableRow>
+                      );
+                    } else if (thing.type === 'gamepad') {
+                      const device = connectedGamepads.get(key);
+                      return (
+                        <TableRow key={'gamepad-' + key}>
+                          <TableCell>{key}</TableCell>
+                          <TableCell>{thing.type}</TableCell>
+                          <TableCell>{device.index}</TableCell>
+                          <TableCell>
+                            {device.connected ? 'yes' : 'no'}
+                          </TableCell>
                         </TableRow>
                       );
                     }

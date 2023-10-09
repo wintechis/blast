@@ -17,7 +17,7 @@ import {downloadScreenshot} from '../assets/js/screenshot.js';
 
 import {initInterpreter} from '../assets/js/interpreter';
 import {statesFlyoutCategory} from '../assets/js/states.js';
-import {thingsFlyoutCategory} from '../tabs/Devices/things';
+import {thingsFlyoutCategory} from '../ThingsStore/things';
 
 JavaScript.addReservedWords('highlightBlock');
 
