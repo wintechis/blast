@@ -58,9 +58,11 @@ export default class ReonnectDialog extends React.Component {
 
   async getDevices() {
     try {
-      await navigator.mediaDevices.getUserMedia({audio: true, video: true});
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      this.setState({mediaDevices: devices});
+      await navigator.mediaDevices.getUserMedia({audio: true, video: false});
+      const audioDevices = await navigator.mediaDevices.enumerateDevices();
+      await navigator.mediaDevices.getUserMedia({audio: false, video: true});
+      const videoDevices = await navigator.mediaDevices.enumerateDevices();
+      this.setState({mediaDevices: [...audioDevices, ...videoDevices]});
     } catch (e) {
       // ignore DOMException: Requested device not found
       // This happens when the user has no camera or microphone
