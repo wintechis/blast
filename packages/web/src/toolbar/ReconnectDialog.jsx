@@ -57,9 +57,9 @@ export default class ReonnectDialog extends React.Component {
 
   async getDevices(audio, video) {
     try {
-        await navigator.mediaDevices.getUserMedia({audio, video});
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        this.setState({mediaDevices: devices});
+      await navigator.mediaDevices.getUserMedia({audio, video});
+      const devices = await navigator.mediaDevices.enumerateDevices();
+      this.setState({mediaDevices: devices});
     } catch (e) {
       // ignore DOMException: Requested device not found
       // This happens when the user has no camera or microphone
@@ -152,6 +152,7 @@ export default class ReonnectDialog extends React.Component {
                           selectedThing: thing,
                           selectedThingName: thingName,
                         });
+                      }
                       if (device) {
                         if (thing.id === 'spheroMini') {
                           this.props.setSpheroConnected(true);
