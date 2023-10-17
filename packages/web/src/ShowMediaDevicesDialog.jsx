@@ -30,21 +30,22 @@ export default class ShowMediaDevicesDialog extends React.Component {
 
   componentDidMount() {
     setAudioSelectButtonHandler(() => {
+      this.getDevices(false, true);
       this.setState({open: true, selectedAdapter: 'audiooutput'});
     });
     setVideoSelectButtonHandler(() => {
+      this.getDevices(true, false);
       this.setState({open: true, selectedAdapter: 'videoinput'});
     });
-    this.getDevices();
   }
 
   handleClose() {
     this.setState({open: false});
   }
 
-  async getDevices() {
+  async getDevices(audio, video) {
     try {
-      await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+      await navigator.mediaDevices.getUserMedia({audio, video});
       const devices = await navigator.mediaDevices.enumerateDevices();
       this.setState({MediaDevices: devices});
     } catch (e) {
