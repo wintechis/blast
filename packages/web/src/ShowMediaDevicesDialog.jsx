@@ -62,7 +62,7 @@ export default class ShowMediaDevicesDialog extends React.Component {
         <DialogTitle>Please select a device from the list below</DialogTitle>
         <List dense>
           {(this.state.selectedAdapter &&
-            this.state.MediaDevices.length > 0 &&
+            this.state.MediaDevices?.length > 0 &&
             this.state.MediaDevices?.map(device => {
               const thing = implementedThings.find(
                 implementedThing =>
