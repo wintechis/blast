@@ -12,6 +12,7 @@ import {getThingsLog} from '../../tabs/DeviceTab';
  */
 export let gamepads: Array<Gamepad> = [];
 export const connectedGamepads: Map<string, Gamepad> = new Map();
+const gamepadIndices: Array<number> = [];
 
 /**
  * Connects all GamePads matching the filter criteria in thing.
@@ -51,7 +52,7 @@ export const connectGamepad = async function (
   // get first device not already connected
   const device = devices.find(device => {
     if (device !== null) {
-      return !connectedGamepads.has(device.id);
+      return !gamepadIndices.includes(device.index);
     }
     return false;
   });
@@ -59,7 +60,7 @@ export const connectGamepad = async function (
     console.error('No unconnected gamepads found.');
     return;
   }
-  connectedGamepads.set(device.id, device);
+  gamepadIndices.push(device.index);
 
   addGamepad(device, thing);
   thingsLog(
