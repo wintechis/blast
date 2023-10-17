@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Box,
+  Button,
   Container,
   Dialog,
   DialogTitle,
@@ -23,6 +24,7 @@ export default class SpheroDialog extends React.Component {
     };
     this.handleClose = this.handleClose.bind(this);
     this.setHeading = this.setHeading.bind(this);
+    this.save = this.save.bind(this);
   }
 
   open() {
@@ -43,6 +45,11 @@ export default class SpheroDialog extends React.Component {
     }
   }
 
+  save() {
+    const sphero = spheroInstances.get(this.state.spheroId);
+    sphero.resetYaw();
+  }
+
   render() {
     return (
       <Dialog open={this.state.open} onClose={this.handleClose}>
@@ -50,7 +57,7 @@ export default class SpheroDialog extends React.Component {
           Drag the slider below, until the sphero&apos;s blue LED is pointing at
           you
         </DialogTitle>
-        <Container>
+        <Container sx={{display: 'flex', flexDirection: 'column'}}>
           <FormControl fullWidth>
             <Typography variant="body1">
               (Only Spheros in the workspace are selectable)
@@ -94,6 +101,12 @@ export default class SpheroDialog extends React.Component {
               onChange={this.setHeading}
             />
           </Box>
+          <Button
+            sx={{alignSelf: 'flex-end', marginBottom: '25px'}}
+            onClick={this.save}
+          >
+            save
+          </Button>
         </Container>
       </Dialog>
     );
