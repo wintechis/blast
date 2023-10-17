@@ -20,7 +20,7 @@ export default class ShowMediaDevicesDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      MediaDevices: null,
+      mediaDevices: null,
       open: false,
       selectedAdapter: null,
     };
@@ -30,11 +30,11 @@ export default class ShowMediaDevicesDialog extends React.Component {
 
   componentDidMount() {
     setAudioSelectButtonHandler(() => {
-      this.getDevices(false, true);
+      this.getDevices(true, false);
       this.setState({open: true, selectedAdapter: 'audiooutput'});
     });
     setVideoSelectButtonHandler(() => {
-      this.getDevices(true, false);
+      this.getDevices(false, true);
       this.setState({open: true, selectedAdapter: 'videoinput'});
     });
   }
@@ -47,7 +47,7 @@ export default class ShowMediaDevicesDialog extends React.Component {
     try {
       await navigator.mediaDevices.getUserMedia({audio, video});
       const devices = await navigator.mediaDevices.enumerateDevices();
-      this.setState({MediaDevices: devices});
+      this.setState({mediaDevices: devices});
     } catch (e) {
       // ignore DOMException: Requested device not found
       // This happens when the user has no camera or microphone
@@ -63,8 +63,8 @@ export default class ShowMediaDevicesDialog extends React.Component {
         <DialogTitle>Please select a device from the list below</DialogTitle>
         <List dense>
           {(this.state.selectedAdapter &&
-            this.state.MediaDevices?.length > 0 &&
-            this.state.MediaDevices?.map(device => {
+            this.state.mediaDevices?.length > 0 &&
+            this.state.mediaDevices?.map(device => {
               const thing = implementedThings.find(
                 implementedThing =>
                   implementedThing.type === this.state.selectedAdapter

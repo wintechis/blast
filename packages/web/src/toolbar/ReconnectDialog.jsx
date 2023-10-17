@@ -39,7 +39,6 @@ export default class ReonnectDialog extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleAVDialogClose = this.handleAVDialogClose.bind(this);
     this.getDevices = this.getDevices.bind(this);
-    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   static propTypes = {
@@ -56,17 +55,11 @@ export default class ReonnectDialog extends React.Component {
     xml: PropTypes.object,
   };
 
-  async getDevices() {
+  async getDevices(audio, video) {
     try {
-      let devices;
-      if (this.state.selectedThing.type === 'audiooutput') {
-        await navigator.mediaDevices.getUserMedia({audio: true, video: false});
-        devices = await navigator.mediaDevices.enumerateDevices();
-      } else if (this.state.selectedThing.type === 'videoinput') {
-        await navigator.mediaDevices.getUserMedia({audio: false, video: true});
-        devices = await navigator.mediaDevices.enumerateDevices();
-      }
-      this.setState({mediaDevices: devices});
+        await navigator.mediaDevices.getUserMedia({audio, video});
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        this.setState({mediaDevices: devices});
     } catch (e) {
       // ignore DOMException: Requested device not found
       // This happens when the user has no camera or microphone
@@ -74,10 +67,6 @@ export default class ReonnectDialog extends React.Component {
         console.error(e);
       }
     }
-  }
-
-  componentDidMount() {
-    this.getDevices();
   }
 
   handleClose() {
@@ -147,18 +136,22 @@ export default class ReonnectDialog extends React.Component {
                         device = await connectWebHidDevice(thing);
                       } else if (thing.type === 'gamepad') {
                         device = await connectGamepad(thing);
-                      } else if (
-                        thing.type === 'audiooutput' ||
-                        thing.type === 'videoinput'
-                      ) {
-                        await this.getDevices();
+                      } else if (thing.type === 'audiooutput') {
+                        await this.getDevices(true, false);
                         this.setState({
                           aVDialogopen: true,
                           selectedAdapter: thing.type,
                           selectedThing: thing,
                           selectedThingName: thingName,
                         });
-                      }
+                      } else if (thing.type === 'videoinput') {
+                        await this.getDevices(false, true);
+                        this.setState({
+                          aVDialogopen: true,
+                          selectedAdapter: thing.type,
+                          selectedThing: thing,
+                          selectedThingName: thingName,
+                        });
                       if (device) {
                         if (thing.id === 'spheroMini') {
                           this.props.setSpheroConnected(true);
