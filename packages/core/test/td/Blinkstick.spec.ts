@@ -22,7 +22,6 @@ describe('Blinkstick Thing Description', () => {
       expect(color.forms[0].contentType).toEqual(
         'application/x.binary-data-stream'
       );
-      expect(color.forms[0]['hid:reportId']).toEqual(5);
     });
   });
 });

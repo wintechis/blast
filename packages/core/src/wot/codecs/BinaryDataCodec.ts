@@ -320,12 +320,13 @@ function byte2object(schema: DataSchema, bytes: Buffer): Object {
  */
 function object2byte(schema: DataSchema, dataValue: unknown): Buffer {
   let bytes: Buffer;
-  if (Array.isArray(dataValue)) {
+  if (
+    Array.isArray(dataValue) &&
+    dataValue.every(element => typeof element === 'number')
+  ) {
     bytes = Buffer.from(dataValue);
-  } else if (typeof dataValue === 'object' && dataValue !== null) {
-    bytes = Buffer.from(JSON.stringify(dataValue));
   } else {
-    throw new Error('Datatype not supported by codec');
+    bytes = Buffer.from(JSON.stringify(dataValue));
   }
   return bytes;
 }

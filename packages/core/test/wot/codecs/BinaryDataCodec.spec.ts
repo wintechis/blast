@@ -411,10 +411,16 @@ describe('BinaryDataStreamCodec', () => {
         type: 'string',
       },
     };
-    test('should return stringified array', () => {
+    test('should return array', () => {
       const array = ['abc', 'def'];
       const stringified = new TextEncoder().encode(JSON.stringify(array));
       const buffer = Buffer.from(stringified);
+      expect(codec.valueToBytes(array, schema)).toEqual(buffer);
+    });
+    test('should return buffer with array', () => {
+      schema.items.type = 'number';
+      const array = [1, 2, 3, 4, 5];
+      const buffer = Buffer.from(array);
       expect(codec.valueToBytes(array, schema)).toEqual(buffer);
     });
   });
