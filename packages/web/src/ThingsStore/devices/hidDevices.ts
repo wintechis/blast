@@ -30,7 +30,8 @@ export const getDeviceById = function (uid: string): HIDAdapterDevice {
  * @returns the connected device
  */
 export const connectWebHidDevice = async function (
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ): Promise<HIDAdapterDevice | void> {
   const thingsLog = getThingsLog();
   let filters: HIDDeviceFilter[] = [];
@@ -50,7 +51,7 @@ export const connectWebHidDevice = async function (
     return;
   }
   // add device to the device map
-  addWebHidDevice(device[0], thing);
+  addWebHidDevice(device[0], thing, name);
   reloadToolbox();
   thingsLog(
     `HID Device <code>${thing.name}</code> connected`,
@@ -66,9 +67,10 @@ export const connectWebHidDevice = async function (
  */
 export const addWebHidDevice = function (
   device: HIDAdapterDevice,
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ): void {
-  const deviceName = device.productName;
+  const deviceName = name ?? device.productName;
   const uid = device.id;
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = (name: string, id: string): void => {

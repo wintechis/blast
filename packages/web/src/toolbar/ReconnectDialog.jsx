@@ -131,11 +131,11 @@ export default class ReonnectDialog extends React.Component {
                     onClick={async () => {
                       let device;
                       if (thing.type === 'bluetooth') {
-                        device = await requestDevice(thing);
+                        device = await requestDevice(thing, thingName);
                       } else if (thing.type === 'hid') {
-                        device = await connectWebHidDevice(thing);
+                        device = await connectWebHidDevice(thing, thingName);
                       } else if (thing.type === 'gamepad') {
-                        device = await connectGamepad(thing);
+                        device = await connectGamepad(thing, thingName);
                       } else if (thing.type === 'audiooutput') {
                         await this.getDevices(true, false);
                         this.setState({
@@ -215,7 +215,11 @@ export default class ReonnectDialog extends React.Component {
                     <ListItem key={device.label}>
                       <ListItemButton
                         onClick={() => {
-                          addMediaDevice(device, thing);
+                          addMediaDevice(
+                            device,
+                            thing,
+                            this.state.selectedThingName
+                          );
                           this.handleAVDialogClose(device);
                         }}
                       >

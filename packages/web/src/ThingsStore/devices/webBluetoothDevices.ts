@@ -72,7 +72,10 @@ export const connectBluetoothDevice = async function (id: string) {
   return gatt;
 };
 
-export const requestDevice = async function (thing: implementedThing) {
+export const requestDevice = async function (
+  thing: implementedThing,
+  name?: string
+) {
   const thingsLog = getThingsLog();
   if (BROWSER_SUPPORT) {
     let options: RequestDeviceOptions;
@@ -91,7 +94,7 @@ export const requestDevice = async function (thing: implementedThing) {
       const device = await navigator.bluetooth.requestDevice(options);
       thingsLog(`Device <code>${thing.name}</code> paired`, 'Bluetooth');
       connectBluetoothDevice(device.id);
-      addWebBluetoothDevice(device, thing);
+      addWebBluetoothDevice(device, thing, name);
       return device;
     } catch (error) {
       console.error(error);
@@ -101,9 +104,10 @@ export const requestDevice = async function (thing: implementedThing) {
 
 export const addWebBluetoothDevice = async function (
   device: BluetoothDevice,
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ) {
-  const name = device.name ?? '';
+  name = name ?? device.name ?? '';
   const id = device.id;
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = (name: string, id: string): void => {

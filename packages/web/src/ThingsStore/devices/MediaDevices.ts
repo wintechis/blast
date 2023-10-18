@@ -10,8 +10,10 @@ export const connectedMediaDevices: Map<string, MediaDeviceInfo> = new Map();
 
 export const addMediaDevice = function (
   device: MediaDeviceInfo,
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ) {
+  name = name ?? device.label;
   const thingsLog = getThingsLog();
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function (name: string, id: string): void {
@@ -57,6 +59,6 @@ export const addMediaDevice = function (
       }
     );
   };
-  promptAndCheckWithAlert(device.label, device.deviceId);
+  promptAndCheckWithAlert(name, device.deviceId);
   reloadToolbox();
 };

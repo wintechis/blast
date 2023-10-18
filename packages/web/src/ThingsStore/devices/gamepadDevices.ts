@@ -18,7 +18,8 @@ const gamepadIndices: Array<number> = [];
  * Connects all GamePads matching the filter criteria in thing.
  */
 export const connectGamepad = async function (
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ): Promise<Gamepad | void> {
   const thingsLog = getThingsLog();
   let devices = gamepads;
@@ -62,7 +63,7 @@ export const connectGamepad = async function (
   }
   gamepadIndices.push(device.index);
 
-  addGamepad(device, thing);
+  addGamepad(device, thing, name);
   thingsLog(
     `Gamepad <code>${device.id}</code> Connected`,
     'Gamepad',
@@ -122,8 +123,10 @@ pollGamepads();
 
 export const addGamepad = function (
   device: Gamepad,
-  thing: implementedThing
+  thing: implementedThing,
+  name?: string
 ): void {
+  const deviceName = name ?? device.id;
   // This function needs to be named so it can be called recursively.
   const promptAndCheckWithAlert = function (name: string, id: number): void {
     Variables.promptName(
@@ -164,5 +167,5 @@ export const addGamepad = function (
       }
     );
   };
-  promptAndCheckWithAlert(device.id, device.index);
+  promptAndCheckWithAlert(deviceName, device.index);
 };
