@@ -28,8 +28,7 @@
         {
           "href": "hid://sendFeatureReport",
           "hid:path": "{{HIDPATH}}",
-          "contentType": "application/x.binary-data-stream",
-          "hid:reportId": 5
+          "contentType": "application/x.binary-data-stream"
         }
       ]
     }

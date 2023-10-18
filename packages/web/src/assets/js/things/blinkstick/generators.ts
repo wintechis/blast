@@ -48,6 +48,12 @@ JavaScript.forBlock['blinkstick_set_colors'] = function (block: Block): string {
   const g = parseInt(colour.substring(4, 6), 16);
   const b = parseInt(colour.substring(6, 8), 16);
 
-  const code = `await things.get(${thing}).writeProperty('color', [5, ${index}, ${r}, ${g}, ${b}]);\n`;
+  const code = `await things.get(${thing}).writeProperty('color', [
+    ${5},
+    ${index},
+    ${r},
+    ${g},
+    ${b}
+  ]);\n`;
   return code;
 };

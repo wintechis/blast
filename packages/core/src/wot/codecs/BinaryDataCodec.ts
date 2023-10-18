@@ -319,6 +319,13 @@ function byte2object(schema: DataSchema, bytes: Buffer): Object {
  * @returns converted buffer.
  */
 function object2byte(schema: DataSchema, dataValue: unknown): Buffer {
-  const value = JSON.stringify(dataValue);
-  return Buffer.from(value, 'utf-8');
+  let bytes: Buffer;
+  if (Array.isArray(dataValue)) {
+    bytes = Buffer.from(dataValue);
+  } else if (typeof dataValue === 'object' && dataValue !== null) {
+    bytes = Buffer.from(JSON.stringify(dataValue));
+  } else {
+    throw new Error('Datatype not supported by codec');
+  }
+  return bytes;
 }
