@@ -9,7 +9,7 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitReturns": true,
     "resolveJsonModule": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
     "module": "ESNext",

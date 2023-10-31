@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
-      - run: yarn set version berry
+      - run: yarn set version 3.x
       - run: yarn install --immutable
       - run: yarn lint
       - run: yarn build
