@@ -21,7 +21,7 @@
     "build:node": "yarn run clean && yarn run bundle:node",
     "build:browser": "yarn run clean && yarn run bundle:browser",
     "bundle": "webpack --config webpack.config.js",
-    "bundle:tds": "webpack --config webpack.tds.config.cjs",
+    "bundle:td": "webpack --config webpack.tds.config.cjs",
     "bundle:node": "webpack --config webpack.node.config.cjs",
     "bundle:browser": "webpack --config webpack.browser.config.cjs",
     "clean": "yarn rimraf dist",
