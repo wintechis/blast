@@ -51,7 +51,7 @@
     "jest-environment-jsdom": "^29.5.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "pnp-webpack-plugin": "^1.7.0",
-    "prettier": "^2.8.8",
+    "prettier": "latest",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
