@@ -6,6 +6,11 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
+export interface ObjectBlock extends Block {
+  numFields: number;
+  fields: string[];
+}
+
 JavaScript['object_from_json'] = function (block: Block) {
   const jsonValue = JavaScript.valueToCode(
     block,
@@ -26,13 +31,13 @@ JavaScript['object_to_json'] = function (block: Block) {
   return [code, JavaScript.ORDER_NONE];
 };
 
-JavaScript['object_create'] = function (block: Block) {
-  if (!(block as any).numFields) {
+JavaScript['object_create'] = function (block: ObjectBlock) {
+  if (!block.numFields) {
     return ['{}', JavaScript.ORDER_NONE];
   }
 
   let fieldInitCode = '';
-  for (let i = 1; i <= (block as any).numFields; i++) {
+  for (let i = 1; i <= block.numFields; i++) {
     if (i > 1) {
       fieldInitCode += ', ';
     }

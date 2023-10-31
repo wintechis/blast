@@ -14,7 +14,6 @@ import {
 import {getWorkspace} from '../assets/js/interpreter';
 import {thingsStore} from './ThingsStore';
 import {connectedThingsSlice} from './connectedThingsReducers';
-import {connectDevice} from './devices';
 import {implementedThing} from './types';
 import {connectedBluetoothDevices} from './devices/webBluetoothDevices';
 import {connectedHidDevices} from './devices/hidDevices';

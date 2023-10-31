@@ -73,17 +73,19 @@ intervalEvents.push(everySecondsIntervals['${block.id}']);\n`;
  * @param {Blockly.Block} block the terminate block.
  * @returns {String} the generated code.
  */
-JavaScript.forBlock['terminate'] = function (block: Block): string {
+JavaScript.forBlock['terminate'] = function (_block: Block): string {
   const code = 'process.exit();\n';
 
   return code;
 };
 
 if (typeof window !== 'undefined') {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['interpreterExecutionExit'] = false;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['process'] = {
     exit: () => {
-      // eslint-disable-next-line no-undef
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (globalThis as any)['interpreterExecutionExit'] = true;
       stopJS();
     },

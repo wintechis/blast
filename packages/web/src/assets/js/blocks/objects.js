@@ -3,8 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import Blockly from 'blockly';
-const {Blocks, Extensions, FieldTextInput, inputs} = Blockly;
+import {Blocks, Extensions, FieldTextInput, inputs} from 'blockly';
 
 Blocks['object_from_json'] = {
   init: function () {

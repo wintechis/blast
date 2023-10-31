@@ -7,6 +7,10 @@ import targetIdx2word from './mappings/target-idx2word.js';
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
+type TargetWord = {
+  [key: number]: string;
+};
+
 /**
  * Generates JavaScript code for the text_to_code block.
  */
@@ -22,6 +26,7 @@ JavaScript.forBlock['text_to_code'] = function (
 /**
  * Generates JavaScript code from text input.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['textToCode'] = async function (text: string) {
   const encoder = await tf.loadLayersModel(
     '../core/src/drivers/text2code/tfjs_model/encoder/model.json'
@@ -43,13 +48,16 @@ JavaScript.forBlock['text_to_code'] = function (
     const outputTokenTensor = tf.tidy(() => {
       const input = generateDecoderInputFromTokenID(nextTokenID);
       const prediction = decoder.predict(input);
-      return (prediction as any).squeeze().argMax();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      return (prediction as tf.Tensor<tf.Rank>).squeeze().argMax();
     });
 
     const outputToken = await outputTokenTensor.data();
     outputTokenTensor.dispose();
     nextTokenID = Math.round(outputToken[0]);
-    const word = (targetIdx2word as any)[nextTokenID];
+    const word = (targetIdx2word as TargetWord)[
+      nextTokenID as unknown as keyof TargetWord
+    ] as string;
     numPredicted++;
 
     if (word !== '<EOS>' && word !== '<SOS>') {
@@ -66,7 +74,9 @@ JavaScript.forBlock['text_to_code'] = function (
     await tf.nextFrame();
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (states as any)[0].dispose();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (states as any)[1].dispose();
 
   const sentence = convertTokensToSentence(responseTokens);
@@ -80,10 +90,11 @@ function convertSentenceToTensor(sentence: string): tf.Tensor {
   let inputWordIds: number[] = [];
   const textArray = sentence.toString().split(' ');
 
-  textArray.map(x => {
+  textArray.forEach((x: string) => {
     x = x.toLowerCase();
-    let idx = '1'; // '1' index for UNK
+    let idx = 1; // '1' index for UNK
     if (x in inputWord2idx) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       idx = (inputWord2idx as any)[x];
     }
     inputWordIds.push(Number(idx));

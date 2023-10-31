@@ -35,18 +35,7 @@ JavaScript.forBlock['string_showPrompt'] = function (
     msg = JavaScript.valueToCode(block, 'TEXT', JavaScript.ORDER_NONE) || "''";
   }
 
-  JavaScript.definitions_['getStdIn'] =
-    "import {getStdIn} from '../interpreter'";
-
-  const functionName = JavaScript.provideFunction_('showPrompt', [
-    'async function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(message) {',
-    '  const input = getStdIn();',
-    '  const inputString = await input(message);',
-    '  return inputString;',
-    '}',
-  ]);
-
-  let code = `await showPrompt(${msg})`;
+  let code = `await window.prompt(${msg})`;
   const toNumber = block.getFieldValue('TYPE') === 'NUMBER';
   if (toNumber) {
     code = `Number(${code})`;

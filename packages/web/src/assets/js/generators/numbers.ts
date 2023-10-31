@@ -33,7 +33,7 @@ JavaScript.forBlock['parse_int'] = function (block: Block): [string, number] {
   return [code, JavaScript.ORDER_NONE];
 };
 
-JavaScript.forBlock['timestamp'] = function (block: Block): [string, number] {
+JavaScript.forBlock['timestamp'] = function (_block: Block): [string, number] {
   const code = 'Date.now()';
   return [code, JavaScript.ORDER_NONE];
 };

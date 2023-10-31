@@ -128,6 +128,7 @@ export default class BlastBar extends React.Component {
                 options={samples}
                 sx={{width: 300}}
                 renderInput={params => {
+                  // eslint-disable-next-line no-unused-vars
                   const {InputLabelProps, InputProps, ...other} = params;
                   return (
                     <StyledInputBase

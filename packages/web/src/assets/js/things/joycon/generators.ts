@@ -81,9 +81,11 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
 /**
  * Adds WoT event handlers to the JoyCon's ExposedThing instance.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['addJoyConHandlers'] = function (
   exposedThing: WoT.ExposedThing
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const id = (exposedThing as any).id;
   const device = getDeviceById(id);
   if (!device) {
@@ -101,7 +103,7 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     throw new Error(`No JoyCon with id ${id} found.`);
   }
 
-  Object.assign(joyCon, {
+  Object.assign(joyCon as JoyConLeft | JoyConRight | GeneralController, {
     pressed: {},
     prevPressed: {},
     accelerometers: {},
@@ -113,6 +115,7 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     quaternion: {},
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   function _shallowEqual(object1: any, object2: any) {
     const keys1 = Object.keys(object1);
     const keys2 = Object.keys(object2);
@@ -130,7 +133,7 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   }
 
   const handleInput = function (packet: JoyConPacket) {
-    if (!packet || !packet.actualOrientation) {
+    if (!packet?.actualOrientation) {
       return;
     }
     const {
@@ -154,7 +157,8 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     }
 
     // write values to JoyCon
-    Object.assign(joyCon as any, {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Object.assign(joyCon as JoyConLeft | JoyConRight | GeneralController, {
       pressed,
       accelerometers,
       gyroscopes,
@@ -165,24 +169,32 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
       quaternion,
     });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!_shallowEqual(pressed, (joyCon as any).prevPressed)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (joyCon as any).prevPressed = pressed;
       exposedThing.emitEvent('button', buttonStatus);
     }
   };
 
   joyCon.open();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (joyCon as any).interval = setInterval(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!(joyCon as any).eventListenerAttached === true) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (joyCon as any).addEventListener('hidinput', (event: any) => {
-        handleInput((event as any).detail);
+        handleInput(event.detail);
       });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (joyCon as any).eventListenerAttached = true;
     }
   }, 2000);
 
   addCleanUpFunction(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((joyCon as any).interval) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       clearInterval((joyCon as any).interval);
     }
   });
@@ -213,9 +225,11 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   });
 
   const waitForProperty = async function (property: string) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     while (Object.keys((joyCon as any)[property]).length === 0) {
       await new Promise(resolve => setTimeout(resolve, 100));
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     return (joyCon as any)[property];
   };
 };
@@ -305,10 +319,13 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
 /**
  * Adds WoT event handlers to the gamepad's ExposedThing instance.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['addGamepadHandlers'] = function (
   gamepad: WoT.ExposedThing
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const switchPro = new SwitchPro((gamepad as any).id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (switchPro as any).interval = setInterval(
     switchPro.pollGamepads.bind(switchPro),
     50
@@ -326,7 +343,9 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
   switchPro.addListener(handleButton);
 
   addCleanUpFunction(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((switchPro as any).interval) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       clearInterval((switchPro as any).interval);
     }
   });

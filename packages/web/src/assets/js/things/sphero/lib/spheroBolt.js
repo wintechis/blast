@@ -463,7 +463,7 @@ export default class SpheroBolt {
 
   /* Rolls the Sphero */
   async rollTime(speed, heading, time, flags) {
-    setTimeout((heading, flags) => this.roll(0, this.heading, []), time);
+    setTimeout((_heading, _flags) => this.roll(0, this.heading, []), time);
     await this.roll(speed, heading, flags);
   }
 
@@ -805,10 +805,6 @@ function decodeFlags(flags) {
     hasSourceId,
   };
 }
-
-const wait = time => {
-  return new Promise(callback => setTimeout(callback, time));
-};
 
 const maskToRaw = sensorMask => {
   return {

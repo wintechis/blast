@@ -1,10 +1,12 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function debounce(func: any, wait: number) {
-  let timeout: any = null;
-  let later: any = null;
+  let timeout: NodeJS.Timeout | undefined = undefined;
+  let later: () => void | undefined;
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const debouncedFunction = (...args: any) => {
     later = () => {
-      timeout = null;
+      timeout = undefined;
       func(...args);
     };
     clearTimeout(timeout);

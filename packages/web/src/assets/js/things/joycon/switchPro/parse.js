@@ -167,7 +167,7 @@ function toRevolutionsPerSecond(value) {
   return parseFloat((0.0001694 * view.getInt16(0, true)).toFixed(6));
 }
 
-export function parseDeviceInfo(rawData, data) {
+export function parseDeviceInfo(rawData, _data) {
   const bytes = rawData.slice(15, 15 + 11);
   const firmwareMajorVersionRaw = bytes.slice(0, 1)[0]; // index 0
   const firmwareMinorVersionRaw = bytes.slice(1, 2)[0]; // index 1

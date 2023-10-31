@@ -23,6 +23,7 @@ JavaScript.forBlock['solid_upload_image'] = function (block: Block): string {
 /**
  * Uploads an image to a solid container.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['solid_uploadImage'] = async function (
   image: string,
   url: string

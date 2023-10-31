@@ -151,6 +151,7 @@ const clearIntervalEvents = function () {
  * Reset the JS Interpreter.
  */
 export const resetInterpreter = async function () {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (window as any).resetServient();
   clearIntervalEvents();
   getWorkspace()?.highlightBlock(null);
@@ -164,6 +165,7 @@ export const resetInterpreter = async function () {
  * Stop the JavaScript execution.
  */
 export const stopJS = function () {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['interpreterExecutionExit'] = true;
   resetInterpreter();
   setStatus('stopped');
@@ -260,6 +262,7 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
 
   // Load the interpreter now, and upon future changes.
   generateCode();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   workspace.addChangeListener((e: any) => {
     if (!(e instanceof Events.UiBase)) {
       // Something changed. Parser needs to be reloaded.
@@ -272,6 +275,7 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
  * Execute the user's code.
  */
 export const runJS = async function () {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['interpreterExecutionExit'] = false;
   setStatus('running');
   stdInfo('execution started');
@@ -291,6 +295,7 @@ export const runJS = async function () {
     await func(stopJS);
   } catch (e) {
     stopJS();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (globalThis as any)['interpreterExecutionExit'] = true;
     resetInterpreter();
     setStatus('error');

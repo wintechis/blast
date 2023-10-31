@@ -117,5 +117,10 @@
         "require-atomic-updates": "off"
       }
     }
-  ]
+  ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
 }

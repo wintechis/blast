@@ -61,7 +61,9 @@ JavaScript.forBlock['spheroMini_stop'] = function (block: Block): string {
 /**
  * Adds WoT interaction handlers to the Sphero Mini ExposedThing instance.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['addSpheroHandlers'] = function (sphero: WoT.ExposedThing) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const mini = getSpheroMini((sphero as any).id);
   sphero.setActionHandler('roll', async (params: WoT.InteractionOutput) => {
     const values = (await params.value()) as {speed: number; heading: number};

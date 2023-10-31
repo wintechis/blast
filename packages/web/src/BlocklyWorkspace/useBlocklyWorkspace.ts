@@ -21,6 +21,7 @@ import {thingsFlyoutCategory} from '../ThingsStore/things';
 
 JavaScript.addReservedWords('highlightBlock');
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any)['highlightBlock'] = function (id: string) {
   (getMainWorkspace() as WorkspaceSvg).highlightBlock(id);
 };
@@ -28,6 +29,7 @@ JavaScript.addReservedWords('highlightBlock');
 export function importFromXml(
   xml: Element,
   workspace: WorkspaceSvg,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onImportXmlError: (e: any) => void
 ) {
   try {
