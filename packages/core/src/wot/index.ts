@@ -230,6 +230,47 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
     return output;
   };
 
+  consumedThing.writeProperty = async function (
+    propertyName: string,
+    value: WoT.InteractionInput,
+    options: WoT.InteractionOptions = {}
+  ): Promise<void> {
+    const propertyElement = exposedThing.properties[propertyName];
+    if (!propertyElement) {
+      throw new Error(`Property '${propertyName}' not found`);
+    }
+    // add a dummy form to by-pass protocol-listener-registry check
+    const form = {
+      op: 'writeProperty',
+    } as FormElementBase;
+    propertyElement.forms = [form];
+
+    let readable = new Readable();
+    if (value) {
+      readable = interactionInputToReadable(value);
+    }
+
+    let type = exposedThing.properties[propertyName].type as string;
+    if (!type) {
+      throw new Error(`Property '${propertyName}' has no type`);
+    }
+    switch (type) {
+      case 'string':
+      case 'boolean':
+      case 'number':
+        type = 'text/plain';
+        break;
+      default:
+        type = 'application/json';
+    }
+
+    const content = new Content(type, readable);
+    await exposedThing.handleWriteProperty(propertyName, content, {
+      formIndex: 0,
+      ...options,
+    });
+  };
+
   return consumedThing;
 };
 
