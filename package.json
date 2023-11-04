@@ -35,6 +35,7 @@
         "eslint-plugin-node": "latest",
         "eslint-plugin-react": "latest",
         "lint-staged": "latest",
+        "ndjson-cli": "latest",
         "prettier": "latest",
         "typescript": "latest"
     },
