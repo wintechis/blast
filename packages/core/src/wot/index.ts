@@ -8,7 +8,7 @@ import {
 } from '@node-wot/core';
 import {InteractionOutput} from '@node-wot/core/dist/interaction-output';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
-import {HttpsClientFactory} from '@node-wot/binding-http';
+import {HttpClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
@@ -25,10 +25,7 @@ import {ReadableStream as PolyfillStream} from 'web-streams-polyfill/ponyfill/es
 let servient: Servient;
 let wot: typeof WoT;
 
-export const getServient = function (
-  bluetoothAdapter: BluetoothAdapter,
-  hidAdapter: HidAdapter
-): Servient {
+export const getServient = function (): Servient {
   const httpConfig = {
     port: 8083,
     allowSelfSigned: true, // client configuration
@@ -36,19 +33,18 @@ export const getServient = function (
 
   if (!servient) {
     servient = new Servient();
+    const bluetoothAdapter = new ConcreteBluetoothAdapter();
+    const hidAdapter = new ConcreteHidAdapter();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
-    servient.addClientFactory(new HttpsClientFactory(httpConfig));
+    servient.addClientFactory(new HttpClientFactory(httpConfig));
     servient.addClientFactory(new HidClientFactory(hidAdapter));
   }
   return servient;
 };
 
-const getWot = async function (
-  bluetoothAdapter: BluetoothAdapter = new ConcreteBluetoothAdapter(),
-  hidAdapter: HidAdapter = new ConcreteHidAdapter()
-): Promise<typeof WoT> {
+export const getWot = async function (): Promise<typeof WoT> {
   if (!wot) {
-    wot = await getServient(bluetoothAdapter, hidAdapter).start();
+    wot = await getServient().start();
   }
   return wot;
 };
@@ -67,10 +63,10 @@ export const resetServient = async function (): Promise<void> {
   }
 };
 
-export const createThing = async function (
+export const createExposedThing = async function (
   td: WoT.ThingDescription,
   id: string | undefined
-): Promise<WoT.ConsumedThing> {
+): Promise<WoT.ExposedThing> {
   if (id) {
     const map = {
       MacOrWebBluetoothId: id,
@@ -82,6 +78,15 @@ export const createThing = async function (
   }
   const wotServient = await getWot();
   const exposedThing = await wotServient.produce(td);
+  return exposedThing;
+};
+
+export const createThing = async function (
+  td: WoT.ThingDescription,
+  id: string | undefined
+): Promise<WoT.ConsumedThing> {
+  const exposedThing = await createExposedThing(td, id);
+  const wotServient = await getWot();
   const consumedThing = await wotServient.consume(
     exposedThing.getThingDescription()
   );
@@ -292,3 +297,5 @@ const interactionInputToReadable = function (
   }
   return body;
 };
+
+export {BluetoothClientFactory, ConcreteBluetoothAdapter};
