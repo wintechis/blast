@@ -1,6 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function debounce(func: any, wait: number) {
-  let timeout: NodeJS.Timeout | undefined = undefined;
+  let timeout: NodeJS.Timeout | undefined;
   let later: () => void | undefined;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,9 +14,11 @@ export default function debounce(func: any, wait: number) {
   };
 
   const cancel = () => {
-    if (timeout !== null) {
+    if (timeout !== undefined) {
       clearTimeout(timeout);
-      later();
+      if (later !== undefined) {
+        later();
+      }
     }
   };
 
