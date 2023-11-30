@@ -91,7 +91,7 @@ export default class HidClient implements ProtocolClient {
 
     if (methodName === 'sendFeatureReport') {
       debug(`Sending feature report: ${reportId} ${data}`);
-      await device.sendFeatureReport(reportId, data);
+      await device.sendFeatureReport(reportId, Buffer.from(data.subarray(1)));
     } else if (methodName === 'sendReport') {
       debug(`Sending report: ${reportId} ${data}`);
       await device.sendReport(reportId, Buffer.from(data.subarray(1)));

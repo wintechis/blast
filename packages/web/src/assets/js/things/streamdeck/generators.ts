@@ -349,7 +349,7 @@ JavaScript.forBlock['streamdeck_write_on_buttons'] = function (
 JavaScript.forBlock['streamdeck_set_brightness'] = function (block: Block) {
   const value =
     JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) ||
-    JavaScript.quote_('100');
+    JavaScript.quote_('0');
   const name =
     JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 

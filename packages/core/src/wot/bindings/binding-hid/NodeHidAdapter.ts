@@ -48,7 +48,11 @@ export default class ConcreteHidAdapter implements HidAdapter {
       },
       sendFeatureReport: async (reportId: number, data: BufferSource) => {
         // use hid.sendFeatureReport() with reportId as first byte
-        hid.sendFeatureReport(data as Buffer);
+        const buffer = Buffer.concat([
+          Buffer.from([reportId]),
+          Buffer.from(data as ArrayBuffer),
+        ]);
+        hid.sendFeatureReport(buffer);
       },
       receiveFeatureReport: async (reportId: number) => {
         // node-hid needs to know the report length, return empty DataView
