@@ -31,7 +31,6 @@
           "href": "hid://sendFeatureReport",
           "hid:path": "{{HIDPATH}}",
           "hid:data": [
-            5,
             85,
             170,
             209,
@@ -49,7 +48,8 @@
             0,
             0
           ],
-          "hid:valueIndex": 5,
+          "hid:valueIndex": 4,
+          "hid:reportId": 5,
           "op": "writeproperty",
           "contentType": "application/octet-stream"
         }
