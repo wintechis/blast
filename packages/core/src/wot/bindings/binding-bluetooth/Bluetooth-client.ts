@@ -49,6 +49,8 @@ export default class BluetoothClient implements ProtocolClient {
     } else {
       buff = new Uint8Array(value.buffer);
     }
+
+    debug(`Received value: ${buff}`);
     // Convert to readable
     const body = Readable.from(buff);
 

@@ -20,7 +20,7 @@ export default class JavascriptTab extends React.Component {
       "import * as blastCore from 'blast.node.js';"
     );
 
-    // replace 'const blastTds = await import('../../assets/blast/blast.tds.js');'
+    // replace 'const blastTds = await import('../../assets/blast/blast.tds.cjs');'
     // with 'import * as blastTds from 'blast.tds.js';'
     code = code.replace(
       /const blastTds = await import\('..\/..\/assets\/blast\/blast.tds.js'\);/gm,

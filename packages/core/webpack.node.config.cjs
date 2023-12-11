@@ -9,16 +9,12 @@ const nodeConfig = {
   },
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.[name].js',
-    chunkFormat: 'module',
+    filename: 'blast.[name].cjs',
     library: {
-      type: 'module',
+      type: 'commonjs-static',
     },
   },
-  devtool: 'eval-source-map',
-  experiments: {
-    outputModule: true,
-  },
+  devtool: 'inline-cheap-module-source-map',
   mode: 'development',
   resolve: {
     extensions: ['.ts', '.js'],
@@ -50,7 +46,7 @@ const nodeConfig = {
     ],
   },
   target: 'node',
-  externals: ['node-hid'],
+  externals: ['node-hid', 'hci-socket'],
 };
 
 module.exports = nodeConfig;

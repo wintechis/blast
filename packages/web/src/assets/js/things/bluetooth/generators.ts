@@ -15,7 +15,7 @@ JavaScript.forBlock['things_eddyStoneDevice'] = function (
   JavaScript.imports_['core'] =
     "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+    "const blastTds = await import('../../assets/blast/blast.tds.cjs');";
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['EddystoneDevice'] =
@@ -36,7 +36,7 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
   JavaScript.imports_['core'] =
     "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+    "const blastTds = await import('../../assets/blast/blast.tds.cjs');";
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['BluetoothGeneric'] =

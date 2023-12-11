@@ -16,12 +16,12 @@ Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:
 > :warning: You might have to set yarn version using `yarn set version berry` before installing
 
 ## Usage
-This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/td) (of `dist/blast.tds.js`) with [Node.js](https://nodejs.org/) using `dist/blast.node.js`. For an example on how to use `blast.browser.js` see [`packages/web/`](../web/). If you don't have a `dist` folder make sure to [install & build](#install--build) first.
+This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/td) (of `dist/blast.tds.cjs`) with [Node.js](https://nodejs.org/) using `dist/blast.node.cjs`. For an example on how to use `blast.browser.js` see [`packages/web/`](../web/). If you don't have a `dist` folder make sure to [install & build](#install--build) first.
 
 ### Example
 ```JavaScript
-import {createThing} from './dist/blast.node.js';
-import {BleRgbController} from './dist/blast.tds.js';
+import {createThing} from './dist/blast.node.cjs';
+import {BleRgbController} from './dist/blast.tds.cjs';
 
 const mac = 'BE5860018744';
 

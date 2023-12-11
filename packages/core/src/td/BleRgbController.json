@@ -66,7 +66,7 @@
           "op": "writeproperty",
           "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
           "contentType": "application/x.binary-data-stream",
-          "sbo:methodName": "sbo:write-without-response"
+          "sbo:methodName": "sbo:write"
         }
       ]
     },

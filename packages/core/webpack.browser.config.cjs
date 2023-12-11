@@ -17,7 +17,7 @@ const browserConfig = {
       type: 'module',
     },
   },
-  devtool: 'source-map',
+  devtool: 'inline-cheap-module-source-map',
   experiments: {
     outputModule: true,
   },

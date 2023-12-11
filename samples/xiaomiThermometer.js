@@ -1,5 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.js';
-import {XiaomiThermometer} from '../packages/core/dist/blast.tds.js';
+import {createThing} from '../packages/core/dist/blast.node.cjs';
+import {XiaomiThermometer} from '../packages/core/dist/blast.tds.cjs';
 
 const mac = 'A4C13852B4DD';
 

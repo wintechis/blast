@@ -1,54 +1,258 @@
 import {BluetoothAdapter} from './BluetoothAdapter';
-import {Adapter, createBluetooth} from 'node-ble';
+import {
+  AttErrors,
+  BleManager,
+  Connection,
+  GattClientCharacteristic,
+  GattClientService
+} from 'ble-host';
+import HciSocket from 'hci-socket';
+
 import {createLoggers} from '@node-wot/core';
 
-const {debug} = createLoggers('binding-bluetooth', 'NodeBluetoothAdapters');
+const {debug} = createLoggers('binding-bluetooth', 'NodeBluetoothAdapter');
+
+const transport = new HciSocket(); // connects to the first hci device on the computer, for example hci0
+const options = {
+  // optional properties go here
+};
+
+class ChangeEvent<T> extends Event {
+  target: EventTarget;
+  constructor(message: string, target: EventTarget) {
+    super(message);
+    this.target = target;
+  }
+}
 
 export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
-  private adapter: Adapter | null = null;
+  bleManager: BleManager | undefined = undefined;
+  connectedDevices: Map<string, Connection> = new Map();
+  async getBleManager() {
+    if (this.bleManager === undefined) {
+      this.bleManager = await new Promise<BleManager>((resolve, reject) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (BleManager as any).create(
+          transport,
+          options,
+          (err: AttErrors, manager: BleManager) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(manager);
+            }
+          }
+        );
+      });
+    }
+    return this.bleManager;
+  }
 
-  public async getCharacteristic(
+  async getCharacteristic(
     deviceId: string,
-    serviceID: string,
-    characteristicId: string
+    serviceID: BluetoothServiceUUID,
+    characteristicId: BluetoothCharacteristicUUID
   ): Promise<BluetoothRemoteGATTCharacteristic> {
-    // test if deviceId is hex characters and : only
-    if (!/^[0-9a-fA-F:]+$/.test(deviceId)) {
-      throw new Error(`Device id ${deviceId} is not valid`);
+    debug(`getCharacteristic ${deviceId} ${serviceID} ${characteristicId}`);
+    const manager = await this.getBleManager();
+
+    // add : to mac address
+    if (deviceId.length === 12) {
+      deviceId = deviceId
+        .match(/.{1,2}/g)!
+        .join(':')
+        .toUpperCase();
     }
-    // test if deviceId has : every 2 characters
-    if (!/^([0-9a-fA-F]{2}:)*[0-9a-fA-F]{2}$/.test(deviceId)) {
-      // add ':' every 2 characters
-      deviceId = deviceId?.replace(/(.{2})/g, '$1:').slice(0, -1);
-    }
+    // upper case uuids
+    serviceID = (serviceID as string).toUpperCase();
+    characteristicId = (characteristicId as string).toUpperCase();
 
-    if (!this.adapter) {
-      const {bluetooth} = createBluetooth();
-      this.adapter = await bluetooth.defaultAdapter();
-    }
+    debug(`Connecting to ${deviceId}`);
 
-    if (!(await this.adapter.isDiscovering())) {
-      debug('Starting discovery');
-      await this.adapter.startDiscovery();
-    }
+    const connection =
+      this.connectedDevices.get(deviceId) ??
+      (await new Promise<Connection>((resolve, reject) => {
+        setTimeout(() => {
+          reject(new Error('Connection timeout'));
+        }, 10000);
+        manager.connect(
+          'public',
+          deviceId,
+          {
+            /* options */
+          },
+          (conn: Connection) => {
+            this.connectedDevices.set(deviceId, conn);
+            (conn as any).on('disconnect', () => {
+              this.connectedDevices.delete(deviceId);
+            });
+            resolve(conn);
+          }
+        );
+        manager.connect(
+          'random',
+          deviceId,
+          {
+            /* options */
+          },
+          (conn: Connection) => {
+            this.connectedDevices.set(deviceId, conn);
+            (conn as any).on('disconnect', () => {
+              this.connectedDevices.delete(deviceId);
+            });
+            resolve(conn);
+          }
+        );
+      }));
 
-    debug(`Looking for device ${deviceId}`);
-    const device = await this.adapter.waitDevice(deviceId, 10000);
-    if (!device) {
-      throw new Error(`Device with id ${deviceId} not found`);
-    }
-    debug(`Found device ${deviceId}`);
+    debug(`Connected to ${deviceId}`);
 
-    debug(`Connecting to device ${deviceId}`);
-    await device.connect();
-    const gattServer = await device.gatt();
+    const service = await new Promise<GattClientService>((resolve, reject) => {
+      connection.gatt.discoverServicesByUuid(serviceID, 1, services => {
+        const service = services[0];
+        debug(`Found service ${serviceID}`);
+        resolve(service);
+      });
+    });
 
-    debug(`Getting service ${serviceID} on device ${deviceId}`);
-    const service = await gattServer.getPrimaryService(serviceID);
+    const characteristic = await new Promise<GattClientCharacteristic>(
+      (resolve, reject) => {
+        service.discoverCharacteristics(characteristics => {
+          const characteristic = characteristics.find(
+            c => c.uuid === characteristicId
+          );
+          if (characteristic) {
+            debug(`Found characteristic ${characteristicId}`);
+            resolve(characteristic);
+          } else {
+            reject(
+              new Error(
+                `Characteristic ${characteristicId} not found on service ${serviceID}`
+              )
+            );
+          }
+        });
+      }
+    );
 
-    debug(`Getting characteristic ${characteristicId} on device ${deviceId}`);
-    return service.getCharacteristic(
-      characteristicId
-    ) as unknown as Promise<BluetoothRemoteGATTCharacteristic>;
+    return this.wrap(characteristic);
+  }
+
+  wrap(
+    characteristic: GattClientCharacteristic
+  ): BluetoothRemoteGATTCharacteristic {
+    const char = {
+      service: {} as BluetoothRemoteGATTService,
+      uuid: characteristic.uuid,
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      properties: characteristic.properties as any,
+      value: undefined,
+      readValue: () => {
+        return new Promise((resolve, reject) => {
+          debug('readValue');
+          characteristic.read((err, value) => {
+            if (err || value === undefined) {
+              reject(err);
+            } else {
+              debug('readValue done', value);
+              const arrayBuffer = new Uint8Array(value).buffer;
+              resolve(new DataView(arrayBuffer));
+            }
+          });
+        });
+      },
+      writeValue: async (value: BufferSource) => {
+        return new Promise<void>((resolve, reject) => {
+          debug('writeValue', value);
+          characteristic.write(
+            Buffer.from(value as ArrayBuffer),
+            (err: AttErrors) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            }
+          );
+        });
+      },
+      writeValueWithoutResponse: async (value: BufferSource) => {
+        return new Promise<void>((resolve, reject) => {
+          debug('writeValueWithoutResponse', value);
+          characteristic.writeWithoutResponse(
+            Buffer.from(value as ArrayBuffer),
+            undefined,
+            (err: AttErrors) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve();
+              }
+            }
+          );
+        });
+      },
+      writeValueWithResponse: async (value: BufferSource) => {
+        return new Promise<void>((resolve, reject) => {
+          debug('writeValueWithResponse', value);
+          characteristic.write(
+            Buffer.from(value as ArrayBuffer),
+            (err: AttErrors) => {
+              if (err) {
+                reject(err);
+              } else {
+                debug('writeValueWithResponse done');
+                resolve();
+              }
+            }
+          );
+        });
+      },
+      startNotifications: () => {
+        return new Promise((resolve, reject) => {
+          characteristic.writeCCCD(true, false, err => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(char);
+            }
+          });
+        });
+      },
+      stopNotifications: () => {
+        return new Promise((resolve, reject) => {
+          characteristic.writeCCCD(false, false, err => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(char);
+            }
+          });
+        });
+      },
+      addEventListener: (
+        type: 'characteristicvaluechanged',
+        listener: EventListenerOrEventListenerObject | null,
+        options?: boolean | AddEventListenerOptions
+      ) => {
+        characteristic.on('change', (value: Buffer, isIndication: boolean, callback: Function) => {
+          if (listener) {
+            debug('characteristicvaluechanged event received with value ', value);
+            const arrayBuffer = new Uint8Array(value).buffer;
+            (char.value as any) = new DataView(arrayBuffer);
+            debug('calling listener with value ', char.value);
+            (listener as EventListener)(new ChangeEvent('characteristicvaluechanged',  char as unknown as EventTarget));
+          }
+        });
+      },
+      removeEventListener: (
+        type: 'characteristicvaluechanged',
+        listener: EventListenerOrEventListenerObject | null,
+        options?: boolean | EventListenerOptions
+      ) => {
+        characteristic.removeEventListener('change', listener as EventListener);
+      },
+    };
+    return char as BluetoothRemoteGATTCharacteristic;
   }
 }

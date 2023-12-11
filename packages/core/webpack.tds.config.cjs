@@ -8,14 +8,10 @@ const tdConfig = {
   },
   output: {
     path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.[name].js',
-    chunkFormat: 'module',
+    filename: 'blast.[name].cjs',
     library: {
-      type: 'module',
+      type: 'commonjs-static',
     },
-  },
-  experiments: {
-    outputModule: true,
   },
   mode: 'production',
   module: {

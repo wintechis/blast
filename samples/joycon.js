@@ -1,5 +1,5 @@
-import {createThingWithHandlers} from '../packages/core/dist/blast.node.js';
-import {JoyCon as td} from '../packages/core/dist/blast.tds.js';
+import {createThingWithHandlers} from '../packages/core/dist/blast.node.cjs';
+import {JoyCon as td} from '../packages/core/dist/blast.tds.cjs';
 import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
 import {JoyConLeft, JoyConRight, GeneralController} from '../packages/web/src/assets/js/things/joycon/switchPro/JoyCon.js'
 

@@ -1,4 +1,4 @@
-import {createThing} from '../packages/core/dist/blast.node.js';
+import {createThing} from '../packages/core/dist/blast.node.cjs';
 const IP = "127.0.0.1:3001"
 const td = {
   '@context': [
