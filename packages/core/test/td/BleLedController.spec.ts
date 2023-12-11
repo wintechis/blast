@@ -41,7 +41,7 @@ describe('BleLedController Thing Description', () => {
         'application/x.binary-data-stream'
       );
       expect(colour.forms[0]['sbo:methodName']).toEqual(
-        'sbo:write-without-response'
+        'sbo:write'
       );
     });
     test('power', () => {

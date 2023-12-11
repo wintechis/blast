@@ -74,7 +74,7 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
       (await new Promise<Connection>((resolve, reject) => {
         setTimeout(() => {
           reject(new Error('Connection timeout'));
-        }, 10000);
+        }, 4000);
         manager.connect(
           'public',
           deviceId,
