@@ -53,6 +53,13 @@ jest.mock('ble-host', () => ({
   },
 }));
 
+/**
+ * Mock the HciSocket class
+ */
+jest.mock('hci-socket', () => {
+  return jest.fn(); // Mock the default export as a function
+});
+
 // eslint-disable-next-line node/no-unpublished-import
 import {describe, expect, jest, test} from '@jest/globals';
 import ConcreteBluetoothAdapter from '../../../../src/wot/bindings/binding-bluetooth/NodeBluetoothAdapter';
