@@ -40,9 +40,7 @@ describe('BleLedController Thing Description', () => {
       expect(colour.forms[0].contentType).toEqual(
         'application/x.binary-data-stream'
       );
-      expect(colour.forms[0]['sbo:methodName']).toEqual(
-        'sbo:write'
-      );
+      expect(colour.forms[0]['sbo:methodName']).toEqual('sbo:write');
     });
     test('power', () => {
       const power = thing?.properties.power;
