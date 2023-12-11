@@ -1,5 +1,4 @@
 declare module 'ble-host' {
-
   declare interface scanParameters {
     /**
      * Whether the scan response data should be requested
@@ -153,6 +152,18 @@ declare module 'ble-host' {
       parameters: ConnectParameters,
       callback: updateConnParamsCallback
     );
+
+    /**
+     * Disconnect event
+     */
+    on(event: 'disconnect', listener: DisconnectEventListener);
+  }
+
+  declare interface DisconnectEventListener {
+    /**
+     * @param reason An error code indicating reason for disconnecting
+     */
+    (reason: number);
   }
 
   /**

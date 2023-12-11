@@ -4,7 +4,7 @@ import {
   BleManager,
   Connection,
   GattClientCharacteristic,
-  GattClientService
+  GattClientService,
 } from 'ble-host';
 import HciSocket from 'hci-socket';
 
@@ -83,7 +83,7 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
           },
           (conn: Connection) => {
             this.connectedDevices.set(deviceId, conn);
-            (conn as any).on('disconnect', () => {
+            conn.on('disconnect', () => {
               this.connectedDevices.delete(deviceId);
             });
             resolve(conn);
@@ -97,7 +97,7 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
           },
           (conn: Connection) => {
             this.connectedDevices.set(deviceId, conn);
-            (conn as any).on('disconnect', () => {
+            conn.on('disconnect', () => {
               this.connectedDevices.delete(deviceId);
             });
             resolve(conn);
@@ -235,15 +235,27 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
         listener: EventListenerOrEventListenerObject | null,
         options?: boolean | AddEventListenerOptions
       ) => {
-        characteristic.on('change', (value: Buffer, isIndication: boolean, callback: Function) => {
-          if (listener) {
-            debug('characteristicvaluechanged event received with value ', value);
-            const arrayBuffer = new Uint8Array(value).buffer;
-            (char.value as any) = new DataView(arrayBuffer);
-            debug('calling listener with value ', char.value);
-            (listener as EventListener)(new ChangeEvent('characteristicvaluechanged',  char as unknown as EventTarget));
+        characteristic.on(
+          'change',
+          (value: Buffer, isIndication: boolean, callback: Function) => {
+            if (listener) {
+              debug(
+                'characteristicvaluechanged event received with value ',
+                value
+              );
+              const arrayBuffer = new Uint8Array(value).buffer;
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              (char.value as any) = new DataView(arrayBuffer);
+              debug('calling listener with value ', char.value);
+              (listener as EventListener)(
+                new ChangeEvent(
+                  'characteristicvaluechanged',
+                  char as unknown as EventTarget
+                )
+              );
+            }
           }
-        });
+        );
       },
       removeEventListener: (
         type: 'characteristicvaluechanged',
