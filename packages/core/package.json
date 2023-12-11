@@ -70,7 +70,6 @@
     "hci-socket": "^1.0.0",
     "inquirer": "^9.2.2",
     "json-placeholder-replacer": "^1.0.35",
-    "node-ble": "https://github.com/derwehr/node-ble",
     "node-hid": "^2.1.2",
     "readable-stream": "^4.3.0",
     "rxjs": "^7.8.1",
