@@ -13,7 +13,8 @@ To install and build `@blast/core`, open a terminal and execute the following co
 
 Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:browser` to only build the respective file.
 
-> :warning: You might have to set yarn version using `yarn set version berry` before installing
+> [!NOTE]
+> You might have to set yarn version using `yarn set version berry` before installing
 
 ## Usage
 This section describes using the pre-defined [TDs](https://www.w3.org/2019/wot/td) (of `dist/blast.tds.cjs`) with [Node.js](https://nodejs.org/) using `dist/blast.node.cjs`. For an example on how to use `blast.browser.js` see [`packages/web/`](../web/). If you don't have a `dist` folder make sure to [install & build](#install--build) first.

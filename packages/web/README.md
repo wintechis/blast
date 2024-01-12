@@ -9,7 +9,8 @@ To serve BLAST on your local network, execute the commands below:
 1. (If not done already) Install the dependencies `yarn install`
 2. `yarn start`
 
-> :warning: **BLAST's Bluetooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
+> [!IMPORTANT]
+> **BLAST's Bluetooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
 
 ### WebHID on Linux
 On most Linux systems, the udev subsystem blocks write access to HID devices. In order to unblock access, each device requires its own udev rule. See the [device section](https://github.com/wintechis/blast/wiki/Devices) of the wiki for step by step instructions for all devices used by BLAST.

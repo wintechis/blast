@@ -13,6 +13,7 @@ In order to use the BLAST web demo open a Terminal and enter the following comma
 5. Start BLAST web: `yarn start`
 6. Open your Browser and navigate to `https://localhost:3000`
 
-> :warning: You might have to set yarn version using `yarn set version berry` before installing
+> [!NOTE]
+> You might have to set yarn version using `yarn set version berry` before installing
 
 For more detailed descriptions navigate to one of the packages ([`@blast/core`](./packages/core/) or [`@blast/web`](./packages/web/))
