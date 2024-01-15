@@ -12,7 +12,7 @@ import * as SpheroMini from './SpheroMini.json';
 import * as StreamDeckMini from './StreamDeckMini.json';
 import * as XiaomiFlowerCare from './XiaomiFlowerCare.json';
 import * as XiaomiThermometer from './XiaomiThermometer.json';
-import * as Microbit from "./Microbit.json";
+import * as Microbit from './Microbit.json';
 
 export {
   BleRgbController,
