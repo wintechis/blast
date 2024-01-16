@@ -8,6 +8,7 @@
     "@fontsource/roboto": "^5.0.1",
     "@fseehawer/react-circular-slider": "^2.6.1",
     "@inrupt/solid-client": "^1.29.0",
+    "@inrupt/solid-client-authn-browser": "^2.0.0",
     "@mui/icons-material": "^5.11.16",
     "@mui/lab": "^5.0.0-alpha.131",
     "@mui/material": "^5.13.2",

@@ -6,6 +6,7 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {saveFileInContainer} from '@inrupt/solid-client';
+import {fetch} from '@inrupt/solid-client-authn-browser';
 
 /**
  * Generates Javascript code for the solid_upload_image block.
@@ -43,7 +44,7 @@ JavaScript.forBlock['solid_upload_image'] = function (block: Block): string {
   const blob = new Blob([ia], {type: mimeString});
 
   try {
-    await saveFileInContainer(url, blob);
+    await saveFileInContainer(url, blob, {fetch});
   } catch (e) {
     console.error(e);
   }

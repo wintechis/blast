@@ -21,6 +21,7 @@ import Typography from '@mui/material/Typography';
 import {loadFromFile, loadSample, save} from './load.ts';
 import logo from '../assets/logo.png';
 import ReconnectDialog from './ReconnectDialog.jsx';
+import SolidDialog from './SolidDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';
 
 import {onStatusChange, runJS, stopJS} from '../assets/js/interpreter.ts';
@@ -82,6 +83,7 @@ export default class BlastBar extends React.Component {
       spheroConnected: false,
     };
     this.reconnectDialogRef = React.createRef();
+    this.SolidDialogRef = React.createRef();
     this.spheroDialogRef = React.createRef();
     onStatusChange.stopped.push(() => this.setStatus('stopped'));
     onStatusChange.running.push(() => this.setStatus('running'));
@@ -110,6 +112,7 @@ export default class BlastBar extends React.Component {
           setSpheroConnected={this.setSpheroConnected}
         />
         <SpheroDialog ref={this.spheroDialogRef} />
+        <SolidDialog ref={this.SolidDialogRef} />
         <Toolbar>
           <Box
             component="img"
@@ -175,6 +178,22 @@ export default class BlastBar extends React.Component {
               }}
             >
               <SaveIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Log in to Solid">
+            <IconButton
+              size="large"
+              aria-label="log in to Solid"
+              color="inherit"
+              onClick={() => {
+                this.SolidDialogRef.current.open();
+              }}
+            >
+              <img
+                src="https://solid.mit.edu/assets/img/solid-logo.svg"
+                alt="solid logo"
+                height="24"
+              />
             </IconButton>
           </Tooltip>
           {this.state.spheroConnected && (

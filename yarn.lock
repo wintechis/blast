@@ -1707,6 +1707,7 @@ __metadata:
     "@fontsource/roboto": ^5.0.1
     "@fseehawer/react-circular-slider": ^2.6.1
     "@inrupt/solid-client": ^1.29.0
+    "@inrupt/solid-client-authn-browser": ^2.0.0
     "@mui/icons-material": ^5.11.16
     "@mui/lab": ^5.0.0-alpha.131
     "@mui/material": ^5.13.2
@@ -2236,6 +2237,55 @@ __metadata:
   version: 2.0.1
   resolution: "@humanwhocodes/object-schema@npm:2.0.1"
   checksum: 24929487b1ed48795d2f08346a0116cc5ee4634848bce64161fb947109352c562310fd159fc64dda0e8b853307f5794605191a9547f7341158559ca3c8262a45
+  languageName: node
+  linkType: hard
+
+"@inrupt/oidc-client-ext@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@inrupt/oidc-client-ext@npm:2.0.0"
+  dependencies:
+    "@inrupt/oidc-client": ^1.11.6
+    "@inrupt/solid-client-authn-core": ^2.0.0
+    jose: ^5.1.3
+    uuid: ^9.0.1
+  checksum: b47f5e2f8055c88316a36fdaf541c45de1dfe176ad839a23fcd0ee39ec59f80e16bf7bec03d17334010b7e8f0aeeca74737fe6416426e74c8720beeefa17b2c1
+  languageName: node
+  linkType: hard
+
+"@inrupt/oidc-client@npm:^1.11.6":
+  version: 1.11.6
+  resolution: "@inrupt/oidc-client@npm:1.11.6"
+  dependencies:
+    acorn: ^7.4.1
+    base64-js: ^1.5.1
+    core-js: ^3.8.3
+    crypto-js: ^4.0.0
+    serialize-javascript: ^4.0.0
+  checksum: 938fff1d2a28d3b15993860aa4e986f30fb29ab199ea1394c1fee57ee88e48c242ab7896b31bfb772a86a1153af0c7233a5173fe6c4b18cc07dc9750ab6cfe82
+  languageName: node
+  linkType: hard
+
+"@inrupt/solid-client-authn-browser@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@inrupt/solid-client-authn-browser@npm:2.0.0"
+  dependencies:
+    "@inrupt/oidc-client-ext": ^2.0.0
+    "@inrupt/solid-client-authn-core": ^2.0.0
+    events: ^3.3.0
+    jose: ^5.1.3
+    uuid: ^9.0.1
+  checksum: e474f9cf0213863acff4cce9943ff3a1dde6e37368dde0723077b8593c1434effa8701bcb0ca691a55b4b00358ba24858f2eb7d99217e1ddc2f6287565a52ec8
+  languageName: node
+  linkType: hard
+
+"@inrupt/solid-client-authn-core@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@inrupt/solid-client-authn-core@npm:2.0.0"
+  dependencies:
+    events: ^3.3.0
+    jose: ^5.1.3
+    uuid: ^9.0.1
+  checksum: 3adf8c0c35fead4fa203819bd121ff74275a47d419daf231312477d6bf75f9b1fbe4e672bc48ed0593b91c8d06fbb508e2cebff92b6e3843f6248b8e02eb136a
   languageName: node
   linkType: hard
 
@@ -5012,7 +5062,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^7.1.1":
+"acorn@npm:^7.1.1, acorn@npm:^7.4.1":
   version: 7.4.1
   resolution: "acorn@npm:7.4.1"
   bin:
@@ -5981,7 +6031,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"base64-js@npm:^1.3.1":
+"base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
@@ -7313,6 +7363,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"core-js@npm:^3.8.3":
+  version: 3.35.0
+  resolution: "core-js@npm:3.35.0"
+  checksum: 25c224aca3df012b98f08f13ccbd8171ef5852acd33fd5e58e106d27f5f0c97de2fdbc520f0b4364d26253caf2deb3e5d265310f57d2a66ae6cc922850e649f0
+  languageName: node
+  linkType: hard
+
 "core-util-is@npm:1.0.2":
   version: 1.0.2
   resolution: "core-util-is@npm:1.0.2"
@@ -7464,6 +7521,13 @@ __metadata:
     randombytes: ^2.0.0
     randomfill: ^1.0.3
   checksum: c1609af82605474262f3eaa07daa0b2140026bd264ab316d4bf1170272570dbe02f0c49e29407fe0d3634f96c507c27a19a6765fb856fed854a625f9d15618e2
+  languageName: node
+  linkType: hard
+
+"crypto-js@npm:^4.0.0":
+  version: 4.2.0
+  resolution: "crypto-js@npm:4.2.0"
+  checksum: f051666dbc077c8324777f44fbd3aaea2986f198fe85092535130d17026c7c2ccf2d23ee5b29b36f7a4a07312db2fae23c9094b644cc35f7858b1b4fcaf27774
   languageName: node
   linkType: hard
 
@@ -13160,6 +13224,13 @@ __metadata:
   bin:
     jiti: bin/jiti.js
   checksum: a7bd5d63921c170eaec91eecd686388181c7828e1fa0657ab374b9372bfc1f383cf4b039e6b272383d5cb25607509880af814a39abdff967322459cca41f2961
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.1.3":
+  version: 5.2.0
+  resolution: "jose@npm:5.2.0"
+  checksum: 277ef57dcfb2552c3f769e07235ace4d206b8959ca72dff58128be9af480ab591c8cd8724140d0110fd3bc88a020178d552ab29d418a97f98724d5c82593ac93
   languageName: node
   linkType: hard
 
@@ -20539,7 +20610,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^9.0.0":
+"uuid@npm:^9.0.0, uuid@npm:^9.0.1":
   version: 9.0.1
   resolution: "uuid@npm:9.0.1"
   bin:

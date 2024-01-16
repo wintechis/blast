@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {utils, Xml} from 'blockly';
 import {Provider} from 'react-redux';
 import {thingsStore} from './ThingsStore/ThingsStore.ts';
@@ -30,6 +30,11 @@ import ErrorBoundary from './ErrorBoundary.jsx';
 import JavascriptTab from './tabs/JavascriptTab.jsx';
 import PseudoCodeTab from './tabs/PseudoCodeTab.jsx';
 import ShowMediaDevicesDialog from './ShowMediaDevicesDialog.jsx';
+
+import {
+  handleIncomingRedirect,
+  getDefaultSession,
+} from '@inrupt/solid-client-authn-browser';
 
 import './assets/js/things/index.js';
 
@@ -90,6 +95,7 @@ TabPanel.propTypes = {
 };
 
 export default function App() {
+  const [webId, setWebId] = useState(getDefaultSession().info.webId);
   const [code, setCode] = React.useState('');
   const [tabId, setTabId] = React.useState('workspace');
   const [xml, setXml] = React.useState('');
@@ -97,6 +103,19 @@ export default function App() {
   const [workspace, setWorkspace] = React.useState(null);
   const blastBarRef = React.createRef();
   const handleChange = (event, id) => setTabId(id);
+
+  // The useEffect hook is executed on page load, and in particular when the user
+  // is redirected to the page after logging in the identity provider.
+  useEffect(() => {
+    // After redirect, the current URL contains login information.
+    handleIncomingRedirect({
+      restorePreviousSession: true,
+      onError: console.error,
+    }).then(info => {
+      setWebId(info.webId);
+      console.log(`Logged in as ${info.webId}`);
+    });
+  }, [webId]);
 
   onStatusChange.running.push(() => {
     setRunning(true);
