@@ -26,19 +26,10 @@ export const connectedConsumedDevices: Map<string, unknown> = new Map();
 
 export const handleAddConsumedThing = async function (uri: string) {
   // TODO: Check if URI is valid
-
   // Crawl all referenced Thing Description links
   const foundTDs = await crawl(uri, 3);
 
   for (const td of foundTDs) {
-    // generate a unique id for the new device
-    const uid =
-      Date.now().toString(36) + Math.random().toString(36).substring(2);
-    // TODO: Check if ID is already used ??
-
-    // Set new ID
-    td.id = uid;
-
     addConsumedDevice(td);
   }
 };
