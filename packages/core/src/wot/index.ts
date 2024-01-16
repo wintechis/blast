@@ -8,7 +8,7 @@ import {
 } from '@node-wot/core';
 import {InteractionOutput} from '@node-wot/core/dist/interaction-output';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
-import {HttpClientFactory} from '@node-wot/binding-http';
+import {HttpClientFactory, HttpsClientFactory} from '@node-wot/binding-http';
 import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
 import {HidClientFactory} from './bindings/binding-hid/Hid';
@@ -35,6 +35,7 @@ export const getServient = function (): Servient {
     const hidAdapter = new ConcreteHidAdapter();
     servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
     servient.addClientFactory(new HttpClientFactory(httpConfig));
+    servient.addClientFactory(new HttpsClientFactory(httpConfig));
     servient.addClientFactory(new HidClientFactory(hidAdapter));
   }
   return servient;
