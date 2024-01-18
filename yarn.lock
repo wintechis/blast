@@ -1647,9 +1647,9 @@ __metadata:
   resolution: "@blast/core@workspace:packages/core"
   dependencies:
     "@jest/globals": ^29.5.0
-    "@node-wot/binding-http": 0.8.7
-    "@node-wot/core": 0.8.7
-    "@node-wot/td-tools": 0.8.7
+    "@node-wot/binding-http": 0.8.11
+    "@node-wot/core": 0.8.11
+    "@node-wot/td-tools": 0.8.11
     "@types/inquirer": ^9.0.3
     "@types/node": ^20.1.0
     "@types/node-hid": ^1.3.1
@@ -1691,8 +1691,8 @@ __metadata:
     webpack: latest
     webpack-cli: latest
     webpack-node-externals: ^3.0.0
-    wot-thing-description-types: 1.1.0-24-May-2023
-    wot-typescript-definitions: 0.8.0-SNAPSHOT.26
+    wot-thing-description-types: 1.1.0-09-November-2023
+    wot-typescript-definitions: 0.8.0-SNAPSHOT.29
     x11: ^2.3.0
   languageName: unknown
   linkType: soft
@@ -3195,30 +3195,31 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-wot/binding-http@npm:0.8.7":
-  version: 0.8.7
-  resolution: "@node-wot/binding-http@npm:0.8.7"
+"@node-wot/binding-http@npm:0.8.11":
+  version: 0.8.11
+  resolution: "@node-wot/binding-http@npm:0.8.11"
   dependencies:
-    "@node-wot/core": 0.8.7
-    "@node-wot/td-tools": 0.8.7
+    "@node-wot/core": 0.8.11
+    "@node-wot/td-tools": 0.8.11
     "@types/eventsource": 1.1.10
     accept-language-parser: 1.5.0
     basic-auth: 2.0.1
     client-oauth2: ^4.2.5
     eventsource: ^2.0.2
+    find-my-way: ^7.6.2
     node-fetch: ^2.6.7
     query-string: ^7.1.1
     rxjs: 5.5.11
     slugify: ^1.4.5
-  checksum: f38818426951a49042f778fdcd16df276e411ff8296067c4747cf8f6d285913e7367ebeb7db48d175aed6b1df67893d328d2d6f0e9d33b4064812ca0cf0b210f
+  checksum: dee51200e0511017cd20bef36d5215094fcdce0064c49d445bf4b744fe46eb5ab171a4a9e9f522400cc65eb848e711780e2e9c622df923576236a43329fd7d04
   languageName: node
   linkType: hard
 
-"@node-wot/core@npm:0.8.7":
-  version: 0.8.7
-  resolution: "@node-wot/core@npm:0.8.7"
+"@node-wot/core@npm:0.8.11":
+  version: 0.8.11
+  resolution: "@node-wot/core@npm:0.8.11"
   dependencies:
-    "@node-wot/td-tools": 0.8.7
+    "@node-wot/td-tools": 0.8.11
     "@petamoriken/float16": ^3.1.1
     ajv: ^8.11.0
     cbor: ^8.1.0
@@ -3226,22 +3227,22 @@ __metadata:
     uritemplate: 0.3.4
     uuid: ^7.0.3
     web-streams-polyfill: ^3.0.1
-  checksum: aa6b1f7d1a2d9d18cce21173eca428e81a7b839d182f5e7900e0ffd93c44132db479c4fa7837b252d0fcc64b03a1e403c6eee1c84e4f9da13454f3cecc504165
+  checksum: 943b13a87f5f238644c3ef70477054cd2d1c4690e198ce03433ea80a221b14c5873bdc64c662b0cc09892884d3d84833f8a8fda6e8179c669f43a1e381e3baba
   languageName: node
   linkType: hard
 
-"@node-wot/td-tools@npm:0.8.7":
-  version: 0.8.7
-  resolution: "@node-wot/td-tools@npm:0.8.7"
+"@node-wot/td-tools@npm:0.8.11":
+  version: 0.8.11
+  resolution: "@node-wot/td-tools@npm:0.8.11"
   dependencies:
     ajv: ^8.11.0
     debug: ^4.3.4
     is-absolute-url: 3.0.3
     json-placeholder-replacer: ^1.0.35
     url-toolkit: 2.1.6
-    wot-thing-model-types: 1.1.0-24-May-2023
-    wot-typescript-definitions: 0.8.0-SNAPSHOT.26
-  checksum: 94260044b1dc9df7037e3523a2821790a1d94202674773d1b7644ffa84391eac0a652c3a1194e74bf901b536b77d1472cb9d4c42c78e4d77a23960faa9a126f2
+    wot-thing-model-types: 1.1.0-09-November-2023
+    wot-typescript-definitions: 0.8.0-SNAPSHOT.29
+  checksum: c413400052c6522a30915342edc1e7516fa61d5e0cbf4ae578d078f9ab1e2cf6c0da60477ecb1fb713babd5c05cc0e574afb9c9c9ada665e2b0840f8d01ecaa7
   languageName: node
   linkType: hard
 
@@ -9620,6 +9621,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"fast-decode-uri-component@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "fast-decode-uri-component@npm:1.0.1"
+  checksum: 427a48fe0907e76f0e9a2c228e253b4d8a8ab21d130ee9e4bb8339c5ba4086235cf9576831f7b20955a752eae4b525a177ff9d5825dd8d416e7726939194fbee
+  languageName: node
+  linkType: hard
+
 "fast-deep-equal@npm:^3.1.1, fast-deep-equal@npm:^3.1.3":
   version: 3.1.3
   resolution: "fast-deep-equal@npm:3.1.3"
@@ -9665,6 +9673,15 @@ __metadata:
   version: 2.0.6
   resolution: "fast-levenshtein@npm:2.0.6"
   checksum: 92cfec0a8dfafd9c7a15fba8f2cc29cd0b62b85f056d99ce448bbcd9f708e18ab2764bda4dd5158364f4145a7c72788538994f0d1787b956ef0d1062b0f7c24c
+  languageName: node
+  linkType: hard
+
+"fast-querystring@npm:^1.0.0":
+  version: 1.1.2
+  resolution: "fast-querystring@npm:1.1.2"
+  dependencies:
+    fast-decode-uri-component: ^1.0.1
+  checksum: 7149f82ee9ac39a9c08c7ffe435b9f6deade76ae5e3675fe1835720513e8c4bc541e666b4b7b1c0c07e08f369dcf4828d00f2bee39889a90a168e1439cf27b0b
   languageName: node
   linkType: hard
 
@@ -9830,6 +9847,17 @@ __metadata:
     make-dir: ^3.0.2
     pkg-dir: ^4.1.0
   checksum: 1e61c2e64f5c0b1c535bd85939ae73b0e5773142713273818cc0b393ee3555fb0fd44e1a5b161b8b6c3e03e98c2fcc9c227d784850a13a90a8ab576869576817
+  languageName: node
+  linkType: hard
+
+"find-my-way@npm:^7.6.2":
+  version: 7.7.0
+  resolution: "find-my-way@npm:7.7.0"
+  dependencies:
+    fast-deep-equal: ^3.1.3
+    fast-querystring: ^1.0.0
+    safe-regex2: ^2.0.0
+  checksum: 6cd3fbfd57aa359475658bbc2336b27c561c16a91a1fb6346d025e3d6ff7a127fdc4cf23ac4b6ed8054534ac45f63a5b9421d52834ae1d36c47ccfde2a73a3aa
   languageName: node
   linkType: hard
 
@@ -17972,6 +18000,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"ret@npm:~0.2.0":
+  version: 0.2.2
+  resolution: "ret@npm:0.2.2"
+  checksum: 774964bb413a3525e687bca92d81c1cd75555ec33147c32ecca22f3d06409e35df87952cfe3d57afff7650a0f7e42139cf60cb44e94c29dde390243bc1941f16
+  languageName: node
+  linkType: hard
+
 "retry@npm:^0.12.0":
   version: 0.12.0
   resolution: "retry@npm:0.12.0"
@@ -18144,6 +18179,15 @@ __metadata:
     get-intrinsic: ^1.1.3
     is-regex: ^1.1.4
   checksum: bc566d8beb8b43c01b94e67de3f070fd2781685e835959bbbaaec91cc53381145ca91f69bd837ce6ec244817afa0a5e974fc4e40a2957f0aca68ac3add1ddd34
+  languageName: node
+  linkType: hard
+
+"safe-regex2@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "safe-regex2@npm:2.0.0"
+  dependencies:
+    ret: ~0.2.0
+  checksum: f5e182fca040dedd50ae052ea0eb035d9903b2db71243d5d8b43299735857288ef2ab52546a368d9c6fd1333b2a0d039297925e78ffc14845354f3f6158af7c2
   languageName: node
   linkType: hard
 
@@ -21473,6 +21517,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wot-thing-description-types@npm:1.1.0-09-November-2023":
+  version: 1.1.0-09-November-2023
+  resolution: "wot-thing-description-types@npm:1.1.0-09-November-2023"
+  checksum: 3daa89f99629a9d14a2f945f7076b0c73e68eb86319b013faa928097ff5c0215e52209921613b7737705c0d28aef4332fb3ee84b41b43b334ec03831e4e044cc
+  languageName: node
+  linkType: hard
+
 "wot-thing-description-types@npm:1.1.0-24-May-2023":
   version: 1.1.0-24-May-2023
   resolution: "wot-thing-description-types@npm:1.1.0-24-May-2023"
@@ -21480,19 +21531,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"wot-thing-model-types@npm:1.1.0-24-May-2023":
-  version: 1.1.0-24-May-2023
-  resolution: "wot-thing-model-types@npm:1.1.0-24-May-2023"
-  checksum: 3f5848b8266abe9db727c10cd6f7eb7f29fa0ca75c5f0739cd1864e0ada6772db6f8ad5fee9df4e4748e3b592431a67d73c818c401b11840703d3417c37f8e1e
+"wot-thing-model-types@npm:1.1.0-09-November-2023":
+  version: 1.1.0-09-November-2023
+  resolution: "wot-thing-model-types@npm:1.1.0-09-November-2023"
+  checksum: 0802e5867f2f7e6ab106838f7b429a5eb5325764cf5827e74d289297f98c691855ea39a8b74a0abfffa0b2fa607b560cd46ea5691a0a74f7e210f64144b1af4f
   languageName: node
   linkType: hard
 
-"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.26":
-  version: 0.8.0-SNAPSHOT.26
-  resolution: "wot-typescript-definitions@npm:0.8.0-SNAPSHOT.26"
+"wot-typescript-definitions@npm:0.8.0-SNAPSHOT.29":
+  version: 0.8.0-SNAPSHOT.29
+  resolution: "wot-typescript-definitions@npm:0.8.0-SNAPSHOT.29"
   dependencies:
-    wot-thing-description-types: 1.1.0-24-May-2023
-  checksum: a1ef0fb694e21346d46c37906ce145ff2cd40e66fd5873a9d299cf5345264fbcaf992ebb369423b0eaa194d32ec0f070e73aa1633518c368820690201e236a29
+    wot-thing-description-types: 1.1.0-09-November-2023
+  checksum: 11b621cd966f22c44a55c22d0c8e5bf0e1c6e93ad15ba13f88a319bd7f6c1dddad87646f12b7ce052795ad442fb55b290cb6fba3d2cffd2c07fcd2a98f38217c
   languageName: node
   linkType: hard
 

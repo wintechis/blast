@@ -211,6 +211,10 @@ export default class BluetoothClient implements ProtocolClient {
     return false;
   }
 
+  public async requestThingDescription(uri: string): Promise<Content> {
+    throw new Error('BluetoothClient does not implement TD retrieval');
+  }
+
   /**
    * Deconsructs form in object
    * @param {Form} form form to analyze

@@ -173,6 +173,10 @@ export default class HidClient implements ProtocolClient {
     this.subscriptions.clear();
   }
 
+  public async requestThingDescription(uri: string): Promise<Content> {
+    throw new Error('HidClient does not implement TD retrieval');
+  }
+
   public setSecurity(): boolean {
     return false;
   }
