@@ -16,14 +16,10 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "yarn run clean && yarn run bundle",
-    "build:td": "yarn run clean && yarn run bundle:td",
-    "build:node": "yarn run clean && yarn run bundle:node",
-    "build:browser": "yarn run clean && yarn run bundle:browser",
-    "bundle": "webpack --config webpack.config.js",
-    "bundle:td": "webpack --config webpack.tds.config.cjs",
-    "bundle:node": "webpack --config webpack.node.config.cjs",
-    "bundle:browser": "webpack --config webpack.browser.config.cjs",
+    "build": "yarn run clean && webpack --config webpack.config.js",
+    "build:td": "webpack --config webpack.tds.config.cjs",
+    "build:node": "webpack --config webpack.node.config.cjs",
+    "build:browser": "webpack --config webpack.browser.config.cjs",
     "clean": "yarn rimraf dist",
     "lint": "eslint \"src/**\" --config .eslintrc.json",
     "fix": "eslint --fix \"src/** \"",
