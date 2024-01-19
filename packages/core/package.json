@@ -58,7 +58,7 @@
   },
   "dependencies": {
     "@node-wot/binding-http": "0.8.11",
-    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=f27dcf97f6adb721e270eae34eac15616b79f2c1",
+    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=f8b96e31c528858682eb890dad7d6ef547202ef0",
     "@node-wot/td-tools": "0.8.11",
     "@types/uritemplate": "^0.3.4",
     "ble-host": "^1.0.3",
