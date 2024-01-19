@@ -58,7 +58,11 @@ export const resetServient = async function (): Promise<void> {
         await thing.destroy();
       }
     });
-    await servient.shutdown();
+    try {
+      await servient.shutdown();
+    } catch (e) {
+      // ignore
+    }
   }
 };
 
