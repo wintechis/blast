@@ -17,28 +17,11 @@ describe('BleLedController Thing Description', () => {
       expect(colour.readOnly).toBeFalsy();
       expect(colour.writeOnly).toBeTruthy();
       expect(colour.observable).toBeFalsy();
-      expect(colour.type).toEqual('string');
-      expect(colour.format).toEqual('hex');
-      expect(colour['bdo:pattern']).toEqual('7e000503{R}{G}{B}00ef');
-      expect(Object.keys(colour['bdo:variables'])).toHaveLength(3);
-      expect(colour['bdo:variables'].R).toBeDefined();
-      expect(colour['bdo:variables'].R.type).toEqual('integer');
-      expect(colour['bdo:variables'].R['bdo:bytelength']).toEqual(1);
-      expect(colour['bdo:variables'].R.minimum).toEqual(0);
-      expect(colour['bdo:variables'].R.maximum).toEqual(255);
-      expect(colour['bdo:variables'].G).toBeDefined();
-      expect(colour['bdo:variables'].G.type).toEqual('integer');
-      expect(colour['bdo:variables'].G['bdo:bytelength']).toEqual(1);
-      expect(colour['bdo:variables'].G.minimum).toEqual(0);
-      expect(colour['bdo:variables'].G.maximum).toEqual(255);
-      expect(colour['bdo:variables'].B).toBeDefined();
-      expect(colour['bdo:variables'].B.type).toEqual('integer');
-      expect(colour['bdo:variables'].B['bdo:bytelength']).toEqual(1);
-      expect(colour['bdo:variables'].B.minimum).toEqual(0);
-      expect(colour['bdo:variables'].B.maximum).toEqual(255);
+      expect(colour.type).toEqual('object');
+      expect(colour.properties).toBeDefined();
       expect(colour.forms).toHaveLength(1);
       expect(colour.forms[0].contentType).toEqual(
-        'application/x.binary-data-stream'
+        'application/octet-stream;length=9;signed=false'
       );
       expect(colour.forms[0]['sbo:methodName']).toEqual('sbo:write');
     });
