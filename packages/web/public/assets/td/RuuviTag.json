@@ -1,0 +1,109 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
+  ],
+  "@type": "",
+  "id": "blast:Bluetooth:RuuviTag",
+  "title": "Ruuvi Tag",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
+  "description": "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "security": "nosec_sc",
+  "events": {
+    "UART data": {
+      "title": "Ruuvi Data data",
+      "description": "The RuuviTag data received over UART, see https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-5-rawv2",
+      "data": {
+        "type": "array",
+        "bdo:pattern": "{format}{temp}{humidity}{pressure}{acc-x}{acc-y}{acc-z}{power-info}{movement-counter}{measurement-sequence-number}",
+        "bdo:variables": {
+          "format": {
+            "type": "number",
+            "bdo:bytelength": 1
+          },
+          "temp": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.005,
+            "unit": "qudtUnit:DEG_C"
+          },
+          "humidity": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.0025,
+            "unit": "qudtUnit:PERCENT"
+          },
+          "pressure": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big",
+            "unit": "qudt:PA"
+          },
+          "acc-x": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:G"
+          },
+          "acc-y": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:mG"
+          },
+          "acc-z": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:signed": true,
+            "bdo:byteOrder": "big",
+            "bdo:scale": 0.001,
+            "unit": "qudtUnit:mG"
+          },
+          "power-info":
+          {
+            "type": "number",
+            "bdo:bytelength": 2
+          },
+          "movement-counter": {
+            "type": "number",
+            "bdo:bytelength": 1,
+            "bdo:byteOrder": "big"
+          },
+          "measurement-sequence-number": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:byteOrder": "big"
+          }
+        }
+      },
+      "forms": [
+        {
+          "href": "./6e400001-b5a3-f393-e0a9-e50e24dcca9e/6e400003-b5a3-f393-e0a9-e50e24dcca9e",
+          "sbo:methodName": "sbo:subscribe",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    }
+  }
+}
