@@ -1,0 +1,471 @@
+{
+    "@context": [
+        "https://www.w3.org/2019/wot/td/v1",
+        "https://www.w3.org/2022/wot/td/v1.1",
+        {
+          "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+          "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+          "qudt": "https://qudt.org/schema/qudt/",
+          "qudtUnit": "https://qudt.org/vocab/unit/"
+        },
+        {
+          "@language": "en"
+        }
+      ],
+    "title": "Microbit",
+    "securityDefinitions": {
+      "nosec_sc": {
+        "scheme": "nosec"
+      }
+    },
+    "security": [
+      "nosec_sc"
+    ],
+    "base": "gatt://{{MacOrWebBluetoothId}}/",
+    "properties": {
+      "AccelerometerPeriod": {
+        "type": "string",
+        "title": "AccelerometerPeriod",
+        "forms": [
+          {
+            "href": "./e95d0753-251d-470a-a062-fa1922dfa9a8/e95dfb24-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Determines the frequency with which accelerometer data is reported in milliseconds. Valid values are 1, 2, 5, 10, 20, 80, 160 and 640."
+      },
+      "Temperature": {
+        "type": "number",
+        "title": "Temperature",
+        "forms": [
+          {
+            "href": "./e95d6100-251d-470a-a062-fa1922dfa9a8/e95d9250-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Provides temperature data as a signed integer 8-bit value in degrees Celsius.",
+        "bdo:bytelength": 1,
+        "bdo:signed": true,
+        "unit": "http://qudt.org/vocab/unit/DEG_C"
+      },
+      "FirmwareRevisionString": {
+        "type": "string",
+        "title": "FirmwareRevisionString",
+        "forms": [
+          {
+            "href": "./0000180a-0000-1000-8000-00805f9b34fb/00002a26-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "bdo:bytelength": 1
+      },
+      "LedMatrixState": {
+        "type": "string",
+        "title": "LedMatrixState",
+        "forms": [
+          {
+            "href": "./e95dd91d-251d-470a-a062-fa1922dfa9a8/e95d7b77-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Controls the state of LEDs in a 5x5 grid, with each octet representing a row and bits representing individual LEDs."
+      },
+      "DeviceName": {
+        "type": "string",
+        "title": "DeviceName",
+        "forms": [
+          {
+            "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a00-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream"
+      },
+      "ButtonAState": {
+        "type": "number",
+        "title": "ButtonAState",
+        "forms": [
+          {
+            "href": "./e95d9882-251d-470a-a062-fa1922dfa9a8/e95dda90-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "State of Button A may be read on demand by a connected client or the client may subscribe to notifications of state change.",
+        "bdo:bytelength": 1
+      },
+      "ButtonBState": {
+        "type": "number",
+        "title": "ButtonBState",
+        "forms": [
+          {
+            "href": "./e95d9882-251d-470a-a062-fa1922dfa9a8/e95dda91-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "State of Button B may be read on demand by a connected client or the client may subscribe to notifications of state change.",
+        "bdo:bytelength": 1
+      },
+      "LedText": {
+        "type": "string",
+        "title": "LedText",
+        "forms": [
+          {
+            "href": "./e95dd91d-251d-470a-a062-fa1922dfa9a8/e95d93ee-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "writeproperty",
+            "sbo:methodName": "sbo:write-without-response"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Allows short UTF-8 text strings to be sent for display on the LED matrix, with a maximum length of 20 octets."
+      },
+      "SerialNumberString": {
+        "type": "string",
+        "title": "SerialNumberString",
+        "forms": [
+          {
+            "href": "./0000180a-0000-1000-8000-00805f9b34fb/00002a25-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "bdo:bytelength": 1
+      },
+      "ClientRequirements": {
+        "type": "string",
+        "title": "ClientRequirements",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95d23c4-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "writeproperty",
+            "sbo:methodName": "sbo:write-without-response"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "A variable length list of event data structures indicating the types of micro:bit events the client wishes to be informed of."
+      },
+      "TemperaturePeriod": {
+        "type": "string",
+        "title": "TemperaturePeriod",
+        "forms": [
+          {
+            "href": "./e95d6100-251d-470a-a062-fa1922dfa9a8/e95d1b25-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Determines the frequency with which temperature data is updated."
+      },
+      "ScrollingDelay": {
+        "type": "string",
+        "title": "ScrollingDelay",
+        "forms": [
+          {
+            "href": "./e95dd91d-251d-470a-a062-fa1922dfa9a8/e95d0d2d-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "writeproperty",
+            "sbo:methodName": "sbo:write-without-response"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Defines the delay in milliseconds to wait between showing each character on the LED display."
+      },
+      "PeripheralPreferredConnectionParameters": {
+        "type": "string",
+        "title": "PeripheralPreferredConnectionParameters",
+        "forms": [
+          {
+            "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a04-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream"
+      },
+      "Appearance": {
+        "type": "string",
+        "title": "Appearance",
+        "forms": [
+          {
+            "href": "./00001800-0000-1000-8000-00805f9b34fb/00002a01-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream"
+      },
+      "ModelNumberString": {
+        "type": "string",
+        "title": "ModelNumberString",
+        "forms": [
+          {
+            "href": "./0000180a-0000-1000-8000-00805f9b34fb/00002a24-0000-1000-8000-00805f9b34fb",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "bdo:bytelength": 1
+      },
+      "ClientEvent": {
+        "type": "string",
+        "title": "ClientEvent",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95d5404-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "writeproperty",
+            "sbo:methodName": "sbo:write-without-response"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Allows the client to write events to inform the micro:bit of occurrences."
+      },
+      "MicrobitEvent": {
+        "type": "string",
+        "title": "MicrobitEvent",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95d9775-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Allows notification of events from the micro:bit to the client."
+      },
+      "Acceleration": {
+        "type": "array",
+        "title": "Acceleration",
+        "forms": [
+          {
+            "href": "./e95d0753-251d-470a-a062-fa1922dfa9a8/e95dca4b-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Contains accelerometer measurements for X, Y and Z axes as 3 signed 16 bit values in that orderContains accelerometer measurements for X, Y and Z axes as 3 signed 16 bit values in little endian format. Values should be divided by 1000.",
+        "unit": "http://qudt.org/vocab/unit/G"
+      },
+      "MicrobitRequirements": {
+        "type": "string",
+        "title": "MicrobitRequirements",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95db84c-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "readproperty",
+            "sbo:methodName": "sbo:read"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Indicates the types of client events the micro:bit wishes to be informed of."
+      }
+    },
+    "actions": {},
+    "events": {
+      "MicrobitRequirements": {
+        "title": "MicrobitRequirements",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95db84c-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Indicates the types of client events the micro:bit wishes to be informed of.",
+        "data": {
+          "type": "string"
+        }
+      },
+      "ButtonBState": {
+        "title": "ButtonBState",
+        "forms": [
+          {
+            "href": "./e95d9882-251d-470a-a062-fa1922dfa9a8/e95dda91-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "State of Button B may be read on demand by a connected client or the client may subscribe to notifications of state change.",
+        "data": {
+          "type": "number",
+          "bdo:bytelength": 1
+        }
+      },
+      "Temperature": {
+        "title": "Temperature",
+        "forms": [
+          {
+            "href": "./e95d6100-251d-470a-a062-fa1922dfa9a8/e95d9250-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Provides temperature data as a signed integer 8-bit value in degrees Celsius.",
+        "unit": "http://qudt.org/vocab/unit/DEG_C",
+        "data": {
+          "type": "number",
+          "bdo:bytelength": 1,
+          "bdo:signed": true
+        }
+      },
+      "Acceleration": {
+        "title": "Acceleration",
+        "forms": [
+          {
+            "href": "./e95d0753-251d-470a-a062-fa1922dfa9a8/e95dca4b-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Contains accelerometer measurements for X, Y and Z axes as 3 signed 16 bit values in that orderContains accelerometer measurements for X, Y and Z axes as 3 signed 16 bit values in little endian format. Values should be divided by 1000.",
+        "unit": "http://qudt.org/vocab/unit/G",
+        "data": {
+          "type": "array",
+          "bdo:pattern": "{X}{Y}{Z}",
+			"bdo:variables" : {
+
+                "X": {
+                    "type": "number",
+                    "bdo:bytelength": 2,
+                    "bdo:scale": 0.001
+                },
+                "Y": {
+                    "type": "number",
+                    "bdo:bytelength": 2,
+                    "bdo:scale": 0.001
+                },
+                "Z": {
+                    "type": "number",
+                    "bdo:bytelength": 2,
+                    "bdo:scale": 0.001
+                }
+            }
+
+        }
+      },
+      "MicrobitEvent": {
+        "title": "MicrobitEvent",
+        "forms": [
+          {
+            "href": "./e95d93af-251d-470a-a062-fa1922dfa9a8/e95d9775-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "Allows notification of events from the micro:bit to the client.",
+        "data": {
+          "type": "string"
+        }
+      },
+      "ButtonAState": {
+        "title": "ButtonAState",
+        "forms": [
+          {
+            "href": "./e95d9882-251d-470a-a062-fa1922dfa9a8/e95dda90-251d-470a-a062-fa1922dfa9a8",
+            "contentType": "application/x.binary-data-stream",
+            "contentFormat": null,
+            "op": "subscribeevent",
+            "sbo:methodName": "sbo:notify"
+          }
+        ],
+        "contentEncoding": "binary",
+        "contentMediaType": "application/octet-stream",
+        "description": "State of Button A may be read on demand by a connected client or the client may subscribe to notifications of state change.",
+        "data": {
+          "type": "number",
+          "bdo:bytelength": 1
+        }
+      }
+    }
+  }
