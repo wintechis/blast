@@ -52,7 +52,7 @@ Blocks['bleLedController_switch_lights'] = {
    */
   init: function () {
     this.appendValueInput('colour')
-      .setCheck('Colour')
+      .setCheck(['String', 'Number', 'Colour'])
       .appendField('write colour property', 'label');
     this.appendValueInput('thing')
       .setCheck('Thing')
