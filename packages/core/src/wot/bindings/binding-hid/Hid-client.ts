@@ -9,7 +9,6 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {SecurityScheme} from '@node-wot/td-tools';
 import {HidForm} from './Hid';
 import {Subscription} from 'rxjs';
 import {HidAdapter} from './HidAdapter';
