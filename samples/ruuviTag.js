@@ -1,5 +1,5 @@
 import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {RuuviTag} from '../packages/core/dist/blast.tds.cjs';
+import {RuuviTag} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'C43B4FC3FECA';
 

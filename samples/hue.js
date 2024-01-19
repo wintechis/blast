@@ -1,5 +1,5 @@
 import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {PhilipsHue} from '../packages/core/dist/blast.tds.cjs';
+import {PhilipsHue} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'D7FF4B11BC6F';
 

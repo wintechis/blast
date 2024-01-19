@@ -1,5 +1,5 @@
 import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {Microbit} from '../packages/core/dist/blast.tds.cjs';
+import {Microbit} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'F698F1183836';
 

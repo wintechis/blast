@@ -1,5 +1,5 @@
 import {createThingWithHandlers} from '../packages/core/dist/blast.node.cjs';
-import {GamepadPro} from '../packages/core/dist/blast.tds.cjs';
+import {GamepadPro} from '../packages/core/dist/blast.tds.js';
 import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
 import SwitchPro from '../packages/web/src/assets/js/things/joycon/switchPro/SwitchPro.js'
 

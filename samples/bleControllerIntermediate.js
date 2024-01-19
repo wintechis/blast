@@ -1,5 +1,5 @@
 import {createThing, createThingWithHandlers} from '../packages/core/dist/blast.node.cjs';
-import {BleRgbController} from '../packages/core/dist/blast.tds.cjs';
+import {BleRgbController} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'BE5860018744';
 

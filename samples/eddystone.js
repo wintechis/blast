@@ -1,5 +1,5 @@
 import {createThing, EddystoneHelpers} from '../packages/core/dist/blast.node.cjs';
-import {EddystoneDevice} from '../packages/core/dist/blast.tds.cjs';
+import {EddystoneDevice} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'F0346FBF4875';
 

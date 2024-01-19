@@ -17,7 +17,7 @@
   },
   "scripts": {
     "build": "yarn run clean && webpack --config webpack.config.js",
-    "build:td": "webpack --config webpack.tds.config.cjs",
+    "build:tds": "webpack --config webpack.tds.config.cjs",
     "build:node": "webpack --config webpack.node.config.cjs",
     "build:browser": "webpack --config webpack.browser.config.cjs",
     "clean": "yarn rimraf dist",

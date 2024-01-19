@@ -21,7 +21,7 @@ JavaScript.forBlock['things_joycon'] = function (
   JavaScript.imports_['core'] =
     "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.cjs');";
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
   JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
@@ -243,7 +243,7 @@ JavaScript.forBlock['things_gamepad_pro'] = function (
   JavaScript.imports_['core'] =
     "const blastCore = await import('../../assets/blast/blast.browser.js');";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.cjs');";
+    "const blastTds = await import('../../assets/blast/blast.tds.js');";
 
   JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';

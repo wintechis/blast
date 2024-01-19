@@ -1,5 +1,5 @@
 import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {GoveeLamp} from '../packages/core/dist/blast.tds.cjs';
+import {GoveeLamp} from '../packages/core/dist/blast.tds.js';
 
 const mac = 'A4C138D81103';
 
