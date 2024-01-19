@@ -5,15 +5,14 @@ import {
   FieldTextInput,
   FieldDropdown,
   Names,
-  MenuOption,
+  MenuGenerator,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-import {DataSchema, ThingDescription} from 'wot-thing-description-types';
-
 import {getWorkspace, eventsInWorkspace} from './interpreter';
 import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
+import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -73,210 +72,140 @@ export function generateThingBlock(
      * @this {Blockly.Block}
      */
     init: function () {
-      this.appendDummyInput('name')
+      this.appendDummyInput()
         .appendField(deviceName, 'label')
         .appendField(new FieldTextInput('Error getting name'), 'name');
-      this.appendDummyInput('id')
+      this.appendDummyInput()
         .appendField(new FieldTextInput('Error getting id'), 'id')
         .setVisible(false);
       this.setOutput(true, 'Thing');
       this.setColour(60);
       this.setTooltip(description);
-      this.setHelpUrl();
       this.getField('name').setEnabled(false);
     },
   };
 }
 
 export function generateThingCode(deviceName: string, td: ThingDescription) {
-  JavaScript.forBlock[`things_${deviceName}`] = function (block: Block) {
+  JavaScript.forBlock[`things_${deviceName}`] = function (
+    block: Block
+  ): [string, number] {
+    const id = JavaScript.quote_(block.getFieldValue('id'));
     const name = JavaScript.quote_(block.getFieldValue('name'));
 
     JavaScript.imports_['core'] =
       "const blastCore = await import('../../assets/blast/blast.browser.js');";
 
     JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
-    JavaScript.things_[
-      'things_' + name
-    ] = `things.set(${name}, await createThing(${JSON.stringify(td)}))`;
+    JavaScript.things_['things_' + name] = td.base?.includes(
+      'gatt://{{MacOrWebBluetoothId}}/'
+    )
+      ? `things.set(${name}, await createThing(${JSON.stringify(td)}, ${id}))`
+      : `things.set(${name}, await createThing(${JSON.stringify(td)}))`;
 
     return [name, JavaScript.ORDER_NONE];
   };
 }
 
 export function generateReadPropertyBlock(
-  propertyName: string,
+  propertyNames: string[],
   deviceName: string,
   td: ThingDescription
 ) {
-  const langTag = getLanguage();
-  let blockName = '';
-  if (td?.properties?.titles?.[langTag]) {
-    blockName = `read property '${td?.properties?.titles?.[langTag]}' of`;
-  } else if (td?.properties?.title) {
-    blockName = `read property '${td?.properties?.title}' of`;
-  } else {
-    blockName = `read property '${propertyName}' of`;
+  const propertyDropdown: MenuGenerator = [];
+
+  for (const propertyName of propertyNames) {
+    propertyDropdown.push([
+      td?.properties?.[propertyName]?.title ?? propertyName,
+      propertyName,
+    ]);
   }
 
-  Blocks[`${deviceName}_readPropertyBlock_${propertyName}`] = {
+  Blocks[`${deviceName}_read_property`] = {
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(blockName, 'label');
+        .appendField('read')
+        .appendField(new FieldDropdown(propertyDropdown), 'property')
+        .appendField(`property of ${td.title ?? deviceName}`, 'label');
       this.setOutput(true, td.properties?.type ?? null);
       this.setColour(255);
-      this.setTooltip(
-        td.descriptions?.[langTag] ??
-          td.description ??
-          `Read the ${propertyName} property of ${deviceName}`
-      );
+      this.setTooltip(td.description ?? `Read the properties of ${deviceName}`);
     },
   };
 }
 
-export function generateReadPropertyCode(
-  propertyName: string,
-  deviceName: string
-) {
-  JavaScript.forBlock[`${deviceName}_readPropertyBlock_${propertyName}`] =
-    function (block: Block) {
-      const name =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+export function generateReadPropertyCode(deviceName: string) {
+  JavaScript.forBlock[`${deviceName}_read_property`] = function (block: Block) {
+    const property = JavaScript.quote_(block.getFieldValue('property'));
+    const thing =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
 
-      const code = `await (await things.get(${name}).readProperty('${propertyName}')).value()`;
-      return [code, JavaScript.ORDER_NONE];
-    };
+    const code = `await (await things.get(${thing}).readProperty(${property})).value()`;
+    return [code, JavaScript.ORDER_NONE];
+  };
 }
 
 export function generateWritePropertyBlock(
-  propertyName: string,
+  propertyNames: string[],
   deviceName: string,
   td: ThingDescription
 ) {
-  Blocks[`${deviceName}_writePropertyBlock_${propertyName}`] = {
-    init: function () {
-      if (
-        td.properties === undefined ||
-        td.properties[propertyName] === undefined
-      ) {
-        return;
-      }
-      if (td.properties[propertyName]['enum'] !== undefined) {
-        const optionsArr: MenuOption[] = [];
-        td.properties[propertyName]['enum']?.forEach((value, i) => {
-          optionsArr.push([(value as string).toString(), i.toString()]);
-        });
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField('write value', 'label')
-          .appendField(new FieldDropdown(optionsArr), 'value')
-          .appendField(`to '${propertyName}' property of`, 'label');
-      } else {
-        if (td.properties[propertyName].type !== undefined) {
-          if (
-            td.properties[propertyName].type?.toLocaleLowerCase() === 'object'
-          ) {
-            const objectProperties = td.properties[propertyName].properties;
-            if (objectProperties !== undefined) {
-              this.appendDummyInput(propertyName + 'label').appendField(
-                'write values'
-              );
-              Object.keys(objectProperties).forEach(key => {
-                this.appendValueInput(key)
-                  .setCheck(
-                    dataTypeMapping[objectProperties[key].type as string]
-                  )
-                  .appendField(key, 'label');
-              });
-            }
-          } else {
-            this.appendValueInput('value')
-              .setCheck(
-                dataTypeMapping[td.properties[propertyName].type as string]
-              )
-              .appendField('write value', 'label');
-          }
-        } else {
-          this.appendValueInput('value')
-            .setCheck()
-            .appendField('write value', 'label');
-        }
+  const propertyDropdown: MenuGenerator = [];
+  const propertyInputTypes: {[key: string]: string} = {};
 
-        this.appendValueInput('thing')
-          .setCheck('Thing')
-          .appendField(`to '${propertyName}' property of`, 'label');
-      }
-      this.setInputsInline(true);
+  for (const propertyName of propertyNames) {
+    propertyDropdown.push([
+      td?.properties?.[propertyName]?.title ?? propertyName,
+      propertyName,
+    ]);
+    propertyInputTypes[propertyName] = td.properties?.[propertyName].type ?? '';
+  }
+
+  console.log(propertyNames);
+  console.log(propertyInputTypes);
+  console.log(propertyDropdown);
+
+  Blocks[`${deviceName}_write_property`] = {
+    init: function () {
+      this.appendValueInput('value')
+        .setCheck(propertyInputTypes)
+        .appendField('write')
+        .appendField(
+          new FieldDropdown(propertyDropdown, this.propertyValidator),
+          'property'
+        );
+      this.appendValueInput('thing')
+        .appendField(`property to ${td.title ?? deviceName}`, 'label')
+        .setCheck('Thing');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(255);
-      this.setTooltip(`Write the ${propertyName} property of ${deviceName}`);
-      this.setHelpUrl('');
+      this.setTooltip(
+        td.description ?? `Write the properties of ${deviceName}`
+      );
+    },
+    propertyValidator: function (property: string) {
+      const block = this.getSourceBlock();
+      const type = dataTypeMapping[propertyInputTypes[property]];
+      block.getInput('value').setCheck(type);
     },
   };
 }
 
-export function generateWritePropertyCode(
-  propertyName: string,
-  deviceName: string,
-  td: ThingDescription
-) {
-  JavaScript.forBlock[`${deviceName}_writePropertyBlock_${propertyName}`] =
-    function (block: Block) {
-      if (
-        td.properties === undefined ||
-        td.properties[propertyName] === undefined
-      ) {
-        return;
-      }
-      const name =
-        JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+export function generateWritePropertyCode(deviceName: string) {
+  JavaScript.forBlock[`${deviceName}_write_property`] = function (
+    block: Block
+  ) {
+    const name =
+      JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
+    const property = JavaScript.quote_(block.getFieldValue('property'));
+    const value =
+      JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
 
-      let value = '';
-      if (td.properties[propertyName]['enum'] !== undefined) {
-        const valueIndex = block.getFieldValue('value');
-        value = (td.properties[propertyName]['enum'] as string[])[valueIndex];
-      } else {
-        if (
-          td.properties[propertyName].type?.toLocaleLowerCase() === 'object'
-        ) {
-          // iterate over inputs and create object
-          const objectProperties = td.properties[propertyName].properties;
-          if (objectProperties !== undefined) {
-            value = '{';
-            Object.keys(objectProperties).forEach(key => {
-              let inputValue =
-                JavaScript.valueToCode(block, key, JavaScript.ORDER_NONE) ||
-                null;
-              if (
-                td.properties?.[propertyName].properties?.[
-                  key
-                ].type?.toLocaleLowerCase() === 'string'
-              ) {
-                inputValue = JavaScript.quote_(inputValue);
-              }
-              value += `"${key}": ${inputValue}`;
-              if (key !== Object.keys(objectProperties).pop()) {
-                value += ',';
-              }
-            });
-            value += '}';
-          }
-        } else {
-          value = JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE);
-          if (
-            td.properties?.[propertyName].type?.toLocaleLowerCase() === 'string'
-          ) {
-            value = JavaScript.quote_(value);
-          }
-        }
-      }
-
-      const code = `await things.get(${name}).writeProperty('${propertyName}', ${value})\n`;
-
-      return code;
-    };
+    const code = `await things.get(${name}).writeProperty(${property}, ${value})`;
+    return code;
+  };
 }
 
 export function generateInvokeActionBlock(
@@ -356,8 +285,13 @@ export function generateInvokeActionCode(
 
 export function generateSubscribeEventBlock(
   eventName: string,
-  deviceName: string
+  deviceName: string,
+  td: ThingDescription
 ) {
+  const event = td.events?.[eventName];
+  let varType = event?.data?.type ?? '';
+  varType = varType.charAt(0).toUpperCase() + varType.slice(1);
+
   Blocks[`${deviceName}_subscribeEventBlock_${eventName}`] = {
     /**
      * Block for reading a property of a Xiaomi Mijia thermometer.
@@ -367,15 +301,20 @@ export function generateSubscribeEventBlock(
     init: function () {
       this.appendValueInput('thing')
         .setCheck('Thing')
-        .appendField(`on ${eventName} events of`);
-      this.appendDummyInput()
-        .appendField('with variable')
-        .appendField(new FieldTextInput('eventVar'), 'eventVar');
+        .appendField('on')
+        .appendField(new FieldTextInput(eventName), 'event')
+        .appendField(`event of ${deviceName}`);
+      if (varType.length > 0) {
+        this.appendDummyInput()
+          .appendField('uses variable')
+          .appendField(new FieldTextInput(eventName + varType), 'eventVar');
+      }
       this.appendStatementInput('statements').appendField('do');
       this.setInputsInline(false);
       this.setColour(180);
       this.setTooltip('');
       this.setHelpUrl('');
+      this.getField('event').setEnabled(false);
       this.getField('eventVar').setEnabled(false);
       getWorkspace()?.addChangeListener((e: Abstract) => {
         if (
@@ -386,14 +325,14 @@ export function generateSubscribeEventBlock(
           (e as BlockCreate).ids?.includes(this.id)
         ) {
           this.addEvent();
-          if (this.childBlocks_.length === 0) {
+          if (this.childBlocks_.length === 0 && varType.length > 0) {
             this.createVars();
           }
         } else if (
           e.type === Events.BLOCK_DELETE &&
           (e as BlockDelete).ids?.includes(this.id)
         ) {
-          this.deleteVars();
+          // this.deleteVars();
           JavaScript.handlers['things' + this.id] = undefined;
           this.removeFromEvents();
         }
@@ -420,25 +359,23 @@ export function generateSubscribeEventBlock(
       if (!ws) {
         return;
       }
-      const varNames = ['eventVar'];
-      for (const varName of varNames) {
-        // create legal variable name
-        let legalName = JavaScript.nameDB_.getName(
-          varName,
+      const varName = this.getFieldValue('eventVar');
+      // create legal variable name
+      let legalName = JavaScript.nameDB_.getName(
+        varName,
+        Names.NameType.VARIABLE
+      );
+      for (let i = 1; ws.getVariable(legalName) !== null; i++) {
+        // if name already exists, append a number
+        legalName = JavaScript.nameDB_.getName(
+          varName + '-' + i,
           Names.NameType.VARIABLE
         );
-        for (let i = 1; ws.getVariable(legalName) !== null; i++) {
-          // if name already exists, append a number
-          legalName = JavaScript.nameDB_.getName(
-            varName + '-' + i,
-            Names.NameType.VARIABLE
-          );
-        }
-        // create variable
-        legalName = ws.createVariable(legalName).name;
-        // set field value
-        this.getField(varName).setValue(legalName);
       }
+      // create variable
+      legalName = ws.createVariable(legalName).name;
+      // set field value
+      this.getField('eventVar').setValue(legalName);
     },
   };
 }
@@ -452,13 +389,14 @@ export function generateSubscribeEventCode(
       const thing =
         JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
       const statements = JavaScript.statementToCode(block, 'statements');
-      const eventVar = block.getFieldValue('eventVar');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const varName = block.getFieldValue('eventVar') ?? '';
 
       const eventHandler = JavaScript.provideFunction_('handleGenericEvent', [
         'async function ' +
           JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
           '(interactionOutput) {',
-        `  const ${eventVar} = await interactionOutput.value();`,
+        `  const ${varName} = await interactionOutput.value();`,
         `  ${statements.replace(/`/g, '\\`')}`,
         '}',
       ]);

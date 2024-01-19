@@ -21,6 +21,7 @@ import {
   generateSecurityCode,
   crawl,
 } from '../../assets/js/automatedBlockGeneration';
+import {connectDevice} from '.';
 
 export const connectedConsumedDevices: Map<string, unknown> = new Map();
 
@@ -30,20 +31,20 @@ export const handleAddConsumedThing = async function (uri: string) {
   const foundTDs = await crawl(uri, 3);
 
   for (const td of foundTDs) {
-    addConsumedDevice(td);
+    const isBluetooth = JSON.stringify(td).includes('gatt://');
+    addConsumedDevice(td, isBluetooth);
   }
 };
 
 /**
  * Adds a device to BLAST.
  */
-const addConsumedDevice = function (td: ThingDescription) {
+const addConsumedDevice = function (
+  td: ThingDescription,
+  isBluetooth: boolean
+) {
   const deviceName = td.title;
-  const type = 'consumedDevice';
-  // Object to store property names and allowed ops
-  const propertiesObj: {
-    [key: string]: (string | string[] | undefined)[];
-  } = {};
+  const type = isBluetooth ? 'bluetooth' : 'consumedDevice';
   // Object to store action names and allowed ops
   const actionsObj: {
     [key: string]: (string | string[] | undefined)[];
@@ -63,6 +64,7 @@ const addConsumedDevice = function (td: ThingDescription) {
   const implementedThingsBlockList = [];
 
   // Generate Thing Block
+  console.log(deviceName);
   if (typeof td.description === 'undefined') {
     generateThingBlock(deviceName, deviceName, td);
   } else {
@@ -81,35 +83,36 @@ const addConsumedDevice = function (td: ThingDescription) {
       category: 'Security',
     });
   }
+  const readProps = [];
+  const writeProps = [];
   // get property names and allowed operations
   for (const [propertyName, property] of Object.entries(td.properties ?? {})) {
-    propertiesObj[propertyName] = property.forms.map(form => form.op);
-  }
-
-  // Generate Property Blocks
-  for (const [propertyName, operations] of Object.entries(propertiesObj)) {
-    const op = new Set(operations.flat());
+    const op = new Set(property.forms.map(form => form.op));
 
     if (op.has('readproperty')) {
-      generateReadPropertyBlock(propertyName, deviceName, td);
-      generateReadPropertyCode(propertyName, deviceName);
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_readPropertyBlock_${propertyName}`,
-        category: 'Properties',
-      });
+      readProps.push(propertyName);
     }
     if (op.has('writeproperty')) {
-      generateWritePropertyBlock(propertyName, deviceName, td);
-      generateWritePropertyCode(propertyName, deviceName, td);
-
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_writePropertyBlock_${propertyName}`,
-        category: 'Properties',
-      });
+      writeProps.push(propertyName);
     }
+  }
+
+  if (readProps.length > 0) {
+    generateReadPropertyBlock(readProps, deviceName, td);
+    generateReadPropertyCode(deviceName);
+    implementedThingsBlockList.push({
+      type: `${deviceName}_read_property`,
+      category: 'Properties',
+    });
+  }
+
+  if (writeProps.length > 0) {
+    generateWritePropertyBlock(writeProps, deviceName, td);
+    generateWritePropertyCode(deviceName);
+    implementedThingsBlockList.push({
+      type: `${deviceName}_write_property`,
+      category: 'Properties',
+    });
   }
 
   for (const [actionName, action] of Object.entries(td.actions ?? {})) {
@@ -153,7 +156,7 @@ const addConsumedDevice = function (td: ThingDescription) {
   for (const [eventName, operations] of Object.entries(eventObj)) {
     const op = new Set(operations.flat());
     if (op.has('subscribeevent')) {
-      generateSubscribeEventBlock(eventName, deviceName);
+      generateSubscribeEventBlock(eventName, deviceName, td);
       generateSubscribeEventCode(eventName, deviceName);
 
       // Add to implementedThingsBlockList
@@ -170,16 +173,16 @@ const addConsumedDevice = function (td: ThingDescription) {
     name: deviceName,
     type: type,
     blocks: implementedThingsBlockList,
+    ...(isBluetooth && {optionalServices: getServices(td)}),
   };
 
-  // add the devices blocks to the toolbox
-  for (const block of thing.blocks) {
-    addBlock(block.type, block.category, block.XML);
-  }
-  // This function needs to be named so it can be called recursively.
+  connectDevice(thing);
+};
+
+export const connectConsumedDevice = function (thing: implementedThing) {
   const promptAndCheckWithAlert = function (name: string, id: string): void {
     Variables.promptName(
-      'Device connected! Now give your device a name.',
+      'Thing consumed! Now give your Thing a name.',
       name,
       text => {
         if (text) {
@@ -199,7 +202,7 @@ const addConsumedDevice = function (td: ThingDescription) {
                 thing,
               })
             );
-            connectedConsumedDevices.set(text, td);
+            connectedConsumedDevices.set(text, id);
             connectedThings.set(text, thing as implementedThing);
           }
         } else {
@@ -211,6 +214,45 @@ const addConsumedDevice = function (td: ThingDescription) {
       }
     );
   };
-  promptAndCheckWithAlert(deviceName, td.id ?? '');
+  promptAndCheckWithAlert(thing.name, thing.id);
   reloadToolbox();
+};
+
+const getServices = function (td: ThingDescription): string[] {
+  // get all json members called 'forms' of properties, actions, and events
+  const forms = [
+    ...Object.values(td.properties ?? {}).flatMap(property => property.forms),
+    ...Object.values(td.actions ?? {}).flatMap(action => action.forms),
+    ...Object.values(td.events ?? {}).flatMap(event => event.forms),
+  ];
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const deconstructForm = function (form: any) {
+    const deconstructedForm: Record<string, string> = {};
+
+    if (form.href.startsWith('gatt://')) {
+      // Remove gatt://
+      deconstructedForm.path = form.href.split('://')[1];
+    } else if (form.href.startsWith('./')) {
+      // Remove ./
+      deconstructedForm.path = form.href.split('./')[1];
+    }
+
+    // If deviceID contains '/' it gets also split.
+    // path string is checked it is a UUID; everything else is added together to deviceID
+    const pathElements = deconstructedForm.path.split('/');
+
+    // Extract serviceId
+    deconstructedForm.serviceId = pathElements[0];
+
+    // Extract characteristicId
+    deconstructedForm.characteristicId = pathElements[1];
+
+    return deconstructedForm;
+  };
+
+  const services = forms.map(form => deconstructForm(form).serviceId);
+
+  // remove duplicates
+  return [...new Set(services)];
 };
