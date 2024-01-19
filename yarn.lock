@@ -1648,7 +1648,7 @@ __metadata:
   dependencies:
     "@jest/globals": ^29.5.0
     "@node-wot/binding-http": 0.8.11
-    "@node-wot/core": 0.8.11
+    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=f27dcf97f6adb721e270eae34eac15616b79f2c1"
     "@node-wot/td-tools": 0.8.11
     "@types/inquirer": ^9.0.3
     "@types/node": ^20.1.0
@@ -3212,6 +3212,22 @@ __metadata:
     rxjs: 5.5.11
     slugify: ^1.4.5
   checksum: dee51200e0511017cd20bef36d5215094fcdce0064c49d445bf4b744fe46eb5ab171a4a9e9f522400cc65eb848e711780e2e9c622df923576236a43329fd7d04
+  languageName: node
+  linkType: hard
+
+"@node-wot/core@https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=f27dcf97f6adb721e270eae34eac15616b79f2c1":
+  version: 0.8.11
+  resolution: "@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=%40node-wot%2Fcore&commit=f27dcf97f6adb721e270eae34eac15616b79f2c1"
+  dependencies:
+    "@node-wot/td-tools": 0.8.11
+    "@petamoriken/float16": ^3.1.1
+    ajv: ^8.11.0
+    cbor: ^8.1.0
+    debug: ^4.3.4
+    uritemplate: 0.3.4
+    uuid: ^7.0.3
+    web-streams-polyfill: ^3.0.1
+  checksum: b91b92a3add94a811d19b4f137aa9263fb5fa330f010961dc55e415ee734bbc8c81f7d9bd9800ce2a90f07ee546711a44ab279f5d0bfe47461912d06e1915fcd
   languageName: node
   linkType: hard
 
