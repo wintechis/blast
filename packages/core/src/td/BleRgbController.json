@@ -31,41 +31,89 @@
     "colour": {
       "title": "colour",
       "description": "The colour of the LED light.",
-      "unit": "",
-      "type": "string",
-      "format": "hex",
+      "type": "object",
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
-      "bdo:pattern": "7e000503{R}{G}{B}00ef",
-      "bdo:variables": {
+      "properties": {
+        "commandStart":{
+          "type": "integer",
+          "const": 126,
+          "default": 126,
+          "description": "Command start byte.",
+          "ex:bitOffset": 0,
+          "ex:bitLength": 8
+        },
+        "commandLength": {
+          "type": "integer",
+          "const": 7,
+          "default": 7,
+          "description": "Command length.",
+          "ex:bitOffset": 8,
+          "ex:bitLength": 8
+        },
+        "commandId": {
+          "type": "integer",
+          "const": 5,
+          "default": 5,
+          "description": "Command type.",
+          "ex:bitOffset": 16,
+          "ex:bitLength": 8
+        },
+        "commandSubId": {
+          "type": "integer",
+          "const": 3,
+          "default": 3,
+          "description": "Command sub type.",
+          "ex:bitOffset": 24,
+          "ex:bitLength": 8
+        },
         "R": {
           "type": "integer",
-          "bdo:bytelength": 1,
           "minimum": 0,
           "maximum": 255,
-          "description": "Red value."
+          "description": "Red value.",
+          "ex:bitOffset": 32,
+          "ex:bitLength": 8
         },
         "G": {
           "type": "integer",
-          "bdo:bytelength": 1,
           "minimum": 0,
           "maximum": 255,
-          "description": "Green value."
+          "description": "Green value.",
+          "ex:bitOffset": 40,
+          "ex:bitLength": 8
         },
         "B": {
           "type": "integer",
-          "bdo:bytelength": 1,
           "minimum": 0,
           "maximum": 255,
-          "description": "Blue value."
+          "description": "Blue value.",
+          "ex:bitOffset": 48,
+          "ex:bitLength": 8
+        },
+        "unknown": {
+          "type": "integer",
+          "const": 0,
+          "default": 0,
+          "ex:bitOffset": 56,
+          "ex:bitLength": 8
+        },
+        "commandEnd": {
+          "type": "integer",
+          "const": 239,
+          "default": 239,
+          "description": "Command end byte.",
+          "ex:bitOffset": 64,
+          "ex:bitLength": 8
         }
       },
+      "required": ["R","G","B"],
       "forms": [
         {
           "op": "writeproperty",
           "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
-          "contentType": "application/x.binary-data-stream",
+          "contentType": "application/octet-stream;length=9;signed=false",
           "sbo:methodName": "sbo:write"
         }
       ]
