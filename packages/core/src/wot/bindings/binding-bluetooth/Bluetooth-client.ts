@@ -8,7 +8,7 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/Subscription';
 import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {Readable} from 'stream';

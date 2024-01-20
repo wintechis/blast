@@ -10,7 +10,7 @@ import {
   createLoggers,
 } from '@node-wot/core';
 import {HidForm} from './Hid';
-import {Subscription} from 'rxjs';
+import {Subscription} from 'rxjs/Subscription';
 import {HidAdapter} from './HidAdapter';
 import {Readable} from 'stream';
 
