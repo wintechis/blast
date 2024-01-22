@@ -1,5 +1,5 @@
 /**
- * WebBluetooth protocol binding
+ * @fileoverview Bluetooth GATT protocol binding
  */
 import {
   ProtocolClientFactory,
@@ -7,17 +7,17 @@ import {
   ContentSerdes,
   createLoggers,
 } from '@node-wot/core';
-import BluetoothClient from './Bluetooth-client';
+import GattClient from './gatt-client';
 import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
 import {BluetoothAdapter} from './BluetoothAdapter';
 
-const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client-factory');
+const {debug} = createLoggers('binding-bluetooth', 'gatt-client-factory');
 
-export default class BluetoothClientFactory implements ProtocolClientFactory {
+export default class GattClientFactory implements ProtocolClientFactory {
   public readonly scheme: string = 'gatt';
   private readonly clients: Set<ProtocolClient> = new Set();
   public contentSerdes: ContentSerdes = ContentSerdes.get();
-  adapter: BluetoothAdapter;
+  private adapter: BluetoothAdapter;
 
   constructor(adapter: BluetoothAdapter) {
     this.contentSerdes.addCodec(new BinaryDataStreamCodec());
@@ -26,7 +26,7 @@ export default class BluetoothClientFactory implements ProtocolClientFactory {
 
   public getClient(): ProtocolClient {
     debug(`Creating client for ${this.scheme}`);
-    const client = new BluetoothClient(this.adapter);
+    const client = new GattClient(this.adapter);
     this.clients.add(client);
     return client;
   }

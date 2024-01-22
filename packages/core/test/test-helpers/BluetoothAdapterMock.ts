@@ -101,4 +101,12 @@ export default class BluetoothAdapterMock implements BluetoothAdapter {
       (characteristic as CharacteristicMock).value = new DataView(value);
     }
   }
+
+  public observeGAP(
+    deviceId: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handler: (event: any) => void
+  ): Promise<void> {
+    return Promise.resolve();
+  }
 }

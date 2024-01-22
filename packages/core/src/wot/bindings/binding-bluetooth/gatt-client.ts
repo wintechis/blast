@@ -1,5 +1,5 @@
 /**
- * @fileoverview Bluetooth protocol binding for eclipse/thingweb.node-wot
+ * @fileoverview Bluetooth GATT protocol binding for eclipse/thingweb.node-wot
  */
 
 import {
@@ -13,11 +13,11 @@ import {BluetoothForm} from './Bluetooth';
 import {BluetoothAdapter} from './BluetoothAdapter';
 import {Readable} from 'stream';
 
-const {debug} = createLoggers('binding-bluetooth', 'bluetooth-client');
+const {debug} = createLoggers('binding-bluetooth', 'gatt-client');
 
-export default class BluetoothClient implements ProtocolClient {
-  bluetoothAdapter: BluetoothAdapter;
-  subscriptions: Map<string, Subscription>;
+export default class GattClient implements ProtocolClient {
+  private bluetoothAdapter: BluetoothAdapter;
+  private subscriptions: Map<string, Subscription>;
 
   constructor(bluetoothAdapter: BluetoothAdapter) {
     debug('created client');
@@ -26,8 +26,9 @@ export default class BluetoothClient implements ProtocolClient {
   }
 
   public toString(): string {
-    return '[BluetoothClient]';
+    return '[GattClient]';
   }
+
   public async readResource(form: BluetoothForm): Promise<Content> {
     const deconstructedForm = this.deconstructForm(form);
 
@@ -116,8 +117,6 @@ export default class BluetoothClient implements ProtocolClient {
     form: BluetoothForm,
     content: Content
   ): Promise<Content> {
-    // TODO check if href is service/char/operation, then write,
-    // might also be gatt://operation, i.e watchAdvertisements
     return this.writeResource(form, content).then(() => {
       return Promise.resolve({
         type: 'application/json',

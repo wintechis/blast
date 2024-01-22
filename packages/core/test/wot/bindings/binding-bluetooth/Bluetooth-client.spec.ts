@@ -3,7 +3,7 @@ import {describe, expect, jest, test} from '@jest/globals';
 import {Content} from '@node-wot/core';
 import {Readable} from 'node:stream';
 
-import BluetoothClient from '../../../../src/wot/bindings/binding-bluetooth/Bluetooth-client';
+import GattClient from '../../../../src/wot/bindings/binding-bluetooth/gatt-client';
 import {BluetoothAdapter} from '../../../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
 import BluetoothAdapterMock from '../../../test-helpers/BluetoothAdapterMock';
 
@@ -13,11 +13,11 @@ describe('Bluetooth client', () => {
     '00000000-0000-1000-8000-00001234abce',
     new DataView(new Uint8Array([0x01, 0x02, 0x03, 0x04]).buffer)
   );
-  const client = new BluetoothClient(adapter as BluetoothAdapter);
+  const client = new GattClient(adapter as BluetoothAdapter);
 
   describe('toString', () => {
-    test('should return [BluetoothClient]', () => {
-      expect(client.toString()).toEqual('[BluetoothClient]');
+    test('should return [GattClient]', () => {
+      expect(client.toString()).toEqual('[GattClient]');
     });
   });
 
@@ -195,7 +195,7 @@ describe('Bluetooth client', () => {
         .fn()
         .mockImplementation(async () => undefined)
         .mockName('writeResource');
-      const client = new BluetoothClient(adapter as BluetoothAdapter);
+      const client = new GattClient(adapter as BluetoothAdapter);
       client.writeResource = writeResource as any;
 
       const form = {

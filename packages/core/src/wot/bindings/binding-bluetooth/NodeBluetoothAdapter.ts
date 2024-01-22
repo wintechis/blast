@@ -138,6 +138,37 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     return this.wrap(characteristic);
   }
 
+  async observeGAP(
+    deviceId: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handler: (event: any) => void
+  ): Promise<void> {
+    const manager = await this.getBleManager();
+    const scanner = manager.startScan({});
+    if (deviceId.length === 12) {
+      deviceId = deviceId
+        .match(/.{1,2}/g)!
+        .join(':')
+        .toUpperCase();
+    }
+    scanner.on('report', eventData => {
+      if (eventData.address === deviceId) {
+        const evt = {
+          target: {
+            address: eventData.address,
+            rssi: eventData.rssi,
+            txPower: eventData.parsedDataItems.txPowerLevel,
+            manufacturerData:
+              eventData.parsedDataItems.manufacturerSpecificData,
+            serviceData: eventData.parsedDataItems.serviceData,
+            serviceUuids: eventData.parsedDataItems.serviceUuids,
+          },
+        };
+        handler(evt);
+      }
+    });
+  }
+
   wrap(
     characteristic: GattClientCharacteristic
   ): BluetoothRemoteGATTCharacteristic {

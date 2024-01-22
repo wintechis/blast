@@ -26,4 +26,18 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     );
     return service.getCharacteristic(characteristicId);
   }
+
+  public async observeGAP(
+    deviceId: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    handler: (event: any) => void
+  ): Promise<void> {
+    const filters: BluetoothLEScanFilter[] = [];
+    if (deviceId) {
+      filters.push({name: deviceId});
+    }
+    debug(`Starting scan with filters ${filters}`);
+    await navigator.bluetooth.requestLEScan({filters});
+    navigator.bluetooth.addEventListener('advertisementreceived', handler);
+  }
 }

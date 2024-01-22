@@ -9,7 +9,10 @@ import {
 import {InteractionOutput} from '@node-wot/core/dist/interaction-output';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpClientFactory, HttpsClientFactory} from '@node-wot/binding-http';
-import {BluetoothClientFactory} from './bindings/binding-bluetooth/Bluetooth';
+import {
+  GattClientFactory,
+  GapClientFactory,
+} from './bindings/binding-bluetooth/Bluetooth';
 import ConcreteBluetoothAdapter from 'BluetoothAdapter';
 import {HidClientFactory} from './bindings/binding-hid/Hid';
 import ConcreteHidAdapter from 'HidAdapter';
@@ -33,7 +36,8 @@ export const getServient = function (): Servient {
     servient = new Servient();
     const bluetoothAdapter = new ConcreteBluetoothAdapter();
     const hidAdapter = new ConcreteHidAdapter();
-    servient.addClientFactory(new BluetoothClientFactory(bluetoothAdapter));
+    servient.addClientFactory(new GattClientFactory(bluetoothAdapter));
+    servient.addClientFactory(new GapClientFactory(bluetoothAdapter));
     servient.addClientFactory(new HttpClientFactory(httpConfig));
     servient.addClientFactory(new HttpsClientFactory(httpConfig));
     servient.addClientFactory(new HidClientFactory(hidAdapter));
@@ -301,4 +305,4 @@ const interactionInputToReadable = function (
   return body;
 };
 
-export {BluetoothClientFactory, ConcreteBluetoothAdapter};
+export {GattClientFactory as BluetoothClientFactory, ConcreteBluetoothAdapter};
