@@ -28,72 +28,73 @@
       "title": "Ruuvi Data data",
       "description": "The RuuviTag data received over UART, see https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-5-rawv2",
       "data": {
-        "type": "array",
-        "bdo:pattern": "{format}{temp}{humidity}{pressure}{acc-x}{acc-y}{acc-z}{power-info}{movement-counter}{measurement-sequence-number}",
-        "bdo:variables": {
+        "type": "object",
+        "properties": {
           "format": {
-            "type": "number",
-            "bdo:bytelength": 1
+            "type": "integer",
+            "ex:bitOffset": 0,
+            "ex:bitLength": 8
           },
           "temp": {
             "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:signed": true,
-            "bdo:byteOrder": "big",
-            "bdo:scale": 0.005,
+            "ex:bitOffset": 8,
+            "ex:bitLength": 16,
+            "scale": 0.005,
             "unit": "qudtUnit:DEG_C"
           },
           "humidity": {
             "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:byteOrder": "big",
-            "bdo:scale": 0.0025,
+            "ex:bitOffset": 24,
+            "ex:bitLength": 16,
+            "signed": false,
+            "scale": 0.0025,
             "unit": "qudtUnit:PERCENT"
           },
           "pressure": {
             "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:byteOrder": "big",
+            "ex:bitOffset": 40,
+            "ex:bitLength": 16,
+            "signed": false,
             "unit": "qudt:PA"
           },
           "acc-x": {
-            "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:signed": true,
-            "bdo:byteOrder": "big",
-            "bdo:scale": 0.001,
-            "unit": "qudtUnit:G"
+            "type": "integer",
+            "ex:bitOffset": 56,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
+            "unit": "qudtUnit:mG"
           },
           "acc-y": {
-            "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:signed": true,
-            "bdo:byteOrder": "big",
-            "bdo:scale": 0.001,
+            "type": "integer",
+            "ex:bitOffset": 72,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
             "unit": "qudtUnit:mG"
           },
           "acc-z": {
-            "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:signed": true,
-            "bdo:byteOrder": "big",
-            "bdo:scale": 0.001,
+            "type": "integer",
+            "ex:bitOffset": 88,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
             "unit": "qudtUnit:mG"
           },
           "power-info":
           {
-            "type": "number",
-            "bdo:bytelength": 2
+            "type": "integer",
+            "ex:bitOffset": 104,
+            "ex:bitLength": 16
           },
           "movement-counter": {
-            "type": "number",
-            "bdo:bytelength": 1,
-            "bdo:byteOrder": "big"
+            "type": "integer",
+            "ex:bitOffset": 120,
+            "ex:bitLength": 8,
+            "signed": false
           },
           "measurement-sequence-number": {
-            "type": "number",
-            "bdo:bytelength": 2,
-            "bdo:byteOrder": "big"
+            "type": "integer",
+            "ex:bitOffset": 128,
+            "ex:bitLength": 16,
+            "signed": false
           }
         }
       },
@@ -101,7 +102,89 @@
         {
           "href": "./6e400001-b5a3-f393-e0a9-e50e24dcca9e/6e400003-b5a3-f393-e0a9-e50e24dcca9e",
           "sbo:methodName": "sbo:subscribe",
-          "contentType": "application/x.binary-data-stream"
+          "contentType": "application/octet-stream"
+        }
+      ]
+    },
+    "GapBroadcast": {
+      "title": "GapBroadcast",
+      "description": "The GapBroadcast event is emitted when the device is advertising.",
+      "data": {
+        "type": "object",
+        "properties": {
+          "format": {
+            "type": "integer",
+            "ex:bitOffset": 0,
+            "ex:bitLength": 8
+          },
+          "temp": {
+            "type": "number",
+            "ex:bitOffset": 8,
+            "ex:bitLength": 16,
+            "scale": 0.005,
+            "unit": "qudtUnit:DEG_C"
+          },
+          "humidity": {
+            "type": "number",
+            "ex:bitOffset": 24,
+            "ex:bitLength": 16,
+            "signed": false,
+            "scale": 0.0025,
+            "unit": "qudtUnit:PERCENT"
+          },
+          "pressure": {
+            "type": "number",
+            "ex:bitOffset": 40,
+            "ex:bitLength": 16,
+            "signed": false,
+            "unit": "qudt:PA"
+          },
+          "acc-x": {
+            "type": "integer",
+            "ex:bitOffset": 56,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
+            "unit": "qudtUnit:mG"
+          },
+          "acc-y": {
+            "type": "integer",
+            "ex:bitOffset": 72,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
+            "unit": "qudtUnit:mG"
+          },
+          "acc-z": {
+            "type": "integer",
+            "ex:bitOffset": 88,
+            "ex:bitLength": 16,
+            "byteOrder": "LITTLE_ENDIAN",
+            "unit": "qudtUnit:mG"
+          },
+          "power-info":
+          {
+            "type": "integer",
+            "ex:bitOffset": 104,
+            "ex:bitLength": 16
+          },
+          "movement-counter": {
+            "type": "integer",
+            "ex:bitOffset": 120,
+            "ex:bitLength": 8,
+            "signed": false
+          },
+          "measurement-sequence-number": {
+            "type": "integer",
+            "ex:bitOffset": 128,
+            "ex:bitLength": 16,
+            "signed": false
+          }
+        }
+      },
+      "forms": [
+        {
+          "href": "gap://{{MacOrWebBluetoothId}}/observe",
+          "sbo:methodName": "sbo:subscribe",
+          "contentType": "application/octet-stream"
         }
       ]
     }

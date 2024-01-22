@@ -14,81 +14,77 @@ describe('RuuviTag Thing Description', () => {
     test('UART data', () => {
       const uart = thing?.events['UART data'];
       expect(uart).toBeDefined();
-      expect(uart.data.type).toEqual('array');
-      expect(uart.data['bdo:pattern']).toEqual(
-        '{format}{temp}{humidity}{pressure}{acc-x}{acc-y}{acc-z}{power-info}{movement-counter}{measurement-sequence-number}'
+      expect(uart.data.type).toEqual('object');
+      expect(uart.data['properties']).toBeDefined();
+      expect(Object.keys(uart.data['properties'])).toHaveLength(10);
+      expect(uart.data['properties'].format.type).toEqual('integer');
+      expect(uart.data['properties'].format['ex:bitOffset']).toEqual(0);
+      expect(uart.data['properties'].format['ex:bitLength']).toEqual(8);
+      expect(uart.data['properties'].temp.type).toEqual('number');
+      expect(uart.data['properties'].temp['ex:bitOffset']).toEqual(8);
+      expect(uart.data['properties'].temp['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties'].temp.scale).toEqual(0.005);
+      expect(uart.data['properties'].temp.unit).toEqual('qudtUnit:DEG_C');
+      expect(uart.data['properties'].humidity.type).toEqual('number');
+      expect(uart.data['properties'].humidity['ex:bitOffset']).toEqual(24);
+      expect(uart.data['properties'].humidity['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties'].humidity.signed).toBeFalsy();
+      expect(uart.data['properties'].humidity.scale).toEqual(0.0025);
+      expect(uart.data['properties'].humidity.unit).toEqual('qudtUnit:PERCENT');
+      expect(uart.data['properties'].pressure.type).toEqual('number');
+      expect(uart.data['properties'].pressure['ex:bitOffset']).toEqual(40);
+      expect(uart.data['properties'].pressure['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties'].pressure.signed).toBeFalsy();
+      expect(uart.data['properties'].pressure.unit).toEqual('qudt:PA');
+      expect(uart.data['properties']['acc-x'].type).toEqual('integer');
+      expect(uart.data['properties']['acc-x']['ex:bitOffset']).toEqual(56);
+      expect(uart.data['properties']['acc-x']['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties']['acc-x'].byteOrder).toEqual(
+        'LITTLE_ENDIAN'
       );
-      expect(Object.keys(uart.data['bdo:variables'])).toHaveLength(10);
-      expect(uart.data['bdo:variables'].format.type).toEqual('number');
-      expect(uart.data['bdo:variables'].format['bdo:bytelength']).toEqual(1);
-      expect(uart.data['bdo:variables'].temp.type).toEqual('number');
-      expect(uart.data['bdo:variables'].temp['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables'].temp['bdo:signed']).toBeTruthy();
-      expect(uart.data['bdo:variables'].temp['bdo:byteOrder']).toEqual('big');
-      expect(uart.data['bdo:variables'].temp['bdo:scale']).toEqual(0.005);
-      expect(uart.data['bdo:variables'].humidity.type).toEqual('number');
-      expect(uart.data['bdo:variables'].humidity['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables'].humidity['bdo:byteOrder']).toEqual(
-        'big'
+      expect(uart.data['properties']['acc-x'].unit).toEqual('qudtUnit:mG');
+
+      expect(uart.data['properties']['acc-y'].type).toEqual('integer');
+      expect(uart.data['properties']['acc-y']['ex:bitOffset']).toEqual(72);
+      expect(uart.data['properties']['acc-y']['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties']['acc-y'].byteOrder).toEqual(
+        'LITTLE_ENDIAN'
       );
-      expect(uart.data['bdo:variables'].humidity['bdo:scale']).toEqual(0.0025);
-      expect(uart.data['bdo:variables'].pressure.type).toEqual('number');
-      expect(uart.data['bdo:variables'].pressure['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables'].pressure['bdo:byteOrder']).toEqual(
-        'big'
+      expect(uart.data['properties']['acc-y'].unit).toEqual('qudtUnit:mG');
+
+      expect(uart.data['properties']['acc-z'].type).toEqual('integer');
+      expect(uart.data['properties']['acc-z']['ex:bitOffset']).toEqual(88);
+      expect(uart.data['properties']['acc-z']['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties']['acc-z'].byteOrder).toEqual(
+        'LITTLE_ENDIAN'
       );
-      expect(uart.data['bdo:variables']['acc-x'].type).toEqual('number');
-      expect(uart.data['bdo:variables']['acc-x']['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables']['acc-x']['bdo:signed']).toBeTruthy();
-      expect(uart.data['bdo:variables']['acc-x']['bdo:byteOrder']).toEqual(
-        'big'
+      expect(uart.data['properties']['acc-z'].unit).toEqual('qudtUnit:mG');
+
+      expect(uart.data['properties']['power-info'].type).toEqual('integer');
+      expect(uart.data['properties']['power-info']['ex:bitOffset']).toEqual(
+        104
       );
-      expect(uart.data['bdo:variables']['acc-x']['bdo:scale']).toEqual(0.001);
-      expect(uart.data['bdo:variables']['acc-y'].type).toEqual('number');
-      expect(uart.data['bdo:variables']['acc-y']['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables']['acc-y']['bdo:signed']).toBeTruthy();
-      expect(uart.data['bdo:variables']['acc-y']['bdo:byteOrder']).toEqual(
-        'big'
+      expect(uart.data['properties']['power-info']['ex:bitLength']).toEqual(16);
+
+      expect(uart.data['properties']['movement-counter'].type).toEqual(
+        'integer'
       );
-      expect(uart.data['bdo:variables']['acc-y']['bdo:scale']).toEqual(0.001);
-      expect(uart.data['bdo:variables']['acc-z'].type).toEqual('number');
-      expect(uart.data['bdo:variables']['acc-z']['bdo:bytelength']).toEqual(2);
-      expect(uart.data['bdo:variables']['acc-z']['bdo:signed']).toBeTruthy();
-      expect(uart.data['bdo:variables']['acc-z']['bdo:byteOrder']).toEqual(
-        'big'
-      );
-      expect(uart.data['bdo:variables']['acc-z']['bdo:scale']).toEqual(0.001);
-      expect(uart.data['bdo:variables']['power-info'].type).toEqual('number');
       expect(
-        uart.data['bdo:variables']['power-info']['bdo:bytelength']
-      ).toEqual(2);
-      expect(uart.data['bdo:variables']['movement-counter'].type).toEqual(
-        'number'
-      );
+        uart.data['properties']['movement-counter']['ex:bitOffset']
+      ).toEqual(120);
       expect(
-        uart.data['bdo:variables']['movement-counter']['bdo:bytelength']
-      ).toEqual(1);
+        uart.data['properties']['movement-counter']['ex:bitLength']
+      ).toEqual(8);
+
       expect(
-        uart.data['bdo:variables']['movement-counter']['bdo:byteOrder']
-      ).toEqual('big');
+        uart.data['properties']['measurement-sequence-number'].type
+      ).toEqual('integer');
       expect(
-        uart.data['bdo:variables']['measurement-sequence-number'].type
-      ).toEqual('number');
+        uart.data['properties']['measurement-sequence-number']['ex:bitOffset']
+      ).toEqual(128);
       expect(
-        uart.data['bdo:variables']['measurement-sequence-number'][
-          'bdo:bytelength'
-        ]
-      ).toEqual(2);
-      expect(
-        uart.data['bdo:variables']['measurement-sequence-number'][
-          'bdo:byteOrder'
-        ]
-      ).toEqual('big');
-      expect(uart.forms).toHaveLength(1);
-      expect(uart.forms[0]['sbo:methodName']).toEqual('sbo:subscribe');
-      expect(uart.forms[0].contentType).toEqual(
-        'application/x.binary-data-stream'
-      );
+        uart.data['properties']['measurement-sequence-number']['ex:bitLength']
+      ).toEqual(16);
     });
   });
 });
