@@ -11,13 +11,32 @@ const handler = async (data) => {
   data = await data.value();
   console.log(data);
 };
-ruuvi.subscribeEvent('GapBroadcast', handler);
-
+console.log('Subscribing to Ruuvi GAP broadcasts');
 // Control LED
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const led = await createThing(BleRgbController, ledMac);
 await led.writeProperty('power', {is_on: 1});
-while (true) {
-    await led.writeProperty('colour', {R: 255, G: 0, B: 0});
-    await led.writeProperty('colour', {R: 0, G: 255, B: 0});
-    await led.writeProperty('colour', {R: 0, G: 0, B: 255});
-}
+ruuvi.subscribeEvent('GapBroadcast', handler);
+await led.writeProperty('colour', {R: 255, G: 0, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 255, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 0, B: 255});
+await sleep(1000);
+await led.writeProperty('colour', {R: 255, G: 0, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 255, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 0, B: 255});
+await sleep(1000);
+await led.writeProperty('colour', {R: 255, G: 0, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 255, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 0, B: 255});
+await sleep(1000);
+await led.writeProperty('colour', {R: 255, G: 0, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 255, B: 0});
+await sleep(1000);
+await led.writeProperty('colour', {R: 0, G: 0, B: 255});
