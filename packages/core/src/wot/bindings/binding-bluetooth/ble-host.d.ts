@@ -538,4 +538,93 @@ declare module 'ble-host' {
       callback: ConnectCallback
     ): PendingConnection;
   }
+
+  export class Scanner {
+    /**
+     * Stops the scan. No further reports will be emitted.
+     */
+    stopScan();
+
+    /**
+     * Event emitted when a scan report is received.
+     */
+    on(event: 'report', listener: ReportEventListener);
+  }
+
+  declare interface ReportEventListener {
+    /**
+     * @param eventData The scan report
+     */
+    (eventData: eventData);
+  }
+
+  declare interface eventData {
+    /**
+     * If the device is connectable (i.e. it did not send `ADV_NONCONN_IND`)
+     */
+    connectable: boolean;
+    /**
+     * `public` or `random`
+     */
+    addressType: string;
+    /**
+     * Bluetooth Device Address
+     */
+    address: string;
+    /**
+     * Signed integer in dBm (-127 to 20), 127 means not available
+     */
+    rssi: number;
+    /**
+     * Scan response data
+     */
+    rawDataItems: {
+      /**
+       * 16-bit unsigned integer
+       */
+      type: number;
+      /**
+       * Buffer containing the data
+       */
+      data: Buffer;
+    }[];
+    /**
+     * Object with the advertising data items; only included fields will be present
+     */
+    parsedDataItems: {
+      flags: {
+        leLimitedDiscoverableMode: boolean;
+        leGeneralDiscoverableMode: boolean;
+        brEdrNotSupported: boolean;
+        simultaneousLeAndBdEdrToSameDeviceCapableController: boolean;
+        simultaneousLeAndBrEdrToSameDeviceCapableHost: boolean;
+        raw: Buffer;
+      };
+      serviceUuids: string[];
+      localName: string;
+      txPowerLevel: number;
+      slaveConnectionIntervalRange: {
+        min: number;
+        max: number;
+      };
+      serviceSolicitations: string[];
+      serviceData: {
+        uuid: string;
+        data: Buffer;
+      }[];
+      appearance: number;
+      publicTargetAddresses: string[];
+      randomTargetAddresses: string[];
+      advertisingInterval: number;
+      uri: string;
+      leSupportedFeatures: {
+        low: number;
+        high: number;
+      };
+      manufacturerSpecificData: {
+        companyIdentifierCode: number;
+        data: Buffer;
+      }[];
+    };
+  }
 }
