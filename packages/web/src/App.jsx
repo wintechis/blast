@@ -112,8 +112,10 @@ export default function App() {
       restorePreviousSession: true,
       onError: console.error,
     }).then(info => {
-      setWebId(info.webId);
-      console.log(`Logged in as ${info.webId}`);
+      if (info.session.info.isLoggedIn) {
+        setWebId(info.webId);
+        console.log(`Logged in as ${info.webId}`);
+      }
     });
   }, [webId]);
 
