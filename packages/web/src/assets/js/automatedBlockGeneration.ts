@@ -6,6 +6,8 @@ import {
   FieldDropdown,
   Names,
   MenuGenerator,
+  utils,
+  Xml,
 } from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import {getWorkspace, eventsInWorkspace} from './interpreter';
@@ -13,6 +15,7 @@ import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
+import {blocks} from 'blockly/blocks';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -126,11 +129,18 @@ export function generateReadPropertyBlock(
       this.appendValueInput('thing')
         .setCheck('Thing')
         .appendField('read')
-        .appendField(new FieldDropdown(propertyDropdown), 'property')
+        .appendField(
+          new FieldDropdown(propertyDropdown, this.validator),
+          'property'
+        )
         .appendField(`property of ${td.title ?? deviceName}`, 'label');
-      this.setOutput(true, td.properties?.type ?? null);
       this.setColour(255);
       this.setTooltip(td.description ?? `Read the properties of ${deviceName}`);
+    },
+    validator: function (property: string) {
+      const block = this.getSourceBlock();
+      const type = dataTypeMapping[td.properties?.[property].type ?? ''];
+      block.setOutput(true, type);
     },
   };
 }
@@ -162,10 +172,6 @@ export function generateWritePropertyBlock(
     propertyInputTypes[propertyName] = td.properties?.[propertyName].type ?? '';
   }
 
-  console.log(propertyNames);
-  console.log(propertyInputTypes);
-  console.log(propertyDropdown);
-
   Blocks[`${deviceName}_write_property`] = {
     init: function () {
       this.appendValueInput('value')
@@ -181,14 +187,44 @@ export function generateWritePropertyBlock(
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
       this.setColour(255);
+      this.value = '';
       this.setTooltip(
         td.description ?? `Write the properties of ${deviceName}`
       );
     },
     propertyValidator: function (property: string) {
       const block = this.getSourceBlock();
+      const ws = getWorkspace();
+      if (!ws) {
+        return;
+      }
+      if (property === block.value) {
+        return;
+      }
+      // delete old input block
+      const connection = block.getInput('value')?.connection;
+      if (connection) {
+        const inputBlock = connection.targetBlock();
+        if (inputBlock) {
+          inputBlock.dispose();
+        }
+      }
+
+      block.value = property;
       const type = dataTypeMapping[propertyInputTypes[property]];
-      block.getInput('value').setCheck(type);
+      block.getInput('value')?.setCheck(type);
+      // attach block of correct type to input
+      const inputBlockXml = schemaToXml(td.properties?.[property] ?? {});
+      const xml = utils.xml.createElement('xml');
+      xml.setAttribute('xmlns', 'https://developers.google.com/blockly/xml');
+      xml.appendChild(inputBlockXml);
+      const inputBlockId = Xml.appendDomToWorkspace(xml, ws)[0];
+      const inputBlock = ws.getBlockById(inputBlockId);
+      if (inputBlock) {
+        inputBlock.initSvg();
+        inputBlock.render();
+        connection.connect(inputBlock.outputConnection);
+      }
     },
   };
 }
@@ -544,4 +580,85 @@ async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
   } else {
     throw new Error('Could not fetch TD');
   }
+}
+
+function primitiveTypeToXml(type: string) {
+  const blockXml = utils.xml.createElement('block');
+  const fieldNode = utils.xml.createElement('field');
+  let textNode;
+  switch (type) {
+    case 'integer':
+    case 'number':
+      blockXml.setAttribute('type', 'number_value');
+      fieldNode.setAttribute('name', 'NUM');
+      textNode = utils.xml.createTextNode('0');
+      fieldNode.appendChild(textNode);
+      blockXml.appendChild(fieldNode);
+      break;
+    case 'boolean':
+      blockXml.setAttribute('type', 'logic_boolean');
+      fieldNode.setAttribute('name', 'BOOL');
+      textNode = utils.xml.createTextNode('TRUE');
+      fieldNode.appendChild(textNode);
+      blockXml.appendChild(fieldNode);
+      break;
+    case 'string':
+    default:
+      blockXml.setAttribute('type', 'string');
+      fieldNode.setAttribute('name', 'TEXT');
+      textNode = utils.xml.createTextNode('');
+      fieldNode.appendChild(textNode);
+      blockXml.appendChild(fieldNode);
+  }
+  return blockXml;
+}
+
+/**
+ * Returns a default block for the given data schema.
+ * @param schema The data schema to generate a block for.
+ */
+function schemaToXml(schema: DataSchema) {
+  const type = schema.type ?? 'string';
+  if (type !== 'object') {
+    return primitiveTypeToXml(type);
+  }
+  let properties = schema.properties ?? {};
+  // filter properties with default values and const values
+  properties = Object.fromEntries(
+    Object.entries(properties).filter(
+      ([_, value]) => value.default === undefined && value.const === undefined
+    )
+  );
+  const propertyNames = Object.keys(properties);
+  const blockNode = utils.xml.createElement('block');
+  blockNode.setAttribute('type', 'object_create');
+
+  const mutationNode = utils.xml.createElement('mutation');
+  mutationNode.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+  mutationNode.setAttribute('num_fields', propertyNames.length.toString());
+
+  propertyNames.forEach(propertyName => {
+    const fieldNode = utils.xml.createElement('field');
+    fieldNode.setAttribute('name', propertyName);
+    mutationNode.appendChild(fieldNode);
+  });
+
+  blockNode.appendChild(mutationNode);
+
+  propertyNames.forEach((propertyName, index) => {
+    const fieldNode = utils.xml.createElement('field');
+    fieldNode.setAttribute('name', `field${index + 1}`);
+    fieldNode.textContent = propertyName;
+    blockNode.appendChild(fieldNode);
+  });
+
+  propertyNames.forEach((propertyName, index) => {
+    const valueNode = utils.xml.createElement('value');
+    valueNode.setAttribute('name', `field_input${index + 1}`);
+    const inputBlock = schemaToXml(properties[propertyName]);
+    valueNode.appendChild(inputBlock);
+    blockNode.appendChild(valueNode);
+  });
+
+  return blockNode;
 }

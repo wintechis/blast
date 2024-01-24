@@ -1,5 +1,5 @@
 import {Variables, dialog} from 'blockly';
-import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {reloadToolbox} from '../../BlocklyWorkspace/toolbox';
 import {implementedThing} from './../types';
 import {thingsStore} from './../ThingsStore';
 import {connectedThingsSlice} from './../connectedThingsReducers';
@@ -61,10 +61,9 @@ const addConsumedDevice = function (
   const dataObj: {[key: string]: DataSchema} = {};
 
   // List of all created Blocks
-  const implementedThingsBlockList = [];
+  const implementedThingsBlockList: implementedThing['blocks'] = [];
 
   // Generate Thing Block
-  console.log(deviceName);
   if (typeof td.description === 'undefined') {
     generateThingBlock(deviceName, deviceName, td);
   } else {
@@ -83,8 +82,8 @@ const addConsumedDevice = function (
       category: 'Security',
     });
   }
-  const readProps = [];
-  const writeProps = [];
+  const readProps: string[] = [];
+  const writeProps: string[] = [];
   // get property names and allowed operations
   for (const [propertyName, property] of Object.entries(td.properties ?? {})) {
     const op = new Set(property.forms.map(form => form.op));
