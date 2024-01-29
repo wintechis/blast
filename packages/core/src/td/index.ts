@@ -4,7 +4,7 @@ import * as BluetoothGeneric from './BluetoothGeneric.json';
 import * as EddystoneDevice from './EddystoneDevice.json';
 import * as JoyCon from './JoyCon.json';
 import * as GamepadPro from './GamepadPro.json';
-import * as GoveeLamp from './GoveeLamp.json';
+import * as GoveeLedBulb from './GoveeLamp.json';
 import * as HuskyDuino from './HuskyDuino.json';
 import * as PhilipsHue from './PhilipsHue.json';
 import * as RuuviTag from './RuuviTag.json';
@@ -20,7 +20,7 @@ export {
   BluetoothGeneric,
   EddystoneDevice,
   GamepadPro,
-  GoveeLamp,
+  GoveeLedBulb,
   HuskyDuino,
   JoyCon,
   Microbit,

@@ -27,101 +27,137 @@
 
   "properties": {
     "power": {
-      "type": "string",
-      "format": "hex",
+      "title": "power",
+      "description": "The current power status of the bulb",
+      "type": "object",
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
-      "minimum": 0,
-      "maximum": 1,
-      "description": "The current power status of the bulb",
-      "bdo:pattern": "3301{state}00000000000000000000000000000000",
-      "bdo:variables": {
-        "state": {
+      "properties": {
+        "commandId": {
           "type": "integer",
-          "bdo:bytelength": 1,
-          "minimum": 0,
-          "maximum": 1,
-          "description": "The current power state"
+          "ex:bitLength": 8,
+          "ex:bitOffset": 0,
+          "default": 51
+        },
+        "packetType": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 8,
+          "default": 1
+        },
+        "power": {
+          "type": "boolean",
+          "ex:bitLength": 1,
+          "ex:bitOffset": 23
+        },
+        "checksum": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 152
         }
       },
-      "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
+      "required": ["power", "checksum"],
       "forms": [
         {
           "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
-          "contentType": "application/x.binary-data-stream"
+          "contentType": "application/octet-stream;length=20;signed=false;byteSeq=LITTLE_ENDIAN"
         }
       ]
     },
     "brightness": {
-      "type": "string",
-      "format": "hex",
-      "bdo:pattern": "3304{value}000000000000000000000000000000000",
-      "bdo:variables": {
-        "value": {
+      "type": "object",
+      "properties": {
+        "commandId": {
           "type": "integer",
-          "bdo:bytelength": 1,
-          "minimum": 0,
-          "maximum": 255,
-          "description": "Brightness value"
+          "ex:bitLength": 8,
+          "ex:bitOffset": 0,
+          "default": 51
+        },
+        "packetType": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 8,
+          "default": 4
+        },
+        "brightness": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 16
+        },
+        "checksum": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 152
         }
       },
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
       "description": "The current brightness value of the bulb",
-      "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
       "forms": [
         {
           "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
-          "contentType": "application/x.binary-data-stream"
+          "contentType": "application/octet-stream;length=20;signed=false;byteSeq=LITTLE_ENDIAN"
         }
       ]
     },
     "colour": {
-      "type": "string",
-      "format": "hex",
-
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
       "description": "The colour of the LED light.",
-
-      "bdo:pattern": "330502{red}{green}{blue}00000000000000000000000000",
-      "bdo:variables": {
+      "type": "object",
+      "properties": {
+        "commandId": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 0,
+          "default": 51
+        },
+        "packetType": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 8,
+          "default": 5
+        },
+        "packetType2": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 16,
+          "default": 2
+        },
         "red": {
           "type": "integer",
-          "bdo:bytelength": 1,
-          "minimum": 0,
-          "maximum": 255,
-          "description": "Red value."
+          "ex:bitLength": 8,
+          "ex:bitOffset": 24
         },
         "green": {
           "type": "integer",
-          "bdo:bytelength": 1,
-          "minimum": 0,
-          "maximum": 255,
-          "description": "Green value."
+          "ex:bitLength": 8,
+          "ex:bitOffset": 32
         },
         "blue": {
           "type": "integer",
-          "bdo:bytelength": 1,
-          "minimum": 0,
-          "maximum": 255,
-          "description": "Blue value."
+          "ex:bitLength": 8,
+          "ex:bitOffset": 40
+        },
+        "checksum": {
+          "type": "integer",
+          "ex:bitLength": 8,
+          "ex:bitOffset": 152
         }
       },
-      "tst:function": "let checksum = 0; for (let i = 0; i < buf.length; i++) {checksum = checksum ^ buf[i];} let finBuf = Buffer.concat([buf, Buffer.from([checksum])]); return finBuf;",
       "forms": [
         {
           "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
           "op": "writeproperty",
           "sbo:methodName": "sbo:write",
-          "contentType": "application/x.binary-data-stream"
+          "contentType": "application/octet-stream;length=20;signed=false;byteSeq=LITTLE_ENDIAN"
         }
       ]
     }

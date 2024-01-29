@@ -10,6 +10,9 @@ import './blinkstick/generators.ts';
 import './bluetooth/blocks.ts';
 import './bluetooth/generators.ts';
 
+import './govee/blocks.ts';
+import './govee/generators.ts';
+
 import './hue/blocks.ts';
 import './hue/generators.ts';
 

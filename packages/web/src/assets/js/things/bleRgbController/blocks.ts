@@ -1,5 +1,5 @@
 /**
- * @fileoverview Block definitions for a BLE RGB LED controller
+ * @fileoverview Block'https://github.com/wintechis/blast/wiki/Govee-Light' definitions for a BLE RGB LED controller
  * (https://github.com/arduino12/ble_rgb_led_strip_controller).
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
