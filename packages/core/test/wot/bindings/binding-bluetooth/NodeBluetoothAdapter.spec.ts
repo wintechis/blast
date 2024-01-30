@@ -21,19 +21,16 @@ jest.mock('ble-host', () => ({
             ) => {
               callback({
                 gatt: {
-                  discoverServicesByUuid: jest.fn(
-                    (
-                      serviceID: string,
-                      numToFind: number,
-                      callback: (services: unknown) => void
-                    ) => {
+                  discoverAllPrimaryServices: jest.fn(
+                    (callback: (services: unknown) => void) => {
                       callback([
                         {
+                          uuid: '00000000-0000-0000-0000-000000000001',
                           discoverCharacteristics: jest.fn(
                             (callback: (characteristics: unknown) => void) => {
                               callback([
                                 {
-                                  uuid: '00000000-0000-0000-0000-000000000000',
+                                  uuid: '00000000-0000-0000-0000-000000000002',
                                 },
                               ]);
                             }
@@ -83,8 +80,8 @@ describe('NodeBluetoothAdapter', () => {
     test('should return characteristic', async () => {
       const characteristic = await adapter.getCharacteristic(
         '00:00:00:00:00:00',
-        '',
-        '00000000-0000-0000-0000-000000000000'
+        '00000000-0000-0000-0000-000000000001',
+        '00000000-0000-0000-0000-000000000002'
       );
       expect(characteristic).toBeDefined();
     });
