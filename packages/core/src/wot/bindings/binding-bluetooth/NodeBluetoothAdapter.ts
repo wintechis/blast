@@ -108,15 +108,15 @@ export default class ConcreteBluetoothAdapter implements BluetoothAdapter {
     debug(`Connected to ${deviceId}`);
 
     const service = await new Promise<GattClientService>((resolve, reject) => {
-      connection.gatt.discoverServicesByUuid(serviceID, 1, services => {
-        if (services.length === 0) {
+      connection.gatt.discoverAllPrimaryServices(services => {
+        const service = services.find(s => s.uuid === serviceID);
+        if (service === undefined) {
           reject(
             new Error(`Service ${serviceID} not found on device ${deviceId}`)
           );
+        } else {
+          resolve(service);
         }
-        const service = services[0];
-        debug(`Found service ${serviceID}`);
-        resolve(service);
       });
     });
 
