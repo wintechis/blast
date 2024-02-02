@@ -496,7 +496,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-private-property-in-object@npm:^7.16.0":
+"@babel/plugin-proposal-private-property-in-object@npm:^7.16.7":
   version: 7.21.11
   resolution: "@babel/plugin-proposal-private-property-in-object@npm:7.21.11"
   dependencies:
@@ -10765,6 +10765,7 @@ __metadata:
     bindings: ~1.5.0
     node-addon-api: ^3.0.0
     node-gyp: latest
+  checksum: 19e77f9d10f4ea2cc06f1cf1094c5fd3912dade0e962ec9524ffee1a645cc7df5e5c489ed94c3a274c35aef6c25a1cd6474f87048b9e9cac233ebaeda10215af
   conditions: os=linux
   languageName: node
   linkType: hard
@@ -20133,11 +20134,11 @@ __metadata:
 
 "typescript@patch:typescript@latest#~builtin<compat/typescript>":
   version: 5.3.3
-  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=29ae49"
+  resolution: "typescript@patch:typescript@npm%3A5.3.3#~builtin<compat/typescript>::version=5.3.3&hash=e012d7"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: f61375590b3162599f0f0d5b8737877ac0a7bc52761dbb585d67e7b8753a3a4c42d9a554c4cc929f591ffcf3a2b0602f65ae3ce74714fd5652623a816862b610
+  checksum: 4e604a9e107ce0c23b16a2f8d79d0531d4d8fe9ebbb7a8c395c66998c39892f0e0a071ef0b0d4e66420a8ec2b8d6cfd9cdb29ba24f25b37cba072e9282376df9
   languageName: node
   linkType: hard
 
