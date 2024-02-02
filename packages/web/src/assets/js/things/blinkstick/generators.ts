@@ -23,9 +23,8 @@ JavaScript.forBlock['things_blinkstick'] = function (
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['Blinkstick'] = 'const {Blinkstick} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(Blinkstick, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(Blinkstick, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

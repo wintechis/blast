@@ -23,9 +23,8 @@ JavaScript.forBlock['things_Huskylens'] = function (
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['HuskyDuino'] = 'const {HuskyDuino} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(HuskyDuino, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(HuskyDuino, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

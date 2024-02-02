@@ -23,9 +23,8 @@ const customEvents = new Map();
 const eventTargets = new Map();
 const eventValues = new Map();`;
 
-  JavaScript.definitions_[
-    'customEvents-' + block.id
-  ] = `customEvents.set(${id}, new CustomEvent("${stateName}"));`;
+  JavaScript.definitions_['customEvents-' + block.id] =
+    `customEvents.set(${id}, new CustomEvent("${stateName}"));`;
 
   const functionName = JavaScript.provideFunction_(
     stateName,

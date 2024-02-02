@@ -23,9 +23,8 @@ JavaScript.forBlock['things_xiaomiThermometer'] = function (
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['XiaomiThermometer'] =
     'const {XiaomiThermometer} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(XiaomiThermometer, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(XiaomiThermometer, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

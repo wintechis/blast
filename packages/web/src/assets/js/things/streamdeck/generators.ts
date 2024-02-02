@@ -21,9 +21,8 @@ JavaScript.forBlock['things_streamdeck'] = function (block: Block) {
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['StreamDeckMini'] = 'const {StreamDeckMini} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(StreamDeckMini, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(StreamDeckMini, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

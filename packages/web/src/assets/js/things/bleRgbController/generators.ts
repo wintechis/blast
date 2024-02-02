@@ -24,9 +24,8 @@ JavaScript.forBlock['things_bleLedController'] = function (
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['BleRgbController'] =
     'const {BleRgbController} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(BleRgbController, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(BleRgbController, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

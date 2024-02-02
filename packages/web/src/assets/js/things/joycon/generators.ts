@@ -26,9 +26,8 @@ JavaScript.forBlock['things_joycon'] = function (
   JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
   JavaScript.priority_['JoyCon'] = 'const {JoyCon} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThingWithHandlers(JoyCon, ${id}, addJoyConHandlers));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThingWithHandlers(JoyCon, ${id}, addJoyConHandlers));`;
 
   return [name, JavaScript.ORDER_NONE];
 };
@@ -251,9 +250,8 @@ JavaScript.forBlock['things_gamepad_pro'] = function (
   JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
   JavaScript.priority_['GamepadPro'] = 'const {GamepadPro} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThingWithHandlers(GamepadPro, ${id}, addGamepadHandlers));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThingWithHandlers(GamepadPro, ${id}, addGamepadHandlers));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

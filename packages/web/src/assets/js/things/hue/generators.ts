@@ -20,9 +20,8 @@ JavaScript.forBlock['things_hue'] = function (block: Block): [string, number] {
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['PhilipsHue'] = 'const {PhilipsHue} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(PhilipsHue, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(PhilipsHue, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

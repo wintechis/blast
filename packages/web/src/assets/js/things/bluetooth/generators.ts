@@ -20,9 +20,8 @@ JavaScript.forBlock['things_eddyStoneDevice'] = function (
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['EddystoneDevice'] =
     'const {EddystoneDevice} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(EddystoneDevice, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(EddystoneDevice, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };
@@ -41,9 +40,8 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['BluetoothGeneric'] =
     'const {BluetoothGeneric} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(BluetoothGeneric, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(BluetoothGeneric, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

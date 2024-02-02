@@ -22,9 +22,8 @@ JavaScript.forBlock['things_govee'] = function (
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['GoveeLedBulb'] = 'const {GoveeLedBulb} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(GoveeLedBulb, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(GoveeLedBulb, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

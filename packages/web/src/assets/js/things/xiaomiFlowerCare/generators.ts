@@ -23,9 +23,8 @@ JavaScript.forBlock['things_xiaomiFlowerCare'] = function (
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['XiaomiFlowerCare'] =
     'const {XiaomiFlowerCare} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(XiaomiFlowerCare, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(XiaomiFlowerCare, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };

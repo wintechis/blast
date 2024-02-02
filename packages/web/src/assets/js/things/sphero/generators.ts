@@ -24,9 +24,8 @@ JavaScript.forBlock['things_spheroMini'] = function (
   JavaScript.priority_['createThingWithHandlers'] =
     'const {createThingWithHandlers} = blastCore;';
   JavaScript.priority_['SpheroMini'] = 'const {SpheroMini} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThingWithHandlers(SpheroMini, ${id}, addSpheroHandlers));
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThingWithHandlers(SpheroMini, ${id}, addSpheroHandlers));
   things.get(${name}).id = ${id};`;
 
   return [name, JavaScript.ORDER_NONE];

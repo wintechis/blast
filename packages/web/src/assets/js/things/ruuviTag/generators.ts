@@ -20,9 +20,8 @@ JavaScript.forBlock['things_ruuviTag'] = function (block: Block) {
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['RuuviTag'] = 'const {RuuviTag} = blastTds;';
-  JavaScript.things_[
-    'things' + name
-  ] = `things.set(${name}, await createThing(RuuviTag, ${id}));`;
+  JavaScript.things_['things' + name] =
+    `things.set(${name}, await createThing(RuuviTag, ${id}));`;
 
   return [name, JavaScript.ORDER_NONE];
 };
