@@ -93,6 +93,7 @@
           "ex:bitOffset": 152
         }
       },
+      "required": ["brightness", "checksum"],
       "observable": false,
       "readOnly": false,
       "writeOnly": true,
@@ -152,6 +153,7 @@
           "ex:bitOffset": 152
         }
       },
+      "required": ["red", "green", "blue", "checksum"],
       "forms": [
         {
           "href": "./00010203-0405-0607-0809-0a0b0c0d1910/00010203-0405-0607-0809-0a0b0c0d2b11",
