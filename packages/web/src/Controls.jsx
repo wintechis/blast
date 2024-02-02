@@ -1,26 +1,21 @@
-import * as React from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import Output from './Output.jsx';
 import Version from './Version.jsx';
 
-export default class Controls extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      running: false,
-    };
-    this.outputRef = React.createRef();
-  }
+const Controls = () => {
+  const [running, setRunning] = useState(false);
+  const outputRef = useRef(null);
 
-  componentDidMount() {
-    globalThis['addMessage'] = this.outputRef.current.addMessage;
-  }
+  useEffect(() => {
+    globalThis['addMessage'] = outputRef.current.addMessage;
+  }, []);
 
-  render() {
-    return (
-      <>
-        <Output ref={this.outputRef} />
-        <Version />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Output ref={outputRef} />
+      <Version />
+    </>
+  );
+};
+
+export default Controls;

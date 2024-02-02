@@ -47,24 +47,27 @@ JavaScript.forBlock['ruuviTag_event'] = function (block: Block) {
     'measurementSequenceNumber'
   );
 
-  const eventHandler = JavaScript.provideFunction_('ruuviTagHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '  const responseArr = await interactionOutput.value();',
-    `  ${tempVarName} = responseArr[1];`,
-    `  ${humidityVarName} = responseArr[2];`,
-    `  ${pressureVarName} = responseArr[3];`,
-    `  ${accelerationXVarName} = responseArr[4];`,
-    `  ${accelerationYVarName} = responseArr[5];`,
-    `  ${accelerationZVarName} = responseArr[6];`,
-    `  ${batteryVarName} = responseArr[7];`,
-    `  ${txPowerVarName} = responseArr[7];`,
-    `  ${movementCounterVarName} = responseArr[8];`,
-    `  ${measurementSequenceNumberVarName} = responseArr[9];`,
-    `  ${statements.replace(/`/g, '\\`')}`,
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'ruuviTagHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '  const responseArr = await interactionOutput.value();',
+      `  ${tempVarName} = responseArr[1];`,
+      `  ${humidityVarName} = responseArr[2];`,
+      `  ${pressureVarName} = responseArr[3];`,
+      `  ${accelerationXVarName} = responseArr[4];`,
+      `  ${accelerationYVarName} = responseArr[5];`,
+      `  ${accelerationZVarName} = responseArr[6];`,
+      `  ${batteryVarName} = responseArr[7];`,
+      `  ${txPowerVarName} = responseArr[7];`,
+      `  ${movementCounterVarName} = responseArr[8];`,
+      `  ${measurementSequenceNumberVarName} = responseArr[9];`,
+      `  ${statements.replace(/`/g, '\\`')}`,
+      '}',
+    ]
+  );
 
   const handler = `await things.get(${thing}).subscribeEvent('UART data', ${eventHandler});\n`;
   JavaScript.handlers['things' + block.id] = handler;

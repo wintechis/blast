@@ -42,16 +42,19 @@ JavaScript.forBlock['xiaomiThermometer_event'] = function (
   const tempVarName = block.getFieldValue('temperature');
   const humidityVarName = block.getFieldValue('humidity');
 
-  const eventHandler = JavaScript.provideFunction_('xiaomiThermometerHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '  const responseArr = await interactionOutput.value();',
-    `  ${tempVarName} = responseArr[0];`,
-    `  ${humidityVarName} = responseArr[1];`,
-    `  ${statements.replace(/`/g, '\\`')}`,
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'xiaomiThermometerHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '  const responseArr = await interactionOutput.value();',
+      `  ${tempVarName} = responseArr[0];`,
+      `  ${humidityVarName} = responseArr[1];`,
+      `  ${statements.replace(/`/g, '\\`')}`,
+      '}',
+    ]
+  );
 
   const handler = `await things.get(${thing}).subscribeEvent('measurements', ${eventHandler});`;
   JavaScript.handlers['things' + block.id] = handler;

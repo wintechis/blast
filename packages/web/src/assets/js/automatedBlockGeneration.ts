@@ -15,7 +15,6 @@ import {BlockDelete} from 'blockly/core/events/events_block_delete';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
-import {blocks} from 'blockly/blocks';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -428,14 +427,17 @@ export function generateSubscribeEventCode(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const varName = block.getFieldValue('eventVar') ?? '';
 
-      const eventHandler = JavaScript.provideFunction_('handleGenericEvent', [
-        'async function ' +
-          JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(interactionOutput) {',
-        `  const ${varName} = await interactionOutput.value();`,
-        `  ${statements.replace(/`/g, '\\`')}`,
-        '}',
-      ]);
+      const eventHandler = JavaScript.provideFunction_(
+        'handleGenericEvent' + block.id,
+        [
+          'async function ' +
+            JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+            '(interactionOutput) {',
+          `  const ${varName} = await interactionOutput.value();`,
+          `  ${statements.replace(/`/g, '\\`')}`,
+          '}',
+        ]
+      );
 
       const handler = `await things.get(${thing}).subscribeEvent('${eventName}', ${eventHandler});\n`;
       JavaScript.handlers['things' + block.id] = handler;

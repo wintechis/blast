@@ -44,20 +44,23 @@ JavaScript.forBlock['streamdeck_button_event'] = function (
   const button5Name = block.getFieldValue('button5');
   const button6Name = block.getFieldValue('button6');
 
-  const eventHandler = JavaScript.provideFunction_('streamdeckHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '    const keyData = await interactionOutput.value();',
-    `    ${button1Name} = keyData[0];`,
-    `    ${button2Name} = keyData[1];`,
-    `    ${button3Name} = keyData[2];`,
-    `    ${button4Name} = keyData[3];`,
-    `    ${button5Name} = keyData[4];`,
-    `    ${button6Name} = keyData[5];`,
-    `    ${statements.replace(/`/g, '\\`')}`,
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'streamdeckHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '    const keyData = await interactionOutput.value();',
+      `    ${button1Name} = keyData[0];`,
+      `    ${button2Name} = keyData[1];`,
+      `    ${button3Name} = keyData[2];`,
+      `    ${button4Name} = keyData[3];`,
+      `    ${button5Name} = keyData[4];`,
+      `    ${button6Name} = keyData[5];`,
+      `    ${statements.replace(/`/g, '\\`')}`,
+      '}',
+    ]
+  );
 
   const handler = `await things.get(${thing}).subscribeEvent('inputreport', ${eventHandler});\n`;
   JavaScript.handlers['things' + block.id] = handler;

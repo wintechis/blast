@@ -62,16 +62,19 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
   const statements = JavaScript.statementToCode(block, 'statements');
   const button = JavaScript.quote_(block.getFieldValue('button'));
 
-  const eventHandler = JavaScript.provideFunction_('joycon_buttonHandler', [
-    'async function ' +
-      JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-      '(interactionOutput) {',
-    '  const buttonStatus = await interactionOutput.value();',
-    `  if (buttonStatus[${button}]) {`,
-    `${statements.replace(/`/g, '\\`')}`,
-    '  }',
-    '}',
-  ]);
+  const eventHandler = JavaScript.provideFunction_(
+    'joycon_buttonHandler' + block.id,
+    [
+      'async function ' +
+        JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
+        '(interactionOutput) {',
+      '  const buttonStatus = await interactionOutput.value();',
+      `  if (buttonStatus[${button}]) {`,
+      `${statements.replace(/`/g, '\\`')}`,
+      '  }',
+      '}',
+    ]
+  );
   const handler = `await things.get(${thing}).subscribeEvent('button', ${eventHandler});`;
   JavaScript.handlers['things' + block.id] = handler;
 
