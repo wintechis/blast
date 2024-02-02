@@ -40,8 +40,10 @@ export default class Output extends React.Component {
   componentDidMount() {
     // overwrite console.log
     const oldLog = console.log;
-    console.log = (msg, type) => {
-      oldLog(msg);
+    console.log = (...params) => {
+      oldLog(...params);
+      const msg = params[0];
+      const type = params[1];
       this.setState(state => {
         if (typeof msg === 'undefined') {
           return;
