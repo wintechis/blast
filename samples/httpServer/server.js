@@ -1,4 +1,4 @@
-import {RuuviTag} from '../../packages/core/dist/blast.tds.cjs';
+import {RuuviTag} from '../../packages/core/dist/blast.tds.js';
 import {createThing, createExposedThing, getServient} from '../../packages/core/dist/blast.node.cjs';
 import bindingHttp from "@node-wot/binding-http";
 
