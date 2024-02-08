@@ -1,5 +1,5 @@
 import {Variables, dialog} from 'blockly';
-import {reloadToolbox} from '../../BlocklyWorkspace/toolbox';
+import {addBlock, reloadToolbox} from '../../BlocklyWorkspace/toolbox';
 import {implementedThing} from './../types';
 import {thingsStore} from './../ThingsStore';
 import {connectedThingsSlice} from './../connectedThingsReducers';
@@ -20,6 +20,7 @@ import {
   generateSecurityBlock,
   generateSecurityCode,
   crawl,
+  schemaToXml,
 } from '../../assets/js/automatedBlockGeneration';
 import {connectDevice} from '.';
 
@@ -35,6 +36,8 @@ export const handleAddConsumedThing = async function (uri: string) {
     addConsumedDevice(td, isBluetooth);
   }
 };
+
+const xmlSerializer = new XMLSerializer();
 
 /**
  * Adds a device to BLAST.
@@ -86,12 +89,19 @@ const addConsumedDevice = function (
   const writeProps: string[] = [];
   // get property names and allowed operations
   for (const [propertyName, property] of Object.entries(td.properties ?? {})) {
-    const op = new Set(property.forms.map(form => form.op));
+    const ops = [];
+    for (const form of property.forms) {
+      if (Array.isArray(form.op)) {
+        ops.push(...form.op);
+      } else {
+        ops.push(form.op);
+      }
+    }
 
-    if (op.has('readproperty')) {
+    if (ops.includes('readproperty')) {
       readProps.push(propertyName);
     }
-    if (op.has('writeproperty')) {
+    if (ops.includes('writeproperty')) {
       writeProps.push(propertyName);
     }
   }
@@ -138,10 +148,24 @@ const addConsumedDevice = function (
         outputObj[actionName]
       );
 
+      const xml = `
+      <block type="${deviceName}_invokeActionBlock_${actionName}">
+        <value name="input">
+          ${
+            inputObj[actionName]
+              ? xmlSerializer.serializeToString(
+                  schemaToXml(inputObj[actionName])
+                )
+              : undefined
+          }
+        </value>
+      </block>`;
+
       // Add to implementedThingsBlockList
       implementedThingsBlockList.push({
         type: `${deviceName}_invokeActionBlock_${actionName}`,
         category: 'Actions',
+        XML: xml,
       });
     }
   }
@@ -183,31 +207,35 @@ export const connectConsumedDevice = function (thing: implementedThing) {
     Variables.promptName(
       'Thing consumed! Now give your Thing a name.',
       name,
-      text => {
-        if (text) {
+      newName => {
+        if (newName) {
           const existing = thingsStore
             .getState()
-            .connectedThings.some(thing => thing.id === text);
+            .connectedThings.some(thing => thing.id === newName);
           if (existing) {
-            const msg = `Name ${text} already exists.`;
+            const msg = `Name ${newName} already exists.`;
             dialog.alert(msg, () => {
-              promptAndCheckWithAlert(text, id); // Recurse
+              promptAndCheckWithAlert(newName, id); // Recurse
             });
           } else {
             // No conflict
             thingsStore.dispatch(
               connectedThingsSlice.actions.add({
-                name: text,
+                name: newName,
                 thing,
               })
             );
-            connectedConsumedDevices.set(text, id);
-            connectedThings.set(text, thing as implementedThing);
+            connectedConsumedDevices.set(newName, id);
+            connectedThings.set(newName, thing);
+            // Add blocks to toolbox
+            for (const block of thing.blocks) {
+              addBlock(block.type, block.category, block.XML);
+            }
           }
         } else {
           const msg = 'Name cannot be empty';
           dialog.alert(msg, () => {
-            promptAndCheckWithAlert(text ?? '', id); // Recuse
+            promptAndCheckWithAlert(newName ?? '', id); // Recuse
           });
         }
       }

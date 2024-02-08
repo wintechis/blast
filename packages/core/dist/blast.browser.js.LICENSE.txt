@@ -18,4 +18,12 @@
 
 /*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
+/**
+ * @license
+ * web-streams-polyfill v3.3.2
+ * Copyright 2024 Mattias Buelens, Diwank Singh Tomer and other contributors.
+ * This code is released under the MIT license.
+ * SPDX-License-Identifier: MIT
+ */
+
 /** @license URI.js v4.4.1 (c) 2011 Gary Court. License: http://github.com/garycourt/uri-js */

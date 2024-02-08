@@ -287,7 +287,7 @@ export const thingsFlyoutCategory = function (
 };
 
 /**
- * Construct the webBluetooth blocks required by the flyout for the things category.
+ * Construct the blocks required by the flyout for the things category.
  */
 const flyoutCategoryBlocks = function (): {[key: string]: Element[]} {
   const xmlList: {[key: string]: Element[]} = {

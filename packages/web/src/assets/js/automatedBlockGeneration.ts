@@ -4,6 +4,7 @@ import {
   Events,
   FieldTextInput,
   FieldDropdown,
+  inputs,
   Names,
   MenuGenerator,
   utils,
@@ -19,6 +20,8 @@ import {DataSchema, ThingDescription} from 'wot-thing-description-types';
 interface NavigatorLanguage {
   userLanguage?: string;
 }
+
+const ALIGN_RIGHT = inputs.Align.RIGHT;
 
 const dataTypeMapping: Record<string, string> = {
   integer: 'Number',
@@ -135,6 +138,7 @@ export function generateReadPropertyBlock(
         .appendField(`property of ${td.title ?? deviceName}`, 'label');
       this.setColour(255);
       this.setTooltip(td.description ?? `Read the properties of ${deviceName}`);
+      this.setOutput(true, null);
     },
     validator: function (property: string) {
       const block = this.getSourceBlock();
@@ -238,7 +242,7 @@ export function generateWritePropertyCode(deviceName: string) {
     const value =
       JavaScript.valueToCode(block, 'value', JavaScript.ORDER_NONE) || null;
 
-    const code = `await things.get(${name}).writeProperty(${property}, ${value})`;
+    const code = `await things.get(${name}).writeProperty(${property}, ${value});\n`;
     return code;
   };
 }
@@ -252,30 +256,26 @@ export function generateInvokeActionBlock(
 ) {
   Blocks[`${deviceName}_invokeActionBlock_${actionName}`] = {
     init: function () {
-      if (td.actions === undefined || td.actions.actionName === undefined) {
-        return;
-      }
-      if (
-        typeof input !== 'undefined' &&
-        typeof td.actions.actionName.input?.type !== 'undefined'
-      ) {
-        if (dataTypeMapping[td.actions.actionName.input.type]) {
+      this.appendValueInput('thing')
+        .appendField('invoke action')
+        .appendField(new FieldTextInput(actionName), 'action')
+        .appendField(`of ${deviceName}`, 'label')
+        .setCheck('Thing');
+      this.getField('action').setEnabled(false);
+      if (input?.type) {
+        if (dataTypeMapping[input.type]) {
           this.appendValueInput('value')
-            .setCheck(dataTypeMapping[td.actions.actionName.input.type])
-            .appendField(`invoke action '${actionName}' with value`, 'label');
+            .setCheck(dataTypeMapping[input.type])
+            .appendField('with value', 'label')
+            .setAlign(ALIGN_RIGHT);
         } else {
           this.appendValueInput('value')
-            .setCheck()
-            .appendField(`invoke action '${actionName}' with value`, 'label');
+            .appendField('with value', 'label')
+            .setAlign(ALIGN_RIGHT);
         }
       }
-      this.appendValueInput('thing')
-        .setCheck('Thing')
-        .appendField(`invoke '${actionName}' action of`, 'label');
-      this.setInputsInline(true);
       if (typeof output !== 'undefined') {
         this.setOutput(true, null);
-        this.setInputsInline(true);
       } else {
         this.setPreviousStatement(true, null);
         this.setNextStatement(true, null);
@@ -619,7 +619,7 @@ function primitiveTypeToXml(type: string) {
  * Returns a default block for the given data schema.
  * @param schema The data schema to generate a block for.
  */
-function schemaToXml(schema: DataSchema) {
+export function schemaToXml(schema: DataSchema) {
   const type = schema.type ?? 'string';
   if (type !== 'object') {
     return primitiveTypeToXml(type);
