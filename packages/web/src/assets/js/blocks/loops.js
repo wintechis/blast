@@ -63,7 +63,7 @@ Blocks['wait_seconds'] = {
   init: function () {
     this.appendValueInput('SECONDS').appendField('wait').setCheck('Number');
     this.appendDummyInput().appendField('seconds');
-    this.setColour(120);
+    this.setColour(180);
     this.setTooltip('Wait x seconds before executing the next block.');
     this.setPreviousStatement(true, null);
     this.setNextStatement(true, null);
