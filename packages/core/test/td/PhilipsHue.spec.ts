@@ -38,7 +38,7 @@ describe('Philips Hue Thing Description', () => {
       expect(brightness).toBeDefined();
       expect(brightness.type).toEqual('integer');
       expect(brightness.observable).toBeFalsy();
-      expect(brightness.readOnly).toBeTruthy();
+      expect(brightness.readOnly).toBeFalsy();
       expect(brightness.writeOnly).toBeFalsy();
       expect(brightness.minimum).toEqual(1);
       expect(brightness.maximum).toEqual(255);
