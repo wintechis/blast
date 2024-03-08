@@ -16,6 +16,7 @@ const {
   Xml,
 } = Blockly;
 import {findLegalName, getDefinition, rename} from '../states.js';
+import {eventsInWorkspace, getWorkspace} from '../interpreter.ts';
 
 Blocks['state_definition'] = {
   /**
@@ -73,6 +74,19 @@ Blocks['event'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
+    getWorkspace()?.addChangeListener(e => {
+      if (
+        e.type === Events.BLOCK_CREATE &&
+        this.isInFlyout === false &&
+        this.rendered === true &&
+        this.childBlocks_.length === 0 &&
+        e.ids?.includes(this.id)
+      ) {
+        this.addEvent();
+      } else if (e.type === Events.BLOCK_DELETE && e.ids?.includes(this.id)) {
+        this.removeFromEvents();
+      }
+    });
   },
   /**
    * Returns the state name of this event.
@@ -212,6 +226,22 @@ Blocks['event'] = {
         }
         Events.setGroup(oldGroup);
       }
+    }
+  },
+  /**
+   * Add this block's id to the events array.
+   */
+  addEvent: function () {
+    eventsInWorkspace.push(this.id);
+  },
+  /**
+   * Remove this block's id from the events array.
+   */
+  removeFromEvents: function () {
+    // remove this block from the events array.
+    const index = eventsInWorkspace.indexOf(this.id);
+    if (index !== -1) {
+      eventsInWorkspace.splice(index, 1);
     }
   },
   defType_: 'state_definition',
