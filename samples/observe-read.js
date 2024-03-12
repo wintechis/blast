@@ -1,9 +1,9 @@
-import {createThing} from './blast.node.cjs';
-import {RuuviTag} from './blast.tds.js';
+import {createThing} from '../packages/core/dist/blast.node.js';
+import {RuuviTag} from '../packages/core/dist/blast.tds.js';
 import {existsSync, appendFileSync, writeFileSync} from 'fs';
 
 // where is the error handler?
-import {XiaomiFlowerCare} from './blast.tds.js';
+import {XiaomiFlowerCare} from '../packages/core/dist/blast.tds.js';
 
 // assets
 const rtmac = 'e63fe17b6b95';
