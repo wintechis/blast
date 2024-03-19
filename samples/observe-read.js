@@ -1,12 +1,12 @@
-import {createThing} from '../packages/core/dist/blast.node.js';
-import {RuuviTag} from '../packages/core/dist/blast.tds.js';
+import {createThing} from '@blast/node';
+import {RuuviTag} from '@blast/tds';
 import {existsSync, appendFileSync, writeFileSync} from 'fs';
 
 // where is the error handler?
-import {XiaomiFlowerCare} from '../packages/core/dist/blast.tds.js';
+import {XiaomiFlowerCare} from '@blast/tds';
 
 // assets
-const rtmac = 'e63fe17b6b95';
+const rtmac = 'C43B4FC3FECA';
 const rtthing = await createThing(RuuviTag, rtmac);
 const fcmac = 'c47c8d6d362d';
 const fcthing = await createThing(XiaomiFlowerCare, fcmac);
@@ -47,53 +47,53 @@ const handler = async (d) => {
 };
 
 // read flowercare
-async function read() {
-    // First enable readMode
-    //console.log('activating read mode...');
-    await fcthing.invokeAction('readMode', 'A01F');
+// async function read() {
+//     // First enable readMode
+//     //console.log('activating read mode...');
+//     await fcthing.invokeAction('readMode', 'A01F');
 
-    // Read byte string
-    //console.log('reading measurements...');
-    const byteString = await fcthing.readProperty('valueString');
+//     // Read byte string
+//     //console.log('reading measurements...');
+//     const byteString = await fcthing.readProperty('valueString');
 
-    // Get result array
-    const measurementArray = await byteString.value();
+//     // Get result array
+//     const measurementArray = await byteString.value();
 
-    let data = { 'temperature': measurementArray[0],
-		 'brightness': measurementArray[1],
-		 'moisture': measurementArray[2],
-		 'conductivity': measurementArray[3]
-	       };
+//     let data = { 'temperature': measurementArray[0],
+// 		 'brightness': measurementArray[1],
+// 		 'moisture': measurementArray[2],
+// 		 'conductivity': measurementArray[3]
+// 	       };
 
-    let timestamp = new Date().toISOString();
-    data.timestamp = timestamp;
+//     let timestamp = new Date().toISOString();
+//     data.timestamp = timestamp;
 
-    let json = JSON.stringify(data, null, '\t');
-    console.log(json);
+//     let json = JSON.stringify(data, null, '\t');
+//     console.log(json);
 
-    // should be really a xsd:duration and the date should include the timezone (in ISO8601 format)
-    let date = timestamp.substring(0, 10);
+//     // should be really a xsd:duration and the date should include the timezone (in ISO8601 format)
+//     let date = timestamp.substring(0, 10);
 
-    let csv = `./flowercare-${fcmac}-${date}.csv`;
-    if (!existsSync(csv)) {
-	let header = 'date';
-	for (let key in data) {
-	    header = header + ',' + key;
-	}
-	appendFileSync(csv, header + '\n');
-    }
+//     let csv = `./flowercare-${fcmac}-${date}.csv`;
+//     if (!existsSync(csv)) {
+// 	let header = 'date';
+// 	for (let key in data) {
+// 	    header = header + ',' + key;
+// 	}
+// 	appendFileSync(csv, header + '\n');
+//     }
 
-    let row = date;
-    for (let key in data) {
-	row = row + ',' + data[key];
-    }
+//     let row = date;
+//     for (let key in data) {
+// 	row = row + ',' + data[key];
+//     }
 
-    appendFileSync(csv, row + '\n');
-}
+//     appendFileSync(csv, row + '\n');
+// }
 
 rtthing.subscribeEvent('UART data', handler);
 
-await read();
-await sleep(1000);
-await read();
-//process.exit(0);
+// await read();
+// await sleep(1000);
+// await read();
+// process.exit(0);

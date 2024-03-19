@@ -1,5 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {XiaomiFlowerCare} from '../packages/core/dist/blast.tds.js';
+import {createThing} from '@blast/node';
+import {XiaomiFlowerCare} from '@blast/tds';
 
 const mac = 'C47C8D6D36BB';
 

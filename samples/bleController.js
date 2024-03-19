@@ -1,5 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {BleRgbController} from '../packages/core/dist/blast.tds.js';
+import {createThing} from '@blast/node';
+import {BleRgbController} from '@blast/tds';
 
 const mac = 'BE5860018744';
 

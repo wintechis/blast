@@ -1,9 +1,0 @@
-{
-    "extends": "./tsconfig.json",
-    "compilerOptions": {
-      "paths": {
-        "BluetoothAdapter": ["./src/wot/bindings/binding-bluetooth/WebBluetoothAdapter.js"],
-        "HidAdapter": ["./src/wot/bindings/binding-hid/WebHidAdapter.js"],
-      }
-    }
-  }

@@ -1,5 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {GoveeLedBulb} from '../packages/core/dist/blast.tds.js';
+import {createThing} from '@blast/node';
+import {GoveeLedBulb} from '@blast/tds';
 
 const mac = 'A4C1389D7900';
 

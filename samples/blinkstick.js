@@ -1,6 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {Blinkstick} from '../packages/core/dist/blast.tds.js';
-import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
+import {createThing, HidHelpers} from '@blast/node';
+import {Blinkstick} from '@blast/tds';
 
 const device = await HidHelpers.selectDevice();
 const thing = await createThing(Blinkstick, device.path);

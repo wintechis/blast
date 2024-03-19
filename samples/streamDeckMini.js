@@ -1,6 +1,5 @@
-import {createThing} from '../packages/core/dist/blast.node.cjs';
-import {StreamDeckMini} from '../packages/core/dist/blast.tds.js';
-import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
+import {createThing, HidHelpers} from '@blast/node';
+import {StreamDeckMini} from '@blast/tds';
 
 const device = await HidHelpers.selectDevice();
 const thing = await createThing(StreamDeckMini, device.path);

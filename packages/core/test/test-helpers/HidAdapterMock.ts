@@ -1,4 +1,4 @@
-import {HidAdapter} from '../../src/wot/bindings/binding-hid/HidAdapter';
+import {HidAdapter} from "../../src/bindings/binding-hid/HidAdapter";
 
 class HIDDeviceMock extends EventTarget implements HIDDevice {
   public opened = false;
@@ -95,7 +95,7 @@ class HIDDeviceMock extends EventTarget implements HIDDevice {
   }
 }
 
-export default class HidAdapterMock implements HidAdapter {
+export default class HidAdapterMock extends HidAdapter {
   public devices: HIDDeviceMock[] = [];
 
   public getDevice(id: string): Promise<HIDDevice> {

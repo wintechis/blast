@@ -1,4 +1,4 @@
-import {getServient, getWot} from '../../packages/core/dist/blast.node.cjs';
+import {getServient, getWot} from '@blast/node';
 import core from '@node-wot/core';
 
 const servient = getServient()

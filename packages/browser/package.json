@@ -1,0 +1,83 @@
+{
+  "name": "@blast/browser",
+  "version": "0.0.1",
+  "main": "dist/blast.browser.js",
+  "description": "BLAST - Block Applications for Things, node package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/blast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wintechis/blast/issues"
+  },
+  "homepage": "https://github.com/wintechis/blast#readme",
+  "author": "Thomas Wehr",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.cjs",
+    "lint": "eslint \"src/**\" --config .eslintrc.json",
+    "fix": "eslint --fix \"src/** \"",
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "type": "module",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "@jest/globals": "^29.5.0",
+    "@types/node": "^20.1.0",
+    "@types/uuid": "^9.0.1",
+    "@types/w3c-web-hid": "^1.0.3",
+    "@types/web-bluetooth": "^0.0.17",
+    "@typescript-eslint/eslint-plugin": "latest",
+    "@typescript-eslint/parser": "latest",
+    "eslint": "latest",
+    "eslint-config-google": "latest",
+    "eslint-config-prettier": "latest",
+    "eslint-plugin-node": "latest",
+    "eslint-plugin-prettier": "latest",
+    "jest": "^29.5.0",
+    "jest-environment-jsdom": "^29.5.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "pnp-webpack-plugin": "^1.7.0",
+    "prettier": "latest",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-jest": "^29.1.0",
+    "ts-loader": "^9.4.2",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "dependencies": {
+    "@blast/core": "0.0.1",
+    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=ac95171ebc74dd1111bab2647d2444d207f49724",
+    "@node-wot/td-tools": "0.8.11",
+    "@types/uritemplate": "^0.3.4",
+    "debug": "^4.3.4",
+    "json-placeholder-replacer": "^1.0.35",
+    "readable-stream": "^4.3.0",
+    "rxjs": "5.5.11",
+    "stream": "^0.0.2",
+    "typescript": "latest",
+    "uritemplate": "^0.3.4",
+    "uuid": "^9.0.0",
+    "web-streams-polyfill": "^3.2.1",
+    "wot-thing-description-types": "1.1.0-09-November-2023",
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29",
+    "x11": "^2.3.0"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{js,ts}"
+    ],
+    "preset": "ts-jest/presets/js-with-ts",
+    "testEnvironment": "node",
+    "transform": {
+      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!variables/.*)"
+    ]
+  }
+}

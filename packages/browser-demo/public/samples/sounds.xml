@@ -1,0 +1,78 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="audioOutput_playFileFromUrl" id="H8ZRH-i={:|4`Eg}x{uA" x="38" y="38">
+    <value name="URI">
+      <block type="uri_from_string" id="~1Gc}p|bS|.Q~BfMi=Te">
+        <value name="URI">
+          <block type="string" id="d-}5EpC0mn6?cAD)=uy-">
+            <field name="TEXT">https://studio.code.org/blockly/media/click.mp3</field>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="audioOutput_playFileFromUrl" id="pkx2~5g)%.xZFm`9E!)T">
+        <value name="URI">
+          <block type="uri_from_string" id="2XM1JPl[B+V{az+z/*#p">
+            <value name="URI">
+              <block type="string" id="tVVPJG95!mprtd5_s_tn">
+                <field name="TEXT">https://studio.code.org/blockly/media/skins/dance/win.mp3</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="audioOutput_playFileFromUrl" id="jifOz53c5v`CsAa.{/[i">
+            <value name="URI">
+              <block type="uri_from_string" id="cxCLOz{*^6,tEPJhzj(@">
+                <value name="URI">
+                  <block type="string" id="y!~;?qHit6[ld+p!A.Gu">
+                    <field name="TEXT">https://upload.wikimedia.org/wikipedia/commons/2/25/243020_plasterbrain_game-start.ogg</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="audioOutput_playFileFromUrl" id="7*IkY4]6i@OW]S;=WCFr">
+                <value name="URI">
+                  <block type="uri_from_string" id="/lF(AA[oH(qTQXq_3.0j">
+                    <value name="URI">
+                      <block type="string" id="2mTx7gK.He?V`vr0fdyt">
+                        <field name="TEXT">https://upload.wikimedia.org/wikipedia/commons/d/d9/Wilhelm_Scream.ogg</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="audioOutput_playFileFromUrl" id="W#DC4Pk|pEzof9Fk`@*8">
+                    <value name="URI">
+                      <block type="uri_from_string" id="y]=]chA*k$G,l1Q.|SZ=">
+                        <value name="URI">
+                          <block type="string" id=")ne+qH?vP=8Qs_`s}j@d">
+                            <field name="TEXT">https://studio.code.org/restricted/highhopes_panicatthedisco.mp3</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="audioOutput_playFileFromUrl" id="f%E,5p6He[;H)4ua[?f5">
+                        <value name="URI">
+                          <block type="uri_from_string" id="6SSP(2rJ@PC:8,TA`?DA">
+                            <value name="URI">
+                              <block type="string" id="R4wqXx?~9%{=YR3S3?,]">
+                                <field name="TEXT">https://studio.code.org/restricted/neverreallyover_katyperry.mp3</field>
+                              </block>
+                            </value>
+                          </block>
+                        </value>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

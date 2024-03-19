@@ -1,0 +1,31 @@
+{
+  "name": "@blast/tds",
+  "version": "0.0.1",
+  "main": "dist/blast.tds.js",
+  "description": "BLAST - Block Applications for Things, Core Package",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/blast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wintechis/blast/issues"
+  },
+  "homepage": "https://github.com/wintechis/blast#readme",
+  "author": "Thomas Wehr",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "scripts": {
+    "build": "yarn run clean && webpack --config webpack.config.cjs",
+    "clean": "yarn rimraf dist"
+  },
+  "type": "module",
+  "license": "AGPL-3.0",
+  "devDependencies": {
+    "rimraf": "^5.0.0",
+    "typescript": "^5.4.2",
+    "webpack": "latest",
+    "webpack-cli": "latest",
+    "webpack-node-externals": "^3.0.0"
+  }
+}

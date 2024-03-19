@@ -1,0 +1,172 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {"@language": "en"}
+  ],
+  "@type": "",
+  "title": "BLE RGB Controller",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
+  "description":
+    "A Bluetooth Low Energy (BLE) controller that can be used to control RGB LED lights.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "security": ["nosec_sc"],
+  "sbo:hasGAPRole": "sbo:Peripheral",
+  "sbo:isConnectable": true,
+  "sbo:hasAdvertisingIntervall": {
+    "qudt:numericValue": 50,
+    "qutdUnit:unit": "qudtUnit:MilliSEC"
+  },
+  "properties": {
+    "colour": {
+      "title": "colour",
+      "description": "The colour of the LED light.",
+      "type": "object",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "properties": {
+        "commandStart":{
+          "type": "integer",
+          "const": 126,
+          "default": 126,
+          "description": "Command start byte.",
+          "ex:bitOffset": 0,
+          "ex:bitLength": 8
+        },
+        "commandLength": {
+          "type": "integer",
+          "const": 7,
+          "default": 7,
+          "description": "Command length.",
+          "ex:bitOffset": 8,
+          "ex:bitLength": 8
+        },
+        "commandId": {
+          "type": "integer",
+          "const": 5,
+          "default": 5,
+          "description": "Command type.",
+          "ex:bitOffset": 16,
+          "ex:bitLength": 8
+        },
+        "commandSubId": {
+          "type": "integer",
+          "const": 3,
+          "default": 3,
+          "description": "Command sub type.",
+          "ex:bitOffset": 24,
+          "ex:bitLength": 8
+        },
+        "R": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Red value.",
+          "ex:bitOffset": 32,
+          "ex:bitLength": 8
+        },
+        "G": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Green value.",
+          "ex:bitOffset": 40,
+          "ex:bitLength": 8
+        },
+        "B": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 255,
+          "description": "Blue value.",
+          "ex:bitOffset": 48,
+          "ex:bitLength": 8
+        },
+        "unknown": {
+          "type": "integer",
+          "const": 0,
+          "default": 0,
+          "ex:bitOffset": 56,
+          "ex:bitLength": 8
+        },
+        "commandEnd": {
+          "type": "integer",
+          "const": 239,
+          "default": 239,
+          "description": "Command end byte.",
+          "ex:bitOffset": 64,
+          "ex:bitLength": 8
+        }
+      },
+      "required": ["R","G","B"],
+      "forms": [
+        {
+          "op": "writeproperty",
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "contentType": "application/octet-stream;length=9;signed=false",
+          "sbo:methodName": "sbo:write"
+        }
+      ]
+    },
+    "power": {
+      "type": "string",
+      "format": "hex",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "description": "The power switch of the controller.",
+      "bdo:pattern": "7e0004{is_on}00000000ef",
+      "bdo:variables": {
+        "is_on": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1,
+          "bdo:bytelength": 1
+        }
+      },
+      "forms": [
+        {
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    },
+    "effect": {
+      "type": "string",
+      "format": "hex",
+      "observable": false,
+      "readOnly": false,
+      "writeOnly": true,
+      "description": "The effect of the LED light.",
+      "bdo:pattern": "7e0003{effect}03000000ef",
+      "bdo:variables": {
+        "effect": {
+          "type": "integer",
+          "minimum": 128,
+          "maximum": 156,
+          "bdo:bytelength": 1
+        }
+      },
+      "forms": [
+        {
+          "href": "./0000fff0-0000-1000-8000-00805f9b34fb/0000fff3-0000-1000-8000-00805f9b34fb",
+          "op": "writeproperty",
+          "sbo:methodName": "sbo:write",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    }
+  }
+}

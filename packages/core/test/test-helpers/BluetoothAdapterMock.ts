@@ -1,4 +1,4 @@
-import {BluetoothAdapter} from '../../src/wot/bindings/binding-bluetooth/BluetoothAdapter';
+import {BluetoothAdapter} from "../../src/bindings/binding-bluetooth/BluetoothAdapter";
 
 class CharacteristicMock
   extends EventTarget
@@ -67,7 +67,7 @@ class CharacteristicMock
   }
 }
 
-export default class BluetoothAdapterMock implements BluetoothAdapter {
+export default class BluetoothAdapterMock extends BluetoothAdapter {
   private characteristics: BluetoothRemoteGATTCharacteristic[] = [];
 
   public addCharacteristic(characteristicId: string, value?: DataView) {

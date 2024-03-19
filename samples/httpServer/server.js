@@ -1,5 +1,5 @@
-import {RuuviTag} from '../../packages/core/dist/blast.tds.js';
-import {createThing, createExposedThing, getServient} from '../../packages/core/dist/blast.node.cjs';
+import {RuuviTag} from '@blast/tds';
+import {createThing, createExposedThing, getServient} from '@blast/node';
 import bindingHttp from "@node-wot/binding-http";
 
 const mac = 'C43B4FC3FECA';

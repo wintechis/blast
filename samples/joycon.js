@@ -1,6 +1,5 @@
-import {createThingWithHandlers} from '../packages/core/dist/blast.node.cjs';
-import {JoyCon as td} from '../packages/core/dist/blast.tds.js';
-import {HidHelpers} from '../packages/core/dist/blast.hidHelpers.js';
+import {createThingWithHandlers, HidHelpers} from '@blast/node';
+import {JoyCon as td} from '@blast/tds';
 import {JoyConLeft, JoyConRight, GeneralController} from '../packages/web/src/assets/js/things/joycon/switchPro/JoyCon.js'
 
 const device = await HidHelpers.selectDevice();

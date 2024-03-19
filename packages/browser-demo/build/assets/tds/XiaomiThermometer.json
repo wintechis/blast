@@ -1,0 +1,56 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "sbo": "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      "bdo": "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      "qudt": "https://qudt.org/schema/qudt/",
+      "qudtUnit": "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
+  ],
+  "@type": "",
+  "id": "blast:Bluetooth:xiamoiThermometer",
+  "title": "Xiaomi Thermometer",
+  "base": "gatt://{{MacOrWebBluetoothId}}/",
+  "description": "The Xiaomi Thermometer is a temperature and humidity sensor with a Bluetooth Low Energy interface.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "security": "nosec_sc",
+  "events": {
+    "measurements": {
+      "title": "Temperature and humidity measurements",
+      "description": "The temperature and humidity values measured by the thermometer.",
+      "data": {
+        "type": "array",
+        "bdo:pattern": "{temp}{hum}2011",
+        "bdo:variables": {
+          "temp": {
+            "type": "number",
+            "bdo:bytelength": 2,
+            "bdo:scale": 0.01,
+            "unit": "qudtUnit:DEG_C"
+          },
+          "hum": {
+            "type": "number",
+            "bdo:bytelength": 1,
+            "unit": "qudtUnit:PERCENT"
+          }
+        }
+      },
+      "forms": [
+        {
+          "href": "./ebe0ccb0-7a0a-4b0c-8a1a-6ff2997da3a6/ebe0ccc1-7a0a-4b0c-8a1a-6ff2997da3a6",
+          "sbo:methodName": "sbo:subscribe",
+          "contentType": "application/x.binary-data-stream"
+        }
+      ]
+    }
+  }
+}
