@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-unpublished-import
 import Blast from '../../core/src/index';
 import ConcreteBluetoothAdapter from './WebBluetoothAdapter';
 import ConcreteHidAdapter from './WebHidAdapter';

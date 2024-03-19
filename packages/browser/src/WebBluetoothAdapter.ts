@@ -1,3 +1,4 @@
+// eslint-disable-next-line node/no-unpublished-import
 import {BluetoothAdapter} from '../../core/src/index';
 import {createLoggers} from '@node-wot/core';
 
