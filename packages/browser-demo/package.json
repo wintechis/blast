@@ -41,7 +41,7 @@
     "copy-tds": "copyfiles -u 3 \"../tds/src/tds/*.json\" \"./public/assets/\"",
     "build": "yarn run copy-blast && yarn run copy-tds && gulp update-version && craco build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
-    "test": "echo \"Error: no test for @blast/web specified yet\"",
+    "test": "echo \"Error: no test for @blast/browser-demo specified yet\"",
     "test:coverage": "echo \"Error: no test for @blast/web specified yet\"",
     "eject": "react-scripts eject"
   },
