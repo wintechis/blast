@@ -74,19 +74,6 @@ Blocks['event'] = {
     this.setColour(180);
     this.setTooltip('');
     this.setHelpUrl('');
-    getWorkspace()?.addChangeListener(e => {
-      if (
-        e.type === Events.BLOCK_CREATE &&
-        this.isInFlyout === false &&
-        this.rendered === true &&
-        this.childBlocks_.length === 0 &&
-        e.ids?.includes(this.id)
-      ) {
-        this.addEvent();
-      } else if (e.type === Events.BLOCK_DELETE && e.ids?.includes(this.id)) {
-        this.removeFromEvents();
-      }
-    });
   },
   /**
    * Returns the state name of this event.
@@ -147,6 +134,7 @@ Blocks['event'] = {
       event.type === Events.BLOCK_CREATE &&
       event.ids.indexOf(this.id) !== -1
     ) {
+      this.addEvent();
       // Look for the case where an event was created (usually through
       // paste) and there is no matching state.  In this case, create
       // an empty state definition block with the correct name.
@@ -192,6 +180,8 @@ Blocks['event'] = {
       }
     } else if (event.type === Events.BLOCK_DELETE) {
       // Remove this blocks eventListeners.
+      this.removeFromEvents();
+
       const name = this.getStateName();
       // Look for the case where a state definition has been deleted,
       // leaving this block (an event block) orphaned. In this case, delete
