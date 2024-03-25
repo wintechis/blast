@@ -24,21 +24,23 @@ const eventTargets = new Map();
 const eventValues = new Map();`;
 
   JavaScript.definitions_['customEvents-' + block.id] =
-    `customEvents.set(${id}, new CustomEvent("${stateName}"));`;
+    `customEvents.set(${id}, new CustomEvent('${stateName}'));`;
 
   const functionName = JavaScript.provideFunction_(
     stateName,
     `
-eventTargets.set("${stateName}", new EventTarget());
+eventTargets.set('${stateName}', new EventTarget());
 eventValues.set(${id}, ${stateCondition});
 async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
+  let prevValue = false;
   while (true) {
-    const value = ${stateCondition};
-    if (!eventValues.get("${stateName}") && value) {
-      eventTargets.get("${stateName}").dispatchEvent(customEvents.get(${id}));
+    let value = (${stateCondition});
+    if (!prevValue && value) {
+      eventTargets.get('${stateName}').dispatchEvent(customEvents.get(${id}));
+      value = (${stateCondition});
     }
-    eventValues.set("${stateName}", value);
-    await new Promise(resolve => setTimeout(resolve, 5));
+    prevValue = value;
+    await new Promise(resolve => setTimeout(resolve, 0));
   }
 }`
   );
@@ -53,7 +55,7 @@ JavaScript.forBlock['event'] = function (block: Block): string {
   const stateName = block.getFieldValue('NAME');
   const statements = JavaScript.statementToCode(block, 'statements');
 
-  const code = `eventTargets.get("${stateName}").addEventListener("${stateName}", async () => {\n${statements}\n});\n`;
+  const code = `eventTargets.get('${stateName}').addEventListener('${stateName}', async () => {\n${statements}\n});\n`;
 
   return code;
 };
