@@ -80,6 +80,7 @@ export const setWorkspace = function (ws: WorkspaceSvg): void {
  * Array containing all interval events.
  */
 export const intervalEvents: string[] = [];
+(globalThis as any).intervalEvents = intervalEvents;
 
 /**
  * Tracks event blocks currently in the workspace,
