@@ -80,6 +80,7 @@ export const setWorkspace = function (ws: WorkspaceSvg): void {
  * Array containing all interval events.
  */
 export const intervalEvents: string[] = [];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (globalThis as any).intervalEvents = intervalEvents;
 
 /**
