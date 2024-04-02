@@ -4,7 +4,7 @@
 This is a monorepo with five packages:
 * [`@blast/core`](./packages/core/) is a library enabling usage of Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)) Thing Descriptions ([TDs](https://www.w3.org/2019/wot/td)) for Bluetooth devices in [Node.js](https://nodejs.org/).
 * [`@blast/node`](./packages/node/) bundle for Node.js, using [node-ble-host](https://github.com/Emill/node-ble-host) and [node-hid](https://github.com/node-hid/node-hid).
-* [`@blast/browser`](./packages/browser/) BLAST browser bundle using utilizing [Web Bluetooth](https://webbluetoothcg.github.io/web-bluetooth/) and [WebHID](https://wicg.github.io/webhid/).
+* [`@blast/browser`](./packages/browser/) BLAST browser bundle utilizing [Web Bluetooth](https://webbluetoothcg.github.io/web-bluetooth/) and [WebHID](https://wicg.github.io/webhid/).
 * [`@blast/browser-demo`](./packages/browser-demo/) a programming and execution environment for applications interacting with WoT devices from within the web-browser
 * [`@blast/tds`](./packages/tds/) Collection of WoT Thing Descriptions tested with BLAST
 
