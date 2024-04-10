@@ -52,12 +52,11 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
 JavaScript.forBlock['bluetoothGeneric_get_signal_strength_wb'] = function (
   block: Block
 ): [string, number] {
-  const id =
-    JavaScript.quote_(
-      block.getInputTargetBlock('thing')?.getFieldValue('id')
-    ) || '';
+  const id = JavaScript.quote_(
+    block.getInputTargetBlock('thing')?.getFieldValue('id') || ''
+  );
   const getDeviceById = JavaScript.provideFunction_('getDeviceById', [
-    'asnyc function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(id) {',
+    'async function ' + JavaScript.FUNCTION_NAME_PLACEHOLDER_ + '(id) {',
     '  const devices = await navigator.bluetooth.getDevices();',
     '  return devices.find(device => device.id === id);',
     '}',
