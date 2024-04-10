@@ -36,7 +36,7 @@ export default class SolidDialog extends React.Component {
   async login() {
     await login({
       oidcIssuer: this.state.oidcIssuer,
-      redirectUrl: window.location.origin,
+      redirectUrl: window.location.origin + window.location.pathname,
       clientName: 'BLAST',
       clientDescription: 'BLAST - Block Applications for Things',
     });
