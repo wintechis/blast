@@ -1,16 +1,9 @@
 {
+  "private": true,
   "name": "@blast/node",
   "version": "0.0.1",
   "main": "dist/index.cjs",
   "description": "BLAST - Block Applications for Things, node package",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wintechis/blast.git"
-  },
-  "bugs": {
-    "url": "https://github.com/wintechis/blast/issues"
-  },
-  "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "engines": {
     "node": ">=16.0.0"
