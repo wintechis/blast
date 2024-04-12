@@ -45,7 +45,7 @@
     "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "@blast/core": "0.0.1",
+    "@blast/core": "workspace:0.0.1",
     "@node-wot/binding-http": "0.8.11",
     "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=ac95171ebc74dd1111bab2647d2444d207f49724",
     "@node-wot/td-tools": "0.8.11",
