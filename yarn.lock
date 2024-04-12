@@ -1757,13 +1757,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@blast/core@0.0.1, @blast/core@workspace:packages/core":
+"@blast/core@0.0.1, @blast/core@workspace:0.0.1, @blast/core@workspace:packages/core":
   version: 0.0.0-use.local
   resolution: "@blast/core@workspace:packages/core"
   dependencies:
     "@jest/globals": ^29.5.0
     "@node-wot/binding-http": 0.8.11
-    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=ac95171ebc74dd1111bab2647d2444d207f49724"
+    "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
     "@node-wot/td-tools": 0.8.11
     "@types/debug": ^4.1.12
     "@types/inquirer": ^9.0.3
@@ -1805,7 +1805,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@blast/node@workspace:packages/node"
   dependencies:
-    "@blast/core": 0.0.1
+    "@blast/core": "workspace:0.0.1"
     "@jest/globals": ^29.5.0
     "@node-wot/binding-http": 0.8.11
     "@node-wot/core": "https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=ac95171ebc74dd1111bab2647d2444d207f49724"
@@ -3306,6 +3306,23 @@ __metadata:
     uuid: ^7.0.3
     web-streams-polyfill: ^3.0.1
   checksum: 22b9a29c9068c2d465af51269fa3a6727a8eda08324e05a8155786e328da9bcc7bbf2637719f499980aa748ba3b777d3ef6329182b3124cf2e9c9cb05da8fc90
+  languageName: node
+  linkType: hard
+
+"@node-wot/core@https://github.com/derwehr/node-wot#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43":
+  version: 0.8.11
+  resolution: "@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=%40node-wot%2Fcore&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
+  dependencies:
+    "@node-wot/td-tools": 0.8.11
+    "@petamoriken/float16": ^3.1.1
+    ajv: ^8.11.0
+    cbor: ^8.1.0
+    debug: ^4.3.4
+    uritemplate: 0.3.4
+    uuid: ^7.0.3
+    web-streams-polyfill: ^3.0.1
+    wot-thing-description-types: 1.1.0-09-November-2023
+  checksum: e5e61384d10e51bfad41248fe4bd08dcf613cbc2449c405f9cb88926f3f7583e01c3eb8c9a0338fded6d20153f08d1d2d3022e09d42a9e00411ad93c55140adf
   languageName: node
   linkType: hard
 
