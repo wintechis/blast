@@ -43,3 +43,4 @@ Now, you can import the packages in your project code, i.e.:
 import {createThing} from '@blast/node';
 import {BleRgbController} from '@blast/tds';
 ```
+Don't forget to execute ``sudo setcap cap_net_admin=ep $(eval readlink -f `which node`)`` to allow Node.js to access Bluetooth devices.
