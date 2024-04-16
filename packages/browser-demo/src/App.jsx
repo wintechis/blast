@@ -36,9 +36,9 @@ import {
   getDefaultSession,
 } from '@inrupt/solid-client-authn-browser';
 
-import './assets/js/things/index.js';
+import './ThingsStore/blocks/index.js';
 
-import {getLatestCode, onStatusChange} from './assets/js/interpreter.ts';
+import {getLatestCode, onStatusChange} from './BlocklyWorkspace/interpreter.ts';
 
 const theme = createTheme({
   palette: {

@@ -24,6 +24,7 @@ export declare const EddystoneHelpers: {
 	decodeAdvertisingData: (hexString: string) => string | Uint8Array | number;
 	encodeAdvertisingData: (data: string, frameType: FrameType) => string | Uint8Array;
 };
+export declare const addEvent: (name: string, condition: string) => EventTarget;
 export interface Capabilities {
 	specVersion: number;
 	maxSlots: number;

@@ -13,10 +13,10 @@ import {UseBlocklyProps} from './BlocklyWorkspaceProps';
 import debounce from './debounce';
 
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
-import {downloadScreenshot} from '../assets/js/screenshot.js';
+import {downloadScreenshot} from './screenshot.js';
 
-import {initInterpreter} from '../assets/js/interpreter';
-import {statesFlyoutCategory} from '../assets/js/states.js';
+import {initInterpreter} from './interpreter';
+import {statesFlyoutCategory} from './states.js';
 import {thingsFlyoutCategory} from '../ThingsStore/things';
 
 JavaScript.addReservedWords('highlightBlock');

@@ -12,7 +12,10 @@ import {
   Typography,
 } from '@mui/material';
 import CircularSlider from '@fseehawer/react-circular-slider';
-import {spheroIds, spheroInstances} from '../assets/js/things/sphero/blocks.ts';
+import {
+  spheroIds,
+  spheroInstances,
+} from '../ThingsStore/blocks/sphero/blocks.ts';
 
 export default class SpheroDialog extends React.Component {
   constructor(props) {

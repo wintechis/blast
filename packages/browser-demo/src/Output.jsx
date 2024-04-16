@@ -17,7 +17,7 @@ import {
   setStatus,
   setStdInfo,
   setStdWarn,
-} from './assets/js/interpreter.ts';
+} from './BlocklyWorkspace/interpreter.ts';
 
 const OutputTab = styled(props => (
   <Tab disableFocusRipple disableRipple {...props} />

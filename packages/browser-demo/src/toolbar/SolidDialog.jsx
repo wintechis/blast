@@ -8,12 +8,7 @@ import {
   FormControl,
   TextField,
 } from '@mui/material';
-import {
-  login,
-  handleIncomingRedirect,
-  fetch,
-  getDefaultSession,
-} from '@inrupt/solid-client-authn-browser';
+import {login, getDefaultSession} from '@inrupt/solid-client-authn-browser';
 
 export default class SolidDialog extends React.Component {
   constructor(props) {
@@ -44,9 +39,6 @@ export default class SolidDialog extends React.Component {
     if (session.info.isLoggedIn) {
       const webId = session.info.webId;
       console.log(`Logged in as ${webId}`);
-      const profile = await fetch(webId);
-      const profileJson = await profile.json();
-      console.log(profileJson);
     }
   }
 

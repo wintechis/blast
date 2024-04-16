@@ -15,7 +15,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace.ts';
 import {getDevMode} from '../ThingsStore/things.ts';
-import {getWorkspace} from '../assets/js/interpreter.ts';
+import {getWorkspace} from '../BlocklyWorkspace/interpreter.ts';
 import {requestDevice} from '../ThingsStore/devices/webBluetoothDevices.ts';
 import {connectWebHidDevice} from '../ThingsStore/devices/hidDevices.ts';
 import {connectGamepad} from '../ThingsStore/devices/gamepadDevices.ts';

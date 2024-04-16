@@ -22,7 +22,7 @@ import {
   setConsumeThingButtonHandler,
   setWebHidButtonHandler,
 } from './ThingsStore/things.ts';
-import {getStdWarn} from './assets/js/interpreter.ts';
+import {getStdWarn} from './BlocklyWorkspace/interpreter.ts';
 import {connectDevice} from './ThingsStore/devices/index.ts';
 import {handleAddConsumedThing} from './ThingsStore/devices/consumedDevices.ts';
 

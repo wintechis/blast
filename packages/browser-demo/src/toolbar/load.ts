@@ -2,7 +2,7 @@ import FileSaver from 'file-saver';
 import {hideChaff, utils, Xml} from 'blockly';
 import {importFromXml} from '../BlocklyWorkspace/useBlocklyWorkspace';
 
-import {getWorkspace, resetInterpreter} from '../assets/js/interpreter';
+import {getWorkspace, resetInterpreter} from '../BlocklyWorkspace/interpreter';
 import {implementedThings, resetThings} from '../ThingsStore/things';
 import {implementedThing} from '../ThingsStore/types';
 import ReconnectDialog from './ReconnectDialog';

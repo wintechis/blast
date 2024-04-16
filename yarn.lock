@@ -1680,7 +1680,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": latest
     "@typescript-eslint/parser": latest
     babel-polyfill: latest
-    blockly: 10.0.2
+    blockly: 10.4.3
     buffer: ^6.0.3
     copyfiles: latest
     eslint: latest
@@ -6297,12 +6297,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"blockly@npm:10.0.2":
-  version: 10.0.2
-  resolution: "blockly@npm:10.0.2"
+"blockly@npm:10.4.3":
+  version: 10.4.3
+  resolution: "blockly@npm:10.4.3"
   dependencies:
     jsdom: 22.1.0
-  checksum: 26541bff203cd8c4bd84a7c081a104d442745ea74f1dafd3f4b0fefb99272e070573ef5873624dcb86a8521c3366ba7453f604c277da62fd9bda8d2a79f84bb9
+  checksum: 1d01db87f31e23c3c1297457a54de887cf932c283d6db60c0ca478ed893f727a595908f86155c233ee93caea67c713b2657fe3966d655b8a35aaa0b5f5c50e0e
   languageName: node
   linkType: hard
 

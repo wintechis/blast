@@ -3,7 +3,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {getWorkspace} from '../assets/js/interpreter';
+import {getWorkspace} from './interpreter';
 import {
   BlockInfo,
   StaticCategoryInfo,

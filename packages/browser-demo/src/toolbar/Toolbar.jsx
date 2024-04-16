@@ -24,11 +24,14 @@ import ReconnectDialog from './ReconnectDialog.jsx';
 import SolidDialog from './SolidDialog.jsx';
 import SpheroDialog from './SpheroDialog.jsx';
 
-import {onStatusChange, runJS, stopJS} from '../assets/js/interpreter.ts';
+import {
+  onStatusChange,
+  runJS,
+  stopJS,
+} from '../BlocklyWorkspace/interpreter.ts';
 import {setDevMode} from '../ThingsStore/things.ts';
 
 const samples = [
-  './samples/eval.xml',
   './samples/events.xml',
   './samples/everyMinutes.xml',
   './samples/gamble.xml',

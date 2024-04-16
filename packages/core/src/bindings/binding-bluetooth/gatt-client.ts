@@ -96,6 +96,7 @@ export default class GattClient implements ProtocolClient {
           `invoking "writeValueWithoutResponse" on characteristic ${deconstructedForm.characteristicId}`
         );
         await characteristic.writeValueWithoutResponse(arrBuffer);
+        debug('writeValueWithoutResponse done');
         break;
 
       case 'sbo:write':
@@ -103,6 +104,7 @@ export default class GattClient implements ProtocolClient {
           `invoking "writeValueWithResponse" on characteristic ${deconstructedForm.characteristicId}`
         );
         await characteristic.writeValueWithResponse(arrBuffer);
+        debug('writeValueWithResponse done');
         break;
 
       default: {

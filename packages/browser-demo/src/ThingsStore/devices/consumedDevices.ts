@@ -21,7 +21,7 @@ import {
   generateSecurityCode,
   crawl,
   schemaToXml,
-} from '../../assets/js/automatedBlockGeneration';
+} from '../../BlocklyWorkspace/automatedBlockGeneration';
 import {connectDevice} from '.';
 
 export const connectedConsumedDevices: Map<string, unknown> = new Map();
@@ -138,8 +138,7 @@ const addConsumedDevice = function (
         actionName,
         deviceName,
         inputObj[actionName],
-        outputObj[actionName],
-        td
+        outputObj[actionName]
       );
       generateInvokeActionCode(
         actionName,

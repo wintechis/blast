@@ -11,7 +11,7 @@ import {
   removeBlock,
   removeCategory,
 } from '../BlocklyWorkspace/toolbox';
-import {getWorkspace} from '../assets/js/interpreter';
+import {getWorkspace} from '../BlocklyWorkspace/interpreter';
 import {thingsStore} from './ThingsStore';
 import {connectedThingsSlice} from './connectedThingsReducers';
 import {implementedThing} from './types';

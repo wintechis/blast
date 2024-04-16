@@ -2,6 +2,7 @@
 
 This folder contains different examples demonstrating the BLAST core functionalities. These are very simple programs, for more complex use cases, see [useCases folder](./useCases). Each sample is described below.
 
+- [Samples](#samples)
   - [events.xml](#eventsxml)
   - [gamble.xml](#gamblexml)
   - [helloWorld.xml](#helloworldxml)
@@ -15,9 +16,6 @@ This folder contains different examples demonstrating the BLAST core functionali
   - [streamdeck.xml](#streamdeckxml)
   - [toggle.xml](#togglexml)
   - [webSpeech.xml](#webspeechxml)
-
-## eval.xml
-Show how the `procedures_eval` block can be used to evaluate and execute custom JavaScript.
 
 ## events.xml
 Demonstrates the `state_definition` and `event` blocks. In this program a counter variable number is incremented from 1 to 9 and each time its value is even, an event is triggered.
