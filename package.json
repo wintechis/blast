@@ -15,7 +15,7 @@
         "lint": "yarn workspaces foreach  run lint",
         "test": "yarn workspaces foreach  run test",
         "test:coverage": "yarn workspaces foreach  run test:coverage",
-        "start": "yarn workspace @blast/web run start"
+        "start": "yarn workspace @blast/browser-demo run start"
     },
     "type": "module",
     "workspaces": [
