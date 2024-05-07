@@ -15,6 +15,7 @@ import {getWorkspace, eventsInWorkspace} from './interpreter';
 import {Abstract} from 'blockly/core/events/events_abstract';
 import {BlockCreate} from 'blockly/core/events/events_block_create';
 import {DataSchema, ThingDescription} from 'wot-thing-description-types';
+import {fetchData} from './corsProxy';
 
 interface NavigatorLanguage {
   userLanguage?: string;
@@ -347,8 +348,8 @@ export function generateSubscribeEventBlock(
       this.setColour(180);
       this.setTooltip('');
       this.setHelpUrl('');
-      this.getField('event').setEnabled(false);
-      this.getField('eventVar').setEnabled(false);
+      this.getField('event')?.setEnabled(false);
+      this.getField('eventVar')?.setEnabled(false);
     },
     /**
      * Add this block's id to the events array.
@@ -405,7 +406,9 @@ export function generateSubscribeEventBlock(
       ) {
         this.addEvent();
         if (this.childBlocks_.length === 0) {
-          this.createVars();
+          if (varType.length > 0) {
+            this.createVars();
+          }
         }
       } else if (event.type === Events.BLOCK_DELETE) {
         this.removeFromEvents();
@@ -432,7 +435,7 @@ export function generateSubscribeEventCode(
           'async function ' +
             JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
             '(interactionOutput) {',
-          `  const ${varName} = await interactionOutput.value();`,
+          `${varName ? `const ${varName} = await interactionOutput.value();` : ''}`,
           `  ${statements.replace(/`/g, '\\`')}`,
           '}',
         ]
@@ -549,38 +552,32 @@ export async function crawl(startUri: string, maxDepth: number) {
  * @returns A tuple with the TD and an array of links to other TDs.
  */
 async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
-  const res = await fetch(uri);
-  if (res.ok) {
-    const nextTDLinks: string[] = [];
-    // Get TD
-    const td = (await res.json()) as ThingDescription;
-    if (td.links) {
-      // find type of link and get href
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      for (const [_, value] of Object.entries(td.links)) {
-        // If content type is application/td+json add td
-        if (
-          typeof value?.type !== 'undefined' &&
-          value.type === 'application/td+json'
-        ) {
-          nextTDLinks.push(value.href);
-          continue;
-        }
-        // Use head request to follow link and get content type
-        const response = await fetch(value.href, {
-          method: 'HEAD',
-        });
-        const contentType: string | null = response.headers.get('Content-Type');
-        if (contentType?.includes('application/td+json')) {
-          nextTDLinks.push(value.href);
-          continue;
-        }
+  const td = (await fetchData(uri)) as ThingDescription;
+  const nextTDLinks: string[] = [];
+  if (td.links) {
+    // find type of link and get href
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    for (const [_, value] of Object.entries(td.links)) {
+      // If content type is application/td+json add td
+      if (
+        typeof value?.type !== 'undefined' &&
+        value.type === 'application/td+json'
+      ) {
+        nextTDLinks.push(value.href);
+        continue;
+      }
+      // Use head request to follow link and get content type
+      const response = await fetch(value.href, {
+        method: 'HEAD',
+      });
+      const contentType: string | null = response.headers.get('Content-Type');
+      if (contentType?.includes('application/td+json')) {
+        nextTDLinks.push(value.href);
+        continue;
       }
     }
-    return [td, nextTDLinks];
-  } else {
-    throw new Error('Could not fetch TD');
   }
+  return [td, nextTDLinks];
 }
 
 function primitiveTypeToXml(type: string) {
