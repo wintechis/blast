@@ -109,7 +109,7 @@ export default function App() {
   useEffect(() => {
     // After redirect, the current URL contains login information.
     handleIncomingRedirect({
-      restorePreviousSession: true,
+      restorePreviousSession: false,
       onError: console.error,
     }).then(info => {
       if (getDefaultSession().info.isLoggedIn) {
