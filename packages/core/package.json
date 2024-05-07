@@ -1,9 +1,10 @@
 {
+  "private": true,
   "name": "@blast/core",
   "version": "0.0.1",
   "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
   "description": "BLAST - Block Applications for Things, Core Package",
+  "author": "Thomas Wehr",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wintechis/blast.git"
@@ -12,12 +13,12 @@
     "url": "https://github.com/wintechis/blast/issues"
   },
   "homepage": "https://github.com/wintechis/blast#readme",
-  "author": "Thomas Wehr",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "node esbuild.js",
+    "build:types": "tsc --emitDeclarationOnly --declaration --project tsconfig.json",
     "lint": "eslint \"src/**\" --config .eslintrc.json",
     "fix": "eslint --fix \"src/** \"",
     "test": "jest",
@@ -28,12 +29,10 @@
   "devDependencies": {
     "@jest/globals": "^29.5.0",
     "@types/debug": "^4.1.12",
-    "@types/inquirer": "^9.0.3",
     "@types/node": "^20.1.0",
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
-    "bundle-declarations-webpack-plugin": "^5.1.1",
     "eslint": "latest",
     "eslint-config-google": "latest",
     "eslint-config-prettier": "latest",
@@ -45,9 +44,7 @@
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "ts-node": "^10.9.1",
-    "typescript": "^5.4.2",
-    "webpack": "^5.90.3",
-    "webpack-cli": "^5.1.4"
+    "typescript": "^5.4.2"
   },
   "dependencies": {
     "@node-wot/binding-http": "0.8.11",
@@ -55,6 +52,7 @@
     "@node-wot/td-tools": "0.8.11",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
+    "esbuild": "^0.21.0",
     "json-placeholder-replacer": "^1.0.35",
     "readable-stream": "^4.3.0",
     "rxjs": "5.5.11",
@@ -63,8 +61,7 @@
     "uuid": "^9.0.0",
     "web-streams-polyfill": "^3.2.1",
     "wot-thing-description-types": "1.1.0-09-November-2023",
-    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29",
-    "x11": "^2.3.0"
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29"
   },
   "jest": {
     "collectCoverageFrom": [

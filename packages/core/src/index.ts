@@ -6,23 +6,23 @@ import {
   ExposedThing,
   ProtocolHelpers,
 } from '@node-wot/core';
-import {InteractionOutput} from '@node-wot/core/dist/interaction-output';
+import {InteractionOutput} from '@node-wot/core/dist/interaction-output.js';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpClientFactory, HttpsClientFactory} from '@node-wot/binding-http';
 import {
   GattClientFactory,
   GapClientFactory,
-} from './bindings/binding-bluetooth/Bluetooth';
-import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
-export {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter';
-import {HidClientFactory} from './bindings/binding-hid/Hid';
-import {HidAdapter} from './bindings/binding-hid/HidAdapter';
-export {HidAdapter} from './bindings/binding-hid/HidAdapter';
+} from './bindings/binding-bluetooth/Bluetooth.js';
+import {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter.js';
+export {BluetoothAdapter} from './bindings/binding-bluetooth/BluetoothAdapter.js';
+import {HidClientFactory} from './bindings/binding-hid/Hid.js';
+import {HidAdapter} from './bindings/binding-hid/HidAdapter.js';
+export {HidAdapter} from './bindings/binding-hid/HidAdapter.js';
 import {ErrorListener} from 'wot-typescript-definitions';
 import {FormElementBase} from 'wot-thing-description-types';
-export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers';
+export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers.js';
 import {Readable} from 'stream';
-import {ReadableStream as PolyfillStream} from 'web-streams-polyfill/ponyfill/es2018';
+import {ReadableStream as PolyfillStream} from 'web-streams-polyfill';
 
 export default class Blast {
   private servient: Servient;

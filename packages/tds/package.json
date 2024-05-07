@@ -1,7 +1,7 @@
 {
   "name": "@blast/tds",
   "version": "0.0.1",
-  "main": "dist/blast.tds.js",
+  "main": "dist/index.cjs",
   "description": "BLAST - Block Applications for Things, Core Package",
   "repository": {
     "type": "git",
@@ -16,16 +16,11 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "yarn run clean && webpack --config webpack.config.cjs",
-    "clean": "yarn rimraf dist"
+    "build": "esbuild src/index.js --bundle --platform=node --outfile=dist/index.cjs"
   },
   "type": "module",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "rimraf": "^5.0.0",
-    "typescript": "^5.4.2",
-    "webpack": "latest",
-    "webpack-cli": "latest",
-    "webpack-node-externals": "^3.0.0"
+    "esbuild": "^0.21.0"
   }
 }

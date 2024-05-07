@@ -6,8 +6,8 @@ import {
   ProtocolClient,
   createLoggers,
 } from '@node-wot/core';
-import HidClient from './Hid-client';
-import {HidAdapter} from './HidAdapter';
+import HidClient from './Hid-client.js';
+import {HidAdapter} from './HidAdapter.js';
 
 const {debug} = createLoggers('binding-hid', 'hid-client-factory');
 

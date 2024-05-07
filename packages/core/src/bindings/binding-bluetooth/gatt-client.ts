@@ -8,9 +8,9 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {Subscription} from 'rxjs/Subscription';
-import {BluetoothForm} from './Bluetooth';
-import {BluetoothAdapter} from './BluetoothAdapter';
+import {Subscription} from 'rxjs';
+import {BluetoothForm} from './Bluetooth.js';
+import {BluetoothAdapter} from './BluetoothAdapter.js';
 import {Readable} from 'stream';
 
 const {debug} = createLoggers('binding-bluetooth', 'gatt-client');

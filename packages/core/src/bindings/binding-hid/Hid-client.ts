@@ -9,9 +9,9 @@ import {
   ProtocolHelpers,
   createLoggers,
 } from '@node-wot/core';
-import {HidForm} from './Hid';
-import {Subscription} from 'rxjs/Subscription';
-import {HidAdapter} from './HidAdapter';
+import {HidForm} from './Hid.js';
+import {Subscription} from 'rxjs/Subscription.js';
+import {HidAdapter} from './HidAdapter.js';
 import {Readable} from 'stream';
 
 const {debug} = createLoggers('binding-hid', 'hid-client');

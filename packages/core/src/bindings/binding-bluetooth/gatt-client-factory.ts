@@ -7,9 +7,9 @@ import {
   ContentSerdes,
   createLoggers,
 } from '@node-wot/core';
-import GattClient from './gatt-client';
-import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec';
-import {BluetoothAdapter} from './BluetoothAdapter';
+import GattClient from './gatt-client.js';
+import {BinaryDataStreamCodec} from '../../codecs/BinaryDataCodec.js';
+import {BluetoothAdapter} from './BluetoothAdapter.js';
 
 const {debug} = createLoggers('binding-bluetooth', 'gatt-client-factory');
 

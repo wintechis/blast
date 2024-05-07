@@ -7,8 +7,8 @@ import {
   ContentSerdes,
   createLoggers,
 } from '@node-wot/core';
-import GapClient from './gap-client';
-import {BluetoothAdapter} from './BluetoothAdapter';
+import GapClient from './gap-client.js';
+import {BluetoothAdapter} from './BluetoothAdapter.js';
 
 const {debug} = createLoggers('binding-bluetooth', 'gap-client-factory');
 

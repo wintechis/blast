@@ -1,7 +1,7 @@
 import Blast from '@blast/core';
-import ConcreteBluetoothAdapter from './NodeBluetoothAdapter';
-import ConcreteHidAdapter from './NodeHidAdapter';
-export {HidHelpers} from './hidHelpers';
+import ConcreteBluetoothAdapter from './NodeBluetoothAdapter.js';
+import ConcreteHidAdapter from './NodeHidAdapter.js';
+export {HidHelpers} from './hidHelpers/index.js';
 
 const blast = new Blast(ConcreteBluetoothAdapter, ConcreteHidAdapter);
 

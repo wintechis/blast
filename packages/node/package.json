@@ -5,11 +5,19 @@
   "main": "dist/index.cjs",
   "description": "BLAST - Block Applications for Things, node package",
   "author": "Thomas Wehr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/blast.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wintechis/blast/issues"
+  },
+  "homepage": "https://github.com/wintechis/blast#readme",
   "engines": {
     "node": ">=16.0.0"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js",
+    "build": "node esbuild.js",
     "lint": "eslint \"src/**\" --config .eslintrc.json",
     "fix": "eslint --fix \"src/** \"",
     "test": "jest",
@@ -25,7 +33,6 @@
     "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "latest",
     "@typescript-eslint/parser": "latest",
-    "bundle-declarations-webpack-plugin": "^5.1.1",
     "eslint": "latest",
     "eslint-config-google": "latest",
     "eslint-config-prettier": "latest",
@@ -33,16 +40,10 @@
     "eslint-plugin-prettier": "latest",
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
-    "node-polyfill-webpack-plugin": "^3.0.0",
-    "pnp-webpack-plugin": "^1.7.0",
     "prettier": "latest",
-    "terser-webpack-plugin": "^5.3.9",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
-    "ts-node": "^10.9.1",
-    "webpack": "^5.90.3",
-    "webpack-cli": "latest",
-    "webpack-node-externals": "^3.0.0"
+    "ts-node": "^10.9.1"
   },
   "dependencies": {
     "@blast/core": "workspace:0.0.1",
@@ -62,7 +63,6 @@
     "typescript": "latest",
     "uritemplate": "^0.3.4",
     "uuid": "^9.0.0",
-    "web-streams-polyfill": "^3.2.1",
     "wot-thing-description-types": "1.1.0-09-November-2023",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.29",
     "x11": "^2.3.0"
