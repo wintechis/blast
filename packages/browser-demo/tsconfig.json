@@ -1,11 +1,8 @@
 {
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*"],
   "compilerOptions": {
-    "allowJs": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
     "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -16,10 +13,5 @@
     "paths": {
       "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"],
     },
-    "resolveJsonModule": true,
-    "skipLibCheck": false,
-    "strict": true,
-    "target": "ESNext"
   },
-  "include": ["src/**/*"]
 }

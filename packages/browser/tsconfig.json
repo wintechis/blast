@@ -1,19 +1,4 @@
 {
-  "compilerOptions": {
-    "allowJs": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "node"
-  },
-  "include": ["src/**/*", "test/**/*"]
+  "extends": "../../tsconfig.json",
+  "include": ["src/**/*"],
 }
