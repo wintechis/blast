@@ -1,4 +1,4 @@
-import {BluetoothAdapter} from '../../core/src/index';
+import {BluetoothAdapter} from '@blast/core';
 import {createLoggers} from '@node-wot/core';
 
 const {debug} = createLoggers('binding-bluetooth', 'WebBluetoothAdapter');

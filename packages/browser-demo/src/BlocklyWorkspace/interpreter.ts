@@ -179,7 +179,7 @@ export const stopJS = function () {
  */
 const generateCode = function () {
   if (!workspace) {
-    return '';
+    return;
   }
   // Generate JavaScript code and parse it.
   latestCode = workspaceToCode(workspace);

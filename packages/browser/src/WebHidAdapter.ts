@@ -1,4 +1,4 @@
-import {HidAdapter} from '../../core/src/index';
+import {HidAdapter} from '@blast/core';
 import {createLoggers} from '@node-wot/core';
 import {v4} from 'uuid';
 

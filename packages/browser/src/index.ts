@@ -1,4 +1,4 @@
-import Blast from '../../core/src/index';
+import Blast from '@blast/core';
 import ConcreteBluetoothAdapter from './WebBluetoothAdapter';
 import ConcreteHidAdapter from './WebHidAdapter';
 

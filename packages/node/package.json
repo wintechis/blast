@@ -26,6 +26,7 @@
   "type": "module",
   "license": "AGPL-3.0",
   "devDependencies": {
+    "@esbuild-plugins/node-resolve": "^0.2.2",
     "@jest/globals": "^29.5.0",
     "@types/inquirer": "^9.0.3",
     "@types/node": "^20.1.0",
