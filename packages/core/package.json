@@ -62,18 +62,5 @@
     "web-streams-polyfill": "^3.2.1",
     "wot-thing-description-types": "1.1.0-09-November-2023",
     "wot-typescript-definitions": "0.8.0-SNAPSHOT.29"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts}"
-    ],
-    "preset": "ts-jest/presets/js-with-ts",
-    "testEnvironment": "node",
-    "transform": {
-      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ]
   }
 }
