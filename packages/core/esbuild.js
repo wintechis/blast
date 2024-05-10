@@ -1,12 +1,12 @@
-import {NodeResolvePlugin} from '@esbuild-plugins/node-resolve'
-import { build } from 'esbuild'
+import {NodeResolvePlugin} from '@esbuild-plugins/node-resolve';
+import { build } from 'esbuild';
 
 await build({
   entryPoints: ['src/index.ts'],
   bundle: true,
   minify: true,
   format: 'cjs',
-  platform: "node",
+  platform: 'node',
   outfile: 'dist/index.cjs',
   plugins: [
     NodeResolvePlugin({
@@ -15,10 +15,10 @@ await build({
             if (resolved.includes('node_modules')) {
                 return {
                     external: true,
-                }
+                };
             }
-            return resolved
+            return resolved;
         },
     }),
 ],
-})
+});

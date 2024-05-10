@@ -40,7 +40,7 @@ export const connectWebHidDevice = async function (
   }
   thingsLog(`Requesting device <code>${thing.name}</code>`, 'HID');
   // requestDeviceAndAddId is added to navigator.hid in @blast:core
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   const device: HIDAdapterDevice[] = await (
     navigator.hid as HIDAdapter
   ).requestDeviceAndAddId({

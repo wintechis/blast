@@ -17,8 +17,8 @@
   },
   "scripts": {
     "build": "webpack --config webpack.config.cjs",
-    "lint": "eslint \"src/**\" --config .eslintrc.json",
-    "fix": "eslint --fix \"src/** \"",
+    "lint": "eslint --config eslint.config.js",
+    "fix": "eslint --config eslint.config.js --fix",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },

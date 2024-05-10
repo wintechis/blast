@@ -159,7 +159,7 @@ JavaScript.forBlock['joycon_button_events'] = function (block: Block): string {
     }
 
     // write values to JoyCon
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     Object.assign(joyCon as JoyConLeft | JoyConRight | GeneralController, {
       pressed,
       accelerometers,

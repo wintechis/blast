@@ -14,7 +14,7 @@
  * @property {number} roll - The sideways angle of the object.  Angle around X-axis.
  */
 
-/* eslint-disable one-var-declaration-per-line */
+
 
 /**
  * The Madgwick algorithm.  See: http://www.x-io.co.uk/open-source-imu-and-ahrs-algorithms/.

@@ -4,8 +4,6 @@ const leftMadgwick = new Madgwick(10);
 const rightMadgwick = new Madgwick(10);
 const rad2deg = 180.0 / Math.PI;
 
-/* eslint-disable require-jsdoc */
-
 function baseSum(array, iteratee) {
   let result;
 

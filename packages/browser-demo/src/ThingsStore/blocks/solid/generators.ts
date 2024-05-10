@@ -30,7 +30,7 @@ JavaScript.forBlock['solid_upload_image'] = function (block: Block): string {
   url: string
 ) {
   // convert base64/URLEncoded data component to raw binary data held in a string
-  // eslint-disable-next-line no-undef
+
   const byteString = atob(image.split(',')[1]);
 
   // seperate out the mime component
@@ -40,7 +40,7 @@ JavaScript.forBlock['solid_upload_image'] = function (block: Block): string {
   for (let i = 0; i < byteString.length; i++) {
     ia[i] = byteString.charCodeAt(i);
   }
-  // eslint-disable-next-line no-undef
+
   const blob = new Blob([ia], {type: mimeString});
 
   try {

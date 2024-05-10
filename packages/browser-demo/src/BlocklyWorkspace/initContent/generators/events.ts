@@ -6,15 +6,12 @@
 
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
+import {getDefinition} from '../../states';
 
-// eslint-disable-next-line no-unused-vars
-JavaScript.forBlock['state_definition'] = function (block: Block): string {
+JavaScript.forBlock['state'] = function (block: Block): string {
+  // read block inputs
   const stateName = block.getFieldValue('NAME');
-  const stateCondition = JavaScript.valueToCode(
-    block,
-    'state_condition',
-    JavaScript.ORDER_NONE
-  );
+  const statements = JavaScript.statementToCode(block, 'statements');
 
   const id = JavaScript.quote_(block.id);
 
@@ -23,44 +20,30 @@ const customEvents = new Map();
 const eventTargets = new Map();`;
 
   JavaScript.definitions_['customEvents-' + block.id] =
-    `customEvents.set(${id}, [new CustomEvent('${stateName}'), new CustomEvent('${stateName}')]);`;
+    `customEvents.set(${id}, new CustomEvent('${stateName}'));
+eventTargets.set('${stateName}', new EventTarget());`;
+
+  JavaScript.definitions_['states'] = `
+const states = new Map();`;
 
   const functionName = JavaScript.provideFunction_(
     stateName,
-    `
-eventTargets.set('${stateName}', [new EventTarget(), new EventTarget()]);
-async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
-  let prevValue = false;
-  while (true) {
-    let value = (${stateCondition});
-    if (!prevValue && value) {
-      eventTargets.get('${stateName}')[0].dispatchEvent(customEvents.get(${id})[0]);
-      value = (${stateCondition});
-    }
-    if (prevValue && !value) {
-      eventTargets.get('${stateName}')[1].dispatchEvent(customEvents.get(${id})[1]);
-      value = (${stateCondition});
-    }
-    prevValue = value;
-    await new Promise(resolve => setTimeout(resolve, 0));
-  }
-}`
+    `async function ${JavaScript.FUNCTION_NAME_PLACEHOLDER_}() {
+    ${statements}
+  }`
   );
 
-  const code = `${functionName}();\n`;
+  JavaScript.definitions_['states-' + block.id] =
+    `states.set(${id}, eventTargets.get('${stateName}').addEventListener('${stateName}', ${functionName}));`;
 
-  return code;
+  return '';
 };
 
-JavaScript.forBlock['event'] = function (block: Block): string {
-  // read block inputs
+JavaScript.forBlock['transition'] = function (block: Block): string {
   const stateName = block.getFieldValue('NAME');
-  const statements = JavaScript.statementToCode(block, 'statements');
-  const enters = block.getFieldValue('entersExits') === 'ENTERS';
+  const stateDefBlock = getDefinition(stateName, block.workspace);
+  const code = `eventTargets.get('${stateName}')
+  .dispatchEvent(customEvents.get(${JavaScript.quote_(stateDefBlock.id)}));\n`;
 
-  if (enters) {
-    return `eventTargets.get('${stateName}')[0].addEventListener('${stateName}', async () => {\n${statements}\n});\n`;
-  } else {
-    return `eventTargets.get('${stateName}')[1].addEventListener('${stateName}', async () => {\n${statements}\n});\n`;
-  }
+  return code;
 };

@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-unpublished-import
 import {HidAdapter} from '../../core/src/index';
 import {createLoggers} from '@node-wot/core';
 import {v4} from 'uuid';

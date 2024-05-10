@@ -48,7 +48,7 @@ JavaScript.forBlock['text_to_code'] = function (
     const outputTokenTensor = tf.tidy(() => {
       const input = generateDecoderInputFromTokenID(nextTokenID);
       const prediction = decoder.predict(input);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       return (prediction as tf.Tensor<tf.Rank>).squeeze().argMax();
     });
 

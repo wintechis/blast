@@ -6,7 +6,7 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
-// eslint-disable-next-line no-unused-vars
+
 JavaScript.forBlock['generic_thing'] = function (
   _block: Block
 ): [string, number] {

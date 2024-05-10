@@ -1,4 +1,3 @@
-// eslint-disable-next-line node/no-missing-import
 import PQueue from 'p-queue';
 import {getDeviceById} from '../../../devices/webBluetoothDevices.ts';
 

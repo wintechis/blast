@@ -426,7 +426,7 @@ export function generateSubscribeEventCode(
       const thing =
         JavaScript.valueToCode(block, 'thing', JavaScript.ORDER_NONE) || null;
       const statements = JavaScript.statementToCode(block, 'statements');
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
       const varName = block.getFieldValue('eventVar') ?? '';
 
       const eventHandler = JavaScript.provideFunction_(
@@ -556,7 +556,7 @@ async function fetchTD(uri: string): Promise<[ThingDescription, string[]]> {
   const nextTDLinks: string[] = [];
   if (td.links) {
     // find type of link and get href
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
     for (const [_, value] of Object.entries(td.links)) {
       // If content type is application/td+json add td
       if (
