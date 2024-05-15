@@ -1,4 +1,4 @@
-<img src="packages/web/public/assets/media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
+<img src="packages/browser-demo/public/assets/media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
 # BLAST - Block Applications For Things
 This is a monorepo with five packages:
