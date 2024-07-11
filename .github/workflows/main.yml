@@ -13,12 +13,24 @@ jobs:
         with:
           node-version: 18
           cache: 'yarn'
-      - run: yarn set version 3.8.1
-      - run: yarn install --immutable
-      - run: yarn lint
-      - run: yarn build
-      - run: yarn test
-      - uses: actions/upload-artifact@v4
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+      - name: Run linter
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: lint
+      - name: Build
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: build
+      - name: Run Test
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: test
+      - name: Upload build files
+        uses: actions/upload-artifact@v4
         with:
           name: build
           path: packages/browser-demo/build/
