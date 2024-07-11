@@ -49,7 +49,7 @@
   },
   "dependencies": {
     "@node-wot/binding-http": "0.8.11",
-    "@node-wot/core": "git@github.com:derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43",
+    "@node-wot/core": "git+ssh://git@github.com:derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43",
     "@node-wot/td-tools": "0.8.11",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
