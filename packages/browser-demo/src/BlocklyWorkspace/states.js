@@ -12,9 +12,9 @@ import {getCategory} from './toolbox.ts';
  * @param {!Blockly.Workspace} root Root workspace.
  * @return {!Array} Array containing states.
  */
-export const allStates = function (root) {
-  const states = root.getBlocksByType('state', false).map(block => {
-    return /** @type {!StateBlock} */ (block).getStateName();
+const allStates = function (root) {
+  const states = root.getBlocksByType('state_definition', false).map(block => {
+    return /** @type {!StateBlock} */ (block).getStateDef()[0];
   });
   return states;
 };
@@ -73,9 +73,9 @@ const isNameUsed = function (name, workspace, optExclude) {
     if (block === optExclude) {
       continue;
     }
-    if (block.getStateName) {
+    if (block.getStateDef) {
       const stateBlock = /** @type {!StateBlock} */ (block);
-      const stateName = stateBlock.getStateName();
+      const stateName = stateBlock.getStateDef()[0];
       if (Names.equals(stateName, name)) {
         return true;
       }
@@ -100,12 +100,12 @@ export const rename = function (name) {
   );
   const oldName = this.getValue();
   if (oldName !== name && oldName !== legalName) {
-    // Rename any transitions.
+    // Rename any events.
     const blocks = this.getSourceBlock().workspace.getAllBlocks(false);
     for (const block of blocks) {
       if (block.renameState) {
-        const transitionBlock = block;
-        transitionBlock.renameState(oldName, legalName);
+        const stateBlock = /** @type {!Stateblock} */ (block);
+        stateBlock.renameState(/** @type {string} */ (oldName), legalName);
       }
     }
   }
@@ -120,9 +120,9 @@ export const rename = function (name) {
 export const statesFlyoutCategory = function (workspace) {
   const xmlList = [];
 
-  if (Blocks['state']) {
+  if (Blocks['state_definition']) {
     const block = utils.xml.createElement('block');
-    block.setAttribute('type', 'state');
+    block.setAttribute('type', 'state_definition');
     block.setAttribute('gap', 16);
     const nameField = utils.xml.createElement('field');
     nameField.setAttribute('name', 'NAME');
@@ -136,14 +136,14 @@ export const statesFlyoutCategory = function (workspace) {
   }
 
   /**
-   * Creates a transition block for each state in stateList.
+   * Creates an event block for each state in stateList.
    * @param {Array<string>} stateList Array containing states.
    */
-  function populateTransitions(stateList) {
-    // if stateList is empty create disabled transition block.
+  function populateEvents(stateList) {
+    // if stateList is empty create disabled event block.
     if (stateList.length === 0) {
       const block = utils.xml.createElement('block');
-      block.setAttribute('type', 'transition');
+      block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
       block.setAttribute('disabled', true);
       const mutation = utils.xml.createElement('mutation');
@@ -154,7 +154,7 @@ export const statesFlyoutCategory = function (workspace) {
 
     for (const stateName of stateList) {
       const block = utils.xml.createElement('block');
-      block.setAttribute('type', 'transition');
+      block.setAttribute('type', 'event');
       block.setAttribute('gap', 16);
       const mutation = utils.xml.createElement('mutation');
       mutation.setAttribute('name', stateName);
@@ -164,9 +164,8 @@ export const statesFlyoutCategory = function (workspace) {
   }
 
   const states = allStates(workspace);
-
-  // Add transition blocks to the list.
-  populateTransitions(states);
+  // Add event blocks to the list.
+  populateEvents(states);
 
   // Add all blocks from the categories contents array to the list.
   const category = getCategory('States');
@@ -183,8 +182,8 @@ export const statesFlyoutCategory = function (workspace) {
 };
 
 /**
- * Find the definition block for the transition.
- * @param {string} name Name of transition target.
+ * Find the definition block for the named event.
+ * @param {string} name Name of event.
  * @param {!Blockly.Workspace} workspace The workspace to search.
  * @return {Blockly.Block} The state definition block, or null if not found.
  */
@@ -192,9 +191,10 @@ export const getDefinition = function (name, workspace) {
   // Assume that a state definition is a top block.
   const blocks = workspace.getTopBlocks(false);
   for (const block of blocks) {
-    if (block.getStateName) {
-      const stateName = block.getStateName();
-      if (stateName !== undefined && Names.equals(stateName, name)) {
+    if (block.getStateDef) {
+      const stateBlock = /** @type {!StateBlock} */ (block);
+      const stateName = stateBlock.getStateDef()[0];
+      if (stateName && Names.equals(stateName, name)) {
         return block;
       }
     }
