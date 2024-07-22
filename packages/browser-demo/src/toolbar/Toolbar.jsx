@@ -193,7 +193,7 @@ export default class BlastBar extends React.Component {
               }}
             >
               <img
-                src="https://solid.mit.edu/assets/img/solid-logo.svg"
+                src="https://solidproject.org/image/logo.svg"
                 alt="solid logo"
                 height="24"
               />
