@@ -12,6 +12,7 @@ import {
   getWorkspace,
 } from '../../../BlocklyWorkspace/interpreter';
 import {implementedThings} from '../../things';
+import { BlockDelete } from 'blockly/core/events/events_block_delete';
 
 Blocks['things_ruuviTag'] = {
   /**
@@ -160,7 +161,6 @@ Blocks['ruuviTag_event'] = {
   },
   onchange: function (event: Abstract) {
     if (!this.workspace || this.workspace.isFlyout) {
-      // Block is deleted or is in a flyout.
       return;
     }
     if (!event.recordUndo) {
@@ -175,9 +175,35 @@ Blocks['ruuviTag_event'] = {
       if (this.childBlocks_.length === 0) {
         this.createVars();
       }
-    } else if (event.type === Events.BLOCK_DELETE) {
+    } else if (event.type === Events.BLOCK_DELETE &&
+      (event as BlockDelete).ids?.indexOf(this.id) !== -1) {
       this.removeFromEvents();
       this.deleteVars();
+    }
+  },
+  deleteVars: function () {
+    console.log('deleteVars');
+    const ws = getWorkspace();
+    if (ws === null) {
+      return;
+    }
+    const varNames = [
+      'temperature',
+      'humidity',
+      'pressure',
+      'accelerationX',
+      'accelerationY',
+      'accelerationZ',
+      'batteryVoltage',
+      'movementCounter',
+      'measurementSequenceNumber',
+      'txPower',
+    ];
+    for (const varName of varNames) {
+      const varId = ws.getVariable(this.getFieldValue(varName))?.getId();
+      if (varId !== undefined) {
+        ws.deleteVariableById(varId);
+      }
     }
   },
 };

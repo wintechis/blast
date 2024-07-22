@@ -131,42 +131,39 @@ const addConsumedDevice = function (
   }
 
   // Generate Action Blocks
-  for (const [actionName, operations] of Object.entries(actionsObj)) {
-    const op = new Set(operations.flat());
-    if (op.has('invokeaction')) {
-      generateInvokeActionBlock(
-        actionName,
-        deviceName,
-        inputObj[actionName],
-        outputObj[actionName]
-      );
-      generateInvokeActionCode(
-        actionName,
-        deviceName,
-        inputObj[actionName],
-        outputObj[actionName]
-      );
+  for (const [actionName] of Object.entries(actionsObj)) {
+    generateInvokeActionBlock(
+      actionName,
+      deviceName,
+      inputObj[actionName],
+      outputObj[actionName]
+    );
+    generateInvokeActionCode(
+      actionName,
+      deviceName,
+      inputObj[actionName],
+      outputObj[actionName]
+    );
 
-      const xml = `
-      <block type="${deviceName}_invokeActionBlock_${actionName}">
-        <value name="input">
-          ${
-            inputObj[actionName]
-              ? xmlSerializer.serializeToString(
-                  schemaToXml(inputObj[actionName])
-                )
-              : undefined
-          }
-        </value>
-      </block>`;
+    const xml = `
+    <block type="${deviceName}_invokeActionBlock_${actionName}">
+      <value name="input">
+        ${
+          inputObj[actionName]
+            ? xmlSerializer.serializeToString(
+                schemaToXml(inputObj[actionName])
+              )
+            : undefined
+        }
+      </value>
+    </block>`;
 
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_invokeActionBlock_${actionName}`,
-        category: 'Actions',
-        XML: xml,
-      });
-    }
+    // Add to implementedThingsBlockList
+    implementedThingsBlockList.push({
+      type: `${deviceName}_invokeActionBlock_${actionName}`,
+      category: 'Actions',
+      XML: xml,
+    });
   }
 
   for (const [eventName, event] of Object.entries(td.events ?? {})) {
@@ -175,18 +172,15 @@ const addConsumedDevice = function (
   }
 
   // Generate Event Blocks
-  for (const [eventName, operations] of Object.entries(eventObj)) {
-    const op = new Set(operations.flat());
-    if (op.has('subscribeevent')) {
-      generateSubscribeEventBlock(eventName, deviceName, td);
-      generateSubscribeEventCode(eventName, deviceName);
+  for (const [eventName] of Object.entries(eventObj)) {
+    generateSubscribeEventBlock(eventName, deviceName, td);
+    generateSubscribeEventCode(eventName, deviceName);
 
-      // Add to implementedThingsBlockList
-      implementedThingsBlockList.push({
-        type: `${deviceName}_subscribeEventBlock_${eventName}`,
-        category: 'Events',
-      });
-    }
+    // Add to implementedThingsBlockList
+    implementedThingsBlockList.push({
+      type: `${deviceName}_subscribeEventBlock_${eventName}`,
+      category: 'Events',
+    });
   }
 
   // Push thing and all created blocks to implemented Things
@@ -197,6 +191,8 @@ const addConsumedDevice = function (
     blocks: implementedThingsBlockList,
     ...(isBluetooth && {optionalServices: getServices(td)}),
   };
+
+  console.log(thing);
 
   connectDevice(thing);
 };
@@ -262,6 +258,8 @@ const getServices = function (td: ThingDescription): string[] {
     } else if (form.href.startsWith('./')) {
       // Remove ./
       deconstructedForm.path = form.href.split('./')[1];
+    } else {
+      return {};
     }
 
     // If deviceID contains '/' it gets also split.
@@ -277,8 +275,6 @@ const getServices = function (td: ThingDescription): string[] {
     return deconstructedForm;
   };
 
-  const services = forms.map(form => deconstructForm(form).serviceId);
-
-  // remove duplicates
-  return [...new Set(services)];
+  // Get all unique serviceIds
+  return [...new Set(forms.map(form => deconstructForm(form).serviceId).filter(serviceId => serviceId !== undefined))];
 };
