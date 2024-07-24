@@ -1,3 +1,4 @@
+"use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
@@ -1720,7 +1721,6 @@ var RuuviTag_default = {
     }
   ],
   "@type": "",
-  id: "blast:Bluetooth:RuuviTag",
   title: "Ruuvi Tag",
   base: "gatt://{{MacOrWebBluetoothId}}/",
   description: "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
