@@ -1876,7 +1876,14 @@ var RuuviTag_default = {
           "power-info": {
             type: "integer",
             "ex:bitOffset": 104,
-            "ex:bitLength": 16
+            "ex:bitLength": 11,
+            signed: false
+          },
+          "tx-power": {
+            type: "integer",
+            "ex:bitOffset": 115,
+            "ex:bitLength": 5,
+            signed: false
           },
           "movement-counter": {
             type: "integer",
