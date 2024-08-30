@@ -18,7 +18,7 @@
     "@reduxjs/toolkit": "^1.9.7",
     "@tensorflow/tfjs": "^4.6.0",
     "@types/file-saver": "^2.0.5",
-    "axios": "^1.6.8",
+    "axios": "^1.7.4",
     "blockly": "10.4.3",
     "buffer": "^6.0.3",
     "events": "^3.3.0",
