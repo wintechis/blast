@@ -7,6 +7,7 @@ import GamepadPro from './tds/GamepadPro.json';
 import GoveeLedBulb from './tds/GoveeLamp.json';
 import HuskyDuino from './tds/HuskyDuino.json';
 import PhilipsHue from './tds/PhilipsHue.json';
+import ReneTag from './tds/ReneTag.json';
 import RuuviTag from './tds/RuuviTag.json';
 import SpheroMini from './tds/SpheroMini.json';
 import StreamDeckMini from './tds/StreamDeckMini.json';
@@ -25,6 +26,7 @@ export {
   JoyCon,
   Microbit,
   PhilipsHue,
+  ReneTag,
   RuuviTag,
   SpheroMini,
   StreamDeckMini,

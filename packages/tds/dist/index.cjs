@@ -30,6 +30,7 @@ __export(src_exports, {
   JoyCon: () => JoyCon_default,
   Microbit: () => MicroBit_default,
   PhilipsHue: () => PhilipsHue_default,
+  ReneTag: () => ReneTag_default,
   RuuviTag: () => RuuviTag_default,
   SpheroMini: () => SpheroMini_default,
   StreamDeckMini: () => StreamDeckMini_default,
@@ -1705,6 +1706,74 @@ var PhilipsHue_default = {
   }
 };
 
+// src/tds/ReneTag.json
+var ReneTag_default = {
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      sbo: "https://freumi.inrupt.net/SimpleBluetoothOntology.ttl#",
+      bdo: "https://freumi.inrupt.net/BinaryDataOntology.ttl#",
+      qudt: "https://qudt.org/schema/qudt/",
+      qudtUnit: "https://qudt.org/vocab/unit/"
+    },
+    {
+      "@language": "en"
+    }
+  ],
+  "@type": "",
+  title: "Ruuvi Tag",
+  base: "gatt://{{MacOrWebBluetoothId}}/",
+  description: "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
+  securityDefinitions: {
+    nosec_sc: {
+      scheme: "nosec"
+    }
+  },
+  security: "nosec_sc",
+  events: {
+    GapBroadcast: {
+      title: "GapBroadcast",
+      description: "The GapBroadcast event is emitted when the device is advertising.",
+      data: {
+        type: "object",
+        properties: {
+          format: {
+            type: "integer",
+            "ex:bitOffset": 0,
+            "ex:bitLength": 8
+          },
+          absAccX: {
+            type: "integer",
+            "ex:bitOffset": 16,
+            "ex:bitLength": 32,
+            unit: "qudtUnit:mG"
+          },
+          absAccY: {
+            type: "integer",
+            "ex:bitOffset": 48,
+            "ex:bitLength": 32,
+            unit: "qudtUnit:mG"
+          },
+          absAccZ: {
+            type: "integer",
+            "ex:bitOffset": 80,
+            "ex:bitLength": 32,
+            unit: "qudtUnit:mG"
+          }
+        }
+      },
+      forms: [
+        {
+          href: "gap://{{MacOrWebBluetoothId}}/observe",
+          "sbo:methodName": "sbo:subscribe",
+          contentType: "application/octet-stream"
+        }
+      ]
+    }
+  }
+};
+
 // src/tds/RuuviTag.json
 var RuuviTag_default = {
   "@context": [
@@ -2873,6 +2942,7 @@ var MicroBit_default = {
   JoyCon,
   Microbit,
   PhilipsHue,
+  ReneTag,
   RuuviTag,
   SpheroMini,
   StreamDeckMini,
