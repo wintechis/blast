@@ -13,6 +13,7 @@
     }
   ],
   "@type": "",
+  "id": "blast:Bluetooth:RuuviTag",
   "title": "Ruuvi Tag",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
@@ -81,14 +82,7 @@
           {
             "type": "integer",
             "ex:bitOffset": 104,
-            "ex:bitLength": 11,
-            "signed": false
-          },
-          "tx-power": {
-            "type": "integer",
-            "ex:bitOffset": 115,
-            "ex:bitLength": 5,
-            "signed": false
+            "ex:bitLength": 16
           },
           "movement-counter": {
             "type": "integer",
@@ -170,14 +164,7 @@
           {
             "type": "integer",
             "ex:bitOffset": 104,
-            "ex:bitLength": 11,
-            "signed": false
-          },
-          "tx-power": {
-            "type": "integer",
-            "ex:bitOffset": 115,
-            "ex:bitLength": 5,
-            "signed": false
+            "ex:bitLength": 16
           },
           "movement-counter": {
             "type": "integer",

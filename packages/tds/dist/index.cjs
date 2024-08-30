@@ -1846,7 +1846,7 @@ var RuuviTag_default = {
             unit: "qudtUnit:PERCENT"
           },
           pressure: {
-            type: "integer",
+            type: "number",
             "ex:bitOffset": 40,
             "ex:bitLength": 16,
             signed: false,

@@ -1,7 +1,7 @@
 import {createThing} from '@blast/node';
 import {RuuviTag} from '@blast/tds';
 
-const mac = 'C2FC63E96628';
+const mac = 'C43B4FC3FECA';
 
 const thing = await createThing(RuuviTag, mac);
 const measurements = [];
@@ -14,7 +14,6 @@ const handler = async (data) => {
   for (const measurement of measurements) {
     console.log(measurement.name, ':', data[measurement.name], measurement.unit ?? '');
   }
-  console.log('---\n\n');
 };
 
 thing.subscribeEvent('GapBroadcast', handler);

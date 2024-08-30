@@ -58,23 +58,23 @@ export default class Output extends React.Component {
       });
     };
     // overwrite console.error
-    // const oldError = console.error;
-    // console.error = msg => {
-    //   const args = Array.from(arguments);
-    //   oldError.apply(console, args);
-    //   globalThis['interpreterExecutionExit'] = true;
-    //   resetInterpreter();
-    //   setStatus('error');
-    //   this.setState(state => {
-    //     return {
-    //       messages: state.messages.concat({
-    //         text: msg.toString(),
-    //         time: new Date().toLocaleTimeString(),
-    //         type: 'error',
-    //       }),
-    //     };
-    //   });
-    // };
+    const oldError = console.error;
+    console.error = msg => {
+      const args = Array.from(arguments);
+      oldError.apply(console, args);
+      globalThis['interpreterExecutionExit'] = true;
+      resetInterpreter();
+      setStatus('error');
+      this.setState(state => {
+        return {
+          messages: state.messages.concat({
+            text: msg.toString(),
+            time: new Date().toLocaleTimeString(),
+            type: 'error',
+          }),
+        };
+      });
+    };
     setStdInfo(msg => {
       this.setState(state => {
         return {

@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@blast/core": "0.0.1",
-    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c",
+    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43",
     "@node-wot/td-tools": "0.8.11",
     "@types/uritemplate": "^0.3.4",
     "debug": "^4.3.4",
