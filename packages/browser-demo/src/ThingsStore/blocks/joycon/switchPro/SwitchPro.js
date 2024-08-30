@@ -72,7 +72,10 @@ export default class SwitchPro {
 
   // get reference to the gamepad
   _getGamepad() {
-    return gamepads[this.id];
+    // console.log('getGamepad');
+    // console.log(gamepads);
+    // console.log(this.id);
+    return gamepads[0];
   }
 
   _shallowEqual(object1, object2) {

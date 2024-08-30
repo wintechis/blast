@@ -1732,7 +1732,7 @@ __metadata:
   dependencies:
     "@blast/core": 0.0.1
     "@jest/globals": ^29.5.0
-    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
+    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c"
     "@node-wot/td-tools": 0.8.11
     "@types/node": ^20.1.0
     "@types/uritemplate": ^0.3.4
@@ -1779,7 +1779,7 @@ __metadata:
     "@eslint/js": ^9.2.0
     "@jest/globals": ^29.5.0
     "@node-wot/binding-http": 0.8.11
-    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
+    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c"
     "@node-wot/td-tools": 0.8.11
     "@types/debug": ^4.1.12
     "@types/node": ^20.1.0
@@ -1820,7 +1820,7 @@ __metadata:
     "@esbuild-plugins/node-resolve": ^0.2.2
     "@jest/globals": ^29.5.0
     "@node-wot/binding-http": 0.8.11
-    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
+    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c"
     "@node-wot/td-tools": 0.8.11
     "@types/inquirer": ^9.0.3
     "@types/node": ^20.1.0
@@ -3682,9 +3682,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43":
+"@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c":
   version: 0.8.11
-  resolution: "@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=%40node-wot%2Fcore&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43"
+  resolution: "@node-wot/core@https://github.com/derwehr/node-wot.git#workspace=%40node-wot%2Fcore&commit=bcd6625607a6d7d08148feb24d22a0c69330df6c"
   dependencies:
     "@node-wot/td-tools": 0.8.11
     "@petamoriken/float16": ^3.1.1
@@ -3695,7 +3695,7 @@ __metadata:
     uuid: ^7.0.3
     web-streams-polyfill: ^3.0.1
     wot-thing-description-types: 1.1.0-09-November-2023
-  checksum: e5e61384d10e51bfad41248fe4bd08dcf613cbc2449c405f9cb88926f3f7583e01c3eb8c9a0338fded6d20153f08d1d2d3022e09d42a9e00411ad93c55140adf
+  checksum: 1164c72ff774172f407767ccc457d36a6dbd53e4ab3ef32035bbfd8ff1ce3fba2dece3ddf9468d2e495adaa40546af1c1257455b2b2aa3f0953890c67fb9fce6
   languageName: node
   linkType: hard
 

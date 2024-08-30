@@ -192,8 +192,6 @@ const addConsumedDevice = function (
     ...(isBluetooth && {optionalServices: getServices(td)}),
   };
 
-  console.log(thing);
-
   connectDevice(thing);
 };
 

@@ -15,7 +15,7 @@
   "@type": "",
   "title": "Ruuvi Tag",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
-  "description": "RuuviTag is a wireless Bluetooth sensor node that measures temperature, air humidity, and movement.",
+  "description": "A RuuviTag with modified firmware, broadcasting acceleration data.",
   "securityDefinitions": {
     "nosec_sc": {
       "scheme": "nosec"
@@ -23,95 +23,6 @@
   },
   "security": "nosec_sc",
   "events": {
-    "UART data": {
-      "title": "Ruuvi Data data",
-      "description": "The RuuviTag data received over UART, see https://docs.ruuvi.com/communication/bluetooth-advertisements/data-format-5-rawv2",
-      "data": {
-        "type": "object",
-        "properties": {
-          "format": {
-            "type": "integer",
-            "ex:bitOffset": 0,
-            "ex:bitLength": 8
-          },
-          "temp": {
-            "type": "number",
-            "ex:bitOffset": 8,
-            "ex:bitLength": 16,
-            "scale": 0.005,
-            "unit": "qudtUnit:DEG_C"
-          },
-          "humidity": {
-            "type": "number",
-            "ex:bitOffset": 24,
-            "ex:bitLength": 16,
-            "signed": false,
-            "scale": 0.0025,
-            "unit": "qudtUnit:PERCENT"
-          },
-          "pressure": {
-            "type": "number",
-            "ex:bitOffset": 40,
-            "ex:bitLength": 16,
-            "signed": false,
-            "unit": "qudt:PA"
-          },
-          "acc-x": {
-            "type": "integer",
-            "ex:bitOffset": 56,
-            "ex:bitLength": 16,
-            "byteOrder": "LITTLE_ENDIAN",
-            "unit": "qudtUnit:mG"
-          },
-          "acc-y": {
-            "type": "integer",
-            "ex:bitOffset": 72,
-            "ex:bitLength": 16,
-            "byteOrder": "LITTLE_ENDIAN",
-            "unit": "qudtUnit:mG"
-          },
-          "acc-z": {
-            "type": "integer",
-            "ex:bitOffset": 88,
-            "ex:bitLength": 16,
-            "byteOrder": "LITTLE_ENDIAN",
-            "unit": "qudtUnit:mG"
-          },
-          "power-info":
-          {
-            "type": "integer",
-            "ex:bitOffset": 104,
-            "ex:bitLength": 11,
-            "signed": false
-          },
-          "tx-power": {
-            "type": "integer",
-            "ex:bitOffset": 115,
-            "ex:bitLength": 5,
-            "signed": false
-          },
-          "movement-counter": {
-            "type": "integer",
-            "ex:bitOffset": 120,
-            "ex:bitLength": 8,
-            "signed": false
-          },
-          "measurement-sequence-number": {
-            "type": "integer",
-            "ex:bitOffset": 128,
-            "ex:bitLength": 16,
-            "signed": false
-          }
-        }
-      },
-      "forms": [
-        {
-          "href": "./6e400001-b5a3-f393-e0a9-e50e24dcca9e/6e400003-b5a3-f393-e0a9-e50e24dcca9e",
-          "sbo:methodName": "sbo:subscribe",
-          "contentType": "application/octet-stream"
-        }
-      ]
-    },
     "GapBroadcast": {
       "title": "GapBroadcast",
       "description": "The GapBroadcast event is emitted when the device is advertising.",

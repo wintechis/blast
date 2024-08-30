@@ -1,7 +1,7 @@
 import {createThing} from '@blast/node';
 import {PhilipsHue} from '@blast/tds';
 
-const mac = 'D7FF4B11BC6F';
+const mac = 'C091CD52180C';
 
 const thing = await createThing(PhilipsHue, mac);
 

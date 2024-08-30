@@ -4,7 +4,7 @@
  * @license https://www.gnu.org/licenses/agpl-3.0.de.html AGPLv3
  */
 
-import {Events, WorkspaceSvg} from 'blockly';
+import Blockly, {Events, WorkspaceSvg} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import './initContent/blocks/index.js';
 import './initContent/generators/index';
@@ -183,7 +183,55 @@ const generateCode = function () {
   }
   // Generate JavaScript code and parse it.
   latestCode = workspaceToCode(workspace);
+
 };
+
+// Function to log all block definitions to the console
+function logAllBlockDefinitions() {
+  const workspace = getWorkspace();
+
+  if (!workspace) {
+    return;
+  }
+
+  const blockDefinitions: Record<string, any> = {};
+
+  for (const blockType in Blockly.Blocks) {
+      const blockDef = Blockly.Blocks[blockType];
+      if (blockDef && blockDef.init) {
+        blockDefinitions[blockType] = {};
+
+        // Create a temporary block instance
+        const tempBlock = workspace.newBlock(blockType);
+
+        blockDefinitions[blockType].text = tempBlock.toString();
+
+        blockDefinitions[blockType].inputs = tempBlock.inputList.map((input) => {
+          return {
+            name: input.name,
+            type: input.type,
+            dataType: input.connection?.getCheck() ?? 'ANY',
+            fields: input.fieldRow.map((field) => {
+              return {
+                name: field.name,
+                type: field.constructor.name,
+              };
+            }),
+          };
+        });
+
+        blockDefinitions[blockType].output = tempBlock.outputConnection ? tempBlock.outputConnection.getCheck() ?? ['ANY'] : ['Statement'];
+
+        blockDefinitions[blockType].previousConnection = tempBlock.previousConnection ? true : false;
+        blockDefinitions[blockType].nextConnection = tempBlock.nextConnection ? true : false;
+
+        // Dispose of the temporary block
+        tempBlock.dispose();
+      }
+  }
+
+  console.log(JSON.stringify(blockDefinitions, null, 2));
+}
 
 /**
  * Generate code for all blocks in the workspace to the specified language.
@@ -271,6 +319,8 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
       generateCode();
     }
   });
+
+  logAllBlockDefinitions();
 };
 
 /**

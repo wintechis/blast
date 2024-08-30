@@ -146,6 +146,7 @@ const ownConsume = function (exposedThing: ExposedThing): WoT.ConsumedThing {
       // add a dummy form to by-pass protocol-listener-registry check
       const form = {
         op: 'subscribeEvent',
+        "contentType": "application/octet-stream;length=1;",
       } as FormElementBase;
       eventElement.forms = [form];
 

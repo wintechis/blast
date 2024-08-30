@@ -343,6 +343,8 @@ JavaScript.forBlock['gamepad_pro_button'] = function (block: Block): string {
   switchPro.addListener(handleJoystick);
   switchPro.addListener(handleButton);
 
+  console.log(switchPro);
+
   addCleanUpFunction(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if ((switchPro as any).interval) {
