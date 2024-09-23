@@ -1,7 +1,7 @@
 import {createThing} from '@blast/node';
 import {ReneTag} from '@blast/tds';
 
-const mac = 'E2AF39826B48';
+const mac = 'C93BF234870A';
 
 const thing = await createThing(ReneTag, mac);
 const measurements = [];

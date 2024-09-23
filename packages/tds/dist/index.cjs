@@ -1745,21 +1745,57 @@ var ReneTag_default = {
           },
           absAccX: {
             type: "integer",
-            "ex:bitOffset": 16,
-            "ex:bitLength": 32,
-            unit: "qudtUnit:mG"
+            "ex:bitOffset": 8,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:milliG"
           },
           absAccY: {
             type: "integer",
-            "ex:bitOffset": 48,
-            "ex:bitLength": 32,
-            unit: "qudtUnit:mG"
+            "ex:bitOffset": 24,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:MilliG"
           },
           absAccZ: {
             type: "integer",
-            "ex:bitOffset": 80,
-            "ex:bitLength": 32,
-            unit: "qudtUnit:mG"
+            "ex:bitOffset": 40,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:MilliG"
+          },
+          peakToPeakAccX: {
+            type: "integer",
+            "ex:bitOffset": 56,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:MilliG"
+          },
+          peakToPeakAccY: {
+            type: "integer",
+            "ex:bitOffset": 72,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:MilliG"
+          },
+          peakToPeakAccZ: {
+            type: "integer",
+            "ex:bitOffset": 88,
+            "ex:bitLength": 16,
+            unit: "qudtUnit:MilliG"
+          },
+          "power-info": {
+            type: "number",
+            "ex:bitOffset": 104,
+            "ex:bitLength": 11,
+            signed: false,
+            unit: "qudtUnit:MilliV"
+          },
+          "tx-power": {
+            type: "integer",
+            "ex:bitOffset": 115,
+            "ex:bitLength": 5,
+            unit: "qudtUnit:Decibel-milliwatts"
+          },
+          "measurement-sequence-number": {
+            type: "integer",
+            "ex:bitOffset": 120,
+            "ex:bitLength": 16
           }
         }
       },
@@ -1926,21 +1962,21 @@ var RuuviTag_default = {
             "ex:bitOffset": 56,
             "ex:bitLength": 16,
             byteOrder: "LITTLE_ENDIAN",
-            unit: "qudtUnit:mG"
+            unit: "qudtUnit:MilliG"
           },
           "acc-y": {
             type: "integer",
             "ex:bitOffset": 72,
             "ex:bitLength": 16,
             byteOrder: "LITTLE_ENDIAN",
-            unit: "qudtUnit:mG"
+            unit: "qudtUnit:MilliG"
           },
           "acc-z": {
             type: "integer",
             "ex:bitOffset": 88,
             "ex:bitLength": 16,
             byteOrder: "LITTLE_ENDIAN",
-            unit: "qudtUnit:mG"
+            unit: "qudtUnit:MilliG"
           },
           "power-info": {
             type: "integer",

@@ -1,7 +1,7 @@
 import {createThing} from '@blast/node';
 import {RuuviTag} from '@blast/tds';
 
-const mac = 'C43B4FC3FECA';
+const mac = 'E2AF39826B48';
 
 const thing = await createThing(RuuviTag, mac);
 const measurements = [];
