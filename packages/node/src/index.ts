@@ -5,6 +5,7 @@ export {HidHelpers} from './hidHelpers/index.js';
 
 const blast = new Blast(ConcreteBluetoothAdapter, ConcreteHidAdapter);
 
+const getServient = async () => blast.getServient();
 const getWot = async () => blast.getWot();
 const resetServient = async () => blast.resetServient();
 const createExposedThing = async (
@@ -20,6 +21,7 @@ const createThingWithHandlers = async (
 ) => blast.createThingWithHandlers(td, id, addHandlers);
 
 export {
+  getServient,
   getWot,
   resetServient,
   createExposedThing,

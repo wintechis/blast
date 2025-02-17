@@ -54,6 +54,10 @@ export default class Blast {
     this.servient.addClientFactory(new HttpsClientFactory(httpConfig));
   }
 
+  public async getServient(): Promise<Servient> {
+    return this.servient;
+  }
+
   public async getWot(): Promise<typeof WoT> {
     if (!this.wot) {
       this.wot = await this.servient.start();
