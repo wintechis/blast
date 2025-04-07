@@ -1,7 +1,15 @@
 name: Licenses Summary
 
 # Controls when the action will run.
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - '**'
+      - '!gh-pages'
+  pull_request:
+    branches:
+      - '**'
+      - '!gh-pages'
 
 jobs:
   licenses-summary:
