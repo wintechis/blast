@@ -11,7 +11,6 @@
     }
   ],
   "@type": "",
-  "id": "blast:bluetooth:BluetoothGeneric",
   "title": "Genereic Bluetooth device",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "A generic Bluetooth device",
