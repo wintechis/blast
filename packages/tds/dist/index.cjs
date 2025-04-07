@@ -264,7 +264,6 @@ var BluetoothGeneric_default = {
     }
   ],
   "@type": "",
-  id: "blast:bluetooth:BluetoothGeneric",
   title: "Genereic Bluetooth device",
   base: "gatt://{{MacOrWebBluetoothId}}/",
   description: "A generic Bluetooth device",
@@ -614,7 +613,6 @@ var EddystoneDevice_default = {
     "https://www.w3.org/2019/wot/td/v1"
   ],
   "@type": "",
-  id: "blast:bluetooth:EddystoneDevice",
   title: "Eddystone Device",
   base: "gatt://{{MacOrWebBluetoothId}}/",
   description: "A Bluetooth device implementing the Eddystone protocol",
@@ -2317,7 +2315,6 @@ var XiaomiThermometer_default = {
     }
   ],
   "@type": "",
-  id: "blast:Bluetooth:xiamoiThermometer",
   title: "Xiaomi Thermometer",
   base: "gatt://{{MacOrWebBluetoothId}}/",
   description: "The Xiaomi Thermometer is a temperature and humidity sensor with a Bluetooth Low Energy interface.",

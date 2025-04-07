@@ -3,7 +3,6 @@
     "https://www.w3.org/2019/wot/td/v1"
   ],
   "@type": "",
-  "id": "blast:bluetooth:EddystoneDevice",
   "title": "Eddystone Device",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "A Bluetooth device implementing the Eddystone protocol",

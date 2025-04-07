@@ -13,7 +13,6 @@
     }
   ],
   "@type": "",
-  "id": "blast:Bluetooth:xiamoiThermometer",
   "title": "Xiaomi Thermometer",
   "base": "gatt://{{MacOrWebBluetoothId}}/",
   "description": "The Xiaomi Thermometer is a temperature and humidity sensor with a Bluetooth Low Energy interface.",

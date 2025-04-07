@@ -12,11 +12,14 @@
     "scripts": {
         "install": "yarn workspaces foreach run install",
         "build": "yarn workspaces foreach  run build",
+        "deploy": "gh-pages -d packages/browser-demo/build",
         "lint": "yarn workspaces foreach  run lint",
         "test": "yarn workspaces foreach  run test",
         "test:coverage": "yarn workspaces foreach  run test:coverage",
+        "predeploy": "yarn workspace @blast/browser-demo run build",
         "start": "yarn workspace @blast/browser-demo run start"
     },
+    "homepage": "https://wintechis.github.io/blast",
     "type": "module",
     "workspaces": [
         "./packages/browser",
@@ -40,5 +43,8 @@
         "typescript": "latest",
         "typescript-eslint": "^7.8.0"
     },
-    "packageManager": "yarn@3.8.1"
+    "packageManager": "yarn@3.8.1",
+    "dependencies": {
+        "gh-pages": "^6.3.0"
+    }
 }
