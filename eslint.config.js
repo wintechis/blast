@@ -80,6 +80,7 @@ export default [
   {
     rules: {
       '@typescript-eslint/no-non-null-assertion': 'off',
+      "@typescript-eslint/no-unsafe-function-type": "warn",
       '@typescript-eslint/no-use-before-define': 'off',
       '@typescript-eslint/no-warning-comments': 'off',
       '@typescript-eslint/no-empty-function': 'off',

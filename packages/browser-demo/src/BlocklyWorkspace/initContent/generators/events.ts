@@ -7,7 +7,6 @@
 import {Block} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 
-// eslint-disable-next-line no-unused-vars
 JavaScript.forBlock['state_definition'] = function (block: Block): string {
   const stateName = block.getFieldValue('NAME');
   const stateCondition = JavaScript.valueToCode(

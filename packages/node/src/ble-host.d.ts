@@ -509,11 +509,17 @@ declare module 'ble-host' {
   }
 
   export interface AttErrors {
-    // Define properties and methods of AttErrors here
+    /**
+     * @param status An HCI error code indicating the status
+     */
+    (status: number);
   }
 
   export interface HciErrors {
-    // Define properties and methods of HciErrors here
+    /**
+     * @param status An HCI error code indicating the status
+     */
+    (status: number);
   }
 
   export class BleManager {

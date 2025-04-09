@@ -19,6 +19,7 @@ let status: statusValues = 'ready';
 /**
  * Stores functions to be invoked when status changes.
  */
+// @eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const onStatusChange: Record<statusValues, Function[]> = {
   ready: [],
   running: [],
@@ -92,11 +93,13 @@ export const eventsInWorkspace: string[] = [];
 /**
  * Stores functions to invoke to reset, when the interpreter is stopped.
  */
+// @eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 const cleanUpFunctions: Function[] = [];
 
 /**
  * Adds a function to {@link cleanUpFunctions} to be invoked when the interpreter
  */
+// @eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
 export const addCleanUpFunction = function (fn: Function) {
   cleanUpFunctions.push(fn);
 };
