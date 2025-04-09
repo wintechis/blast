@@ -117,7 +117,7 @@ export default class HidAdapterMock extends HidAdapter {
     productName = 'mock'
   ) {
     const device = new HIDDeviceMock(path, vendorId, productId, productName);
-    device.value = value;
+    device.value = new DataView(value.buffer as ArrayBuffer);
     this.devices.push(device);
     return device;
   }

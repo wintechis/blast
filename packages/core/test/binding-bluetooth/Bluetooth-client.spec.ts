@@ -54,7 +54,7 @@ describe('Bluetooth client', () => {
       expect(content.body).toBeDefined();
       expect(content.toBuffer).toBeDefined();
       expect(await content.toBuffer()).toEqual(
-        Buffer.from(new Int8Array([0x01, 0x02, 0x03, 0x04]))
+        Buffer.from(new Uint8Array(new Int8Array([0x01, 0x02, 0x03, 0x04]).buffer))
       );
     });
     test('reading without specified content type', async () => {
@@ -328,7 +328,7 @@ describe('Bluetooth client', () => {
         body: Readable.from([0x05, 0x06, 0x07, 0x08]),
         toBuffer: () => {
           return Promise.resolve(
-            Buffer.from(new Int8Array([0x05, 0x06, 0x07, 0x08]))
+            Buffer.from(new Uint8Array(new Int8Array([0x05, 0x06, 0x07, 0x08]).buffer))
           );
         },
       };

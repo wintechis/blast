@@ -93,7 +93,7 @@ export default class HidClient implements ProtocolClient {
       await device.sendFeatureReport(reportId, data);
     } else if (methodName === 'sendReport') {
       debug(`Sending report: ${reportId} ${data}`);
-      await device.sendReport(reportId, Buffer.from(data.subarray(1)));
+      await device.sendReport(reportId, data.subarray(1));
     } else {
       throw new Error(`Method ${methodName} is not supported`);
     }

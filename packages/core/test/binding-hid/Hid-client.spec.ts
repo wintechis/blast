@@ -66,7 +66,7 @@ describe('HidClient', () => {
       expect(content.body).toBeDefined();
       expect(content.toBuffer).toBeDefined();
       expect(await content.toBuffer()).toEqual(
-        Buffer.from(new Int8Array([0, 1, 2, 3, 4, 5, 6, 7]))
+        Buffer.from(new Uint8Array(new Int8Array([0, 1, 2, 3, 4, 5, 6, 7]).buffer))
       );
     });
   });
@@ -143,7 +143,7 @@ describe('HidClient', () => {
       ).resolves.toBeUndefined();
       expect(device.sendFeatureReport).toHaveBeenCalledWith(
         1,
-        Buffer.from(new Int8Array([0, 1, 2, 99, 4, 5, 6, 7]))
+        Buffer.from(new Uint8Array(new Int8Array([0, 1, 2, 99, 4, 5, 6, 7]).buffer))
       );
     });
   });

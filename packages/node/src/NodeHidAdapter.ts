@@ -39,11 +39,22 @@ export default class ConcreteHidAdapter extends HidAdapter {
         hid.close();
       },
       sendReport: async (reportId: number, data: BufferSource) => {
-        // create Buffer with reportId as first byte
-        const buffer = Buffer.concat([
-          Buffer.from([reportId]),
-          Buffer.from(data as ArrayBuffer),
-        ]);
+        // Create a single buffer with reportId as first byte followed by data
+        let buffer: Buffer;
+
+        if (data instanceof Uint8Array) {
+          // If data is already a Uint8Array, convert it directly
+          buffer = Buffer.from([reportId, ...Array.from(data)]);
+        } else if (data instanceof ArrayBuffer) {
+          // If data is an ArrayBuffer, convert it to a Uint8Array first
+          const view = new Uint8Array(data);
+          buffer = Buffer.from([reportId, ...Array.from(view)]);
+        } else {
+          // For other ArrayBufferView types
+          const view = new Uint8Array(data.buffer, data.byteOffset, data.byteLength);
+          buffer = Buffer.from([reportId, ...Array.from(view)]);
+        }
+
         hid.write(buffer);
       },
       sendFeatureReport: async (reportId: number, data: BufferSource) => {
