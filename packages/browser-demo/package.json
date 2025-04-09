@@ -86,7 +86,7 @@
     "gulp-replace": "^1.1.4",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3",
-    "webpack": "5.92.1"
+    "webpack": "5.94.0"
   },
   "homepage": "."
 }
