@@ -51,7 +51,7 @@ const loadXml = async function (
   try {
     xml = utils.xml.textToDom(xmlString);
   } catch (e) {
-    console.error(XML_ERROR + '\nXML: ' + xml);
+    console.error(XML_ERROR + '\nXML: ' + xml, e);
     return;
   }
 

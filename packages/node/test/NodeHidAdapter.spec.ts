@@ -105,7 +105,7 @@ describe('wrap', () => {
     const data = new Uint8Array([0]);
     await hidDevice.sendReport(reportId, data);
     expect(hid.write).toHaveBeenCalledWith(
-      Buffer.concat([Buffer.from([reportId]), Buffer.from(data)])
+      Buffer.from([reportId, ...Array.from(data)])
     );
   });
 

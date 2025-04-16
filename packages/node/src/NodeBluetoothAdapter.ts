@@ -202,7 +202,7 @@ export default class ConcreteBluetoothAdapter extends BluetoothAdapter {
           debug('writeValue', value);
           characteristic.write(
             Buffer.from(value as ArrayBuffer),
-            (err: AttErrors) => {
+            (err: number) => {
               if (err) {
                 reject(err);
               } else {
@@ -233,7 +233,7 @@ export default class ConcreteBluetoothAdapter extends BluetoothAdapter {
           debug('writeValueWithResponse', value);
           characteristic.write(
             Buffer.from(value as ArrayBuffer),
-            (err: AttErrors) => {
+            (err: number) => {
               if (err) {
                 reject(err);
               } else {

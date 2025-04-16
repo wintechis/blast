@@ -307,7 +307,7 @@ function byte2string(schema: DataSchema, bytes: Buffer): string {
  * @param bytes values to convert.
  * @returns converted object.
  */
-function byte2object(schema: DataSchema, bytes: Buffer): Object {
+function byte2object(schema: DataSchema, bytes: Buffer): object {
   const value = bytes.toString('utf-8');
   return JSON.parse(value);
 }

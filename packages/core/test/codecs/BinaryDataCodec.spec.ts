@@ -72,35 +72,35 @@ describe('BinaryDataStreamCodec', () => {
         'bdo:signed': true,
       };
       test('should return 0', () => {
-        const buffer = Buffer.from(new Int8Array([0, 0, 0, 0, 0, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 0, 0, 0, 0, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(0);
       });
       test('should return 1', () => {
-        const buffer = Buffer.from(new Int8Array([1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([1])));
         expect(codec.bytesToValue(buffer, schema)).toBe(1);
       });
       test('should return -1', () => {
-        const buffer = Buffer.from(new Int8Array([-1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([-1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-1);
       });
       test('should return 256', () => {
-        const buffer = Buffer.from(new Int8Array([0, 1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(256);
       });
       test('should return -256', () => {
-        const buffer = Buffer.from(new Int8Array([0, -1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, -1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-256);
       });
       test('should return 65536', () => {
-        const buffer = Buffer.from(new Int8Array([0, 0, 1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 0, 1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(65536);
       });
       test('should return -65536', () => {
-        const buffer = Buffer.from(new Int8Array([0, 0, -1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 0, -1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-65536);
       });
       test('should return 16777216', () => {
-        const buffer = Buffer.from(new Int8Array([0, 0, 0, 1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 0, 0, 1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(16777216);
       });
     });
@@ -112,35 +112,35 @@ describe('BinaryDataStreamCodec', () => {
         'bdo:byteOrder': 'big',
       };
       test('should return 0', () => {
-        const buffer = Buffer.from(new Int8Array([0, 0, 0, 0, 0, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([0, 0, 0, 0, 0, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(0);
       });
       test('should return 1', () => {
-        const buffer = Buffer.from(new Int8Array([1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(1);
       });
       test('should return -1', () => {
-        const buffer = Buffer.from(new Int8Array([-1]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([-1]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-1);
       });
       test('should return 256', () => {
-        const buffer = Buffer.from(new Int8Array([1, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([1, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(256);
       });
       test('should return -256', () => {
-        const buffer = Buffer.from(new Int8Array([-1, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([-1, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-256);
       });
       test('should return 65536', () => {
-        const buffer = Buffer.from(new Int8Array([1, 0, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([1, 0, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(65536);
       });
       test('should return -65536', () => {
-        const buffer = Buffer.from(new Int8Array([-1, 0, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([-1, 0, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(-65536);
       });
       test('should return 16777216', () => {
-        const buffer = Buffer.from(new Int8Array([1, 0, 0, 0]));
+        const buffer = Buffer.from(new Uint8Array(new Int8Array([1, 0, 0, 0]).buffer));
         expect(codec.bytesToValue(buffer, schema)).toBe(16777216);
       });
     });
