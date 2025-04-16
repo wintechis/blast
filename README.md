@@ -44,3 +44,9 @@ import {createThing} from '@blast/node';
 import {BleRgbController} from '@blast/tds';
 ```
 Don't forget to execute ``sudo setcap cap_net_admin=ep $(eval readlink -f `which node`)`` to allow Node.js to access Bluetooth devices.
+
+
+# Publications
+[Freund, M., Fries, J., Wehr, T., & Harth, A. (2023). Generating Visual Programming Blocks based on Semantics in W3C Thing Descriptions. In SWoCoT@ ESWC (pp. 1-15).](https://ceur-ws.org/Vol-3412/paper1.pdf)
+[Freund, M., Wehr, T., & Harth, A. (2022). Blast: Block applications for things. In European Semantic Web Conference (pp. 68-72).](https://2022.eswc-conferences.org/wp-content/uploads/2022/05/pd_Freund_et_al_paper_225.pdf)
+[Wehr, T., Freund, M., & Harth, A. (2024). Taking Control of Your Health Data: A Solid-Based Mobile App for Wearable Data Collection and RDF Visualization. In European Semantic Web Conference (pp. 336-339).](https://2024.eswc-conferences.org/wp-content/uploads/2024/05/77770325.pdf)
