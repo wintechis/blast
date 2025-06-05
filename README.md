@@ -1,6 +1,9 @@
 <img src="packages/browser-demo/public/assets/media/logo.png" alt="BLAST logo" title="BLAST" align="right" height="200" />
 
 # BLAST - Block Applications For Things
+
+Try out BLAST at [https://wintechis.github.io/blast/](https://wintechis.github.io/blast/)
+
 This is a monorepo with five packages:
 * [`@blast/core`](./packages/core/) is a library enabling usage of Web of Things ([WoT](https://www.w3.org/TR/wot-architecture/)) Thing Descriptions ([TDs](https://www.w3.org/2019/wot/td)) for Bluetooth devices in [Node.js](https://nodejs.org/).
 * [`@blast/node`](./packages/node/) bundle for Node.js, using [node-ble-host](https://github.com/Emill/node-ble-host) and [node-hid](https://github.com/node-hid/node-hid).
