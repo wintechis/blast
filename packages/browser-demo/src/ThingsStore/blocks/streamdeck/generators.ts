@@ -193,7 +193,7 @@ JavaScript.forBlock['streamdeck_color_buttons'] = function (
   const g = parseInt(colour.slice(4, 6), 16);
   const b = parseInt(colour.slice(6, 8), 16);
 
-  const code = `${writeStreamDeckData}(${r}, ${g}, ${b}, [${buttons}]);\n`;
+  const code = `await ${writeStreamDeckData}(${r}, ${g}, ${b}, [${buttons}]);\n`;
   return code;
 };
 
