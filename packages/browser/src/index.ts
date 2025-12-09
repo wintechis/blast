@@ -18,6 +18,14 @@ const createThingWithHandlers = async (
   addHandlers: (thing: WoT.ExposedThing) => void
 ) => blast.createThingWithHandlers(td, id, addHandlers);
 
+export default {
+  getWot,
+  resetServient,
+  createExposedThing,
+  createThing,
+  createThingWithHandlers,
+};
+
 export {
   getWot,
   resetServient,

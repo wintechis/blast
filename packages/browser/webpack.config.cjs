@@ -1,6 +1,7 @@
 'use strict';
 
 const path = require('path');
+const webpack = require('webpack');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const browserConfig = {
@@ -8,20 +9,28 @@ const browserConfig = {
     browser: './src/index.ts',
   },
   output: {
-    path: path.resolve(__dirname, './dist/'),
-    filename: 'blast.browser.js',
-    chunkFormat: 'module',
-    library: {
-      type: 'module',
+      path: path.resolve(__dirname, './dist/'),
+      filename: 'blast.browser.js',
+      library: {
+        type: 'module',
+      },
+      module: true,
     },
-  },
-  experiments: {
-    outputModule: true,
-  },
+    experiments: {
+      outputModule: true,
+    },
   target: 'web',
   devtool: 'inline-cheap-module-source-map',
-  mode: 'production',
-  plugins: [new NodePolyfillPlugin()],
+  mode: 'development',
+  optimization: {
+    minimize: false,
+  },
+  plugins: [
+    new NodePolyfillPlugin(),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+  ],
   resolve: {
     extensions: ['.ts', '.js'],
     alias: {
@@ -29,6 +38,7 @@ const browserConfig = {
     },
     fallback: {
       fs: false,
+      process: require.resolve('process/browser'),
     },
   },
   module: {

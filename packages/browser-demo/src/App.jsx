@@ -149,7 +149,7 @@ export default function App() {
           <Container maxWidth={false} sx={{height: '100vh', pt: '64px'}}>
             <Paper sx={{height: '100%'}}>
               <Grid container sx={{height: '100%'}} spacing={0}>
-                <Grid item xs={9}>
+                <Grid size={{xs: 9}}>
                   <TabContext value={tabId}>
                     <TabList value={tabId} onChange={handleChange}>
                       <Tab value="workspace" label="Workspace" />
@@ -205,7 +205,7 @@ export default function App() {
                     </TabPanel>
                   </TabContext>
                 </Grid>
-                <Grid item xs={3} sx={{height: '100%', zIndex: 500}}>
+                <Grid size={{xs: 3}} sx={{height: '100%', zIndex: 500}}>
                   <ErrorBoundary>
                     <Controls />
                   </ErrorBoundary>

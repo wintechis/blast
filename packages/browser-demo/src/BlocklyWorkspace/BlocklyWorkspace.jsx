@@ -16,28 +16,16 @@ const propTypes = {
   onDispose: PropTypes.func,
 };
 
-const defaultProps = {
-  initialXml: null,
-  toolboxConfiguration: currentToolbox,
-  workspaceConfiguration: null,
-  className: null,
-  onWorkspaceChange: null,
-  onImportXmlError: null,
-  onXmlChange: null,
-  onInject: null,
-  onDispose: null,
-};
-
 function BlocklyWorkspace({
-  initialXml,
-  toolboxConfiguration,
-  workspaceConfiguration,
-  className,
-  onWorkspaceChange,
-  onXmlChange,
-  onImportXmlError,
-  onInject,
-  onDispose,
+  initialXml = null,
+  toolboxConfiguration = currentToolbox,
+  workspaceConfiguration = null,
+  className = null,
+  onWorkspaceChange = null,
+  onXmlChange = null,
+  onImportXmlError = null,
+  onInject = null,
+  onDispose = null,
 }) {
   const editorDiv = React.useRef(null);
   const {xml} = useBlocklyWorkspace({
@@ -64,6 +52,5 @@ function BlocklyWorkspace({
 }
 
 BlocklyWorkspace.propTypes = propTypes;
-BlocklyWorkspace.defaultProps = defaultProps;
 
 export default BlocklyWorkspace;
