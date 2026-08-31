@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, test} from '@jest/globals';
-import * as td from '../../src/td/XiaomiThermometer.json';
-import {parseTD, Thing} from '@node-wot/td-tools';
+import {describe, expect, test} from 'bun:test';
+import * as td from '../../src/tds/XiaomiThermometer.json';
+import {parseTD, Thing} from '@node-wot/core';
 
 describe('Xiaomi Thermometer Thing Description', () => {
   let thing: undefined | Thing;

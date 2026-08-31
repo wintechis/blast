@@ -11,21 +11,39 @@ on:
       - '**'
       - '!gh-pages'
 
+# A push that supersedes an in-flight run for the same ref makes that run's result
+# irrelevant, so cancel it - except on master, whose runs feed the deploy job.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
 jobs:
   lint-build:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+      # Keep in sync with "packageManager" in package.json and mise.toml.
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      # Required: node-gyp builds the native modules node-hid and hci-socket depend on
+      # during install. The steps after install run entirely on Bun - the root scripts pass
+      # `--bun`, which keeps tsc and eslint off Node despite their shebangs - but install
+      # itself still needs this, so do not remove it.
       - uses: actions/setup-node@v4
         with:
-          node-version: 18
-          cache: 'yarn'
-      - run: yarn set version 3.8.1
-      - run: yarn install --immutable
-      - run: yarn lint
-      - run: yarn build
-      - run: yarn test
+          node-version: 20
+      # --frozen-lockfile also fails the run if bun.lock is out of date with the
+      # package.json files, which is the check that keeps the lockfile honest.
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Lint
+        run: bun run lint
+      - name: Build
+        run: bun run build
+      - name: Test
+        run: bun run test
       - uses: actions/upload-artifact@v4
         with:
           name: build
@@ -38,7 +56,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          # This allows yarn workspaces --since to compare with origin/main branch
           fetch-depth: 0
       - name: download build files
         uses: actions/download-artifact@v4

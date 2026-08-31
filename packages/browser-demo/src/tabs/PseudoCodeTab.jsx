@@ -1,6 +1,5 @@
 import React from 'react';
 import Blockly from 'blockly';
-import PropTypes from 'prop-types';
 
 import SyntaxHighlighter from 'react-syntax-highlighter';
 
@@ -131,10 +130,6 @@ export default class PseudoCodeTab extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  static propTypes = {
-    workspace: PropTypes.object,
-  };
 
   render() {
     return (

@@ -3,7 +3,10 @@
  * create returns a mock BleManager instance with
  * that can connect to a device 00:00:00:00:00:00
  */
-jest.mock('ble-host', () => ({
+// eslint-disable-next-line node/no-unpublished-import
+import {describe, expect, jest, mock, test} from 'bun:test';
+
+mock.module('ble-host', () => ({
   BleManager: {
     create: jest.fn(
       (
@@ -53,13 +56,16 @@ jest.mock('ble-host', () => ({
 /**
  * Mock the HciSocket class
  */
-jest.mock('hci-socket', () => {
-  return jest.fn(); // Mock the default export as a function
-});
+mock.module('hci-socket', () => ({
+  // NodeBluetoothAdapter does `import HciSocket from 'hci-socket'` and constructs it at
+  // module scope, so the stub has to be on `default`.
+  default: jest.fn(),
+}));
 
-// eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, jest, test} from '@jest/globals';
-import ConcreteBluetoothAdapter from '../src/NodeBluetoothAdapter';
+// Dynamic so it loads after the mock.module() calls above; ESM would hoist a static import.
+const {default: ConcreteBluetoothAdapter} = await import(
+  '../src/NodeBluetoothAdapter'
+);
 
 describe('NodeBluetoothAdapter', () => {
   const adapter = new ConcreteBluetoothAdapter();

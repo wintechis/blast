@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, test} from '@jest/globals';
-import * as td from '../../src/td/JoyCon.json';
-import {Thing} from '@node-wot/td-tools';
+import {describe, expect, test} from 'bun:test';
+import * as td from '../../src/tds/JoyCon.json';
+import {Thing} from '@node-wot/core';
 
 describe('JoyCon Thing Description', () => {
   const thing = td as unknown as Thing;

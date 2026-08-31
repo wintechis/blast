@@ -1,50 +1,66 @@
 {
-    "private": true,
-    "name": "blast",
-    "description": "Block Applications for Things",
-    "version": "0.0.1",
-    "author": "Thomas Wehr",
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/wintechis/blast.git"
-    },
-    "license": "AGPL-3.0",
-    "scripts": {
-        "install": "yarn workspaces foreach run install",
-        "build": "yarn workspaces foreach  run build",
-        "deploy": "gh-pages -d packages/browser-demo/build",
-        "lint": "yarn workspaces foreach  run lint",
-        "test": "yarn workspaces foreach  run test",
-        "test:coverage": "yarn workspaces foreach  run test:coverage",
-        "predeploy": "yarn workspace @blast/browser-demo run build",
-        "start": "yarn workspace @blast/browser-demo run start"
-    },
-    "homepage": "https://wintechis.github.io/blast",
-    "type": "module",
-    "workspaces": [
-        "./packages/browser",
-        "./packages/browser-demo",
-        "./packages/core",
-        "./packages/node",
-        "./packages/tds"
+  "private": true,
+  "name": "blast",
+  "description": "Block Applications for Things",
+  "version": "0.0.1",
+  "author": "Thomas Wehr",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wintechis/blast.git"
+  },
+  "license": "AGPL-3.0",
+  "scripts": {
+    "build": "bun run --bun --filter @blast/core build && bun run --bun --filter @blast/tds build && bun run --bun --filter @blast/node build && bun run --bun --filter @blast/browser build && bun run --bun --filter @blast/browser-demo build",
+    "lint": "bun run --bun --filter './packages/*' lint",
+    "test": "bun run --bun --filter './packages/*' test",
+    "test:coverage": "bun run --bun --filter './packages/*' test:coverage",
+    "start": "bun run --bun --filter @blast/browser-demo start",
+    "predeploy": "bun run --bun --filter @blast/browser-demo build",
+    "deploy": "bun run predeploy && gh-pages -d packages/browser-demo/build"
+  },
+  "homepage": "https://wintechis.github.io/blast",
+  "type": "module",
+  "workspaces": {
+    "packages": [
+      "packages/*"
     ],
-    "engines": {
-        "node": ">=16.0.0"
-    },
-    "devDependencies": {
-        "@typescript-eslint/eslint-plugin": "^8.29.1",
-        "@typescript-eslint/parser": "^8.29.1",
-        "esbuild": "^0.25.2",
-        "eslint": "^9.24.0",
-        "eslint-config-prettier": "^10.1.1 ",
-        "eslint-plugin-n": "^17.17.0",
-        "ndjson-cli": "^0.3.1",
-        "prettier": "^3.5.3",
-        "typescript": "^5.8.3",
-        "typescript-eslint": "^8.29.1"
-    },
-    "packageManager": "yarn@3.8.1",
-    "dependencies": {
-        "gh-pages": "^6.3.0"
+    "catalog": {
+      "@eslint/js": "^9.24.0",
+      "@types/node": "^20.1.0",
+      "@types/web-bluetooth": "^0.0.21",
+      "@typescript-eslint/eslint-plugin": "^8.29.1",
+      "@typescript-eslint/parser": "^8.29.1",
+      "eslint": "^9.24.0",
+      "eslint-config-prettier": "^10.1.1",
+      "globals": "^16.0.0",
+      "prettier": "^3.5.3",
+      "typescript": "^5.8.3",
+      "typescript-eslint": "^8.29.1"
     }
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "catalog:",
+    "@types/bun": "^1.3.14",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-n": "^17.17.0",
+    "gh-pages": "^6.3.0",
+    "node-gyp": "^11.0.0",
+    "prettier": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:"
+  },
+  "packageManager": "bun@1.3.14",
+  "trustedDependencies": [
+    "hci-socket",
+    "node-hid"
+  ],
+  "overrides": {
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29"
+  }
 }

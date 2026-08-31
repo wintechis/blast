@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // The root tsconfig's outDir resolves relative to the root; this package emits no
+    // declarations, but keep any stray output inside the package rather than at the top.
+    "outDir": "dist",
+    "noEmit": true
+  },
+  "include": ["src/**/*", "test/**/*"],
+}

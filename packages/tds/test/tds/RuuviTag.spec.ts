@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, test} from '@jest/globals';
-import * as td from '../../src/td/RuuviTag.json';
-import {parseTD, Thing} from '@node-wot/td-tools';
+import {describe, expect, test} from 'bun:test';
+import * as td from '../../src/tds/RuuviTag.json';
+import {parseTD, Thing} from '@node-wot/core';
 
 describe('RuuviTag Thing Description', () => {
   let thing: undefined | Thing;
@@ -16,7 +16,7 @@ describe('RuuviTag Thing Description', () => {
       expect(uart).toBeDefined();
       expect(uart.data.type).toEqual('object');
       expect(uart.data['properties']).toBeDefined();
-      expect(Object.keys(uart.data['properties'])).toHaveLength(10);
+      expect(Object.keys(uart.data['properties'])).toHaveLength(11);
       expect(uart.data['properties'].format.type).toEqual('integer');
       expect(uart.data['properties'].format['ex:bitOffset']).toEqual(0);
       expect(uart.data['properties'].format['ex:bitLength']).toEqual(8);
@@ -60,11 +60,21 @@ describe('RuuviTag Thing Description', () => {
       );
       expect(uart.data['properties']['acc-z'].unit).toEqual('qudtUnit:mG');
 
+      // Ruuvi RAWv2 splits bits 104-119 into 11 bits of battery voltage and 5 bits of TX
+      // power. These assertions predated that split, expecting a single 16-bit power-info
+      // and no tx-power at all. The Thing Description is the correct side: decoding Ruuvi's
+      // published RAWv2 test vector through this schema yields 1377 (-> 1377 + 1600 mV =
+      // 2.977 V) and 22 (-> -40 + 22*2 = +4 dBm), both matching Ruuvi's documented values.
+      // See packages/core/test/codecs/OctetstreamCodec.spec.ts, which pins that decode.
       expect(uart.data['properties']['power-info'].type).toEqual('integer');
       expect(uart.data['properties']['power-info']['ex:bitOffset']).toEqual(
         104
       );
-      expect(uart.data['properties']['power-info']['ex:bitLength']).toEqual(16);
+      expect(uart.data['properties']['power-info']['ex:bitLength']).toEqual(11);
+
+      expect(uart.data['properties']['tx-power'].type).toEqual('integer');
+      expect(uart.data['properties']['tx-power']['ex:bitOffset']).toEqual(115);
+      expect(uart.data['properties']['tx-power']['ex:bitLength']).toEqual(5);
 
       expect(uart.data['properties']['movement-counter'].type).toEqual(
         'integer'

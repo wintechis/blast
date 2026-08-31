@@ -1,4 +1,4 @@
-import {Form} from '@node-wot/td-tools';
+import {Form} from '@node-wot/core';
 
 export {default as HidClient} from './Hid-client.js';
 export {default as HidClientFactory} from './Hid-client-factory.js';

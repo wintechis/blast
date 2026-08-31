@@ -2,10 +2,12 @@ import * as WoT from 'wot-typescript-definitions';
 import {
   ConsumedThing,
   Content,
+  ContentSerdes,
   Servient,
   ExposedThing,
   ProtocolHelpers,
 } from '@node-wot/core';
+import {OctetstreamCodec} from './codecs/OctetstreamCodec.js';
 import {InteractionOutput} from '@node-wot/core/dist/interaction-output.js';
 import {JsonPlaceholderReplacer} from 'json-placeholder-replacer';
 import {HttpClientFactory, HttpsClientFactory} from '@node-wot/binding-http';
@@ -21,10 +23,10 @@ export {HidAdapter} from './bindings/binding-hid/HidAdapter.js';
 import {ErrorListener} from 'wot-typescript-definitions';
 import {FormElementBase} from 'wot-thing-description-types';
 export {EddystoneHelpers} from './bindings/binding-bluetooth/EddystoneHelpers.js';
-import {Readable} from 'stream';
+import {Readable} from 'node:stream';
 import {ReadableStream as PolyfillStream} from 'web-streams-polyfill';
 
-export default class Blast {
+export class Blast {
   private servient: Servient;
   private wot: typeof WoT | undefined;
 
@@ -37,6 +39,9 @@ export default class Blast {
       allowSelfSigned: true, // client configuration
     };
     this.servient = new Servient();
+    // Replace node-wot's built-in application/octet-stream codec with BLAST's, which adds
+    // support for the `scale` and `signed` data-schema keywords used by several TDs.
+    ContentSerdes.get().addCodec(new OctetstreamCodec());
     if (ConcreteBluetoothAdapter) {
       const bluetoothAdapter = new ConcreteBluetoothAdapter();
       if (bluetoothAdapter) {
@@ -122,6 +127,14 @@ export default class Blast {
     return consumedThing;
   }
 }
+
+// Blast is exported both by name and as the default. The named export is the one bundlers
+// can be trusted with: @blast/core ships CJS (dist/index.cjs), and when a bundler compiles
+// `import Blast from '@blast/core'` under Node's ESM-importing-CJS semantics, the default
+// binding is the whole module.exports object rather than this class - so `new Blast(...)`
+// throws "is not a constructor". A named import resolves to the property directly and is
+// unaffected. @blast/browser and @blast/node both take the named one.
+export default Blast;
 
 const fillPlaceholder = function (
   data: Record<string, unknown>,

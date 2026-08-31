@@ -8,13 +8,8 @@
 
 ## Install & build
 To install and build `@blast/core`, open a terminal and execute the following commands from withing this directory.
-  1. install the dependencies `yarn install`
-  2. run the build script `yarn build`
-
-Alternatively you could run `yarn build:tds`, `yarn build:node`, or `yarn build:browser` to only build the respective file.
-
-> [!NOTE]
-> You might have to set yarn version using `yarn set version berry` before installing
+  1. install the dependencies `bun install`
+  2. run the build script `bun run build`
 
 > [!IMPORTANT]
 > in order to access the Bluetooth HCI layer from Node.js, either you need to run node using sudo every time or execute ``sudo setcap cap_net_admin=ep $(eval readlink -f `which node`)`` first to give the node binary access to use Bluetooth HCI.

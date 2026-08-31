@@ -1,0 +1,9 @@
+# Toolchain pins, replacing the former .nvmrc.
+# Keep `bun` in sync with "packageManager" in package.json and with the bun-version in
+# .github/workflows/main.yml. Node is needed at install time, for the node-gyp builds of
+# node-hid and hci-socket. Everything after install runs on Bun, Vite included, but only
+# because the root scripts pass `--bun`; without it `bun run` follows the node shebang on
+# tsc and eslint. Node stays pinned here regardless - install needs it.
+[tools]
+node = "20"
+bun = "1.3.14"

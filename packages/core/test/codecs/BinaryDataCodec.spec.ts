@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, test} from '@jest/globals';
+import {describe, expect, test} from 'bun:test';
 import {BinaryDataStreamCodec} from '../../src/codecs/BinaryDataCodec';
 import {DataSchema} from 'wot-typescript-definitions';
 

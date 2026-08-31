@@ -1,7 +1,7 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, test} from '@jest/globals';
+import {describe, expect, test} from 'bun:test';
 import * as td from '../../src/tds/BleRgbController.json';
-import {parseTD, Thing} from '@node-wot/td-tools';
+import {parseTD, Thing} from '@node-wot/core';
 
 describe('BleLedController Thing Description', () => {
   let thing: undefined | Thing;
