@@ -6,17 +6,21 @@ Employing a VPE, BLAST makes creating WoT Applications more accessible: Without 
 
 ## Usage
 To serve BLAST on your local network, execute the commands below:
-1. (If not done already) Install the dependencies `yarn install`
-2. `yarn start`
+1. (If not done already) Install the dependencies `bun install`
+2. `bun run start`
 
 > [!IMPORTANT]
-> **The Browser Demo's Bluetooth blocks require you to use Chrome 89 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
+> **The Browser Demo's Bluetooth blocks require you to use Chrome 92 or newer on Windows with `chrome://flags/#enable-experimental-web-platform-features` enabled.**
+>
+> WebHID itself shipped in Chrome 89, but `@blast/browser` identifies HID devices with
+> `crypto.randomUUID()` (Chrome 92+) since it dropped the `uuid` package, so 92 is the
+> real floor.
 
 ### WebHID on Linux
 On most Linux systems, the udev subsystem blocks write access to HID devices. In order to unblock access, each device requires its own udev rule. See the [device section](https://github.com/wintechis/blast/wiki/Devices) of the wiki for step by step instructions for all devices used by BLAST.
 
 ### Compatibility
-This table displays all blocks with limited compatibility, assuming you're using **google chrome version 85, or newer**, and have the **`experimental web platform features flag` enabled**.
+This table displays all blocks with limited compatibility, assuming you're using **google chrome version 92, or newer** (see the note above), and have the **`experimental web platform features flag` enabled**.
 
 | block | Windows | Linux | Mac | Android |
 |---|---|---|---|---|

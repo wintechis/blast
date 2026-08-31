@@ -1,4 +1,9 @@
 {
   "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    // The root tsconfig's outDir resolves relative to the root, which would emit this
+    // package's declarations into the repository-level dist/. Keep them in this package.
+    "outDir": "dist"
+  },
   "include": ["src/**/*"],
 }

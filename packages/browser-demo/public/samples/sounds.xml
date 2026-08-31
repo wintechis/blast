@@ -42,32 +42,6 @@
                     </value>
                   </block>
                 </value>
-                <next>
-                  <block type="audioOutput_playFileFromUrl" id="W#DC4Pk|pEzof9Fk`@*8">
-                    <value name="URI">
-                      <block type="uri_from_string" id="y]=]chA*k$G,l1Q.|SZ=">
-                        <value name="URI">
-                          <block type="string" id=")ne+qH?vP=8Qs_`s}j@d">
-                            <field name="TEXT">https://studio.code.org/restricted/highhopes_panicatthedisco.mp3</field>
-                          </block>
-                        </value>
-                      </block>
-                    </value>
-                    <next>
-                      <block type="audioOutput_playFileFromUrl" id="f%E,5p6He[;H)4ua[?f5">
-                        <value name="URI">
-                          <block type="uri_from_string" id="6SSP(2rJ@PC:8,TA`?DA">
-                            <value name="URI">
-                              <block type="string" id="R4wqXx?~9%{=YR3S3?,]">
-                                <field name="TEXT">https://studio.code.org/restricted/neverreallyover_katyperry.mp3</field>
-                              </block>
-                            </value>
-                          </block>
-                        </value>
-                      </block>
-                    </next>
-                  </block>
-                </next>
               </block>
             </next>
           </block>

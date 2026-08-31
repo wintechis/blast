@@ -1,6 +1,6 @@
 import {HidAdapter} from '@blast/core';
 import {createLoggers} from '@node-wot/core';
-import {v4} from 'uuid';
+import {randomUUID} from 'node:crypto';
 
 const {debug} = createLoggers('binding-hid', 'WebHidAdapter');
 
@@ -34,7 +34,7 @@ export default class ConcreteHidAdapter extends HidAdapter {
   const hidAdapterDevices: HIDAdapterDevice[] = [];
   for (const device of devices) {
     // generate a unique id for the new device
-    const id = v4();
+    const id = randomUUID();
     const hidAdapterDevice = device as HIDAdapterDevice;
     hidAdapterDevice.id = id;
     if (!device.opened) {

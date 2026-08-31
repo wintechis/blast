@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <!--
+      manifest.json provides metadata used when your web app is installed on a
+      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
+    -->
+    <link rel="manifest" href="./manifest.json" />
+    <title>BLAST - Block Applications For Things</title>
+    <!-- Fonts to support Material Design -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    />
+    <script type="module">
+      // blast.browser.js is a prebuilt bundle that lives in public/assets/, copied there
+      // from packages/browser by the copy-blast script. It is deliberately NOT part of
+      // this app's module graph: the code the Blockly blocks generate imports it by URL
+      // at runtime, so it has to stay a standalone file rather than be inlined here.
+      //
+      // The specifier is therefore built at runtime and marked @vite-ignore, so Vite
+      // leaves it alone instead of trying to resolve and bundle it. Resolving against
+      // document.baseURI keeps it correct under base './' whatever subpath the app is
+      // deployed to. interpreter.ts calls window.resetServient() when a program stops.
+      import(/* @vite-ignore */ new URL('assets/blast/blast.browser.js', document.baseURI).href)
+        .then(module => {
+          window.resetServient = module.resetServient;
+        })
+        .catch(error => {
+          console.error('Failed to load blast.browser.js', error);
+        });
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/index.tsx"></script>
+  </body>
+</html>

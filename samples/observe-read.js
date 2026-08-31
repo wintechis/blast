@@ -1,6 +1,6 @@
 import {createThing} from '@blast/node';
 import {RuuviTag} from '@blast/tds';
-import {existsSync, appendFileSync, writeFileSync} from 'fs';
+import {existsSync, appendFileSync, writeFileSync} from 'node:fs';
 
 // where is the error handler?
 import {XiaomiFlowerCare} from '@blast/tds';

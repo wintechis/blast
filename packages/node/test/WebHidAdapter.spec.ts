@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, jest, test} from '@jest/globals';
+import {describe, expect, jest, test} from 'bun:test';
 // mock functionality used from navigator.hid
 const devices = [
   {
@@ -24,7 +24,10 @@ const devices = [
     ]);
   }),
 };
-import ConcreteHidAdapter from '../src/WebHidAdapter';
+// Imported dynamically: ESM hoists static imports above the navigator.hid stub above, and
+// WebHidAdapter assigns to navigator.hid at module scope. ts-jest's CommonJS transform used
+// to preserve the textual order; under real ESM the import has to come after the stub.
+const {default: ConcreteHidAdapter} = await import('../src/WebHidAdapter');
 
 describe('WebHidAdapter', () => {
   const adapter = new ConcreteHidAdapter();

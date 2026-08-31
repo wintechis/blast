@@ -1,10 +1,5 @@
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/sdks
-!.yarn/versions
 packages/browser-demo/build
 **/coverage
 node_modules
+packages/browser-demo/playwright-report
+packages/browser-demo/test-results

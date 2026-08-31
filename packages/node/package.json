@@ -14,67 +14,36 @@
   },
   "homepage": "https://github.com/wintechis/blast#readme",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "node esbuild.js",
+    "build": "bun build.js",
     "lint": "eslint --config eslint.config.js",
     "fix": "eslint --config eslint.config.js --fix",
-    "test": "jest",
-    "test:coverage": "jest --coverage"
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
   },
   "type": "module",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "@esbuild-plugins/node-resolve": "^0.2.2",
-    "@jest/globals": "^29.7.0",
-    "@types/inquirer": "^9.0.7",
-    "@types/node": "^20.1.0",
-    "@types/uuid": "^10.0.0",
-    "eslint-config-google": "^0.14.0",
-    "eslint-config-prettier": "^10.1.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.2.6",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "prettier": "^3.5.3",
-    "ts-jest": "^29.3.1",
-    "ts-loader": "^9.5.2",
-    "ts-node": "^10.9.2"
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "prettier": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "@blast/core": "workspace:0.0.1",
-    "@node-wot/binding-http": "0.8.11",
-    "@node-wot/core": "https://github.com/derwehr/node-wot.git#workspace=@node-wot/core&commit=c50ed48643dfb4fac4b578c7e097d1217baafc43",
-    "@node-wot/td-tools": "0.8.11",
+    "@blast/core": "workspace:*",
+    "@node-wot/binding-http": "0.9.2",
+    "@node-wot/core": "0.9.2",
     "@types/uritemplate": "^0.3.6",
     "ble-host": "^1.0.3",
-    "debug": "^4.4.0",
     "hci-socket": "^1.0.0",
     "inquirer": "^12.5.2",
     "json-placeholder-replacer": "^2.1.0",
     "node-hid": "^3.1.2",
-    "readable-stream": "^4.7.0",
-    "stream": "^0.0.3",
-    "supports-color": "^10.0.0",
-    "typescript": "^5.8.3",
     "uritemplate": "^0.3.4",
-    "uuid": "^11.1.0",
-    "wot-thing-description-types": "1.1.0-09-November-2023",
-    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29",
-    "x11": "^2.3.0"
-  },
-  "jest": {
-    "collectCoverageFrom": [
-      "src/**/*.{js,ts}"
-    ],
-    "preset": "ts-jest/presets/js-with-ts",
-    "testEnvironment": "node",
-    "transform": {
-      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
-    },
-    "transformIgnorePatterns": [
-      "node_modules/(?!variables/.*)"
-    ]
+    "wot-thing-description-types": "^1.1.0-12-March-2025",
+    "wot-typescript-definitions": "0.8.0-SNAPSHOT.29"
   }
 }

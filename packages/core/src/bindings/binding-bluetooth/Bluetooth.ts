@@ -1,4 +1,4 @@
-import {Form} from '@node-wot/td-tools';
+import {Form} from '@node-wot/core';
 
 export {default as BluetoothClient} from './gatt-client.js';
 export {default as GattClientFactory} from './gatt-client-factory.js';

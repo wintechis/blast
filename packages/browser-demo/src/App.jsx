@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {utils, Xml} from 'blockly';
 import {Provider} from 'react-redux';
 import {thingsStore} from './ThingsStore/ThingsStore.ts';
-import PropTypes from 'prop-types';
 import './App.css';
 import {TabContext, TabList, useTabContext} from '@mui/lab';
 import {
@@ -86,13 +85,6 @@ function TabPanel(props) {
     </Paper>
   );
 }
-
-TabPanel.propTypes = {
-  children: PropTypes.node,
-  className: PropTypes.string,
-  style: PropTypes.object,
-  value: PropTypes.string,
-};
 
 export default function App() {
   const [webId, setWebId] = useState(getDefaultSession().info.webId);

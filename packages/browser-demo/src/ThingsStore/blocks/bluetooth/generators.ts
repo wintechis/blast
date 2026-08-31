@@ -13,9 +13,9 @@ JavaScript.forBlock['things_eddyStoneDevice'] = function (
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
   JavaScript.imports_['core'] =
-    "const blastCore = await import('../../assets/blast/blast.browser.js');";
+    "const blastCore = await import(new URL('assets/blast/blast.browser.js', document.baseURI).href);";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+    "const blastTds = await import(new URL('assets/blast/blast.tds.js', document.baseURI).href);";
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['EddystoneDevice'] =
@@ -33,9 +33,9 @@ JavaScript.forBlock['things_bluetoothGeneric'] = function (
   const name = JavaScript.quote_(block.getFieldValue('name'));
 
   JavaScript.imports_['core'] =
-    "const blastCore = await import('../../assets/blast/blast.browser.js');";
+    "const blastCore = await import(new URL('assets/blast/blast.browser.js', document.baseURI).href);";
   JavaScript.imports_['tds'] =
-    "const blastTds = await import('../../assets/blast/blast.tds.js');";
+    "const blastTds = await import(new URL('assets/blast/blast.tds.js', document.baseURI).href);";
 
   JavaScript.priority_['createThing'] = 'const {createThing} = blastCore;';
   JavaScript.priority_['BluetoothGeneric'] =
@@ -101,7 +101,7 @@ JavaScript.forBlock['eddyStoneDevice_write_eddystone_property'] = function (
   if (property === 'advertisedData') {
     property = JavaScript.quote_(property);
     JavaScript.imports_['core'] =
-      "const blastCore = await import('../../assets/blast/blast.browser.js');";
+      "const blastCore = await import(new URL('assets/blast/blast.browser.js', document.baseURI).href);";
     JavaScript.definitions_['EddystoneHelpers'] =
       'const {EddystoneHelpers} = blastCore;';
     code = `
@@ -129,7 +129,7 @@ JavaScript.forBlock['read_eddystone_property'] = function (
   if (property === 'advertisedData') {
     property = JavaScript.quote_(property);
     JavaScript.imports_['core'] =
-      "const blastCore = await import('../../assets/blast/blast.browser.js');";
+      "const blastCore = await import(new URL('assets/blast/blast.browser.js', document.baseURI).href);";
     JavaScript.definitions_['EddystoneHelpers'] =
       'const {EddystoneHelpers} = blastCore;';
     code = `

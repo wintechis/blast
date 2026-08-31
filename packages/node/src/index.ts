@@ -1,4 +1,4 @@
-import Blast from '@blast/core';
+import {Blast} from '@blast/core';
 import ConcreteBluetoothAdapter from './NodeBluetoothAdapter.js';
 import ConcreteHidAdapter from './NodeHidAdapter.js';
 export {HidHelpers} from './hidHelpers/index.js';

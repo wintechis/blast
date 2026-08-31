@@ -15,9 +15,5 @@
     "./packages/tds",
   ],
   "editor.tabSize": 2,
-  "search.exclude": {
-    "**/.yarn": true,
-    "**/.pnp.*": true
-  },
   "typescript.enablePromptUseWorkspaceTsdk": true
 }

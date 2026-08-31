@@ -42,9 +42,6 @@ JavaScript.forBlock['every_seconds'] = function (block: Block): string {
   const unit = block.getFieldValue('units');
   const statements = JavaScript.statementToCode(block, 'statements');
 
-  JavaScript.definitions_['every_seconds'] =
-    'const everySecondsIntervals = {};';
-
   if (value < 0.1) {
     console.error('Event interval value must be greater than 0.1.');
   }
@@ -58,12 +55,15 @@ JavaScript.forBlock['every_seconds'] = function (block: Block): string {
     milliSeconds = value * 60 * 60 * 1000;
   }
 
-  const code = `everySecondsIntervals['${block.id}'] = setInterval(
-  async () => {${statements}},
-  ${milliSeconds}
-);
-// Add interval to intervalEvents, so it can be removed when BLAST is stopped.
-intervalEvents.push(everySecondsIntervals['${block.id}']);\n`;
+  // Register the interval with the shared scheduler so it is tracked as a live
+  // source and cancelled cleanly when BLAST is stopped.
+  const code = `blastScheduler.addInterval(async () => {
+  try {
+${statements}
+  } catch (e) {
+    blastScheduler.reportError(e);
+  }
+}, ${milliSeconds});\n`;
 
   return code;
 };

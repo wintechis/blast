@@ -40,7 +40,7 @@ class HIDDeviceMock extends EventTarget implements HIDDevice {
     this.opened = false;
   }
 
-  public async sendReport(reportId: number, data: Buffer) {
+  public async sendReport(reportId: number, data: BufferSource) {
     return;
   }
 
@@ -48,7 +48,7 @@ class HIDDeviceMock extends EventTarget implements HIDDevice {
     return Buffer.alloc(0);
   }
 
-  public async sendFeatureReport(reportId: number, data: Buffer) {
+  public async sendFeatureReport(reportId: number, data: BufferSource) {
     return;
   }
 

@@ -12,7 +12,7 @@ import {
 import {HidForm} from './Hid.js';
 import {Subscription} from 'rxjs';
 import {HidAdapter} from './HidAdapter.js';
-import {Readable} from 'stream';
+import {Readable} from 'node:stream';
 
 const {debug} = createLoggers('binding-hid', 'hid-client');
 

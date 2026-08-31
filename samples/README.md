@@ -3,6 +3,6 @@ This folder contains sample files demonstrating the `@blast/core` usage with nod
 
 ## Usage
 In order to execute any of the samples do the following:
-1. Install dependencies: `yarn install`
-2. Build BLAST: `yarn build`
-3. Run the sample: `yarn node [filename].js`
+1. Install dependencies: `bun install`
+2. Build BLAST: `bun run build`
+3. Run the sample: `bun [filename].js`

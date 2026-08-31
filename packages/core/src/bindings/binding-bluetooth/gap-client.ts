@@ -11,7 +11,7 @@ import {
 import {Subscription} from 'rxjs';
 import {BluetoothForm} from './Bluetooth.js';
 import {BluetoothAdapter} from './BluetoothAdapter.js';
-import {Readable} from 'stream';
+import {Readable} from 'node:stream';
 import {Form} from 'wot-typescript-definitions';
 
 const {debug} = createLoggers('binding-bluetooth', 'gap-client');

@@ -1,5 +1,5 @@
 // eslint-disable-next-line node/no-unpublished-import
-import {describe, expect, jest, test} from '@jest/globals';
+import {describe, expect, jest, test} from 'bun:test';
 import HidClientFactory from '../../src/bindings/binding-hid/Hid-client-factory';
 import HidAdapterMock from '../test-helpers/HidAdapterMock';
 import HidClient from '../../src/bindings/binding-hid/Hid-client';

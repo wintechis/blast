@@ -1,5 +1,4 @@
 import React from 'react';
-import propTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -40,12 +39,6 @@ export default class ConnectDialog extends React.Component {
     this.handleChange = this.handleChange.bind(this);
     this.handleFetch = this.handleFetch.bind(this);
   }
-
-  static propTypes = {
-    blastBarRef: propTypes.object.isRequired,
-    onclose: propTypes.func,
-    open: propTypes.bool,
-  };
 
   componentDidMount() {
     setWebBluetoothButtonHandler(() => {

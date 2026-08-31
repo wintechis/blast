@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
@@ -40,20 +39,6 @@ export default class ReonnectDialog extends React.Component {
     this.handleAVDialogClose = this.handleAVDialogClose.bind(this);
     this.getDevices = this.getDevices.bind(this);
   }
-
-  static propTypes = {
-    aVDevice: PropTypes.object,
-    aVDialogopen: PropTypes.bool,
-    connected: PropTypes.object,
-    onclose: PropTypes.func,
-    open: PropTypes.bool,
-    selectedThing: PropTypes.object,
-    selectedThingName: PropTypes.string,
-    setSpheroConnected: PropTypes.func,
-    things: PropTypes.object,
-    mediaDevices: PropTypes.object,
-    xml: PropTypes.object,
-  };
 
   async getDevices(audio, video) {
     try {

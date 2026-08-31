@@ -1,44 +1,62 @@
-"use strict";
 var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
+function __accessProp(key) {
+  return this[key];
+}
+var __toCommonJS = (from) => {
+  var entry = (__moduleCache ??= new WeakMap).get(from), desc;
+  if (entry)
+    return entry;
+  entry = __defProp({}, "__esModule", { value: true });
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (var key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(entry, key))
+        __defProp(entry, key, {
+          get: __accessProp.bind(from, key),
+          enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable
+        });
+  }
+  __moduleCache.set(from, entry);
+  return entry;
+};
+var __moduleCache;
+var __returnValue = (v) => v;
+function __exportSetter(name, newValue) {
+  this[name] = __returnValue.bind(null, newValue);
+}
 var __export = (target, all) => {
   for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
+    __defProp(target, name, {
+      get: all[name],
+      enumerable: true,
+      configurable: true,
+      set: __exportSetter.bind(all, name)
+    });
 };
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.js
-var src_exports = {};
-__export(src_exports, {
-  BleRgbController: () => BleRgbController_default,
-  Blinkstick: () => Blinkstick_default,
-  BluetoothGeneric: () => BluetoothGeneric_default,
-  EddystoneDevice: () => EddystoneDevice_default,
-  GamepadPro: () => GamepadPro_default,
-  GoveeLedBulb: () => GoveeLamp_default,
-  HuskyDuino: () => HuskyDuino_default,
-  JoyCon: () => JoyCon_default,
-  Microbit: () => MicroBit_default,
-  PhilipsHue: () => PhilipsHue_default,
-  ReneTag: () => ReneTag_default,
-  RuuviTag: () => RuuviTag_default,
-  SpheroMini: () => SpheroMini_default,
-  StreamDeckMini: () => StreamDeckMini_default,
+var exports_src = {};
+__export(exports_src, {
+  XiaomiThermometer: () => XiaomiThermometer_default,
   XiaomiFlowerCare: () => XiaomiFlowerCare_default,
-  XiaomiThermometer: () => XiaomiThermometer_default
+  StreamDeckMini: () => StreamDeckMini_default,
+  SpheroMini: () => SpheroMini_default,
+  RuuviTag: () => RuuviTag_default,
+  ReneTag: () => ReneTag_default,
+  PhilipsHue: () => PhilipsHue_default,
+  Microbit: () => MicroBit_default,
+  JoyCon: () => JoyCon_default,
+  HuskyDuino: () => HuskyDuino_default,
+  GoveeLedBulb: () => GoveeLamp_default,
+  GamepadPro: () => GamepadPro_default,
+  EddystoneDevice: () => EddystoneDevice_default,
+  BluetoothGeneric: () => BluetoothGeneric_default,
+  Blinkstick: () => Blinkstick_default,
+  BleRgbController: () => BleRgbController_default
 });
-module.exports = __toCommonJS(src_exports);
-
+module.exports = __toCommonJS(exports_src);
 // src/tds/BleRgbController.json
 var BleRgbController_default = {
   "@context": [
@@ -211,7 +229,6 @@ var BleRgbController_default = {
     }
   }
 };
-
 // src/tds/Blinkstick.json
 var Blinkstick_default = {
   "@context": [
@@ -249,7 +266,6 @@ var Blinkstick_default = {
     }
   }
 };
-
 // src/tds/BluetoothGeneric.json
 var BluetoothGeneric_default = {
   "@context": [
@@ -606,7 +622,6 @@ var BluetoothGeneric_default = {
   },
   subscribedEvents: {}
 };
-
 // src/tds/EddystoneDevice.json
 var EddystoneDevice_default = {
   "@context": [
@@ -790,7 +805,6 @@ var EddystoneDevice_default = {
     }
   }
 };
-
 // src/tds/JoyCon.json
 var JoyCon_default = {
   "@context": [
@@ -1227,7 +1241,6 @@ var JoyCon_default = {
     }
   }
 };
-
 // src/tds/GamepadPro.json
 var GamepadPro_default = {
   "@context": [
@@ -1267,7 +1280,6 @@ var GamepadPro_default = {
     }
   }
 };
-
 // src/tds/GoveeLamp.json
 var GoveeLamp_default = {
   "@context": [
@@ -1435,7 +1447,6 @@ var GoveeLamp_default = {
     }
   }
 };
-
 // src/tds/HuskyDuino.json
 var HuskyDuino_default = {
   "@context": [
@@ -1561,7 +1572,6 @@ var HuskyDuino_default = {
     }
   }
 };
-
 // src/tds/PhilipsHue.json
 var PhilipsHue_default = {
   "@context": [
@@ -1703,7 +1713,6 @@ var PhilipsHue_default = {
     }
   }
 };
-
 // src/tds/ReneTag.json
 var ReneTag_default = {
   "@context": [
@@ -1807,7 +1816,6 @@ var ReneTag_default = {
     }
   }
 };
-
 // src/tds/RuuviTag.json
 var RuuviTag_default = {
   "@context": [
@@ -1849,7 +1857,7 @@ var RuuviTag_default = {
             type: "number",
             "ex:bitOffset": 8,
             "ex:bitLength": 16,
-            scale: 5e-3,
+            scale: 0.005,
             unit: "qudtUnit:DEG_C"
           },
           humidity: {
@@ -1857,7 +1865,7 @@ var RuuviTag_default = {
             "ex:bitOffset": 24,
             "ex:bitLength": 16,
             signed: false,
-            scale: 25e-4,
+            scale: 0.0025,
             unit: "qudtUnit:PERCENT"
           },
           pressure: {
@@ -1937,7 +1945,7 @@ var RuuviTag_default = {
             type: "number",
             "ex:bitOffset": 8,
             "ex:bitLength": 16,
-            scale: 5e-3,
+            scale: 0.005,
             unit: "qudtUnit:DEG_C"
           },
           humidity: {
@@ -1945,7 +1953,7 @@ var RuuviTag_default = {
             "ex:bitOffset": 24,
             "ex:bitLength": 16,
             signed: false,
-            scale: 25e-4,
+            scale: 0.0025,
             unit: "qudtUnit:PERCENT"
           },
           pressure: {
@@ -2012,7 +2020,6 @@ var RuuviTag_default = {
     }
   }
 };
-
 // src/tds/SpheroMini.json
 var SpheroMini_default = {
   "@context": [
@@ -2053,7 +2060,6 @@ var SpheroMini_default = {
     }
   }
 };
-
 // src/tds/StreamDeckMini.json
 var StreamDeckMini_default = {
   "@context": [
@@ -2192,7 +2198,6 @@ var StreamDeckMini_default = {
     }
   }
 };
-
 // src/tds/XiaomiFlowerCare.json
 var XiaomiFlowerCare_default = {
   "@context": [
@@ -2223,7 +2228,7 @@ var XiaomiFlowerCare_default = {
   "sbo:hasGAPRole": "sbo:Peripheral",
   "sbo:isConnectable": true,
   "sbo:hasAdvertisingIntervall": {
-    "qudt:numericValue": 2e3,
+    "qudt:numericValue": 2000,
     "qutdUnit:unit": "qudtUnit:MilliSEC"
   },
   properties: {
@@ -2298,7 +2303,6 @@ var XiaomiFlowerCare_default = {
     }
   }
 };
-
 // src/tds/XiaomiThermometer.json
 var XiaomiThermometer_default = {
   "@context": [
@@ -2355,7 +2359,6 @@ var XiaomiThermometer_default = {
     }
   }
 };
-
 // src/tds/MicroBit.json
 var MicroBit_default = {
   "@context": [
@@ -2963,22 +2966,3 @@ var MicroBit_default = {
     }
   }
 };
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
-  BleRgbController,
-  Blinkstick,
-  BluetoothGeneric,
-  EddystoneDevice,
-  GamepadPro,
-  GoveeLedBulb,
-  HuskyDuino,
-  JoyCon,
-  Microbit,
-  PhilipsHue,
-  ReneTag,
-  RuuviTag,
-  SpheroMini,
-  StreamDeckMini,
-  XiaomiFlowerCare,
-  XiaomiThermometer
-});

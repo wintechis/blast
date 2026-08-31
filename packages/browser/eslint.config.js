@@ -4,7 +4,7 @@ import globals from 'globals';
 export default [
   ...rootConfig,
   {
-    ignores: ['dist/**', 'test/**', 'webpack.config.cjs', 'esbuild.js', 'eslint.config.js'],
+    ignores: ['dist/**', 'test/**', 'eslint.config.js', 'build.js'],
   },
   {
     languageOptions: {

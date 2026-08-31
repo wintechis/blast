@@ -241,9 +241,7 @@ class DeviceTab extends React.Component {
               </TableHead>
               <TableBody>
                 {(this.state.connectedThings &&
-                  // eslint-disable-next-line react/prop-types
                   Array.from(this.state.connectedThings.keys()).map(key => {
-                    // eslint-disable-next-line react/prop-types
                     const thing = this.state.connectedThings.get(key);
                     if (thing?.type === 'bluetooth') {
                       const device = connectedBluetoothDevices.get(key);

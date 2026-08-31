@@ -1,6 +1,5 @@
 import {HidAdapter} from '@blast/core';
 import {createLoggers} from '@node-wot/core';
-import {v4} from 'uuid';
 
 const {debug} = createLoggers('binding-hid', 'WebHidAdapter');
 
@@ -33,8 +32,11 @@ export default class ConcreteHidAdapter implements HidAdapter {
   const devices = await navigator.hid.requestDevice(options);
   const hidAdapterDevices: HIDAdapterDevice[] = [];
   for (const device of devices) {
-    // generate a unique id for the new device
-    const id = v4();
+    // Generate a unique id for the new device. crypto.randomUUID replaces the uuid
+    // package; it needs a secure context (WebHID requires one anyway) but also raises
+    // this bundle's floor to Chrome 92, three versions above WebHID's own Chrome 89.
+    // See the browser support note in packages/browser-demo/README.md.
+    const id = crypto.randomUUID();
     const hidAdapterDevice = device as HIDAdapterDevice;
     hidAdapterDevice.id = id;
     if (!device.opened) {

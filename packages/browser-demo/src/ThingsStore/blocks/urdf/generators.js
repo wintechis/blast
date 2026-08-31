@@ -72,15 +72,9 @@ globalThis['urdfQueryWrapper'] = async function (uri, format, query) {
     return res;
   }
 
-  // Convert result from array of objects to array of arrays.
-  const resultArray = new Array(res.length);
-  for (const obj of res) {
-    const resultArrayRow = new Array(Object.keys(obj).length);
-    for (const value of Object.values(obj)) {
-      resultArrayRow.push(value.value);
-    }
-    resultArray.push(resultArrayRow);
-  }
-
-  return resultArray;
+  // Convert the result from an array of binding objects to an array of arrays.
+  // Build these with map, not `new Array(n)` plus push: the length argument pre-fills n
+  // empty slots and push appends *after* them, so every row used to come back as its own
+  // width in holes followed by the real values, and the outer array at twice its length.
+  return res.map(binding => Object.values(binding).map(term => term.value));
 };

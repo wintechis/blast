@@ -2,7 +2,7 @@
   "name": "@blast/tds",
   "version": "0.0.1",
   "main": "dist/index.cjs",
-  "description": "BLAST - Block Applications for Things, Core Package",
+  "description": "BLAST - Block Applications for Things, Thing Description collection",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wintechis/blast.git"
@@ -13,14 +13,18 @@
   "homepage": "https://github.com/wintechis/blast#readme",
   "author": "Thomas Wehr",
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20.0.0"
   },
   "scripts": {
-    "build": "esbuild src/index.js --bundle --platform=node --outfile=dist/index.cjs"
+    "build": "bun run build:node && bun run build:browser",
+    "build:node": "bun build src/index.js --target=node --format=cjs --outfile=dist/index.cjs",
+    "build:browser": "bun build src/index.js --target=browser --format=esm --outfile=dist/blast.tds.js",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
   },
   "type": "module",
   "license": "AGPL-3.0",
   "devDependencies": {
-    "esbuild": "^0.21.0"
+    "@node-wot/core": "0.9.2"
   }
 }

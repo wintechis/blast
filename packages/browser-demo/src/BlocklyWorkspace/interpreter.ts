@@ -8,6 +8,7 @@ import {Events, WorkspaceSvg} from 'blockly';
 import {javascriptGenerator as JavaScript} from 'blockly/javascript';
 import './initContent/blocks/index.js';
 import './initContent/generators/index';
+import {scheduler} from './scheduler';
 
 export type statusValues = 'ready' | 'running' | 'stopped' | 'error';
 
@@ -132,6 +133,10 @@ export const setStdWarn = function (fn: (text: string) => void) {
   stdWarn = fn;
 };
 
+// Route errors thrown by scheduler-driven code (state conditions, enter/exit
+// handlers, `every_seconds` callbacks) to the interpreter's warning output.
+scheduler.setErrorHandler(text => stdWarn(text));
+
 /**
  * Getter for the Interpreter's standard warning output function.
  */
@@ -158,6 +163,9 @@ const clearIntervalEvents = function () {
 export const resetInterpreter = async function () {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await (window as any).resetServient();
+  // Tear down all scheduler-managed state pollers and interval timers, then
+  // clear any legacy interval events.
+  scheduler.stop();
   clearIntervalEvents();
   getWorkspace()?.highlightBlock(null);
 
@@ -282,6 +290,9 @@ export const initInterpreter = function (ws: WorkspaceSvg) {
 export const runJS = async function () {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['interpreterExecutionExit'] = false;
+  // Clear any sources left over from a previous run before the new code
+  // registers its own.
+  scheduler.stop();
   setStatus('running');
   stdInfo('execution started');
   try {
@@ -293,9 +304,11 @@ export const runJS = async function () {
     const func = new AsyncFunction(
       'f',
       `${latestCode}
-      if(${eventsInWorkspace.length === 0} && ${
-        intervalEvents.length === 0
-      }) {f()};`
+      // Stop automatically once the top-level code has run, unless the program
+      // is kept alive by workspace event blocks (checked at generation time) or
+      // by live scheduler sources such as states and intervals (checked at
+      // runtime, after registration).
+      if(${eventsInWorkspace.length === 0} && !blastScheduler.hasLiveSources()) {f()};`
     );
     await func(stopJS);
   } catch (e) {
