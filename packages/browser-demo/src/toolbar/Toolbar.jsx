@@ -192,8 +192,15 @@ export default class BlastBar extends React.Component {
                 this.SolidDialogRef.current.open();
               }}
             >
+              {/*
+                The emblem lives in public/assets/media/. Prefix with the Vite
+                base URL so it resolves under the deploy subpath (e.g. /blast/ on
+                GitHub Pages) rather than the server root; the previous
+                "/samples/solid-emblem.svg" was both the wrong folder and an
+                absolute path, so it 404'd on every deployment.
+              */}
               <img
-                src="/samples/solid-emblem.svg"
+                src={`${import.meta.env.BASE_URL}assets/media/solid-emblem.svg`}
                 alt="solid logo"
                 height="24"
               />
