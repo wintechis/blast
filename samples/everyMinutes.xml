@@ -1,0 +1,92 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="xHK=K`y%}:jCZEC2%]2G">i</variable>
+  </variables>
+  <block type="for" id="U}}c27Q#*7%az`Ka*J5A" x="23" y="53">
+    <field name="VAR" id="xHK=K`y%}:jCZEC2%]2G">i</field>
+    <value name="FROM">
+      <block type="math_number" id="nk!A/~a.GN}v[/fiKmG{">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <value name="TO">
+      <block type="math_number" id="FboBNVgbsX_JC}kK?H0C">
+        <field name="NUM">1000</field>
+      </block>
+    </value>
+    <value name="BY">
+      <block type="math_number" id="2unLq1;qZD4?Xp96Th%4">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <statement name="DO">
+      <block type="display_text" id="$f%w+;#cs4H@=~nNcB{j">
+        <value name="text">
+          <block type="variables_get" id="+C.8-,}lhFF_#C@.XC0U">
+            <field name="VAR" id="xHK=K`y%}:jCZEC2%]2G">i</field>
+          </block>
+        </value>
+        <next>
+          <block type="wait_seconds" id="eGIs8S~anF![^rkV7h9$">
+            <value name="SECONDS">
+              <block type="math_number" id="`gH.cw@,%tynyob[H{G)">
+                <field name="NUM">1</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="every_seconds" id="Y=(FVjqS/0@{g+q(tu2V" x="418" y="52">
+    <field name="units">seconds</field>
+    <value name="value">
+      <block type="number_value" id="=/Lp_n+aHiYVz;rgfKs9">
+        <field name="NUM">2</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text" id="_)SBj8BTlXadx[[55!0z">
+        <value name="text">
+          <block type="string" id="Y#hc=(JluU0f)`Dq1p+r">
+            <field name="TEXT">2 seconds passed</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="every_seconds" id="=PL^ff``9xCBC4nlqP!]" x="423" y="146">
+    <field name="units">seconds</field>
+    <value name="value">
+      <block type="number_value" id="/=4Y@HA*?]:ZgjGbnxY}">
+        <field name="NUM">10</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text" id="I+~S0%%R|H1@o9AUa/{p">
+        <value name="text">
+          <block type="string" id="md8U=cj.)7g%seJ;{1ea">
+            <field name="TEXT">10 seconds passed</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+  <block type="every_seconds" id="ym;y6|_nHJlu`ukm|G^T" x="422" y="257">
+    <field name="units">minutes</field>
+    <value name="value">
+      <block type="number_value" id="ZhN@#s?7!Jz4fF}2^kWP">
+        <field name="NUM">1</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text" id="gd__!rw9MvMFAl0w6d23">
+        <value name="text">
+          <block type="string" id="nN05Fwo?C3Sra-;vXQ!/">
+            <field name="TEXT">1 minute passed</field>
+          </block>
+        </value>
+      </block>
+    </statement>
+  </block>
+</xml>

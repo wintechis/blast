@@ -1,0 +1,108 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="9.nzn!tsVxjW:)Hvs|Pr">obj</variable>
+  </variables>
+  <block type="variables_set">
+    <field name="VAR" id="9.nzn!tsVxjW:)Hvs|Pr">obj</field>
+    <value name="VALUE">
+      <block type="object_create">
+        <mutation xmlns="http://www.w3.org/1999/xhtml" num_fields="3">
+          <field name="foo"></field>
+          <field name="bar"></field>
+          <field name="nested"></field>
+        </mutation>
+        <field name="field1">foo</field>
+        <field name="field2">bar</field>
+        <field name="field3">nested</field>
+        <value name="field_input1">
+          <block type="string">
+            <field name="TEXT">baz</field>
+          </block>
+        </value>
+        <value name="field_input2">
+          <block type="number_value">
+            <field name="NUM">42</field>
+          </block>
+        </value>
+        <value name="field_input3">
+          <block type="object_create">
+            <mutation xmlns="http://www.w3.org/1999/xhtml" num_fields="2">
+              <field name="foo"></field>
+              <field name="bar"></field>
+            </mutation>
+            <field name="field1">foo</field>
+            <field name="field2">bar</field>
+            <value name="field_input1">
+              <block type="string">
+                <field name="TEXT">baz</field>
+              </block>
+            </value>
+            <value name="field_input2">
+              <block type="number_value">
+                <field name="NUM">42</field>
+              </block>
+            </value>
+          </block>
+        </value>
+      </block>
+    </value>
+    <next>
+      <block type="display_text">
+        <value name="text">
+          <block type="object_keys">
+            <value name="object_input">
+              <block type="variables_get">
+                <field name="VAR" id="9.nzn!tsVxjW:)Hvs|Pr">obj</field>
+              </block>
+            </value>
+          </block>
+        </value>
+        <next>
+          <block type="display_text">
+            <value name="text">
+              <block type="object_get">
+                <value name="property_input">
+                  <block type="string">
+                    <field name="TEXT">foo</field>
+                  </block>
+                </value>
+                <value name="object_input">
+                  <block type="variables_get">
+                    <field name="VAR" id="9.nzn!tsVxjW:)Hvs|Pr">obj</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="display_text">
+                <value name="text">
+                  <block type="object_get">
+                    <value name="property_input">
+                      <block type="string">
+                        <field name="TEXT">bar</field>
+                      </block>
+                    </value>
+                    <value name="object_input">
+                      <block type="object_get">
+                        <value name="property_input">
+                          <block type="string">
+                            <field name="TEXT">nested</field>
+                          </block>
+                        </value>
+                        <value name="object_input">
+                          <block type="variables_get">
+                            <field name="VAR" id="9.nzn!tsVxjW:)Hvs|Pr">obj</field>
+                          </block>
+                        </value>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

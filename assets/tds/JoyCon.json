@@ -1,0 +1,435 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "Nintento Switch Joy-Con Controller",
+  "description": "The Nintendo Switch Joy-Con Controller for the Nintendo Switch console.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": "",
+  "security": [
+    "nosec_sc"
+  ],
+  "properties": {
+    "accelerometers": {
+      "title": "Accelerometers",
+      "description": "The accelerometers of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "1": {
+          "title": "Accelerometer 1",
+          "description": "The first accelerometer of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            }
+          }
+        },
+        "2": {
+          "title": "Accelerometer 2",
+          "description": "The second accelerometer of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            }
+          }
+        },
+        "3": {
+          "title": "Accelerometer 3",
+          "description": "The third accelerometer of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the accelerometer.",
+              "type": "number",
+              "unit": "m/s^2"
+            }
+          }
+        }
+      }
+    },
+    "actualAccelerometer": {
+      "title": "Actual Accelerometer",
+      "description": "The actual accelerometer of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "x": {
+          "title": "X-Axis",
+          "description": "The X-Axis of the accelerometer.",
+          "type": "number",
+          "unit": "m/s^2"
+        },
+        "y": {
+          "title": "Y-Axis",
+          "description": "The Y-Axis of the accelerometer.",
+          "type": "number",
+          "unit": "m/s^2"
+        },
+        "z": {
+          "title": "Z-Axis",
+          "description": "The Z-Axis of the accelerometer.",
+          "type": "number",
+          "unit": "m/s^2"
+        }
+      }
+    },
+    "actualGyroscope": {
+      "title": "Actual Gyroscope",
+      "description": "The actual gyroscope of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "rps": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "rad/s"
+            }
+          }
+        },
+        "dps": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "title": "X-Axis",
+              "description": "The X-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            },
+            "y": {
+              "title": "Y-Axis",
+              "description": "The Y-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            },
+            "z": {
+              "title": "Z-Axis",
+              "description": "The Z-Axis of the gyroscope.",
+              "type": "number",
+              "unit": "deg/s"
+            }
+          }
+        }
+      }
+    },
+    "actualOrientation": {
+      "title": "Actual Orientation",
+      "description": "The actual orientation of the Joy-Con.",
+      "type": "object",
+      "properties":{
+        "alpha": {
+          "title": "Alpha",
+          "description": "The alpha value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "beta": {
+          "title": "Beta",
+          "description": "The beta value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "gamma": {
+          "title": "Gamma",
+          "description": "The gamma value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        }
+      }
+    },
+    "actualOrientationQuaternion": {
+      "title": "Actual Orientation Quaternion",
+      "description": "The actual orientation quaternion of the Joy-Con.",
+      "type": "object",
+      "properties":{
+        "alpha": {
+          "title": "Alpha",
+          "description": "The alpha value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "beta": {
+          "title": "Beta",
+          "description": "The beta value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        },
+        "gamma": {
+          "title": "Gamma",
+          "description": "The gamma value of the orientation.",
+          "type": "number",
+          "unit": "deg"
+        }
+      }
+    },
+    "gyroscopes": {
+      "title": "Gyroscopes",
+      "description": "The gyroscopes of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "0": {
+          "title": "Gyroscope 0",
+          "description": "The first gyroscope of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "rps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
+              }
+            },
+            "dps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
+              }
+            }
+          }
+        },
+        "1": {
+          "title": "Gyroscope 1",
+          "description": "The second gyroscope of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "rps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
+              }
+            },
+            "dps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
+              }
+            }
+          }
+        },
+        "2": {
+          "title": "Gyroscope 2",
+          "description": "The third gyroscope of the Joy-Con.",
+          "type": "object",
+          "properties": {
+            "rps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "rad/s"
+                }
+              }
+            },
+            "dps": {
+              "type": "object",
+              "properties": {
+                "x": {
+                  "title": "X-Axis",
+                  "description": "The X-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "y": {
+                  "title": "Y-Axis",
+                  "description": "The Y-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                },
+                "z": {
+                  "title": "Z-Axis",
+                  "description": "The Z-Axis of the gyroscope.",
+                  "type": "number",
+                  "unit": "deg/s"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "quaternion": {
+      "title": "Quaternion",
+      "description": "The quaternion of the Joy-Con.",
+      "type": "object",
+      "properties": {
+        "w": {
+          "title": "W",
+          "description": "The W value of the quaternion.",
+          "type": "number"
+        },
+        "x": {
+          "title": "X",
+          "description": "The X value of the quaternion.",
+          "type": "number"
+        },
+        "y": {
+          "title": "Y",
+          "description": "The Y value of the quaternion.",
+          "type": "number"
+        },
+        "z": {
+          "title": "Z",
+          "description": "The Z value of the quaternion.",
+          "type": "number"
+        }
+      }
+    }
+  },
+  "events": {
+    "button": {
+      "title": "Joy-Con button pressed events",
+      "description": "This event is emitted when a button on the Joy-Con is pressed.",
+      "data": {
+        "type": "array",
+        "description": "A string array containing all buttons that were pressed."
+      }
+    }
+  }
+}
