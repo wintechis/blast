@@ -82,8 +82,12 @@ JavaScript.forBlock['terminate'] = function (_block: Block): string {
 if (typeof window !== 'undefined') {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['interpreterExecutionExit'] = false;
+  // Extend rather than replace: blast.browser.js installs a process polyfill (nextTick etc.)
+  // that its stream code depends on.
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (globalThis as any)['process'] = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ...(globalThis as any)['process'],
     exit: () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (globalThis as any)['interpreterExecutionExit'] = true;

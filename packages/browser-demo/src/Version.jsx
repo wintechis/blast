@@ -11,7 +11,7 @@ export default function Version() {
   });
 
   // This constant is rewritten by update-version.js on build
-  const rev = '#3acaf18';
+  const rev = '#4f82757';
 
   const {vertical, horizontal, open} = state;
 

@@ -72827,10 +72827,13 @@ var umask = function() {
 
 // src/globals.ts
 globalThis.Buffer ??= Buffer2;
-globalThis.process ??= {
-  ...exports_process,
-  nextTick: (callback, ...args) => queueMicrotask(() => callback(...args))
-};
+if (typeof globalThis.process?.nextTick !== "function") {
+  globalThis.process = {
+    ...exports_process,
+    ...globalThis.process,
+    nextTick: (callback, ...args) => queueMicrotask(() => callback(...args))
+  };
+}
 
 // src/index.ts
 var import_core4 = __toESM(require_dist5(), 1);

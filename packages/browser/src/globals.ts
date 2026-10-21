@@ -12,8 +12,15 @@ globalThis.Buffer ??= Buffer;
 // them with `item.fun.apply(null, item.array)`, silently dropping every argument after the
 // callback. readable-stream schedules nearly all of its work as nextTick(fn, stream, state),
 // so stream reads hang. Replace nextTick with one that forwards its arguments.
-globalThis.process ??= {
-  ...processPolyfill,
-  nextTick: (callback: (...args: unknown[]) => void, ...args: unknown[]) =>
-    queueMicrotask(() => callback(...args)),
-} as unknown as NodeJS.Process;
+//
+// The host page may already define a partial `process` - the demo installs {exit} for its
+// terminate block - so check for nextTick rather than for `process`, and keep whatever the
+// page defined on top of the polyfill.
+if (typeof globalThis.process?.nextTick !== 'function') {
+  globalThis.process = {
+    ...processPolyfill,
+    ...globalThis.process,
+    nextTick: (callback: (...args: unknown[]) => void, ...args: unknown[]) =>
+      queueMicrotask(() => callback(...args)),
+  } as unknown as NodeJS.Process;
+}
