@@ -48,9 +48,14 @@ export default class Output extends React.Component {
         if (typeof msg === 'undefined') {
           return;
         }
+        // objects (e.g. from consumed http things) would otherwise print as [object Object]
+        const text =
+          (type ?? 'text') === 'text' && msg !== null && typeof msg === 'object'
+            ? JSON.stringify(msg, null, 2)
+            : String(msg);
         return {
           messages: state.messages.concat({
-            text: msg.toString(),
+            text,
             time: new Date().toLocaleTimeString(),
             type: type ?? 'text',
           }),
@@ -112,7 +117,9 @@ export default class Output extends React.Component {
             key={i}
             sx={{display: 'block', backgroundColor: '#E7EBF0', m: 1, p: 1}}
           >
-            <Typography sx={{ml: 1}}>{msg.text}</Typography>
+            <Typography sx={{ml: 1, whiteSpace: 'pre-wrap'}}>
+              {msg.text}
+            </Typography>
             <Typography
               sx={{color: 'text.secondary', fontSize: '0.8rem'}}
               align="right"

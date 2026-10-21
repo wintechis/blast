@@ -1,3 +1,4 @@
+import './globals';
 import {Blast, EddystoneHelpers} from '@blast/core';
 import ConcreteBluetoothAdapter from './WebBluetoothAdapter';
 import ConcreteHidAdapter from './WebHidAdapter';
