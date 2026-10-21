@@ -1,0 +1,103 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <variables>
+    <variable id="^,c_==H308Jb={GklNFg">seconds</variable>
+  </variables>
+  <block type="streamdeck_button_event" x="90" y="45">
+    <field name="upDown">down</field>
+    <field name="button1">TRUE</field>
+    <field name="button2">FALSE</field>
+    <field name="button3">FALSE</field>
+    <field name="button4">FALSE</field>
+    <field name="button5">FALSE</field>
+    <field name="button6">FALSE</field>
+    <value name="id">
+      <block type="things_webHID">
+        <field name="id">streamdeck</field>
+      </block>
+    </value>
+    <statement name="statements">
+      <block type="display_text">
+        <value name="text">
+          <block type="string">
+            <field name="TEXT">interrupt</field>
+          </block>
+        </value>
+        <next>
+          <block type="wait_seconds">
+            <value name="SECONDS">
+              <block type="number_value">
+                <field name="NUM">5</field>
+              </block>
+            </value>
+          </block>
+        </next>
+      </block>
+    </statement>
+  </block>
+  <block type="variables_set" x="81" y="314">
+    <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+    <value name="VALUE">
+      <block type="number_value">
+        <field name="NUM">0</field>
+      </block>
+    </value>
+    <next>
+      <block type="while_until">
+        <field name="MODE">WHILE</field>
+        <value name="BOOL">
+          <block type="logic_boolean">
+            <field name="BOOL">TRUE</field>
+          </block>
+        </value>
+        <statement name="DO">
+          <block type="display_text">
+            <value name="text">
+              <block type="string_join">
+                <mutation items="2"></mutation>
+                <value name="ADD0">
+                  <block type="string">
+                    <field name="TEXT">BLAST execution time:</field>
+                  </block>
+                </value>
+                <value name="ADD1">
+                  <block type="variables_get">
+                    <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                  </block>
+                </value>
+              </block>
+            </value>
+            <next>
+              <block type="variables_set">
+                <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                <value name="VALUE">
+                  <block type="number_arithmetic">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                      <block type="variables_get">
+                        <field name="VAR" id="^,c_==H308Jb={GklNFg">seconds</field>
+                      </block>
+                    </value>
+                    <value name="B">
+                      <block type="number_value">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </value>
+                <next>
+                  <block type="wait_seconds">
+                    <value name="SECONDS">
+                      <block type="number_value">
+                        <field name="NUM">1</field>
+                      </block>
+                    </value>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </statement>
+      </block>
+    </next>
+  </block>
+</xml>

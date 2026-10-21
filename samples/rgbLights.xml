@@ -1,0 +1,255 @@
+<xml xmlns="https://developers.google.com/blockly/xml">
+  <block type="bleLedController_switch_lights">
+    <value name="colour">
+      <block type="colour_picker">
+        <field name="COLOUR">#000000</field>
+      </block>
+    </value>
+    <value name="thing">
+      <block type="things_bleLedController">
+        <field name="name">ELK-BLEDOM</field>
+        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+      </block>
+    </value>
+    <next>
+      <block type="wait_seconds">
+        <value name="SECONDS">
+          <block type="math_number">
+            <field name="NUM">0.2</field>
+          </block>
+        </value>
+        <next>
+          <block type="bleLedController_switch_lights">
+            <value name="colour">
+              <block type="colour_picker">
+                <field name="COLOUR">#ff0000</field>
+              </block>
+            </value>
+            <value name="thing">
+              <block type="things_bleLedController">
+                <field name="name">ELK-BLEDOM</field>
+                <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+              </block>
+            </value>
+            <next>
+              <block type="wait_seconds">
+                <value name="SECONDS">
+                  <block type="math_number">
+                    <field name="NUM">0.2</field>
+                  </block>
+                </value>
+                <next>
+                  <block type="bleLedController_switch_lights">
+                    <value name="colour">
+                      <block type="colour_picker">
+                        <field name="COLOUR">#ff9900</field>
+                      </block>
+                    </value>
+                    <value name="thing">
+                      <block type="things_bleLedController">
+                        <field name="name">ELK-BLEDOM</field>
+                        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                      </block>
+                    </value>
+                    <next>
+                      <block type="wait_seconds">
+                        <value name="SECONDS">
+                          <block type="math_number">
+                            <field name="NUM">0.2</field>
+                          </block>
+                        </value>
+                        <next>
+                          <block type="bleLedController_switch_lights">
+                            <value name="colour">
+                              <block type="colour_picker">
+                                <field name="COLOUR">#ffcc66</field>
+                              </block>
+                            </value>
+                            <value name="thing">
+                              <block type="things_bleLedController">
+                                <field name="name">ELK-BLEDOM</field>
+                                <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                              </block>
+                            </value>
+                            <next>
+                              <block type="wait_seconds">
+                                <value name="SECONDS">
+                                  <block type="math_number">
+                                    <field name="NUM">0.2</field>
+                                  </block>
+                                </value>
+                                <next>
+                                  <block type="bleLedController_switch_lights">
+                                    <value name="colour">
+                                      <block type="colour_picker">
+                                        <field name="COLOUR">#ffff00</field>
+                                      </block>
+                                    </value>
+                                    <value name="thing">
+                                      <block type="things_bleLedController">
+                                        <field name="name">ELK-BLEDOM</field>
+                                        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                      </block>
+                                    </value>
+                                    <next>
+                                      <block type="wait_seconds">
+                                        <value name="SECONDS">
+                                          <block type="math_number">
+                                            <field name="NUM">0.2</field>
+                                          </block>
+                                        </value>
+                                        <next>
+                                          <block type="bleLedController_switch_lights">
+                                            <value name="colour">
+                                              <block type="colour_picker">
+                                                <field name="COLOUR">#33ff33</field>
+                                              </block>
+                                            </value>
+                                            <value name="thing">
+                                              <block type="things_bleLedController">
+                                                <field name="name">ELK-BLEDOM</field>
+                                                <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                              </block>
+                                            </value>
+                                            <next>
+                                              <block type="wait_seconds">
+                                                <value name="SECONDS">
+                                                  <block type="math_number">
+                                                    <field name="NUM">0.2</field>
+                                                  </block>
+                                                </value>
+                                                <next>
+                                                  <block type="bleLedController_switch_lights">
+                                                    <value name="colour">
+                                                      <block type="colour_picker">
+                                                        <field name="COLOUR">#66cccc</field>
+                                                      </block>
+                                                    </value>
+                                                    <value name="thing">
+                                                      <block type="things_bleLedController">
+                                                        <field name="name">ELK-BLEDOM</field>
+                                                        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                                      </block>
+                                                    </value>
+                                                    <next>
+                                                      <block type="wait_seconds">
+                                                        <value name="SECONDS">
+                                                          <block type="math_number">
+                                                            <field name="NUM">0.2</field>
+                                                          </block>
+                                                        </value>
+                                                        <next>
+                                                          <block type="bleLedController_switch_lights">
+                                                            <value name="colour">
+                                                              <block type="colour_picker">
+                                                                <field name="COLOUR">#33ccff</field>
+                                                              </block>
+                                                            </value>
+                                                            <value name="thing">
+                                                              <block type="things_bleLedController">
+                                                                <field name="name">ELK-BLEDOM</field>
+                                                                <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                                              </block>
+                                                            </value>
+                                                            <next>
+                                                              <block type="wait_seconds">
+                                                                <value name="SECONDS">
+                                                                  <block type="math_number">
+                                                                    <field name="NUM">0.2</field>
+                                                                  </block>
+                                                                </value>
+                                                                <next>
+                                                                  <block type="bleLedController_switch_lights">
+                                                                    <value name="colour">
+                                                                      <block type="colour_picker">
+                                                                        <field name="COLOUR">#6666cc</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <value name="thing">
+                                                                      <block type="things_bleLedController">
+                                                                        <field name="name">ELK-BLEDOM</field>
+                                                                        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                                                      </block>
+                                                                    </value>
+                                                                    <next>
+                                                                      <block type="wait_seconds">
+                                                                        <value name="SECONDS">
+                                                                          <block type="math_number">
+                                                                            <field name="NUM">0.2</field>
+                                                                          </block>
+                                                                        </value>
+                                                                        <next>
+                                                                          <block type="bleLedController_switch_lights">
+                                                                            <value name="colour">
+                                                                              <block type="colour_picker">
+                                                                                <field name="COLOUR">#cc66cc</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <value name="thing">
+                                                                              <block type="things_bleLedController">
+                                                                                <field name="name">ELK-BLEDOM</field>
+                                                                                <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                                                              </block>
+                                                                            </value>
+                                                                            <next>
+                                                                              <block type="wait_seconds">
+                                                                                <value name="SECONDS">
+                                                                                  <block type="math_number">
+                                                                                    <field name="NUM">0.2</field>
+                                                                                  </block>
+                                                                                </value>
+                                                                                <next>
+                                                                                  <block type="bleLedController_switch_lights">
+                                                                                    <value name="colour">
+                                                                                      <block type="colour_picker">
+                                                                                        <field name="COLOUR">#000000</field>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                    <value name="thing">
+                                                                                      <block type="things_bleLedController">
+                                                                                        <field name="name">ELK-BLEDOM</field>
+                                                                                        <field name="id">e5TaEhHVdHuGu+elQKr6lA==</field>
+                                                                                      </block>
+                                                                                    </value>
+                                                                                  </block>
+                                                                                </next>
+                                                                              </block>
+                                                                            </next>
+                                                                          </block>
+                                                                        </next>
+                                                                      </block>
+                                                                    </next>
+                                                                  </block>
+                                                                </next>
+                                                              </block>
+                                                            </next>
+                                                          </block>
+                                                        </next>
+                                                      </block>
+                                                    </next>
+                                                  </block>
+                                                </next>
+                                              </block>
+                                            </next>
+                                          </block>
+                                        </next>
+                                      </block>
+                                    </next>
+                                  </block>
+                                </next>
+                              </block>
+                            </next>
+                          </block>
+                        </next>
+                      </block>
+                    </next>
+                  </block>
+                </next>
+              </block>
+            </next>
+          </block>
+        </next>
+      </block>
+    </next>
+  </block>
+</xml>

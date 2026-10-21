@@ -1,0 +1,38 @@
+{
+  "@context": [
+    "https://www.w3.org/2019/wot/td/v1",
+    "https://www.w3.org/2022/wot/td/v1.1",
+    {
+      "@language": "en"
+    }
+  ],
+  "title": "Nintento Switch Pro Controller",
+  "description": "The Nintendo Switch Pro Controller is a gamepad used for the Nintendo Switch console.",
+  "securityDefinitions": {
+    "nosec_sc": {
+      "scheme": "nosec"
+    }
+  },
+  "@type": "",
+  "security": [
+    "nosec_sc"
+  ],
+  "events": {
+    "button": {
+      "title": "Gamepad button pressed events",
+      "description": "This event is emitted when a button on the gamepad is pressed.",
+      "data": {
+        "type": "array",
+        "description": "A string array containing all buttons that were pressed."
+      }
+    },
+    "joystick": {
+      "title": "Gamepad joystick moved events",
+      "description": "This event is emitted when the left joystick on the gamepad is moved.",
+      "data": {
+        "type": "object",
+        "description": "An object containing the x and y coordinates and the angle of the joystick."
+      }
+    }
+  }
+}
